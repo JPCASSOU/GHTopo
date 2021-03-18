@@ -1,0 +1,350 @@
+object CdrProfilTopo: TCdrProfilTopo
+  Left = 0
+  Height = 571
+  Top = 0
+  Width = 961
+  Align = alClient
+  ClientHeight = 571
+  ClientWidth = 961
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  ParentFont = False
+  TabOrder = 0
+  DesignLeft = 382
+  DesignTop = 257
+  object PageControl1: TPageControl
+    Left = 0
+    Height = 506
+    Top = 65
+    Width = 959
+    ActivePage = tabShtConduits
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    TabIndex = 2
+    TabOrder = 0
+    object tabShtProfil: TTabSheet
+      Caption = 'Profil'
+      ClientHeight = 477
+      ClientWidth = 951
+      object pnlProfil: TPanel
+        Left = 4
+        Height = 448
+        Top = 4
+        Width = 944
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        BevelOuter = bvLowered
+        ClientHeight = 448
+        ClientWidth = 944
+        TabOrder = 0
+        object Chart1: TChart
+          Left = 1
+          Height = 446
+          Top = 1
+          Width = 942
+          AxisList = <          
+            item
+              Grid.Color = clMedGray
+              Grid.Style = psSolid
+              Marks.LabelBrush.Style = bsClear
+              Minors = <>
+              Title.LabelFont.Orientation = 900
+              Title.LabelBrush.Style = bsClear
+            end          
+            item
+              Grid.Color = clSilver
+              Grid.Style = psSolid
+              Intervals.Options = [aipGraphCoords, aipUseMaxLength, aipUseMinLength, aipUseNiceSteps]
+              Alignment = calBottom
+              Marks.LabelBrush.Style = bsClear
+              Minors = <>
+              Title.LabelBrush.Style = bsClear
+            end>
+          BackColor = clWhite
+          Foot.Brush.Color = clBtnFace
+          Foot.Font.Color = clBlue
+          Title.Brush.Color = clBtnFace
+          Title.Font.Color = clBlue
+          Title.Text.Strings = (
+            'TAChart'
+          )
+          Align = alClient
+          OnMouseMove = Chart1MouseMove
+        end
+      end
+      object lbCoordsProfil: TStaticText
+        Left = 4
+        Height = 20
+        Top = 455
+        Width = 627
+        Anchors = [akLeft, akBottom]
+        BorderStyle = sbsSunken
+        TabOrder = 1
+      end
+    end
+    object tabShtValeurs: TTabSheet
+      Caption = 'Valeurs'
+      ClientHeight = 477
+      ClientWidth = 951
+      object grdValeursProfil: TStringGrid
+        Left = 2
+        Height = 444
+        Top = 32
+        Width = 942
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        TabOrder = 0
+        TitleFont.CharSet = ANSI_CHARSET
+        TitleFont.Height = -13
+        TitleFont.Name = 'Arial'
+        TitleFont.Pitch = fpVariable
+        TitleFont.Quality = fqDraft
+        TitleFont.Style = [fsBold]
+      end
+      object lbNbPointsProfil: TLabel
+        Left = 2
+        Height = 16
+        Top = 8
+        Width = 102
+        Caption = 'lbNbPointsProfil'
+        ParentColor = False
+      end
+      object btnCopierTableau: TButton
+        Left = 812
+        Height = 25
+        Top = 4
+        Width = 134
+        Caption = 'btnCopierTableau'
+        OnClick = btnCopierTableauClick
+        TabOrder = 1
+      end
+    end
+    object tabShtConduits: TTabSheet
+      Caption = 'Galeries recoupées'
+      ClientHeight = 477
+      ClientWidth = 951
+      object Panel1: TPanel
+        Left = 5
+        Height = 445
+        Top = 32
+        Width = 942
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        BevelOuter = bvLowered
+        ClientHeight = 445
+        ClientWidth = 942
+        TabOrder = 0
+        object lsbGaleriesRecoupees: TListBox
+          Left = 4
+          Height = 413
+          Top = 28
+          Width = 934
+          Anchors = [akTop, akLeft, akRight, akBottom]
+          ItemHeight = 20
+          OnDrawItem = lsbGaleriesRecoupeesDrawItem
+          ScrollWidth = 901
+          Style = lbOwnerDrawFixed
+          TabOrder = 0
+        end
+        object HeaderControl1: THeaderControl
+          Left = 4
+          Height = 26
+          Top = 4
+          Width = 934
+          DragReorder = False
+          Sections = <          
+            item
+              Alignment = taLeftJustify
+              Text = 'No'
+              Width = 50
+              Visible = True
+            end          
+            item
+              Alignment = taLeftJustify
+              Text = 'Station'
+              Width = 120
+              Visible = True
+            end          
+            item
+              Alignment = taLeftJustify
+              Text = 'Coul.'
+              Width = 50
+              Visible = True
+            end          
+            item
+              Alignment = taLeftJustify
+              Text = 'Abscisse'
+              Width = 80
+              Visible = True
+            end          
+            item
+              Alignment = taLeftJustify
+              Text = 'Z Conduit'
+              Width = 80
+              Visible = True
+            end          
+            item
+              Alignment = taLeftJustify
+              Text = 'Z Terrain'
+              Width = 80
+              Visible = True
+            end          
+            item
+              Alignment = taLeftJustify
+              Text = 'Couverture'
+              Width = 80
+              Visible = True
+            end>
+          OnSectionClick = HeaderControl1SectionClick
+          OnSectionResize = HeaderControl1SectionResize
+          Anchors = [akTop, akLeft, akRight]
+        end
+      end
+      object lbNbConduitsRecoupes: TLabel
+        Left = 5
+        Height = 16
+        Top = 8
+        Width = 146
+        Caption = 'lbNbConduitsRecoupes'
+        ParentColor = False
+      end
+      object btnCopierListeConduitsRecoupes: TButton
+        Left = 776
+        Height = 25
+        Top = 4
+        Width = 171
+        Anchors = [akTop, akRight]
+        Caption = 'btnCopierListeConduitsRecoupes'
+        OnClick = btnCopierListeConduitsRecoupesClick
+        TabOrder = 1
+      end
+    end
+  end
+  object pnlProfil1: TPanel
+    Left = 0
+    Height = 59
+    Top = 4
+    Width = 959
+    Anchors = [akTop, akLeft, akRight]
+    BevelOuter = bvLowered
+    ClientHeight = 59
+    ClientWidth = 959
+    TabOrder = 1
+    object btnProfilColor: TColorButton
+      Left = 76
+      Height = 25
+      Top = 31
+      Width = 112
+      BorderWidth = 2
+      ButtonColorSize = 16
+      ButtonColor = clBlack
+    end
+    object editNomProfil: TEdit
+      Left = 76
+      Height = 24
+      Top = 4
+      Width = 525
+      Anchors = [akTop, akLeft, akRight]
+      TabOrder = 0
+    end
+    object editX1: TCurrencyEdit
+      Left = 633
+      Height = 24
+      Top = 4
+      Width = 104
+      Alignment = taRightJustify
+      DisplayFormat = '0.00'
+      Anchors = [akTop, akRight]
+      MaxValue = 0
+      MinValue = 0
+      ReadOnly = True
+      TabOrder = 1
+      Value = 0
+    end
+    object editY1: TCurrencyEdit
+      Left = 633
+      Height = 24
+      Top = 31
+      Width = 104
+      Alignment = taRightJustify
+      DisplayFormat = '0.00'
+      Anchors = [akTop, akRight]
+      MaxValue = 0
+      MinValue = 0
+      ReadOnly = True
+      TabOrder = 2
+      Value = 0
+    end
+    object editX2: TCurrencyEdit
+      Left = 745
+      Height = 24
+      Top = 4
+      Width = 104
+      Alignment = taRightJustify
+      DisplayFormat = '0.00'
+      Anchors = [akTop, akRight]
+      MaxValue = 0
+      MinValue = 0
+      ReadOnly = True
+      TabOrder = 3
+      Value = 0
+    end
+    object editY2: TCurrencyEdit
+      Left = 745
+      Height = 24
+      Top = 31
+      Width = 104
+      Alignment = taRightJustify
+      DisplayFormat = '0.00'
+      Anchors = [akTop, akRight]
+      MaxValue = 0
+      MinValue = 0
+      ReadOnly = True
+      TabOrder = 4
+      Value = 0
+    end
+    object Label1: TLabel
+      Left = 609
+      Height = 16
+      Top = 8
+      Width = 21
+      Anchors = [akTop, akRight]
+      Caption = 'X ='
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 609
+      Height = 16
+      Top = 35
+      Width = 20
+      Anchors = [akTop, akRight]
+      Caption = 'Y ='
+      ParentColor = False
+    end
+    object Label3: TLabel
+      Left = 4
+      Height = 16
+      Top = 31
+      Width = 50
+      Caption = 'Couleur'
+      ParentColor = False
+    end
+    object Label4: TLabel
+      Left = 4
+      Height = 16
+      Top = 4
+      Width = 29
+      Caption = 'Nom'
+      ParentColor = False
+    end
+    object lbOrientationProfil: TStaticText
+      Left = 853
+      Height = 25
+      Top = 4
+      Width = 102
+      Anchors = [akTop, akRight]
+      BorderStyle = sbsSunken
+      TabOrder = 5
+    end
+  end
+end

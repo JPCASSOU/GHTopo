@@ -1,0 +1,59 @@
+object CdrDepthDiagramExt: TCdrDepthDiagramExt
+  Left = 0
+  Height = 359
+  Top = 0
+  Width = 382
+  Align = alClient
+  ClientHeight = 359
+  ClientWidth = 382
+  TabOrder = 0
+  DesignLeft = 973
+  DesignTop = 436
+  object Panel1: TPanel
+    Left = 40
+    Height = 339
+    Top = 20
+    Width = 342
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    ClientHeight = 339
+    ClientWidth = 342
+    TabOrder = 0
+    object imgHistogrammes: TPaintBox
+      Left = 1
+      Height = 337
+      Top = 1
+      Width = 340
+      Align = alClient
+      OnMouseMove = imgHistogrammesMouseMove
+      OnPaint = imgHistogrammesPaint
+    end
+  end
+  object lbMousePos: TStaticText
+    Left = 40
+    Height = 20
+    Top = 0
+    Width = 232
+    BorderStyle = sbsSunken
+    Caption = 'StaticText1g'
+    TabOrder = 1
+  end
+  object lbZMax: TLabel
+    Left = 0
+    Height = 13
+    Top = 20
+    Width = 36
+    AutoSize = False
+    Caption = 'lbZMax'
+    ParentColor = False
+  end
+  object lbZMin: TLabel
+    Left = 0
+    Height = 13
+    Top = 345
+    Width = 36
+    Anchors = [akLeft, akBottom]
+    AutoSize = False
+    Caption = 'lbZMin'
+    ParentColor = False
+  end
+end

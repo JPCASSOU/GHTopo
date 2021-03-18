@@ -1,0 +1,169 @@
+object dlgSelectSecteurCodeExpe: TdlgSelectSecteurCodeExpe
+  Left = 299
+  Height = 136
+  Top = 237
+  Width = 844
+  Caption = 'dlgSelectSecteurCodeExpe'
+  ClientHeight = 136
+  ClientWidth = 844
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  Position = poScreenCenter
+  LCLVersion = '2.0.0.4'
+  object Panel1: TPanel
+    Left = 0
+    Height = 96
+    Top = 1
+    Width = 842
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelOuter = bvLowered
+    ClientHeight = 96
+    ClientWidth = 842
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 4
+      Height = 16
+      Top = 8
+      Width = 49
+      Caption = 'Secteur'
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 4
+      Height = 16
+      Top = 36
+      Width = 110
+      Caption = 'Code instruments'
+      ParentColor = False
+    end
+    object Label3: TLabel
+      Left = 4
+      Height = 16
+      Top = 64
+      Width = 80
+      Caption = 'Séance topo'
+      ParentColor = False
+    end
+    object editIdxSecteur: TCurrencyEdit
+      Left = 136
+      Height = 24
+      Top = 8
+      Width = 80
+      Alignment = taRightJustify
+      DecimalPlaces = 0
+      DisplayFormat = '0'
+      MaxValue = 0
+      MinValue = 0
+      TabOrder = 0
+      Value = 0
+    end
+    object editIdxCode: TCurrencyEdit
+      Left = 136
+      Height = 24
+      Top = 36
+      Width = 80
+      Alignment = taRightJustify
+      DecimalPlaces = 0
+      DisplayFormat = '0'
+      MaxValue = 0
+      MinValue = 0
+      TabOrder = 1
+      Value = 0
+    end
+    object editIdxExpe: TCurrencyEdit
+      Left = 136
+      Height = 24
+      Top = 64
+      Width = 80
+      Alignment = taRightJustify
+      DecimalPlaces = 0
+      DisplayFormat = '0'
+      MaxValue = 0
+      MinValue = 0
+      TabOrder = 2
+      Value = 0
+    end
+    object Button1: TButton
+      Left = 216
+      Height = 25
+      Top = 8
+      Width = 39
+      Caption = '...'
+      OnClick = Button1Click
+      TabOrder = 3
+    end
+    object Button2: TButton
+      Left = 216
+      Height = 25
+      Top = 36
+      Width = 39
+      Caption = '...'
+      OnClick = Button2Click
+      TabOrder = 4
+    end
+    object Button3: TButton
+      Left = 216
+      Height = 25
+      Top = 64
+      Width = 39
+      Caption = '...'
+      OnClick = Button3Click
+      TabOrder = 5
+    end
+    object lbDescSecteur: TStaticText
+      Left = 260
+      Height = 25
+      Top = 8
+      Width = 579
+      Anchors = [akTop, akLeft, akRight]
+      BorderStyle = sbsSunken
+      TabOrder = 6
+    end
+    object lbDescCode: TStaticText
+      Left = 260
+      Height = 25
+      Top = 36
+      Width = 579
+      Anchors = [akTop, akLeft, akRight]
+      BorderStyle = sbsSunken
+      TabOrder = 7
+    end
+    object lbDescExpe: TStaticText
+      Left = 260
+      Height = 25
+      Top = 64
+      Width = 579
+      Anchors = [akTop, akLeft, akRight]
+      BorderStyle = sbsSunken
+      TabOrder = 8
+    end
+  end
+  object btnOK: TBitBtn
+    Left = 617
+    Height = 30
+    Top = 102
+    Width = 108
+    Anchors = [akRight, akBottom]
+    Default = True
+    DefaultCaption = True
+    Kind = bkOK
+    ModalResult = 1
+    TabOrder = 1
+  end
+  object btnCancel: TBitBtn
+    Left = 734
+    Height = 30
+    Top = 102
+    Width = 108
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    DefaultCaption = True
+    Kind = bkCancel
+    ModalResult = 2
+    TabOrder = 2
+  end
+end

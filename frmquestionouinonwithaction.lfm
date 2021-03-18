@@ -1,0 +1,63 @@
+object dlgQuestionOuiNonWithAction: TdlgQuestionOuiNonWithAction
+  Left = 564
+  Height = 102
+  Top = 301
+  Width = 469
+  Caption = 'dlgQuestionOuiNonWithAction'
+  ClientHeight = 102
+  ClientWidth = 469
+  Font.CharSet = ANSI_CHARSET
+  Font.Color = clBlack
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  OnShow = FormShow
+  Position = poScreenCenter
+  LCLVersion = '2.0.0.4'
+  object BitBtn1: TBitBtn
+    Left = 228
+    Height = 30
+    Top = 69
+    Width = 115
+    Anchors = [akRight, akBottom]
+    Default = True
+    DefaultCaption = True
+    Kind = bkYes
+    ModalResult = 6
+    TabOrder = 0
+  end
+  object lbQuestion: TLabel
+    Left = 4
+    Height = 57
+    Top = 7
+    Width = 460
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    AutoSize = False
+    Caption = 'lbQuestion'
+    ParentColor = False
+    WordWrap = True
+  end
+  object BitBtn2: TBitBtn
+    Left = 352
+    Height = 30
+    Top = 69
+    Width = 115
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    DefaultCaption = True
+    Kind = bkNo
+    ModalResult = 7
+    TabOrder = 1
+  end
+  object chkDoAction: TCheckBox
+    Left = 4
+    Height = 20
+    Top = 75
+    Width = 99
+    Anchors = [akLeft, akBottom]
+    Caption = 'chkDoAction'
+    TabOrder = 2
+  end
+end

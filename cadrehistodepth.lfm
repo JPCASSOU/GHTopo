@@ -1,0 +1,56 @@
+object CdrHistoAltitudesExt: TCdrHistoAltitudesExt
+  Left = 0
+  Height = 431
+  Top = 0
+  Width = 637
+  Align = alClient
+  ClientHeight = 431
+  ClientWidth = 637
+  TabOrder = 0
+  DesignLeft = 454
+  DesignTop = 548
+  object Chart1: TChart
+    Left = 0
+    Height = 431
+    Top = 0
+    Width = 637
+    AxisList = <    
+      item
+        Grid.Color = clGray
+        Grid.Style = psSolid
+        Marks.LabelBrush.Style = bsClear
+        Minors = <>
+        Title.LabelFont.Orientation = 900
+        Title.Visible = True
+        Title.Caption = 'Altitudes'
+        Title.LabelBrush.Style = bsClear
+      end    
+      item
+        Grid.Color = clGray
+        Grid.Style = psSolid
+        Alignment = calBottom
+        Marks.LabelBrush.Style = bsClear
+        Minors = <>
+        Title.Visible = True
+        Title.Caption = 'Longueur'
+        Title.LabelBrush.Style = bsClear
+      end>
+    BackColor = clWhite
+    Foot.Brush.Color = clBtnFace
+    Foot.Font.Color = clBlue
+    Title.Brush.Color = clBtnFace
+    Title.Font.Color = clBlue
+    Title.Text.Strings = (
+      'TAChart'
+    )
+    Align = alClient
+    object Chart1BarSeries1: TBarSeries
+      Marks.Attachment = maEdge
+      ZPosition = 11
+      AxisIndexX = 1
+      AxisIndexY = 0
+      BarBrush.Color = clMoneyGreen
+      BarWidthPercent = 90
+    end
+  end
+end

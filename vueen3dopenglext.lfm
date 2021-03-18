@@ -1,0 +1,342 @@
+object frmVueEn3DOpenGLExt: TfrmVueEn3DOpenGLExt
+  Left = 174
+  Height = 736
+  Top = 101
+  Width = 1354
+  Caption = 'frmVueEn3DOpenGLExt'
+  ClientHeight = 736
+  ClientWidth = 1354
+  Font.CharSet = ANSI_CHARSET
+  Font.Color = clBlack
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  OnClose = FormClose
+  OnShow = FormShow
+  Position = poScreenCenter
+  LCLVersion = '2.0.0.4'
+  object Panel2: TPanel
+    Left = 4
+    Height = 733
+    Top = 3
+    Width = 1149
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelOuter = bvLowered
+    ClientHeight = 733
+    ClientWidth = 1149
+    TabOrder = 0
+    object Panel3: TPanel
+      Left = 4
+      Height = 31
+      Top = 2
+      Width = 889
+      Anchors = [akTop, akLeft, akRight]
+      BevelOuter = bvLowered
+      TabOrder = 0
+    end
+    object Panel1: TPanel
+      Left = 4
+      Height = 691
+      Top = 37
+      Width = 1141
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      Caption = 'Panel1'
+      ClientHeight = 691
+      ClientWidth = 1141
+      TabOrder = 1
+      inline CdrVue3DOpenGLExt1: TCdrVue3DOpenGLExt
+        Left = 1
+        Height = 689
+        Top = 1
+        Width = 1139
+        ClientHeight = 689
+        ClientWidth = 1139
+        inherited OpenGLControl1: TOpenGLControl
+          Height = 689
+          Width = 1139
+        end
+      end
+    end
+  end
+  object Panel4: TPanel
+    Left = 1157
+    Height = 333
+    Top = 3
+    Width = 197
+    Anchors = [akTop, akRight]
+    BevelOuter = bvLowered
+    ClientHeight = 333
+    ClientWidth = 197
+    TabOrder = 1
+    object btnParametrerVue: TButton
+      Left = 4
+      Height = 25
+      Top = 4
+      Width = 188
+      Anchors = [akTop, akLeft, akRight]
+      Caption = 'Paramétrer la vue 3D'
+      OnClick = btnParametrerVueClick
+      TabOrder = 0
+    end
+    object grbxParamsMaillage: TGroupBox
+      Left = 5
+      Height = 285
+      Top = 36
+      Width = 187
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      Caption = 'Maillage'
+      ClientHeight = 264
+      ClientWidth = 183
+      TabOrder = 1
+      object cmbModeDessinMaillage: TComboBox
+        Left = 4
+        Height = 24
+        Top = 4
+        Width = 175
+        Anchors = [akTop, akLeft, akRight]
+        ItemHeight = 16
+        ItemIndex = 0
+        Items.Strings = (
+          'Aucun'
+          'Fil de fer'
+          'Solide'
+          'Transparent'
+        )
+        OnChange = cmbModeDessinMaillageChange
+        Style = csDropDownList
+        TabOrder = 0
+        Text = 'Aucun'
+      end
+      object btnColorZMiniMaillage: TColorButton
+        Left = 68
+        Height = 30
+        Top = 132
+        Width = 112
+        Anchors = [akTop, akLeft, akRight]
+        BorderWidth = 2
+        ButtonColorSize = 16
+        ButtonColor = clLime
+      end
+      object btnColorZMaxiMaillage: TColorButton
+        Left = 68
+        Height = 30
+        Top = 100
+        Width = 112
+        Anchors = [akTop, akLeft, akRight]
+        BorderWidth = 2
+        ButtonColorSize = 16
+        ButtonColor = clMaroon
+      end
+      object Label11: TLabel
+        Left = 4
+        Height = 16
+        Top = 136
+        Width = 38
+        Caption = 'Z Mini'
+        ParentColor = False
+      end
+      object Label12: TLabel
+        Left = 4
+        Height = 16
+        Top = 104
+        Width = 42
+        Caption = 'Z Maxi'
+        ParentColor = False
+      end
+      object Button2: TButton
+        Left = 4
+        Height = 25
+        Top = 164
+        Width = 176
+        Anchors = [akTop, akLeft, akRight]
+        Caption = 'Reconstruire'
+        OnClick = Button2Click
+        TabOrder = 1
+      end
+      object trkbMaillageOpacity: TTrackBar
+        Left = 4
+        Height = 40
+        Top = 32
+        Width = 175
+        Max = 255
+        OnChange = trkbMaillageOpacityChange
+        PageSize = 10
+        Position = 50
+        TickMarks = tmTopLeft
+        TickStyle = tsManual
+        Anchors = [akTop, akLeft, akRight]
+        TabOrder = 2
+      end
+      object lbStatusMaillage: TStaticText
+        Left = 4
+        Height = 21
+        Top = 241
+        Width = 175
+        Alignment = taCenter
+        Anchors = [akTop, akLeft, akRight]
+        BorderStyle = sbsSingle
+        Caption = '---'
+        Color = clSilver
+        ParentColor = False
+        TabOrder = 3
+      end
+      object chkDegradeAltitudes: TCheckBox
+        Left = 4
+        Height = 20
+        Top = 80
+        Width = 143
+        Caption = 'Dégradé d''altitudes'
+        TabOrder = 4
+      end
+      object btnDetourerMNT: TButton
+        Left = 4
+        Height = 25
+        Top = 212
+        Width = 175
+        Anchors = [akTop, akLeft, akRight]
+        Caption = 'btnDetourerMNT'
+        OnClick = btnDetourerMNTClick
+        TabOrder = 5
+      end
+    end
+  end
+  object Panel5: TPanel
+    Left = 1156
+    Height = 234
+    Top = 352
+    Width = 194
+    Anchors = [akTop, akRight]
+    BevelOuter = bvLowered
+    ClientHeight = 234
+    ClientWidth = 194
+    TabOrder = 2
+    object sclTheta: TScrollBar
+      Left = 8
+      Height = 21
+      Top = 208
+      Width = 181
+      Anchors = [akLeft, akRight, akBottom]
+      LargeChange = 10
+      Max = 360
+      PageSize = 0
+      Position = 45
+      TabOrder = 0
+      OnChange = sclThetaChange
+    end
+    object sclPhi: TScrollBar
+      Left = 167
+      Height = 160
+      Top = 44
+      Width = 22
+      Anchors = [akTop, akRight, akBottom]
+      Kind = sbVertical
+      Max = 90
+      PageSize = 0
+      Position = 32
+      TabOrder = 1
+      OnChange = sclPhiChange
+    end
+    object sclFOV: TScrollBar
+      Left = 4
+      Height = 21
+      Top = 4
+      Width = 186
+      Anchors = [akTop, akLeft, akRight]
+      Max = 180
+      Min = 1
+      PageSize = 0
+      Position = 60
+      TabOrder = 2
+      OnChange = sclFOVChange
+    end
+    object editFOV: TCurrencyEdit
+      Left = 76
+      Height = 25
+      Top = 28
+      Width = 40
+      Alignment = taRightJustify
+      AutoSize = False
+      DecimalPlaces = 0
+      DisplayFormat = '0'
+      Font.CharSet = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      MaxValue = 0
+      MinValue = 0
+      ParentFont = False
+      TabOrder = 3
+      Value = 1
+    end
+    object editTheta: TCurrencyEdit
+      Left = 76
+      Height = 27
+      Top = 176
+      Width = 40
+      Alignment = taRightJustify
+      AutoSize = False
+      DecimalPlaces = 0
+      DisplayFormat = '0'
+      Font.CharSet = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      MaxValue = 0
+      MinValue = 0
+      ParentFont = False
+      TabOrder = 4
+      Value = 45
+    end
+    object editPhi: TCurrencyEdit
+      Left = 124
+      Height = 26
+      Top = 104
+      Width = 40
+      Alignment = taRightJustify
+      AutoSize = False
+      DecimalPlaces = 0
+      DisplayFormat = '0'
+      Font.CharSet = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      MaxValue = 0
+      MinValue = 0
+      ParentFont = False
+      TabOrder = 5
+      Value = 32
+    end
+    object Label1: TLabel
+      Left = 36
+      Height = 16
+      Top = 36
+      Width = 35
+      Caption = 'Zoom'
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 128
+      Height = 16
+      Top = 84
+      Width = 30
+      Caption = 'Elev.'
+      ParentColor = False
+    end
+    object Label3: TLabel
+      Left = 68
+      Height = 16
+      Top = 156
+      Width = 53
+      Caption = 'Rotation'
+      ParentColor = False
+    end
+  end
+end

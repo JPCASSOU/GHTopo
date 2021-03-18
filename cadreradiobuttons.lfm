@@ -1,0 +1,13 @@
+object CdrRadioButtons: TCdrRadioButtons
+  Left = 0
+  Height = 44
+  Top = 0
+  Width = 765
+  Align = alClient
+  Color = clForm
+  OnResize = FrameResize
+  ParentColor = False
+  TabOrder = 0
+  DesignLeft = 509
+  DesignTop = 362
+end

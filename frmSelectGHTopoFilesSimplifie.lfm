@@ -1,0 +1,93 @@
+object dlgSelectGHTopoFilesSimplifie: TdlgSelectGHTopoFilesSimplifie
+  Left = 470
+  Height = 371
+  Top = 314
+  Width = 521
+  Caption = 'dlgSelectGHTopoFilesSimplifie'
+  ClientHeight = 371
+  ClientWidth = 521
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  Position = poScreenCenter
+  LCLVersion = '2.0.0.4'
+  object btnOK1: TBitBtn
+    Left = 391
+    Height = 30
+    Top = 338
+    Width = 127
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    DefaultCaption = True
+    Kind = bkCancel
+    ModalResult = 2
+    TabOrder = 0
+  end
+  object btnOK: TBitBtn
+    Left = 259
+    Height = 30
+    Top = 338
+    Width = 127
+    Anchors = [akRight, akBottom]
+    DefaultCaption = True
+    Kind = bkOK
+    ModalResult = 1
+    TabOrder = 1
+  end
+  object Panel1: TPanel
+    Left = 4
+    Height = 328
+    Top = 4
+    Width = 516
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelOuter = bvLowered
+    ClientHeight = 328
+    ClientWidth = 516
+    TabOrder = 2
+    object lsbFichiers: TFileListBox
+      Left = 4
+      Height = 252
+      Top = 70
+      Width = 508
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      Directory = 'C:\lazarus'
+      ItemHeight = 0
+      Mask = '*.xtb;*.gtx'
+      TabOrder = 0
+    end
+    object editInitialDir: TDirectoryEdit
+      Left = 4
+      Height = 24
+      Top = 22
+      Width = 508
+      Directory = 'editInitialDir'
+      ShowHidden = False
+      ButtonWidth = 23
+      NumGlyphs = 1
+      Anchors = [akTop, akLeft, akRight]
+      MaxLength = 0
+      TabOrder = 1
+      OnChange = editInitialDirChange
+      Text = 'editInitialDir'
+    end
+    object Label1: TLabel
+      Left = 4
+      Height = 16
+      Top = 4
+      Width = 98
+      Caption = 'Dossier courant'
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 4
+      Height = 16
+      Top = 52
+      Width = 50
+      Caption = 'Fichiers'
+      ParentColor = False
+    end
+  end
+end

@@ -1,0 +1,39 @@
+object CdrRoseDiagramExt: TCdrRoseDiagramExt
+  Left = 0
+  Height = 410
+  Top = 0
+  Width = 405
+  Align = alClient
+  ClientHeight = 410
+  ClientWidth = 405
+  Font.CharSet = ANSI_CHARSET
+  Font.Color = clBlack
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  ParentFont = False
+  TabOrder = 0
+  DesignLeft = 483
+  DesignTop = 456
+  object Panel1: TPanel
+    Left = 0
+    Height = 410
+    Top = 0
+    Width = 405
+    Align = alClient
+    Anchors = [akTop, akLeft, akRight]
+    ClientHeight = 410
+    ClientWidth = 405
+    TabOrder = 0
+    object imgHistogrammes: TPaintBox
+      Left = 1
+      Height = 408
+      Top = 1
+      Width = 403
+      Align = alClient
+      OnPaint = imgHistogrammesPaint
+    end
+  end
+end

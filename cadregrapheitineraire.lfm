@@ -1,0 +1,499 @@
+object CdrGrapheItineraire: TCdrGrapheItineraire
+  Left = 0
+  Height = 646
+  Top = 0
+  Width = 768
+  Align = alClient
+  ClientHeight = 646
+  ClientWidth = 768
+  Font.CharSet = ANSI_CHARSET
+  Font.Color = clBlack
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  ParentFont = False
+  TabOrder = 0
+  DesignLeft = 1143
+  DesignTop = 362
+  object Panel2: TPanel
+    Left = 4
+    Height = 96
+    Top = 4
+    Width = 761
+    Anchors = [akTop, akLeft, akRight]
+    BevelInner = bvLowered
+    ClientHeight = 96
+    ClientWidth = 761
+    TabOrder = 0
+    object lbStDepart: TLabel
+      Left = 4
+      Height = 16
+      Top = 36
+      Width = 42
+      Caption = 'Départ'
+      ParentColor = False
+    end
+    object lbStArrivee: TLabel
+      Left = 292
+      Height = 16
+      Top = 36
+      Width = 46
+      Caption = 'Arrivée'
+      ParentColor = False
+    end
+    object editNomItineraire: TEdit
+      Left = 148
+      Height = 24
+      Top = 8
+      Width = 508
+      Anchors = [akTop, akLeft, akRight]
+      TabOrder = 0
+      Text = 'editNomItineraire'
+    end
+    object Label3: TLabel
+      Left = 4
+      Height = 16
+      Top = 8
+      Width = 118
+      Caption = 'Nom de l''itinéraire'
+      ParentColor = False
+    end
+    object lbNbPointsPassage: TStaticText
+      Left = 8
+      Height = 25
+      Top = 64
+      Width = 96
+      BorderStyle = sbsSingle
+      Caption = '%d points'
+      TabOrder = 1
+    end
+    object lbLongueurParcours: TStaticText
+      Left = 368
+      Height = 25
+      Top = 64
+      Width = 388
+      Anchors = [akTop, akLeft, akRight]
+      BorderStyle = sbsSingle
+      Caption = '%d points'
+      TabOrder = 2
+    end
+    object lbDistanceEuclidienne: TStaticText
+      Left = 108
+      Height = 25
+      Top = 64
+      Width = 256
+      BorderStyle = sbsSingle
+      Caption = '%d points'
+      TabOrder = 3
+    end
+    object btnCalculerItineraire: TButton
+      Left = 504
+      Height = 25
+      Top = 36
+      Width = 124
+      Caption = 'Calculer'
+      OnClick = btnCalculerItineraireClick
+      TabOrder = 4
+    end
+    object editStationDepart: TEdit
+      Left = 148
+      Height = 24
+      Top = 36
+      Width = 86
+      TabOrder = 5
+    end
+    object editStationArrivee: TEdit
+      Left = 352
+      Height = 24
+      Top = 36
+      Width = 86
+      TabOrder = 6
+    end
+    object btnCouleur: TColorButton
+      Left = 660
+      Height = 25
+      Top = 8
+      Width = 96
+      Anchors = [akTop, akRight]
+      BorderWidth = 2
+      ButtonColorSize = 16
+      ButtonColor = clRed
+      OnClick = btnCouleurClick
+    end
+    object btnPickStartFromCarte: TButton
+      Left = 236
+      Height = 24
+      Top = 36
+      Width = 31
+      Caption = '...'
+      OnClick = btnPickStartFromCarteClick
+      TabOrder = 7
+    end
+    object btnPickEndFromCarte: TButton
+      Left = 440
+      Height = 24
+      Top = 36
+      Width = 31
+      Caption = '...'
+      OnClick = btnPickEndFromCarteClick
+      TabOrder = 8
+    end
+  end
+  object PageControl1: TPageControl
+    Left = 4
+    Height = 511
+    Top = 104
+    Width = 759
+    ActivePage = tabExportHTML
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    TabIndex = 2
+    TabOrder = 1
+    object tabShtPlan: TTabSheet
+      Caption = 'Carte'
+      ClientHeight = 482
+      ClientWidth = 751
+      inline CdrDGCDrawingContext1: TCdrDGCDrawingContext
+        Height = 482
+        Width = 751
+        ClientHeight = 482
+        ClientWidth = 751
+        inherited pnlVue: TPanel
+          Height = 446
+          Width = 720
+          ClientHeight = 446
+          ClientWidth = 720
+          inherited Vue: TPaintBox
+            Height = 444
+            Width = 718
+          end
+        end
+        inherited lbMousePosition: TStaticText
+          Top = 451
+          Width = 616
+        end
+        inherited SpeedButton12: TSpeedButton
+          Left = 719
+          Flat = False
+        end
+        inherited SpeedButton13: TSpeedButton
+          Left = 719
+          Flat = False
+        end
+        inherited SpeedButton14: TSpeedButton
+          Left = 719
+          Flat = False
+        end
+        inherited SpeedButton15: TSpeedButton
+          Left = 719
+          Flat = False
+        end
+        inherited SpeedButton16: TSpeedButton
+          Left = 719
+          Flat = False
+        end
+        inherited SpeedButton17: TSpeedButton
+          Left = 719
+          Flat = False
+        end
+        inherited SpeedButton18: TSpeedButton
+          Left = 719
+          Top = 416
+          Flat = False
+        end
+        inherited SpeedButton19: TSpeedButton
+          Left = 656
+          Top = 450
+          Flat = False
+        end
+        inherited SpeedButton20: TSpeedButton
+          Left = 688
+          Top = 450
+          Flat = False
+        end
+        inherited SpeedButton21: TSpeedButton
+          Left = 719
+          Top = 450
+        end
+        inherited SpeedButton22: TSpeedButton
+          Left = 624
+          Top = 450
+          Flat = False
+        end
+      end
+    end
+    object tabShtRoadMap: TTabSheet
+      Caption = 'Feuille de route'
+      ClientHeight = 482
+      ClientWidth = 751
+      object grdRoadmap: TStringGrid
+        Left = 0
+        Height = 368
+        Top = 32
+        Width = 747
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        TabOrder = 0
+        TitleFont.CharSet = ANSI_CHARSET
+        TitleFont.Color = clBlack
+        TitleFont.Height = -13
+        TitleFont.Name = 'Arial'
+        TitleFont.Pitch = fpVariable
+        TitleFont.Quality = fqDraft
+        TitleFont.Style = [fsBold]
+      end
+      object btnCopierTableau: TButton
+        Left = 555
+        Height = 25
+        Top = 4
+        Width = 195
+        Anchors = [akTop, akRight]
+        Caption = 'Copier le tableau'
+        OnClick = btnCopierTableauClick
+        TabOrder = 1
+      end
+      object cmbUniteBoussole: TComboBox
+        Left = 108
+        Height = 24
+        Top = 4
+        Width = 164
+        ItemHeight = 16
+        OnChange = cmbUniteBoussoleChange
+        Style = csDropDownList
+        TabOrder = 2
+      end
+      object Label1: TLabel
+        Left = 0
+        Height = 16
+        Top = 4
+        Width = 93
+        Caption = 'Unité boussole'
+        ParentColor = False
+      end
+      object Label10: TLabel
+        Left = 0
+        Height = 16
+        Top = 409
+        Width = 259
+        Anchors = [akLeft, akBottom]
+        Caption = 'Fichier PDF pour les fiches de l''itinéraire'
+        ParentColor = False
+      end
+      object editPDFOutputFiches: TFileNameEdit
+        Left = 0
+        Height = 24
+        Top = 429
+        Width = 747
+        DialogKind = dkSave
+        DialogOptions = [ofOverwritePrompt, ofEnableSizing, ofViewDetail]
+        FilterIndex = 0
+        HideDirectories = False
+        ButtonWidth = 23
+        NumGlyphs = 1
+        Anchors = [akLeft, akRight, akBottom]
+        MaxLength = 0
+        TabOrder = 3
+      end
+      object btnGenererFichesPDF: TButton
+        Left = 0
+        Height = 25
+        Top = 457
+        Width = 239
+        Anchors = [akLeft, akBottom]
+        Caption = 'Générer les fiches des points'
+        OnClick = btnGenererFichesPDFClick
+        TabOrder = 4
+      end
+    end
+    object tabExportHTML: TTabSheet
+      Caption = 'Export HTML'
+      ClientHeight = 482
+      ClientWidth = 751
+      object Label2: TLabel
+        Left = 4
+        Height = 16
+        Top = 60
+        Width = 20
+        Caption = 'L ='
+        ParentColor = False
+      end
+      object editHTMLWidth: TCurrencyEdit
+        Left = 44
+        Height = 24
+        Top = 56
+        Width = 61
+        Alignment = taRightJustify
+        DecimalPlaces = 0
+        DisplayFormat = '0'
+        MaxValue = 0
+        MinValue = 400
+        TabOrder = 0
+        Value = 666
+      end
+      object Label4: TLabel
+        Left = 116
+        Height = 16
+        Top = 60
+        Width = 21
+        Caption = 'H ='
+        ParentColor = False
+      end
+      object editHTMLHeight: TCurrencyEdit
+        Left = 152
+        Height = 24
+        Top = 56
+        Width = 61
+        Alignment = taRightJustify
+        DecimalPlaces = 0
+        DisplayFormat = '0'
+        MaxValue = 0
+        MinValue = 400
+        TabOrder = 1
+        Value = 666
+      end
+      object Label5: TLabel
+        Left = 255
+        Height = 16
+        Top = 56
+        Width = 39
+        Caption = 'Menu:'
+        ParentColor = False
+      end
+      object editHTMLHeight1: TCurrencyEdit
+        Left = 323
+        Height = 24
+        Top = 56
+        Width = 61
+        Alignment = taRightJustify
+        DecimalPlaces = 0
+        DisplayFormat = '0'
+        MaxValue = 0
+        MinValue = 100
+        TabOrder = 2
+        Value = 200
+      end
+      object btnExportHTML: TButton
+        Left = 0
+        Height = 25
+        Top = 232
+        Width = 167
+        Caption = 'btnExportHTML'
+        OnClick = btnExportHTMLClick
+        TabOrder = 3
+      end
+      object cmbDeviceCible: TComboBox
+        Left = 4
+        Height = 24
+        Top = 24
+        Width = 741
+        Anchors = [akTop, akLeft, akRight]
+        ItemHeight = 16
+        OnChange = cmbDeviceCibleChange
+        TabOrder = 4
+        Text = 'cmbDeviceCible'
+      end
+      object btnBackgroundCarte: TColorButton
+        Left = 152
+        Height = 29
+        Top = 96
+        Width = 139
+        BorderWidth = 2
+        ButtonColorSize = 16
+        ButtonColor = 14155775
+      end
+      object btnColorCenterline: TColorButton
+        Left = 152
+        Height = 29
+        Top = 128
+        Width = 139
+        BorderWidth = 2
+        ButtonColorSize = 16
+        ButtonColor = clMaroon
+      end
+      object Label6: TLabel
+        Left = 4
+        Height = 16
+        Top = 128
+        Width = 72
+        Caption = 'Centerlines'
+        ParentColor = False
+      end
+      object Label7: TLabel
+        Left = 4
+        Height = 16
+        Top = 96
+        Width = 105
+        Caption = 'BackgroundPlan'
+        ParentColor = False
+      end
+      object Label8: TLabel
+        Left = 4
+        Height = 16
+        Top = 4
+        Width = 99
+        Caption = 'Affichage cible:'
+        ParentColor = False
+      end
+      object editHTMLOutput: TFileNameEdit
+        Left = 4
+        Height = 24
+        Top = 184
+        Width = 741
+        DialogKind = dkSave
+        DialogOptions = [ofOverwritePrompt, ofEnableSizing, ofViewDetail]
+        FilterIndex = 0
+        HideDirectories = False
+        ButtonWidth = 23
+        NumGlyphs = 1
+        Anchors = [akTop, akLeft, akRight]
+        MaxLength = 0
+        TabOrder = 5
+      end
+      object Label9: TLabel
+        Left = 4
+        Height = 16
+        Top = 164
+        Width = 147
+        Caption = 'Fichier HTML de sortie:'
+        ParentColor = False
+      end
+    end
+  end
+  object lbMouseCoords: TStaticText
+    Left = 4
+    Height = 25
+    Top = 617
+    Width = 563
+    Anchors = [akLeft, akRight, akBottom]
+    BorderStyle = sbsSingle
+    Caption = 'lbMouseCoords'
+    TabOrder = 2
+  end
+  object pnlProgression: TPanel
+    Left = 36
+    Height = 49
+    Top = 320
+    Width = 695
+    Anchors = [akTop, akLeft, akRight]
+    ClientHeight = 49
+    ClientWidth = 695
+    TabOrder = 3
+    object lbEtape: TLabel
+      Left = 4
+      Height = 16
+      Top = 4
+      Width = 48
+      Caption = 'lbEtape'
+      ParentColor = False
+    end
+    object ProgressBar1: TProgressBar
+      Left = 4
+      Height = 20
+      Top = 24
+      Width = 684
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      Smooth = True
+      TabOrder = 0
+    end
+  end
+end

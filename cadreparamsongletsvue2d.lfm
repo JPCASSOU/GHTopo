@@ -1,0 +1,327 @@
+object cdrParamsOngletVue2D: TcdrParamsOngletVue2D
+  Left = 0
+  Height = 216
+  Top = 0
+  Width = 460
+  Align = alClient
+  ClientHeight = 216
+  ClientWidth = 460
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  ParentFont = False
+  TabOrder = 0
+  DesignLeft = 3193
+  DesignTop = 143
+  object grbxElementsAffiches: TGroupBox
+    Left = 4
+    Height = 184
+    Top = 1
+    Width = 240
+    Caption = 'Elements affichés'
+    ClientHeight = 163
+    ClientWidth = 236
+    TabOrder = 0
+    object chkPolygonales: TCheckBox
+      Left = 4
+      Height = 20
+      Top = 4
+      Width = 98
+      Caption = 'Polygonales'
+      TabOrder = 0
+    end
+    object chkStations: TCheckBox
+      Left = 4
+      Height = 20
+      Top = 32
+      Width = 71
+      Caption = 'Stations'
+      TabOrder = 1
+    end
+    object chkIDStations: TCheckBox
+      Left = 111
+      Height = 20
+      Top = 32
+      Width = 84
+      Caption = 'IDStations'
+      TabOrder = 2
+    end
+    object chkCotes: TCheckBox
+      Left = 111
+      Height = 20
+      Top = 52
+      Width = 73
+      Caption = 'Cotation'
+      TabOrder = 3
+    end
+    object chkParois: TCheckBox
+      Left = 4
+      Height = 20
+      Top = 72
+      Width = 60
+      Caption = 'Parois'
+      TabOrder = 4
+    end
+    object chkSections: TCheckBox
+      Left = 4
+      Height = 20
+      Top = 92
+      Width = 74
+      Caption = 'Sections'
+      TabOrder = 5
+    end
+    object chkRemplissage: TCheckBox
+      Left = 111
+      Height = 20
+      Top = 72
+      Width = 101
+      Caption = 'Remplissage'
+      TabOrder = 6
+    end
+    object chkAltitudes: TCheckBox
+      Left = 4
+      Height = 20
+      Top = 52
+      Width = 75
+      Caption = 'Altitudes'
+      TabOrder = 7
+    end
+    object editLargeurTraitPolygonale: TSpinEdit
+      Left = 110
+      Height = 24
+      Top = 4
+      Width = 68
+      MaxValue = 5
+      TabOrder = 8
+      Value = 5
+    end
+    object chkEntrances: TCheckBox
+      Left = 111
+      Height = 20
+      Top = 92
+      Width = 67
+      Caption = 'Entrées'
+      TabOrder = 9
+    end
+    object chkAntennes: TCheckBox
+      Left = 4
+      Height = 20
+      Top = 112
+      Width = 83
+      Caption = 'Radiantes'
+      OnChange = chkAntennesChange
+      TabOrder = 10
+    end
+    object chkQuadrillage: TCheckBox
+      Left = 4
+      Height = 20
+      Top = 132
+      Width = 89
+      Align = alCustom
+      Caption = 'Grille: Esp:'
+      TabOrder = 11
+    end
+    object editQdrSpc: TComboBox
+      Left = 111
+      Height = 24
+      Top = 132
+      Width = 64
+      ItemHeight = 16
+      ItemIndex = 0
+      Items.Strings = (
+        '10'
+        '20'
+        '25'
+        '40'
+        '50'
+        '100'
+        '200'
+        '250'
+        '400'
+        '500'
+        '1000'
+        '2000'
+        '4000'
+        '5000'
+        '10000'
+      )
+      TabOrder = 12
+      Text = '10'
+    end
+    object btnQdrColor: TColorButton
+      Left = 175
+      Height = 24
+      Top = 132
+      Width = 58
+      BorderWidth = 2
+      ButtonColorSize = 16
+      ButtonColor = clGray
+    end
+    object Label2: TLabel
+      Left = 184
+      Height = 16
+      Top = 4
+      Width = 16
+      Caption = 'px'
+      ParentColor = False
+    end
+    object chkAnnotations: TCheckBox
+      Left = 111
+      Height = 20
+      Top = 112
+      Width = 95
+      Caption = 'Annotations'
+      TabOrder = 13
+    end
+  end
+  object grbxDegradeAltitudes: TGroupBox
+    Left = 248
+    Height = 184
+    Top = 1
+    Width = 212
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'Dégradé d''altitudes'
+    ClientHeight = 163
+    ClientWidth = 208
+    TabOrder = 1
+    object lbX1Y1: TStaticText
+      Left = 4
+      Height = 17
+      Top = 124
+      Width = 200
+      Anchors = [akLeft, akRight, akBottom]
+      BorderStyle = sbsSunken
+      Caption = 'lbX1Y1'
+      Font.CharSet = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      ParentFont = False
+      TabOrder = 0
+    end
+    object lbX2Y2: TStaticText
+      Left = 4
+      Height = 17
+      Top = 144
+      Width = 200
+      Anchors = [akLeft, akRight, akBottom]
+      BorderStyle = sbsSunken
+      Caption = 'lbX2Y2'
+      Font.CharSet = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -12
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      ParentFont = False
+      TabOrder = 1
+    end
+    object btnDegradeStart: TColorButton
+      Left = 144
+      Height = 28
+      Top = 4
+      Width = 60
+      Anchors = [akTop, akRight]
+      BorderWidth = 2
+      ButtonColorSize = 16
+      ButtonColor = clYellow
+    end
+    object btnDegradeStop: TColorButton
+      Left = 144
+      Height = 28
+      Top = 32
+      Width = 60
+      Anchors = [akTop, akRight]
+      BorderWidth = 2
+      ButtonColorSize = 16
+      ButtonColor = clGreen
+    end
+    object lbCoteMini: TLabel
+      Left = 4
+      Height = 16
+      Top = 4
+      Width = 53
+      Caption = 'Alt. mini'
+      Font.CharSet = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+    end
+    object lbCoteMaxi: TLabel
+      Left = 4
+      Height = 16
+      Top = 32
+      Width = 57
+      Caption = 'Alt. maxi'
+      Font.CharSet = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+    end
+    object Label1: TLabel
+      Left = 4
+      Height = 16
+      Top = 61
+      Width = 121
+      Anchors = [akTop, akLeft, akRight]
+      Caption = 'Fond'
+      ParentColor = False
+    end
+    object btnBGColor: TColorButton
+      Left = 144
+      Height = 27
+      Top = 61
+      Width = 60
+      Anchors = [akTop, akRight]
+      BorderWidth = 2
+      ButtonColorSize = 16
+      ButtonColor = clWhite
+    end
+    object chkJonctions: TCheckBox
+      Left = 10
+      Height = 20
+      Top = 102
+      Width = 102
+      Caption = 'chkJonctions'
+      OnChange = chkJonctionsChange
+      TabOrder = 2
+    end
+  end
+  object cmbRepresentation: TComboBox
+    Left = 248
+    Height = 24
+    Top = 189
+    Width = 212
+    Anchors = [akRight, akBottom]
+    ItemHeight = 16
+    Items.Strings = (
+      ''
+    )
+    Style = csDropDownList
+    TabOrder = 2
+  end
+  object lbRepresentationMode: TLabel
+    Left = 4
+    Height = 16
+    Top = 193
+    Width = 96
+    Anchors = [akLeft, akBottom]
+    Caption = 'Représentation'
+    ParentColor = False
+  end
+end

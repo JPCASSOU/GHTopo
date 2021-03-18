@@ -1,0 +1,82 @@
+object dlgEditReseau: TdlgEditReseau
+  Left = 528
+  Height = 167
+  Top = 310
+  Width = 519
+  Caption = 'dlgEditReseau'
+  ClientHeight = 167
+  ClientWidth = 519
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  Position = poScreenCenter
+  LCLVersion = '2.0.0.4'
+  object BitBtn1: TBitBtn
+    Left = 234
+    Height = 30
+    Top = 134
+    Width = 135
+    Anchors = [akRight, akBottom]
+    Default = True
+    DefaultCaption = True
+    Kind = bkOK
+    ModalResult = 1
+    TabOrder = 0
+  end
+  object BitBtn2: TBitBtn
+    Left = 382
+    Height = 30
+    Top = 134
+    Width = 135
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    DefaultCaption = True
+    Kind = bkCancel
+    ModalResult = 2
+    TabOrder = 1
+  end
+  object Panel1: TPanel
+    Left = 4
+    Height = 129
+    Top = 1
+    Width = 513
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelInner = bvLowered
+    ClientHeight = 129
+    ClientWidth = 513
+    TabOrder = 2
+    inline CdrReseaux1: TCdrReseaux
+      Left = 2
+      Height = 125
+      Top = 2
+      Width = 509
+      ClientHeight = 125
+      ClientWidth = 509
+      inherited cmbTypeReseau: TComboBox
+        Top = 62
+      end
+      inherited lbTypeReseau: TLabel
+        Top = 62
+      end
+      inherited editNomReseau: TEdit
+        Width = 372
+      end
+      inherited lbColorReseau: TLabel
+        Top = 4
+      end
+      inherited btnColorReseau: TStaticText
+        Height = 21
+      end
+      inherited editObsReseau: TEdit
+        Top = 92
+        Width = 372
+      end
+      inherited lbObsReseau: TLabel
+        Top = 92
+      end
+    end
+  end
+end

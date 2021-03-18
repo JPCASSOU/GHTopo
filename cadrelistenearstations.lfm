@@ -1,0 +1,116 @@
+object CdrListeNearestStations: TCdrListeNearestStations
+  Left = 0
+  Height = 469
+  Top = 0
+  Width = 978
+  Align = alClient
+  ClientHeight = 469
+  ClientWidth = 978
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -13
+  Font.Name = 'Arial Narrow'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  ParentFont = False
+  TabOrder = 0
+  DesignLeft = 508
+  DesignTop = 398
+  object lsbStations: TListBox
+    Left = 0
+    Height = 420
+    Top = 49
+    Width = 978
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -13
+    Font.Name = 'Arial'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold]
+    ItemHeight = 20
+    OnDrawItem = lsbStationsDrawItem
+    ParentFont = False
+    Style = lbOwnerDrawFixed
+    TabOrder = 0
+  end
+  object hcColsTitres: THeaderControl
+    Left = 0
+    Height = 22
+    Top = 28
+    Width = 981
+    DragReorder = False
+    Sections = <    
+      item
+        Alignment = taLeftJustify
+        Text = 'Station'
+        Width = 120
+        Visible = True
+      end    
+      item
+        Alignment = taLeftJustify
+        Text = 'ID terrain'
+        Width = 120
+        Visible = True
+      end    
+      item
+        Alignment = taLeftJustify
+        Text = 'Dist.'
+        Width = 90
+        Visible = True
+      end    
+      item
+        Alignment = taLeftJustify
+        Text = 'dp'
+        Width = 90
+        Visible = True
+      end    
+      item
+        Alignment = taLeftJustify
+        Text = 'Delta X'
+        Width = 90
+        Visible = True
+      end    
+      item
+        Alignment = taLeftJustify
+        Text = 'Delta Y'
+        Width = 90
+        Visible = True
+      end    
+      item
+        Alignment = taLeftJustify
+        Text = 'Delta Z'
+        Width = 90
+        Visible = True
+      end>
+    OnSectionResize = hcColsTitresSectionResize
+    Anchors = [akTop, akLeft, akRight]
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -13
+    Font.Name = 'Arial'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object lbNbStationsFound: TLabel
+    Left = 756
+    Height = 16
+    Top = 4
+    Width = 221
+    Alignment = taRightJustify
+    Anchors = [akTop, akRight]
+    AutoSize = False
+    Caption = 'lbNbStationsFound'
+    ParentColor = False
+  end
+  object lbStationDeBase: TStaticText
+    Left = 0
+    Height = 24
+    Top = 0
+    Width = 552
+    BorderStyle = sbsSunken
+    Caption = 'lbStationDeBase'
+    TabOrder = 2
+  end
+end

@@ -1,0 +1,121 @@
+object dlgSelectSerie: TdlgSelectSerie
+  Left = 396
+  Height = 586
+  Top = 260
+  Width = 942
+  Caption = 'dlgSelectSerie'
+  ClientHeight = 586
+  ClientWidth = 942
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  Position = poScreenCenter
+  LCLVersion = '2.0.0.4'
+  object Panel1: TPanel
+    Left = 0
+    Height = 547
+    Top = 0
+    Width = 940
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelOuter = bvLowered
+    ClientHeight = 547
+    ClientWidth = 940
+    TabOrder = 0
+    inline CdrListeSeries1: TCdrListeSeries
+      Left = 1
+      Height = 545
+      Top = 1
+      Width = 938
+      ClientHeight = 545
+      ClientWidth = 938
+      inherited hcColsTitres: THeaderControl
+        Width = 931
+      end
+      inherited cmbEntreesOuReseaux: TComboBox
+        Width = 931
+      end
+      inherited SpeedButton8: TSpeedButton
+        Flat = False
+      end
+      inherited SpeedButton12: TSpeedButton
+        Flat = False
+      end
+      inherited SpeedButton2: TSpeedButton
+        Flat = False
+      end
+      inherited SpeedButton3: TSpeedButton
+        Left = 907
+        Flat = False
+      end
+      inherited lbNbreElements: TLabel
+        Top = 526
+      end
+      inherited editRechercheRapide: TEdit
+        Width = 764
+      end
+      inherited SpeedButton4: TSpeedButton
+        Left = 907
+        Flat = False
+      end
+      inherited SpeedButton1: TSpeedButton
+        Flat = False
+      end
+      inherited SpeedButton5: TSpeedButton
+        Flat = False
+      end
+      inherited lsbListe: TCheckListBox
+        Height = 377
+        Width = 931
+      end
+      inherited editSelectionMultiple: TEdit
+        Width = 655
+      end
+      inherited SpeedButton6: TSpeedButton
+        Left = 799
+        Flat = False
+      end
+      inherited SpeedButton7: TSpeedButton
+        Left = 829
+        Flat = False
+      end
+      inherited SpeedButton9: TSpeedButton
+        Left = 855
+        Flat = False
+      end
+      inherited SpeedButton10: TSpeedButton
+        Left = 882
+        Flat = False
+      end
+      inherited SpeedButton11: TSpeedButton
+        Left = 909
+      end
+    end
+  end
+  object BitBtn1: TBitBtn
+    Left = 703
+    Height = 30
+    Top = 553
+    Width = 116
+    Anchors = [akRight, akBottom]
+    Default = True
+    DefaultCaption = True
+    Kind = bkOK
+    ModalResult = 1
+    TabOrder = 1
+  end
+  object BitBtn2: TBitBtn
+    Left = 824
+    Height = 30
+    Top = 553
+    Width = 116
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    DefaultCaption = True
+    Kind = bkCancel
+    ModalResult = 2
+    TabOrder = 2
+  end
+end

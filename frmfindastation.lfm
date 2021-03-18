@@ -1,0 +1,87 @@
+object dlgFindAStation: TdlgFindAStation
+  Left = 742
+  Height = 255
+  Top = 361
+  Width = 430
+  Caption = 'dlgFindAStation'
+  ClientHeight = 255
+  ClientWidth = 430
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  OnShow = FormShow
+  Position = poScreenCenter
+  LCLVersion = '2.0.0.4'
+  object editFindWhat: TEdit
+    Left = 3
+    Height = 24
+    Top = 24
+    Width = 423
+    Anchors = [akTop, akLeft, akRight]
+    TabOrder = 0
+  end
+  object chkDoMatchExact: TCheckBox
+    Left = 3
+    Height = 20
+    Top = 56
+    Width = 132
+    Caption = 'chkDoMatchExact'
+    TabOrder = 1
+  end
+  object btnOK: TBitBtn
+    Left = 183
+    Height = 30
+    Top = 222
+    Width = 120
+    Anchors = [akRight, akBottom]
+    Default = True
+    DefaultCaption = True
+    Kind = bkOK
+    ModalResult = 1
+    TabOrder = 2
+  end
+  object BitBtn2: TBitBtn
+    Left = 308
+    Height = 30
+    Top = 222
+    Width = 120
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    DefaultCaption = True
+    Kind = bkCancel
+    ModalResult = 2
+    TabOrder = 3
+  end
+  object lbPrompt: TLabel
+    Left = 4
+    Height = 16
+    Top = 4
+    Width = 58
+    Caption = 'lbPrompt'
+    ParentColor = False
+  end
+  object lsbIDsTerrain: TListBox
+    Left = 3
+    Height = 143
+    Top = 77
+    Width = 423
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    Columns = 4
+    ItemHeight = 0
+    OnDblClick = lsbIDsTerrainDblClick
+    TabOrder = 4
+  end
+  object Button1: TButton
+    Left = 4
+    Height = 25
+    Top = 227
+    Width = 134
+    Anchors = [akLeft, akBottom]
+    Caption = 'Copier la liste'
+    OnClick = Button1Click
+    TabOrder = 5
+  end
+end

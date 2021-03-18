@@ -1,0 +1,599 @@
+object dlgDistanceBetweenTwoStations: TdlgDistanceBetweenTwoStations
+  Left = 362
+  Height = 449
+  Top = 91
+  Width = 759
+  Caption = 'dlgDistanceBetweenTwoStations'
+  ClientHeight = 449
+  ClientWidth = 759
+  Constraints.MinHeight = 440
+  Constraints.MinWidth = 638
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  Position = poScreenCenter
+  LCLVersion = '2.0.0.4'
+  object GroupBox1: TGroupBox
+    Left = 4
+    Height = 172
+    Top = 90
+    Width = 180
+    Caption = 'Station 1'
+    ClientHeight = 151
+    ClientWidth = 176
+    TabOrder = 0
+    object lbStation1: TStaticText
+      Left = 3
+      Height = 26
+      Top = 24
+      Width = 167
+      Alignment = taCenter
+      Anchors = [akTop, akLeft, akRight]
+      BorderStyle = sbsSunken
+      Caption = 'lbStation1'
+      Color = 8454143
+      Font.CharSet = ANSI_CHARSET
+      Font.Height = -16
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      Font.Style = [fsBold]
+      ParentFont = False
+      ParentColor = False
+      TabOrder = 0
+    end
+    object lbXStation1: TStaticText
+      Left = 40
+      Height = 21
+      Top = 78
+      Width = 131
+      Alignment = taRightJustify
+      Anchors = [akLeft, akRight, akBottom]
+      BorderStyle = sbsSunken
+      Caption = '0.000'
+      TabOrder = 1
+    end
+    object lbYStation1: TStaticText
+      Left = 40
+      Height = 21
+      Top = 102
+      Width = 131
+      Alignment = taRightJustify
+      Anchors = [akLeft, akRight, akBottom]
+      BorderStyle = sbsSunken
+      Caption = '0.000'
+      TabOrder = 2
+    end
+    object Label3: TLabel
+      Left = 4
+      Height = 16
+      Top = 126
+      Width = 19
+      Anchors = [akLeft, akBottom]
+      Caption = 'Z ='
+      ParentColor = False
+    end
+    object lbZStation1: TStaticText
+      Left = 40
+      Height = 21
+      Top = 126
+      Width = 131
+      Alignment = taRightJustify
+      Anchors = [akLeft, akRight, akBottom]
+      BorderStyle = sbsSunken
+      Caption = '0.000'
+      TabOrder = 3
+    end
+    object Label4: TLabel
+      Left = 3
+      Height = 16
+      Top = 78
+      Width = 21
+      Anchors = [akLeft, akBottom]
+      Caption = 'X ='
+      ParentColor = False
+    end
+    object Label5: TLabel
+      Left = 4
+      Height = 16
+      Top = 102
+      Width = 20
+      Anchors = [akLeft, akBottom]
+      Caption = 'Y ='
+      ParentColor = False
+    end
+    object lbIDStation1: TStaticText
+      Left = 3
+      Height = 21
+      Top = 53
+      Width = 167
+      Alignment = taCenter
+      Anchors = [akTop, akLeft, akRight]
+      BorderStyle = sbsSunken
+      Caption = 'lbIDStation1'
+      TabOrder = 4
+    end
+    object lbNamespaceSt1: TStaticText
+      Left = 4
+      Height = 19
+      Top = 3
+      Width = 166
+      Alignment = taCenter
+      Anchors = [akTop, akLeft, akRight]
+      BorderStyle = sbsSunken
+      Caption = 'lbNamespaceSt1'
+      Color = 11599792
+      ParentColor = False
+      TabOrder = 5
+    end
+  end
+  object GroupBox2: TGroupBox
+    Left = 296
+    Height = 172
+    Top = 90
+    Width = 180
+    Caption = 'Station 2'
+    ClientHeight = 151
+    ClientWidth = 176
+    TabOrder = 1
+    object lbStation2: TStaticText
+      Left = 4
+      Height = 26
+      Top = 24
+      Width = 167
+      Alignment = taCenter
+      Anchors = [akTop, akLeft, akRight]
+      BorderStyle = sbsSunken
+      Caption = 'lbStation2'
+      Color = 8454143
+      Font.CharSet = ANSI_CHARSET
+      Font.Height = -16
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      Font.Style = [fsBold]
+      ParentFont = False
+      ParentColor = False
+      TabOrder = 0
+    end
+    object lbXStation2: TStaticText
+      Left = 39
+      Height = 21
+      Top = 78
+      Width = 131
+      Alignment = taRightJustify
+      Anchors = [akLeft, akRight, akBottom]
+      BorderStyle = sbsSunken
+      Caption = '0.000'
+      TabOrder = 1
+    end
+    object lbYStation2: TStaticText
+      Left = 39
+      Height = 21
+      Top = 102
+      Width = 131
+      Alignment = taRightJustify
+      Anchors = [akLeft, akRight, akBottom]
+      BorderStyle = sbsSunken
+      Caption = '0.000'
+      TabOrder = 2
+    end
+    object Label6: TLabel
+      Left = 3
+      Height = 16
+      Top = 126
+      Width = 0
+      Anchors = [akLeft, akRight, akBottom]
+      Caption = 'Z ='
+      ParentColor = False
+    end
+    object lbZStation2: TStaticText
+      Left = 39
+      Height = 21
+      Top = 126
+      Width = 131
+      Alignment = taRightJustify
+      Anchors = [akLeft, akRight, akBottom]
+      BorderStyle = sbsSunken
+      Caption = '0.000'
+      TabOrder = 3
+    end
+    object Label7: TLabel
+      Left = 3
+      Height = 16
+      Top = 78
+      Width = 0
+      Anchors = [akLeft, akRight, akBottom]
+      Caption = 'X ='
+      ParentColor = False
+    end
+    object Label8: TLabel
+      Left = 3
+      Height = 16
+      Top = 102
+      Width = 0
+      Anchors = [akLeft, akRight, akBottom]
+      Caption = 'Y ='
+      ParentColor = False
+    end
+    object lbIDStation2: TStaticText
+      Left = 4
+      Height = 21
+      Top = 53
+      Width = 167
+      Alignment = taCenter
+      Anchors = [akTop, akLeft, akRight]
+      BorderStyle = sbsSunken
+      Caption = 'lbIDStation2'
+      TabOrder = 4
+    end
+    object Label15: TLabel
+      Left = 4
+      Height = 16
+      Top = 81
+      Width = 21
+      Anchors = [akLeft, akBottom]
+      Caption = 'X ='
+      ParentColor = False
+    end
+    object Label16: TLabel
+      Left = 3
+      Height = 16
+      Top = 104
+      Width = 20
+      Anchors = [akLeft, akBottom]
+      Caption = 'Y ='
+      ParentColor = False
+    end
+    object Label17: TLabel
+      Left = 3
+      Height = 16
+      Top = 128
+      Width = 19
+      Anchors = [akLeft, akBottom]
+      Caption = 'Z ='
+      ParentColor = False
+    end
+    object lbNamespaceSt2: TStaticText
+      Left = 4
+      Height = 19
+      Top = 3
+      Width = 166
+      Alignment = taCenter
+      Anchors = [akTop, akLeft, akRight]
+      BorderStyle = sbsSunken
+      Caption = 'lbNamespaceSt2'
+      Color = 11599792
+      ParentColor = False
+      TabOrder = 5
+    end
+  end
+  object GroupBox4: TGroupBox
+    Left = 480
+    Height = 224
+    Top = 38
+    Width = 156
+    Caption = 'Distance et angles'
+    ClientHeight = 203
+    ClientWidth = 152
+    TabOrder = 2
+    object Label12: TLabel
+      Left = 3
+      Height = 16
+      Top = 4
+      Width = 94
+      Caption = 'Distance totale'
+      ParentColor = False
+    end
+    object lbDistance: TStaticText
+      Left = 5
+      Height = 22
+      Top = 24
+      Width = 119
+      Alignment = taRightJustify
+      Anchors = [akTop, akLeft, akRight]
+      AutoSize = True
+      BorderStyle = sbsSunken
+      Caption = '0.000'
+      Color = 11009788
+      Font.CharSet = ANSI_CHARSET
+      Font.Color = clBlue
+      Font.Height = -16
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      Font.Style = [fsBold]
+      ParentFont = False
+      ParentColor = False
+      TabOrder = 0
+    end
+    object Label13: TLabel
+      Left = 3
+      Height = 16
+      Top = 108
+      Width = 28
+      Caption = 'Az ='
+      ParentColor = False
+    end
+    object lbAzimut: TStaticText
+      Left = 31
+      Height = 19
+      Top = 108
+      Width = 93
+      Alignment = taRightJustify
+      Anchors = [akTop, akLeft, akRight]
+      AutoSize = True
+      BorderStyle = sbsSunken
+      Caption = '0.000'
+      Font.CharSet = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 1
+    end
+    object Label14: TLabel
+      Left = 3
+      Height = 16
+      Top = 132
+      Width = 21
+      Caption = 'P ='
+      ParentColor = False
+    end
+    object lbPente: TStaticText
+      Left = 31
+      Height = 19
+      Top = 132
+      Width = 93
+      Alignment = taRightJustify
+      Anchors = [akTop, akLeft, akRight]
+      AutoSize = True
+      BorderStyle = sbsSunken
+      Caption = '0.000'
+      Font.CharSet = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 2
+    end
+    object btnCopyDistanceAngles: TButton
+      Left = 40
+      Height = 25
+      Top = 168
+      Width = 107
+      Caption = 'Copier'
+      OnClick = btnCopyDistanceAnglesClick
+      TabOrder = 3
+    end
+    object lbDistanceXY: TStaticText
+      Left = 5
+      Height = 22
+      Top = 76
+      Width = 119
+      Alignment = taRightJustify
+      Anchors = [akTop, akLeft, akRight]
+      AutoSize = True
+      BorderStyle = sbsSunken
+      Caption = '0.000'
+      Font.CharSet = ANSI_CHARSET
+      Font.Height = -16
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 4
+    end
+    object Label18: TLabel
+      Left = 5
+      Height = 16
+      Top = 55
+      Width = 130
+      Caption = 'Distance horizontale'
+      ParentColor = False
+    end
+    object Label1: TLabel
+      Left = 132
+      Height = 16
+      Top = 24
+      Width = 16
+      Anchors = [akTop, akRight]
+      AutoSize = False
+      Caption = 'm'
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 132
+      Height = 16
+      Top = 76
+      Width = 16
+      Anchors = [akTop, akRight]
+      AutoSize = False
+      Caption = 'm'
+      ParentColor = False
+    end
+    object Label9: TLabel
+      Left = 132
+      Height = 16
+      Top = 108
+      Width = 15
+      Anchors = [akTop, akRight]
+      AutoSize = False
+      Caption = '°'
+      ParentColor = False
+    end
+    object Label10: TLabel
+      Left = 132
+      Height = 16
+      Top = 133
+      Width = 16
+      Anchors = [akTop, akRight]
+      AutoSize = False
+      Caption = '°'
+      ParentColor = False
+    end
+  end
+  object Panel1: TPanel
+    Left = 4
+    Height = 149
+    Top = 264
+    Width = 753
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelOuter = bvLowered
+    ClientHeight = 149
+    ClientWidth = 753
+    TabOrder = 3
+    inline CdrListeNearestStations1: TCdrListeNearestStations
+      Left = 1
+      Height = 147
+      Top = 1
+      Width = 751
+      ClientHeight = 147
+      ClientWidth = 751
+      inherited lsbStations: TListBox
+        Height = 98
+        Width = 751
+      end
+      inherited hcColsTitres: THeaderControl
+        Width = 754
+      end
+      inherited lbNbStationsFound: TLabel
+        Left = 529
+      end
+    end
+  end
+  object lbSerieOfStation2: TStaticText
+    Left = 4
+    Height = 21
+    Top = 65
+    Width = 468
+    BorderStyle = sbsSunken
+    Caption = 'lbSerieOfStation2'
+    TabOrder = 4
+  end
+  object lbSerieOfStation1: TStaticText
+    Left = 4
+    Height = 21
+    Top = 40
+    Width = 468
+    BorderStyle = sbsSunken
+    Caption = 'lbSerieOfStation1'
+    TabOrder = 5
+  end
+  object btnOK: TBitBtn
+    Left = 498
+    Height = 30
+    Top = 417
+    Width = 127
+    Anchors = [akRight, akBottom]
+    Default = True
+    DefaultCaption = True
+    Kind = bkOK
+    ModalResult = 1
+    TabOrder = 6
+  end
+  object btnCancel: TBitBtn
+    Left = 630
+    Height = 30
+    Top = 417
+    Width = 127
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    DefaultCaption = True
+    Kind = bkCancel
+    ModalResult = 2
+    TabOrder = 7
+  end
+  object chkDoPerformAdditionalAction: TCheckBox
+    Left = 4
+    Height = 20
+    Top = 425
+    Width = 215
+    Anchors = [akLeft, akBottom]
+    Caption = 'chkDoPerformAdditionalAction'
+    Enabled = False
+    TabOrder = 8
+  end
+  object lbDescroAction: TStaticText
+    Left = 4
+    Height = 32
+    Top = 4
+    Width = 753
+    Alignment = taCenter
+    Anchors = [akTop, akLeft, akRight]
+    BorderStyle = sbsSunken
+    Caption = '#'
+    Color = 16777136
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -19
+    Font.Name = 'Arial'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold]
+    ParentFont = False
+    ParentColor = False
+    TabOrder = 9
+  end
+  object btnSwapStations: TButton
+    Left = 192
+    Height = 52
+    Top = 108
+    Width = 96
+    Caption = '<->'
+    OnClick = btnSwapStationsClick
+    TabOrder = 10
+  end
+  object Panel2: TPanel
+    Left = 186
+    Height = 78
+    Top = 184
+    Width = 107
+    BevelOuter = bvLowered
+    ClientHeight = 78
+    ClientWidth = 107
+    TabOrder = 11
+    object lbDeltaX: TStaticText
+      Left = 4
+      Height = 21
+      Top = 4
+      Width = 100
+      Alignment = taCenter
+      Anchors = [akTop, akLeft, akRight]
+      BorderStyle = sbsSunken
+      Caption = '0.000'
+      TabOrder = 0
+    end
+    object lbDeltaY: TStaticText
+      Left = 4
+      Height = 21
+      Top = 28
+      Width = 100
+      Alignment = taCenter
+      Anchors = [akTop, akLeft, akRight]
+      BorderStyle = sbsSunken
+      Caption = '0.000'
+      TabOrder = 1
+    end
+    object lbDeltaZ: TStaticText
+      Left = 4
+      Height = 21
+      Top = 52
+      Width = 100
+      Alignment = taCenter
+      Anchors = [akTop, akLeft, akRight]
+      BorderStyle = sbsSunken
+      Caption = '0.000'
+      TabOrder = 2
+    end
+  end
+end

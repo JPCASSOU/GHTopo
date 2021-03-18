@@ -1,0 +1,213 @@
+object frmGestionSeries: TfrmGestionSeries
+  Left = 191
+  Height = 668
+  Top = 334
+  Width = 1146
+  Caption = 'frmGestionSeries'
+  ClientHeight = 668
+  ClientWidth = 1146
+  OnCloseQuery = FormCloseQuery
+  LCLVersion = '2.0.0.4'
+  object Panel1: TPanel
+    Left = 4
+    Height = 36
+    Top = 1
+    Width = 1139
+    Anchors = [akTop, akLeft, akRight]
+    BevelOuter = bvLowered
+    ClientHeight = 36
+    ClientWidth = 1139
+    TabOrder = 0
+    inline CdrNavigateurSeries1: TCdrNavigateurSeries
+      Left = 1
+      Top = 1
+      Width = 1137
+      ClientWidth = 1137
+      inherited SpeedButton1: TSpeedButton
+        Left = 800
+        Flat = False
+      end
+      inherited SpeedButton2: TSpeedButton
+        Left = 828
+        Flat = False
+      end
+      inherited SpeedButton3: TSpeedButton
+        Left = 856
+        Flat = False
+      end
+      inherited SpeedButton5: TSpeedButton
+        Left = 740
+        Flat = False
+      end
+      inherited SpeedButton6: TSpeedButton
+        Left = 888
+        Flat = False
+      end
+      inherited SpeedButton7: TSpeedButton
+        Left = 944
+        Flat = False
+      end
+      inherited SpeedButton8: TSpeedButton
+        Left = 916
+        Flat = False
+      end
+      inherited SpeedButton9: TSpeedButton
+        Left = 1008
+        Flat = False
+      end
+      inherited SpeedButton11: TSpeedButton
+        Left = 1077
+        Flat = False
+      end
+      inherited SpeedButton12: TSpeedButton
+        Left = 976
+        Flat = False
+      end
+      inherited editNomSerie: TEdit
+        Width = 651
+      end
+      inherited SpeedButton13: TSpeedButton
+        Left = 1109
+        Flat = False
+      end
+      inherited SpeedButton14: TSpeedButton
+        Left = 768
+        Flat = False
+      end
+      inherited SpeedButton4: TSpeedButton
+        Left = 1039
+        Flat = False
+      end
+    end
+  end
+  object Panel2: TPanel
+    Left = 4
+    Height = 627
+    Top = 39
+    Width = 1139
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelOuter = bvLowered
+    ClientHeight = 627
+    ClientWidth = 1139
+    TabOrder = 1
+    inline CdrSerieIndependant1: TCdrSerieIndependant
+      Left = 1
+      Height = 625
+      Top = 1
+      Width = 1137
+      ClientHeight = 625
+      ClientWidth = 1137
+      inherited pnlEnteteSerie: TPanel
+        Width = 1135
+        ClientWidth = 1135
+        inherited cmbChance: TComboBox
+          Left = 987
+        end
+        inherited cmbObstacle: TComboBox
+          Left = 987
+        end
+        inherited lblChances: TLabel
+          Left = 923
+        end
+        inherited lblObstacles: TLabel
+          Left = 923
+        end
+        inherited editNomSerie: TEdit
+          Width = 805
+        end
+        inherited editCommentaire: TEdit
+          Width = 766
+        end
+        inherited editLG0: TCurrencyEdit
+          Left = 859
+        end
+        inherited editLD0: TCurrencyEdit
+          Left = 927
+        end
+        inherited editHZ0: TCurrencyEdit
+          Left = 995
+        end
+        inherited editHN0: TCurrencyEdit
+          Left = 1063
+        end
+        inherited pnlReseaux: TPanel
+          Width = 758
+          ClientWidth = 758
+          inherited lbNomReseau: TStaticText
+            Width = 597
+          end
+        end
+      end
+      inherited pnlTableur: TPanel
+        Height = 486
+        Width = 1135
+        ClientHeight = 486
+        ClientWidth = 1135
+        inherited grdStations: TStringGrid
+          Height = 455
+          Width = 1096
+        end
+        inherited lbNbStations: TLabel
+          Top = 462
+        end
+        inherited lbMessages: TStaticText
+          Top = 462
+          Width = 670
+        end
+        inherited SpeedButton1: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton2: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton3: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton4: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton5: TSpeedButton
+          Flat = False
+        end
+        inherited lbLongueurCumulee: TStaticText
+          Left = 973
+          Top = 462
+        end
+        inherited SpeedButton6: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton8: TSpeedButton
+          Flat = False
+        end
+        inherited Shape1: TShape
+          Width = 1135
+        end
+        inherited SpeedButton9: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton11: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton12: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton13: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton14: TSpeedButton
+          Flat = False
+        end
+        inherited lbDataAreModified: TStaticText
+          Left = 866
+          Top = 462
+        end
+      end
+      inherited btnShowHideHeader: TButton
+        Left = 1102
+      end
+      inherited pnlErreursACorriger: TPanel
+        Left = 667
+      end
+    end
+  end
+end

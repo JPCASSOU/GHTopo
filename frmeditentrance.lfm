@@ -1,0 +1,120 @@
+object dlgEditEntrance: TdlgEditEntrance
+  Left = 593
+  Height = 215
+  Top = 490
+  Width = 589
+  Caption = 'dlgEditEntrance'
+  ClientHeight = 215
+  ClientWidth = 589
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  OnShow = FormShow
+  Position = poScreenCenter
+  LCLVersion = '2.0.0.4'
+  object Panel1: TPanel
+    Left = 0
+    Height = 178
+    Top = 0
+    Width = 586
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelInner = bvLowered
+    ClientHeight = 178
+    ClientWidth = 586
+    TabOrder = 0
+    inline CdrEntreeCavites1: TCdrEntreeCavites
+      Left = 2
+      Height = 174
+      Top = 2
+      Width = 582
+      ClientHeight = 174
+      ClientWidth = 582
+      inherited lbEntranceName: TLabel
+        Height = 16
+        Width = 105
+      end
+      inherited lbComments: TLabel
+        Height = 16
+        Width = 79
+      end
+      inherited editNomEntree: TEdit
+        Height = 24
+        Width = 352
+      end
+      inherited editCommentaires: TEdit
+        Height = 24
+        Width = 424
+      end
+      inherited editSerie: TCurrencyEdit
+        Height = 24
+      end
+      inherited editPoint: TCurrencyEdit
+        Height = 24
+      end
+      inherited editXEntree: TCurrencyEdit
+        Height = 24
+      end
+      inherited editYEntree: TCurrencyEdit
+        Height = 24
+      end
+      inherited editZEntree: TCurrencyEdit
+        Height = 24
+      end
+      inherited lbEntranceCoordinates: TLabel
+        Height = 16
+        Width = 144
+      end
+      inherited lbStationOfEntrance: TLabel
+        Height = 16
+        Width = 127
+      end
+      inherited editIDTerrain: TEdit
+        Height = 24
+      end
+      inherited lbIDTerrainEntree: TLabel
+        Height = 16
+        Width = 111
+      end
+      inherited Label1: TLabel
+        Height = 16
+        Width = 107
+      end
+      inherited lbNumEntrance: TStaticText
+        Left = 513
+      end
+      inherited btnGetCoordsFromSerSt: TButton
+        Width = 150
+      end
+      inherited btnGetCoordsFromIDTerrain: TButton
+        Width = 150
+      end
+    end
+  end
+  object BitBtn1: TBitBtn
+    Left = 304
+    Height = 30
+    Top = 182
+    Width = 135
+    Anchors = [akRight, akBottom]
+    Default = True
+    DefaultCaption = True
+    Kind = bkOK
+    ModalResult = 1
+    TabOrder = 1
+  end
+  object BitBtn2: TBitBtn
+    Left = 452
+    Height = 30
+    Top = 182
+    Width = 135
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    DefaultCaption = True
+    Kind = bkCancel
+    ModalResult = 2
+    TabOrder = 2
+  end
+end

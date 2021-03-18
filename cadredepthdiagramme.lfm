@@ -1,0 +1,126 @@
+object CdrDepthDiagramme: TCdrDepthDiagramme
+  Left = 0
+  Height = 515
+  Top = 0
+  Width = 583
+  Align = alClient
+  ClientHeight = 515
+  ClientWidth = 583
+  ParentFont = False
+  TabOrder = 0
+  DesignLeft = 246
+  DesignTop = 259
+  object lbZMax: TLabel
+    Left = 4
+    Height = 13
+    Top = 4
+    Width = 36
+    Alignment = taRightJustify
+    AutoSize = False
+    Caption = 'lbZMax'
+    ParentColor = False
+  end
+  object lbZMin: TLabel
+    Left = 4
+    Height = 13
+    Top = 479
+    Width = 36
+    Alignment = taRightJustify
+    Anchors = [akLeft, akBottom]
+    AutoSize = False
+    Caption = 'lbZMin'
+    ParentColor = False
+  end
+  object Panel1: TPanel
+    Left = 44
+    Height = 491
+    Top = 1
+    Width = 537
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    ClientHeight = 491
+    ClientWidth = 537
+    TabOrder = 0
+    inline CdrDGCDrawingContext1: TCdrDGCDrawingContext
+      Left = 2
+      Height = 487
+      Top = 2
+      Width = 533
+      ClientHeight = 487
+      ClientWidth = 533
+      inherited pnlVue: TPanel
+        Height = 451
+        Width = 502
+        ClientHeight = 451
+        ClientWidth = 502
+        inherited Vue: TPaintBox
+          Height = 449
+          Width = 500
+        end
+      end
+      inherited lbMousePosition: TStaticText
+        Top = 456
+        Width = 398
+      end
+      inherited SpeedButton12: TSpeedButton
+        Left = 501
+        Flat = False
+      end
+      inherited SpeedButton13: TSpeedButton
+        Left = 501
+        Flat = False
+      end
+      inherited SpeedButton14: TSpeedButton
+        Left = 501
+        Flat = False
+      end
+      inherited SpeedButton15: TSpeedButton
+        Left = 501
+        Flat = False
+      end
+      inherited SpeedButton16: TSpeedButton
+        Left = 501
+        Flat = False
+      end
+      inherited SpeedButton17: TSpeedButton
+        Left = 501
+        Flat = False
+      end
+      inherited SpeedButton18: TSpeedButton
+        Left = 501
+        Top = 421
+        Flat = False
+      end
+      inherited SpeedButton19: TSpeedButton
+        Left = 438
+        Top = 455
+        Flat = False
+      end
+      inherited SpeedButton20: TSpeedButton
+        Left = 470
+        Top = 455
+        Flat = False
+      end
+      inherited SpeedButton21: TSpeedButton
+        Left = 501
+        Top = 455
+      end
+      inherited SpeedButton22: TSpeedButton
+        Left = 406
+        Top = 455
+        Flat = False
+      end
+    end
+  end
+  object sclPourcentageSeuilHightLight: TScrollBar
+    Left = 44
+    Height = 16
+    Top = 495
+    Width = 537
+    Anchors = [akLeft, akRight, akBottom]
+    PageSize = 0
+    Position = 60
+    TabOrder = 1
+  end
+end

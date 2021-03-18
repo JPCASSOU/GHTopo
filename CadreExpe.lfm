@@ -1,0 +1,233 @@
+object CdrExpe: TCdrExpe
+  Left = 0
+  Height = 218
+  Top = 0
+  Width = 587
+  Align = alClient
+  ClientHeight = 218
+  ClientWidth = 587
+  TabOrder = 0
+  DesignLeft = 864
+  DesignTop = 337
+  object lblSeance: TLabel
+    Left = 4
+    Height = 15
+    Top = 4
+    Width = 50
+    Caption = 'lblSeance'
+    ParentColor = False
+  end
+  object lblDate: TLabel
+    Left = 401
+    Height = 15
+    Top = 4
+    Width = 37
+    Anchors = [akTop, akRight]
+    Caption = 'lblDate'
+    ParentColor = False
+  end
+  object lblSpeleometre: TLabel
+    Left = 4
+    Height = 15
+    Top = 32
+    Width = 79
+    Caption = 'lblSpeleometre'
+    ParentColor = False
+  end
+  object lblSpeleographe: TLabel
+    Left = 4
+    Height = 15
+    Top = 60
+    Width = 85
+    Caption = 'lblSpeleographe'
+    ParentColor = False
+  end
+  object lblDeclimag: TLabel
+    Left = 4
+    Height = 15
+    Top = 88
+    Width = 63
+    Caption = 'lblDeclimag'
+    ParentColor = False
+  end
+  object lblColor: TLabel
+    Left = 4
+    Height = 15
+    Top = 116
+    Width = 42
+    Caption = 'lblColor'
+    ParentColor = False
+  end
+  object lblObs: TLabel
+    Left = 4
+    Height = 15
+    Top = 140
+    Width = 34
+    Caption = 'lblObs'
+    ParentColor = False
+  end
+  object editNoExpe: TCurrencyEdit
+    Left = 136
+    Height = 23
+    Top = 4
+    Width = 144
+    Alignment = taRightJustify
+    DecimalPlaces = 0
+    DisplayFormat = '0'
+    MaxValue = 0
+    MinValue = 0
+    TabOrder = 0
+    Value = 0
+  end
+  object editSpeleometre: TEdit
+    Left = 136
+    Height = 23
+    Top = 32
+    Width = 418
+    Anchors = [akTop, akLeft, akRight]
+    TabOrder = 1
+  end
+  object editSpeleographe: TEdit
+    Left = 136
+    Height = 23
+    Top = 60
+    Width = 418
+    Anchors = [akTop, akLeft, akRight]
+    TabOrder = 2
+  end
+  object editDeclimag: TCurrencyEdit
+    Left = 136
+    Height = 23
+    Top = 88
+    Width = 84
+    Alignment = taRightJustify
+    DecimalPlaces = 3
+    DisplayFormat = '0.000'
+    MaxValue = 0
+    MinValue = 0
+    TabOrder = 3
+    Value = 0
+  end
+  object editComment: TMemo
+    Left = 136
+    Height = 47
+    Top = 144
+    Width = 448
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    Lines.Strings = (
+      ''
+    )
+    TabOrder = 8
+  end
+  object lbColorSeance: TStaticText
+    Left = 136
+    Height = 24
+    Top = 116
+    Width = 84
+    BorderStyle = sbsSingle
+    Color = clActiveCaption
+    OnClick = lbColorSeanceClick
+    ParentColor = False
+    TabOrder = 6
+    Transparent = False
+  end
+  object cmbModeDecl: TComboBox
+    Left = 312
+    Height = 23
+    Top = 88
+    Width = 132
+    ItemHeight = 15
+    ItemIndex = 0
+    Items.Strings = (
+      'Automatique'
+      'Manuelle'
+    )
+    OnChange = cmbModeDeclChange
+    Style = csDropDownList
+    TabOrder = 5
+    Text = 'Automatique'
+  end
+  object editCouleur: TCurrencyEdit
+    Left = 224
+    Height = 23
+    Top = 116
+    Width = 48
+    Alignment = taRightJustify
+    DecimalPlaces = 0
+    DisplayFormat = '0'
+    MaxValue = 255
+    MinValue = 0
+    TabOrder = 7
+    Value = 0
+    Visible = False
+    OnKeyPress = editCouleurKeyPress
+  end
+  object btnCalcDeclimag: TButton
+    Left = 448
+    Height = 25
+    Top = 87
+    Width = 136
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'Calculer ...'
+    OnClick = btnCalcDeclimagClick
+    TabOrder = 4
+  end
+  object Button1: TButton
+    Left = 553
+    Height = 24
+    Top = 32
+    Width = 33
+    Anchors = [akTop, akRight]
+    Caption = '...'
+    OnClick = Button1Click
+    TabOrder = 9
+  end
+  object Button2: TButton
+    Left = 553
+    Height = 24
+    Top = 60
+    Width = 33
+    Anchors = [akTop, akRight]
+    Caption = '...'
+    OnClick = Button2Click
+    TabOrder = 10
+  end
+  object editDateSeance: TDateEdit
+    Left = 451
+    Height = 23
+    Top = 4
+    Width = 135
+    CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames]
+    DateOrder = doNone
+    ButtonWidth = 23
+    Anchors = [akTop, akRight]
+    NumGlyphs = 1
+    MaxLength = 0
+    TabOrder = 11
+  end
+  object cmbUnitDeclimag: TComboBox
+    Left = 224
+    Height = 23
+    Top = 88
+    Width = 84
+    ItemHeight = 15
+    ItemIndex = 0
+    Items.Strings = (
+      'Degrés'
+      'Grades'
+    )
+    OnChange = cmbUnitDeclimagChange
+    Style = csDropDownList
+    TabOrder = 12
+    Text = 'Degrés'
+  end
+  object lbInfosDiverses: TStaticText
+    Left = 3
+    Height = 21
+    Top = 196
+    Width = 581
+    Anchors = [akLeft, akRight, akBottom]
+    BorderStyle = sbsSunken
+    TabOrder = 13
+  end
+end

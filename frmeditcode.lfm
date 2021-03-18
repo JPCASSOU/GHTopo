@@ -1,0 +1,236 @@
+object dlgEditCode: TdlgEditCode
+  Left = 556
+  Height = 356
+  Top = 323
+  Width = 760
+  Caption = 'dlgEditCode'
+  ClientHeight = 356
+  ClientWidth = 760
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  OnShow = FormShow
+  Position = poScreenCenter
+  LCLVersion = '2.0.0.4'
+  object Panel1: TPanel
+    Left = 4
+    Height = 320
+    Top = 1
+    Width = 755
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelInner = bvLowered
+    ClientHeight = 320
+    ClientWidth = 755
+    TabOrder = 0
+    inline CdrCode1: TCdrCode
+      Left = 2
+      Height = 316
+      Top = 2
+      Width = 751
+      ClientHeight = 316
+      ClientWidth = 751
+      inherited lblNCode: TLabel
+        Height = 16
+        Width = 58
+      end
+      inherited lblCompas: TLabel
+        Height = 16
+        Width = 67
+      end
+      inherited cmbUB: TComboBox
+        Height = 24
+        ItemHeight = 16
+      end
+      inherited lblClino: TLabel
+        Height = 16
+        Width = 49
+      end
+      inherited cmbUC: TComboBox
+        Height = 24
+        ItemHeight = 16
+      end
+      inherited lbMesureHorizontaleInvDir: TLabel
+        Height = 16
+        Width = 168
+      end
+      inherited cmbAzimutDirecte: TComboBox
+        Height = 24
+        ItemHeight = 16
+      end
+      inherited cmbPenteDirecte: TComboBox
+        Height = 24
+        ItemHeight = 16
+      end
+      inherited cmbPosZero: TComboBox
+        Height = 24
+        ItemHeight = 16
+      end
+      inherited lblLength: TLabel
+        Height = 16
+        Width = 60
+      end
+      inherited lblZero: TLabel
+        Height = 16
+        Width = 44
+      end
+      inherited lblLimit: TLabel
+        Height = 16
+        Width = 48
+      end
+      inherited lblPrecision: TLabel
+        Height = 16
+        Width = 75
+      end
+      inherited lblObs: TLabel
+        Height = 16
+        Width = 40
+      end
+      inherited editCommentaires: TEdit
+        Height = 24
+        Width = 601
+      end
+      inherited lbCodeComp: TStaticText
+        Left = 621
+      end
+      inherited lbCodeIncl: TStaticText
+        Left = 621
+      end
+      inherited editNoCode: TCurrencyEdit
+        Height = 24
+      end
+      inherited lbErrAz: TStaticText
+        Left = 665
+      end
+      inherited lbErrInc: TStaticText
+        Left = 665
+      end
+      inherited editFactLong: TCurrencyEdit
+        Height = 24
+      end
+      inherited editPsiL: TCurrencyEdit
+        Height = 24
+      end
+      inherited editPsiAz: TCurrencyEdit
+        Height = 24
+      end
+      inherited editPsiP: TCurrencyEdit
+        Height = 24
+      end
+      inherited editAngleLimite: TCurrencyEdit
+        Height = 24
+      end
+      inherited lbMesureVerticaleInvDir: TLabel
+        Height = 16
+        Width = 62
+      end
+      inherited pnlFonctionsCorrection: TPanel
+        Height = 86
+        Width = 748
+        ClientHeight = 86
+        ClientWidth = 748
+        inherited Button1: TButton
+          Left = 654
+        end
+        inherited Button2: TButton
+          Left = 654
+        end
+        inherited lbAzCorrige: TStaticText
+          Left = 694
+        end
+        inherited lbPenteCorrigee: TStaticText
+          Left = 694
+        end
+        inherited editAzTest: TCurrencyEdit
+          Left = 602
+        end
+        inherited editIncTest: TCurrencyEdit
+          Left = 602
+        end
+      end
+      inherited lbErreurTourillon: TLabel
+        Height = 16
+        Width = 107
+      end
+      inherited editErreurTourillon: TCurrencyEdit
+        Height = 24
+      end
+      inherited pnlPropalCorrPentes: TPanel
+        inherited Label1: TLabel
+          Height = 16
+          Width = 146
+        end
+        inherited Label6: TLabel
+          Height = 16
+          Width = 141
+        end
+        inherited editLongDevReference: TCurrencyEdit
+          Height = 24
+        end
+        inherited Label8: TLabel
+          Height = 16
+          Width = 12
+        end
+        inherited editDeniveleReference: TCurrencyEdit
+          Height = 24
+        end
+        inherited Label12: TLabel
+          Height = 16
+          Width = 12
+        end
+      end
+      inherited lbDiametreBoules: TLabel
+        Height = 16
+        Width = 113
+      end
+      inherited editDiamBoule1: TCurrencyEdit
+        Height = 24
+      end
+      inherited editDiamBoule2: TCurrencyEdit
+        Height = 24
+      end
+      inherited Label13: TLabel
+        Height = 16
+        Width = 24
+      end
+      inherited Label14: TLabel
+        Height = 16
+        Width = 24
+      end
+      inherited Label15: TLabel
+        Height = 16
+        Width = 16
+      end
+      inherited Label16: TLabel
+        Height = 16
+        Width = 16
+      end
+    end
+  end
+  object BitBtn1: TBitBtn
+    Left = 528
+    Height = 30
+    Top = 325
+    Width = 113
+    Anchors = [akRight, akBottom]
+    Default = True
+    DefaultCaption = True
+    Kind = bkOK
+    ModalResult = 1
+    TabOrder = 1
+  end
+  object BitBtn2: TBitBtn
+    Left = 646
+    Height = 30
+    Top = 325
+    Width = 113
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    DefaultCaption = True
+    Kind = bkCancel
+    ModalResult = 2
+    TabOrder = 2
+  end
+end

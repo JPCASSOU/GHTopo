@@ -1,0 +1,212 @@
+object CdrEntreeCavites: TCdrEntreeCavites
+  Left = 0
+  Height = 173
+  Top = 0
+  Width = 568
+  Align = alClient
+  ClientHeight = 173
+  ClientWidth = 568
+  TabOrder = 0
+  DesignLeft = 92
+  DesignTop = 265
+  object lbEntranceName: TLabel
+    Left = 2
+    Height = 15
+    Top = 4
+    Width = 88
+    Caption = 'lbEntranceName'
+    ParentColor = False
+  end
+  object lbComments: TLabel
+    Left = 2
+    Height = 15
+    Top = 144
+    Width = 69
+    Caption = 'lbComments'
+    ParentColor = False
+  end
+  object editNomEntree: TEdit
+    Left = 154
+    Height = 23
+    Top = 4
+    Width = 338
+    Anchors = [akTop, akLeft, akRight]
+    TabOrder = 2
+    Text = 'Entrée principale'
+  end
+  object editCommentaires: TEdit
+    Left = 154
+    Height = 23
+    Top = 144
+    Width = 410
+    Anchors = [akTop, akLeft, akRight]
+    TabOrder = 6
+  end
+  object editSerie: TCurrencyEdit
+    Left = 154
+    Height = 23
+    Top = 60
+    Width = 78
+    Alignment = taRightJustify
+    DecimalPlaces = 0
+    DisplayFormat = '0'
+    MaxValue = 0
+    MinValue = 0
+    TabOrder = 0
+    Value = 1
+  end
+  object editPoint: TCurrencyEdit
+    Left = 237
+    Height = 23
+    Top = 60
+    Width = 78
+    Alignment = taRightJustify
+    DecimalPlaces = 0
+    DisplayFormat = '0'
+    MaxValue = 0
+    MinValue = 0
+    TabOrder = 1
+    Value = 0
+  end
+  object editXEntree: TCurrencyEdit
+    Left = 154
+    Height = 23
+    Top = 88
+    Width = 106
+    Alignment = taRightJustify
+    DisplayFormat = '0.00;-0.00 '
+    MaxValue = 0
+    MinValue = 0
+    TabOrder = 3
+    Value = 0
+  end
+  object editYEntree: TCurrencyEdit
+    Left = 263
+    Height = 23
+    Top = 88
+    Width = 98
+    Alignment = taRightJustify
+    DisplayFormat = '0.00;-0.00 '
+    MaxValue = 0
+    MinValue = 0
+    TabOrder = 4
+    Value = 0
+  end
+  object editZEntree: TCurrencyEdit
+    Left = 488
+    Height = 23
+    Top = 88
+    Width = 75
+    Alignment = taRightJustify
+    DisplayFormat = '0.00;-0.00 '
+    MaxValue = 0
+    MinValue = 0
+    TabOrder = 5
+    Value = 0
+  end
+  object lbEntranceCoordinates: TLabel
+    Left = 2
+    Height = 15
+    Top = 88
+    Width = 120
+    Caption = 'lbEntranceCoordinates'
+    ParentColor = False
+  end
+  object lbStationOfEntrance: TLabel
+    Left = 2
+    Height = 15
+    Top = 60
+    Width = 106
+    Caption = 'lbStationOfEntrance'
+    ParentColor = False
+  end
+  object btnCallCalculette: TButton
+    Left = 364
+    Height = 25
+    Top = 88
+    Width = 120
+    Caption = 'Convertisseur'
+    OnClick = btnCallCalculetteClick
+    TabOrder = 7
+  end
+  object editIDTerrain: TEdit
+    Left = 154
+    Height = 23
+    Top = 32
+    Width = 162
+    TabOrder = 8
+  end
+  object lbIDTerrainEntree: TLabel
+    Left = 2
+    Height = 15
+    Top = 32
+    Width = 88
+    Caption = 'lbIDTerrainEntree'
+    ParentColor = False
+  end
+  object Label1: TLabel
+    Left = 325
+    Height = 15
+    Top = 36
+    Width = 83
+    Caption = 'ex: TP19, PF8, ...'
+    ParentColor = False
+  end
+  object lbNumEntrance: TStaticText
+    Left = 499
+    Height = 17
+    Top = 4
+    Width = 65
+    Anchors = [akTop, akRight]
+    BorderStyle = sbsSunken
+    Caption = '0000'
+    TabOrder = 9
+  end
+  object lbCurrentEPSG: TStaticText
+    Left = 156
+    Height = 21
+    Top = 116
+    Width = 93
+    BorderStyle = sbsSunken
+    Caption = 'lbCurrentEPSG'
+    TabOrder = 10
+  end
+  object btnGetCoordsFromSerSt: TButton
+    Left = 428
+    Height = 25
+    Top = 61
+    Width = 136
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'btnGetCoordsFromSerSt'
+    OnClick = btnGetCoordsFromSerStClick
+    TabOrder = 11
+  end
+  object btnGetCoordsFromIDTerrain: TButton
+    Left = 428
+    Height = 25
+    Top = 32
+    Width = 136
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'btnGetCoordsFromIDTerrain'
+    OnClick = btnGetCoordsFromIDTerrainClick
+    TabOrder = 12
+  end
+  object btnCouleurEntrance: TColorButton
+    Left = 320
+    Height = 25
+    Top = 60
+    Width = 75
+    BorderWidth = 2
+    ButtonColorSize = 16
+    ButtonColor = clBlack
+  end
+  object btnExtractFromMNT: TButton
+    Left = 364
+    Height = 25
+    Top = 112
+    Width = 120
+    Caption = 'Extraire depuis MNT'
+    OnClick = btnExtractFromMNTClick
+    TabOrder = 13
+  end
+end

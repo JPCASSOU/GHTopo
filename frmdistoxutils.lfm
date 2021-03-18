@@ -1,0 +1,39 @@
+object dlgDistoXUtils: TdlgDistoXUtils
+  Left = 383
+  Height = 598
+  Top = 83
+  Width = 880
+  Caption = 'dlgDistoXUtils'
+  ClientHeight = 598
+  ClientWidth = 880
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  OnClose = FormClose
+  OnCloseQuery = FormCloseQuery
+  LCLVersion = '2.0.0.4'
+  object btnClose: TBitBtn
+    Left = 754
+    Height = 27
+    Top = 568
+    Width = 123
+    Anchors = [akRight, akBottom]
+    DefaultCaption = True
+    Kind = bkClose
+    ModalResult = 11
+    OnClick = btnCloseClick
+    TabOrder = 0
+  end
+  object Panel1: TPanel
+    Left = 2
+    Height = 559
+    Top = 2
+    Width = 878
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelOuter = bvLowered
+    TabOrder = 1
+  end
+end

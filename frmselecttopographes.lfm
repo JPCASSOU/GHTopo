@@ -1,0 +1,82 @@
+object dlgSelectTopographes: TdlgSelectTopographes
+  Left = 461
+  Height = 339
+  Top = 370
+  Width = 601
+  Caption = 'Topographes'
+  ClientHeight = 339
+  ClientWidth = 601
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -13
+  Font.Name = 'Arial Narrow'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  Position = poScreenCenter
+  LCLVersion = '1.8.0.6'
+  object BitBtn1: TBitBtn
+    Left = 399
+    Height = 28
+    Top = 288
+    Width = 96
+    Anchors = [akRight, akBottom]
+    Default = True
+    DefaultCaption = True
+    Kind = bkOK
+    ModalResult = 1
+    OnClick = BitBtn1Click
+    TabOrder = 0
+  end
+  object BitBtn2: TBitBtn
+    Left = 503
+    Height = 28
+    Top = 288
+    Width = 96
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    DefaultCaption = True
+    Kind = bkCancel
+    ModalResult = 2
+    TabOrder = 1
+  end
+  object lsbTopographes: TListBox
+    Left = 4
+    Height = 279
+    Top = 5
+    Width = 595
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    ItemHeight = 0
+    MultiSelect = True
+    Sorted = True
+    TabOrder = 2
+  end
+  object btnAddTopographe: TButton
+    Left = 4
+    Height = 28
+    Top = 288
+    Width = 95
+    Anchors = [akLeft, akBottom]
+    Caption = 'Nouveau ...'
+    OnClick = btnAddTopographeClick
+    TabOrder = 3
+  end
+  object btnSupprimerTopographe: TButton
+    Left = 104
+    Height = 28
+    Top = 288
+    Width = 95
+    Anchors = [akLeft, akBottom]
+    Caption = 'Supprimer'
+    OnClick = btnSupprimerTopographeClick
+    TabOrder = 4
+  end
+  object lbLocalisationFichierTopographes: TStaticText
+    Left = 4
+    Height = 21
+    Top = 318
+    Width = 595
+    Anchors = [akLeft, akRight]
+    BorderStyle = sbsSunken
+    TabOrder = 5
+  end
+end

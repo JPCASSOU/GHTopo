@@ -1,0 +1,227 @@
+object dlgMiniConvertisseur: TdlgMiniConvertisseur
+  Left = 498
+  Height = 189
+  Top = 218
+  Width = 512
+  Caption = 'dlgMiniConvertisseur'
+  ClientHeight = 189
+  ClientWidth = 512
+  Font.CharSet = ANSI_CHARSET
+  Font.Color = clBlack
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  OnShow = FormShow
+  Position = poScreenCenter
+  LCLVersion = '2.0.0.4'
+  object BitBtn1: TBitBtn
+    Left = 291
+    Height = 30
+    Top = 155
+    Width = 107
+    Anchors = [akRight, akBottom]
+    DefaultCaption = True
+    Kind = bkOK
+    ModalResult = 1
+    TabOrder = 0
+  end
+  object BitBtn2: TBitBtn
+    Left = 403
+    Height = 30
+    Top = 155
+    Width = 107
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    DefaultCaption = True
+    Kind = bkCancel
+    ModalResult = 2
+    TabOrder = 1
+  end
+  object Panel7: TPanel
+    Left = 2
+    Height = 63
+    Top = 2
+    Width = 508
+    Anchors = [akTop, akLeft, akRight]
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    ClientHeight = 63
+    ClientWidth = 508
+    TabOrder = 2
+    object lbSystSource: TLabel
+      Left = 6
+      Height = 16
+      Top = 4
+      Width = 83
+      Caption = 'lbSystSource'
+      ParentColor = False
+    end
+    object cmbSystSourceJPC: TComboBox
+      Left = 172
+      Height = 24
+      Top = 4
+      Width = 250
+      Anchors = [akTop, akLeft, akRight]
+      ItemHeight = 16
+      OnChange = cmbSystSourceJPCChange
+      Style = csDropDownList
+      TabOrder = 0
+    end
+    object lbSystCible: TLabel
+      Left = 6
+      Height = 16
+      Top = 32
+      Width = 71
+      Caption = 'lbSystCible'
+      ParentColor = False
+    end
+    object cmbSystCibleJPC: TComboBox
+      Left = 172
+      Height = 24
+      Top = 32
+      Width = 250
+      Anchors = [akTop, akLeft, akRight]
+      ItemHeight = 16
+      OnChange = cmbSystCibleJPCChange
+      Style = csDropDownList
+      TabOrder = 1
+    end
+    object Button1: TButton
+      Left = 430
+      Height = 51
+      Top = 5
+      Width = 75
+      Anchors = [akTop, akRight, akBottom]
+      Caption = 'Permuter'
+      OnClick = Button1Click
+      TabOrder = 2
+    end
+  end
+  object Panel2: TPanel
+    Left = 2
+    Height = 82
+    Top = 72
+    Width = 508
+    Anchors = [akTop, akLeft, akRight]
+    BevelOuter = bvLowered
+    ClientHeight = 82
+    ClientWidth = 508
+    TabOrder = 3
+    object lbValeursEntree: TLabel
+      Left = 5
+      Height = 16
+      Top = 24
+      Width = 100
+      Caption = 'lbValeursEntree'
+      ParentColor = False
+    end
+    object editX_Source1JPC: TCurrencyEdit
+      Left = 172
+      Height = 24
+      Top = 25
+      Width = 117
+      Alignment = taRightJustify
+      DecimalPlaces = 8
+      DisplayFormat = '0.00000000'
+      MaxValue = 0
+      MinValue = 0
+      TabOrder = 0
+      Value = 0
+      OnKeyPress = editX_Source1JPCKeyPress
+    end
+    object editY_Source1JPC: TCurrencyEdit
+      Left = 291
+      Height = 24
+      Top = 25
+      Width = 117
+      Alignment = taRightJustify
+      DecimalPlaces = 8
+      DisplayFormat = '0.00000000'
+      MaxValue = 0
+      MinValue = 0
+      TabOrder = 1
+      Value = 0
+      OnKeyPress = editY_Source1JPCKeyPress
+    end
+    object lbValeursCalculees: TLabel
+      Left = 4
+      Height = 16
+      Top = 51
+      Width = 121
+      Caption = 'lbValeursCalculees'
+      ParentColor = False
+    end
+    object editX_Cible1JPC: TCurrencyEdit
+      Left = 172
+      Height = 24
+      Top = 52
+      Width = 117
+      Alignment = taRightJustify
+      Color = 10944511
+      DecimalPlaces = 8
+      DisplayFormat = '0.00000000'
+      MaxValue = 0
+      MinValue = 0
+      TabOrder = 2
+      Value = 0
+    end
+    object editY_Cible1JPC: TCurrencyEdit
+      Left = 291
+      Height = 24
+      Top = 52
+      Width = 117
+      Alignment = taRightJustify
+      Color = 10944511
+      DecimalPlaces = 8
+      DisplayFormat = '0.00000000'
+      MaxValue = 0
+      MinValue = 0
+      TabOrder = 3
+      Value = 0
+    end
+    object btnCalculer: TButton
+      Left = 413
+      Height = 52
+      Top = 24
+      Width = 91
+      Anchors = [akTop, akRight]
+      Caption = 'Calculer'
+      OnClick = btnCalculerClick
+      TabOrder = 4
+    end
+    object lbValeursX: TLabel
+      Left = 172
+      Height = 16
+      Top = 5
+      Width = 33
+      Caption = 'X (m)'
+      Font.CharSet = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+    end
+    object lbValeursY: TLabel
+      Left = 348
+      Height = 16
+      Top = 5
+      Width = 32
+      Caption = 'Y (m)'
+      Font.CharSet = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+    end
+  end
+end

@@ -1,0 +1,121 @@
+object dlgProfilTopo: TdlgProfilTopo
+  Left = 643
+  Height = 516
+  Top = 313
+  Width = 764
+  Caption = 'dlgProfilTopo'
+  ClientHeight = 516
+  ClientWidth = 764
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  Position = poScreenCenter
+  LCLVersion = '2.0.0.4'
+  object btnOK: TBitBtn
+    Left = 522
+    Height = 30
+    Top = 484
+    Width = 115
+    Anchors = [akRight, akBottom]
+    Default = True
+    DefaultCaption = True
+    Kind = bkOK
+    ModalResult = 1
+    TabOrder = 0
+  end
+  object btnCancel: TBitBtn
+    Left = 645
+    Height = 30
+    Top = 484
+    Width = 115
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    DefaultCaption = True
+    Kind = bkCancel
+    ModalResult = 2
+    TabOrder = 1
+  end
+  object Button1: TButton
+    Left = 4
+    Height = 25
+    Top = 484
+    Width = 75
+    Anchors = [akLeft, akBottom]
+    Caption = 'Button1'
+    TabOrder = 2
+  end
+  object Panel1: TPanel
+    Left = 3
+    Height = 476
+    Top = 2
+    Width = 758
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelOuter = bvLowered
+    ClientHeight = 476
+    ClientWidth = 758
+    TabOrder = 3
+    inline CdrProfilTopo1: TCdrProfilTopo
+      Left = 1
+      Height = 474
+      Top = 1
+      Width = 756
+      ClientHeight = 474
+      ClientWidth = 756
+      inherited PageControl1: TPageControl
+        Height = 409
+        Width = 754
+        inherited tabShtConduits: TTabSheet
+          ClientHeight = 380
+          ClientWidth = 746
+          inherited Panel1: TPanel
+            Height = 348
+            Width = 737
+            ClientHeight = 348
+            ClientWidth = 737
+            inherited lsbGaleriesRecoupees: TListBox
+              Height = 316
+              Width = 729
+            end
+            inherited HeaderControl1: THeaderControl
+              Width = 729
+            end
+          end
+          inherited btnCopierListeConduitsRecoupes: TButton
+            Left = 571
+          end
+        end
+      end
+      inherited pnlProfil1: TPanel
+        Width = 754
+        ClientWidth = 754
+        inherited editNomProfil: TEdit
+          Width = 320
+        end
+        inherited editX1: TCurrencyEdit
+          Left = 428
+        end
+        inherited editY1: TCurrencyEdit
+          Left = 428
+        end
+        inherited editX2: TCurrencyEdit
+          Left = 540
+        end
+        inherited editY2: TCurrencyEdit
+          Left = 540
+        end
+        inherited Label1: TLabel
+          Left = 404
+        end
+        inherited Label2: TLabel
+          Left = 404
+        end
+        inherited lbOrientationProfil: TStaticText
+          Left = 648
+        end
+      end
+    end
+  end
+end

@@ -1,0 +1,675 @@
+object dlgAddSeriesFromOtherDoc: TdlgAddSeriesFromOtherDoc
+  Left = 275
+  Height = 740
+  Top = 220
+  Width = 1156
+  ActiveControl = editDateExpe
+  Caption = 'dlgAddSeriesFromOtherDoc'
+  ClientHeight = 740
+  ClientWidth = 1156
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  Position = poScreenCenter
+  LCLVersion = '2.0.0.4'
+  object pnlSelectFilename: TPanel
+    Left = 4
+    Height = 34
+    Top = 4
+    Width = 902
+    BevelOuter = bvLowered
+    ClientHeight = 34
+    ClientWidth = 902
+    TabOrder = 0
+    object Label8: TLabel
+      Left = 4
+      Height = 16
+      Top = 8
+      Width = 114
+      Caption = 'Fichier à importer'
+      ParentColor = False
+    end
+    object editImportFilename: TEdit
+      Left = 136
+      Height = 24
+      Top = 4
+      Width = 594
+      Anchors = [akTop, akLeft, akRight]
+      TabOrder = 0
+    end
+    object btnSelectFilename: TButton
+      Left = 732
+      Height = 25
+      Top = 4
+      Width = 44
+      Anchors = [akTop, akRight]
+      Caption = '...'
+      OnClick = btnSelectFilenameClick
+      TabOrder = 1
+    end
+    object btnCharger: TButton
+      Left = 784
+      Height = 25
+      Top = 4
+      Width = 111
+      Anchors = [akTop, akRight]
+      Caption = 'btnCharger'
+      OnClick = btnChargerClick
+      TabOrder = 2
+    end
+  end
+  object btnClose: TBitBtn
+    Left = 1035
+    Height = 30
+    Top = 707
+    Width = 118
+    Anchors = [akRight, akBottom]
+    DefaultCaption = True
+    Kind = bkClose
+    ModalResult = 11
+    TabOrder = 1
+  end
+  object btnImport: TButton
+    Left = 910
+    Height = 30
+    Top = 707
+    Width = 118
+    Anchors = [akRight, akBottom]
+    Caption = 'Importer'
+    OnClick = btnImportClick
+    TabOrder = 2
+  end
+  object pnlDoActions: TPanel
+    Left = 4
+    Height = 659
+    Top = 44
+    Width = 1151
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    ClientHeight = 659
+    ClientWidth = 1151
+    TabOrder = 3
+    object PageControl1: TPageControl
+      Left = 4
+      Height = 192
+      Top = -4
+      Width = 1142
+      ActivePage = tabshtTopoDuJour
+      Anchors = [akTop, akLeft, akRight]
+      TabIndex = 0
+      TabOrder = 0
+      OnChange = PageControl1Change
+      object tabshtTopoDuJour: TTabSheet
+        Caption = 'Topo du jour'
+        ClientHeight = 163
+        ClientWidth = 1134
+        object rgbxTodoWithSerie: TRadioGroup
+          Left = 576
+          Height = 84
+          Top = 80
+          Width = 219
+          AutoFill = True
+          Caption = ' En cas de séries existantes '
+          ChildSizing.LeftRightSpacing = 6
+          ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+          ChildSizing.EnlargeVertical = crsHomogenousChildResize
+          ChildSizing.ShrinkHorizontal = crsScaleChilds
+          ChildSizing.ShrinkVertical = crsScaleChilds
+          ChildSizing.Layout = cclTopToBottomThenLeftToRight
+          ChildSizing.ControlsPerLine = 3
+          ClientHeight = 63
+          ClientWidth = 215
+          ColumnLayout = clVerticalThenHorizontal
+          ItemIndex = 2
+          Items.Strings = (
+            'Ajouter aux visées'
+            'Remplacer les visées'
+            'Ignorer la série'
+          )
+          TabOrder = 0
+        end
+        object grbxCreateNewCodeExpe: TGroupBox
+          Left = 572
+          Height = 77
+          Top = 0
+          Width = 308
+          Caption = 'grbxCreateNewCodeExpe'
+          ClientHeight = 56
+          ClientWidth = 304
+          TabOrder = 1
+          object chkCreateNewCode: TCheckBox
+            Left = 4
+            Height = 20
+            Top = 0
+            Width = 246
+            Caption = 'Créer un nouveau code instruments'
+            Checked = True
+            State = cbChecked
+            TabOrder = 0
+          end
+          object chkCreateNewExpe: TCheckBox
+            Left = 4
+            Height = 20
+            Top = 28
+            Width = 191
+            Caption = 'Créer une nouvelle séance'
+            Checked = True
+            State = cbChecked
+            TabOrder = 1
+          end
+          object editDateExpe: TDateTimePicker
+            Left = 212
+            Height = 24
+            Top = 28
+            Width = 89
+            CenturyFrom = 1941
+            MaxDate = 2958465
+            MinDate = -53780
+            TabOrder = 2
+            TrailingSeparator = False
+            TextForNullDate = 'NULL'
+            LeadingZeros = True
+            Kind = dtkDate
+            TimeFormat = tf24
+            TimeDisplay = tdHMS
+            DateMode = dmComboBox
+            Date = 44246
+            Time = 0.811411608796334
+            UseDefaultSeparators = True
+            HideDateTimeParts = []
+            MonthNames = 'Long'
+          end
+        end
+        object grbxRaccorderA: TGroupBox
+          Left = 4
+          Height = 162
+          Top = 0
+          Width = 564
+          Caption = 'Raccordement au réseau'
+          ClientHeight = 141
+          ClientWidth = 560
+          TabOrder = 2
+          object editSerieAAccrocher: TCurrencyEdit
+            Left = 108
+            Height = 24
+            Top = 4
+            Width = 68
+            Alignment = taRightJustify
+            DecimalPlaces = 0
+            DisplayFormat = '0'
+            MaxValue = 0
+            MinValue = 0
+            TabOrder = 0
+            Value = 0
+          end
+          object Label1: TLabel
+            Left = 4
+            Height = 16
+            Top = 32
+            Width = 91
+            Caption = 'sera rattachée'
+            ParentColor = False
+          end
+          object Label2: TLabel
+            Left = 4
+            Height = 16
+            Top = 4
+            Width = 51
+            Caption = 'La série'
+            ParentColor = False
+          end
+          object lbNomSerieSource: TStaticText
+            Left = 180
+            Height = 24
+            Top = 4
+            Width = 377
+            Anchors = [akTop, akLeft, akRight]
+            BorderStyle = sbsSunken
+            TabOrder = 1
+          end
+          object cmbExtrAccrochage: TComboBox
+            Left = 108
+            Height = 24
+            Top = 32
+            Width = 156
+            ItemHeight = 16
+            ItemIndex = 0
+            Items.Strings = (
+              'Par son origine'
+              'Par son terminus'
+            )
+            Style = csDropDownList
+            TabOrder = 2
+            Text = 'Par son origine'
+          end
+          object Label3: TLabel
+            Left = 317
+            Height = 16
+            Top = 32
+            Width = 70
+            Anchors = [akTop, akRight]
+            Caption = 'à la station'
+            ParentColor = False
+          end
+          object editSerieRaccordement: TCurrencyEdit
+            Left = 396
+            Height = 24
+            Top = 32
+            Width = 54
+            Alignment = taRightJustify
+            DecimalPlaces = 0
+            DisplayFormat = '0'
+            Anchors = [akTop, akRight]
+            MaxValue = 0
+            MinValue = 0
+            TabOrder = 3
+            Value = 0
+          end
+          object editPointRaccordement: TCurrencyEdit
+            Left = 454
+            Height = 24
+            Top = 32
+            Width = 54
+            Alignment = taRightJustify
+            DecimalPlaces = 0
+            DisplayFormat = '0'
+            Anchors = [akTop, akRight]
+            MaxValue = 0
+            MinValue = 0
+            TabOrder = 4
+            Value = 0
+          end
+          object chkCheckStationRattachement: TButton
+            Left = 512
+            Height = 25
+            Top = 32
+            Width = 45
+            Anchors = [akTop, akRight]
+            Caption = 'V'
+            OnClick = chkCheckStationRattachementClick
+            TabOrder = 5
+          end
+        end
+      end
+      object tabShtAddCavite: TTabSheet
+        Caption = 'Ajout d''une cavité'
+        ClientHeight = 179
+        ClientWidth = 1132
+        object chkCreerNouveauReseau: TCheckBox
+          Left = 4
+          Height = 23
+          Top = 12
+          Width = 181
+          Caption = 'Créer un nouveau réseau'
+          Checked = True
+          State = cbChecked
+          TabOrder = 0
+        end
+        object editNouveauReseau: TEdit
+          Left = 216
+          Height = 27
+          Top = 12
+          Width = 280
+          TabOrder = 1
+        end
+        object chkAddEntrances: TCheckBox
+          Left = 4
+          Height = 23
+          Top = 40
+          Width = 142
+          Caption = 'Ajouter les entrées'
+          Checked = True
+          State = cbChecked
+          TabOrder = 2
+        end
+        object Label4: TLabel
+          Left = 4
+          Height = 15
+          Top = 96
+          Width = 195
+          Caption = 'La série 1 correspond à la série'
+          ParentColor = False
+        end
+        object editFirstNumSerieForSynthese: TCurrencyEdit
+          Left = 240
+          Height = 27
+          Top = 96
+          Width = 68
+          Alignment = taRightJustify
+          DisplayFormat = '0'
+          MaxValue = 0
+          MinValue = 0
+          TabOrder = 3
+          Value = 0
+          OnChange = editFirstNumSerieForSyntheseChange
+        end
+        object Label5: TLabel
+          Left = 320
+          Height = 15
+          Top = 128
+          Width = 89
+          Caption = 'de la synthèse'
+          ParentColor = False
+        end
+        object Label6: TLabel
+          Left = 4
+          Height = 15
+          Top = 124
+          Width = 188
+          Caption = 'Le code 1 correspond au code'
+          ParentColor = False
+        end
+        object editFirstNumCodeForSynthese: TCurrencyEdit
+          Left = 240
+          Height = 27
+          Top = 124
+          Width = 68
+          Alignment = taRightJustify
+          DisplayFormat = '0'
+          MaxValue = 0
+          MinValue = 0
+          TabOrder = 4
+          Value = 0
+        end
+        object Label7: TLabel
+          Left = 4
+          Height = 15
+          Top = 152
+          Width = 221
+          Caption = 'La séance 1 correspond à la séance'
+          ParentColor = False
+        end
+        object editFirstNumExpeForSynthese: TCurrencyEdit
+          Left = 240
+          Height = 27
+          Top = 152
+          Width = 68
+          Alignment = taRightJustify
+          DisplayFormat = '0'
+          MaxValue = 0
+          MinValue = 0
+          TabOrder = 5
+          Value = 0
+        end
+        object grbxReprojectionCoordonnees: TGroupBox
+          Left = 702
+          Height = 156
+          Top = 4
+          Width = 428
+          Anchors = [akTop, akRight]
+          Caption = 'Reprojection des coordonnées'
+          ClientHeight = 135
+          ClientWidth = 424
+          TabOrder = 6
+          object Label9: TLabel
+            Left = 4
+            Height = 15
+            Top = 4
+            Width = 82
+            Caption = 'EPSG actuel:'
+            ParentColor = False
+          end
+          object lbSystemeCoordsCourant: TStaticText
+            Left = 188
+            Height = 21
+            Top = 4
+            Width = 234
+            Anchors = [akTop, akLeft, akRight]
+            BorderStyle = sbsSunken
+            Caption = 'lbSystemeCoordsCourant'
+            TabOrder = 0
+          end
+          object Label10: TLabel
+            Left = 4
+            Height = 15
+            Top = 28
+            Width = 174
+            Caption = 'EPSG du réseau à importer:'
+            ParentColor = False
+          end
+          object lbSystemeCoordsImported: TStaticText
+            Left = 188
+            Height = 21
+            Top = 28
+            Width = 234
+            Anchors = [akTop, akLeft, akRight]
+            BorderStyle = sbsSunken
+            Caption = 'lbSystemeCoordsImported'
+            TabOrder = 1
+          end
+          object pnlReprojection: TPanel
+            Left = 92
+            Height = 62
+            Top = 54
+            Width = 332
+            BevelOuter = bvLowered
+            ClientHeight = 62
+            ClientWidth = 332
+            TabOrder = 2
+            object editX2: TCurrencyEdit
+              Left = 220
+              Height = 27
+              Top = 4
+              Width = 108
+              Alignment = taRightJustify
+              DisplayFormat = ',0.00'
+              Anchors = [akTop, akRight]
+              MaxValue = 0
+              MinValue = 0
+              TabOrder = 0
+              Value = 0
+            end
+            object editY2: TCurrencyEdit
+              Left = 220
+              Height = 27
+              Top = 32
+              Width = 108
+              Alignment = taRightJustify
+              DisplayFormat = ',0.00'
+              Anchors = [akTop, akRight]
+              MaxValue = 0
+              MinValue = 0
+              TabOrder = 1
+              Value = 0
+            end
+            object btnReprojeter: TButton
+              Left = 120
+              Height = 25
+              Top = 16
+              Width = 91
+              Anchors = [akTop, akLeft, akRight]
+              Caption = 'Reprojeter'
+              OnClick = btnReprojeterClick
+              TabOrder = 2
+            end
+            object editX1: TCurrencyEdit
+              Left = 4
+              Height = 27
+              Top = 4
+              Width = 108
+              Alignment = taRightJustify
+              DisplayFormat = ',0.00'
+              MaxValue = 0
+              MinValue = 0
+              TabOrder = 3
+              Value = 0
+            end
+            object editY1: TCurrencyEdit
+              Left = 4
+              Height = 27
+              Top = 32
+              Width = 108
+              Alignment = taRightJustify
+              DisplayFormat = ',0.00'
+              MaxValue = 0
+              MinValue = 0
+              TabOrder = 4
+              Value = 0
+            end
+          end
+        end
+        object lbLastAttributedSerie: TStaticText
+          Left = 424
+          Height = 24
+          Top = 96
+          Width = 73
+          Alignment = taRightJustify
+          BorderStyle = sbsSunken
+          Caption = '0'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 7
+        end
+        object lbLastAttributedCode: TStaticText
+          Left = 424
+          Height = 24
+          Top = 124
+          Width = 73
+          Alignment = taRightJustify
+          BorderStyle = sbsSunken
+          Caption = '0'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 8
+        end
+        object lbLastAttributedExpe: TStaticText
+          Left = 424
+          Height = 24
+          Top = 152
+          Width = 73
+          Alignment = taRightJustify
+          BorderStyle = sbsSunken
+          Caption = '0'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 9
+        end
+        object btnColorReseau: TColorButton
+          Left = 496
+          Height = 25
+          Top = 12
+          Width = 75
+          BorderWidth = 2
+          ButtonColorSize = 16
+          ButtonColor = clBlack
+        end
+        object editPtZeroReseauAddedSerie: TCurrencyEdit
+          Left = 240
+          Height = 27
+          Top = 68
+          Width = 68
+          Alignment = taRightJustify
+          DisplayFormat = '0'
+          MaxValue = 0
+          MinValue = 0
+          TabOrder = 10
+          Value = 1
+        end
+        object editPtZeroReseauAddedPoint: TCurrencyEdit
+          Left = 312
+          Height = 27
+          Top = 68
+          Width = 68
+          Alignment = taRightJustify
+          DisplayFormat = '0'
+          MaxValue = 0
+          MinValue = 0
+          TabOrder = 11
+          Value = 0
+        end
+        object Label11: TLabel
+          Left = 4
+          Height = 15
+          Top = 68
+          Width = 171
+          Caption = 'Point zéro du réseau ajouté'
+          ParentColor = False
+        end
+      end
+    end
+    object pnlListeSeries: TPanel
+      Left = 4
+      Height = 463
+      Top = 192
+      Width = 1142
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      BevelOuter = bvLowered
+      ClientHeight = 463
+      ClientWidth = 1142
+      TabOrder = 1
+      inline CdrListeSeries1: TCdrListeSeries
+        Left = 1
+        Height = 461
+        Top = 1
+        Width = 1140
+        ClientHeight = 461
+        ClientWidth = 1140
+        inherited hcColsTitres: THeaderControl
+          Width = 1133
+        end
+        inherited cmbEntreesOuReseaux: TComboBox
+          Width = 1133
+        end
+        inherited SpeedButton8: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton12: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton2: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton3: TSpeedButton
+          Left = 1109
+          Flat = False
+        end
+        inherited lbNbreElements: TLabel
+          Top = 442
+        end
+        inherited editRechercheRapide: TEdit
+          Width = 966
+        end
+        inherited SpeedButton4: TSpeedButton
+          Left = 1109
+          Flat = False
+        end
+        inherited SpeedButton1: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton5: TSpeedButton
+          Flat = False
+        end
+        inherited editSelectionMultiple: TEdit
+          Width = 857
+        end
+        inherited SpeedButton6: TSpeedButton
+          Left = 1001
+          Flat = False
+        end
+        inherited SpeedButton7: TSpeedButton
+          Left = 1031
+          Flat = False
+        end
+        inherited SpeedButton9: TSpeedButton
+          Left = 1057
+          Flat = False
+        end
+        inherited SpeedButton10: TSpeedButton
+          Left = 1084
+          Flat = False
+        end
+        inherited SpeedButton11: TSpeedButton
+          Left = 1111
+        end
+        inherited lsbListe: TCheckListBox
+          Height = 293
+          Width = 1133
+        end
+      end
+    end
+  end
+end

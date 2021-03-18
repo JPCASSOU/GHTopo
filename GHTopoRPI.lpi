@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectOptions>
+    <Version Value="11"/>
+    <PathDelim Value="\"/>
+    <General>
+      <SessionStorage Value="InProjectDir"/>
+      <MainUnit Value="0"/>
+      <Title Value="GHTopoRPI"/>
+      <ResourceType Value="res"/>
+      <UseXPManifest Value="True"/>
+      <Icon Value="0"/>
+    </General>
+    <BuildModes Count="1">
+      <Item1 Name="Default" Default="True"/>
+    </BuildModes>
+    <PublishOptions>
+      <Version Value="2"/>
+      <DestinationDirectory Value="C:\Users\jean-pierre.cassou\Desktop\Projets_Lazarus_a_publier\GHTopoRPI"/>
+      <CompressFinally Value="False"/>
+      <OpenInFileMan Value="True"/>
+      <UseFileFilters Value="True"/>
+      <FileFilter Value="*.(pas|pp|inc|lpr|lfm|lrs|lpi|lpk|xml)"/>
+    </PublishOptions>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes Count="1">
+        <Mode0 Name="default"/>
+      </Modes>
+    </RunParams>
+    <RequiredPackages Count="12">
+      <Item1>
+        <PackageName Value="DateTimeCtrlsDsgn"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="DateTimeCtrls"/>
+      </Item2>
+      <Item3>
+        <PackageName Value="LazSerialPort"/>
+      </Item3>
+      <Item4>
+        <PackageName Value="TAChartLazarusPkg"/>
+      </Item4>
+      <Item5>
+        <PackageName Value="pascalscript"/>
+      </Item5>
+      <Item6>
+        <PackageName Value="pack_powerpdf"/>
+      </Item6>
+      <Item7>
+        <PackageName Value="lazbarcodes"/>
+      </Item7>
+      <Item8>
+        <PackageName Value="rxnew"/>
+      </Item8>
+      <Item9>
+        <PackageName Value="Printer4Lazarus"/>
+      </Item9>
+      <Item10>
+        <PackageName Value="BGRABitmapPack"/>
+      </Item10>
+      <Item11>
+        <PackageName Value="SynEdit"/>
+      </Item11>
+      <Item12>
+        <PackageName Value="LCL"/>
+      </Item12>
+    </RequiredPackages>
+    <Units Count="11">
+      <Unit0>
+        <Filename Value="GHTopoRPI.lpr"/>
+        <IsPartOfProject Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="frmRPIMainWnd.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="RPIMainWnd"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="CadreDataAcquired.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="CdrDataAcquired"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="frmSelectGHTopoFilesSimplifie.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="dlgSelectGHTopoFilesSimplifie"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="cadrelisteviseesenantenne.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="CdrListeViseesEnAntenne"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="CadreListeViseesEnAntenne"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="unitminimalcom_arm.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="UnitMinimalCOM_ARM"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="frmclaviernumerique.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="dlgClavierNumerique"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="cadrerosediagramme.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="CdrRoseDiagramme"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="CadreRoseDiagramme"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="cadredepthdiagramme.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="CdrDepthDiagramme"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="CadreDepthDiagramme"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="cadreradiobuttons.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="CdrRadioButtons"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="CadreRadioButtons"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="frmregisterchineseuser.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="dlgRegisterChineseUser"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="frmRegisterChineseUser"/>
+      </Unit10>
+    </Units>
+  </ProjectOptions>
+  <CompilerOptions>
+    <Version Value="11"/>
+    <PathDelim Value="\"/>
+    <Target>
+      <Filename Value="GHTopoRPI"/>
+    </Target>
+    <SearchPaths>
+      <IncludeFiles Value="$(ProjOutDir)"/>
+      <OtherUnitFiles Value="UnitesMutualisees"/>
+      <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+    </SearchPaths>
+    <Parsing>
+      <SyntaxOptions>
+        <SyntaxMode Value="Delphi"/>
+        <UseAnsiStrings Value="False"/>
+      </SyntaxOptions>
+    </Parsing>
+    <Linking>
+      <Debugging>
+        <GenerateDebugInfo Value="False"/>
+        <StripSymbols Value="True"/>
+      </Debugging>
+      <Options>
+        <Win32>
+          <GraphicApplication Value="True"/>
+        </Win32>
+      </Options>
+    </Linking>
+    <Other>
+      <Verbosity>
+        <ShoLineNum Value="True"/>
+        <ShowAll Value="True"/>
+        <ShowExecInfo Value="True"/>
+        <ShowHintsForUnusedUnitsInMainSrc Value="True"/>
+      </Verbosity>
+    </Other>
+  </CompilerOptions>
+  <Debugging>
+    <Exceptions Count="1">
+      <Item1>
+        <Name Value="EListError"/>
+      </Item1>
+    </Exceptions>
+  </Debugging>
+</CONFIG>

@@ -1,0 +1,63 @@
+object dlgEditSecteur: TdlgEditSecteur
+  Left = 716
+  Height = 99
+  Top = 294
+  Width = 412
+  Caption = 'dlgEditSecteur'
+  ClientHeight = 99
+  ClientWidth = 412
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  Position = poScreenCenter
+  LCLVersion = '2.0.0.4'
+  object dlgEditSecteur: TPanel
+    Left = 4
+    Height = 63
+    Top = 1
+    Width = 405
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelInner = bvLowered
+    ClientHeight = 63
+    ClientWidth = 405
+    TabOrder = 0
+    inline CdrSecteur1: TCdrSecteur
+      Left = 2
+      Height = 59
+      Top = 2
+      Width = 401
+      ClientHeight = 59
+      ClientWidth = 401
+      inherited editNomSecteur: TEdit
+        Width = 299
+      end
+    end
+  end
+  object BitBtn1: TBitBtn
+    Left = 223
+    Height = 30
+    Top = 67
+    Width = 90
+    Anchors = [akRight, akBottom]
+    Default = True
+    DefaultCaption = True
+    Kind = bkOK
+    ModalResult = 1
+    TabOrder = 1
+  end
+  object BitBtn2: TBitBtn
+    Left = 317
+    Height = 30
+    Top = 67
+    Width = 90
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    DefaultCaption = True
+    Kind = bkCancel
+    ModalResult = 2
+    TabOrder = 2
+  end
+end

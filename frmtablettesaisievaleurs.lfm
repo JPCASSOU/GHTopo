@@ -1,0 +1,219 @@
+object dlgSaisieValeursNum: TdlgSaisieValeursNum
+  Left = 517
+  Height = 535
+  Top = 194
+  Width = 413
+  BorderIcons = []
+  BorderStyle = bsDialog
+  ClientHeight = 535
+  ClientWidth = 413
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -37
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  OnShow = FormShow
+  LCLVersion = '1.2.6.0'
+  object Panel1: TPanel
+    Left = 0
+    Height = 379
+    Top = 92
+    Width = 410
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    ClientHeight = 379
+    ClientWidth = 410
+    TabOrder = 0
+    object Button1: TButton
+      Left = 8
+      Height = 90
+      Top = 192
+      Width = 90
+      Caption = '1'
+      OnClick = Button1Click
+      TabOrder = 0
+    end
+    object Button2: TButton
+      Left = 99
+      Height = 90
+      Top = 192
+      Width = 90
+      Caption = '2'
+      OnClick = Button2Click
+      TabOrder = 1
+    end
+    object Button3: TButton
+      Left = 191
+      Height = 90
+      Top = 192
+      Width = 90
+      Caption = '3'
+      OnClick = Button3Click
+      TabOrder = 2
+    end
+    object Button4: TButton
+      Left = 8
+      Height = 90
+      Top = 100
+      Width = 90
+      Caption = '4'
+      OnClick = Button4Click
+      TabOrder = 3
+    end
+    object Button5: TButton
+      Left = 99
+      Height = 90
+      Top = 100
+      Width = 90
+      Caption = '5'
+      OnClick = Button5Click
+      TabOrder = 4
+    end
+    object Button6: TButton
+      Left = 191
+      Height = 90
+      Top = 100
+      Width = 90
+      Caption = '6'
+      OnClick = Button6Click
+      TabOrder = 5
+    end
+    object Button7: TButton
+      Left = 8
+      Height = 90
+      Top = 8
+      Width = 90
+      Caption = '7'
+      OnClick = Button7Click
+      TabOrder = 6
+    end
+    object Button8: TButton
+      Left = 99
+      Height = 90
+      Top = 8
+      Width = 90
+      Caption = '8'
+      OnClick = Button8Click
+      TabOrder = 7
+    end
+    object Button9: TButton
+      Left = 191
+      Height = 90
+      Top = 8
+      Width = 90
+      Caption = '9'
+      OnClick = Button9Click
+      TabOrder = 8
+    end
+    object Button10: TButton
+      Left = 8
+      Height = 90
+      Top = 284
+      Width = 90
+      Caption = '-'
+      OnClick = Button10Click
+      TabOrder = 9
+    end
+    object Button11: TButton
+      Left = 99
+      Height = 90
+      Top = 284
+      Width = 90
+      Caption = '0'
+      OnClick = Button11Click
+      TabOrder = 10
+    end
+    object Button12: TButton
+      Left = 191
+      Height = 90
+      Top = 284
+      Width = 90
+      Caption = ','
+      OnClick = Button12Click
+      TabOrder = 11
+    end
+    object Button14: TButton
+      Left = 288
+      Height = 90
+      Top = 8
+      Width = 117
+      Anchors = [akTop, akLeft, akRight]
+      Caption = 'C'
+      OnClick = Button14Click
+      TabOrder = 12
+    end
+    object Button13: TButton
+      Left = 288
+      Height = 90
+      Top = 100
+      Width = 117
+      Anchors = [akTop, akLeft, akRight]
+      Caption = '<----'
+      OnClick = Button13Click
+      TabOrder = 13
+    end
+  end
+  object BitBtn1: TBitBtn
+    Left = 4
+    Height = 60
+    Top = 473
+    Width = 198
+    Anchors = [akLeft, akBottom]
+    Default = True
+    DefaultCaption = True
+    Kind = bkOK
+    ModalResult = 1
+    TabOrder = 1
+  end
+  object BitBtn2: TBitBtn
+    Left = 212
+    Height = 60
+    Top = 473
+    Width = 198
+    Anchors = [akRight, akBottom]
+    DefaultCaption = True
+    Kind = bkCancel
+    ModalResult = 2
+    TabOrder = 2
+  end
+  object lbPrompt: TLabel
+    Left = 0
+    Height = 44
+    Top = 0
+    Width = 163
+    Caption = 'lbPrompt'
+    ParentColor = False
+  end
+  object lbValue: TStaticText
+    Left = 0
+    Height = 47
+    Top = 44
+    Width = 410
+    Alignment = taRightJustify
+    Anchors = [akTop, akLeft, akRight]
+    BorderStyle = sbsSingle
+    Caption = '0'
+    Color = clYellow
+    ParentColor = False
+    TabOrder = 3
+  end
+  object lbOldValue: TStaticText
+    Left = 277
+    Height = 36
+    Top = 4
+    Width = 133
+    Anchors = [akTop, akRight]
+    BorderStyle = sbsSingle
+    Caption = '6666.666'
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -24
+    Font.Name = 'Arial'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 4
+  end
+end

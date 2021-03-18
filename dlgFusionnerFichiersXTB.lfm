@@ -1,0 +1,123 @@
+object dlgFusionFichiers: TdlgFusionFichiers
+  Left = 388
+  Height = 549
+  Top = 132
+  Width = 721
+  Caption = 'dlgFusionFichiers'
+  ClientHeight = 549
+  ClientWidth = 721
+  LCLVersion = '1.6.0.4'
+  object CheckListBox1: TCheckListBox
+    Left = 8
+    Height = 384
+    Top = 40
+    Width = 346
+    ItemHeight = 0
+    TabOrder = 0
+  end
+  object Label1: TLabel
+    Left = 8
+    Height = 13
+    Top = 20
+    Width = 93
+    Caption = 'Cavités à fusionner'
+    ParentColor = False
+  end
+  object DirectoryEdit1: TDirectoryEdit
+    Left = 404
+    Height = 21
+    Top = 36
+    Width = 296
+    ShowHidden = False
+    ButtonWidth = 23
+    NumGlyphs = 1
+    MaxLength = 0
+    TabOrder = 1
+  end
+  object FileListBox1: TFileListBox
+    Left = 406
+    Height = 347
+    Top = 60
+    Width = 295
+    Directory = 'C:\lazarus'
+    ItemHeight = 13
+    MultiSelect = True
+    TabOrder = 2
+  end
+  object Label2: TLabel
+    Left = 404
+    Height = 13
+    Top = 20
+    Width = 83
+    Caption = 'Dossier de travail'
+    ParentColor = False
+  end
+  object Button1: TButton
+    Left = 360
+    Height = 25
+    Top = 124
+    Width = 40
+    Caption = '<'
+    TabOrder = 3
+  end
+  object Button2: TButton
+    Left = 360
+    Height = 25
+    Top = 96
+    Width = 40
+    Caption = '<<'
+    TabOrder = 4
+  end
+  object Button3: TButton
+    Left = 8
+    Height = 25
+    Top = 436
+    Width = 75
+    Caption = 'Fusionner'
+    TabOrder = 5
+  end
+  object CheckBox1: TCheckBox
+    Left = 8
+    Height = 17
+    Top = 468
+    Width = 133
+    Caption = 'Envoyer dans un fichier'
+    TabOrder = 6
+  end
+  object FileNameEdit1: TFileNameEdit
+    Left = 164
+    Height = 21
+    Top = 468
+    Width = 336
+    FilterIndex = 0
+    HideDirectories = False
+    ButtonWidth = 23
+    NumGlyphs = 1
+    MaxLength = 0
+    TabOrder = 7
+  end
+  object Button4: TButton
+    Left = 8
+    Height = 25
+    Top = 516
+    Width = 200
+    Caption = 'Enregistrer paramètres de fusion'
+    TabOrder = 8
+  end
+  object Button5: TButton
+    Left = 212
+    Height = 25
+    Top = 516
+    Width = 216
+    Caption = 'Restaurer params fusion'
+    TabOrder = 9
+  end
+  object Button6: TButton
+    Left = 360
+    Height = 25
+    Top = 152
+    Width = 40
+    Caption = 'Button6'
+    TabOrder = 10
+  end
+end

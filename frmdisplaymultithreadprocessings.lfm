@@ -1,0 +1,81 @@
+object dlgDispMultiThreadProcessing: TdlgDispMultiThreadProcessing
+  Left = 632
+  Height = 332
+  Top = 247
+  Width = 573
+  BorderStyle = bsNone
+  Caption = 'dlgDispMultiThreadProcessing'
+  ClientHeight = 332
+  ClientWidth = 573
+  OnShow = FormShow
+  Position = poScreenCenter
+  LCLVersion = '2.0.0.4'
+  object Panel1: TPanel
+    Left = 4
+    Height = 274
+    Top = 4
+    Width = 563
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelOuter = bvLowered
+    ClientHeight = 274
+    ClientWidth = 563
+    TabOrder = 0
+    object lsbMessages: TListBox
+      Left = 4
+      Height = 94
+      Top = 180
+      Width = 558
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      ItemHeight = 0
+      TabOrder = 0
+    end
+    object Panel2: TPanel
+      Left = 4
+      Height = 174
+      Top = 4
+      Width = 558
+      Anchors = [akTop, akLeft, akRight]
+      BevelOuter = bvLowered
+      ClientHeight = 174
+      ClientWidth = 558
+      TabOrder = 1
+      object lsbEtapesTraitement: TListBox
+        Left = 4
+        Height = 164
+        Top = 4
+        Width = 546
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        ItemHeight = 0
+        TabOrder = 0
+      end
+    end
+  end
+  object Panel3: TPanel
+    Left = 4
+    Height = 46
+    Top = 280
+    Width = 563
+    Anchors = [akLeft, akRight, akBottom]
+    BevelOuter = bvLowered
+    ClientHeight = 46
+    ClientWidth = 563
+    TabOrder = 1
+    object lbMonoThreadEtape: TLabel
+      Left = 4
+      Height = 15
+      Top = 4
+      Width = 107
+      Caption = 'lbMonoThreadEtape'
+      ParentColor = False
+    end
+    object pgrBarMonothread: TProgressBar
+      Left = 6
+      Height = 20
+      Top = 24
+      Width = 557
+      Anchors = [akLeft, akRight, akBottom]
+      Smooth = True
+      TabOrder = 0
+    end
+  end
+end

@@ -1,0 +1,192 @@
+object frmHelpSystem: TfrmHelpSystem
+  Left = 744
+  Height = 444
+  Top = 285
+  Width = 580
+  Caption = 'frmHelpSystem'
+  ClientHeight = 444
+  ClientWidth = 580
+  Font.CharSet = ANSI_CHARSET
+  Font.Color = clBlack
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnResize = FormResize
+  OnShow = FormShow
+  Position = poScreenCenter
+  LCLVersion = '2.0.0.4'
+  object BitBtn1: TBitBtn
+    Left = 425
+    Height = 30
+    Top = 410
+    Width = 151
+    Anchors = [akRight, akBottom]
+    DefaultCaption = True
+    Kind = bkClose
+    ModalResult = 11
+    TabOrder = 0
+  end
+  object PageControl1: TPageControl
+    Left = 4
+    Height = 401
+    Top = 4
+    Width = 573
+    ActivePage = tabShtQRCode
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    TabIndex = 2
+    TabOrder = 1
+    object tabshtHelpSystem: TTabSheet
+      Caption = 'tabshtHelpSystem'
+      ClientHeight = 372
+      ClientWidth = 565
+      object memoText: TMemo
+        Left = 3
+        Height = 339
+        Top = 32
+        Width = 561
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        Color = 8454143
+        Font.CharSet = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Pitch = fpVariable
+        Font.Quality = fqDraft
+        Font.Style = [fsBold]
+        Lines.Strings = (
+          ''
+        )
+        ParentFont = False
+        ScrollBars = ssVertical
+        TabOrder = 0
+      end
+      object cmbTitles: TComboBox
+        Left = 3
+        Height = 24
+        Top = 4
+        Width = 561
+        Anchors = [akTop, akLeft, akRight]
+        ItemHeight = 16
+        OnChange = cmbTitlesChange
+        Style = csDropDownList
+        TabOrder = 1
+      end
+    end
+    object tabShtAbout: TTabSheet
+      Caption = 'tabShtAbout'
+      ClientHeight = 372
+      ClientWidth = 565
+      object lbGHTopoName: TLabel
+        Left = 3
+        Height = 22
+        Top = 3
+        Width = 145
+        Caption = 'lbGHTopoName'
+        Font.CharSet = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -19
+        Font.Name = 'Arial'
+        Font.Pitch = fpVariable
+        Font.Quality = fqDraft
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object lsbResolutionEcrans: TListBox
+        Left = 3
+        Height = 68
+        Top = 60
+        Width = 560
+        Anchors = [akTop, akLeft, akRight]
+        Font.CharSet = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Pitch = fpVariable
+        Font.Quality = fqDraft
+        Font.Style = [fsBold]
+        ItemHeight = 0
+        ParentFont = False
+        ScrollWidth = 419
+        TabOrder = 0
+      end
+      object memoAdditionnalInfos: TMemo
+        Left = 4
+        Height = 237
+        Top = 132
+        Width = 559
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        Font.CharSet = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Pitch = fpVariable
+        Font.Quality = fqDraft
+        Font.Style = [fsBold]
+        ParentFont = False
+        ScrollBars = ssBoth
+        TabOrder = 1
+      end
+      object btnGoURLGHTopo: TButton
+        Left = -66
+        Height = 25
+        Top = 32
+        Width = 629
+        Anchors = [akTop, akRight]
+        Caption = 'Copy'
+        OnClick = btnGoURLGHTopoClick
+        TabOrder = 2
+      end
+    end
+    object tabShtQRCode: TTabSheet
+      Caption = 'tabShtQRCode'
+      ClientHeight = 372
+      ClientWidth = 565
+      object QRCode: TBarcodeQR
+        Left = 0
+        Height = 335
+        Top = 32
+        Width = 364
+        Anchors = [akTop, akLeft, akBottom]
+        BorderStyle = bsSingle
+        ParentBackground = False
+        ParentColor = False
+        TabOrder = 0
+        StrictSize = True
+        Text = 'TBarcodeQR'
+        ECCLevel = eBarcodeQR_ECCLevel_Q
+      end
+      object editToEncodeQRCode: TEdit
+        Left = 0
+        Height = 24
+        Top = 4
+        Width = 488
+        Anchors = [akTop, akLeft, akRight]
+        TabOrder = 1
+      end
+      object btnQRCode: TButton
+        Left = 488
+        Height = 25
+        Top = 3
+        Width = 75
+        Anchors = [akTop, akRight]
+        Caption = 'QRCode'
+        OnClick = btnQRCodeClick
+        TabOrder = 2
+      end
+    end
+  end
+  object lbUtilisateurFinal: TLabel
+    Left = 3
+    Height = 16
+    Top = 424
+    Width = 108
+    Anchors = [akLeft, akBottom]
+    Caption = 'lbUtilisateurFinal'
+    ParentColor = False
+  end
+end

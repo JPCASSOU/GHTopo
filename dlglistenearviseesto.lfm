@@ -1,0 +1,151 @@
+object frmListeNearViseesTo: TfrmListeNearViseesTo
+  Left = 890
+  Height = 473
+  Top = 407
+  Width = 860
+  Caption = 'frmListeNearViseesTo'
+  ClientHeight = 473
+  ClientWidth = 860
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  LCLVersion = '2.0.0.4'
+  object btnCancel: TBitBtn
+    Left = 747
+    Height = 28
+    Top = 443
+    Width = 111
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    DefaultCaption = True
+    Kind = bkCancel
+    ModalResult = 2
+    TabOrder = 0
+  end
+  object Button1: TButton
+    Left = 212
+    Height = 24
+    Top = 32
+    Width = 68
+    Caption = '...'
+    TabOrder = 1
+  end
+  object Panel2: TPanel
+    Left = 4
+    Height = 433
+    Top = 4
+    Width = 854
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelInner = bvLowered
+    ClientHeight = 433
+    ClientWidth = 854
+    TabOrder = 2
+    object Panel1: TPanel
+      Left = 4
+      Height = 371
+      Top = 60
+      Width = 849
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      BevelInner = bvRaised
+      BevelOuter = bvLowered
+      ClientHeight = 371
+      ClientWidth = 849
+      TabOrder = 0
+      inline CdrListeNearestStations1: TCdrListeNearestStations
+        Left = 2
+        Height = 367
+        Top = 2
+        Width = 845
+        ClientHeight = 367
+        ClientWidth = 845
+        inherited lsbStations: TListBox
+          Height = 318
+          Width = 845
+        end
+        inherited hcColsTitres: THeaderControl
+          Width = 848
+        end
+        inherited lbNbStationsFound: TLabel
+          Left = 623
+        end
+      end
+    end
+    object Label1: TLabel
+      Left = 4
+      Height = 16
+      Top = 4
+      Width = 45
+      Caption = 'Station'
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 4
+      Height = 16
+      Top = 32
+      Width = 112
+      Caption = 'Rayon de capture'
+      ParentColor = False
+    end
+    object editRayonCapture: TCurrencyEdit
+      Left = 140
+      Height = 24
+      Top = 32
+      Width = 68
+      Alignment = taRightJustify
+      DisplayFormat = ',0.00'
+      MaxValue = 0
+      MinValue = 0
+      TabOrder = 1
+      Value = 0
+    end
+    object editIDTerrain: TEdit
+      Left = 140
+      Height = 24
+      Top = 4
+      Width = 140
+      TabOrder = 2
+    end
+    object chkDoMatchExact: TCheckBox
+      Left = 288
+      Height = 20
+      Top = 4
+      Width = 171
+      Caption = 'Correspondance exacte'
+      TabOrder = 3
+    end
+    object Button2: TButton
+      Left = 480
+      Height = 25
+      Top = 4
+      Width = 176
+      Caption = 'Relister'
+      OnClick = Button2Click
+      TabOrder = 4
+    end
+    object btnBouclerSurCetteStation: TButton
+      Left = 672
+      Height = 25
+      Top = 4
+      Width = 177
+      Caption = 'Accrocher'
+      OnClick = btnBouclerSurCetteStationClick
+      TabOrder = 5
+    end
+  end
+  object btnOK: TBitBtn
+    Left = 630
+    Height = 28
+    Top = 443
+    Width = 111
+    Anchors = [akRight, akBottom]
+    Default = True
+    DefaultCaption = True
+    Kind = bkOK
+    ModalResult = 1
+    OnClick = btnOKClick
+    TabOrder = 3
+  end
+end

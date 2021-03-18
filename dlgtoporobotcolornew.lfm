@@ -1,0 +1,73 @@
+object DialogSelTopoColor: TDialogSelTopoColor
+  Left = 802
+  Height = 372
+  Top = 164
+  Width = 420
+  BorderStyle = bsDialog
+  Caption = 'DialogSelTopoColor'
+  ClientHeight = 372
+  ClientWidth = 420
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -13
+  Font.Name = 'Arial Narrow'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  OnShow = FormShow
+  Position = poScreenCenter
+  LCLVersion = '2.0.0.4'
+  object btnOK: TBitBtn
+    Left = 257
+    Height = 30
+    Top = 339
+    Width = 80
+    Anchors = [akRight, akBottom]
+    Default = True
+    DefaultCaption = True
+    Kind = bkOK
+    ModalResult = 1
+    TabOrder = 0
+  end
+  object btnCancel: TBitBtn
+    Left = 340
+    Height = 30
+    Top = 339
+    Width = 80
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    DefaultCaption = True
+    Kind = bkCancel
+    ModalResult = 2
+    TabOrder = 1
+  end
+  object pnlGP: TPanel
+    Left = 4
+    Height = 331
+    Top = 4
+    Width = 414
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelOuter = bvLowered
+    ClientHeight = 331
+    ClientWidth = 414
+    TabOrder = 2
+    object pbxPalette: TPaintBox
+      Left = 1
+      Height = 329
+      Top = 1
+      Width = 412
+      Align = alClient
+      OnMouseDown = pbxPaletteMouseDown
+      OnPaint = pbxPalettePaint
+    end
+  end
+  object lblIndex: TStaticText
+    Left = 4
+    Height = 27
+    Top = 339
+    Width = 68
+    Anchors = [akLeft, akBottom]
+    BorderStyle = sbsSunken
+    Caption = 'lblIndex'
+    TabOrder = 3
+  end
+end

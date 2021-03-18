@@ -1,0 +1,170 @@
+object dlgEditSerie: TdlgEditSerie
+  Left = 461
+  Height = 614
+  Top = 394
+  Width = 1027
+  Caption = 'dlgEditSerie'
+  ClientHeight = 614
+  ClientWidth = 1027
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  OnCloseQuery = FormCloseQuery
+  Position = poScreenCenter
+  LCLVersion = '2.0.0.4'
+  object Panel1: TPanel
+    Left = 2
+    Height = 577
+    Top = 0
+    Width = 1021
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelOuter = bvLowered
+    ClientHeight = 577
+    ClientWidth = 1021
+    TabOrder = 0
+    inline CdrSerieIndependant1: TCdrSerieIndependant
+      Left = 1
+      Height = 575
+      Top = 1
+      Width = 1019
+      ClientHeight = 575
+      ClientWidth = 1019
+      inherited pnlEnteteSerie: TPanel
+        Width = 1017
+        ClientWidth = 1017
+        inherited cmbChance: TComboBox
+          Left = 869
+        end
+        inherited cmbObstacle: TComboBox
+          Left = 869
+        end
+        inherited lblChances: TLabel
+          Left = 805
+        end
+        inherited lblObstacles: TLabel
+          Left = 805
+        end
+        inherited editNomSerie: TEdit
+          Width = 687
+        end
+        inherited editCommentaire: TEdit
+          Width = 648
+        end
+        inherited editLG0: TCurrencyEdit
+          Left = 741
+        end
+        inherited editLD0: TCurrencyEdit
+          Left = 809
+        end
+        inherited editHZ0: TCurrencyEdit
+          Left = 877
+        end
+        inherited editHN0: TCurrencyEdit
+          Left = 945
+        end
+        inherited pnlReseaux: TPanel
+          Width = 640
+          ClientWidth = 640
+          inherited lbNomReseau: TStaticText
+            Width = 479
+          end
+        end
+      end
+      inherited pnlTableur: TPanel
+        Height = 436
+        Width = 1017
+        ClientHeight = 436
+        ClientWidth = 1017
+        inherited grdStations: TStringGrid
+          Height = 405
+          Width = 978
+        end
+        inherited lbNbStations: TLabel
+          Top = 412
+        end
+        inherited lbMessages: TStaticText
+          Top = 412
+          Width = 552
+        end
+        inherited SpeedButton1: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton2: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton3: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton4: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton5: TSpeedButton
+          Flat = False
+        end
+        inherited lbLongueurCumulee: TStaticText
+          Left = 855
+          Top = 412
+        end
+        inherited SpeedButton6: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton8: TSpeedButton
+          Flat = False
+        end
+        inherited Shape1: TShape
+          Width = 1017
+        end
+        inherited SpeedButton9: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton11: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton12: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton13: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton14: TSpeedButton
+          Flat = False
+        end
+        inherited lbDataAreModified: TStaticText
+          Left = 748
+          Top = 412
+        end
+      end
+      inherited btnShowHideHeader: TButton
+        Left = 986
+      end
+      inherited pnlErreursACorriger: TPanel
+        Left = 549
+      end
+    end
+  end
+  object chkDontCloseIfErrors: TCheckBox
+    Left = 4
+    Height = 20
+    Top = 582
+    Width = 172
+    Anchors = [akLeft, akBottom]
+    Caption = 'Ne pas fermer si erreurs'
+    Checked = True
+    State = cbChecked
+    TabOrder = 1
+  end
+  object btnClose: TBitBtn
+    Left = 865
+    Height = 30
+    Top = 582
+    Width = 158
+    Anchors = [akRight, akBottom]
+    DefaultCaption = True
+    Kind = bkClose
+    ModalResult = 11
+    TabOrder = 2
+  end
+end

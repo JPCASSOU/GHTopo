@@ -1,0 +1,711 @@
+object CdrCode: TCdrCode
+  Left = 0
+  Height = 317
+  Top = 0
+  Width = 621
+  Align = alClient
+  ClientHeight = 317
+  ClientWidth = 621
+  TabOrder = 0
+  DesignLeft = 391
+  DesignTop = 180
+  object lblNCode: TLabel
+    Left = 4
+    Height = 15
+    Top = 4
+    Width = 50
+    Caption = 'lblNCode'
+    ParentColor = False
+  end
+  object lblCompas: TLabel
+    Left = 4
+    Height = 15
+    Top = 32
+    Width = 57
+    Caption = 'lblCompas'
+    ParentColor = False
+  end
+  object cmbUB: TComboBox
+    Left = 158
+    Height = 23
+    Top = 32
+    Width = 478
+    ItemHeight = 15
+    OnChange = cmbUBChange
+    Style = csDropDownList
+    TabOrder = 1
+  end
+  object lblClino: TLabel
+    Left = 4
+    Height = 15
+    Top = 60
+    Width = 41
+    Caption = 'lblClino'
+    ParentColor = False
+  end
+  object cmbUC: TComboBox
+    Left = 158
+    Height = 23
+    Top = 60
+    Width = 478
+    ItemHeight = 15
+    OnChange = cmbUCChange
+    Style = csDropDownList
+    TabOrder = 2
+  end
+  object lbMesureHorizontaleInvDir: TLabel
+    Left = 4
+    Height = 15
+    Top = 88
+    Width = 141
+    Caption = 'lbMesureHorizontaleInvDir'
+    ParentColor = False
+  end
+  object cmbAzimutDirecte: TComboBox
+    Left = 144
+    Height = 23
+    Top = 88
+    Width = 110
+    ItemHeight = 15
+    Style = csDropDownList
+    TabOrder = 3
+  end
+  object cmbPenteDirecte: TComboBox
+    Left = 336
+    Height = 23
+    Top = 88
+    Width = 110
+    ItemHeight = 15
+    Style = csDropDownList
+    TabOrder = 4
+  end
+  object cmbPosZero: TComboBox
+    Left = 144
+    Height = 23
+    Top = 116
+    Width = 110
+    ItemHeight = 15
+    Style = csDropDownList
+    TabOrder = 5
+  end
+  object lblLength: TLabel
+    Left = 4
+    Height = 15
+    Top = 144
+    Width = 50
+    Caption = 'lblLength'
+    ParentColor = False
+  end
+  object lblZero: TLabel
+    Left = 4
+    Height = 15
+    Top = 116
+    Width = 37
+    Caption = 'lblZero'
+    ParentColor = False
+  end
+  object lblLimit: TLabel
+    Left = 260
+    Height = 15
+    Top = 116
+    Width = 40
+    Caption = 'lblLimit'
+    ParentColor = False
+  end
+  object lblPrecision: TLabel
+    Left = 4
+    Height = 15
+    Top = 172
+    Width = 61
+    Caption = 'lblPrecision'
+    ParentColor = False
+  end
+  object lblObs: TLabel
+    Left = 4
+    Height = 15
+    Top = 200
+    Width = 34
+    Caption = 'lblObs'
+    ParentColor = False
+  end
+  object editCommentaires: TEdit
+    Left = 144
+    Height = 23
+    Top = 200
+    Width = 471
+    Anchors = [akTop, akLeft, akRight]
+    TabOrder = 11
+  end
+  object lbCodeComp: TStaticText
+    Left = 491
+    Height = 24
+    Top = 32
+    Width = 41
+    Anchors = [akTop, akRight]
+    BorderStyle = sbsSunken
+    TabOrder = 12
+  end
+  object lbCodeIncl: TStaticText
+    Left = 491
+    Height = 24
+    Top = 60
+    Width = 41
+    Anchors = [akTop, akRight]
+    BorderStyle = sbsSunken
+    TabOrder = 13
+  end
+  object editNoCode: TCurrencyEdit
+    Left = 158
+    Height = 23
+    Top = 4
+    Width = 80
+    Alignment = taRightJustify
+    DecimalPlaces = 0
+    DisplayFormat = '0'
+    MaxValue = 0
+    MinValue = 0
+    TabOrder = 0
+    Value = 0
+  end
+  object lbErrAz: TStaticText
+    Left = 535
+    Height = 24
+    Top = 32
+    Width = 77
+    Anchors = [akTop, akRight]
+    BorderStyle = sbsSunken
+    TabOrder = 14
+  end
+  object lbErrInc: TStaticText
+    Left = 535
+    Height = 24
+    Top = 60
+    Width = 77
+    Anchors = [akTop, akRight]
+    BorderStyle = sbsSunken
+    TabOrder = 15
+  end
+  object editFactLong: TCurrencyEdit
+    Left = 144
+    Height = 23
+    Top = 145
+    Width = 64
+    Alignment = taRightJustify
+    DecimalPlaces = 4
+    DisplayFormat = ',0.000;-,0.000'
+    MaxValue = 0
+    MinValue = 0
+    TabOrder = 6
+    Value = 0
+  end
+  object editPsiL: TCurrencyEdit
+    Left = 144
+    Height = 23
+    Top = 173
+    Width = 73
+    Alignment = taRightJustify
+    DisplayFormat = ',0.00;-,0.00'
+    MaxValue = 0
+    MinValue = 0
+    TabOrder = 8
+    Value = 0
+  end
+  object editPsiAz: TCurrencyEdit
+    Left = 222
+    Height = 23
+    Top = 173
+    Width = 73
+    Alignment = taRightJustify
+    DisplayFormat = ',0.00;-,0.00'
+    MaxValue = 0
+    MinValue = 0
+    TabOrder = 9
+    Value = 0
+  end
+  object editPsiP: TCurrencyEdit
+    Left = 299
+    Height = 23
+    Top = 173
+    Width = 73
+    Alignment = taRightJustify
+    DisplayFormat = ',0.00;-,0.00'
+    MaxValue = 0
+    MinValue = 0
+    TabOrder = 10
+    Value = 0
+  end
+  object editAngleLimite: TCurrencyEdit
+    Left = 336
+    Height = 23
+    Top = 116
+    Width = 110
+    Alignment = taRightJustify
+    DisplayFormat = ',0.00;-,0.00'
+    MaxValue = 0
+    MinValue = 0
+    TabOrder = 7
+    Value = 0
+  end
+  object lbMesureVerticaleInvDir: TLabel
+    Left = 260
+    Height = 15
+    Top = 88
+    Width = 49
+    Caption = 'Verticales'
+    ParentColor = False
+  end
+  object pnlFonctionsCorrection: TPanel
+    Left = 3
+    Height = 87
+    Top = 228
+    Width = 618
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelOuter = bvLowered
+    ClientHeight = 87
+    ClientWidth = 618
+    ParentFont = False
+    TabOrder = 16
+    object lblObs1: TLabel
+      Left = 4
+      Height = 15
+      Top = 8
+      Width = 125
+      Caption = 'Fonctions de correction'
+      ParentColor = False
+    end
+    object Label7: TLabel
+      Left = 4
+      Height = 15
+      Top = 32
+      Width = 115
+      Caption = 'Azimuts: Az Corrigé ='
+      ParentColor = False
+    end
+    object Label11: TLabel
+      Left = 5
+      Height = 15
+      Top = 60
+      Width = 124
+      Caption = 'Azimuts: Inc Corrigée ='
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 140
+      Height = 15
+      Top = 8
+      Width = 48
+      Caption = 'Cste Ang'
+      ParentColor = False
+    end
+    object editAzCo: TCurrencyEdit
+      Left = 136
+      Height = 23
+      Top = 27
+      Width = 60
+      Alignment = taRightJustify
+      DecimalPlaces = 4
+      DisplayFormat = ',0.0000;-,0.0000 '
+      MaxValue = 0
+      MinValue = 0
+      TabOrder = 0
+      Value = 0
+      OnChange = editAzCoChange
+    end
+    object editIncCo: TCurrencyEdit
+      Left = 136
+      Height = 23
+      Top = 55
+      Width = 60
+      Alignment = taRightJustify
+      DecimalPlaces = 4
+      DisplayFormat = ',0.0000;-,0.0000 '
+      MaxValue = 0
+      MinValue = 0
+      TabOrder = 1
+      Value = 0
+    end
+    object lbCosAz: TLabel
+      Left = 308
+      Height = 15
+      Top = 32
+      Width = 85
+      Caption = '* sin( Azimut0 +'
+      ParentColor = False
+    end
+    object editAzErrMaxAz: TCurrencyEdit
+      Left = 400
+      Height = 23
+      Top = 27
+      Width = 60
+      Alignment = taRightJustify
+      DecimalPlaces = 4
+      DisplayFormat = ',0.0000;-,0.0000 '
+      MaxValue = 0
+      MinValue = 0
+      TabOrder = 2
+      Value = 0
+    end
+    object Label3: TLabel
+      Left = 236
+      Height = 15
+      Top = 8
+      Width = 57
+      Caption = 'Erreur max'
+      ParentColor = False
+    end
+    object editAzErrMax: TCurrencyEdit
+      Left = 236
+      Height = 23
+      Top = 28
+      Width = 68
+      Alignment = taRightJustify
+      DecimalPlaces = 4
+      DisplayFormat = ',0.0000;-,0.0000 '
+      MaxValue = 0
+      MinValue = 0
+      TabOrder = 3
+      Value = 0
+    end
+    object Label4: TLabel
+      Left = 224
+      Height = 15
+      Top = 30
+      Width = 8
+      Caption = '+'
+      ParentColor = False
+    end
+    object Label5: TLabel
+      Left = 464
+      Height = 15
+      Top = 29
+      Width = 4
+      Caption = ')'
+      ParentColor = False
+    end
+    object lbCosInc: TLabel
+      Left = 308
+      Height = 15
+      Top = 60
+      Width = 74
+      Caption = '* sin(Pente0 +'
+      ParentColor = False
+    end
+    object editIncErrMaxInc: TCurrencyEdit
+      Left = 400
+      Height = 23
+      Top = 55
+      Width = 60
+      Alignment = taRightJustify
+      DecimalPlaces = 4
+      DisplayFormat = ',0.0000;-,0.0000 '
+      MaxValue = 0
+      MinValue = 0
+      TabOrder = 4
+      Value = 0
+    end
+    object editIncErrMax: TCurrencyEdit
+      Left = 236
+      Height = 23
+      Top = 55
+      Width = 68
+      Alignment = taRightJustify
+      DecimalPlaces = 4
+      DisplayFormat = ',0.0000;-,0.0000 '
+      MaxValue = 0
+      MinValue = 0
+      TabOrder = 5
+      Value = 0
+    end
+    object Label9: TLabel
+      Left = 224
+      Height = 15
+      Top = 58
+      Width = 8
+      Caption = '+'
+      ParentColor = False
+    end
+    object Label10: TLabel
+      Left = 464
+      Height = 15
+      Top = 57
+      Width = 4
+      Caption = ')'
+      ParentColor = False
+    end
+    object Button1: TButton
+      Left = 524
+      Height = 24
+      Top = 27
+      Width = 40
+      Anchors = [akTop, akRight]
+      Caption = 'Test'
+      OnClick = Button1Click
+      TabOrder = 6
+    end
+    object Button2: TButton
+      Left = 524
+      Height = 24
+      Top = 54
+      Width = 40
+      Anchors = [akTop, akRight]
+      Caption = 'Test'
+      OnClick = Button2Click
+      TabOrder = 7
+    end
+    object lbAzCorrige: TStaticText
+      Left = 564
+      Height = 21
+      Top = 27
+      Width = 50
+      Anchors = [akTop, akRight]
+      BorderStyle = sbsSunken
+      TabOrder = 8
+    end
+    object lbPenteCorrigee: TStaticText
+      Left = 564
+      Height = 21
+      Top = 55
+      Width = 50
+      Anchors = [akTop, akRight]
+      BorderStyle = sbsSunken
+      TabOrder = 9
+    end
+    object editAzTest: TCurrencyEdit
+      Left = 472
+      Height = 23
+      Top = 27
+      Width = 52
+      Alignment = taRightJustify
+      DisplayFormat = ',0.00;-,0.00 '
+      Anchors = [akTop, akRight]
+      MaxValue = 0
+      MinValue = 0
+      TabOrder = 10
+      Value = 92
+    end
+    object editIncTest: TCurrencyEdit
+      Left = 472
+      Height = 23
+      Top = 55
+      Width = 52
+      Alignment = taRightJustify
+      DisplayFormat = ',0.00;-,0.00 '
+      Anchors = [akTop, akRight]
+      MaxValue = 0
+      MinValue = 0
+      TabOrder = 11
+      Value = 88
+    end
+    object btnPropalerCorrectionAzimuts: TButton
+      Left = 196
+      Height = 23
+      Top = 26
+      Width = 24
+      Caption = '...'
+      TabOrder = 12
+    end
+    object btnPropalerCorrectionPentes: TButton
+      Left = 196
+      Height = 25
+      Top = 53
+      Width = 24
+      Caption = '...'
+      OnClick = btnPropalerCorrectionPentesClick
+      TabOrder = 13
+    end
+  end
+  object lbErreurTourillon: TLabel
+    Left = 212
+    Height = 15
+    Top = 145
+    Width = 87
+    Caption = 'lbErreurTourillon'
+    ParentColor = False
+  end
+  object editErreurTourillon: TCurrencyEdit
+    Left = 336
+    Height = 23
+    Top = 146
+    Width = 72
+    Alignment = taRightJustify
+    DecimalPlaces = 3
+    DisplayFormat = '0.000'
+    MaxValue = 0
+    MinValue = 0
+    TabOrder = 17
+    Value = 0
+  end
+  object btnHelpErrTourillon: TButton
+    Left = 416
+    Height = 24
+    Top = 144
+    Width = 31
+    Caption = '?'
+    OnClick = btnHelpErrTourillonClick
+    TabOrder = 18
+  end
+  object pnlPropalCorrPentes: TPanel
+    Left = 160
+    Height = 96
+    Top = 221
+    Width = 357
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    ClientHeight = 96
+    ClientWidth = 357
+    Color = 11468799
+    ParentColor = False
+    TabOrder = 19
+    object Button3: TButton
+      Left = 300
+      Height = 25
+      Top = 65
+      Width = 51
+      Anchors = [akRight, akBottom]
+      Caption = 'X'
+      OnClick = Button3Click
+      TabOrder = 0
+    end
+    object Label1: TLabel
+      Left = 5
+      Height = 15
+      Top = 8
+      Width = 119
+      Caption = 'Longueur de référence'
+      ParentColor = False
+    end
+    object Label6: TLabel
+      Left = 5
+      Height = 15
+      Top = 36
+      Width = 113
+      Caption = 'Dénivelé de référence'
+      ParentColor = False
+    end
+    object Button4: TButton
+      Left = 168
+      Height = 25
+      Top = 65
+      Width = 127
+      Anchors = [akRight, akBottom]
+      Caption = 'Calculer'
+      OnClick = Button4Click
+      TabOrder = 1
+    end
+    object editLongDevReference: TCurrencyEdit
+      Left = 196
+      Height = 23
+      Top = 8
+      Width = 80
+      Alignment = taRightJustify
+      DecimalPlaces = 3
+      DisplayFormat = '0.000'
+      MaxValue = 0
+      MinValue = 0
+      TabOrder = 2
+      Value = 0
+    end
+    object Label8: TLabel
+      Left = 288
+      Height = 15
+      Top = 12
+      Width = 11
+      Caption = 'm'
+      ParentColor = False
+    end
+    object editDeniveleReference: TCurrencyEdit
+      Left = 196
+      Height = 23
+      Top = 36
+      Width = 80
+      Alignment = taRightJustify
+      DecimalPlaces = 3
+      DisplayFormat = '0.000'
+      MaxValue = 0
+      MinValue = 0
+      TabOrder = 3
+      Value = 0
+    end
+    object Label12: TLabel
+      Left = 288
+      Height = 15
+      Top = 40
+      Width = 11
+      Caption = 'm'
+      ParentColor = False
+    end
+  end
+  object lbDiametreBoules: TLabel
+    Left = 452
+    Height = 15
+    Top = 92
+    Width = 93
+    Caption = 'lbDiametreBoules'
+    ParentColor = False
+  end
+  object editDiamBoule1: TCurrencyEdit
+    Left = 477
+    Height = 23
+    Top = 116
+    Width = 68
+    Alignment = taRightJustify
+    DisplayFormat = '0.00'
+    MaxValue = 0
+    MinValue = 0
+    TabOrder = 20
+    Value = 0
+  end
+  object editDiamBoule2: TCurrencyEdit
+    Left = 477
+    Height = 23
+    Top = 145
+    Width = 68
+    Alignment = taRightJustify
+    DisplayFormat = '0.00'
+    MaxValue = 0
+    MinValue = 0
+    TabOrder = 21
+    Value = 0
+  end
+  object Label13: TLabel
+    Left = 551
+    Height = 15
+    Top = 120
+    Width = 22
+    Caption = 'mm'
+    ParentColor = False
+  end
+  object Label14: TLabel
+    Left = 551
+    Height = 15
+    Top = 149
+    Width = 22
+    Caption = 'mm'
+    ParentColor = False
+  end
+  object btnHelpBoules: TButton
+    Left = 576
+    Height = 25
+    Top = 128
+    Width = 27
+    Caption = '?'
+    OnClick = btnHelpBoulesClick
+    TabOrder = 22
+  end
+  object Label15: TLabel
+    Left = 452
+    Height = 15
+    Top = 120
+    Width = 13
+    Caption = 'B1'
+    ParentColor = False
+  end
+  object Label16: TLabel
+    Left = 452
+    Height = 15
+    Top = 145
+    Width = 13
+    Caption = 'B2'
+    ParentColor = False
+  end
+end

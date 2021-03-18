@@ -1,0 +1,46 @@
+object dlgEditeurTexte: TdlgEditeurTexte
+  Left = 385
+  Height = 598
+  Top = 143
+  Width = 796
+  Caption = 'dlgEditeurTexte'
+  ClientHeight = 598
+  ClientWidth = 796
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  Position = poScreenCenter
+  LCLVersion = '1.6.0.4'
+  object BitBtn1: TBitBtn
+    Left = 649
+    Height = 30
+    Top = 565
+    Width = 142
+    Anchors = [akRight, akBottom]
+    DefaultCaption = True
+    Kind = bkClose
+    ModalResult = 11
+    TabOrder = 0
+  end
+  object memoTextes: TMemo
+    Left = 4
+    Height = 554
+    Top = 4
+    Width = 786
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clBlue
+    Font.Height = -13
+    Font.Name = 'Courier New'
+    Font.Pitch = fpFixed
+    Font.Quality = fqDraft
+    Font.Style = [fsBold]
+    ParentFont = False
+    ScrollBars = ssBoth
+    TabOrder = 1
+    WordWrap = False
+  end
+end

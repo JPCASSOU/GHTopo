@@ -1,0 +1,52 @@
+object dlgTabletteQuestionOuiNon: TdlgTabletteQuestionOuiNon
+  Left = 580
+  Height = 86
+  Top = 418
+  Width = 528
+  Caption = 'dlgTabletteQuestionOuiNon'
+  ClientHeight = 86
+  ClientWidth = 528
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -27
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  OnShow = FormShow
+  LCLVersion = '1.2.6.0'
+  object lbPrompt: TLabel
+    Left = 4
+    Height = 32
+    Top = 4
+    Width = 519
+    Alignment = taCenter
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'lbPrompt'
+    ParentColor = False
+    WordWrap = True
+  end
+  object btnYes: TBitBtn
+    Left = 156
+    Height = 40
+    Top = 42
+    Width = 180
+    Anchors = [akRight, akBottom]
+    Default = True
+    DefaultCaption = True
+    Kind = bkYes
+    ModalResult = 6
+    TabOrder = 0
+  end
+  object btnNO: TBitBtn
+    Left = 344
+    Height = 40
+    Top = 42
+    Width = 180
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    DefaultCaption = True
+    Kind = bkNo
+    ModalResult = 7
+    TabOrder = 1
+  end
+end

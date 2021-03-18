@@ -1,0 +1,55 @@
+object MainFormPilote: TMainFormPilote
+  Left = 520
+  Height = 588
+  Top = 255
+  Width = 909
+  Caption = 'MainFormPilote'
+  ClientHeight = 588
+  ClientWidth = 909
+  Font.CharSet = ANSI_CHARSET
+  Font.Color = clBlack
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  OnClose = FormClose
+  OnShow = FormShow
+  LCLVersion = '2.0.0.4'
+  object Panel1: TPanel
+    Left = 4
+    Height = 558
+    Top = 4
+    Width = 894
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelOuter = bvLowered
+    ClientHeight = 558
+    ClientWidth = 894
+    TabOrder = 0
+    inline CdrDistoX2New1: TCdrDistoX2New
+      Left = 1
+      Height = 556
+      Top = 1
+      Width = 892
+      ClientHeight = 556
+      ClientWidth = 892
+      inherited SynEdit1: TSynEdit
+        Height = 453
+        Width = 880
+      end
+      inherited lbNbMesuresVisees: TStaticText
+        Left = 720
+      end
+    end
+  end
+  object lbViseeTransmise: TStaticText
+    Left = 4
+    Height = 19
+    Top = 566
+    Width = 856
+    Anchors = [akLeft, akBottom]
+    BorderStyle = sbsSunken
+    Caption = 'lbViseeTransmise'
+    TabOrder = 1
+  end
+end

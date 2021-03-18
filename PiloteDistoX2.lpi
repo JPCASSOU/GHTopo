@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectOptions>
+    <Version Value="11"/>
+    <PathDelim Value="\"/>
+    <General>
+      <SessionStorage Value="InProjectDir"/>
+      <MainUnit Value="0"/>
+      <Title Value="PiloteDistoX2"/>
+      <Scaled Value="True"/>
+      <ResourceType Value="res"/>
+      <UseXPManifest Value="True"/>
+      <XPManifest>
+        <DpiAware Value="True"/>
+      </XPManifest>
+      <Icon Value="0"/>
+    </General>
+    <BuildModes Count="1">
+      <Item1 Name="Default" Default="True"/>
+    </BuildModes>
+    <PublishOptions>
+      <Version Value="2"/>
+      <DestinationDirectory Value="C:\Users\jean-pierre.cassou\Desktop\Projets_Lazarus_a_publier\Pilote_DistoX"/>
+      <CompressFinally Value="False"/>
+      <OpenInFileMan Value="True"/>
+      <UseFileFilters Value="True"/>
+    </PublishOptions>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes Count="0"/>
+    </RunParams>
+    <RequiredPackages Count="11">
+      <Item1>
+        <PackageName Value="TAChartLazarusPkg"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="LazOpenGLContext"/>
+      </Item2>
+      <Item3>
+        <PackageName Value="pascalscript"/>
+      </Item3>
+      <Item4>
+        <PackageName Value="pack_powerpdf"/>
+      </Item4>
+      <Item5>
+        <PackageName Value="lazbarcodes"/>
+      </Item5>
+      <Item6>
+        <PackageName Value="Printer4Lazarus"/>
+      </Item6>
+      <Item7>
+        <PackageName Value="BGRABitmapPack"/>
+      </Item7>
+      <Item8>
+        <PackageName Value="LazSerialPort"/>
+      </Item8>
+      <Item9>
+        <PackageName Value="SynEdit"/>
+      </Item9>
+      <Item10>
+        <PackageName Value="rxnew"/>
+      </Item10>
+      <Item11>
+        <PackageName Value="LCL"/>
+      </Item11>
+    </RequiredPackages>
+    <Units Count="3">
+      <Unit0>
+        <Filename Value="PiloteDistoX2.lpr"/>
+        <IsPartOfProject Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="pilotedistox2mainfrm.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="MainFormPilote"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="PiloteDistoX2MainFrm"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="cadredixtoxnew.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="CdrDistoX2New"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="CadreDixtoXNew"/>
+      </Unit2>
+    </Units>
+  </ProjectOptions>
+  <CompilerOptions>
+    <Version Value="11"/>
+    <PathDelim Value="\"/>
+    <Target>
+      <Filename Value="PiloteDistoX2"/>
+    </Target>
+    <SearchPaths>
+      <IncludeFiles Value="$(ProjOutDir)"/>
+      <OtherUnitFiles Value="UnitesMutualisees"/>
+      <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+    </SearchPaths>
+    <Parsing>
+      <SyntaxOptions>
+        <SyntaxMode Value="Delphi"/>
+        <UseAnsiStrings Value="False"/>
+      </SyntaxOptions>
+    </Parsing>
+    <Linking>
+      <Options>
+        <Win32>
+          <GraphicApplication Value="True"/>
+        </Win32>
+      </Options>
+    </Linking>
+  </CompilerOptions>
+  <Debugging>
+    <Exceptions Count="3">
+      <Item1>
+        <Name Value="EAbort"/>
+      </Item1>
+      <Item2>
+        <Name Value="ECodetoolError"/>
+      </Item2>
+      <Item3>
+        <Name Value="EFOpenError"/>
+      </Item3>
+    </Exceptions>
+  </Debugging>
+</CONFIG>

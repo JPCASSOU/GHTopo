@@ -1,0 +1,80 @@
+object CdrMetaFiltre: TCdrMetaFiltre
+  Left = 0
+  Height = 32
+  Top = 0
+  Width = 520
+  ClientHeight = 32
+  ClientWidth = 520
+  Color = 13041663
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  LCLVersion = '1.6.0.4'
+  ParentColor = False
+  ParentFont = False
+  TabOrder = 0
+  DesignLeft = 586
+  DesignTop = 313
+  object Panel1: TPanel
+    Left = 0
+    Height = 32
+    Top = 0
+    Width = 520
+    Align = alClient
+    ClientHeight = 32
+    ClientWidth = 520
+    TabOrder = 0
+    object lbFiltres: TLabel
+      Left = 4
+      Height = 16
+      Top = 5
+      Width = 43
+      Caption = 'Filtres:'
+      ParentColor = False
+    end
+    object editFiltres: TEdit
+      Left = 56
+      Height = 24
+      Top = 4
+      Width = 343
+      Anchors = [akTop, akLeft, akRight]
+      OnKeyPress = editFiltresKeyPress
+      TabOrder = 0
+    end
+    object btnHelpFiltres: TButton
+      Left = 489
+      Height = 24
+      Top = 4
+      Width = 29
+      Anchors = [akTop, akRight]
+      Caption = '?'
+      OnClick = btnHelpFiltresClick
+      TabOrder = 1
+    end
+    object btnApply: TButton
+      Left = 400
+      Height = 24
+      Top = 4
+      Width = 31
+      Anchors = [akTop, akRight]
+      Caption = 'OK'
+      OnClick = btnApplyClick
+      TabOrder = 2
+    end
+    object chkActif: TCheckBox
+      Left = 436
+      Height = 20
+      Top = 4
+      Width = 48
+      Anchors = [akTop, akRight]
+      Caption = 'Actif'
+      Checked = True
+      OnChange = chkActifChange
+      State = cbChecked
+      TabOrder = 3
+    end
+  end
+end

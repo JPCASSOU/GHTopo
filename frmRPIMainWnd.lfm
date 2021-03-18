@@ -1,0 +1,3383 @@
+object RPIMainWnd: TRPIMainWnd
+  Left = 761
+  Height = 584
+  Top = 424
+  Width = 1150
+  Caption = 'RPIMainWnd'
+  ClientHeight = 584
+  ClientWidth = 1150
+  Constraints.MaxHeight = 760
+  Constraints.MaxWidth = 1150
+  DoubleBuffered = True
+  Font.CharSet = ANSI_CHARSET
+  Font.Color = clBlack
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  FormStyle = fsStayOnTop
+  OnClose = FormClose
+  OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
+  OnShow = FormShow
+  ParentDoubleBuffered = False
+  LCLVersion = '2.0.0.4'
+  object PageControl1: TPageControl
+    Left = 0
+    Height = 584
+    Top = 0
+    Width = 1150
+    ActivePage = tabShtVuePlan
+    Align = alClient
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -13
+    Font.Name = 'Arial'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+    TabIndex = 1
+    TabOrder = 0
+    OnChange = PageControl1Change
+    object tabShtMenu: TTabSheet
+      Caption = '======'
+      ClientHeight = 555
+      ClientWidth = 1142
+      object pnlMainMenu: TPanel
+        Left = 4
+        Height = 550
+        Top = 0
+        Width = 208
+        Anchors = [akTop, akLeft, akBottom]
+        BevelColor = 9868950
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        BevelWidth = 3
+        ClientHeight = 550
+        ClientWidth = 208
+        Font.CharSet = ANSI_CHARSET
+        Font.Color = clBlue
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Pitch = fpVariable
+        Font.Quality = fqDraft
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 0
+        object lbFichier: TLabel
+          Left = 6
+          Height = 16
+          Top = 12
+          Width = 56
+          Caption = 'lbFichier'
+          ParentColor = False
+        end
+        object BitBtn1: TBitBtn
+          Left = 8
+          Height = 48
+          Top = 28
+          Width = 193
+          Action = acNew
+          Anchors = [akTop, akLeft, akRight]
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 0
+        end
+        object BitBtn2: TBitBtn
+          Left = 8
+          Height = 48
+          Top = 80
+          Width = 193
+          Action = acOpen
+          Anchors = [akTop, akLeft, akRight]
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 1
+        end
+        object BitBtn3: TBitBtn
+          Left = 8
+          Height = 76
+          Top = 132
+          Width = 193
+          Action = acQSave
+          Anchors = [akTop, akLeft, akRight]
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 2
+        end
+        object BitBtn4: TBitBtn
+          Left = 8
+          Height = 62
+          Top = 226
+          Width = 193
+          Action = acCompileExt
+          Anchors = [akTop, akLeft, akRight]
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 3
+        end
+        object BitBtn8: TBitBtn
+          Left = 8
+          Height = 60
+          Top = 483
+          Width = 193
+          Action = acQuit
+          Anchors = [akLeft, akRight, akBottom]
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 4
+        end
+        object lbTopographie: TLabel
+          Left = 8
+          Height = 16
+          Top = 208
+          Width = 92
+          Caption = 'lbTopographie'
+          ParentColor = False
+        end
+      end
+      object pnlAdditionalMenu: TPanel
+        Left = 212
+        Height = 550
+        Top = 0
+        Width = 208
+        Anchors = [akTop, akLeft, akBottom]
+        BevelColor = 10329550
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        BevelWidth = 3
+        ClientHeight = 550
+        ClientWidth = 208
+        TabOrder = 3
+        object BitBtn7: TBitBtn
+          Left = 8
+          Height = 48
+          Top = 164
+          Width = 192
+          Action = acVue3D
+          Anchors = [akTop, akLeft, akRight]
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 0
+        end
+        object BitBtn9: TBitBtn
+          Left = 8
+          Height = 48
+          Top = 272
+          Width = 192
+          Action = acViderCroquis
+          Anchors = [akTop, akLeft, akRight]
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Liberation Sans'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          ParentFont = False
+          TabOrder = 1
+        end
+        object BitBtn10: TBitBtn
+          Left = 8
+          Height = 48
+          Top = 216
+          Width = 192
+          Action = acExportGIS
+          Anchors = [akTop, akLeft, akRight]
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 2
+        end
+        object BitBtn6: TBitBtn
+          Left = 8
+          Height = 46
+          Top = 10
+          Width = 192
+          Action = acCheckDatabase
+          Anchors = [akTop, akLeft, akRight]
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 3
+        end
+        object BitBtn5: TBitBtn
+          Left = 8
+          Height = 56
+          Top = 60
+          Width = 192
+          Action = acSaveAs
+          Anchors = [akTop, akLeft, akRight]
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 4
+        end
+        object BitBtn11: TBitBtn
+          Left = 8
+          Height = 44
+          Top = 498
+          Width = 192
+          Action = acHelp
+          Anchors = [akLeft, akRight, akBottom]
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 5
+        end
+        object BitBtn12: TBitBtn
+          Left = 8
+          Height = 52
+          Top = 328
+          Width = 192
+          Action = acExporterGraphe
+          Anchors = [akTop, akLeft, akRight]
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Sans'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          ParentFont = False
+          TabOrder = 6
+        end
+      end
+      object pnlQuickOpen: TPanel
+        Left = 216
+        Height = 532
+        Top = -4
+        Width = 922
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        ClientHeight = 532
+        ClientWidth = 922
+        Color = clSilver
+        ParentColor = False
+        TabOrder = 1
+        object Panel7: TPanel
+          Left = 4
+          Height = 482
+          Top = 8
+          Width = 914
+          Anchors = [akTop, akLeft, akRight, akBottom]
+          BevelOuter = bvLowered
+          ClientHeight = 482
+          ClientWidth = 914
+          Color = 12910591
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -19
+          Font.Name = 'Arial'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          ParentColor = False
+          ParentFont = False
+          TabOrder = 0
+          object Label3: TLabel
+            Left = 4
+            Height = 22
+            Top = 5
+            Width = 162
+            Caption = 'Fichiers en cours'
+            ParentColor = False
+          end
+          object lsbFichiersEnCours: TFileListBox
+            Left = 6
+            Height = 446
+            Top = 32
+            Width = 904
+            Anchors = [akTop, akLeft, akRight, akBottom]
+            Directory = 'C:\lazarus'
+            ItemHeight = 0
+            Mask = '*.xtb;*.gtx'
+            TabOrder = 0
+          end
+        end
+        object btnQuickOpenOK: TButton
+          Left = 736
+          Height = 40
+          Top = 488
+          Width = 90
+          Anchors = [akRight, akBottom]
+          Caption = 'OK'
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          OnClick = btnQuickOpenOKClick
+          ParentFont = False
+          TabOrder = 1
+        end
+        object btnQuickOpenCancel: TButton
+          Left = 828
+          Height = 40
+          Top = 488
+          Width = 90
+          Anchors = [akRight, akBottom]
+          Caption = 'Annuler'
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          OnClick = btnQuickOpenCancelClick
+          ParentFont = False
+          TabOrder = 2
+        end
+      end
+      object pnlSaveAs: TPanel
+        Left = 216
+        Height = 228
+        Top = 128
+        Width = 910
+        Anchors = [akTop, akLeft, akRight]
+        ClientHeight = 228
+        ClientWidth = 910
+        Color = clSilver
+        Font.CharSet = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -19
+        Font.Name = 'Arial'
+        Font.Pitch = fpVariable
+        Font.Quality = fqDraft
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+        TabOrder = 2
+        object Panel6: TPanel
+          Left = 4
+          Height = 178
+          Top = 4
+          Width = 900
+          Anchors = [akTop, akLeft, akRight, akBottom]
+          BevelOuter = bvLowered
+          ClientHeight = 178
+          ClientWidth = 900
+          Color = 12910591
+          ParentColor = False
+          TabOrder = 0
+          object Label1: TLabel
+            Left = 4
+            Height = 22
+            Top = 5
+            Width = 134
+            Caption = 'Nom du fichier'
+            ParentColor = False
+          end
+          object editFileName: TEdit
+            Left = 6
+            Height = 30
+            Top = 32
+            Width = 890
+            Anchors = [akTop, akLeft, akRight]
+            OnChange = editFileNameChange
+            OnKeyPress = editFileNameKeyPress
+            TabOrder = 0
+          end
+          object Label2: TLabel
+            Left = 4
+            Height = 22
+            Top = 72
+            Width = 149
+            Caption = 'dans le dossier:'
+            ParentColor = False
+          end
+          object editCurrentDirectory: TDirectoryEdit
+            Left = 6
+            Height = 30
+            Top = 96
+            Width = 890
+            ShowHidden = False
+            ButtonWidth = 23
+            NumGlyphs = 1
+            Anchors = [akTop, akLeft, akRight]
+            Enabled = False
+            MaxLength = 0
+            TabOrder = 1
+          end
+        end
+        object btnNewDocOK: TButton
+          Left = 714
+          Height = 40
+          Top = 185
+          Width = 90
+          Anchors = [akRight, akBottom]
+          Caption = 'OK'
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          OnClick = btnNewDocOKClick
+          ParentFont = False
+          TabOrder = 1
+        end
+        object btnNewDocCancel: TButton
+          Left = 814
+          Height = 40
+          Top = 185
+          Width = 90
+          Anchors = [akRight, akBottom]
+          Caption = 'Annuler'
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          OnClick = btnNewDocCancelClick
+          ParentFont = False
+          TabOrder = 2
+        end
+      end
+    end
+    object tabShtVuePlan: TTabSheet
+      Caption = 'tabShtVuePlan'
+      ClientHeight = 555
+      ClientWidth = 1142
+      object pnlPlan: TPanel
+        Left = 0
+        Height = 559
+        Top = 0
+        Width = 1012
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        BevelOuter = bvLowered
+        ClientHeight = 559
+        ClientWidth = 1012
+        TabOrder = 0
+        inline GHTopoContext2DA1: TGHTopoContext2DA
+          Left = 1
+          Height = 557
+          Top = 1
+          Width = 1010
+          ClientHeight = 557
+          ClientWidth = 1010
+          DesignLeft = 393
+          DesignTop = 204
+          inherited Panel1: TPanel
+            Height = 467
+            Width = 975
+            ClientHeight = 467
+            ClientWidth = 975
+            inherited Vue: TPaintBox
+              Height = 467
+              Width = 975
+            end
+            inherited pnlMaillage: TPanel
+              Top = 404
+              inherited editIsoValeur: TCurrencyEdit
+                Height = 24
+              end
+              inherited chkDrawMaillage: TCheckBox
+                Height = 20
+                Width = 68
+              end
+              inherited editLineContourOpacity: TSpinEdit
+                Height = 24
+              end
+            end
+            inherited pnlToast: TPanel
+              Width = 957
+            end
+          end
+          inherited lbInfos: TStaticText
+            Width = 585
+          end
+          inherited lbGCSMouse: TStaticText
+            Top = 523
+          end
+          inherited lbModeTravail: TStaticText
+            Left = 900
+          end
+          inherited lbAdditionalInfos: TStaticText
+            Left = 637
+          end
+          inherited pnlFiltres: TPanel
+            Width = 905
+            ClientWidth = 905
+            inherited editMetaFiltre: TEdit
+              Width = 657
+            end
+            inherited btnApplyMetaFiltre: TButton
+              Left = 738
+            end
+            inherited btnHelpMetaFiltre: TButton
+              Left = 769
+            end
+            inherited chkMetaFiltreActif: TCheckBox
+              Left = 801
+            end
+            inherited lbLongViseesVisibles: TStaticText
+              Left = 852
+            end
+            inherited Button1: TButton
+              Left = 709
+            end
+          end
+          inherited btnSerieCouranteDistoX: TButton
+            Left = 908
+          end
+          inherited SpeedButton1: TSpeedButton
+            Left = 975
+            Flat = False
+          end
+          inherited SpeedButton5: TSpeedButton
+            Top = 523
+            Flat = False
+          end
+          inherited SpeedButton8: TSpeedButton
+            Left = 943
+            Top = 523
+            Flat = False
+          end
+          inherited SpeedButton9: TSpeedButton
+            Left = 975
+            Flat = False
+          end
+          inherited SpeedButton2: TSpeedButton
+            Left = 975
+            Top = 459
+            Flat = False
+          end
+          inherited SpeedButton7: TSpeedButton
+            Left = 910
+            Top = 523
+            Flat = False
+          end
+          inherited SpeedButton11: TSpeedButton
+            Left = 975
+            Top = 491
+            Flat = False
+          end
+          inherited SpeedButton17: TSpeedButton
+            Left = 975
+            Top = 523
+            Flat = False
+          end
+          inherited SpeedButton18: TSpeedButton
+            Left = 609
+            Flat = False
+          end
+          inherited SpeedButton19: TSpeedButton
+            Left = 975
+            Flat = False
+          end
+          inherited SpeedButton14: TSpeedButton
+            Left = 975
+            Flat = False
+          end
+          inherited SpeedButton15: TSpeedButton
+            Left = 975
+            Top = 427
+            Flat = False
+          end
+          inherited Panel2: TPanel
+            Left = 975
+            Height = 141
+          end
+          inherited Panel3: TPanel
+            Top = 523
+            Width = 457
+          end
+          inherited SpeedButton3: TSpeedButton
+            Left = 975
+            Flat = False
+          end
+          inherited SpeedButton4: TSpeedButton
+            Left = 975
+            Flat = False
+          end
+          inherited SpeedButton16: TSpeedButton
+            Left = 975
+            Flat = False
+          end
+          inherited SpeedButton6: TSpeedButton
+            Left = 584
+            Flat = False
+          end
+        end
+      end
+      object pnlCommandes: TPanel
+        Left = 1015
+        Height = 559
+        Top = 0
+        Width = 128
+        Anchors = [akTop, akRight, akBottom]
+        BevelOuter = bvLowered
+        ClientHeight = 559
+        ClientWidth = 128
+        TabOrder = 1
+        object pnlCmdsVue: TPanel
+          Left = 2
+          Height = 45
+          Top = 92
+          Width = 123
+          Anchors = [akTop, akLeft, akRight]
+          BevelInner = bvRaised
+          BevelOuter = bvLowered
+          BorderStyle = bsSingle
+          ClientHeight = 41
+          ClientWidth = 119
+          TabOrder = 0
+          object SpeedButton6: TSpeedButton
+            Left = 40
+            Height = 36
+            Top = 2
+            Width = 36
+            Action = acVue3D
+            ShowCaption = False
+            ShowHint = True
+            ParentShowHint = False
+          end
+          object SpeedButton14: TSpeedButton
+            Left = 2
+            Height = 36
+            Top = 2
+            Width = 36
+            Action = acParametrerVue
+            ShowCaption = False
+            ShowHint = True
+            ParentShowHint = False
+          end
+          object SpeedButton7: TSpeedButton
+            Left = 80
+            Height = 36
+            Top = 2
+            Width = 36
+            ShowCaption = False
+            ShowHint = True
+            ParentShowHint = False
+          end
+        end
+        object pnlCmdsVue1: TPanel
+          Left = 2
+          Height = 43
+          Top = 49
+          Width = 123
+          Anchors = [akTop, akLeft, akRight]
+          BevelInner = bvRaised
+          BevelOuter = bvLowered
+          BorderStyle = bsSingle
+          ClientHeight = 39
+          ClientWidth = 119
+          TabOrder = 1
+          object SpeedButton12: TSpeedButton
+            Left = 0
+            Height = 36
+            Top = 2
+            Width = 36
+            Action = acLocaliserStation
+            ShowCaption = False
+            ShowHint = True
+            ParentShowHint = False
+          end
+          object SpeedButton13: TSpeedButton
+            Left = 40
+            Height = 36
+            Top = 2
+            Width = 36
+            ShowCaption = False
+            ShowHint = True
+            ParentShowHint = False
+          end
+        end
+        object pnlOutilsCroquis: TPanel
+          Left = 2
+          Height = 239
+          Top = 184
+          Width = 124
+          Anchors = [akTop, akLeft, akRight]
+          BevelOuter = bvNone
+          BorderStyle = bsSingle
+          ClientHeight = 235
+          ClientWidth = 120
+          TabOrder = 2
+          object SpeedButton15: TSpeedButton
+            Left = 42
+            Height = 36
+            Top = 4
+            Width = 36
+            Action = acNewPolyligne
+            ShowCaption = False
+            ShowHint = True
+            ParentShowHint = False
+          end
+          object SpeedButton16: TSpeedButton
+            Left = 80
+            Height = 36
+            Top = 4
+            Width = 36
+            Action = acNewAnnotation
+            ShowCaption = False
+            ShowHint = True
+            ParentShowHint = False
+          end
+          object SpeedButton17: TSpeedButton
+            Left = 40
+            Height = 36
+            Top = 196
+            Width = 36
+            Action = acDeleteAnnotation
+            ShowCaption = False
+            ShowHint = True
+            ParentShowHint = False
+          end
+          object SpeedButton18: TSpeedButton
+            Left = 2
+            Height = 36
+            Top = 196
+            Width = 36
+            Action = acDeletePolyline
+            ShowCaption = False
+            ShowHint = True
+            ParentShowHint = False
+          end
+          object SpeedButton19: TSpeedButton
+            Left = 78
+            Height = 36
+            Top = 196
+            Width = 36
+            ShowCaption = False
+            ShowHint = True
+            ParentShowHint = False
+          end
+          object SpeedButton21: TSpeedButton
+            Left = 4
+            Height = 36
+            Top = 4
+            Width = 36
+            Action = acSetModeTravailNone
+            ShowCaption = False
+            ShowHint = True
+            ParentShowHint = False
+          end
+          object Panel3: TPanel
+            Left = 1
+            Height = 148
+            Top = 44
+            Width = 117
+            Anchors = [akTop, akLeft, akRight]
+            BevelInner = bvRaised
+            BevelOuter = bvLowered
+            ClientHeight = 148
+            ClientWidth = 117
+            TabOrder = 0
+            object btnStyleObjet0: TStaticText
+              Left = 4
+              Height = 35
+              Top = 4
+              Width = 35
+              BorderStyle = sbsSingle
+              Color = 7006741
+              OnClick = btnStyleObjet0Click
+              ParentColor = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 0
+              Transparent = False
+            end
+            object btnStyleObjet1: TStaticText
+              Left = 40
+              Height = 35
+              Top = 4
+              Width = 35
+              BorderStyle = sbsSingle
+              Color = 7006741
+              OnClick = btnStyleObjet1Click
+              ParentColor = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 1
+              Transparent = False
+            end
+            object btnStyleObjet2: TStaticText
+              Left = 76
+              Height = 35
+              Top = 4
+              Width = 35
+              BorderStyle = sbsSingle
+              Color = 7006741
+              OnClick = btnStyleObjet2Click
+              ParentColor = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 2
+              Transparent = False
+            end
+            object btnStyleObjet3: TStaticText
+              Left = 4
+              Height = 35
+              Top = 38
+              Width = 35
+              BorderStyle = sbsSingle
+              Color = 7006741
+              OnClick = btnStyleObjet3Click
+              ParentColor = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 3
+              Transparent = False
+            end
+            object btnStyleObjet4: TStaticText
+              Left = 40
+              Height = 35
+              Top = 38
+              Width = 35
+              BorderStyle = sbsSingle
+              Color = 7006741
+              OnClick = btnStyleObjet4Click
+              ParentColor = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 4
+              Transparent = False
+            end
+            object btnStyleObjet5: TStaticText
+              Left = 76
+              Height = 35
+              Top = 38
+              Width = 35
+              BorderStyle = sbsSingle
+              Color = 7006741
+              OnClick = btnStyleObjet5Click
+              ParentColor = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 5
+              Transparent = False
+            end
+            object btnStyleObjet6: TStaticText
+              Left = 4
+              Height = 35
+              Top = 72
+              Width = 35
+              BorderStyle = sbsSingle
+              Color = 7006741
+              OnClick = btnStyleObjet6Click
+              ParentColor = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 6
+              Transparent = False
+            end
+            object btnStyleObjet7: TStaticText
+              Left = 40
+              Height = 35
+              Top = 72
+              Width = 35
+              BorderStyle = sbsSingle
+              Color = 7006741
+              OnClick = btnStyleObjet7Click
+              ParentColor = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 7
+              Transparent = False
+            end
+            object btnStyleObjet8: TStaticText
+              Left = 76
+              Height = 35
+              Top = 72
+              Width = 35
+              Alignment = taCenter
+              BorderStyle = sbsSingle
+              Color = 7006741
+              OnClick = btnStyleObjet8Click
+              ParentColor = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 8
+              Transparent = False
+            end
+            object btnStyleObjet9: TStaticText
+              Left = 4
+              Height = 35
+              Top = 106
+              Width = 35
+              Alignment = taCenter
+              BorderStyle = sbsSingle
+              Color = 7006741
+              OnClick = btnStyleObjet9Click
+              ParentColor = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 9
+              Transparent = False
+            end
+            object btnStyleObjet10: TStaticText
+              Left = 40
+              Height = 35
+              Top = 106
+              Width = 35
+              Alignment = taCenter
+              BorderStyle = sbsSingle
+              Color = 7006741
+              ParentColor = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 10
+              Transparent = False
+            end
+            object btnStyleObjet11: TStaticText
+              Left = 76
+              Height = 35
+              Top = 106
+              Width = 35
+              Alignment = taCenter
+              BorderStyle = sbsSingle
+              Color = 7006741
+              ParentColor = False
+              ParentShowHint = False
+              ShowHint = True
+              TabOrder = 11
+              Transparent = False
+            end
+          end
+        end
+        object Panel4: TPanel
+          Left = 2
+          Height = 42
+          Top = 3
+          Width = 123
+          Anchors = [akTop, akLeft, akRight]
+          BevelInner = bvRaised
+          BevelOuter = bvLowered
+          BorderStyle = bsSingle
+          ClientHeight = 38
+          ClientWidth = 119
+          TabOrder = 3
+          object SpeedButton8: TSpeedButton
+            Left = 80
+            Height = 36
+            Top = 1
+            Width = 36
+            Action = acDemanderUneMesure
+            ShowCaption = False
+            ShowHint = True
+            ParentShowHint = False
+          end
+          object SpeedButton9: TSpeedButton
+            Left = 0
+            Height = 36
+            Top = 1
+            Width = 36
+            Action = acQSave
+            ShowCaption = False
+            ShowHint = True
+            ParentShowHint = False
+          end
+          object SpeedButton26: TSpeedButton
+            Left = 40
+            Height = 36
+            Top = 1
+            Width = 36
+            Action = acCompileExt
+            ShowCaption = False
+            ShowHint = True
+            ParentShowHint = False
+          end
+        end
+        object pnlNavigation: TPanel
+          Left = 2
+          Height = 371
+          Top = 184
+          Width = 123
+          Anchors = [akTop, akLeft, akRight, akBottom]
+          BorderStyle = bsSingle
+          ClientHeight = 367
+          ClientWidth = 119
+          Color = 16512938
+          ParentColor = False
+          TabOrder = 4
+          OnClick = pnlNavigationClick
+          object lbNbPathStations: TLabel
+            Left = 1
+            Height = 16
+            Top = 137
+            Width = 114
+            Anchors = [akTop, akLeft, akRight]
+            AutoSize = False
+            Caption = '--'
+            ParentColor = False
+          end
+          object btnExchange: TButton
+            Left = 24
+            Height = 44
+            Top = 48
+            Width = 70
+            Anchors = [akTop, akLeft, akRight]
+            Caption = 'EXC'
+            Font.CharSet = ANSI_CHARSET
+            Font.Color = clBlack
+            Font.Height = -15
+            Font.Name = 'Arial'
+            Font.Pitch = fpVariable
+            Font.Quality = fqDraft
+            Font.Style = [fsBold]
+            OnClick = btnExchangeClick
+            ParentFont = False
+            TabOrder = 0
+          end
+          object btnStationDepart: TButton
+            Left = 1
+            Height = 44
+            Top = 3
+            Width = 114
+            Anchors = [akTop, akLeft, akRight]
+            Caption = '1.1'
+            Font.CharSet = ANSI_CHARSET
+            Font.Color = clBlack
+            Font.Height = -15
+            Font.Name = 'Arial'
+            Font.Pitch = fpVariable
+            Font.Quality = fqDraft
+            Font.Style = [fsBold]
+            OnClick = btnStationDepartClick
+            ParentFont = False
+            TabOrder = 1
+          end
+          object btnStationArrivee: TButton
+            Left = 1
+            Height = 42
+            Top = 92
+            Width = 114
+            Anchors = [akTop, akLeft, akRight]
+            Caption = '1.1'
+            Font.CharSet = ANSI_CHARSET
+            Font.Color = clBlack
+            Font.Height = -15
+            Font.Name = 'Arial'
+            Font.Pitch = fpVariable
+            Font.Quality = fqDraft
+            Font.Style = [fsBold]
+            OnClick = btnStationArriveeClick
+            ParentFont = False
+            TabOrder = 2
+          end
+          object lsbPathRoadMap: TComboBox
+            Left = 0
+            Height = 27
+            Top = 156
+            Width = 117
+            Font.CharSet = ANSI_CHARSET
+            Font.Color = clBlack
+            Font.Height = -16
+            Font.Name = 'Sans'
+            Font.Pitch = fpVariable
+            Font.Quality = fqDraft
+            Font.Style = [fsBold]
+            ItemHeight = 19
+            OnChange = lsbPathRoadMapChange
+            ParentFont = False
+            Style = csDropDownList
+            TabOrder = 3
+          end
+          object Panel5: TPanel
+            Left = 2
+            Height = 174
+            Top = 188
+            Width = 113
+            Anchors = [akTop, akLeft, akRight, akBottom]
+            BevelOuter = bvLowered
+            ClientHeight = 174
+            ClientWidth = 113
+            Color = clYellow
+            ParentColor = False
+            TabOrder = 4
+            object lbNextWpt: TStaticText
+              Left = 1
+              Height = 24
+              Top = 1
+              Width = 111
+              Alignment = taCenter
+              Anchors = [akTop, akLeft, akRight]
+              Caption = '---'
+              Color = 10550186
+              Font.CharSet = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -15
+              Font.Name = 'Sans'
+              Font.Pitch = fpVariable
+              Font.Quality = fqDraft
+              Font.Style = [fsBold]
+              ParentFont = False
+              ParentColor = False
+              TabOrder = 0
+            end
+            object lbNextWptAzimut: TStaticText
+              Left = 1
+              Height = 28
+              Top = 28
+              Width = 113
+              Alignment = taCenter
+              BorderStyle = sbsSingle
+              Caption = '0'
+              Color = clAqua
+              Font.CharSet = ANSI_CHARSET
+              Font.Color = clRed
+              Font.Height = -16
+              Font.Name = 'Sans'
+              Font.Pitch = fpVariable
+              Font.Quality = fqDraft
+              Font.Style = [fsBold]
+              ParentFont = False
+              ParentColor = False
+              TabOrder = 1
+            end
+            object lbNextWptAzimut1: TStaticText
+              Left = 1
+              Height = 28
+              Top = 72
+              Width = 113
+              Caption = '0'
+              Font.CharSet = ANSI_CHARSET
+              Font.Color = clBlack
+              Font.Height = -13
+              Font.Name = 'Sans'
+              Font.Pitch = fpVariable
+              Font.Quality = fqDraft
+              Font.Style = [fsBold]
+              ParentFont = False
+              TabOrder = 2
+            end
+          end
+        end
+        object btnModeTopoNavig: TToggleBox
+          Left = 2
+          Height = 44
+          Top = 136
+          Width = 123
+          Anchors = [akTop, akLeft, akRight]
+          Caption = 'TOPO'
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -19
+          Font.Name = 'Liberation Sans'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          OnChange = btnModeTopoNavigChange
+          ParentFont = False
+          TabOrder = 5
+        end
+      end
+    end
+    object tabShtDistoX: TTabSheet
+      Caption = 'tabShtDistoX'
+      ClientHeight = 555
+      ClientWidth = 1140
+      inline CdrDistoXLazserial1: TCdrDistoXLazserial
+        Height = 555
+        Width = 1140
+        ClientHeight = 555
+        ClientWidth = 1140
+        inherited Button3: TButton
+          Left = 1072
+        end
+        inherited btnDXScanOnOff: TToggleBox
+          Left = 968
+        end
+        inherited PageControlDistoX: TPageControl
+          Height = 506
+          Width = 1136
+          ActivePage = CdrDistoXLazserial1.tabShtListeMesures
+          TabIndex = 0
+          inherited tabShtListeMesures: TTabSheet
+            ClientHeight = 502
+            ClientWidth = 1132
+            inherited hcColsTitres: THeaderControl
+              Width = 1123
+            end
+            inherited lsbMesures: TListBox
+              Height = 412
+              Width = 1123
+              ScrollWidth = 1119
+            end
+          end
+          inherited tabShtJournal: TTabSheet
+            ClientHeight = 502
+            ClientWidth = 1132
+            inherited SynEdit1: TSynEdit
+              Height = 193
+              Width = 822
+            end
+            inherited pnlTamponMesures: TPanel
+              Top = 199
+              ClientHeight = 58
+              ClientWidth = 456
+              inherited lbTamponLine0: TLabel
+                Width = 442
+              end
+              inherited lbTamponLine1: TLabel
+                Width = 442
+              end
+              inherited lbTamponLine2: TLabel
+                Width = 442
+              end
+            end
+          end
+          inherited tabShtMisc: TTabSheet
+            ClientHeight = 502
+            ClientWidth = 1132
+            inherited lbConnexionStatus: TStaticText
+              Top = -167
+            end
+            inherited lbDistoXName: TStaticText
+              Top = -107
+            end
+          end
+        end
+        inherited pnlUtilitaires: TPanel
+          Left = 932
+          inherited pnlQuickSaisieVisee: TPanel
+            Width = 201
+            ClientWidth = 201
+            inherited btnQSAddVisee: TButton
+              Left = 92
+              Top = 56
+            end
+          end
+          inherited btnRemoveLastVisee: TButton
+            Top = 144
+            Width = 201
+          end
+          inherited Button2: TButton
+            Top = 180
+            Width = 201
+          end
+          inherited btnHelp: TButton
+            Top = 216
+            Width = 201
+          end
+          inherited btnDemanderMesure: TButton
+            Width = 201
+          end
+        end
+      end
+    end
+    object tabShtSeries: TTabSheet
+      Caption = 'Séries'
+      ClientHeight = 555
+      ClientWidth = 1140
+      object Panel1: TPanel
+        Left = 0
+        Height = 36
+        Top = 0
+        Width = 1140
+        Anchors = [akTop, akLeft, akRight]
+        BevelOuter = bvLowered
+        ClientHeight = 36
+        ClientWidth = 1140
+        TabOrder = 0
+        inline CdrNavigateurSeries1: TCdrNavigateurSeries
+          Left = 1
+          Top = 1
+          Width = 1138
+          ClientWidth = 1138
+          DesignLeft = 323
+          DesignTop = 295
+          inherited SpeedButton1: TSpeedButton
+            Left = 801
+            Flat = False
+          end
+          inherited SpeedButton2: TSpeedButton
+            Left = 829
+            Flat = False
+          end
+          inherited SpeedButton3: TSpeedButton
+            Left = 857
+            Flat = False
+          end
+          inherited SpeedButton5: TSpeedButton
+            Left = 741
+            Flat = False
+          end
+          inherited SpeedButton6: TSpeedButton
+            Left = 889
+            Flat = False
+          end
+          inherited SpeedButton7: TSpeedButton
+            Left = 945
+            Flat = False
+          end
+          inherited SpeedButton8: TSpeedButton
+            Left = 917
+            Flat = False
+          end
+          inherited SpeedButton9: TSpeedButton
+            Left = 1009
+            Flat = False
+          end
+          inherited SpeedButton11: TSpeedButton
+            Left = 1078
+            Flat = False
+          end
+          inherited SpeedButton12: TSpeedButton
+            Left = 977
+            Flat = False
+          end
+          inherited editNomSerie: TEdit
+            Width = 652
+          end
+          inherited SpeedButton13: TSpeedButton
+            Left = 1110
+            Flat = False
+          end
+          inherited SpeedButton14: TSpeedButton
+            Left = 769
+            Flat = False
+          end
+          inherited SpeedButton4: TSpeedButton
+            Left = 1040
+            Flat = False
+          end
+          inherited lbSearch: TLabel
+            Height = 15
+            Width = 74
+          end
+        end
+      end
+      object Panel2: TPanel
+        Left = 0
+        Height = 522
+        Top = 37
+        Width = 1140
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        BevelOuter = bvLowered
+        ClientHeight = 522
+        ClientWidth = 1140
+        TabOrder = 1
+        inline CdrSerieIndependant1: TCdrSerieIndependant
+          Left = 1
+          Height = 520
+          Top = 1
+          Width = 1138
+          ClientHeight = 520
+          ClientWidth = 1138
+          DesignLeft = 422
+          DesignTop = 298
+          inherited pnlEnteteSerie: TPanel
+            Width = 1136
+            ClientWidth = 1136
+            inherited cmbChance: TComboBox
+              Left = 988
+            end
+            inherited cmbObstacle: TComboBox
+              Left = 988
+            end
+            inherited lblChances: TLabel
+              Left = 925
+              Height = 15
+              Width = 53
+            end
+            inherited lblObstacles: TLabel
+              Left = 924
+              Height = 15
+            end
+            inherited lblSerie: TLabel
+              Height = 15
+              Width = 32
+            end
+            inherited lblSerieName: TLabel
+              Height = 15
+              Width = 63
+            end
+            inherited lblDepart: TLabel
+              Height = 15
+              Width = 40
+            end
+            inherited lblArrivee: TLabel
+              Height = 15
+              Width = 44
+            end
+            inherited editNomSerie: TEdit
+              Height = 27
+              Width = 806
+            end
+            inherited editSerieDepart: TCurrencyEdit
+              Height = 27
+            end
+            inherited editSerieArrivee: TCurrencyEdit
+              Height = 27
+            end
+            inherited editPointDepart: TCurrencyEdit
+              Height = 27
+            end
+            inherited editPointArrivee: TCurrencyEdit
+              Height = 27
+            end
+            inherited editNumeroSerie: TCurrencyEdit
+              Height = 27
+            end
+            inherited Label1: TLabel
+              Height = 15
+            end
+            inherited editCommentaire: TEdit
+              Height = 27
+              Width = 767
+            end
+            inherited Label2: TLabel
+              Height = 15
+            end
+            inherited editRaideur: TCurrencyEdit
+              Height = 27
+            end
+            inherited editNumEntreeRattachement: TCurrencyEdit
+              Height = 27
+            end
+            inherited lbIdxEntree: TLabel
+              Height = 15
+              Width = 71
+            end
+            inherited editLG0: TCurrencyEdit
+              Left = 860
+              Height = 27
+            end
+            inherited editLD0: TCurrencyEdit
+              Left = 928
+              Height = 27
+            end
+            inherited editHZ0: TCurrencyEdit
+              Left = 996
+              Height = 27
+            end
+            inherited editHN0: TCurrencyEdit
+              Left = 1064
+              Height = 27
+            end
+            inherited pnlReseaux: TPanel
+              Width = 759
+              ClientWidth = 759
+              inherited editNumeroReseau: TCurrencyEdit
+                Height = 27
+              end
+              inherited lbNomReseau: TStaticText
+                Width = 598
+              end
+            end
+          end
+          inherited pnlTableur: TPanel
+            Height = 381
+            Width = 1136
+            ClientHeight = 381
+            ClientWidth = 1136
+            inherited grdStations: TStringGrid
+              Height = 350
+              Width = 1097
+            end
+            inherited lbNbStations: TLabel
+              Height = 15
+              Top = 358
+            end
+            inherited lbMessages: TStaticText
+              Top = 357
+              Width = 671
+            end
+            inherited SpeedButton1: TSpeedButton
+              Flat = False
+            end
+            inherited SpeedButton2: TSpeedButton
+              Flat = False
+            end
+            inherited SpeedButton3: TSpeedButton
+              Flat = False
+            end
+            inherited SpeedButton4: TSpeedButton
+              Flat = False
+            end
+            inherited SpeedButton5: TSpeedButton
+              Flat = False
+            end
+            inherited lbLongueurCumulee: TStaticText
+              Left = 974
+              Top = 357
+            end
+            inherited SpeedButton6: TSpeedButton
+              Flat = False
+            end
+            inherited SpeedButton8: TSpeedButton
+              Flat = False
+            end
+            inherited Shape1: TShape
+              Width = 1136
+            end
+            inherited SpeedButton9: TSpeedButton
+              Flat = False
+            end
+            inherited SpeedButton11: TSpeedButton
+              Flat = False
+            end
+            inherited SpeedButton12: TSpeedButton
+              Flat = False
+            end
+            inherited SpeedButton13: TSpeedButton
+              Flat = False
+            end
+            inherited SpeedButton14: TSpeedButton
+              Flat = False
+            end
+            inherited lbDataAreModified: TStaticText
+              Left = 867
+              Top = 357
+            end
+          end
+          inherited btnShowHideHeader: TButton
+            Left = 1103
+          end
+          inherited pnlErreursACorriger: TPanel
+            Left = 668
+            inherited Label5: TLabel
+              Height = 15
+              Width = 188
+            end
+            inherited lsbErreurs: TListBox
+              ScrollWidth = 449
+            end
+          end
+        end
+      end
+    end
+    object tabShtAntennes: TTabSheet
+      Caption = 'Antennes'
+      ClientHeight = 555
+      ClientWidth = 1140
+      inline CdrListeViseesEnAntenne1: TCdrListeViseesEnAntenne
+        Height = 555
+        Width = 1140
+        ClientHeight = 555
+        ClientWidth = 1140
+        inherited pnlListeAntennes: TPanel
+          Height = 515
+          Width = 1135
+          ClientHeight = 515
+          ClientWidth = 1135
+          inherited hcColsTitres: THeaderControl
+            Width = 1131
+          end
+        end
+        inherited lbNbViseesAntennes: TLabel
+          Left = 963
+        end
+        inherited Panel2: TPanel
+          Width = 951
+          ClientWidth = 951
+          inherited SpeedButton3: TSpeedButton
+            Left = 863
+            Flat = False
+          end
+          inherited SpeedButton4: TSpeedButton
+            Left = 831
+            Flat = False
+          end
+          inherited SpeedButton6: TSpeedButton
+            Left = 923
+            Flat = False
+          end
+          inherited SpeedButton7: TSpeedButton
+            Left = 799
+            Flat = False
+          end
+          inherited SpeedButton9: TSpeedButton
+            Left = 892
+            Flat = False
+          end
+          inherited lbSerie: TLabel
+            Height = 15
+            Width = 32
+          end
+          inherited SpeedButton11: TSpeedButton
+            Flat = False
+          end
+          inherited SpeedButton12: TSpeedButton
+            Flat = False
+          end
+          inherited SpeedButton13: TSpeedButton
+            Flat = False
+          end
+          inherited SpeedButton14: TSpeedButton
+            Flat = False
+          end
+          inherited sclStationsOfSerie: TScrollBar
+            Height = 13
+            Width = 439
+          end
+          inherited lbNbStationsOfSerie: TStaticText
+            Left = 730
+          end
+          inherited SpeedButton10: TSpeedButton
+            Flat = False
+          end
+          inherited SpeedButton15: TSpeedButton
+            Flat = False
+          end
+        end
+        inherited lsbViseesAntennes: TListBox
+          Height = 485
+          Width = 1130
+          ScrollWidth = 1126
+        end
+      end
+    end
+    object tabShtListesSimples: TTabSheet
+      Caption = 'tabShtListesSimples'
+      ClientHeight = 555
+      ClientWidth = 1140
+      inline CdrListesSimples1: TCdrListesSimples
+        Height = 555
+        Width = 1140
+        ClientHeight = 555
+        ClientWidth = 1140
+        inherited Panel1: TPanel
+          Height = 555
+          Width = 1140
+          ClientHeight = 555
+          ClientWidth = 1140
+          inherited lbNbreElements: TStaticText
+            Top = 530
+            Width = 101
+          end
+          inherited SpeedButton3: TSpeedButton
+            Left = 966
+            Flat = False
+          end
+          inherited SpeedButton8: TSpeedButton
+            Left = 992
+            Flat = False
+          end
+          inherited SpeedButton9: TSpeedButton
+            Left = 1020
+            Flat = False
+          end
+          inherited SpeedButton12: TSpeedButton
+            Left = 1048
+            Flat = False
+          end
+          inherited SpeedButton2: TSpeedButton
+            Left = 1084
+            Flat = False
+          end
+          inherited SpeedButton1: TSpeedButton
+            Left = 1112
+            Flat = False
+          end
+          inherited editSearch: TEdit
+            Height = 27
+            Width = 1110
+          end
+          inherited SpeedButton4: TSpeedButton
+            Left = 1114
+            Flat = False
+          end
+          inherited hcColsTitres: THeaderControl
+            Width = 1136
+          end
+          inherited lsbListe: TListBox
+            Height = 442
+            Width = 1136
+            ScrollWidth = 1132
+          end
+          inherited Panel2: TPanel
+            Width = 954
+            ClientWidth = 954
+            inherited CdrRadioButtons1: TCdrRadioButtons
+              Left = 1
+              Height = 30
+              Top = 1
+              Width = 952
+            end
+          end
+          inherited ProgressBar1: TProgressBar
+            Top = 530
+            Width = 802
+          end
+          inherited lbRayonCaptureProxi: TLabel
+            Height = 15
+            Top = 531
+            Width = 43
+          end
+          inherited editRayonCaptureProxi: TCurrencyEdit
+            Height = 27
+            Top = 527
+          end
+        end
+      end
+    end
+    object tabshtJournal: TTabSheet
+      Caption = 'tabshtJournal'
+      ClientHeight = 555
+      ClientWidth = 1140
+      object PairSplitter1: TPairSplitter
+        Cursor = crVSplit
+        Left = 0
+        Height = 555
+        Top = 0
+        Width = 1140
+        Align = alClient
+        Position = 412
+        SplitterType = pstVertical
+        object PairSplitterSide1: TPairSplitterSide
+          Cursor = crArrow
+          Left = 0
+          Height = 412
+          Top = 0
+          Width = 1140
+          ClientWidth = 1140
+          ClientHeight = 412
+          object lsbJournal: TListBox
+            Left = 4
+            Height = 396
+            Top = 8
+            Width = 1135
+            Anchors = [akTop, akLeft, akRight, akBottom]
+            ItemHeight = 0
+            ScrollWidth = 1131
+            TabOrder = 0
+          end
+        end
+        object PairSplitterSide2: TPairSplitterSide
+          Cursor = crArrow
+          Left = 0
+          Height = 138
+          Top = 417
+          Width = 1140
+          ClientWidth = 1140
+          ClientHeight = 138
+          inline memoErreurs: TSynEdit
+            Left = 3
+            Height = 138
+            Top = 0
+            Width = 1135
+            Anchors = [akTop, akLeft, akRight, akBottom]
+            Font.Height = -13
+            Font.Name = 'Courier New'
+            Font.Pitch = fpFixed
+            Font.Quality = fqNonAntialiased
+            ParentColor = False
+            ParentFont = False
+            TabOrder = 0
+            Gutter.Width = 0
+            Gutter.MouseActions = <>
+            RightGutter.Width = 0
+            RightGutter.MouseActions = <>
+            Keystrokes = <            
+              item
+                Command = ecUp
+                ShortCut = 38
+              end            
+              item
+                Command = ecSelUp
+                ShortCut = 8230
+              end            
+              item
+                Command = ecScrollUp
+                ShortCut = 16422
+              end            
+              item
+                Command = ecDown
+                ShortCut = 40
+              end            
+              item
+                Command = ecSelDown
+                ShortCut = 8232
+              end            
+              item
+                Command = ecScrollDown
+                ShortCut = 16424
+              end            
+              item
+                Command = ecLeft
+                ShortCut = 37
+              end            
+              item
+                Command = ecSelLeft
+                ShortCut = 8229
+              end            
+              item
+                Command = ecWordLeft
+                ShortCut = 16421
+              end            
+              item
+                Command = ecSelWordLeft
+                ShortCut = 24613
+              end            
+              item
+                Command = ecRight
+                ShortCut = 39
+              end            
+              item
+                Command = ecSelRight
+                ShortCut = 8231
+              end            
+              item
+                Command = ecWordRight
+                ShortCut = 16423
+              end            
+              item
+                Command = ecSelWordRight
+                ShortCut = 24615
+              end            
+              item
+                Command = ecPageDown
+                ShortCut = 34
+              end            
+              item
+                Command = ecSelPageDown
+                ShortCut = 8226
+              end            
+              item
+                Command = ecPageBottom
+                ShortCut = 16418
+              end            
+              item
+                Command = ecSelPageBottom
+                ShortCut = 24610
+              end            
+              item
+                Command = ecPageUp
+                ShortCut = 33
+              end            
+              item
+                Command = ecSelPageUp
+                ShortCut = 8225
+              end            
+              item
+                Command = ecPageTop
+                ShortCut = 16417
+              end            
+              item
+                Command = ecSelPageTop
+                ShortCut = 24609
+              end            
+              item
+                Command = ecLineStart
+                ShortCut = 36
+              end            
+              item
+                Command = ecSelLineStart
+                ShortCut = 8228
+              end            
+              item
+                Command = ecEditorTop
+                ShortCut = 16420
+              end            
+              item
+                Command = ecSelEditorTop
+                ShortCut = 24612
+              end            
+              item
+                Command = ecLineEnd
+                ShortCut = 35
+              end            
+              item
+                Command = ecSelLineEnd
+                ShortCut = 8227
+              end            
+              item
+                Command = ecEditorBottom
+                ShortCut = 16419
+              end            
+              item
+                Command = ecSelEditorBottom
+                ShortCut = 24611
+              end            
+              item
+                Command = ecToggleMode
+                ShortCut = 45
+              end            
+              item
+                Command = ecCopy
+                ShortCut = 16429
+              end            
+              item
+                Command = ecPaste
+                ShortCut = 8237
+              end            
+              item
+                Command = ecDeleteChar
+                ShortCut = 46
+              end            
+              item
+                Command = ecCut
+                ShortCut = 8238
+              end            
+              item
+                Command = ecDeleteLastChar
+                ShortCut = 8
+              end            
+              item
+                Command = ecDeleteLastChar
+                ShortCut = 8200
+              end            
+              item
+                Command = ecDeleteLastWord
+                ShortCut = 16392
+              end            
+              item
+                Command = ecUndo
+                ShortCut = 32776
+              end            
+              item
+                Command = ecRedo
+                ShortCut = 40968
+              end            
+              item
+                Command = ecLineBreak
+                ShortCut = 13
+              end            
+              item
+                Command = ecSelectAll
+                ShortCut = 16449
+              end            
+              item
+                Command = ecCopy
+                ShortCut = 16451
+              end            
+              item
+                Command = ecBlockIndent
+                ShortCut = 24649
+              end            
+              item
+                Command = ecLineBreak
+                ShortCut = 16461
+              end            
+              item
+                Command = ecInsertLine
+                ShortCut = 16462
+              end            
+              item
+                Command = ecDeleteWord
+                ShortCut = 16468
+              end            
+              item
+                Command = ecBlockUnindent
+                ShortCut = 24661
+              end            
+              item
+                Command = ecPaste
+                ShortCut = 16470
+              end            
+              item
+                Command = ecCut
+                ShortCut = 16472
+              end            
+              item
+                Command = ecDeleteLine
+                ShortCut = 16473
+              end            
+              item
+                Command = ecDeleteEOL
+                ShortCut = 24665
+              end            
+              item
+                Command = ecUndo
+                ShortCut = 16474
+              end            
+              item
+                Command = ecRedo
+                ShortCut = 24666
+              end            
+              item
+                Command = ecGotoMarker0
+                ShortCut = 16432
+              end            
+              item
+                Command = ecGotoMarker1
+                ShortCut = 16433
+              end            
+              item
+                Command = ecGotoMarker2
+                ShortCut = 16434
+              end            
+              item
+                Command = ecGotoMarker3
+                ShortCut = 16435
+              end            
+              item
+                Command = ecGotoMarker4
+                ShortCut = 16436
+              end            
+              item
+                Command = ecGotoMarker5
+                ShortCut = 16437
+              end            
+              item
+                Command = ecGotoMarker6
+                ShortCut = 16438
+              end            
+              item
+                Command = ecGotoMarker7
+                ShortCut = 16439
+              end            
+              item
+                Command = ecGotoMarker8
+                ShortCut = 16440
+              end            
+              item
+                Command = ecGotoMarker9
+                ShortCut = 16441
+              end            
+              item
+                Command = ecSetMarker0
+                ShortCut = 24624
+              end            
+              item
+                Command = ecSetMarker1
+                ShortCut = 24625
+              end            
+              item
+                Command = ecSetMarker2
+                ShortCut = 24626
+              end            
+              item
+                Command = ecSetMarker3
+                ShortCut = 24627
+              end            
+              item
+                Command = ecSetMarker4
+                ShortCut = 24628
+              end            
+              item
+                Command = ecSetMarker5
+                ShortCut = 24629
+              end            
+              item
+                Command = ecSetMarker6
+                ShortCut = 24630
+              end            
+              item
+                Command = ecSetMarker7
+                ShortCut = 24631
+              end            
+              item
+                Command = ecSetMarker8
+                ShortCut = 24632
+              end            
+              item
+                Command = ecSetMarker9
+                ShortCut = 24633
+              end            
+              item
+                Command = EcFoldLevel1
+                ShortCut = 41009
+              end            
+              item
+                Command = EcFoldLevel2
+                ShortCut = 41010
+              end            
+              item
+                Command = EcFoldLevel3
+                ShortCut = 41011
+              end            
+              item
+                Command = EcFoldLevel4
+                ShortCut = 41012
+              end            
+              item
+                Command = EcFoldLevel5
+                ShortCut = 41013
+              end            
+              item
+                Command = EcFoldLevel6
+                ShortCut = 41014
+              end            
+              item
+                Command = EcFoldLevel7
+                ShortCut = 41015
+              end            
+              item
+                Command = EcFoldLevel8
+                ShortCut = 41016
+              end            
+              item
+                Command = EcFoldLevel9
+                ShortCut = 41017
+              end            
+              item
+                Command = EcFoldLevel0
+                ShortCut = 41008
+              end            
+              item
+                Command = EcFoldCurrent
+                ShortCut = 41005
+              end            
+              item
+                Command = EcUnFoldCurrent
+                ShortCut = 41003
+              end            
+              item
+                Command = EcToggleMarkupWord
+                ShortCut = 32845
+              end            
+              item
+                Command = ecNormalSelect
+                ShortCut = 24654
+              end            
+              item
+                Command = ecColumnSelect
+                ShortCut = 24643
+              end            
+              item
+                Command = ecLineSelect
+                ShortCut = 24652
+              end            
+              item
+                Command = ecTab
+                ShortCut = 9
+              end            
+              item
+                Command = ecShiftTab
+                ShortCut = 8201
+              end            
+              item
+                Command = ecMatchBracket
+                ShortCut = 24642
+              end            
+              item
+                Command = ecColSelUp
+                ShortCut = 40998
+              end            
+              item
+                Command = ecColSelDown
+                ShortCut = 41000
+              end            
+              item
+                Command = ecColSelLeft
+                ShortCut = 40997
+              end            
+              item
+                Command = ecColSelRight
+                ShortCut = 40999
+              end            
+              item
+                Command = ecColSelPageDown
+                ShortCut = 40994
+              end            
+              item
+                Command = ecColSelPageBottom
+                ShortCut = 57378
+              end            
+              item
+                Command = ecColSelPageUp
+                ShortCut = 40993
+              end            
+              item
+                Command = ecColSelPageTop
+                ShortCut = 57377
+              end            
+              item
+                Command = ecColSelLineStart
+                ShortCut = 40996
+              end            
+              item
+                Command = ecColSelLineEnd
+                ShortCut = 40995
+              end            
+              item
+                Command = ecColSelEditorTop
+                ShortCut = 57380
+              end            
+              item
+                Command = ecColSelEditorBottom
+                ShortCut = 57379
+              end>
+            MouseActions = <>
+            MouseTextActions = <>
+            MouseSelActions = <>
+            Lines.Strings = (
+              'memoErreurs'
+            )
+            VisibleSpecialChars = [vscSpace, vscTabAtLast]
+            SelectedColor.BackPriority = 50
+            SelectedColor.ForePriority = 50
+            SelectedColor.FramePriority = 50
+            SelectedColor.BoldPriority = 50
+            SelectedColor.ItalicPriority = 50
+            SelectedColor.UnderlinePriority = 50
+            SelectedColor.StrikeOutPriority = 50
+            BracketHighlightStyle = sbhsBoth
+            BracketMatchColor.Background = clNone
+            BracketMatchColor.Foreground = clNone
+            BracketMatchColor.Style = [fsBold]
+            FoldedCodeColor.Background = clNone
+            FoldedCodeColor.Foreground = clGray
+            FoldedCodeColor.FrameColor = clGray
+            MouseLinkColor.Background = clNone
+            MouseLinkColor.Foreground = clBlue
+            LineHighlightColor.Background = clNone
+            LineHighlightColor.Foreground = clNone
+            inline SynLeftGutterPartList1: TSynGutterPartList
+            end
+          end
+          object lbMemoryUsage: TStaticText
+            Left = 0
+            Height = 21
+            Top = 116
+            Width = 1139
+            Anchors = [akLeft, akRight, akBottom]
+            BorderStyle = sbsSunken
+            TabOrder = 1
+          end
+          object SpeedButton23: TSpeedButton
+            Left = 1018
+            Height = 32
+            Top = 4
+            Width = 36
+            Action = acCopierConsoleErreur
+            Anchors = [akTop, akRight]
+            ShowCaption = False
+            ShowHint = True
+            ParentShowHint = False
+          end
+          object SpeedButton24: TSpeedButton
+            Left = 1058
+            Height = 32
+            Top = 4
+            Width = 36
+            Action = acClearConsoleErreur
+            Anchors = [akTop, akRight]
+            ShowCaption = False
+            ShowHint = True
+            ParentShowHint = False
+          end
+          object SpeedButton25: TSpeedButton
+            Left = 1102
+            Height = 32
+            Top = 4
+            Width = 36
+            Anchors = [akTop, akRight]
+            ShowCaption = False
+            ShowHint = True
+            ParentShowHint = False
+          end
+        end
+      end
+    end
+  end
+  object pnlAcquitteVisee: TPanel
+    Left = 260
+    Height = 40
+    Top = 60
+    Width = 558
+    Caption = 'pnlAcquitteVisee'
+    Color = clInfoBk
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clBlue
+    Font.Height = -19
+    Font.Name = 'Arial'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold]
+    ParentColor = False
+    ParentFont = False
+    TabOrder = 2
+  end
+  object pnlProgression: TPanel
+    Left = 292
+    Height = 46
+    Top = 508
+    Width = 740
+    Anchors = [akLeft, akRight, akBottom]
+    BevelOuter = bvLowered
+    ClientHeight = 46
+    ClientWidth = 740
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -13
+    Font.Name = 'Arial'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 1
+    object ProgressBar1: TProgressBar
+      Left = 4
+      Height = 20
+      Top = 24
+      Width = 733
+      Anchors = [akLeft, akRight, akBottom]
+      Smooth = True
+      TabOrder = 0
+    end
+    object lbEtape: TLabel
+      Left = 12
+      Height = 16
+      Top = 12
+      Width = 733
+      Anchors = [akTop, akLeft, akRight]
+      AutoSize = False
+      Caption = 'lbEtape'
+      ParentColor = False
+      OnClick = lbEtapeClick
+    end
+  end
+  object ActionList1: TActionList
+    Images = ImageList1
+    left = 764
+    object acNew: TAction
+      Category = 'Fichier'
+      Caption = 'acNewFile'
+      ImageIndex = 0
+      OnExecute = acNewExecute
+    end
+    object acOpen: TAction
+      Category = 'Fichier'
+      Caption = 'acOpen'
+      ImageIndex = 1
+      OnExecute = acOpenExecute
+      ShortCut = 16463
+    end
+    object acQSave: TAction
+      Category = 'Fichier'
+      Caption = 'acQSave'
+      ImageIndex = 2
+      OnExecute = acQSaveExecute
+    end
+    object acQuit: TAction
+      Category = 'Fichier'
+      Caption = 'acQuit'
+      ImageIndex = 3
+      OnExecute = acQuitExecute
+    end
+    object acCompileExt: TAction
+      Category = 'Topographie'
+      Caption = 'acRecalculer'
+      ImageIndex = 4
+      OnExecute = acCompileExtExecute
+    end
+    object acZoomTout: TAction
+      Category = 'Vue'
+      Caption = 'acZoomTout'
+      ImageIndex = 5
+      OnExecute = acZoomToutExecute
+    end
+    object acZoomFenetre: TAction
+      Category = 'Vue'
+      Caption = 'acZoomFenetre'
+      ImageIndex = 6
+      OnExecute = acZoomFenetreExecute
+    end
+    object acPanVue: TAction
+      Category = 'Vue'
+      Caption = 'acPanVue'
+      ImageIndex = 7
+      OnExecute = acPanVueExecute
+    end
+    object acZoomPlus: TAction
+      Category = 'Vue'
+      Caption = 'acZoomPlus'
+      ImageIndex = 8
+      OnExecute = acZoomPlusExecute
+    end
+    object acZoomMoins: TAction
+      Category = 'Vue'
+      Caption = 'acZoomMoins'
+      ImageIndex = 9
+      OnExecute = acZoomMoinsExecute
+    end
+    object acLocaliserStation: TAction
+      Category = 'Vue'
+      Caption = 'acLocaliserStation'
+      ImageIndex = 10
+      OnExecute = acLocaliserStationExecute
+    end
+    object acCheckDatabase: TAction
+      Category = 'Topographie'
+      Caption = 'acCheckDatabase'
+      ImageIndex = 11
+      OnExecute = acCheckDatabaseExecute
+    end
+    object acParametrerVue: TAction
+      Category = 'Vue'
+      Caption = 'acParametrerVue'
+      ImageIndex = 12
+      OnExecute = acParametrerVueExecute
+    end
+    object acNewPolyligne: TAction
+      Category = 'Dessin'
+      Caption = 'acNewPolyligne'
+      ImageIndex = 13
+      OnExecute = acNewPolyligneExecute
+    end
+    object acNewAnnotation: TAction
+      Category = 'Dessin'
+      Caption = 'acNewAnnotation'
+      ImageIndex = 14
+      OnExecute = acNewAnnotationExecute
+    end
+    object acDeletePolyline: TAction
+      Category = 'Dessin'
+      Caption = 'acDeletePolyline'
+      ImageIndex = 15
+      OnExecute = acDeletePolylineExecute
+    end
+    object acDeleteAnnotation: TAction
+      Category = 'Dessin'
+      Caption = 'acDeleteAnnotation'
+      ImageIndex = 16
+      OnExecute = acDeleteAnnotationExecute
+    end
+    object acDemanderUneMesure: TAction
+      Category = 'DistoX'
+      Caption = 'acReconnecterDistoX'
+      ImageIndex = 17
+      OnExecute = acDemanderUneMesureExecute
+    end
+    object acSetModeTravailNone: TAction
+      Category = 'Dessin'
+      Caption = 'acSetModeTravailNone'
+      ImageIndex = 18
+      OnExecute = acSetModeTravailNoneExecute
+    end
+    object acVue3D: TAction
+      Category = 'Topographie'
+      Caption = 'acVue3D'
+      ImageIndex = 19
+      OnExecute = acVue3DExecute
+    end
+    object acHelp: TAction
+      Category = 'Aide'
+      Caption = 'acHelp'
+      ImageIndex = 20
+      OnExecute = acHelpExecute
+    end
+    object acStatistiques: TAction
+      Category = 'Topographie'
+      Caption = 'acStatistiques'
+      OnExecute = acStatistiquesExecute
+    end
+    object acCopierConsoleErreur: TAction
+      Category = 'Journal'
+      Caption = 'acCopierConsoleErreur'
+      ImageIndex = 21
+    end
+    object acClearConsoleErreur: TAction
+      Category = 'Journal'
+      Caption = 'acClearConsoleErreur'
+      ImageIndex = 22
+    end
+    object acSaveAs: TAction
+      Category = 'Fichier'
+      Caption = 'acSaveAs'
+      ImageIndex = 2
+      OnExecute = acSaveAsExecute
+    end
+    object acViderCroquis: TAction
+      Category = 'Dessin'
+      Caption = 'acViderCroquis'
+      ImageIndex = 24
+      OnExecute = acViderCroquisExecute
+    end
+    object acExportGIS: TAction
+      Category = 'Fichier'
+      Caption = 'acExportGIS'
+      ImageIndex = 25
+      OnExecute = acExportGISExecute
+    end
+    object acExporterGraphe: TAction
+      Category = 'Graphe'
+      Caption = 'acExporterGraphe'
+      OnExecute = acExporterGrapheExecute
+    end
+  end
+  object ImageList1: TImageList
+    left = 616
+    Bitmap = {
+      4C691A0000001000000010000000C0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FF000000FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFF000000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FF000000FF000000FF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FFC0C0C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF000080FF0000
+      80FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000080FF00FFFFFF00FFFFFF00FF
+      FFFF000080FF000080FF000080FF000080FF000080FF000080FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF00FFFFFF00FFFFFF00FF
+      FFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF000080FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF00FFFFFF00FFFFFF00FF
+      FFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF000080FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF00FFFFFF00FFFFFF00FF
+      FFFF00FFFFFF000080FF000080FF000080FF000080FF000080FF000080FF0000
+      80FF000080FF000080FF000080FFC0C0C0FF000080FF00FFFFFF00FFFFFF00FF
+      FFFF000080FF008080FF008080FF008080FF008080FF008080FF008080FF0080
+      80FF008080FF000080FFC0C0C0FFC0C0C0FF000080FF00FFFFFF00FFFFFF0000
+      80FF008080FF008080FF008080FF008080FF008080FF008080FF008080FF0080
+      80FF000080FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF00FFFFFF000080FF0080
+      80FF008080FF008080FF008080FF008080FF008080FF008080FF008080FF0000
+      80FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF000080FF008080FF0080
+      80FF008080FF008080FF008080FF008080FF008080FF008080FF000080FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF008080FF008080FF0080
+      80FF008080FF008080FF008080FF008080FF008080FF000080FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF000080FF000080FF0000
+      80FF000080FF000080FF000080FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF808080FF808080FF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF8080
+      80FF808080FF000000FFC0C0C0FFC0C0C0FF000000FF808080FF808080FF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF8080
+      80FF808080FF000000FFC0C0C0FFC0C0C0FF000000FF808080FF808080FF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF8080
+      80FF808080FF000000FFC0C0C0FFC0C0C0FF000000FF808080FF808080FF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF8080
+      80FF808080FF000000FFC0C0C0FFC0C0C0FF000000FF808080FF808080FF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF8080
+      80FF808080FF000000FFC0C0C0FFC0C0C0FF000000FF808080FF808080FF8080
+      80FF000000FF000000FF000000FF000000FF000000FF000000FF808080FF8080
+      80FF808080FF000000FFC0C0C0FFC0C0C0FF000000FF808080FF808080FF8080
+      80FF808080FF808080FF808080FF808080FF808080FF808080FF808080FF8080
+      80FF808080FF000000FFC0C0C0FFC0C0C0FF000000FF808080FF808080FF8080
+      80FF808080FF808080FF808080FF808080FF808080FF808080FF808080FF8080
+      80FF808080FF000000FFC0C0C0FFC0C0C0FF000000FF808080FF808080FF8080
+      80FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF8080
+      80FF808080FF000000FFC0C0C0FFC0C0C0FF000000FF808080FF808080FF8080
+      80FF000000FF000000FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF8080
+      80FF808080FF000000FFC0C0C0FFC0C0C0FF000000FF808080FF808080FF8080
+      80FF000000FF000000FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF8080
+      80FF808080FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF8080
+      80FF000000FF000000FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF8080
+      80FF808080FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFF00
+      00FFFF0000FFFF0000FFFF0000FF000000FFFFFF00FFFFFF00FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFF00
+      00FFFF0000FFFF0000FFFF0000FF000000FFFFFF00FFFFFF00FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFF00
+      00FFFF0000FFFF0000FFFF0000FF000000FFFFFF00FFFFFF00FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFF00
+      00FFFF0000FFFF0000FFFF0000FF000000FFFFFF00FFFFFF00FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFF00
+      00FFFF0000FFFF0000FFFF0000FF000000FFFFFF00FFFFFF00FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFF00
+      00FFFF0000FF000000FF000000FF000000FF000000FF000000FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFF00
+      00FFFF0000FFFF0000FFFF0000FF000000FFFFFF00FFFFFF00FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFF00
+      00FFFF0000FFFF0000FFFF0000FF000000FFFFFF00FFFFFF00FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFF00
+      00FFFF0000FFFF0000FFFF0000FF000000FFFFFF00FFFFFF00FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFF00
+      00FFFF0000FFFF0000FFFF0000FF000000FFFFFF00FFFFFF00FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF474747009393939074747485666666876C6C
+      6C876B6B6B878B8B8B8779797987656565876A6A6A87898989878A8A8A878686
+      868785858585909090904747470086868687FFFFFFFFE4E4E4FBFAFAFAFFF7F7
+      F7FFDADADAFFF0F0F1FFE1E1E1FFFDFDFDFFE9E9E9FFEAEAEBFFF9F9F9FFFFFF
+      FFFFFBFBFBFBFFFFFFFF8787878784848485FFFFFFFFDADADAF7FAFAFAFBE7E7
+      E6FBDADAD8FBF0F0EEFBC5C5C3FBFFFFFFFBE6E6E5FBEAEAE7FBE2E2E1FBFFFF
+      FFFBF6F6F6F7FFFFFFFF8585858586868687FFFFFFFFDBDBDDFBC6C6D1FFCCCC
+      D3FFC4C4CBFFD1D1D8FFBABAC1FFD5D5DCFFC9C9D0FFCFCFD5FFCDCDD9FFFFFF
+      FFFFFBFBFBFBFFFFFFFF8787878786868687FFFFFFFFFDFDFBFB5050A3FF0000
+      7BFF0C0C83FF06067FFF090982FF05057EFF0A0A82FF000074FF5757A9FFFFFF
+      FFFFFBFBFBFBFFFFFFFF8787878787878787FFFFFFFFFFFFFDFBECECF7FF1010
+      83FF00007BFF010181FF00007FFF030382FF00007BFF4848A4FFFAFAFDFFFFFF
+      FFFFFAFAFBFBFFFFFFFF8787878787878787FFFFFFFFF8F8FAFBFFFFFFFFBDBD
+      DEFF080884FF040483FF070784FF00007FFF181888FFF3F3F9FFFFFFFFFFFEFE
+      FEFFFBFBFBFBFFFFFFFF8787878787878787FFFFFFFFFDFDFCFBF1F1F8FFFAFA
+      FEFF7474B5FF00006CFF040478FF000076FF9A9ACCFFF0F0F8FFFCFCFEFFFEFE
+      FFFFFBFBFBFBFFFFFFFF8787878787878787FFFFFFFFFFFFFFFB9191C8FF6161
+      B0FF5454AAFF8282C1FF7E7EBFFF6D6DB7FF6565B3FF6262B1FFE6E6F3FFFFFF
+      FFFFFAFAFBFBFFFFFFFF8787878787878787FFFFFFFFFFFFFFFB9696CAFFBABA
+      DCFF9696C8FFFFFFFFFFFFFFFFFFD8D8EBFF9F9FCCFF9C9CCDFFB7B7DBFFE4E4
+      F2FFF2F2F7FBFFFFFFFF8686878787878787FFFFFFFFFFFFFFFB9696CBFFC7C7
+      E3FF6969B4FF9696CBFF9696CAFF7373B9FFA4A4D1FF9A9ACDFF7474BAFF7979
+      BCFF8989C2FBFFFFFFFF8282858787878787FFFFFFFFFFFFFFFB8B8EC1FFBDC7
+      DEFFCFCEE8FFB9BADDFFBCBCDEFFB9B8DCFFE4E6F3FF7C85B9FFE8E6F2FFE5E5
+      F2FF8585C0FBFFFFFFFF8282858787878787FFFFFFFFFFFFFFFBC1B0E0FF7F44
+      BDFF8F93C4FF8F8BC4FF8F8CC4FF8F90C4FF8B77C4FF8C54C6FFFCFFFDFFDCDA
+      EDFF8B8BC3FBFFFFFFFF8383858785858585FFFFFFFFF6FFF6F7FFDBFFFBF38A
+      EFFBE4FFDBFBE6F4DFFBE6F7DFFBE4FFDBFBF3D9EFFBFF8DFFFBFFFFFEFBE6E2
+      EFFB3A3A93F78585CAFF7B7B808587878787FFFFFFFFFBFFFBFBFFEBFFFFFA5F
+      FAFFF389F5FFF483F6FFF484F6FFF388F5FFF977FAFFFF99FFFFFFFFFFFFFBF8
+      FEFF8888CAFB9494DAFF80808487474747009090909085858585878887878970
+      89878A648A878A668A878A668A878A668A8788648887877E8787878887878887
+      87879D9D9185AAAA9C9049494847C0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000
+      FFFF800000FF800000FF800000FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF800000FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF800000FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000080FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000080FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000080FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000080FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000080FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF0000FFFF800000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF0000FFFF800000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF0000FFFF800000FF800000FF800000FF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FFFF0000FFFF0000FFC0C0C0FFFF00
+      FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFC0C0
+      C0FF0000FFFF0000FFFF0000FFFFC0C0C0FFFF0000FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF00FFFFC0C0C0FFC0C0C0FFC0C0
+      C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFFF00FFFFC0C0C0FFC0C0C0FFFF00FFFFC0C0C0FFC0C0C0FF0000
+      00FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0
+      C0FFC0C0C0FFFF00FFFFC0C0C0FFC0C0C0FFFF00FFFFC0C0C0FFC0C0C0FF0000
+      00FFC0C0C0FF000000FF000000FF000000FFC0C0C0FF000000FFC0C0C0FFC0C0
+      C0FFC0C0C0FFFF00FFFFC0C0C0FFC0C0C0FFFF00FFFFC0C0C0FFC0C0C0FF0000
+      00FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0
+      C0FFC0C0C0FFFF00FFFFC0C0C0FFC0C0C0FFFF00FFFFC0C0C0FFC0C0C0FFC0C0
+      C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FFC0C0
+      C0FFC0C0C0FFFF00FFFFC0C0C0FFC0C0C0FFFF00FFFFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000000FF000000FF000000FFC0C0C0FF000000FF000000FF0000
+      00FFC0C0C0FFFF00FFFFC0C0C0FFC0C0C0FFFF00FFFFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
+      00FF000000FFFF00FFFFC0C0C0FFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFFC0C0C0FFFF00
+      FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFC0C0
+      C0FFFF0000FFFF0000FFC0C0C0FFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF00000000000000000000FFFF000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000FFFF00000000000000000000FFFF000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000FFFF00000000000000000000FFFF000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000FFFF00000000000000000000FFFF000000000000
+      0000000000000000000000000000000080FF000080FF00000000000000000000
+      000000000000000000000000FFFF808000FF808000FF0000FFFF808000FF8080
+      00FF808000FF808000FF808000FF808000FF808000FF808000FF808000FF8080
+      00FF808000FF000000000000FFFF808000FF000000000000FFFF000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000808000FF000000000000FFFF808000FF000000000000FFFF000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000808000FF000000000000FFFF808000FF000000000000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF808000FF0000000000000000000000000000
+      000000000000000080FF000080FF000000000000000000000000000000000000
+      0000808000FF0000000000000000808000FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000808000FF0000000000000000808000FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000808000FF0000000000000000808000FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000808000FF0000000000000000808000FF808000FF808000FF808000FF8080
+      00FF808000FF808000FF808000FF808000FF808000FF808000FF808000FF8080
+      00FF808000FF0000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000C0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FF000000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FFC0C0C0FF000000FFC0C0C0FFC0C0C0FF000000FFC0C0C0FF000000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FF000000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FFC0C0
+      C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FF000000FFC0C0
+      C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FFC0C0C0FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FFC0C0C0FFC0C0
+      C0FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0
+      C0FF000000FF000000FF000000FF000000FF000000FF000000FFC0C0C0FFC0C0
+      C0FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0
+      C0FF000000FF000000FF000000FF000000FF000000FF000000FFC0C0C0FFC0C0
+      C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0
+      C0FF000000FF000000FF000000FF000000FF000000FF000000FFC0C0C0FFC0C0
+      C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0
+      C0FF000000FF000000FF000000FF000000FF000000FF000000FFC0C0C0FFC0C0
+      C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0
+      C0FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF0000
+      00FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF0000
+      00FFC0C0C0FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FF000080FF000080FF000080FF0000
+      80FF000080FF000080FF000080FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF000080FF0000
+      80FF000080FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      80FF000080FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      80FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF000080FF0000
+      80FF000080FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FF000000FFFFFFFFFFFFFFFFFF008080FFFFFF
+      FFFF008080FFFFFFFFFF008080FFFFFFFFFF008080FFFFFFFFFF008080FFFFFF
+      FFFFC0C0C0FF000000FFC0C0C0FF000000FFFFFFFFFF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF008080FF000000FFC0C0C0FF000000FFFFFFFFFFFFFFFFFF008080FFFFFF
+      FFFF008080FFFFFFFFFF008080FFFFFFFFFF008080FFFFFFFFFF008080FFFFFF
+      FFFF008080FF000000FFC0C0C0FF000000FFFFFFFFFF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF008080FF000000FFC0C0C0FF000000FFFFFFFFFFFFFFFFFF000000FFFFFF
+      FFFF000000FF008080FF008080FF000000FF000000FFFFFFFFFF000000FFFFFF
+      FFFF000000FF000000FFC0C0C0FF000000FF008080FF008080FF000000FFFFFF
+      FFFFFFFFFFFF000000FF000000FFFFFFFFFFFFFFFFFF000000FFFFFFFFFF0000
+      00FFFFFFFFFF000000FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF0000
+      00FFFFFFFFFFFFFFFFFFFFFFFFFF000000FF000000FFFFFFFFFF000000FFFFFF
+      FFFF000000FFFFFFFFFF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000000FFC0C0C0FFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFF0000
+      00FFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000000FF000000FFC0C0C0FFFFFFFFFFFFFFFFFF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFFFFFFFFFFFFFF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000080FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000080FF000080FF00000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000080FF000080FF000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000080FF000080FF000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000080FF000080FF0000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000080FF000080FF0000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000080FF0000
+      80FF000000000000000000000000000000000000000000000000000080FF0000
+      80FF000000000000000000000000000000000000000000000000000080FF0000
+      80FF000080FF000000000000000000000000000080FF000080FF000080FF0000
+      80FF000080FF0000000000000000000000000000000000000000000000000000
+      0000000080FF000080FF000080FF000080FF000080FF000080FF000000000000
+      0000000080FF000080FF00000000000000000000000000000000000000000000
+      000000000000000080FF000080FF000080FF0000000000000000000000000000
+      000000000000000080FF000080FF000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000080FF000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000080FF000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000080FF000080FF000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000080FF000080FF00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000080FF000080FF00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000080FF000080FF00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000000000000000000000000000000000000000000000000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000000000000000000000000000000000000000000000000000FF0000
+      00000000000000000000000000FF000000FF0000000000000000000000000000
+      00FF000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000FF000000FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000FF000000FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000FF000000FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000FF000000FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000FF000000FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000FF000000FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000FF000000FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000FF000000FF000000FF000000FF00000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000FF000000FF000000FF000000FF00000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000FF0000FFFF0000FFFF00
+      00FFFF5725FFFF5725FFFF5725FF000000000000FFFF0000FFFF000000000000
+      0000000000000000000000000000FF0000FFFF0000FFFF5725FFFF5725FFFF57
+      25FF0000FFFF0000FFFF00000000000000000000FFFF0000FFFF0000FFFF0000
+      000000000000FF5725FFFF5725FFFF5725FF0000000000000000000000000000
+      FFFF0000FFFF0000FFFF0000000000000000000000000000FFFF0000FFFF0000
+      FFFFFF5725FFFF5725FFFF0000FF0000000000000000000000000000FFFF0000
+      FFFF0000FFFF00000000000000000000000000000000000000000000FFFF0000
+      FFFF0000FFFFFF0000FF0000000000000000000000000000FFFF0000FFFF0000
+      FFFF000000000000000000000000000000000000000000000000FF0000FF0000
+      FFFF0000FFFF0000FFFF00000000000000000000FFFF0000FFFF0000FFFF0000
+      0000000000000000000000000000000000000000000000000000FF0000FFFF57
+      25FF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF000000000000
+      000000000000000000000000000000000000000000000000000000000000FF00
+      00FFFF0000FF0000FFFF0000FFFF0000FFFF0000FFFFFF5725FF000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000FFFF0000FFFF0000FFFF0000FFFFFF5725FFFF5725FF0000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFFF0000FFFF00
+      00FF000000000000000000000000000000000000000000000000000000000000
+      FFFF0000FFFF0000FFFF00000000000000000000FFFF0000FFFF0000FFFFFF00
+      00FF0000000000000000000000000000000000000000000000000000FFFF0000
+      FFFF0000FFFF0000000000000000FF5725FFFF5725FF0000FFFF0000FFFF0000
+      FFFF000000000000000000000000FF5725FF000000000000FFFF0000FFFF0000
+      FFFF000000000000000000000000FF5725FFFF5725FFFF5725FF0000FFFF0000
+      FFFF0000FFFF0000000000000000FF5725FF0000FFFF0000FFFF0000FFFF0000
+      00000000000000000000000000000000000000000000FF5725FFFF5725FF0000
+      FFFF0000FFFF0000FFFF00000000000000000000FFFF0000FFFFFF5725FFFF57
+      25FFFF5725FF0000000000000000FF5725FFFF5725FFFF5725FFFF5725FF0000
+      00000000FFFF0000FFFF0000000000000000FF5725FFFF5725FFFF5725FF0000
+      0000FF5725FFFF5725FFFF5725FFFF5725FF0000000000000000000000000000
+      00000000000000000000000000000000FFFF0000FFFF00000000000000000000
+      0000000000000000000000000000000000000000FFFF0000FFFF000000000000
+      00000000000000000000000000000000FFFF0000FFFF0000FFFF000000000000
+      00000000000000000000000000000000FFFF0000FFFF0000FFFF000000000000
+      0000000000000000000000000000000000000000FFFF0000FFFF0000FFFF0000
+      000000000000000000000000FFFF0000FFFF0000FFFF00000000000000000000
+      000000000000000000000000000000000000000000000000FFFF0000FFFF0000
+      FFFF000000000000FFFF0000FFFF0000FFFF0000000000000000000000000000
+      00000000000000000000000000000000000000000000000000000000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      FFFF0000FFFF0000FFFF00000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000000000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000FFFF0000FFFF0000
+      FFFF000000000000FFFF0000FFFF0000FFFF0000000000000000000000000000
+      0000000000000000000000000000000000000000FFFF0000FFFF0000FFFF0000
+      0000000000001A1A1AFF0000FFFF0000FFFF0000FFFF1A1A1AFF1A1A1AFF1A1A
+      1AFF1A1A1AFF1A1A1AFF000000FF0000FFFF0000FFFF0000FFFF000000000000
+      0000000000001A1A1AFF1A1A1AFF0000FFFF0000FFFF0000FFFF1A1A1AFF1A1A
+      1AFF1A1A1AFF1A1A1AFF000000FF0000FFFF0000FFFF00000000000000000000
+      0000000000001A1A1AFF1A1A1AFF000000000000FFFF0000FFFF0000FFFF0000
+      0000000000001A1A1AFF000000FF000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000FFFF0000FFFF0000
+      FFFF000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000001A1A1AFF0000FFFF0000
+      FFFF0000FFFF0000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000001A1A1AFF1A1A1AFF0000
+      FFFF0000FFFF0000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000001A1A1AFF1A1A1AFF0000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000FF000000FF000000FF0000
+      00FF000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000DCFF000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000DCFF00000000000000000000000000000000000000000000
+      00000000000000000000000000000E0E0EFF0000000000000000000000000000
+      00000000DCFF0000000000000000000000000000000000000000000000000000
+      000000000000000000000E0E0EFF323232FF0E0E0EFF00000000000000000000
+      DCFF000000000000000000000000000000000000000000000000000000000000
+      0000000000000E0E0EFF323232FFF0FBFFFF323232FF0E0E0EFF0000DCFF0000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000E0E0EFF323232FFF0FBFFFFF0FBFFFFF0FBFFFF323232FF0E0E0EFF0000
+      0000000000000000000000000000000000000000000000000000000000000E0E
+      0EFF323232FF323232FFF0FBFFFFAA00FFFFF0FBFFFFF0FBFFFF323232FF0E0E
+      0EFF0000000000000000000000000000000000000000000000000E0E0EFF00FF
+      FFFF00FFFFFF323232FF323232FFF0FBFFFFAA00FFFFF0FBFFFFF0FBFFFF3232
+      32FF0E0E0EFF000000000000000000000000000000000E0E0EFF323232FF00FF
+      FFFF00FFFFFF323232FF323232FF323232FFF0FBFFFFF0FBFFFF323232FF0E0E
+      0EFF000000000000000000000000000000000E0E0EFF323232FF323232FF3232
+      32FF323232FF323232FF323232FF323232FF323232FF323232FF0E0E0EFF0000
+      00000000000000000000000000000E0E0EFF323232FF00FFFFFF00FFFFFF3232
+      32FF323232FF323232FF00FFFFFF00FFFFFF323232FF0E0E0EFF000000000000
+      00000000000000000000000000000E0E0EFF323232FF00FFFFFF00FFFFFF3232
+      32FF323232FF323232FF00FFFFFF00FFFFFF0E0E0EFF00000000000000000000
+      0000000000000000000000000000000000000E0E0EFF323232FF323232FF3232
+      32FF323232FF323232FF323232FF323232FF0E0E0EFF00000000000000000000
+      000000000000000000000000000000000000000000000E0E0EFF323232FF00FF
+      FFFF00FFFFFF323232FF323232FF0E0E0EFF0000000000000000000000000000
+      00000000000000000000000000000000000000000000000000000E0E0EFF00FF
+      FFFF00FFFFFF323232FF0E0E0EFF000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000E0E
+      0EFF0E0E0EFF0E0E0EFF00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000FF000000FF0000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000000FF323232FF0000
+      00FF000000FF000000FF00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000FF3232
+      32FF323232FF323232FF000000FF000000FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000FF3232
+      32FF323232FF323232FF323232FF323232FF000000FF000000FF000000000000
+      0000000000000000000000000000000000000000000000000000000000FF3232
+      32FF323232FF323232FF323232FF323232FF323232FF000000FF000000FF0000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00FF323232FF323232FF323232FF323232FF000000FF00000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00FF323232FF323232FF323232FF323232FF323232FF000000FF000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000FF323232FF000000FF323232FF323232FF323232FF000000FF0000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000FF000000FF000000FF000000FF323232FF323232FF323232FF0000
+      00FF000000000000000000000000000000000000000000000000000000000000
+      0000000000FF000000FF0000000000000000000000FF323232FF323232FF3232
+      32FF000000FF0000000000000000000000000000000000000000000000000000
+      000000000000000000FF000000000000000000000000000000FF323232FF3232
+      32FF323232FF000000FF00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000FF3232
+      32FF323232FF323232FF000000FF000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00FF323232FF000000FF00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000FF0000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFC0C0C0FFC0C0C0FFFFFFFFFFC0C0C0FFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0
+      C0FFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FFC0C0
+      C0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFF0000FFFF0000FFFF0000FFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFC0C0C0FFC0C0C0FFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0C0FFC0C0
+      C0FFFFFFFFFFFFFFFFFF0000FFFFC0C0C0FFFFFFFFFF0000FFFF0000FFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFFC0C0C0FFC0C0C0FFFFFFFFFF0000FFFF0000FFFFFFFFFFFF0000FFFFFFFF
+      FFFFFFFFFFFFC0C0C0FFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFFFFFFFFFF0000FFFFC0C0C0FFC0C0C0FFFFFFFFFFFFFFFFFF0000FFFFC0C0
+      C0FFC0C0C0FFFFFFFFFFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0C0FF0000FFFFC0C0C0FFFFFF
+      FFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFF0000FFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0C0FFC0C0C0FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFF0000
+      FFFFFFFFFFFF0000FFFF0000FFFFFFFFFFFF0000FFFFC0C0C0FFC0C0C0FFFFFF
+      FFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFF0000
+      FFFFC0C0C0FFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFC0C0C0FFFFFFFFFFC0C0
+      C0FFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FF0000FFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFFC0C0C0FFC0C0C0FFC0C0C0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0
+      C0FFC0C0C0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFC0C0C0FFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFFC0C0C0FFC0C0C0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0C0FFC0C0C0FFFFFFFFFFC0C0
+      C0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0C0FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFF0000FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      FFFF800000FF800000FF800000FF800000FF0000FFFFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF8000
+      00FF800000FF0000FFFF0000FFFF800000FF800000FF0000FFFFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF800000FF8000
+      00FF0000FFFFC0C0C0FFC0C0C0FF0000FFFF800000FF800000FF0000FFFFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF800000FF0000
+      FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF800000FF0000FFFFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF800000FF0000
+      FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF800000FF0000FFFFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000
+      FFFFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF800000FF800000FF0000FFFFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF0000FFFF800000FF800000FF0000FFFFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF0000FFFF800000FF800000FF0000FFFFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF0000FFFF800000FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF0000FFFF800000FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF0000FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF0000FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF0000FFFF800000FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF0000FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFFFFFF808080FF8080
+      80FF808080FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000000FFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFF000000FFC0C0C0FFC0C0C0FF000000FFFFFFFFFF808080FF8080
+      80FF808080FF000000FFFFFFFFFF808080FF808080FF808080FF808080FF8080
+      80FFFFFFFFFF000000FFC0C0C0FFC0C0C0FF000000FFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFF000000FFC0C0C0FFC0C0C0FF000000FFFFFFFFFF808080FF8080
+      80FF808080FF000000FFFFFFFFFF808080FF808080FF808080FF808080FF8080
+      80FFFFFFFFFF000000FFC0C0C0FFC0C0C0FF000000FFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFF000000FFC0C0C0FFC0C0C0FF000000FFFFFFFFFF808080FF8080
+      80FF808080FF000000FFFFFFFFFF808080FF808080FF808080FF808080FF8080
+      80FFFFFFFFFF000000FFC0C0C0FFC0C0C0FF000000FFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFF000000FFC0C0C0FFC0C0C0FF000000FFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFF000000FFFFFFFFFF808080FF808080FF808080FF808080FF8080
+      80FFFFFFFFFF000000FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF0000
+      00FF000000FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFF0000
+      FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000
+      FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000
+      FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFF0000
+      FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF00FFFFFF
+      00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF00FF0000
+      80FF000080FFFFFF00FF000080FF000080FFFFFF00FF000080FF000080FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF00FF0000
+      80FF000080FFFFFF00FF000080FF000080FFFFFF00FF000080FF000080FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF00FFFFFF
+      00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF00FF0000
+      80FF000080FFFFFF00FF000080FF000080FFFFFF00FF000080FF000080FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF00FF0000
+      80FF000080FFFFFF00FF000080FF000080FFFFFF00FF000080FF000080FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF00FFFFFF
+      00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF00FF0000
+      80FF000080FFFFFF00FF000080FF000080FFFFFF00FF000080FF000080FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF00FF0000
+      80FF000080FFFFFF00FF000080FF000080FFFFFF00FF000080FF000080FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF00FFFFFF
+      00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFF0000
+      FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000
+      FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000
+      FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFF0000
+      FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFE3E3E3FFE3E3E3FFE3E3E3FFEAEAEAFFB2B2
+      B2FF996633FFCC9999FFF0CAA6FFF1F1F1FFF1F1F1FFA4A0A0FFE3E3E3FFE3E3
+      E3FFE3E3E3FFE3E3E3FFE3E3E3FFE3E3E3FFE3E3E3FFEAEAEAFF996633FFCC99
+      99FFCC9999FFCC6666FFCC9999FFCC9966FFCC6666FFFFFFFFFFEAEAEAFFC0C0
+      C0FFDDDDDDFFE3E3E3FFE3E3E3FFE3E3E3FFE3E3E3FF996666FFE3E3E3FFEAEA
+      EAFFFFFFFFFFFFFFFFFFCC9999FFCC9966FFCC9966FFCC6633FFF0FBFFFFE3E3
+      E3FFD7D7D7FFE3E3E3FFE3E3E3FFE3E3E3FFC0C0C0FFEAEAEAFFCC9966FFF0CA
+      A6FFFFFFFFFFFFFFFFFFFFFFFFFFF0CAA6FFCC6666FFCC6633FFCC6633FFE3E3
+      E3FFA4A0A0FFEAEAEAFFE3E3E3FFE3E3E3FF996666FF993333FFCC6633FFCC66
+      33FFCC6633FFFFECCCFFFFFFFFFFFFFFFFFFF0CAA6FFCC6633FFCC6633FFCC99
+      99FFEAEAEAFFCCCCCCFFE3E3E3FFF1F1F1FF663333FFCC6633FFCC6633FFCC66
+      33FFCC6633FFCC6633FFCC9966FFFFFFFFFFFFFFFFFFE3E3E3FFCC6633FFCC66
+      33FF996633FFCC9999FFDDDDDDFFF1F1F1FF663300FFCC6633FFCC6633FFCC66
+      33FFCC6633FFCC6633FFCC6633FFCC6633FFFFECCCFFFFFFFFFFF0FBFFFFCC66
+      33FF993333FF996666FFDDDDDDFFF1F1F1FF663300FF993333FFCC6633FFCC66
+      33FFCC6633FFCC6633FFCC6633FFCC6633FFCC6633FFCC6666FFE3E3E3FFE3E3
+      E3FFCCCCCCFFCC9999FFDDDDDDFFE3E3E3FF663333FF996633FFCC3333FFCC66
+      33FFCC6633FFCC6633FFCC6633FFCC6633FFCC6633FFCC6633FFCC6633FF9933
+      33FF996666FFCCCCCCFFE3E3E3FFE3E3E3FFB2B2B2FFEAEAEAFFE3E3E3FFE3E3
+      E3FFCC6633FFCC3333FFCC6633FFCC6633FFCC6633FFCC6633FFCC3333FF9933
+      33FF663300FFEAEAEAFFE3E3E3FFE3E3E3FFEAEAEAFF996666FFE3E3E3FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFECCCFFCC9999FFCC6666FFCC6633FFCC6666FFC0C0
+      C0FFCCCCCCFFE3E3E3FFE3E3E3FFE3E3E3FFE3E3E3FFEAEAEAFF996666FFFFFF
+      FFFF993333FFCC9999FFEAEAEAFFFFFFFFFFFFFFFFFFEAEAEAFF999966FFCC99
+      99FFDDDDDDFFE3E3E3FFE3E3E3FFE3E3E3FFE3E3E3FFCCCCCCFFB2B2B2FF5F5F
+      5FFF663300FF993333FF993333FF993300FF663300FF663333FF969696FFB2B2
+      B2FFDDDDDDFFE3E3E3FFE3E3E3FFE3E3E3FFE3E3E3FFD7D7D7FFB2B2B2FF8686
+      86FF777777FF666666FF5F5F5FFF666666FF666666FF777777FF969696FFC0C0
+      C0FFDDDDDDFFE3E3E3FFE3E3E3FFE3E3E3FFE3E3E3FFDDDDDDFFD7D7D7FFCCCC
+      CCFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFCCCCCCFFDDDD
+      DDFFE3E3E3FFE3E3E3FFE3E3E3FFE3E3E3FFE3E3E3FFE3E3E3FFE3E3E3FFE3E3
+      E3FFDDDDDDFFDDDDDDFFDDDDDDFFDDDDDDFFDDDDDDFFE3E3E3FFE3E3E3FFE3E3
+      E3FFE3E3E3FFE3E3E3FFE3E3E3FF
+    }
+  end
+end

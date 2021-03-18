@@ -1,0 +1,387 @@
+object frmExportVersSIGExt: TfrmExportVersSIGExt
+  Left = 822
+  Height = 492
+  Top = 237
+  Width = 702
+  Caption = 'frmExportVersSIGExt'
+  ClientHeight = 492
+  ClientWidth = 702
+  Font.CharSet = ANSI_CHARSET
+  Font.Color = clBlack
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  OnShow = FormShow
+  Position = poScreenCenter
+  LCLVersion = '2.0.0.4'
+  object pnlProgression: TPanel
+    Left = 4
+    Height = 42
+    Top = 446
+    Width = 694
+    Anchors = [akLeft, akRight, akBottom]
+    BevelOuter = bvLowered
+    ClientHeight = 42
+    ClientWidth = 694
+    TabOrder = 0
+    object LbStepProcess: TLabel
+      Left = 4
+      Height = 16
+      Top = 4
+      Width = 94
+      Caption = 'LbStepProcess'
+      ParentColor = False
+    end
+    object ProgressBar1: TProgressBar
+      Left = 4
+      Height = 16
+      Top = 22
+      Width = 684
+      Anchors = [akTop, akLeft, akRight]
+      Smooth = True
+      TabOrder = 0
+    end
+  end
+  object Panel1: TPanel
+    Left = 4
+    Height = 442
+    Top = 4
+    Width = 694
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelOuter = bvLowered
+    ClientHeight = 442
+    ClientWidth = 694
+    TabOrder = 1
+    object lbFichier: TLabel
+      Left = 4
+      Height = 16
+      Top = 37
+      Width = 110
+      Caption = 'Fichier à générer'
+      ParentColor = False
+    end
+    object btnProcess: TButton
+      Left = 443
+      Height = 30
+      Top = 410
+      Width = 119
+      Anchors = [akRight, akBottom]
+      Caption = 'Générer'
+      OnClick = btnProcessClick
+      TabOrder = 0
+    end
+    object BitBtn1: TBitBtn
+      Left = 569
+      Height = 30
+      Top = 408
+      Width = 119
+      Anchors = [akRight, akBottom]
+      Caption = '&Fermer'
+      Kind = bkClose
+      TabOrder = 1
+    end
+    object Panel2: TPanel
+      Left = 4
+      Height = 343
+      Top = 64
+      Width = 687
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      BevelOuter = bvLowered
+      ClientHeight = 343
+      ClientWidth = 687
+      TabOrder = 2
+      object rgbxModeExport: TRadioGroup
+        Left = 312
+        Height = 132
+        Top = 60
+        Width = 236
+        AutoFill = True
+        ChildSizing.LeftRightSpacing = 6
+        ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+        ChildSizing.EnlargeVertical = crsHomogenousChildResize
+        ChildSizing.ShrinkHorizontal = crsScaleChilds
+        ChildSizing.ShrinkVertical = crsScaleChilds
+        ChildSizing.Layout = cclLeftToRightThenTopToBottom
+        ChildSizing.ControlsPerLine = 1
+        ClientHeight = 111
+        ClientWidth = 232
+        Enabled = False
+        ItemIndex = 0
+        Items.Strings = (
+          'Couleur unique'
+          'Par entrées'
+          'Par réseaux'
+        )
+        TabOrder = 0
+      end
+      object chkgrpCenterlinesSilhouettes: TCheckGroup
+        Left = 4
+        Height = 132
+        Top = 64
+        Width = 301
+        AutoFill = True
+        Caption = 'chkgrpCenterlinesSilhouettes'
+        ChildSizing.LeftRightSpacing = 6
+        ChildSizing.TopBottomSpacing = 6
+        ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+        ChildSizing.EnlargeVertical = crsHomogenousChildResize
+        ChildSizing.ShrinkHorizontal = crsScaleChilds
+        ChildSizing.ShrinkVertical = crsScaleChilds
+        ChildSizing.Layout = cclLeftToRightThenTopToBottom
+        ChildSizing.ControlsPerLine = 1
+        ClientHeight = 111
+        ClientWidth = 297
+        Items.Strings = (
+          'Entrances'
+          'Centerlines'
+          'Silhouettes'
+        )
+        TabOrder = 1
+        Data = {
+          03000000020202
+        }
+      end
+      object cmbFormatExport: TComboBox
+        Left = 129
+        Height = 24
+        Top = 4
+        Width = 282
+        ItemHeight = 16
+        ItemIndex = 0
+        Items.Strings = (
+          'OpenStreetMap HTML'
+          'Google KML'
+        )
+        OnChange = cmbFormatExportChange
+        Style = csDropDownList
+        TabOrder = 2
+        Text = 'OpenStreetMap HTML'
+      end
+      object Label1: TLabel
+        Left = 8
+        Height = 16
+        Top = 4
+        Width = 108
+        Caption = 'Format de sortie:'
+        ParentColor = False
+      end
+      object pnlDefaultColors: TPanel
+        Left = 4
+        Height = 136
+        Top = 200
+        Width = 301
+        BevelOuter = bvLowered
+        ClientHeight = 136
+        ClientWidth = 301
+        TabOrder = 3
+        object btnCenterlineColor: TColorButton
+          Left = 192
+          Height = 32
+          Top = 4
+          Width = 99
+          BorderWidth = 2
+          ButtonColorSize = 16
+          ButtonColor = clBlue
+        end
+        object btnSilhouetteColor: TColorButton
+          Left = 192
+          Height = 32
+          Top = 68
+          Width = 99
+          BorderWidth = 2
+          ButtonColorSize = 16
+          ButtonColor = 15316246
+        end
+        object editCenterlineLinewidth: TCurrencyEdit
+          Left = 192
+          Height = 24
+          Top = 40
+          Width = 96
+          Alignment = taRightJustify
+          DisplayFormat = '0.00'
+          MaxValue = 0
+          MinValue = 0
+          TabOrder = 0
+          Value = 2
+        end
+        object lbCouleurPolygo: TLabel
+          Left = 4
+          Height = 16
+          Top = 4
+          Width = 161
+          Caption = 'Couleur de la polygonale'
+          ParentColor = False
+        end
+        object lbCouleurSilhouette: TLabel
+          Left = 4
+          Height = 16
+          Top = 68
+          Width = 148
+          Caption = 'Couleur des silhouettes'
+          ParentColor = False
+        end
+        object lbLineWidthPolygo: TLabel
+          Left = 4
+          Height = 16
+          Top = 40
+          Width = 97
+          Caption = 'Epaisseur ligne'
+          ParentColor = False
+        end
+        object Label7: TLabel
+          Left = 4
+          Height = 16
+          Top = 104
+          Width = 105
+          Caption = 'Opacité (0 .. 255)'
+          ParentColor = False
+        end
+        object editSilhouetteOpacity: TCurrencyEdit
+          Left = 192
+          Height = 24
+          Top = 104
+          Width = 96
+          Alignment = taRightJustify
+          DecimalPlaces = 0
+          DisplayFormat = '0'
+          MaxValue = 255
+          MinValue = 0
+          TabOrder = 1
+          Value = 128
+        end
+      end
+      object Panel3: TPanel
+        Left = 312
+        Height = 136
+        Top = 200
+        Width = 236
+        BevelOuter = bvLowered
+        ClientHeight = 136
+        ClientWidth = 236
+        TabOrder = 4
+        object Label2: TLabel
+          Left = 4
+          Height = 16
+          Top = 4
+          Width = 155
+          Caption = 'Taille de la carte Leaflet'
+          ParentColor = False
+        end
+        object Label3: TLabel
+          Left = 4
+          Height = 16
+          Top = 32
+          Width = 50
+          Caption = 'Largeur'
+          ParentColor = False
+        end
+        object Label4: TLabel
+          Left = 4
+          Height = 16
+          Top = 60
+          Width = 50
+          Caption = 'Hauteur'
+          ParentColor = False
+        end
+        object editLeafletCtxtWidthinPercent: TCurrencyEdit
+          Left = 72
+          Height = 24
+          Top = 32
+          Width = 80
+          Alignment = taRightJustify
+          DecimalPlaces = 0
+          DisplayFormat = '0'
+          MaxValue = 90
+          MinValue = 50
+          TabOrder = 0
+          Value = 85
+        end
+        object editLeafletCtxtHeight: TCurrencyEdit
+          Left = 72
+          Height = 24
+          Top = 60
+          Width = 80
+          Alignment = taRightJustify
+          DecimalPlaces = 0
+          DisplayFormat = '0'
+          MaxValue = 0
+          MinValue = 0
+          TabOrder = 1
+          Value = 0
+        end
+        object Label5: TLabel
+          Left = 160
+          Height = 16
+          Top = 32
+          Width = 10
+          Caption = '%'
+          ParentColor = False
+        end
+        object Label6: TLabel
+          Left = 160
+          Height = 16
+          Top = 64
+          Width = 16
+          Caption = 'px'
+          ParentColor = False
+        end
+      end
+      object chkUseLeafletLocalLibrary: TCheckBox
+        Left = 129
+        Height = 20
+        Top = 32
+        Width = 189
+        Caption = 'chkUseLeafletLocalLibrary'
+        TabOrder = 5
+      end
+    end
+    object editExportFilename: TEdit
+      Left = 132
+      Height = 24
+      Top = 37
+      Width = 507
+      Anchors = [akTop, akLeft, akRight]
+      TabOrder = 3
+      Text = 'editExportFilename'
+    end
+    object btnSelectFilename: TButton
+      Left = 639
+      Height = 25
+      Top = 36
+      Width = 47
+      Anchors = [akTop, akRight]
+      Caption = '...'
+      OnClick = btnSelectFilenameClick
+      TabOrder = 4
+    end
+    object lbEPSGCavite: TStaticText
+      Left = 4
+      Height = 23
+      Top = 413
+      Width = 300
+      Anchors = [akLeft, akBottom]
+      BorderStyle = sbsSunken
+      Caption = 'lbEPSGCavite'
+      TabOrder = 5
+    end
+    object editTitreDocument: TEdit
+      Left = 133
+      Height = 24
+      Top = 8
+      Width = 553
+      Anchors = [akTop, akLeft, akRight]
+      TabOrder = 6
+      Text = 'Report sur carte'
+    end
+    object Label8: TLabel
+      Left = 4
+      Height = 16
+      Top = 8
+      Width = 116
+      Caption = 'Titre du document'
+      ParentColor = False
+    end
+  end
+end

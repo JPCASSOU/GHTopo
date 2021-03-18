@@ -1,0 +1,293 @@
+object frmPrintingCenterExt: TfrmPrintingCenterExt
+  Left = 92
+  Height = 679
+  Top = 61
+  Width = 969
+  Caption = 'frmPrintingCenterExt'
+  ClientHeight = 0
+  ClientWidth = 0
+  Font.CharSet = ANSI_CHARSET
+  Font.Color = clBlack
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  OnClose = FormClose
+  OnCreate = FormCreate
+  Position = poScreenCenter
+  LCLVersion = '2.0.0.4'
+  object BitBtn1: TBitBtn
+    Left = 834
+    Height = 30
+    Top = 646
+    Width = 132
+    Anchors = [akRight, akBottom]
+    DefaultCaption = True
+    Kind = bkClose
+    ModalResult = 11
+    TabOrder = 0
+  end
+  object pnlPrintSettings: TPanel
+    Left = 662
+    Height = 637
+    Top = 4
+    Width = 304
+    Anchors = [akTop, akRight, akBottom]
+    BevelOuter = bvLowered
+    ClientHeight = 637
+    ClientWidth = 304
+    TabOrder = 1
+    object grbPrinterNames: TGroupBox
+      Left = 4
+      Height = 111
+      Top = 3
+      Width = 296
+      Anchors = [akTop, akLeft, akRight]
+      Caption = 'grbPrinterNames'
+      ClientHeight = 90
+      ClientWidth = 292
+      TabOrder = 0
+      object lbPrinterName: TLabel
+        Left = 4
+        Height = 17
+        Top = 1
+        Width = 285
+        Anchors = [akTop, akLeft, akRight]
+        AutoSize = False
+        Caption = 'lbPrinterName'
+        ParentColor = False
+      end
+      object lbOrientation: TLabel
+        Left = 4
+        Height = 17
+        Top = 21
+        Width = 285
+        Anchors = [akTop, akLeft, akRight]
+        AutoSize = False
+        Caption = 'lbOrientation'
+        ParentColor = False
+      end
+      object lbPageFormat: TLabel
+        Left = 4
+        Height = 17
+        Top = 41
+        Width = 285
+        Anchors = [akTop, akLeft, akRight]
+        AutoSize = False
+        Caption = 'lbPageFormat'
+        ParentColor = False
+      end
+      object btnSelectPrinter: TButton
+        Left = 0
+        Height = 25
+        Top = 64
+        Width = 290
+        Anchors = [akLeft, akRight, akBottom]
+        Caption = 'Changer d''imprimante'
+        OnClick = btnSelectPrinterClick
+        TabOrder = 0
+      end
+    end
+    object grbxEchelles: TGroupBox
+      Left = 4
+      Height = 80
+      Top = 204
+      Width = 296
+      Anchors = [akTop, akLeft, akRight]
+      Caption = 'Echelle'
+      ClientHeight = 59
+      ClientWidth = 292
+      TabOrder = 1
+      object lbEchelle: TLabel
+        Left = 4
+        Height = 17
+        Top = 5
+        Width = 100
+        AutoSize = False
+        Caption = 'lbEchelle'
+        ParentColor = False
+      end
+      object editTailleRegle: TCurrencyEdit
+        Left = 109
+        Height = 24
+        Top = 32
+        Width = 123
+        Alignment = taRightJustify
+        DisplayFormat = ',0.00'
+        Anchors = [akTop, akLeft, akRight]
+        MaxValue = 0
+        MinValue = 10
+        TabOrder = 0
+        Value = 100
+      end
+      object chkRegle: TCheckBox
+        Left = 4
+        Height = 20
+        Top = 32
+        Width = 79
+        Caption = 'chkRegle'
+        Checked = True
+        State = cbChecked
+        TabOrder = 1
+      end
+      object Label3: TLabel
+        Left = 236
+        Height = 16
+        Top = 32
+        Width = 12
+        Anchors = [akTop, akRight]
+        Caption = 'm'
+        ParentColor = False
+      end
+      object btnApplyParams2D: TButton
+        Left = 236
+        Height = 25
+        Top = 0
+        Width = 53
+        Anchors = [akTop, akRight]
+        Caption = 'Apply'
+        OnClick = btnApplyParams2DClick
+        TabOrder = 2
+      end
+      object cmbEchelles: TComboBox
+        Left = 112
+        Height = 24
+        Top = 0
+        Width = 120
+        ItemHeight = 16
+        OnChange = cmbEchellesChange
+        Style = csDropDownList
+        TabOrder = 3
+      end
+    end
+    object btnPreview: TButton
+      Left = 4
+      Height = 30
+      Top = 602
+      Width = 140
+      Anchors = [akLeft, akBottom]
+      Caption = 'Preview'
+      OnClick = btnPreviewClick
+      TabOrder = 2
+    end
+    object btnStartImpression: TButton
+      Left = 160
+      Height = 30
+      Top = 602
+      Width = 140
+      Anchors = [akLeft, akBottom]
+      Caption = 'Imprimer'
+      OnClick = btnStartImpressionClick
+      TabOrder = 3
+    end
+    object GroupBox2: TGroupBox
+      Left = 4
+      Height = 84
+      Top = 116
+      Width = 296
+      Anchors = [akTop, akLeft, akRight]
+      Caption = 'Paramètres'
+      ClientHeight = 63
+      ClientWidth = 292
+      TabOrder = 4
+      object btnParametresVue: TButton
+        Left = 4
+        Height = 25
+        Top = 4
+        Width = 163
+        Caption = 'Paramètres vue'
+        OnClick = btnParametresVueClick
+        TabOrder = 0
+      end
+      object chkPrintPagesVides: TCheckBox
+        Left = 4
+        Height = 20
+        Top = 36
+        Width = 179
+        Caption = 'Imprimer les pages vides'
+        TabOrder = 1
+      end
+    end
+  end
+  object Panel1: TPanel
+    Left = 3
+    Height = 674
+    Top = 1
+    Width = 645
+    BevelOuter = bvLowered
+    ClientHeight = 674
+    ClientWidth = 645
+    TabOrder = 2
+    object pnlCadre: TPanel
+      Left = 0
+      Height = 645
+      Top = 1
+      Width = 644
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      BevelOuter = bvLowered
+      ClientHeight = 645
+      ClientWidth = 644
+      TabOrder = 0
+      object PaintBoxVue: TPaintBox
+        Left = 1
+        Height = 643
+        Top = 1
+        Width = 642
+        Align = alClient
+        OnDblClick = PaintBoxVueDblClick
+        OnMouseMove = PaintBoxVueMouseMove
+        OnPaint = PaintBoxVuePaint
+      end
+    end
+    object pnlProgressPrinting: TPanel
+      Left = 36
+      Height = 41
+      Top = 296
+      Width = 587
+      Anchors = [akTop, akLeft, akRight]
+      BevelOuter = bvLowered
+      ClientHeight = 41
+      ClientWidth = 587
+      TabOrder = 1
+      Visible = False
+      object lbPrintCurrent: TLabel
+        Left = 4
+        Height = 16
+        Top = 4
+        Width = 89
+        Caption = 'lbPrintCurrent'
+        ParentColor = False
+      end
+      object progbarPrinting: TProgressBar
+        Left = 4
+        Height = 15
+        Top = 20
+        Width = 579
+        Anchors = [akTop, akLeft, akRight]
+        Smooth = True
+        TabOrder = 0
+      end
+    end
+    object lbNbPages: TLabel
+      Left = 4
+      Height = 17
+      Top = 651
+      Width = 273
+      Anchors = [akLeft, akBottom]
+      AutoSize = False
+      Caption = 'lbNbPages'
+      ParentColor = False
+    end
+    object lbMouseCoordinates: TStaticText
+      Left = 430
+      Height = 19
+      Top = 649
+      Width = 212
+      Anchors = [akRight, akBottom]
+      BorderStyle = sbsSunken
+      Caption = 'lbMouseCoordinates'
+      TabOrder = 2
+    end
+  end
+end

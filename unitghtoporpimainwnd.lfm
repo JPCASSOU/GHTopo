@@ -1,0 +1,2629 @@
+object GHTopoRPIMainWnd: TGHTopoRPIMainWnd
+  Left = 126
+  Height = 610
+  Top = 326
+  Width = 839
+  Caption = 'GHTopoRPIMainWnd'
+  ClientHeight = 610
+  ClientWidth = 839
+  Color = 11711154
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
+  OnShow = FormShow
+  LCLVersion = '1.6.0.4'
+  object PageControl1: TPageControl
+    Left = 0
+    Height = 609
+    Top = 0
+    Width = 722
+    ActivePage = tabshtSeries
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    TabIndex = 2
+    TabOrder = 0
+    TabPosition = tpLeft
+    OnChange = PageControl1Change
+    object tabshtGeneral: TTabSheet
+      Caption = 'tabshtGeneral'
+      ClientHeight = 627
+      ClientWidth = 672
+      object lbNomEtude: TLabel
+        Left = 4
+        Height = 16
+        Top = 7
+        Width = 71
+        Caption = 'lbNomEtude'
+        ParentColor = False
+      end
+      object editNomEtude: TEdit
+        Left = 4
+        Height = 24
+        Top = 27
+        Width = 989
+        Anchors = [akTop, akLeft, akRight]
+        AutoSize = False
+        TabOrder = 0
+        Text = 'editNomEtude'
+      end
+      object editCommentaireEtude: TEdit
+        Left = 4
+        Height = 24
+        Top = 72
+        Width = 989
+        Anchors = [akTop, akLeft, akRight]
+        AutoSize = False
+        TabOrder = 1
+        Text = 'editCommentaireEtude'
+      end
+      object lbCommentaireEtude: TLabel
+        Left = 4
+        Height = 16
+        Top = 55
+        Width = 121
+        Caption = 'lbCommentaireEtude'
+        ParentColor = False
+      end
+      object cmbSystemesCoordonnees: TComboBox
+        Left = 4
+        Height = 24
+        Top = 120
+        Width = 989
+        Anchors = [akTop, akLeft, akRight]
+        AutoSize = False
+        DropDownCount = 16
+        ItemHeight = 16
+        Style = csDropDownList
+        TabOrder = 2
+      end
+      object lbSystemeDeCoordonnees: TLabel
+        Left = 4
+        Height = 16
+        Top = 103
+        Width = 154
+        Caption = 'lbSystemeDeCoordonnees'
+        ParentColor = False
+      end
+      object Button3: TButton
+        Left = 4
+        Height = 25
+        Top = 148
+        Width = 200
+        Caption = 'Enregistrer'
+        TabOrder = 3
+      end
+    end
+    object tabShtListesSimples: TTabSheet
+      Caption = 'tabShtListesSimples'
+      ClientHeight = 627
+      ClientWidth = 672
+      inline CdrListesSimples1: TCdrListesSimples
+        Height = 627
+        Width = 672
+        ClientHeight = 627
+        ClientWidth = 672
+        inherited SpeedButton3: TSpeedButton
+          Left = 302
+          Flat = False
+        end
+        inherited SpeedButton8: TSpeedButton
+          Left = 330
+          Flat = False
+        end
+        inherited SpeedButton9: TSpeedButton
+          Left = 358
+          Flat = False
+        end
+        inherited SpeedButton12: TSpeedButton
+          Left = 386
+          Flat = False
+        end
+        inherited SpeedButton2: TSpeedButton
+          Left = 422
+          Flat = False
+        end
+        inherited SpeedButton1: TSpeedButton
+          Left = 450
+          Flat = False
+        end
+        inherited SpeedButton4: TSpeedButton
+          Left = 644
+          Flat = False
+        end
+      end
+    end
+    object tabshtSeries: TTabSheet
+      Caption = 'tabshtSeries'
+      ClientHeight = 601
+      ClientWidth = 674
+      OnContextPopup = tabshtSeriesContextPopup
+      inline CdrSeriesRPI1: TCdrSeriesRPI
+        Height = 601
+        Width = 674
+        ClientHeight = 601
+        ClientWidth = 674
+        inherited Panel1: TPanel
+          Height = 565
+          Width = 670
+          ClientHeight = 565
+          ClientWidth = 670
+        end
+        inherited pnlButtons: TPanel
+          inherited SpeedButton1: TSpeedButton
+            Flat = False
+          end
+          inherited SpeedButton2: TSpeedButton
+            Flat = False
+          end
+          inherited SpeedButton3: TSpeedButton
+            Flat = False
+          end
+          inherited SpeedButton4: TSpeedButton
+            Flat = False
+          end
+          inherited SpeedButton7: TSpeedButton
+            Flat = False
+          end
+          inherited SpeedButton8: TSpeedButton
+            Flat = False
+          end
+          inherited SpeedButton10: TSpeedButton
+            Flat = False
+          end
+          inherited SpeedButton11: TSpeedButton
+            Flat = False
+          end
+        end
+      end
+    end
+    object tabshtViseesEnAntenne: TTabSheet
+      Caption = 'tabshtViseesEnAntenne'
+      ClientHeight = 627
+      ClientWidth = 672
+      inline CdrAntennes1: TCdrAntennes
+        Height = 688
+        Width = 824
+        ClientHeight = 688
+        ClientWidth = 824
+        DesignLeft = 396
+        DesignTop = 159
+        inherited SpeedButton1: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton2: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton3: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton4: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton7: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton8: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton11: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton12: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton13: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton9: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton14: TSpeedButton
+          Flat = False
+        end
+        inherited SpeedButton15: TSpeedButton
+          Flat = False
+        end
+      end
+    end
+    object tabShtVueEnPlan: TTabSheet
+      Caption = 'tabShtVueEnPlan'
+      ClientHeight = 627
+      ClientWidth = 672
+      inline GHTopoContext2DA1: TGHTopoContext2DA
+        Height = 627
+        Width = 672
+        ClientHeight = 627
+        ClientWidth = 672
+        TabOrder = 1
+        inherited Panel1: TPanel
+          Height = 588
+          Width = 656
+          ClientHeight = 588
+          ClientWidth = 656
+        end
+        inherited Button1: TButton
+          Left = 634
+          Top = 609
+        end
+        inherited Button3: TButton
+          Left = 654
+          Top = 590
+        end
+      end
+      object pnlParamsVue: TPanel
+        Left = 20
+        Height = 280
+        Top = 124
+        Width = 428
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        BevelOuter = bvLowered
+        ClientHeight = 280
+        ClientWidth = 428
+        TabOrder = 0
+        Visible = False
+        OnClick = pnlParamsVueClick
+        object Button1: TButton
+          Left = 320
+          Height = 25
+          Top = 251
+          Width = 102
+          Anchors = [akRight, akBottom]
+          Caption = 'Appliquer'
+          OnClick = Button1Click
+          TabOrder = 0
+        end
+        object Panel2: TPanel
+          Left = 4
+          Height = 237
+          Top = 5
+          Width = 420
+          Anchors = [akTop, akLeft, akRight, akBottom]
+          BevelOuter = bvLowered
+          ClientHeight = 237
+          ClientWidth = 420
+          TabOrder = 1
+          OnClick = Panel2Click
+          inline cdrParamsOngletVue2D1: TcdrParamsOngletVue2D
+            Left = 1
+            Height = 235
+            Top = 1
+            Width = 418
+            ClientHeight = 235
+            ClientWidth = 418
+          end
+        end
+      end
+    end
+    object tabshtDistoX: TTabSheet
+      Caption = 'tabshtDistoX'
+      ClientHeight = 627
+      ClientWidth = 672
+      inline CdrDistoX1: TCdrDistoX
+        Height = 627
+        Width = 672
+        ClientHeight = 627
+        ClientWidth = 672
+        inherited PageControl1: TPageControl
+          Height = 586
+          Width = 666
+          ActivePage = CdrDistoX1.tabCalibration
+          TabIndex = 2
+        end
+      end
+    end
+    object TabSheet1: TTabSheet
+      Caption = 'TabSheet1'
+      ClientHeight = 627
+      ClientWidth = 672
+      object memoToutesMesures: TMemo
+        Left = 14
+        Height = 314
+        Top = 28
+        Width = 801
+        Anchors = [akTop, akLeft, akRight]
+        ScrollBars = ssBoth
+        TabOrder = 0
+      end
+      object memoRafaleActuelle: TMemo
+        Left = 16
+        Height = 301
+        Top = 352
+        Width = 800
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        Lines.Strings = (
+          '#DistoX'#9'Hexadata trame'#9'Horodate'#9'L'#9'A'#9'P'
+        )
+        ScrollBars = ssBoth
+        TabOrder = 1
+      end
+    end
+  end
+  object pnlToolBars: TPanel
+    Left = 726
+    Height = 606
+    Top = 0
+    Width = 111
+    Anchors = [akTop, akRight, akBottom]
+    BevelOuter = bvLowered
+    ClientHeight = 606
+    ClientWidth = 111
+    TabOrder = 1
+    OnClick = pnlToolBarsClick
+    object SpeedButton8: TSpeedButton
+      Left = 76
+      Height = 30
+      Top = 572
+      Width = 30
+      Action = acQuit
+      Anchors = [akRight, akBottom]
+      ShowCaption = False
+      ShowHint = True
+      
+    end
+    object Edit1: TEdit
+      Left = 8
+      Height = 24
+      Top = 372
+      Width = 88
+      TabOrder = 0
+      Text = 'Edit1'
+    end
+    object pnlButtons: TPanel
+      Left = 4
+      Height = 192
+      Top = 172
+      Width = 103
+      Anchors = [akTop, akLeft, akRight]
+      ClientHeight = 192
+      ClientWidth = 103
+      TabOrder = 1
+      object SpeedButton7: TSpeedButton
+        Left = 2
+        Height = 30
+        Top = 32
+        Width = 30
+        Action = acCompileExt
+        ShowCaption = False
+        ShowHint = True
+        
+      end
+      object SpeedButton3: TSpeedButton
+        Left = 62
+        Height = 30
+        Top = 2
+        Width = 30
+        Action = acSaveAs
+        ShowCaption = False
+        ShowHint = True
+        
+      end
+      object SpeedButton2: TSpeedButton
+        Left = 32
+        Height = 30
+        Top = 2
+        Width = 30
+        Action = acOuvrirTopoExt
+        ShowCaption = False
+        ShowHint = True
+        
+      end
+      object SpeedButton1: TSpeedButton
+        Left = 2
+        Height = 30
+        Top = 2
+        Width = 30
+        Action = acNew
+        ShowCaption = False
+        ShowHint = True
+        
+      end
+      object SpeedButton11: TSpeedButton
+        Left = 62
+        Height = 30
+        Top = 64
+        Width = 30
+        Action = acZoomMoins
+        ShowCaption = False
+        ShowHint = True
+        
+      end
+      object SpeedButton10: TSpeedButton
+        Left = 32
+        Height = 30
+        Top = 64
+        Width = 30
+        Action = acZoomPlus
+        ShowCaption = False
+        ShowHint = True
+        
+      end
+      object SpeedButton9: TSpeedButton
+        Left = 2
+        Height = 30
+        Top = 64
+        Width = 30
+        Action = acZoomAll
+        ShowCaption = False
+        ShowHint = True
+        
+      end
+      object SpeedButton15: TSpeedButton
+        Left = 2
+        Height = 30
+        Top = 126
+        Width = 30
+        Action = acAddAnnotation
+        ShowCaption = False
+        ShowHint = True
+        
+      end
+      object SpeedButton16: TSpeedButton
+        Left = 32
+        Height = 30
+        Top = 32
+        Width = 30
+        Action = acDisplayParametresVue
+        ShowCaption = False
+        ShowHint = True
+        
+      end
+      object SpeedButton17: TSpeedButton
+        Left = 62
+        Height = 30
+        Top = 32
+        Width = 30
+        Action = ac3DView
+        ShowCaption = False
+        ShowHint = True
+        
+      end
+      object SpeedButton14: TSpeedButton
+        Left = 62
+        Height = 30
+        Top = 94
+        Width = 30
+        ShowCaption = False
+        ShowHint = True
+        
+      end
+      object SpeedButton13: TSpeedButton
+        Left = 32
+        Height = 30
+        Top = 94
+        Width = 30
+        Action = acPanVue
+        ShowCaption = False
+        ShowHint = True
+        
+      end
+      object SpeedButton12: TSpeedButton
+        Left = 2
+        Height = 30
+        Top = 94
+        Width = 30
+        Action = acZoomWindow
+        ShowCaption = False
+        ShowHint = True
+        
+      end
+      object SpeedButton18: TSpeedButton
+        Left = 32
+        Height = 30
+        Top = 126
+        Width = 30
+        ShowCaption = False
+        ShowHint = True
+        
+      end
+      object SpeedButton20: TSpeedButton
+        Left = 2
+        Height = 30
+        Top = 160
+        Width = 30
+        Action = acStatistiques
+        ShowCaption = False
+        ShowHint = True
+        
+      end
+      object SpeedButton21: TSpeedButton
+        Left = 32
+        Height = 30
+        Top = 160
+        Width = 30
+        ShowCaption = False
+        ShowHint = True
+        
+      end
+    end
+    object Button5: TButton
+      Left = 4
+      Height = 26
+      Top = 3
+      Width = 103
+      Anchors = [akTop, akLeft, akRight]
+      Caption = 'Général'
+      OnClick = Button5Click
+      TabOrder = 2
+    end
+    object Button6: TButton
+      Left = 4
+      Height = 26
+      Top = 112
+      Width = 103
+      Anchors = [akTop, akLeft, akRight]
+      Caption = 'Listes'
+      OnClick = Button6Click
+      TabOrder = 3
+    end
+    object Button7: TButton
+      Left = 4
+      Height = 26
+      Top = 55
+      Width = 103
+      Anchors = [akTop, akLeft, akRight]
+      Caption = 'Séries'
+      OnClick = Button7Click
+      TabOrder = 4
+    end
+    object Button8: TButton
+      Left = 4
+      Height = 26
+      Top = 81
+      Width = 103
+      Anchors = [akTop, akLeft, akRight]
+      Caption = 'Antennes'
+      OnClick = Button8Click
+      TabOrder = 5
+    end
+    object Button9: TButton
+      Left = 4
+      Height = 26
+      Top = 29
+      Width = 103
+      Anchors = [akTop, akLeft, akRight]
+      Caption = 'Plan'
+      OnClick = Button9Click
+      TabOrder = 6
+    end
+    object Button10: TButton
+      Left = 4
+      Height = 29
+      Top = 139
+      Width = 103
+      Anchors = [akTop, akLeft, akRight]
+      Caption = 'DistoX'
+      OnClick = Button10Click
+      TabOrder = 7
+    end
+    object btninterpreterRafaleDeMesures: TButton
+      Left = 5
+      Height = 25
+      Top = 372
+      Width = 104
+      Caption = 'Interpréter la rafale de mesures'
+      OnClick = btninterpreterRafaleDeMesuresClick
+      TabOrder = 8
+    end
+    object SpeedButton4: TSpeedButton
+      Left = 5
+      Height = 30
+      Top = 572
+      Width = 30
+      Action = acVerrouillerEcran
+      Anchors = [akLeft, akBottom]
+      ShowCaption = False
+      ShowHint = True
+      
+    end
+    object btn800x480: TButton
+      Left = 4
+      Height = 25
+      Top = 504
+      Width = 75
+      Anchors = [akLeft, akBottom]
+      Caption = 'btn800x480'
+      OnClick = btn800x480Click
+      TabOrder = 9
+    end
+    object SpeedButton19: TSpeedButton
+      Left = 40
+      Height = 30
+      Top = 572
+      Width = 31
+      Action = acAboutGHTopo
+      Anchors = [akLeft, akBottom]
+      ShowCaption = False
+      ShowHint = True
+      
+    end
+  end
+  object pnlEcranDeverrouillage: TPanel
+    Left = 4
+    Height = 128
+    Top = 4
+    Width = 501
+    ClientHeight = 128
+    ClientWidth = 501
+    TabOrder = 2
+    TabStop = True
+    OnClick = pnlEcranDeverrouillageClick
+    object Panel1: TPanel
+      Left = 76
+      Height = 48
+      Top = 4
+      Width = 324
+      BevelOuter = bvLowered
+      ClientHeight = 48
+      ClientWidth = 324
+      TabOrder = 0
+      object btnUnlockOne: TButton
+        Left = 100
+        Height = 41
+        Top = 4
+        Width = 43
+        Caption = '1'
+        Font.CharSet = ANSI_CHARSET
+        Font.Height = -21
+        Font.Name = 'Arial'
+        Font.Pitch = fpVariable
+        Font.Quality = fqDraft
+        Font.Style = [fsBold]
+        OnClick = btnUnlockOneClick
+        ParentFont = False
+        TabOrder = 0
+      end
+      object btnUnlockTwo: TButton
+        Left = 4
+        Height = 41
+        Top = 4
+        Width = 43
+        Caption = '2'
+        Font.CharSet = ANSI_CHARSET
+        Font.Height = -21
+        Font.Name = 'Arial'
+        Font.Pitch = fpVariable
+        Font.Quality = fqDraft
+        Font.Style = [fsBold]
+        OnClick = btnUnlockTwoClick
+        ParentFont = False
+        TabOrder = 1
+      end
+      object btnUnlockFour: TButton
+        Left = 52
+        Height = 41
+        Top = 4
+        Width = 43
+        Caption = '4'
+        Font.CharSet = ANSI_CHARSET
+        Font.Height = -21
+        Font.Name = 'Arial'
+        Font.Pitch = fpVariable
+        Font.Quality = fqDraft
+        Font.Style = [fsBold]
+        OnClick = btnUnlockFourClick
+        ParentFont = False
+        TabOrder = 2
+      end
+      object btnUnlockThree: TButton
+        Left = 148
+        Height = 41
+        Top = 4
+        Width = 43
+        Caption = '3'
+        Font.CharSet = ANSI_CHARSET
+        Font.Height = -21
+        Font.Name = 'Arial'
+        Font.Pitch = fpVariable
+        Font.Quality = fqDraft
+        Font.Style = [fsBold]
+        OnClick = btnUnlockThreeClick
+        ParentFont = False
+        TabOrder = 3
+      end
+      object btnUnlockTry: TButton
+        Left = 200
+        Height = 41
+        Top = 4
+        Width = 43
+        Caption = 'V'
+        Font.CharSet = ANSI_CHARSET
+        Font.Height = -21
+        Font.Name = 'Arial'
+        Font.Pitch = fpVariable
+        Font.Quality = fqDraft
+        Font.Style = [fsBold]
+        OnClick = btnUnlockTryClick
+        ParentFont = False
+        TabOrder = 4
+      end
+      object btnUnlockClearPwd: TButton
+        Left = 276
+        Height = 41
+        Top = 4
+        Width = 43
+        Caption = 'C'
+        Font.CharSet = ANSI_CHARSET
+        Font.Height = -21
+        Font.Name = 'Arial'
+        Font.Pitch = fpVariable
+        Font.Quality = fqDraft
+        Font.Style = [fsBold]
+        OnClick = btnUnlockClearPwdClick
+        ParentFont = False
+        TabOrder = 5
+      end
+    end
+    object StaticText1: TStaticText
+      Left = 8
+      Height = 32
+      Top = 84
+      Width = 488
+      Alignment = taCenter
+      Anchors = [akTop, akLeft, akRight]
+      Caption = 'Composer 1234 pour déverrouiller'
+      Font.CharSet = ANSI_CHARSET
+      Font.Height = -21
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 1
+    end
+    object lbCarUnlock: TStaticText
+      Left = 8
+      Height = 29
+      Top = 124
+      Width = 489
+      Alignment = taCenter
+      Anchors = [akTop, akLeft, akRight]
+      BorderStyle = sbsSunken
+      TabOrder = 2
+    end
+  end
+  object acnLstMainWnd: TActionList
+    Images = imglstMainWnd
+    left = 744
+    top = 440
+    object Action1: TAction
+      Caption = 'Action1'
+    end
+    object Action2: TAction
+      Caption = 'Action2'
+    end
+    object Action3: TAction
+      Caption = 'Action3'
+    end
+    object Action4: TAction
+      Caption = 'Action4'
+    end
+    object Action5: TAction
+      Caption = 'Action5'
+      OnExecute = Action5Execute
+    end
+    object acSandBox: TAction
+      Caption = 'Bac à sable'
+    end
+    object acCheckBase: TAction
+      Category = 'Topographie'
+      Caption = 'acCheckBase'
+      ImageIndex = 5
+    end
+    object acCompileExt: TAction
+      Category = 'Topographie'
+      Caption = 'acCompileExt'
+      ImageIndex = 6
+      OnExecute = acCompileExtExecute
+    end
+    object ac3DView: TAction
+      Category = 'Topographie'
+      Caption = 'ac3DView'
+      ImageIndex = 10
+      OnExecute = ac3DViewExecute
+    end
+    object acStats: TAction
+      Category = 'Topographie'
+      Caption = 'acStats'
+      ImageIndex = 8
+    end
+    object acAboutGHTopo: TAction
+      Category = 'Outils'
+      Caption = 'acAboutGHTopo'
+      ImageIndex = 14
+      OnExecute = acAboutGHTopoExecute
+    end
+    object acFenetreConsole: TAction
+      Category = 'Fenetre'
+      Caption = 'acFenetreConsole'
+      ShortCut = 4163
+    end
+    object acCalibrerDistoX: TAction
+      Category = 'Outils'
+      Caption = 'Calibrer un DistoX'
+      ImageIndex = 21
+    end
+    object acNew: TAction
+      Category = 'Fichier'
+      Caption = 'acNew'
+      ImageIndex = 0
+      OnExecute = acNewExecute
+    end
+    object acOuvrirTopoExt: TAction
+      Category = 'Fichier'
+      Caption = 'acOuvrirTopoExt'
+      ImageIndex = 1
+      OnExecute = acOuvrirTopoExtExecute
+      ShortCut = 16463
+    end
+    object acSaveAs: TAction
+      Category = 'Fichier'
+      Caption = 'acSaveAs'
+      ImageIndex = 2
+      OnExecute = acSaveAsExecute
+    end
+    object acQuit: TAction
+      Category = 'Fichier'
+      Caption = 'acQuit'
+      ImageIndex = 4
+      OnExecute = acQuitExecute
+      ShortCut = 16465
+    end
+    object acFermer: TAction
+      Category = 'Fichier'
+      Caption = 'acFermer'
+      ImageIndex = 7
+    end
+    object acVerrouillerEcran: TAction
+      Caption = 'acVerrouillerEcran'
+      ImageIndex = 20
+      OnExecute = acVerrouillerEcranExecute
+    end
+    object acAddAnnotation: TAction
+      Category = 'Annotations'
+      Caption = 'acAddAnnotation'
+      ImageIndex = 21
+      OnExecute = acAddAnnotationExecute
+    end
+    object acRemoveAnnotation: TAction
+      Category = 'Annotations'
+      ImageIndex = 22
+      OnExecute = acRemoveAnnotationExecute
+    end
+    object Action6: TAction
+      Category = 'Fichier'
+      Caption = 'Action6'
+    end
+  end
+  object imglstMainWnd: TImageList
+    left = 796
+    top = 440
+    Bitmap = {
+      4C69190000001000000010000000C0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FF000000FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFF000000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FF000000FF000000FF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FFC0C0C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF000080FF0000
+      80FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000080FF00FFFFFF00FFFFFF00FF
+      FFFF000080FF000080FF000080FF000080FF000080FF000080FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF00FFFFFF00FFFFFF00FF
+      FFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF000080FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF00FFFFFF00FFFFFF00FF
+      FFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF000080FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF00FFFFFF00FFFFFF00FF
+      FFFF00FFFFFF000080FF000080FF000080FF000080FF000080FF000080FF0000
+      80FF000080FF000080FF000080FFC0C0C0FF000080FF00FFFFFF00FFFFFF00FF
+      FFFF000080FF008080FF008080FF008080FF008080FF008080FF008080FF0080
+      80FF008080FF000080FFC0C0C0FFC0C0C0FF000080FF00FFFFFF00FFFFFF0000
+      80FF008080FF008080FF008080FF008080FF008080FF008080FF008080FF0080
+      80FF000080FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF00FFFFFF000080FF0080
+      80FF008080FF008080FF008080FF008080FF008080FF008080FF008080FF0000
+      80FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF000080FF008080FF0080
+      80FF008080FF008080FF008080FF008080FF008080FF008080FF000080FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF008080FF008080FF0080
+      80FF008080FF008080FF008080FF008080FF008080FF000080FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF000080FF000080FF0000
+      80FF000080FF000080FF000080FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF8080
+      80FFFFFFFFFF000080FF000080FF000080FF000080FFFFFFFFFF808080FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF8080
+      80FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF8080
+      80FF000080FF000080FF000080FF000080FF000080FF000080FF808080FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF8080
+      80FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF8080
+      80FF000080FF000080FF000080FF000080FF000080FF000080FF808080FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF8080
+      80FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF8080
+      80FF808080FF808080FF808080FF808080FF808080FF808080FF808080FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF8080
+      80FF808080FF808080FF808080FF808080FF808080FF000000FF000000FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF8080
+      80FF000000FF000000FF000000FF808080FF808080FF000000FF000000FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF8080
+      80FF000000FF000000FF000000FF808080FF808080FF000000FF000000FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF8080
+      80FF000000FF000000FF000000FF808080FF808080FF000000FF000000FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF8080
+      80FF000000FF000000FF000000FF808080FF808080FF000000FF000000FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF8080
+      80FF808080FF808080FF808080FF808080FF808080FF000000FF000000FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFF0000
+      FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000
+      FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000
+      FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFF0000
+      FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFF00
+      00FFFF0000FFFF0000FFFF0000FF000000FFFFFF00FFFFFF00FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFF00
+      00FFFF0000FFFF0000FFFF0000FF000000FFFFFF00FFFFFF00FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFF00
+      00FFFF0000FFFF0000FFFF0000FF000000FFFFFF00FFFFFF00FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFF00
+      00FFFF0000FFFF0000FFFF0000FF000000FFFFFF00FFFFFF00FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFF00
+      00FFFF0000FFFF0000FFFF0000FF000000FFFFFF00FFFFFF00FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFF00
+      00FFFF0000FF000000FF000000FF000000FF000000FF000000FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFF00
+      00FFFF0000FFFF0000FFFF0000FF000000FFFFFF00FFFFFF00FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFF00
+      00FFFF0000FFFF0000FFFF0000FF000000FFFFFF00FFFFFF00FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFF00
+      00FFFF0000FFFF0000FFFF0000FF000000FFFFFF00FFFFFF00FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFF00
+      00FFFF0000FFFF0000FFFF0000FF000000FFFFFF00FFFFFF00FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF0000
+      00FFC0C0C0FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FF000080FF000080FF000080FF0000
+      80FF000080FF000080FF000080FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF000080FF0000
+      80FF000080FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      80FF000080FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      80FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF000080FF0000
+      80FF000080FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF474747009393939074747485666666876C6C
+      6C876B6B6B878B8B8B8779797987656565876A6A6A87898989878A8A8A878686
+      868785858585909090904747470086868687FFFFFFFFE4E4E4FBFAFAFAFFF7F7
+      F7FFDADADAFFF0F0F1FFE1E1E1FFFDFDFDFFE9E9E9FFEAEAEBFFF9F9F9FFFFFF
+      FFFFFBFBFBFBFFFFFFFF8787878784848485FFFFFFFFDADADAF7FAFAFAFBE7E7
+      E6FBDADAD8FBF0F0EEFBC5C5C3FBFFFFFFFBE6E6E5FBEAEAE7FBE2E2E1FBFFFF
+      FFFBF6F6F6F7FFFFFFFF8585858586868687FFFFFFFFDBDBDDFBC6C6D1FFCCCC
+      D3FFC4C4CBFFD1D1D8FFBABAC1FFD5D5DCFFC9C9D0FFCFCFD5FFCDCDD9FFFFFF
+      FFFFFBFBFBFBFFFFFFFF8787878786868687FFFFFFFFFDFDFBFB5050A3FF0000
+      7BFF0C0C83FF06067FFF090982FF05057EFF0A0A82FF000074FF5757A9FFFFFF
+      FFFFFBFBFBFBFFFFFFFF8787878787878787FFFFFFFFFFFFFDFBECECF7FF1010
+      83FF00007BFF010181FF00007FFF030382FF00007BFF4848A4FFFAFAFDFFFFFF
+      FFFFFAFAFBFBFFFFFFFF8787878787878787FFFFFFFFF8F8FAFBFFFFFFFFBDBD
+      DEFF080884FF040483FF070784FF00007FFF181888FFF3F3F9FFFFFFFFFFFEFE
+      FEFFFBFBFBFBFFFFFFFF8787878787878787FFFFFFFFFDFDFCFBF1F1F8FFFAFA
+      FEFF7474B5FF00006CFF040478FF000076FF9A9ACCFFF0F0F8FFFCFCFEFFFEFE
+      FFFFFBFBFBFBFFFFFFFF8787878787878787FFFFFFFFFFFFFFFB9191C8FF6161
+      B0FF5454AAFF8282C1FF7E7EBFFF6D6DB7FF6565B3FF6262B1FFE6E6F3FFFFFF
+      FFFFFAFAFBFBFFFFFFFF8787878787878787FFFFFFFFFFFFFFFB9696CAFFBABA
+      DCFF9696C8FFFFFFFFFFFFFFFFFFD8D8EBFF9F9FCCFF9C9CCDFFB7B7DBFFE4E4
+      F2FFF2F2F7FBFFFFFFFF8686878787878787FFFFFFFFFFFFFFFB9696CBFFC7C7
+      E3FF6969B4FF9696CBFF9696CAFF7373B9FFA4A4D1FF9A9ACDFF7474BAFF7979
+      BCFF8989C2FBFFFFFFFF8282858787878787FFFFFFFFFFFFFFFB8B8EC1FFBDC7
+      DEFFCFCEE8FFB9BADDFFBCBCDEFFB9B8DCFFE4E6F3FF7C85B9FFE8E6F2FFE5E5
+      F2FF8585C0FBFFFFFFFF8282858787878787FFFFFFFFFFFFFFFBC1B0E0FF7F44
+      BDFF8F93C4FF8F8BC4FF8F8CC4FF8F90C4FF8B77C4FF8C54C6FFFCFFFDFFDCDA
+      EDFF8B8BC3FBFFFFFFFF8383858785858585FFFFFFFFF6FFF6F7FFDBFFFBF38A
+      EFFBE4FFDBFBE6F4DFFBE6F7DFFBE4FFDBFBF3D9EFFBFF8DFFFBFFFFFEFBE6E2
+      EFFB3A3A93F78585CAFF7B7B808587878787FFFFFFFFFBFFFBFBFFEBFFFFFA5F
+      FAFFF389F5FFF483F6FFF484F6FFF388F5FFF977FAFFFF99FFFFFFFFFFFFFBF8
+      FEFF8888CAFB9494DAFF80808487474747009090909085858585878887878970
+      89878A648A878A668A878A668A878A668A8788648887877E8787878887878887
+      87879D9D9185AAAA9C9049494847000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000FFFF000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000FFFF00000000000000000000000000000000000000000000
+      000000000000000000000000000000000000003196FF00000000000000000000
+      00000000FFFF0000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000003196FFA4A0A0FF003196FF000000000000
+      FFFF000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000003196FFA4A0A0FFA4A0A0FFA4A0A0FF003196FF0000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000001950FF001950FFA4A0A0FF1A1A1AFFA4A0A0FFA4A0A0FF0031
+      96FF000000000000000000000000000000000000000000000000000000000000
+      0000003196FF2557FFFF001950FF001950FFA4A0A0FF1A1A1AFFA4A0A0FFA4A0
+      A0FF003196FF0000000000000000000000000000000000000000000000000031
+      96FF2557FFFFFF0000FF2557FFFF001950FF001950FFA4A0A0FFA4A0A0FF0031
+      96FF000000000000000000000000000000000000000000000000003196FF2557
+      FFFFFF0000FFFF0000FFFF0000FF2557FFFF001950FF001950FF003196FF0000
+      00000000000000000000000000000000000000000000003196FF2557FFFFFF00
+      00FF2557FFFFFF0000FFFF0000FFFF0000FF2557FFFF003196FF000000000000
+      000000000000000000000000000000000000003196FF2557FFFFFF0000FFFF00
+      00FFFF0000FF2557FFFFFF0000FF2557FFFF003196FF00000000000000000000
+      0000000000000000000000000000003196FF2557FFFFFF0000FFFF0000FFFF00
+      00FF2557FFFFFF0000FF2557FFFF003196FF0000000000000000000000000000
+      000000000000000000000000000000000000003196FF2557FFFFFF0000FF2557
+      FFFFFF0000FF2557FFFF003196FF000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000003196FF2557FFFFFF00
+      00FF2557FFFF003196FF00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000003196FF2557
+      FFFF003196FF0000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000031
+      96FF000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000C0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF00FFFFFF
+      00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF00FF0000
+      80FF000080FFFFFF00FF000080FF000080FFFFFF00FF000080FF000080FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF00FF0000
+      80FF000080FFFFFF00FF000080FF000080FFFFFF00FF000080FF000080FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF00FFFFFF
+      00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF00FF0000
+      80FF000080FFFFFF00FF000080FF000080FFFFFF00FF000080FF000080FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF00FF0000
+      80FF000080FFFFFF00FF000080FF000080FFFFFF00FF000080FF000080FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF00FFFFFF
+      00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF00FF0000
+      80FF000080FFFFFF00FF000080FF000080FFFFFF00FF000080FF000080FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF00FF0000
+      80FF000080FFFFFF00FF000080FF000080FFFFFF00FF000080FF000080FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF00FFFFFF
+      00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0080
+      80FF000000FF000000FF008080FF008080FF000000FF000000FF000000FF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF00FF
+      FFFF008080FF008080FF00FFFFFF00FFFFFF008080FF00FFFFFF00FFFFFF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF00FFFFFF0080
+      80FF00FFFFFF008080FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF008080FF0080
+      80FF000000FF000000FFC0C0C0FF000000FF000000FF00FFFFFF00FFFFFF0000
+      00FF000000FF00FFFFFF000000FF008080FF008080FF008080FF000000FF0080
+      80FF00FFFFFF000000FF000000FF000000FF008080FF00FFFFFF00FFFFFF0080
+      80FF000000FF000000FF008080FF000000FF008080FF000000FF000000FF00FF
+      FFFF00FFFFFF008080FF000000FF000000FF008080FF00FFFFFF00FFFFFF00FF
+      FFFF000000FF000000FF000000FF000000FF000000FF000000FF008080FF00FF
+      FFFF00FFFFFF008080FF000000FF000000FF00FFFFFF00FFFFFF00FFFFFF0080
+      80FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF00FF
+      FFFF00FFFFFF00FFFFFF000000FF000000FF00FFFFFF00FFFFFF00FFFFFF00FF
+      FFFF000000FF008080FF008080FF000000FF00FFFFFF000000FF008080FF00FF
+      FFFF00FFFFFF00FFFFFF000000FF000000FF00FFFFFF00FFFFFF00FFFFFF00FF
+      FFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FF
+      FFFF00FFFFFF00FFFFFF000000FF000000FF000000FF00FFFFFF00FFFFFF00FF
+      FFFF808080FF00FFFFFF808080FF808080FF00FFFFFF808080FF00FFFFFF00FF
+      FFFF00FFFFFF00FFFFFF000000FF000000FF000000FF00FFFFFF00FFFFFF00FF
+      FFFF808080FF808080FF808080FF00FFFFFF00FFFFFF808080FF808080FF00FF
+      FFFF008080FF000000FF000000FFC0C0C0FF000000FF000000FF008080FF00FF
+      FFFF808080FF00FFFFFF00FFFFFF808080FF00FFFFFF808080FF00FFFFFF00FF
+      FFFF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF0080
+      80FF00FFFFFF00FFFFFF008080FF00FFFFFF008080FF00FFFFFF00FFFFFF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
+      00FF000000FF008080FF000000FF008080FF008080FF008080FF000000FF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFC0C0C0FFC0C0C0FFFFFFFFFFC0C0C0FFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0
+      C0FFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FFC0C0
+      C0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFF0000FFFF0000FFFF0000FFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFC0C0C0FFC0C0C0FFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0C0FFC0C0
+      C0FFFFFFFFFFFFFFFFFF0000FFFFC0C0C0FFFFFFFFFF0000FFFF0000FFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFFC0C0C0FFC0C0C0FFFFFFFFFF0000FFFF0000FFFFFFFFFFFF0000FFFFFFFF
+      FFFFFFFFFFFFC0C0C0FFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFFFFFFFFFF0000FFFFC0C0C0FFC0C0C0FFFFFFFFFFFFFFFFFF0000FFFFC0C0
+      C0FFC0C0C0FFFFFFFFFFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0C0FF0000FFFFC0C0C0FFFFFF
+      FFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFF0000FFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0C0FFC0C0C0FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFF0000
+      FFFFFFFFFFFF0000FFFF0000FFFFFFFFFFFF0000FFFFC0C0C0FFC0C0C0FFFFFF
+      FFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFF0000
+      FFFFC0C0C0FFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFC0C0C0FFFFFFFFFFC0C0
+      C0FFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FF0000FFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFFC0C0C0FFC0C0C0FFC0C0C0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0
+      C0FFC0C0C0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFC0C0C0FFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFFC0C0C0FFC0C0C0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0C0FFC0C0C0FFFFFFFFFFC0C0
+      C0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0C0FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF000080FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF00FFFFFF0000
+      80FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF00FFFFFF00FF
+      FFFF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF00FFFFFF00FF
+      FFFF00FFFFFF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF000080FF000080FF00FFFFFF00FF
+      FFFF00FFFFFF00FFFFFF000080FF000080FF000080FF000080FF000080FF0000
+      80FF000080FF000080FF000080FF000080FF00FFFFFF00FFFFFF00FFFFFF00FF
+      FFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FF
+      FFFF00FFFFFF00FFFFFF000080FF000080FF00FFFFFF808080FF808080FF8080
+      80FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FF
+      FFFF00FFFFFF00FFFFFF000080FF000080FF00FFFFFF00FFFFFF00FFFFFF00FF
+      FFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FF
+      FFFF00FFFFFF00FFFFFF000080FF000080FF00FFFFFF808080FF808080FF8080
+      80FF808080FF808080FF808080FF808080FF808080FF808080FF808080FF8080
+      80FF808080FF00FFFFFF000080FF000080FF00FFFFFF00FFFFFF00FFFFFF00FF
+      FFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FF
+      FFFF00FFFFFF00FFFFFF000080FF000080FF00FFFFFF808080FF808080FF8080
+      80FF808080FF808080FF808080FF808080FF808080FF808080FF808080FF00FF
+      FFFF00FFFFFF00FFFFFF000080FF000080FF00FFFFFF00FFFFFF00FFFFFF00FF
+      FFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FF
+      FFFF00FFFFFF00FFFFFF000080FF000080FF000080FF000080FF000080FF0000
+      80FF000080FF000080FF000080FF000080FF000080FF000080FF000080FF0000
+      80FF000080FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF8080
+      80FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF8080
+      80FFC0C0C0FFC0C0C0FF000000FF000000FF000080FF000080FF000080FF0000
+      80FF000080FF000080FF000080FF000080FF000080FF000080FF000080FF0000
+      80FF000080FF000080FF000000FF000000FF000080FF000080FF000080FF0000
+      80FF000080FF000080FF000080FF000080FF000080FF000080FF000080FF0000
+      80FF000080FF000080FF000000FF000000FF808000FF808000FF808000FF8080
+      00FF808000FF0000FFFF0000FFFF0000FFFF808000FF808000FF808000FF8080
+      00FF808000FF808000FF000000FF000000FF808000FFC0C0C0FFC0C0C0FF8080
+      80FFC0C0C0FF0000FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FF8080
+      80FFC0C0C0FF808000FF000000FF000000FF808000FFC0C0C0FFC0C0C0FF8080
+      80FFC0C0C0FF0000FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FF8080
+      80FFC0C0C0FF808000FF000000FF000000FF808000FFC0C0C0FFC0C0C0FF8080
+      80FFC0C0C0FF0000FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FF8080
+      80FFC0C0C0FF808000FF000000FF000000FF808000FFC0C0C0FFC0C0C0FF8080
+      80FFC0C0C0FF0000FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FF8080
+      80FFC0C0C0FF808000FF000000FF000000FF808000FFC0C0C0FFC0C0C0FF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFC0C0C0FF8080
+      80FFC0C0C0FF808000FF000000FF000000FF808000FFC0C0C0FFC0C0C0FF8080
+      80FF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FF8080
+      80FFC0C0C0FF808000FF000000FF000000FF808000FFC0C0C0FFC0C0C0FF8080
+      80FFC0C0C0FF0000FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FF8080
+      80FFC0C0C0FF808000FF000000FF000000FF808000FFC0C0C0FFC0C0C0FF8080
+      80FFC0C0C0FFC0C0C0FF0000FFFF808080FFC0C0C0FFC0C0C0FFC0C0C0FF8080
+      80FFC0C0C0FF808000FF000000FF000000FF808000FF808000FF808000FF8080
+      00FF808000FF808000FF808000FF808000FF808000FF808000FF808000FF8080
+      00FF808000FF808000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF8080
+      80FFC0C0C0FFC0C0C0FFC0C0C0FF808080FFC0C0C0FFC0C0C0FFC0C0C0FF8080
+      80FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000080FF000080FF000080FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      80FF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF000080FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF0000
+      FFFF0000FFFF000080FF000080FF000080FF0000FFFF0000FFFF000080FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF0000FFFF0000
+      FFFF000080FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF0000FFFF0000FFFF0000
+      80FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF0000FFFF0000
+      80FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF0000FFFF0000
+      80FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF0000FFFF0000
+      80FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF0000FFFF0000
+      80FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF0000FFFF0000FFFF0000
+      80FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF0000FFFF0000FFFF0000FFFF0000
+      80FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000080FF000080FF0000FFFF0000FFFF000080FF000080FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000080FF0000FFFF0000FFFF000080FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000080FF0000FFFF000080FF000080FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000080FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000080FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000080FF0000FFFF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000080FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FF000080FF0000
+      00FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FF0000
+      80FF000080FF000080FF000000FF000000FF000000FFFFFFFFFF000080FF0000
+      80FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FF0000
+      80FF000080FF000080FFFFFFFFFF000080FF000080FFFFFFFFFF000080FF0000
+      80FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FF000080FF0000
+      80FFFFFFFFFF000080FFFFFFFFFF000080FF000080FFFFFFFFFF000080FF0000
+      80FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FF000080FFFFFF
+      FFFFFFFFFFFF000080FFFFFFFFFF000080FF000080FFFFFFFFFF000080FFFFFF
+      FFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFF000080FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFF000080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFF000080FFFFFF
+      FFFFFFFFFFFF000080FFFFFFFFFF000080FFFFFFFFFFFFFFFFFF000080FFFFFF
+      FFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFF0000FFFF0000FFFF00
+      00FF000080FF000080FFFFFFFFFFFFFFFFFFFFFFFFFF000080FF000080FFFFFF
+      FFFFFFFFFFFF000000FFFFFFFFFF000000FFFF0000FFFF0000FFFF0000FFFF00
+      00FF000080FF000080FF000080FFFFFFFFFF000080FF000080FF000080FF0000
+      80FFFFFFFFFF000000FFFFFFFFFF000000FFFF0000FFFF0000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000080FF000080FF000080FF0000
+      00FF000000FF000000FFFFFFFFFF000000FF000000FF000000FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FF000080FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000000000000000000000000000
+      0000FF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FF000000000000
+      0000000000000000000000000000000000000000000000000000FF0000FFFF00
+      00FFFF0000FFFF0000FFFFFFFFFFFFFFFFFFFF0000FFFF0000FFFF0000FFFF00
+      00FF0000000000000000000000000000000000000000FF0000FFFF0000FFFF00
+      00FFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFF0000FFFF00
+      00FFFF0000FF000000000000000000000000FF0000FFFF0000FFFF0000FFFF00
+      00FFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFF0000FFFF00
+      00FFFF0000FFFF0000FF0000000000000000FF0000FFFF0000FFFF0000FFFF00
+      00FFFF0000FFFF0000FFFFFFFFFFFFFFFFFFFF0000FFFF0000FFFF0000FFFF00
+      00FFFF0000FFFF0000FF00000000FF0000FFFF0000FFFF0000FFFF0000FFFF00
+      00FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF00
+      00FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF00
+      00FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF00
+      00FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFF0000FFFF00
+      00FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF00
+      00FFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFF0000FFFF00
+      00FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF00
+      00FFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFF0000FFFF00
+      00FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF00
+      00FFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFF0000FFFF00
+      00FFFF0000FFFF0000FFFF0000FF00000000FF0000FFFF0000FFFF0000FFFF00
+      00FFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFF0000FFFF00
+      00FFFF0000FFFF0000FF0000000000000000FF0000FFFF0000FFFF0000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00
+      00FFFF0000FFFF0000FF000000000000000000000000FF0000FFFF0000FFFF00
+      00FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF00
+      00FFFF0000FF0000000000000000000000000000000000000000FF0000FFFF00
+      00FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF00
+      00FF000000000000000000000000000000000000000000000000000000000000
+      0000FF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FF000000000000
+      0000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FF000000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FF000080FF0000
+      00FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FF0000
+      80FF000080FF000080FF000000FF000000FF000000FFFFFFFFFF000080FF0000
+      80FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FF0000
+      80FF000080FF000080FFFFFFFFFF000080FF000080FFFFFFFFFF000080FF0000
+      80FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FF000080FF0000
+      80FFFFFFFFFF000080FFFFFFFFFF000080FF000080FFFFFFFFFF000080FF0000
+      80FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FF000080FFFFFF
+      FFFFFFFFFFFF000080FFFFFFFFFF000080FF000080FFFFFFFFFF000080FFFFFF
+      FFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFF000080FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFF000080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFF000080FFFFFF
+      FFFFFFFFFFFF000080FFFFFFFFFF000080FFFFFFFFFFFFFFFFFF000080FFFFFF
+      FFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFF0000FFFF0000FFFF00
+      00FF000080FF000080FFFFFFFFFFFFFFFFFFFFFFFFFF000080FF000080FFFFFF
+      FFFFFFFFFFFF000000FFFFFFFFFF000000FFFF0000FFFF0000FFFF0000FFFF00
+      00FF000080FF000080FF000080FFFFFFFFFF000080FF000080FF000080FF0000
+      80FFFFFFFFFF000000FFFFFFFFFF000000FFFF0000FFFF0000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000080FF000080FF000080FF0000
+      00FF000000FF000000FFFFFFFFFF000000FF000000FF000000FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FF000080FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF0000FFC0C0C0FFC0C0C0FFC0C0C0FFFF00
+      00FFFF0000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF0000FF000080FFFF0000FFFF0000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF000080FFC0C0C0FFC0C0
+      C0FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF0000
+      80FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FFC0C0C0FF000080FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FF000080FF000080FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF000080FFC0C0C0FFC0C0C0FF0000
+      80FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      80FF000080FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000080FF0000FFFF0000FFFF0000FFFFC0C0C0FF0000
+      FFFF0000FFFFC0C0C0FFC0C0C0FF0000FFFFC0C0C0FF0000FFFF0000FFFF0000
+      FFFFC0C0C0FF000080FFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      FFFFC0C0C0FF0000FFFFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FF0000FFFFC0C0
+      C0FFC0C0C0FF000080FFFF0000FF0000FFFF0000FFFF0000FFFFC0C0C0FF0000
+      FFFFC0C0C0FF0000FFFFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FF0000FFFFC0C0
+      C0FFC0C0C0FFFF0000FFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      FFFFC0C0C0FF0000FFFFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FF0000FFFFC0C0
+      C0FFC0C0C0FFFF0000FFC0C0C0FF0000FFFF0000FFFF0000FFFFC0C0C0FF0000
+      FFFF0000FFFFC0C0C0FFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FF0000FFFFC0C0
+      C0FFC0C0C0FFC0C0C0FFFF0000FF000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      0000000000000000000000000000000000FF0000FFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FF0000
+      00FF000000000000000000000000000000FFFFFFFFFF0000FFFFFFFFFFFF0000
+      FFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFF008000FFFFFFFFFF000000FF0000
+      0000000000FF0000000000000000000000FFFFFFFFFF0000FFFF0000FFFFFFFF
+      FFFF0000FFFF0000FFFF0000FFFF008000FFFFFFFFFFFFFFFFFF000000FF0000
+      000000000000000000FF00000000000000FFFFFFFFFFFFFFFFFF800000FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFF000000FF0000
+      00FF000000FF000000FF000000FF000000FFFFFFFFFFFFFFFFFF800000FF8000
+      00FF800000FFFFFFFFFFFFFFFFFF0000FFFF0000FFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFF000000FF000000FFFFFFFFFFFFFFFFFF800000FFFFFF
+      FFFFFFFFFFFF008000FFFFFFFFFF0000FFFFFFFFFFFF0000FFFF0000FFFFFFFF
+      FFFF0000FFFFFFFFFFFF000000FF000000FFFFFFFFFF800000FFFFFFFFFF8000
+      00FF008000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF008000FFFFFFFFFF0000
+      FFFFFFFFFFFFFFFFFFFF000000FF000000FFFFFFFFFF800000FFFFFFFFFFFFFF
+      FFFFFFFFFFFF800000FFFFFFFFFFFFFFFFFF008000FF008000FF008000FF0080
+      00FFFFFFFFFFFFFFFFFF000000FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF0000FFFF0000FFFF0000FFFF000000FF0000
+      FFFF0000FFFF0000FFFF000000FF000000000000000000000000000000000000
+      00000000000000000000000000000000FFFF000000000000FFFF000000000000
+      FFFF000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000FFFF0000FFFF0000FFFF000000000000
+      FFFF0000FFFF0000FFFF00000000000000000000000000000000000000000000
+      00000000000000000000000000000000FFFF0000000000000000000000000000
+      0000000000000000FFFF00000000000000000000000000000000000000000000
+      00000000000000000000000000000000FFFF0000000000000000000000000000
+      FFFF0000FFFF0000FFFF00000000000000000000000000000000000000000000
+      0000000000FF000000FF000000FF000000FF000000FF000000FF000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00FFA4A0A0FFA4A0A0FFA4A0A0FFA4A0A0FFA4A0A0FFA4A0A0FF000000FF0000
+      0000000000000000000000000000000000000000000000000000000000FFA4A0
+      A0FFA4A0A0FFA4A0A0FF000000FF000000FFA4A0A0FFA4A0A0FFA4A0A0FF0000
+      00FF0000000000000000000000000000000000000000000000FFA4A0A0FFA4A0
+      A0FFA4A0A0FF000000FF0000000000000000000000FFA4A0A0FFA4A0A0FFA4A0
+      A0FF000000FF00000000000000000000000000000000000000FFA4A0A0FFA4A0
+      A0FF000000FF00000000000000000000000000000000000000FFA4A0A0FFA4A0
+      A0FF000000FF00000000000000000000000000000000000000FFA4A0A0FFA4A0
+      A0FF000000FF00000000000000000000000000000000000000FFA4A0A0FFA4A0
+      A0FF000000FF00000000000000000000000000000000000000FFA4A0A0FFA4A0
+      A0FF000000FF00000000000000000000000000000000000000FFA4A0A0FFA4A0
+      A0FF000000FF0000000000000000001950FF001950FF001950FF001950FF0019
+      50FF001950FF001950FF001950FF001950FF001950FF001950FF001950FF0019
+      50FF001950FF001950FF001950FF001950FF001950FF001950FF001950FF0019
+      50FF001950FF001950FF001950FF001950FF001950FF001950FF001950FF0019
+      50FF001950FF001950FF001950FF001950FF007AB9FF007AB9FF007AB9FF007A
+      B9FF007AB9FF007AB9FF007AB9FF007AB9FF007AB9FF007AB9FF007AB9FF007A
+      B9FF007AB9FF007AB9FF001950FF001950FF007AB9FF007AB9FF007AB9FF007A
+      B9FF007AB9FF007AB9FF007AB9FF007AB9FF007AB9FF007AB9FF007AB9FF007A
+      B9FF007AB9FF007AB9FF001950FF001950FF007AB9FF007AB9FF007AB9FF007A
+      B9FF007AB9FF007AB9FF007AB9FF007AB9FF007AB9FF007AB9FF007AB9FF007A
+      B9FF007AB9FF007AB9FF001950FF001950FF007AB9FF007AB9FF007AB9FF007A
+      B9FF007AB9FF007AB9FF007AB9FF007AB9FF007AB9FF007AB9FF007AB9FF007A
+      B9FF007AB9FF007AB9FF001950FF001950FF007AB9FF007AB9FF007AB9FF007A
+      B9FF007AB9FF007AB9FF007AB9FF007AB9FF007AB9FF007AB9FF007AB9FF007A
+      B9FF007AB9FF007AB9FF001950FF001950FF001950FF001950FF001950FF0019
+      50FF001950FF001950FF001950FF001950FF001950FF001950FF001950FF0019
+      50FF001950FF001950FF001950FF001950FF001950FF001950FF001950FF0019
+      50FF001950FF001950FF001950FF001950FF001950FF001950FF001950FF0019
+      50FF001950FF001950FF001950FF000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF0000000000000000000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF0000000000000000000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF0000000000000000000000FF000000FF000000000000
+      000000000000000000FF000000FF000000FF000000FF00000000000000000000
+      0000000000FF000000FF0000000000000000000000FF000000FF000000000000
+      000000000000000000FF000000FF000000FF000000FF00000000000000000000
+      0000000000FF000000FF00000000000000000000000000000000000000000000
+      000000000000000000FF000000FF000000FF000000FF00000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000FF000000FF000000FF000000FF00000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000FF000000FF000000FF000000FF00000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000FF000000FF000000FF000000FF00000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000FF000000FF000000FF000000FF00000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000FF000000FF000000FF000000FF00000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000FF000000FF000000FF000000FF00000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000FF000000FF000000FF000000FF000000FF000000FF000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000FF000000FF000000FF000000FF000000FF000000FF000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000FFFF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000FFFF0000FFFF0000000000000000000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF00000000000000000000FFFF0000FFFF0000000000000000000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF00000000000000000000FFFF0000FFFF0000000000000000000000FF0000
+      00000000000000000000000000FF000000FF0000000000000000000000000000
+      00FF00000000000000000000FFFF0000FFFF0000000000000000000000000000
+      00000000000000000000000000FF000000FF0000000000000000000000000000
+      000000000000000000000000FFFF0000FFFF0000000000000000000000000000
+      00000000000000000000000000FF000000FF0000000000000000000000000000
+      000000000000000000000000FFFF0000FFFF0000000000000000000000000000
+      00000000000000000000000000FF000000FF0000000000000000000000000000
+      000000000000000000000000FFFF0000FFFF0000000000000000000000000000
+      00000000000000000000000000FF000000FF0000000000000000000000000000
+      000000000000000000000000FFFF0000FFFF0000000000000000000000000000
+      00000000000000000000000000FF000000FF0000000000000000000000000000
+      000000000000000000000000FFFF0000FFFF0000000000000000000000000000
+      00000000000000000000000000FF000000FF0000000000000000000000000000
+      000000000000000000000000FFFF0000FFFF0000000000000000000000000000
+      00000000000000000000000000FF000000FF0000000000000000000000000000
+      000000000000000000000000FFFF0000FFFF0000000000000000000000000000
+      00000000000000000000000000FF000000FF0000000000000000000000000000
+      000000000000000000000000FFFF0000FFFF0000000000000000000000000000
+      000000000000000000FF000000FF000000FF000000FF00000000000000000000
+      000000000000000000000000FFFF0000FFFF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF000080FF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000080FF000080FF00000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000080FF000080FF000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000080FF000080FF000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000080FF000080FF0000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000080FF000080FF0000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000080FF0000
+      80FF000000000000000000000000000000000000000000000000000080FF0000
+      80FF000000000000000000000000000000000000000000000000000080FF0000
+      80FF000080FF000000000000000000000000000080FF000080FF000080FF0000
+      80FF000080FF0000000000000000000000000000000000000000000000000000
+      0000000080FF000080FF000080FF000080FF000080FF000080FF000000000000
+      0000000080FF000080FF00000000000000000000000000000000000000000000
+      000000000000000080FF000080FF000080FF0000000000000000000000000000
+      000000000000000080FF000080FF000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000080FF000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000080FF000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000080FF000080FF000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000080FF000080FF00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000080FF000080FF00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000080FF000080FF000000000000FFFF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000000000000000000000000000
+      000000000000000000FF000000FF000000000000000000000000000000000000
+      000000000000000000000000FFFF0000FFFF0000000000000000000000000000
+      0000000000FF00000000000000FF000000000000000000000000000000000000
+      000000000000000000000000FFFF0000FFFF0000000000000000000000000000
+      0000000000FF0000000000000000000000FF0000000000000000000000000000
+      000000000000000000000000FFFF0000FFFF0000000000000000000000000000
+      00FF00000000000000000000FFFF0000FFFF0000FFFF00000000000000000000
+      000000000000000000000000FFFF0000FFFF0000000000000000000000000000
+      00FF0000000000000000000000000000FFFF000000FF00000000000000000000
+      000000000000000000000000FFFF0000FFFF0000000000000000000000FF0000
+      000000000000000000000000000000000000000000FF00000000000000000000
+      000000000000000000000000FFFF0000FFFF0000000000000000000000FF0000
+      000000000000000000000000000000000000000000FF00000000000000000000
+      000000000000000000000000FFFF0000FFFF0000000000000000000000FF0000
+      0000000000000000000000000000000000FF0000000000000000000000000000
+      FFFF00000000000000000000FFFF0000FFFF0000000000000000000000FF0000
+      0000000000000000000000000000000000FF00000000000000000000FFFF0000
+      FFFF0000FFFF000000000000FFFF0000FFFF0000000000000000000000FF0000
+      0000000000000000000000000000000000FF0000000000000000000000000000
+      FFFF00000000000000000000FFFF0000FFFF00000000000000000000FFFF0000
+      000000000000000000000000000000000000000000FF00000000000000000000
+      00FF00000000000000000000FFFF0000FFFF000000000000FFFF0000FFFF0000
+      FFFF00000000000000000000000000000000000000FF00000000000000FF0000
+      000000000000000000000000FFFF0000FFFF00000000000000000000FFFF0000
+      00000000000000000000000000000000000000000000000000FF000000000000
+      000000000000000000000000FFFF0000FFFF0000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF
+    }
+  end
+  object imglstVue2D: TImageList
+    left = 676
+    top = 140
+    Bitmap = {
+      4C69190000001000000010000000C0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000
+      FFFF800000FF800000FF800000FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF800000FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF800000FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000080FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000080FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000080FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000080FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000080FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF0000FFFF800000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF0000FFFF800000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF0000FFFF800000FF800000FF800000FF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FFFF0000FFFF0000FFC0C0C0FFFF00
+      FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFC0C0
+      C0FF0000FFFF0000FFFF0000FFFFC0C0C0FFFF0000FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF00FFFFC0C0C0FFC0C0C0FFC0C0
+      C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFFF00FFFFC0C0C0FFC0C0C0FFFF00FFFFC0C0C0FFC0C0C0FF0000
+      00FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0
+      C0FFC0C0C0FFFF00FFFFC0C0C0FFC0C0C0FFFF00FFFFC0C0C0FFC0C0C0FF0000
+      00FFC0C0C0FF000000FF000000FF000000FFC0C0C0FF000000FFC0C0C0FFC0C0
+      C0FFC0C0C0FFFF00FFFFC0C0C0FFC0C0C0FFFF00FFFFC0C0C0FFC0C0C0FF0000
+      00FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0
+      C0FFC0C0C0FFFF00FFFFC0C0C0FFC0C0C0FFFF00FFFFC0C0C0FFC0C0C0FFC0C0
+      C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FFC0C0
+      C0FFC0C0C0FFFF00FFFFC0C0C0FFC0C0C0FFFF00FFFFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000000FF000000FF000000FFC0C0C0FF000000FF000000FF0000
+      00FFC0C0C0FFFF00FFFFC0C0C0FFC0C0C0FFFF00FFFFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
+      00FF000000FFFF00FFFFC0C0C0FFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFFC0C0C0FFFF00
+      FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFC0C0
+      C0FFFF0000FFFF0000FFC0C0C0FFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF00
+      00FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF0000FFC0C0
+      C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF0000FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF0000FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF0000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFFF0000FFC0C0C0FF000000FF000000FF000000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFFF0000FFC0C0C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFFF0000FFC0C0C0FF000000FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0
+      C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FFFF00
+      00FFC0C0C0FFC0C0C0FF000000FFC0C0C0FF000000FF000000FF000000FFC0C0
+      C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFFC0C0C0FFFF0000FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0
+      C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFFFF0000FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FF000000FFC0C0C0FF0000FFFF0000FFFF0000FFFF0000FFFF0000
+      FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FFC0C0
+      C0FF000000FF000000FF000000FFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000000FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFF808080FF808080FF808080FF808080FF808080FF808080FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF8080
+      80FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFF808080FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF
+      FFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFF8080
+      80FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFFFFFFF00
+      00FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFFFFFFFFF00
+      00FF808080FFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFFFFFFFFFFFFFFFFF
+      FFFFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF00
+      00FFFF0000FF808080FFFFFFFFFFFFFFFFFFFF0000FFFF0000FFFF0000FFFF00
+      00FFFFFFFFFFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFFF
+      FFFFFFFFFFFF808080FFFFFFFFFFFFFFFFFFFF0000FFFF0000FFFF0000FFFF00
+      00FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF00
+      00FFFF0000FFFF0000FFFFFFFFFFFFFFFFFF808080FFFFFFFFFFFFFFFFFF8080
+      80FFFFFFFFFFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF00
+      00FFFFFFFFFF808080FFFFFFFFFFFFFFFFFF808080FFFFFFFFFFFFFFFFFFFF00
+      00FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FF808080FFFFFF
+      FFFFFF0000FFFF0000FFFFFFFFFFFFFFFFFF808080FFFFFFFFFFFF0000FFFF00
+      00FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFFF
+      FFFFFFFFFFFF808080FFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFF0000FFFF00
+      00FFFFFFFFFF808080FFFF0000FF808080FFFF0000FFFF0000FFFF0000FFFF00
+      00FF808080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFF8080
+      80FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF8080
+      80FFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFF808080FFFF0000FF808080FF808080FF808080FF808080FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFFF0000FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF00
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF0000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF0000FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF0000FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF0000FFC0C0C0FFC0C0C0FF800000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFFF0000FFC0C0C0FFC0C0C0FFC0C0C0FF800000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFFF0000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF800000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFFF0000FFC0C0C0FFC0C0C0FF800000FF800000FF800000FF800000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF00
+      00FFC0C0C0FFC0C0C0FFC0C0C0FF800000FFC0C0C0FFC0C0C0FF800000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF0000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF800000FFC0C0C0FFC0C0C0FF800000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFFFF0000FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF800000FF800000FF800000FF800000FF8000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00000080FF000080FFFFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF000000
+      80FF000080FF000080FF000080FF000080FF000080FF000080FF000080FFFFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000080FF000080FF0000
+      80FF000080FF000080FF000080FF000080FF000080FF000080FF000080FF0000
+      80FF000080FFFFFFFF00FFFFFF00000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FFFFFFFF00000000FFC0C0C0FFC0C0C0FF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0
+      C0FFC0C0C0FF000000FFFFFFFF00FFFFFF00000000FFC0C0C0FFC0C0C0FF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0
+      C0FFC0C0C0FF000000FFFFFFFF00FFFFFF00FFFFFF00000000FFC0C0C0FFC0C0
+      C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0
+      C0FF000000FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00000000FFC0C0C0FFC0C0
+      C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0
+      C0FF000000FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000FFC0C0
+      C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FF0000
+      00FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000FFC0C0
+      C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FF0000
+      00FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF000000
+      00FFC0C0C0FF000000FFC0C0C0FFC0C0C0FF000000FFC0C0C0FF000000FFFFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF000000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFFFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00000000FF000000FF000000FF000000FF000000FF000000FFFFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00000080FF000080FFFFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00C0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFFF0000FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF00
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF0000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF0000FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF0000FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF0000FFC0C0C0FFC0C0C0FF800000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFFF0000FFC0C0C0FFC0C0C0FFC0C0C0FF800000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFFF0000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF800000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFFF0000FFC0C0C0FFC0C0C0FF800000FF800000FF800000FF800000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF00
+      00FFC0C0C0FFC0C0C0FFC0C0C0FF800000FFC0C0C0FFC0C0C0FF800000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF0000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF800000FFC0C0C0FFC0C0C0FF800000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFFFF0000FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF800000FF800000FF800000FF800000FF8000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF800000FF800000FF800000FF8000
+      00FF800000FF800000FF800000FF800000FF800000FF800000FF800000FF8000
+      00FF800000FF800000FFC0C0C0FF800000FFC0C0C0FFC0C0C0FF800000FFC0C0
+      C0FFC0C0C0FF800000FFC0C0C0FFC0C0C0FF800000FFC0C0C0FFC0C0C0FF8000
+      00FFC0C0C0FFC0C0C0FF800000FF800000FFC0C0C0FFC0C0C0FF800000FFC0C0
+      C0FFC0C0C0FF800000FFC0C0C0FFC0C0C0FF800000FFC0C0C0FFC0C0C0FF8000
+      00FFC0C0C0FFC0C0C0FF800000FF800000FF800000FF800000FF800000FF8000
+      00FF800000FF800000FF800000FF800000FF800000FF800000FF800000FF8000
+      00FF800000FF800000FF800000FF800000FFC0C0C0FFC0C0C0FF800000FFC0C0
+      C0FFC0C0C0FF800000FF0000FFFF0000FFFF0000FFFF0000FFFFC0C0C0FF8000
+      00FFC0C0C0FFC0C0C0FF800000FF800000FFC0C0C0FFC0C0C0FF800000FFC0C0
+      C0FFC0C0C0FF800000FF0000FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FF8000
+      00FFC0C0C0FFC0C0C0FF800000FFC0C0C0FF800000FF800000FF800000FF8000
+      00FF800000FF800000FF0000FFFF0000FFFF0000FFFF800000FF800000FF8000
+      00FF800000FF800000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FF0000FFFFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FF000000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FFC0C0C0FF000000FFC0C0C0FFC0C0C0FF000000FFC0C0C0FF000000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FF000000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FFC0C0
+      C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FF000000FFC0C0
+      C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FFC0C0C0FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FFC0C0C0FFC0C0
+      C0FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0
+      C0FF000000FF000000FF000000FF000000FF000000FF000000FFC0C0C0FFC0C0
+      C0FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0
+      C0FF000000FF000000FF000000FF000000FF000000FF000000FFC0C0C0FFC0C0
+      C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0
+      C0FF000000FF000000FF000000FF000000FF000000FF000000FFC0C0C0FFC0C0
+      C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0
+      C0FF000000FF000000FF000000FF000000FF000000FF000000FFC0C0C0FFC0C0
+      C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0
+      C0FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF0000
+      00FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFC0C0C0FFC0C0C0FFFFFFFFFFC0C0C0FFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0
+      C0FFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FFC0C0
+      C0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFF0000FFFF0000FFFF0000FFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFC0C0C0FFC0C0C0FFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0C0FFC0C0
+      C0FFFFFFFFFFFFFFFFFF0000FFFFC0C0C0FFFFFFFFFF0000FFFF0000FFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFFC0C0C0FFC0C0C0FFFFFFFFFF0000FFFF0000FFFFFFFFFFFF0000FFFFFFFF
+      FFFFFFFFFFFFC0C0C0FFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFFFFFFFFFF0000FFFFC0C0C0FFC0C0C0FFFFFFFFFFFFFFFFFF0000FFFFC0C0
+      C0FFC0C0C0FFFFFFFFFFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0C0FF0000FFFFC0C0C0FFFFFF
+      FFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFF0000FFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0C0FFC0C0C0FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFF0000
+      FFFFFFFFFFFF0000FFFF0000FFFFFFFFFFFF0000FFFFC0C0C0FFC0C0C0FFFFFF
+      FFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFF0000
+      FFFFC0C0C0FFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFC0C0C0FFFFFFFFFFC0C0
+      C0FFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FF0000FFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFFC0C0C0FFC0C0C0FFC0C0C0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0
+      C0FFC0C0C0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFC0C0C0FFC0C0C0FFFFFFFFFFFFFFFFFFC0C0C0FFFFFFFFFFFFFF
+      FFFFC0C0C0FFC0C0C0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0C0FFC0C0C0FFFFFFFFFFC0C0
+      C0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0C0FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      FFFF0000FFFF0000FFFF008000FF008000FF008000FF0000FFFFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000FFFF0000FFFF0000FFFF0000FFFF0080
+      00FF008000FF008000FF008000FF008000FF008000FF0000FFFF0000FFFF0000
+      FFFFC0C0C0FFC0C0C0FFC0C0C0FF008000FF008000FF008000FF008000FF0080
+      00FF008000FF008000FF008000FF008000FF008000FF008000FF0000FFFF8000
+      80FF0000FFFF0000FFFFC0C0C0FF008000FF008000FF008000FF008000FF0080
+      00FF008000FF008000FF008000FF008000FF008000FF008000FF0000FFFF8000
+      80FF800080FF0000FFFF0000FFFF008000FF008000FF008000FF008000FF0000
+      FFFF0000FFFF0000FFFF008000FF008000FF008000FF008000FF008000FF0000
+      FFFF0000FFFF00FF00FF00FF00FF0000FFFF0000FFFF0000FFFF0000FFFF0080
+      80FF008080FF008080FF0000FFFF0000FFFF0000FFFF0000FFFF008000FF0000
+      FFFF00FF00FF00FF00FF00FF00FF008080FF008080FF008080FF008080FF0080
+      80FF008080FF008080FF008080FF008080FF008080FF008080FF0000FFFF0000
+      FFFF0000FFFF00FF00FF00FF00FF008080FF008080FF008080FF008080FF0080
+      80FF008080FF008080FF008080FF008080FF008080FF008080FF008080FF0080
+      80FF0000FFFF00FF00FF00FF00FF008080FF008080FFFF00FFFFFF00FFFFFF00
+      FFFF008080FF008080FF008080FF008080FF008080FF008080FF008080FF0080
+      80FF0000FFFF00FF00FF00FF00FFFF00FFFFFF00FFFF00FF00FF00FF00FF00FF
+      00FFFF00FFFFFF00FFFF008080FF008080FF008080FF008080FF008080FF0080
+      80FF008080FF0000FFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF
+      00FF00FF00FF00FF00FFFF00FFFFFF00FFFF008080FF008080FF008080FF0080
+      80FF008080FF0000FFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF
+      00FF00FF00FF00FF00FF00FF00FF00FF00FFFF00FFFFFF00FFFFFF00FFFFFF00
+      FFFF008080FF0000FFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF
+      00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF
+      00FFFF00FFFFC0C0C0FF0000FFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF
+      00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF
+      00FF00FF00FFFF00FFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFF808080FF808080FF808080FF808080FF808080FF808080FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF8080
+      80FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFF808080FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF
+      FFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFF8080
+      80FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFFFFFFF00
+      00FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFFFFFFFFF00
+      00FF808080FFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFFFFFFFFFFFFFFFFF
+      FFFFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF00
+      00FFFF0000FF808080FFFFFFFFFFFFFFFFFFFF0000FFFF0000FFFF0000FFFF00
+      00FFFFFFFFFFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFFF
+      FFFFFFFFFFFF808080FFFFFFFFFFFFFFFFFFFF0000FFFF0000FFFF0000FFFF00
+      00FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF00
+      00FFFF0000FFFF0000FFFFFFFFFFFFFFFFFF808080FFFFFFFFFFFFFFFFFF8080
+      80FFFFFFFFFFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF00
+      00FFFFFFFFFF808080FFFFFFFFFFFFFFFFFF808080FFFFFFFFFFFFFFFFFFFF00
+      00FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FF808080FFFFFF
+      FFFFFF0000FFFF0000FFFFFFFFFFFFFFFFFF808080FFFFFFFFFFFF0000FFFF00
+      00FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFFF
+      FFFFFFFFFFFF808080FFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFF0000FFFF00
+      00FFFFFFFFFF808080FFFF0000FF808080FFFF0000FFFF0000FFFF0000FFFF00
+      00FF808080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFF0000FFFFFFFFFF8080
+      80FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF8080
+      80FFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFF808080FFFF0000FF808080FF808080FF808080FF808080FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000FFFFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000FF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000FF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFFFFFFFF00FFFFFF00000000FF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFFFFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000FF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFFFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000FFFFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000FF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000FFFFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000FF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFFFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000FF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF000000FFFF000000FF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFFFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000FF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFFFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000FF0000FFFF0000FFFF0000
+      FFFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000FF0000FFFFFFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000FFFFFFFF000000FFFF0000
+      FFFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000FF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFFFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00C0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000000FF000000FF000000FF000000FF000000FF000000FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
+      00FF000000FF000000FFC0C0C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF808080FF808080FF808080FF808080FF808080FFC0C0C0FF000080FF0000
+      80FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FF808080FF808080FF8080
+      80FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF0000
+      80FFC0C0C0FFC0C0C0FF000000FFC0C0C0FF000000FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF808080FF808080FF808080FF808080FF000080FF000080FFC0C0
+      C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FF000000FFC0C0C0FF808080FF8080
+      80FF808080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF000080FFC0C0
+      C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF808080FF808080FF000080FF000080FFC0C0C0FFC0C0
+      C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0C0FF8080
+      80FF808080FF808080FFC0C0C0FFC0C0C0FF000080FF000080FFC0C0C0FFC0C0
+      C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FFC0C0
+      C0FFC0C0C0FF000000FF000000FF000000FF000000FF000080FFC0C0C0FF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF000000FF000000FF0000
+      00FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF808080FF808080FF8080
+      80FF808080FF808080FF808080FF808080FF808080FF808080FF808080FF8080
+      80FF808080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF808080FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFF808080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF808080FFFFFFFFFF0000
+      80FF000080FF000080FF000080FF000080FF000080FF000080FF000080FFFFFF
+      FFFF808080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF808080FFFFFFFFFF0000
+      80FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000080FFFFFF
+      FFFF808080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF808080FFFFFFFFFF0000
+      80FFFFFFFFFFFF0000FFFF0000FFFF0000FFFFFFFFFFFFFFFFFF000080FFFFFF
+      FFFF808080FFC0C0C0FFC0C0C0FF000000FF000000FF808080FFFFFFFFFF0000
+      80FFFF0000FFFFFFFFFFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFF000080FFFFFF
+      FFFF808080FF000000FF000000FF000000FFC0C0C0FF808080FFFFFFFFFF0000
+      80FFFFFFFFFFFFFFFFFFFF0000FFFF0000FFFFFFFFFFFFFFFFFF000080FFFFFF
+      FFFF808080FFC0C0C0FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FFC0C0C0FF000000FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000000FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      80FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF0000FF000080FF000080FF0000
+      80FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000080FFC0C0C0FFC0C0C0FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000080FF000080FF000080FF000080FF000080FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FF000080FF000080FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FFFF0000FFC0C0C0FF000080FFC0C0
+      C0FF000080FF000080FFC0C0C0FF000080FF000080FFC0C0C0FFC0C0C0FF0000
+      80FFC0C0C0FF000080FF000080FFC0C0C0FFFF0000FFC0C0C0FFC0C0C0FF0000
+      80FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      80FF000080FFC0C0C0FF000080FF000080FFFF0000FFC0C0C0FF000080FF0000
+      80FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FF000080FF000080FFC0C0
+      C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FF000080FF000080FFC0C0C0FFC0C0
+      C0FF000080FF000080FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000080FFC0C0C0FF000080FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000080FF000080FFC0C0C0FFC0C0C0FF000080FF000080FFC0C0C0FF0000
+      80FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF000080FF000080FF000080FF0000
+      80FFC0C0C0FFC0C0C0FF000080FF000080FFC0C0C0FFC0C0C0FF000080FF0000
+      80FF000080FF000080FF000080FFC0C0C0FFFF0000FFC0C0C0FFC0C0C0FF0000
+      80FF000080FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      80FFC0C0C0FFC0C0C0FF000080FF000080FFFF0000FFC0C0C0FF000080FFC0C0
+      C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FF000080FFC0C0C0FF000080FFC0C0
+      C0FFC0C0C0FF000080FFFF0000FF000080FFC0C0C0FFFF0000FF000080FFC0C0
+      C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF000080FF0000
+      80FF000080FFFF0000FFC0C0C0FFC0C0C0FF000080FF000080FFC0C0C0FFFF00
+      00FF000080FFC0C0C0FF000080FFC0C0C0FF000080FFC0C0C0FFFF0000FFFF00
+      00FFC0C0C0FF000080FF000080FF000080FFC0C0C0FF000080FFC0C0C0FF0000
+      80FFC0C0C0FFFF0000FFFF0000FF000080FF000080FF000080FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000080FFC0C0C0FF000080FFC0C0C0FFC0C0C0FF000080FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000080FFFF0000FFC0C0C0FFC0C0C0FF000080FFC0C0
+      C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FF000080FF000080FFC0C0C0FF0000
+      80FFC0C0C0FF000080FFC0C0C0FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFFFFFFFFFFFFFFFFF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000080FF000080FF0000FFFF0000
+      FFFF000000FF000000FF000000FF000000FF000000FF000000FFFFFFFFFF0000
+      00FF000000FF000080FF0000FFFFFFFFFFFF0000FFFF0000FFFF0000FFFFFFFF
+      FFFF000000FF808080FF000000FF000000FF000000FFFFFFFFFFFFFFFFFF0000
+      80FF0000FFFF0000FFFFFFFFFFFFFFFFFFFF0000FFFF0000FFFF0000FFFFFFFF
+      FFFF000000FF808080FF000000FF000000FF000000FF000000FFFFFFFFFF0000
+      FFFF0000FFFFFFFFFFFFC0C0C0FFFFFFFFFF0000FFFF0000FFFF0000FFFFFFFF
+      FFFF000000FFC0C0C0FF000000FF000000FF000000FF000000FFFFFFFFFF0000
+      FFFFC0C0C0FFFFFFFFFF000000FFFFFFFFFF0000FFFF0000FFFF0000FFFFFFFF
+      FFFF000000FF808080FF000000FF000000FF000000FF000080FFFFFFFFFF0000
+      FFFFFFFFFFFF000000FF0000FFFFFFFFFFFF0000FFFF0000FFFF0000FFFFFFFF
+      FFFF000000FF808080FF000000FF000000FF000000FF0000FFFFFFFFFFFF0000
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFF0000FFFFFFFF
+      FFFF000000FFC0C0C0FF000000FF000000FF000080FF0000FFFFFFFFFFFF0000
+      FFFF0000FFFF0000FFFF0000FFFFFFFFFFFF0000FFFF0000FFFF0000FFFFFFFF
+      FFFF000000FF808080FF000000FF000000FF0000FFFF0000FFFF000000FF0000
+      FFFF0000FFFF0000FFFF0000FFFF000000FF0000FFFF0000FFFF0000FFFFFFFF
+      FFFF000000FF808080FF000000FF000000FF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFF000000FF000000FF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFFFFFFFFFF0000FFFF0000
+      FFFF000000FFFFFFFFFF000000FF000000FF0000FFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000FFFFFFFF
+      FFFF000000FFFFFFFFFFFFFFFFFF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FFFFFFFFFF000000FF0000
+      00FF000000FFFFFFFFFF000000FFFFFFFFFF000000FF808080FF808080FFC0C0
+      C0FF808080FF808080FFC0C0C0FF808080FF808080FFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FFFFFF
+      FFFF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000000000000000000000FF000000FF0000
+      00FF000000FF000000FF000000FF0000000000000000000000FF000000FF0000
+      00FF000000FF00000000000000000000000000000000000000FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FF0000000000000000000000FF0000
+      0000000000FF00000000000000000000000000000000000000FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FF00000000000000000000
+      00FF000000FF00000000000000000000000000000000000000FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FF000000000000
+      0000000000FF00000000000000000000000000000000000000FFFFFFFFFF0000
+      80FF000080FFFFFFFFFFFFFFFFFF800000FF800000FFFFFFFFFF000000FF0000
+      00000000000000000000000000000000000000000000000000FFFFFFFFFF8000
+      00FF800000FF800000FF800000FF800000FFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00FF0000000000000000000000000000000000000000000000FFFFFFFFFF8000
+      00FFFFFFFFFFFFFFFFFF000080FF000080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFF000000FF00000000000000000000000000000000000000FFFFFFFFFF8000
+      00FFFFFFFFFFFFFFFFFFFFFFFFFF000080FF000080FFFFFFFFFFFFFFFFFFFFFF
+      FFFF000000FF00000000000000000000000000000000000000FFFFFFFFFF8000
+      00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000080FF000080FFFFFFFFFFFFFF
+      FFFF000000FF00000000000000000000000000000000000000FFFFFFFFFF8000
+      00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000080FFFFFFFFFFFFFF
+      FFFF000000FF00000000000000000000000000000000000000FFFFFFFFFF8000
+      00FFFFFFFFFF800000FF800000FFFFFFFFFF000080FF000080FFFFFFFFFFFFFF
+      FFFF000000FF00000000000000000000000000000000000000FFFFFFFFFF8000
+      00FFFFFFFFFFFFFFFFFFFFFFFFFF800000FF000080FFFFFFFFFFFFFFFFFFFFFF
+      FFFF000000FF00000000000000000000000000000000000000FFFFFFFFFF8000
+      00FFFFFFFFFF000080FF000080FF000080FF800000FF800000FFFFFFFFFFFFFF
+      FFFF000000FF00000000000000000000000000000000000000FFFFFFFFFFFFFF
+      FFFFFFFFFFFF000080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF800000FFFFFF
+      FFFF000000FF00000000000000000000000000000000000000FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF800000FF8000
+      00FF000000FF00000000000000000000000000000000000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF0000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000000080FF000080FF0000
+      80FF00000000000080FF000000000000000000000000000080FF000000000000
+      80FF000080FF000080FF000000000000000000000000000080FF000000000000
+      80FF00000000000080FF000000000000000000000000000080FF000080FF0000
+      00000000000000000000000080FF0000000000000000000080FF000080FF0000
+      00000000000000000000000080FF00000000000080FF00000000000080FF0000
+      0000000000000000000000000000000000000000000000000000000080FF0000
+      80FF0000000000000000000080FF00000000000080FF00000000000080FF0000
+      000000000000000080FF000080FF0000000000000000000080FF000000000000
+      80FF0000000000000000000080FF00000000000080FF00000000000080FF0000
+      00000000000000000000000080FF0000000000000000000080FF000080FF0000
+      80FF000000000000000000000000000080FF0000000000000000000000000000
+      80FF000080FF000080FF00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000
+      FFFF0000FFFF0000FFFF0000FFFF000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000C0C0C000C0C0C000C0C0C000C0C0C000C0C0
+      C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0
+      C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0
+      C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0
+      C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0
+      C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0
+      C000C0C0C000C0C0C000C0C0C000C0C0C000000000FF000000FFC0C0C000C0C0
+      C000C0C0C000C0C0C000000000FF000000FF000000FF000000FFC0C0C000C0C0
+      C000C0C0C000C0C0C000C0C0C000C0C0C000000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FFC0C0C000000000FFC0C0C000C0C0C000C0C0C0000000
+      00FFC0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0
+      C000C0C0C000C0C0C000000000FF000000FFC0C0C000000000FF000000FF0000
+      00FFC0C0C000C0C0C000000000FF000000FF000000FFC0C0C000C0C0C000C0C0
+      C000C0C0C000C0C0C000000000FF000000FFC0C0C000C0C0C000C0C0C0000000
+      00FFC0C0C000000000FFFFFFFFFFFFFFFFFFFFFFFFFF000000FFC0C0C000C0C0
+      C000C0C0C000C0C0C000000000FF000000FFC0C0C000000000FF000000FF0000
+      00FFC0C0C000000000FFFFFFFFFFFFFFFFFFFFFFFFFF000000FFC0C0C000C0C0
+      C000C0C0C000C0C0C000000000FF000000FFC0C0C000C0C0C000C0C0C0000000
+      00FFC0C0C000000000FFFFFFFFFFFFFFFFFFFFFFFFFF000000FFC0C0C000C0C0
+      C000C0C0C000C0C0C000000000FF000000FFC0C0C000000000FF000000FF0000
+      00FFC0C0C000C0C0C000000000FF000000FF000000FFC0C0C000C0C0C000C0C0
+      C000C0C0C000C0C0C000000000FF000000FFC0C0C000C0C0C000C0C0C000C0C0
+      C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0
+      C000C0C0C000C0C0C000000000FFC0C0C000000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FFC0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0
+      C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0
+      C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0
+      C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0
+      C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0
+      C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0
+      C000C0C0C000C0C0C000C0C0C000C0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FF000000FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF0000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF0000FFC0C0C0FFC0C0C0FFC0C0C0FFFF00
+      00FFFF0000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFFF0000FF000080FFFF0000FFFF0000FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF000080FFC0C0C0FFC0C0
+      C0FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF0000
+      80FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FFC0C0C0FF000080FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FF000080FF000080FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FF000080FFC0C0C0FFC0C0C0FF0000
+      80FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF000080FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      80FF000080FF000080FF000080FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000080FF0000FFFF0000FFFF0000FFFFC0C0C0FF0000
+      FFFF0000FFFFC0C0C0FFC0C0C0FF0000FFFFC0C0C0FF0000FFFF0000FFFF0000
+      FFFFC0C0C0FF000080FFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      FFFFC0C0C0FF0000FFFFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FF0000FFFFC0C0
+      C0FFC0C0C0FF000080FFFF0000FF0000FFFF0000FFFF0000FFFFC0C0C0FF0000
+      FFFFC0C0C0FF0000FFFFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FF0000FFFFC0C0
+      C0FFC0C0C0FFFF0000FFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      FFFFC0C0C0FF0000FFFFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FF0000FFFFC0C0
+      C0FFC0C0C0FFFF0000FFC0C0C0FF0000FFFF0000FFFF0000FFFFC0C0C0FF0000
+      FFFF0000FFFFC0C0C0FFC0C0C0FF0000FFFFC0C0C0FFC0C0C0FF0000FFFFC0C0
+      C0FFC0C0C0FFC0C0C0FFFF0000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808000FF808000FF808000FFFFFF
+      FFFFFFFFFFFF000000FF000000FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808000FF808000FF808000FF8080
+      00FFFFFFFFFF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808000FF808000FFFFFFFFFF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808000FF808000FFFFFFFFFF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808000FF808000FFFFFFFFFF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808000FF808000FFFFFFFFFF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808000FF808000FFFFFFFFFF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    }
+  end
+  object aclstVisu2D: TActionList
+    Images = imglstVue2D
+    left = 628
+    top = 140
+    object acZoomAll: TAction
+      Category = 'Zoom'
+      Caption = 'Zoom tout'
+      ImageIndex = 0
+      OnExecute = acZoomAllExecute
+    end
+    object acZoomWindow: TAction
+      Category = 'Zoom'
+      Caption = 'Zoom Fenêtre'
+      ImageIndex = 1
+      OnExecute = acZoomWindowExecute
+    end
+    object acPanVue: TAction
+      Category = 'Zoom'
+      Caption = 'Pan vue'
+      ImageIndex = 2
+      OnExecute = acPanVueExecute
+    end
+    object acMetaFiltre: TAction
+      Category = 'Infos'
+      Caption = 'Filtres'
+      ImageIndex = 5
+    end
+    object acDistance: TAction
+      Category = 'Infos'
+      Caption = 'Distance'
+      ImageIndex = 6
+    end
+    object acDisplayParametresVue: TAction
+      Category = 'Infos'
+      Caption = 'acParametresVue'
+      ImageIndex = 7
+      OnExecute = acDisplayParametresVueExecute
+    end
+    object acVue3DFiltree: TAction
+      Caption = 'acVue3DFiltree'
+      ImageIndex = 9
+    end
+    object acFindstation: TAction
+      Category = 'Infos'
+      Caption = 'acFindstation'
+      ImageIndex = 8
+      ShortCut = 16454
+    end
+    object acVue3DOpenGLFiltree: TAction
+      Caption = 'acVue3DOpenGLFiltree'
+      ImageIndex = 10
+    end
+    object acDisplayDiagrammes: TAction
+      Caption = 'acHistoDirections'
+      ImageIndex = 11
+    end
+    object acNil1: TAction
+      Caption = 'acNil1'
+    end
+    object acRefreshVue: TAction
+      Category = 'Zoom'
+      Caption = 'acRefreshVue'
+      ImageIndex = 13
+    end
+    object acPrint1: TAction
+      Caption = 'acPrint'
+      ImageIndex = 14
+    end
+    object acChargerMaillage: TAction
+      Caption = 'acChargerMaillage'
+      ImageIndex = 15
+    end
+    object acExportDXF1: TAction
+      Caption = 'acExportDXF'
+      ImageIndex = 16
+    end
+    object acStatistiques: TAction
+      Caption = 'acStatistiques'
+      ImageIndex = 17
+      OnExecute = acStatistiquesExecute
+    end
+    object acExport2DODG: TAction
+      Caption = 'acExport2DXHTML'
+      Enabled = False
+      ImageIndex = 18
+    end
+    object acExport2DSVG: TAction
+      Caption = 'acExport2DSVG'
+      ImageIndex = 19
+    end
+    object acCapturePlan: TAction
+      Caption = 'acCapturePlan'
+      ImageIndex = 20
+    end
+    object acZoomPlus: TAction
+      Category = 'Zoom'
+      Caption = 'Zoom +'
+      ImageIndex = 21
+      OnExecute = acZoomPlusExecute
+    end
+    object acZoomMoins: TAction
+      Category = 'Zoom'
+      Caption = 'Zoom -'
+      ImageIndex = 22
+      OnExecute = acZoomMoinsExecute
+    end
+    object acEditeurCoupeDeveloppee: TAction
+      Caption = 'acEditeurCoupeDeveloppee'
+      ImageIndex = 23
+    end
+    object acDisplayListeSeries: TAction
+      Caption = 'acDisplayListeSeries'
+      ImageIndex = 24
+    end
+  end
+end

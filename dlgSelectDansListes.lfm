@@ -1,0 +1,97 @@
+object dlgSelectElement: TdlgSelectElement
+  Left = 191
+  Height = 317
+  Top = 178
+  Width = 596
+  Caption = 'dlgSelectElement'
+  ClientHeight = 317
+  ClientWidth = 596
+  Font.CharSet = ANSI_CHARSET
+  Font.Color = clBlack
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  OnClose = FormClose
+  OnShow = FormShow
+  Position = poScreenCenter
+  LCLVersion = '2.0.0.4'
+  object lsbListeElements: TListBox
+    Left = 6
+    Height = 225
+    Top = 56
+    Width = 585
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    ItemHeight = 20
+    OnClick = lsbListeElementsClick
+    OnDrawItem = lsbListeElementsDrawItem
+    Style = lbOwnerDrawFixed
+    TabOrder = 0
+  end
+  object hcColsTitres: THeaderControl
+    Left = 6
+    Height = 21
+    Top = 32
+    Width = 585
+    DragReorder = False
+    Sections = <>
+    OnSectionResize = hcColsTitresSectionResize
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.CellAlignHorizontal = ccaCenter
+    BorderSpacing.CellAlignVertical = ccaCenter
+  end
+  object btnOK: TBitBtn
+    Left = 359
+    Height = 30
+    Top = 284
+    Width = 112
+    Anchors = [akRight, akBottom]
+    Caption = '&OK'
+    Default = True
+    Kind = bkOK
+    ModalResult = 1
+    TabOrder = 2
+  end
+  object BitBtn2: TBitBtn
+    Left = 479
+    Height = 30
+    Top = 284
+    Width = 112
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    Caption = 'Annuler'
+    Kind = bkCancel
+    ModalResult = 2
+    OnClick = BitBtn2Click
+    TabOrder = 3
+  end
+  object editRechercheRapide: TEdit
+    Left = 6
+    Height = 24
+    Top = 4
+    Width = 455
+    Anchors = [akTop, akLeft, akRight]
+    OnKeyPress = editRechercheRapideKeyPress
+    TabOrder = 4
+  end
+  object btnFind: TButton
+    Left = 462
+    Height = 24
+    Top = 4
+    Width = 129
+    Anchors = [akTop, akRight]
+    Caption = 'Rechercher'
+    OnClick = btnFindClick
+    TabOrder = 5
+  end
+  object lbNbElements: TLabel
+    Left = 6
+    Height = 16
+    Top = 284
+    Width = 87
+    Anchors = [akLeft, akBottom]
+    Caption = 'lbNbElements'
+    ParentColor = False
+  end
+end

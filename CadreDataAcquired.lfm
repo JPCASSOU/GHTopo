@@ -1,0 +1,11 @@
+object CdrDataAcquired: TCdrDataAcquired
+  Left = 0
+  Height = 478
+  Top = 0
+  Width = 679
+  Align = alClient
+  Anchors = [akTop, akLeft, akBottom]
+  TabOrder = 0
+  DesignLeft = 685
+  DesignTop = 318
+end

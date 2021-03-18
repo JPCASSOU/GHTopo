@@ -1,0 +1,498 @@
+object frmCalculette: TfrmCalculette
+  Left = 158
+  Height = 834
+  Top = 299
+  Width = 1365
+  Caption = 'frmCalculette'
+  ClientHeight = 834
+  ClientWidth = 1365
+  Font.CharSet = ANSI_CHARSET
+  Font.Color = clBlack
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  OnClose = FormClose
+  OnCloseQuery = FormCloseQuery
+  OnShow = FormShow
+  Position = poScreenCenter
+  LCLVersion = '2.0.0.4'
+  object BitBtn1: TBitBtn
+    Left = 1119
+    Height = 26
+    Top = 804
+    Width = 120
+    Anchors = [akRight, akBottom]
+    DefaultCaption = True
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -13
+    Font.Name = 'Arial'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold]
+    Kind = bkOK
+    ModalResult = 1
+    ParentFont = False
+    TabOrder = 2
+  end
+  object BitBtn2: TBitBtn
+    Left = 1243
+    Height = 26
+    Top = 804
+    Width = 120
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    DefaultCaption = True
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -13
+    Font.Name = 'Arial'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold]
+    Kind = bkCancel
+    ModalResult = 2
+    ParentFont = False
+    TabOrder = 0
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 798
+    Top = 4
+    Width = 1359
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelOuter = bvLowered
+    ClientHeight = 798
+    ClientWidth = 1359
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -13
+    Font.Name = 'Arial'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 1
+    inline CdrCalculette1: TCdrCalculette
+      Left = 1
+      Height = 796
+      Top = 1
+      Width = 1357
+      ClientHeight = 796
+      ClientWidth = 1357
+      DesignLeft = 403
+      DesignTop = 260
+      inherited PageControl1: TPageControl
+        Height = 796
+        Width = 1357
+        ActivePage = CdrCalculette1.tabShtInerties
+        TabIndex = 6
+        inherited tabShtCalculatrice: TTabSheet
+          inherited Panel8: TPanel
+            inherited SpeedButton1: TSpeedButton
+              Flat = False
+            end
+          end
+        end
+        inherited tabShtConvertisseur: TTabSheet
+          inherited PairSplitter2: TPairSplitter
+            inherited PairSplitterSide3: TPairSplitterSide
+              inherited Panel7: TPanel
+                inherited SpeedButton2: TSpeedButton
+                  Flat = False
+                end
+              end
+              inherited Panel1: TPanel
+                inherited SpeedButton3: TSpeedButton
+                  Flat = False
+                end
+                inherited SpeedButton4: TSpeedButton
+                  Flat = False
+                end
+                inherited SpeedButton17: TSpeedButton
+                  Flat = False
+                end
+                inherited SpeedButton9: TSpeedButton
+                  Flat = False
+                end
+                inherited SpeedButton33: TSpeedButton
+                  Flat = False
+                end
+              end
+              inherited Panel11: TPanel
+                inherited SpeedButton6: TSpeedButton
+                  Flat = False
+                end
+                inherited SpeedButton28: TSpeedButton
+                  Flat = False
+                end
+                inherited SpeedButton8: TSpeedButton
+                  Flat = False
+                end
+                inherited SpeedButton7: TSpeedButton
+                  Flat = False
+                end
+                inherited SpeedButton5: TSpeedButton
+                  Flat = False
+                end
+                inherited SpeedButton14: TSpeedButton
+                  Flat = False
+                end
+                inherited SpeedButton16: TSpeedButton
+                  Flat = False
+                end
+              end
+            end
+            inherited PairSplitterSide4: TPairSplitterSide
+              inherited Panel6: TPanel
+                inherited grbxAdditionalLayers: TGroupBox
+                  inherited SpeedButton23: TSpeedButton
+                    Flat = False
+                  end
+                  inherited SpeedButton26: TSpeedButton
+                    Flat = False
+                  end
+                  inherited SpeedButton27: TSpeedButton
+                    Flat = False
+                  end
+                  inherited SpeedButton29: TSpeedButton
+                    Flat = False
+                  end
+                  inherited SpeedButton30: TSpeedButton
+                    Flat = False
+                  end
+                  inherited SpeedButton31: TSpeedButton
+                    Flat = False
+                  end
+                  inherited SpeedButton32: TSpeedButton
+                    Flat = False
+                  end
+                end
+              end
+            end
+          end
+        end
+        inherited tabShtGenerateurQRCode: TTabSheet
+          inherited Panel10: TPanel
+            inherited PairSplitter7: TPairSplitter
+              inherited PairSplitterSide13: TPairSplitterSide
+                inherited SpeedButton15: TSpeedButton
+                  Flat = False
+                end
+                inherited SpeedButton18: TSpeedButton
+                  Flat = False
+                end
+              end
+            end
+          end
+        end
+        inherited tabShtPascalScript: TTabSheet
+          inherited CdrPascalScript1: TCdrPascalScript
+            Height = 704
+            Width = 1222
+            ClientHeight = 704
+            ClientWidth = 1222
+            inherited pnlEditor: TPanel
+              Height = 648
+              Width = 1214
+              ClientHeight = 648
+              ClientWidth = 1214
+              inherited PairSplitter4: TPairSplitter
+                Height = 646
+                Width = 1212
+                inherited PairSplitterSide7: TPairSplitterSide
+                  Width = 1212
+                  ClientWidth = 1212
+                  inherited PairSplitter6: TPairSplitter
+                    Width = 1212
+                    inherited PairSplitterSide12: TPairSplitterSide
+                      Width = 919
+                      ClientWidth = 919
+                      inherited editPascalScript: TSynEdit
+                        Width = 919
+                      end
+                    end
+                  end
+                end
+                inherited PairSplitterSide8: TPairSplitterSide
+                  Height = 240
+                  Width = 1212
+                  ClientWidth = 1212
+                  ClientHeight = 240
+                  inherited PairSplitter5: TPairSplitter
+                    Height = 240
+                    Width = 1212
+                    inherited PairSplitterSide9: TPairSplitterSide
+                      Height = 240
+                      ClientHeight = 240
+                      inherited lsbPSMessages: TListBox
+                        Height = 240
+                      end
+                    end
+                    inherited PairSplitterSide10: TPairSplitterSide
+                      Height = 240
+                      Width = 835
+                      ClientWidth = 835
+                      ClientHeight = 240
+                      inherited editPSOutPut: TSynEdit
+                        Height = 240
+                        Width = 835
+                      end
+                    end
+                  end
+                end
+              end
+            end
+            inherited pnlButtons: TPanel
+              inherited SpeedButton1: TSpeedButton
+                Flat = False
+              end
+              inherited SpeedButton2: TSpeedButton
+                Flat = False
+              end
+              inherited SpeedButton3: TSpeedButton
+                Flat = False
+              end
+              inherited SpeedButton4: TSpeedButton
+                Flat = False
+              end
+              inherited SpeedButton7: TSpeedButton
+                Flat = False
+              end
+            end
+            inherited lbStatusPSScript: TStaticText
+              Left = 1082
+            end
+          end
+        end
+        inherited tabShtDeclimag: TTabSheet
+          inherited Panel3: TPanel
+            inherited SpeedButton13: TSpeedButton
+              Flat = False
+            end
+          end
+          inherited pnlTableauDeclimag: TPanel
+            inherited SpeedButton11: TSpeedButton
+              Flat = False
+            end
+            inherited SpeedButton12: TSpeedButton
+              Flat = False
+            end
+          end
+        end
+        inherited tabShtInerties: TTabSheet
+          ClientHeight = 767
+          ClientWidth = 1349
+          inherited Panel2: TPanel
+            Height = 760
+            Width = 1203
+            ClientHeight = 760
+            ClientWidth = 1203
+            inherited PageControl2: TPageControl
+              Height = 749
+              Width = 886
+              inherited TabSheet1: TTabSheet
+                inherited CdrDGCDrawingContext1: TCdrDGCDrawingContext
+                  Height = 657
+                  Width = 749
+                  ClientHeight = 657
+                  ClientWidth = 749
+                  DesignTop = 201
+                  inherited pnlVue: TPanel
+                    Height = 621
+                    Width = 718
+                    ClientHeight = 621
+                    ClientWidth = 718
+                    inherited Vue: TPaintBox
+                      Height = 619
+                      Width = 716
+                    end
+                  end
+                  inherited lbMousePosition: TStaticText
+                    Top = 626
+                    Width = 614
+                  end
+                  inherited SpeedButton12: TSpeedButton
+                    Left = 717
+                    Flat = False
+                  end
+                  inherited SpeedButton13: TSpeedButton
+                    Left = 717
+                    Flat = False
+                  end
+                  inherited SpeedButton14: TSpeedButton
+                    Left = 717
+                    Flat = False
+                  end
+                  inherited SpeedButton15: TSpeedButton
+                    Left = 717
+                    Flat = False
+                  end
+                  inherited SpeedButton16: TSpeedButton
+                    Left = 717
+                    Flat = False
+                  end
+                  inherited SpeedButton17: TSpeedButton
+                    Left = 717
+                    Flat = False
+                  end
+                  inherited SpeedButton18: TSpeedButton
+                    Left = 717
+                    Top = 591
+                    Flat = False
+                  end
+                  inherited SpeedButton19: TSpeedButton
+                    Left = 654
+                    Top = 625
+                    Flat = False
+                  end
+                  inherited SpeedButton20: TSpeedButton
+                    Left = 686
+                    Top = 625
+                    Flat = False
+                  end
+                  inherited SpeedButton21: TSpeedButton
+                    Left = 717
+                    Top = 625
+                  end
+                  inherited SpeedButton22: TSpeedButton
+                    Left = 622
+                    Top = 625
+                    Flat = False
+                  end
+                end
+              end
+              inherited TabSheet2: TTabSheet
+                ClientHeight = 720
+                ClientWidth = 878
+                inherited CdrDGCDrawingContext2: TCdrDGCDrawingContext
+                  Height = 720
+                  Width = 878
+                  ClientHeight = 720
+                  ClientWidth = 878
+                  DesignTop = 201
+                  inherited pnlVue: TPanel
+                    Height = 684
+                    Width = 847
+                    ClientHeight = 684
+                    ClientWidth = 847
+                    inherited Vue: TPaintBox
+                      Height = 682
+                      Width = 845
+                    end
+                  end
+                  inherited lbMousePosition: TStaticText
+                    Top = 689
+                    Width = 743
+                  end
+                  inherited SpeedButton12: TSpeedButton
+                    Left = 846
+                    Flat = False
+                  end
+                  inherited SpeedButton13: TSpeedButton
+                    Left = 846
+                    Flat = False
+                  end
+                  inherited SpeedButton14: TSpeedButton
+                    Left = 846
+                    Flat = False
+                  end
+                  inherited SpeedButton15: TSpeedButton
+                    Left = 846
+                    Flat = False
+                  end
+                  inherited SpeedButton16: TSpeedButton
+                    Left = 846
+                    Flat = False
+                  end
+                  inherited SpeedButton17: TSpeedButton
+                    Left = 846
+                    Flat = False
+                  end
+                  inherited SpeedButton18: TSpeedButton
+                    Left = 846
+                    Top = 654
+                    Flat = False
+                  end
+                  inherited SpeedButton19: TSpeedButton
+                    Left = 783
+                    Top = 688
+                    Flat = False
+                  end
+                  inherited SpeedButton20: TSpeedButton
+                    Left = 815
+                    Top = 688
+                    Flat = False
+                  end
+                  inherited SpeedButton21: TSpeedButton
+                    Left = 846
+                    Top = 688
+                  end
+                  inherited SpeedButton22: TSpeedButton
+                    Left = 751
+                    Top = 688
+                    Flat = False
+                  end
+                end
+              end
+            end
+          end
+          inherited Panel12: TPanel
+            Height = 665
+            ClientHeight = 665
+            inherited grdCoordonneesSection: TStringGrid
+              Height = 325
+            end
+            inherited Panel14: TPanel
+              Top = 333
+            end
+          end
+        end
+        inherited tabShtTextures: TTabSheet
+          ClientHeight = 704
+          inherited CdrTextures1: TCdrTextures
+            Height = 704
+            Width = 1222
+            ClientHeight = 704
+            ClientWidth = 1222
+            inherited Panel2: TPanel
+              Left = 811
+            end
+            inherited Panel3: TPanel
+              Left = 811
+            end
+            inherited Panel4: TPanel
+              Left = 811
+            end
+            inherited Panel1: TPanel
+              Width = 802
+              ClientWidth = 802
+              inherited PaintBox1: TPaintBox
+                Width = 800
+              end
+            end
+            inherited Panel6: TPanel
+              Left = 811
+            end
+            inherited editCodePascalTexture: TSynEdit
+              Height = 532
+              Width = 801
+            end
+          end
+        end
+      end
+    end
+  end
+  object lbDocTopoName: TStaticText
+    Left = 2
+    Height = 21
+    Top = 807
+    Width = 552
+    Anchors = [akLeft, akBottom]
+    BorderStyle = sbsSunken
+    Caption = 'lbDocTopoName'
+    TabOrder = 3
+  end
+end

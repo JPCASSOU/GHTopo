@@ -1,0 +1,8 @@
+object frmListeStationsNearToCurrent: TfrmListeStationsNearToCurrent
+  Left = 307
+  Height = 312
+  Top = 196
+  Width = 495
+  Caption = 'frmListeStationsNearToCurrent'
+  LCLVersion = '1.6.0.4'
+end

@@ -1,0 +1,79 @@
+object dlgDispGraphisme2D: TdlgDispGraphisme2D
+  Left = 563
+  Height = 440
+  Top = 278
+  Width = 696
+  Caption = 'dlgDispGraphisme2D'
+  ClientHeight = 440
+  ClientWidth = 696
+  LCLVersion = '2.0.0.4'
+  inline CdrDGCDrawingContext1: TCdrDGCDrawingContext
+    Height = 440
+    Width = 696
+    ClientHeight = 440
+    ClientWidth = 696
+    inherited pnlVue: TPanel
+      Height = 404
+      Width = 665
+      ClientHeight = 404
+      ClientWidth = 665
+      inherited Vue: TPaintBox
+        Height = 402
+        Width = 663
+      end
+    end
+    inherited lbMousePosition: TStaticText
+      Top = 409
+      Width = 561
+    end
+    inherited SpeedButton12: TSpeedButton
+      Left = 664
+      Flat = False
+    end
+    inherited SpeedButton13: TSpeedButton
+      Left = 664
+      Flat = False
+    end
+    inherited SpeedButton14: TSpeedButton
+      Left = 664
+      Flat = False
+    end
+    inherited SpeedButton15: TSpeedButton
+      Left = 664
+      Flat = False
+    end
+    inherited SpeedButton16: TSpeedButton
+      Left = 664
+      Flat = False
+    end
+    inherited SpeedButton17: TSpeedButton
+      Left = 664
+      Flat = False
+    end
+    inherited SpeedButton18: TSpeedButton
+      Left = 664
+      Top = 374
+      Flat = False
+    end
+    inherited SpeedButton19: TSpeedButton
+      Left = 601
+      Top = 408
+      Flat = False
+    end
+    inherited SpeedButton20: TSpeedButton
+      Left = 633
+      Top = 408
+      Flat = False
+    end
+    inherited SpeedButton21: TSpeedButton
+      Left = 664
+      Top = 408
+      OnClick = nil
+    end
+    inherited SpeedButton22: TSpeedButton
+      Left = 569
+      Top = 408
+      Flat = False
+    end
+  end
+end

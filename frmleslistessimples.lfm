@@ -1,0 +1,92 @@
+object frmListesSimples: TfrmListesSimples
+  Left = -1528
+  Height = 606
+  Top = 307
+  Width = 1160
+  Caption = 'frmListesSimples'
+  ClientHeight = 606
+  ClientWidth = 1160
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  OnCloseQuery = FormCloseQuery
+  LCLVersion = '2.0.0.4'
+  inline CdrListesSimples1: TCdrListesSimples
+    Height = 606
+    Width = 1160
+    ClientHeight = 606
+    ClientWidth = 1160
+    inherited Panel1: TPanel
+      Height = 606
+      Width = 1160
+      ClientHeight = 606
+      ClientWidth = 1160
+      inherited lbNbreElements: TStaticText
+        Top = 577
+      end
+      inherited SpeedButton3: TSpeedButton
+        Left = 982
+        Flat = False
+      end
+      inherited SpeedButton8: TSpeedButton
+        Left = 1008
+        Flat = False
+      end
+      inherited SpeedButton9: TSpeedButton
+        Left = 1036
+        Flat = False
+      end
+      inherited SpeedButton12: TSpeedButton
+        Left = 1064
+        Flat = False
+      end
+      inherited SpeedButton2: TSpeedButton
+        Left = 1100
+        Flat = False
+      end
+      inherited SpeedButton1: TSpeedButton
+        Left = 1128
+        Flat = False
+      end
+      inherited editSearch: TEdit
+        Width = 1126
+      end
+      inherited SpeedButton4: TSpeedButton
+        Left = 1130
+        Flat = False
+      end
+      inherited hcColsTitres: THeaderControl
+        Width = 1152
+      end
+      inherited lsbListe: TListBox
+        Height = 489
+        Top = 88
+        Width = 1152
+        Font.Quality = fqDraft
+      end
+      inherited Panel2: TPanel
+        Width = 970
+        ClientWidth = 970
+        inherited CdrRadioButtons1: TCdrRadioButtons
+          Left = 1
+          Height = 30
+          Top = 1
+          Width = 968
+        end
+      end
+      inherited ProgressBar1: TProgressBar
+        Top = 577
+        Width = 818
+      end
+      inherited lbRayonCaptureProxi: TLabel
+        Top = 577
+      end
+      inherited editRayonCaptureProxi: TCurrencyEdit
+        Top = 577
+      end
+    end
+  end
+end

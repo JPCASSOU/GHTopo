@@ -1,0 +1,169 @@
+object CdrListesPourVisualisateurs: TCdrListesPourVisualisateurs
+  Left = 0
+  Height = 638
+  Top = 0
+  Width = 655
+  Align = alClient
+  ClientHeight = 638
+  ClientWidth = 655
+  Font.CharSet = ANSI_CHARSET
+  Font.Color = clBlack
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  ParentFont = False
+  TabOrder = 0
+  DesignLeft = 635
+  DesignTop = 97
+  object hcColsTitres: THeaderControl
+    Left = 4
+    Height = 23
+    Top = 64
+    Width = 649
+    DragReorder = False
+    Sections = <>
+    OnSectionResize = hcColsTitresSectionResize
+    Anchors = [akTop, akLeft, akRight]
+  end
+  object lbTitreListe: TLabel
+    Left = 4
+    Height = 16
+    Top = 4
+    Width = 71
+    Caption = 'lbTitreListe'
+    ParentColor = False
+  end
+  object cmbModeListe: TComboBox
+    Left = 207
+    Height = 24
+    Top = 4
+    Width = 445
+    Anchors = [akTop, akLeft, akRight]
+    ItemHeight = 16
+    OnChange = cmbModeListeChange
+    Style = csDropDownList
+    TabOrder = 1
+  end
+  object btnLocaliser: TButton
+    Left = 207
+    Height = 25
+    Top = 582
+    Width = 139
+    Anchors = [akLeft, akBottom]
+    Caption = 'Localiser'
+    OnClick = btnLocaliserClick
+    TabOrder = 2
+  end
+  object lsbListeElements: TCheckListBox
+    Left = 3
+    Height = 486
+    Top = 92
+    Width = 649
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    ItemHeight = 18
+    OnClick = lsbListeElementsClick
+    OnDrawItem = lsbListeElementsDrawItem
+    OnSelectionChange = lsbListeElementsSelectionChange
+    ParentShowHint = False
+    ShowHint = True
+    Style = lbOwnerDrawFixed
+    TabOrder = 3
+  end
+  object chkDoHighLightCurrentItem: TCheckBox
+    Left = 4
+    Height = 20
+    Top = 582
+    Width = 195
+    Anchors = [akLeft, akBottom]
+    Caption = 'chkDoHighLightCurrentItem'
+    OnChange = chkDoHighLightCurrentItemChange
+    TabOrder = 4
+  end
+  object lbRegenerationListe: TStaticText
+    Left = 12
+    Height = 32
+    Top = 96
+    Width = 633
+    Alignment = taCenter
+    Anchors = [akTop, akLeft, akRight]
+    BorderStyle = sbsSingle
+    Caption = '#'
+    TabOrder = 5
+  end
+  object btnHighlightSelected: TButton
+    Left = 2
+    Height = 25
+    Top = 610
+    Width = 197
+    Anchors = [akLeft, akBottom]
+    Caption = 'btnHighlightSelected'
+    OnClick = btnHighlightSelectedClick
+    TabOrder = 6
+  end
+  object editSeriesARetenir: TEdit
+    Left = 4
+    Height = 24
+    Top = 35
+    Width = 492
+    Anchors = [akTop, akLeft, akRight]
+    TabOrder = 7
+  end
+  object btnCocher: TButton
+    Left = 496
+    Height = 24
+    Top = 35
+    Width = 36
+    Anchors = [akTop, akRight]
+    Caption = 'V'
+    OnClick = btnCocherClick
+    TabOrder = 8
+  end
+  object btnHelp: TButton
+    Left = 616
+    Height = 25
+    Top = 34
+    Width = 36
+    Anchors = [akTop, akRight]
+    Caption = '?'
+    OnClick = btnHelpClick
+    TabOrder = 9
+  end
+  object btnDeselectAll: TButton
+    Left = 207
+    Height = 25
+    Top = 610
+    Width = 139
+    Anchors = [akLeft, akBottom]
+    Caption = 'Désélect tout'
+    OnClick = btnDeselectAllClick
+    TabOrder = 10
+  end
+  object btnConvertirEnFiltre: TButton
+    Left = 532
+    Height = 24
+    Hint = 'Convertir en filtre'
+    Top = 35
+    Width = 39
+    Anchors = [akTop, akRight]
+    Caption = '->F'
+    OnClick = btnConvertirEnFiltreClick
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 11
+  end
+  object btnExtraireLesIndex: TButton
+    Left = 572
+    Height = 25
+    Hint = 'Extraire les index'
+    Top = 35
+    Width = 35
+    Anchors = [akTop, akRight]
+    Caption = '-> I'
+    OnClick = btnExtraireLesIndexClick
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 12
+  end
+end

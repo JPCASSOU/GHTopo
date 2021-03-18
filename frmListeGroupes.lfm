@@ -1,0 +1,143 @@
+object dlgListeGroupes: TdlgListeGroupes
+  Left = 481
+  Height = 409
+  Top = 268
+  Width = 636
+  Caption = 'dlgListeGroupes'
+  ClientHeight = 409
+  ClientWidth = 636
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  LCLVersion = '1.6.0.4'
+  object hcColonnes: THeaderControl
+    Left = 4
+    Height = 20
+    Top = 48
+    Width = 630
+    DragReorder = False
+    Sections = <    
+      item
+        Alignment = taLeftJustify
+        Width = 20
+        Visible = True
+      end    
+      item
+        Alignment = taLeftJustify
+        Text = 'V'
+        Width = 20
+        Visible = True
+      end    
+      item
+        Alignment = taLeftJustify
+        Text = 'X'
+        Width = 20
+        Visible = True
+      end    
+      item
+        Alignment = taLeftJustify
+        Text = 'Coul.'
+        Width = 30
+        Visible = True
+      end    
+      item
+        Alignment = taLeftJustify
+        Text = 'No'
+        Width = 40
+        Visible = True
+      end    
+      item
+        Alignment = taLeftJustify
+        Text = 'ZOrder'
+        Width = 55
+        Visible = True
+      end    
+      item
+        Alignment = taLeftJustify
+        Text = 'Nom'
+        Width = 200
+        Visible = True
+      end>
+    Anchors = [akTop, akLeft, akRight]
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -13
+    Font.Name = 'Arial'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+  end
+  object lsbGroupes: TListBox
+    Left = 4
+    Height = 302
+    Top = 67
+    Width = 630
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -13
+    Font.Name = 'Arial'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ItemHeight = 0
+    OnDrawItem = lsbGroupesDrawItem
+    ParentFont = False
+    Style = lbOwnerDrawFixed
+    TabOrder = 1
+  end
+  object Label1: TLabel
+    Left = 3
+    Height = 16
+    Top = 0
+    Width = 68
+    Caption = 'Recherche'
+    ParentColor = False
+    
+    ShowHint = True
+  end
+  object lbNbGroupes: TLabel
+    Left = 349
+    Height = 14
+    Top = 0
+    Width = 90
+    Anchors = [akTop, akRight]
+    AutoSize = False
+    Caption = 'lbNbGroupes'
+    ParentColor = False
+  end
+  object editFindingGroupe: TEdit
+    Left = 2
+    Height = 24
+    Hint = 'Saisir un texte dans la boîte ci-contre.'#13#10'Pour accéder à un groupe par son numéro, saisir un "=" puis le numéro du groupe'
+    Top = 16
+    Width = 436
+    Anchors = [akTop, akLeft, akRight]
+    
+    TabOrder = 2
+  end
+  object BitBtn1: TBitBtn
+    Left = 413
+    Height = 30
+    Top = 375
+    Width = 107
+    Anchors = [akRight, akBottom]
+    Default = True
+    DefaultCaption = True
+    Kind = bkOK
+    ModalResult = 1
+    TabOrder = 3
+  end
+  object BitBtn2: TBitBtn
+    Left = 525
+    Height = 30
+    Top = 375
+    Width = 107
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    DefaultCaption = True
+    Kind = bkCancel
+    ModalResult = 2
+    TabOrder = 4
+  end
+end

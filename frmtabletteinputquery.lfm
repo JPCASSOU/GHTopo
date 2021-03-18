@@ -1,0 +1,58 @@
+object dlgInputQuery: TdlgInputQuery
+  Left = 508
+  Height = 130
+  Top = 606
+  Width = 602
+  BorderIcons = []
+  Caption = 'dlgInputQuery'
+  ClientHeight = 130
+  ClientWidth = 602
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -27
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  OnShow = FormShow
+  LCLVersion = '1.2.6.0'
+  object BitBtn1: TBitBtn
+    Left = 231
+    Height = 40
+    Top = 87
+    Width = 180
+    Anchors = [akRight, akBottom]
+    Default = True
+    DefaultCaption = True
+    Kind = bkOK
+    ModalResult = 1
+    TabOrder = 0
+  end
+  object BitBtn2: TBitBtn
+    Left = 419
+    Height = 40
+    Top = 87
+    Width = 180
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    DefaultCaption = True
+    Kind = bkCancel
+    ModalResult = 2
+    TabOrder = 1
+  end
+  object lbPrompt: TLabel
+    Left = 4
+    Height = 32
+    Top = 4
+    Width = 123
+    Caption = 'lbPrompt'
+    ParentColor = False
+  end
+  object editValue: TEdit
+    Left = 4
+    Height = 40
+    Top = 40
+    Width = 595
+    Anchors = [akTop, akLeft, akRight]
+    TabOrder = 2
+  end
+end

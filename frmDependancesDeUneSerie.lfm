@@ -1,0 +1,87 @@
+object dlgDependancesSerie: TdlgDependancesSerie
+  Left = 440
+  Height = 401
+  Top = 253
+  Width = 677
+  Caption = 'dlgDependancesSerie'
+  ClientHeight = 401
+  ClientWidth = 677
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  Position = poScreenCenter
+  LCLVersion = '1.8.0.6'
+  object lsbSeriesDependantes: TListBox
+    Left = 3
+    Height = 270
+    Top = 92
+    Width = 671
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    ItemHeight = 0
+    TabOrder = 0
+  end
+  object lbSerie: TStaticText
+    Left = 3
+    Height = 19
+    Top = 4
+    Width = 671
+    Anchors = [akTop, akLeft, akRight]
+    BorderStyle = sbsSunken
+    Caption = 'StaticText1g'
+    TabOrder = 1
+  end
+  object lbNbDependances: TLabel
+    Left = 3
+    Height = 16
+    Top = 76
+    Width = 90
+    Caption = 'Dépendances:'
+    ParentColor = False
+  end
+  object lbMessageConfirmation: TStaticText
+    Left = 3
+    Height = 36
+    Top = 32
+    Width = 671
+    Alignment = taCenter
+    Anchors = [akTop, akLeft, akRight]
+    BorderStyle = sbsSunken
+    Caption = 'lbMessageConfirmation'
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clRed
+    Font.Height = -16
+    Font.Name = 'Arial'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 2
+  end
+  object BitBtn1: TBitBtn
+    Left = 460
+    Height = 31
+    Top = 367
+    Width = 104
+    Anchors = [akRight, akBottom]
+    DefaultCaption = True
+    Kind = bkYes
+    ModalResult = 6
+    TabOrder = 3
+  end
+  object BitBtn2: TBitBtn
+    Left = 570
+    Height = 31
+    Top = 367
+    Width = 104
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    Default = True
+    DefaultCaption = True
+    Kind = bkNo
+    ModalResult = 7
+    TabOrder = 4
+  end
+end

@@ -1,0 +1,215 @@
+object dlgEditGisLayer: TdlgEditGisLayer
+  Left = 833
+  Height = 349
+  Top = 266
+  Width = 635
+  Caption = 'Edition d''une couche GIS'
+  ClientHeight = 349
+  ClientWidth = 635
+  Font.CharSet = ANSI_CHARSET
+  Font.Color = clBlack
+  Font.Height = -13
+  Font.Name = 'Arial'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  Position = poScreenCenter
+  LCLVersion = '2.0.0.4'
+  object Panel1: TPanel
+    Left = 4
+    Height = 298
+    Top = 4
+    Width = 623
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelOuter = bvLowered
+    ClientHeight = 298
+    ClientWidth = 623
+    TabOrder = 0
+    object editLayerName: TEdit
+      Left = 212
+      Height = 24
+      Top = 4
+      Width = 404
+      Anchors = [akTop, akLeft, akRight]
+      TabOrder = 0
+    end
+    object Label1: TLabel
+      Left = 4
+      Height = 16
+      Top = 4
+      Width = 115
+      Caption = 'Nom de la couche'
+      ParentColor = False
+    end
+    object GroupBox1: TGroupBox
+      Left = 4
+      Height = 152
+      Top = 136
+      Width = 360
+      Caption = 'Symbole'
+      ClientHeight = 131
+      ClientWidth = 356
+      TabOrder = 1
+      object Label2: TLabel
+        Left = 4
+        Height = 16
+        Top = 64
+        Width = 54
+        Caption = 'Couleur '
+        ParentColor = False
+      end
+      object btnMarkerColor: TColorButton
+        Left = 116
+        Height = 25
+        Top = 64
+        Width = 103
+        BorderWidth = 2
+        ButtonColorSize = 16
+        ButtonColor = clBlue
+      end
+      object editMarkerSize: TCurrencyEdit
+        Left = 116
+        Height = 24
+        Top = 32
+        Width = 103
+        Alignment = taRightJustify
+        DisplayFormat = '0'
+        MaxValue = 0
+        MinValue = 0
+        TabOrder = 0
+        Value = 10
+      end
+      object Label3: TLabel
+        Left = 4
+        Height = 16
+        Top = 32
+        Width = 35
+        Caption = 'Taille'
+        ParentColor = False
+      end
+      object cmbMarkerStyle: TComboBox
+        Left = 116
+        Height = 24
+        Top = 4
+        Width = 232
+        ItemHeight = 16
+        ItemIndex = 0
+        Items.Strings = (
+          'Marqueur standard'
+          'Cercle'
+          'Carré'
+          'Triangle'
+          'Losange'
+          'Etoile'
+          'Croix (+)'
+          'Croix ( x)'
+          'Icône'
+        )
+        Style = csDropDownList
+        TabOrder = 1
+        Text = 'Marqueur standard'
+      end
+      object Label7: TLabel
+        Left = 4
+        Height = 16
+        Top = 4
+        Width = 32
+        Caption = 'Style'
+        ParentColor = False
+      end
+      object editMarkerOpacity: TCurrencyEdit
+        Left = 116
+        Height = 24
+        Top = 96
+        Width = 80
+        Alignment = taRightJustify
+        DecimalPlaces = 0
+        DisplayFormat = '0'
+        MaxValue = 255
+        MinValue = 0
+        TabOrder = 2
+        Value = 64
+      end
+      object Label8: TLabel
+        Left = 4
+        Height = 16
+        Top = 96
+        Width = 49
+        Caption = 'Opacité'
+        ParentColor = False
+      end
+    end
+    object editLayerVarName: TEdit
+      Left = 212
+      Height = 24
+      Top = 32
+      Width = 404
+      Anchors = [akTop, akLeft, akRight]
+      TabOrder = 2
+    end
+    object Label4: TLabel
+      Left = 4
+      Height = 16
+      Top = 32
+      Width = 183
+      Caption = 'Variable JavaScript associée'
+      ParentColor = False
+    end
+    object Label5: TLabel
+      Left = 4
+      Height = 16
+      Top = 60
+      Width = 71
+      Caption = 'Description'
+      ParentColor = False
+    end
+    object editLayerDescription: TEdit
+      Left = 212
+      Height = 24
+      Top = 60
+      Width = 404
+      Anchors = [akTop, akLeft, akRight]
+      TabOrder = 3
+    end
+    object Label6: TLabel
+      Left = 4
+      Height = 16
+      Top = 88
+      Width = 125
+      Caption = 'Auteur ou copyright'
+      ParentColor = False
+    end
+    object editLayerAttribution: TEdit
+      Left = 212
+      Height = 24
+      Top = 88
+      Width = 404
+      Anchors = [akTop, akLeft, akRight]
+      TabOrder = 4
+    end
+  end
+  object BitBtn1: TBitBtn
+    Left = 530
+    Height = 30
+    Top = 310
+    Width = 97
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    DefaultCaption = True
+    Kind = bkCancel
+    ModalResult = 2
+    TabOrder = 1
+  end
+  object BitBtn2: TBitBtn
+    Left = 427
+    Height = 30
+    Top = 310
+    Width = 97
+    Anchors = [akRight, akBottom]
+    Default = True
+    DefaultCaption = True
+    Kind = bkOK
+    ModalResult = 1
+    TabOrder = 2
+  end
+end
