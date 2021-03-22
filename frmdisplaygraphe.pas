@@ -77,6 +77,7 @@ uses
 
 function TdlgDisplayGraphe.Initialiser(const B: TBDDEntites; const G: TPathFindingGraphe): boolean;
 begin
+
   SetLength(FDistancier, 1);
   SetLength(FDistancier[0], 1);
   grdDistancier.ColCount := 1;
@@ -97,6 +98,7 @@ var
 
 begin
   G := CdrGrapheItineraire1.GetGraphe();
+  self.Caption := GetResourceString(rsDLG_GRAPHE_TITLE);
   CdrGrapheItineraire1.SetCurrentIdxItineraire(0);
   G.GetItineraire(CdrGrapheItineraire1.GetCurrentIdxItineraire(), MyPath);
 

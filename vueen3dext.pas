@@ -113,6 +113,7 @@ type
   strict private
     FModeEditValues: TModeEditValues;
     procedure SetPanelEditValues(const M: TModeEditValues; const QValue: double);
+    procedure SetThetaPhi(const QTheta, QPhi: double);
 
   private
     FVue3DParams: TVue3DParams;
@@ -190,6 +191,7 @@ begin
 
   FVue3DParams.Theta               := 45.00;
   FVue3DParams.Phi                 := 32.00;
+  btnExportGCP.Enabled             := false;
   FVue3DParams.FovOrZoom           :=  1.00;
   FVue3DParams.CoefMagnification   :=  1.00;
   FVue3DParams.ColorBackGround     := clWhite;
@@ -208,6 +210,7 @@ begin
   editPhi.Value            := FVue3DParams.Phi;
   editZoom.Value           := FVue3DParams.FovOrZoom;
   editMagnificationZ.Value := FVue3DParams.CoefMagnification;
+
 
   // paramètres de la vue 3D
   CdrVue3DExt1.InitialiseVue3D(FBDDEntites,
@@ -240,6 +243,7 @@ begin
   editPhi.Value               := CdrVue3DExt1.GetPhi();
   editZoom.Value              := CdrVue3DExt1.GetZoom();
   editMagnificationZ.Value    := CdrVue3DExt1.GetFactZ();
+  btnExportGCP.Enabled        := (0 = trunc(editPhi.Value));
 end;
 
 procedure TfrmVue3DExt.btnExportGCPClick(Sender: TObject);
@@ -373,6 +377,15 @@ begin
     FBDDEntites.ExporterAntennesNuagePoints(QFileName);
   end;
 end;
+procedure TfrmVue3DExt.SetThetaPhi(const QTheta, QPhi: double);
+begin
+  FVue3DParams.Theta := QTheta;
+  FVue3DParams.Phi   := QPhi;
+  editTheta.Value    := FVue3DParams.Theta;
+  editPhi.Value      := FVue3DParams.Phi;
+  btnExportGCP.Enabled := (0 = trunc(QPhi));
+  Redessiner();
+end;
 
 procedure TfrmVue3DExt.acParamVue3DExecute(Sender: TObject);
 var
@@ -384,41 +397,22 @@ end;
 
 procedure TfrmVue3DExt.acProjIsoExecute(Sender: TObject);
 begin
-  FVue3DParams.Theta := 45.0;
-  FVue3DParams.Phi   := 32.0;
-  editTheta.Value    := FVue3DParams.Theta;
-  editPhi.Value      := FVue3DParams.Phi;
-  Redessiner();
+  SetThetaPhi(45.0, 32.0);
 end;
 
 procedure TfrmVue3DExt.acProjXYExecute(Sender: TObject);
 begin
-
-  FVue3DParams.Theta := 270.0;
-  FVue3DParams.Phi   :=  90.0;
-  editTheta.Value    := FVue3DParams.Theta;
-  editPhi.Value      := FVue3DParams.Phi;
-
-  Redessiner();
+  SetThetaPhi(270.0, 90.0);
 end;
 
 procedure TfrmVue3DExt.acProjXZExecute(Sender: TObject);
 begin
-  FVue3DParams.Theta := 270.0;
-  FVue3DParams.Phi   :=   0.0;
-  editTheta.Value    := FVue3DParams.Theta;
-  editPhi.Value      := FVue3DParams.Phi;
-  Redessiner();
+  SetThetaPhi(270.0, 0.0);
 end;
 
 procedure TfrmVue3DExt.acProjYZExecute(Sender: TObject);
 begin
-  FVue3DParams.Theta := 0.0;
-  FVue3DParams.Phi   := 0.0;
-
-  editTheta.Value    := FVue3DParams.Theta;
-  editPhi.Value      := FVue3DParams.Phi;
-  Redessiner();
+  SetThetaPhi(0.0, 0.0);
 end;
 
 

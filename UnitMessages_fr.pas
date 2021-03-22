@@ -775,6 +775,7 @@ resourcestring
 
   rsLB_DOCUMENT_TITLE                        = 'Titre du document';
 
+
   // gestion du presse papiers pour l''import de données dans la grille Stations
   rsDLG_CLIPBRD_PTS_TITLE                    = 'Importation de points topo';
 
@@ -831,6 +832,8 @@ resourcestring
   rsDLG_BDD_INSERT_SERIE                     = 'Insérer une série ?';
   rsDLG_BDD_INSERT_NoteVersion               = 'Insérer une note de version ?';
   //*)
+  // resourcestring du dialogue Graphe du réseau
+  rsDLG_GRAPHE_TITLE                         = 'Graphe du réseau';
 
   // messages divers
   rsMSG_HAS_ALREADY_DATA                     = 'Le tableau contient déjà des données. Continuer ?';
@@ -1378,7 +1381,7 @@ resourcestring
   rsCHK_MSG_SERIE_NB_TOTAL_STATIONS          = '%d stations au total';
 
   // resourcestrings du visualisateur 3D
-  rsVUE3D_BTN_EXPORT_GCP                     = 'Polygonale pour GHCaveDraw';
+  rsVUE3D_BTN_EXPORT_GCP                     = 'Export GHCaveDraw';
   rsMSG_EXPORT_GCP_PHI_MUST_BE_ZERO          = 'L''angle d''élévation Phi doit être nul pour utiliser cette fonction';
   //
   rsBTN_HIGHLIGHT_SELECTED                   = 'Surligner sélectionnés';

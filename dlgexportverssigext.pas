@@ -88,6 +88,7 @@ begin
   Result := False;
   editLeafletCtxtWidthinPercent.AsInteger := 85; //85%
   editLeafletCtxtHeight.AsInteger         := Screen.Height - 200;
+
   try
     FDocTopo      := QDocTopo;
     FBDDEntites   := QBDD;
@@ -112,7 +113,7 @@ begin
     cmbFormatExport.Items.Add(GetResourceString(rsEXPORT_SIG_AUTOCAD_DXF));
 
     cmbFormatExport.ItemIndex := 0;
-
+    LbStepProcess.Caption := '';
     chkUseLeafletLocalLibrary.Caption := GetResourceString(rsEXPORT_SIG_USE_LOCAL_LEAFLET);
     chkUseLeafletLocalLibrary.Checked := false;
     chkUseLeafletLocalLibrary.enabled := DirectoryExists(GetGHTopoDirectory() + 'Leaflet');

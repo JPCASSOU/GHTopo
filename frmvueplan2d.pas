@@ -74,6 +74,7 @@ type
     btnStyleObjet7: TStaticText;
     btnStyleObjet9: TStaticText;
     CdrListesPourVisualisateurs1: TCdrListesPourVisualisateurs;
+    chkPOI: TCheckBox;
     chkAltitudes: TCheckBox;
     chkAntennes: TCheckBox;
     chkCotes: TCheckBox;
@@ -192,6 +193,7 @@ type
     procedure chkIDStationsChange(Sender: TObject);
     procedure chkNoeudsChange(Sender: TObject);
     procedure chkParoisChange(Sender: TObject);
+    procedure chkPOIChange(Sender: TObject);
     procedure chkPolygonalesChange(Sender: TObject);
     procedure chkRemplissageChange(Sender: TObject);
     procedure chkSectionsChange(Sender: TObject);
@@ -571,6 +573,11 @@ end;
 procedure TfrmVueEnPlan.chkParoisChange(Sender: TObject);
 begin
   ChangeAttrElementsAffiches(edWalls, chkParois.Checked);
+end;
+
+procedure TfrmVueEnPlan.chkPOIChange(Sender: TObject);
+begin
+  ChangeAttrElementsAffiches(edPOI, chkPOI.Checked);
 end;
 
 procedure TfrmVueEnPlan.chkPolygonalesChange(Sender: TObject);

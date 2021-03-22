@@ -17,7 +17,8 @@ interface
 uses
   {$INCLUDE SelectionLangues.inc} // insère les unités en fonction de la langue
   StructuresDonnees,
-  CallDialogsStdVersion, unitUtilsComposants,
+  CallDialogsStdVersion,
+  unitUtilsComposants,
   Common,
   math,
   types,

@@ -734,9 +734,9 @@ begin
     QActiveTabIndex              := QTabIndex;
     {$ELSE}
     CdrPascalScript1.Initialiser(FEvaluateurExpressions);
-    CdrTextures1.Initialiser();
     QActiveTabIndex   := 0;
     {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
+    CdrTextures1.Initialiser();
     PageControl1.ActivePageIndex := QActiveTabIndex;
     SetFocusForPageIdx(QActiveTabIndex);
     result := True;
