@@ -7,8 +7,8 @@ object GHTopoContext2DA: TGHTopoContext2DA
   ClientHeight = 536
   ClientWidth = 881
   TabOrder = 0
-  DesignLeft = 1030
-  DesignTop = 472
+  DesignLeft = 444
+  DesignTop = 225
   object Panel1: TPanel
     Left = 0
     Height = 446
@@ -270,11 +270,11 @@ object GHTopoContext2DA: TGHTopoContext2DA
       Left = 2
       Height = 60
       Top = 383
-      Width = 302
+      Width = 278
       Anchors = [akLeft, akBottom]
       BevelOuter = bvLowered
       ClientHeight = 60
-      ClientWidth = 302
+      ClientWidth = 278
       Color = 3864639
       ParentColor = False
       TabOrder = 1
@@ -282,7 +282,7 @@ object GHTopoContext2DA: TGHTopoContext2DA
         Left = 2
         Height = 23
         Top = 32
-        Width = 84
+        Width = 67
         Alignment = taRightJustify
         DisplayFormat = '0.00'
         MaxValue = 0
@@ -300,25 +300,25 @@ object GHTopoContext2DA: TGHTopoContext2DA
         TabOrder = 1
       end
       object Button2: TButton
-        Left = 92
+        Left = 71
         Height = 24
-        Top = 32
+        Top = 31
         Width = 68
         Caption = 'OK'
         OnClick = Button2Click
         TabOrder = 2
       end
       object btnLineContourColor: TColorButton
-        Left = 92
+        Left = 71
         Height = 25
-        Top = 4
+        Top = 3
         Width = 68
         BorderWidth = 2
         ButtonColorSize = 16
         ButtonColor = 11192063
       end
       object btnListeProfils: TButton
-        Left = 164
+        Left = 140
         Height = 24
         Top = 32
         Width = 64
@@ -327,7 +327,7 @@ object GHTopoContext2DA: TGHTopoContext2DA
         TabOrder = 3
       end
       object editLineContourOpacity: TSpinEdit
-        Left = 164
+        Left = 140
         Height = 23
         Top = 4
         Width = 64
@@ -336,7 +336,7 @@ object GHTopoContext2DA: TGHTopoContext2DA
         Value = 192
       end
       object btnUnloadMNT: TButton
-        Left = 232
+        Left = 208
         Height = 24
         Top = 32
         Width = 66

@@ -609,6 +609,7 @@ begin
 end;
 procedure TLeafletExport.EndBody();
 begin
+  WriteLine('  <noscript>' + 'JavaScript is required' + '</noscript>' );
   WriteLine('</BODY>');
 end;
 

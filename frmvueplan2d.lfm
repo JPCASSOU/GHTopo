@@ -1,11 +1,11 @@
 object frmVueEnPlan: TfrmVueEnPlan
-  Left = 263
+  Left = 302
   Height = 743
-  Top = 160
-  Width = 1280
+  Top = 278
+  Width = 1274
   Caption = 'Vue en plan'
   ClientHeight = 743
-  ClientWidth = 1280
+  ClientWidth = 1274
   Font.CharSet = ANSI_CHARSET
   Font.Height = -13
   Font.Name = 'Arial'
@@ -21,7 +21,7 @@ object frmVueEnPlan: TfrmVueEnPlan
     Left = 0
     Height = 742
     Top = 0
-    Width = 1279
+    Width = 1273
     Anchors = [akTop, akLeft, akRight, akBottom]
     Position = 893
     object PairSplitterSide1: TPairSplitterSide
@@ -213,35 +213,35 @@ object frmVueEnPlan: TfrmVueEnPlan
       Left = 898
       Height = 742
       Top = 0
-      Width = 381
-      ClientWidth = 381
+      Width = 375
+      ClientWidth = 375
       ClientHeight = 742
       object PairSplitter2: TPairSplitter
         Cursor = crVSplit
         Left = 0
         Height = 742
         Top = 0
-        Width = 381
+        Width = 375
         Align = alClient
-        Position = 284
+        Position = 268
         SplitterType = pstVertical
         object PairSplitterSide3: TPairSplitterSide
           Cursor = crArrow
           Left = 0
-          Height = 284
+          Height = 268
           Top = 0
-          Width = 381
-          ClientWidth = 381
-          ClientHeight = 284
+          Width = 375
+          ClientWidth = 375
+          ClientHeight = 268
           object Panel3: TPanel
             Left = 0
             Height = 68
             Top = 0
-            Width = 381
+            Width = 375
             Anchors = [akTop, akLeft, akRight]
             BevelOuter = bvLowered
             ClientHeight = 68
-            ClientWidth = 381
+            ClientWidth = 375
             TabOrder = 0
             object SpeedButton10: TSpeedButton
               Left = 4
@@ -374,7 +374,7 @@ object frmVueEnPlan: TfrmVueEnPlan
               ParentShowHint = False
             end
             object Panel4: TPanel
-              Left = 280
+              Left = 274
               Height = 62
               Top = 2
               Width = 99
@@ -488,11 +488,11 @@ object frmVueEnPlan: TfrmVueEnPlan
           end
           object pnlOutilsDessin: TPanel
             Left = 1
-            Height = 75
+            Height = 67
             Top = 69
             Width = 315
             BevelOuter = bvLowered
-            ClientHeight = 75
+            ClientHeight = 67
             ClientWidth = 315
             TabOrder = 1
             object SpeedButton31: TSpeedButton
@@ -526,10 +526,12 @@ object frmVueEnPlan: TfrmVueEnPlan
               ParentShowHint = False
             end
             object pnlStylesPolylines: TPanel
-              Left = 4
+              Left = 3
               Height = 30
-              Top = 40
+              Top = 35
               Width = 308
+              Anchors = [akLeft, akBottom]
+              BevelInner = bvRaised
               BevelOuter = bvLowered
               ClientHeight = 30
               ClientWidth = 308
@@ -762,7 +764,7 @@ object frmVueEnPlan: TfrmVueEnPlan
             end
           end
           object lbStatutCroquisTerrain: TStaticText
-            Left = 319
+            Left = 313
             Height = 17
             Top = 72
             Width = 59
@@ -771,13 +773,14 @@ object frmVueEnPlan: TfrmVueEnPlan
             TabOrder = 2
           end
           object Panel5: TPanel
-            Left = 0
-            Height = 128
-            Top = 148
-            Width = 386
+            Left = 1
+            Height = 125
+            Top = 135
+            Width = 371
+            Anchors = [akTop, akLeft, akRight, akBottom]
             BevelOuter = bvLowered
-            ClientHeight = 128
-            ClientWidth = 386
+            ClientHeight = 125
+            ClientWidth = 371
             Font.CharSet = ANSI_CHARSET
             Font.Color = clBlack
             Font.Height = -13
@@ -823,7 +826,7 @@ object frmVueEnPlan: TfrmVueEnPlan
               TabOrder = 3
             end
             object chkStations: TCheckBox
-              Left = 5
+              Left = 4
               Height = 20
               Top = 84
               Width = 68
@@ -894,73 +897,82 @@ object frmVueEnPlan: TfrmVueEnPlan
               OnChange = chkNoeudsChange
               TabOrder = 11
             end
+            object chkPOI: TCheckBox
+              Left = 116
+              Height = 20
+              Top = 104
+              Width = 42
+              Caption = 'POI'
+              OnChange = chkPOIChange
+              TabOrder = 12
+            end
           end
         end
         object PairSplitterSide4: TPairSplitterSide
           Cursor = crArrow
           Left = 0
-          Height = 453
-          Top = 289
-          Width = 381
-          ClientWidth = 381
-          ClientHeight = 453
+          Height = 469
+          Top = 273
+          Width = 375
+          ClientWidth = 375
+          ClientHeight = 469
           object Panel2: TPanel
             Left = 0
-            Height = 453
+            Height = 469
             Top = 0
-            Width = 381
+            Width = 375
             Align = alClient
             BevelOuter = bvLowered
-            ClientHeight = 453
-            ClientWidth = 381
+            ClientHeight = 469
+            ClientWidth = 375
             TabOrder = 0
             inline CdrListesPourVisualisateurs1: TCdrListesPourVisualisateurs
               Left = 1
-              Height = 451
+              Height = 467
               Top = 1
-              Width = 379
-              ClientHeight = 451
-              ClientWidth = 379
+              Width = 373
+              ClientHeight = 467
+              ClientWidth = 373
               inherited hcColsTitres: THeaderControl
-                Width = 373
+                Width = 367
               end
               inherited cmbModeListe: TComboBox
-                Width = 169
+                Width = 163
               end
               inherited btnLocaliser: TButton
-                Top = 395
+                Top = 411
               end
               inherited lsbListeElements: TCheckListBox
-                Height = 299
-                Width = 373
+                Height = 315
+                Width = 367
               end
               inherited chkDoHighLightCurrentItem: TCheckBox
-                Top = 395
+                Top = 411
               end
               inherited lbRegenerationListe: TStaticText
-                Width = 357
+                Width = 351
               end
               inherited btnHighlightSelected: TButton
                 Left = 3
-                Top = 423
+                Top = 439
               end
               inherited editSeriesARetenir: TEdit
-                Width = 216
+                Width = 210
               end
               inherited btnCocher: TButton
-                Left = 220
+                Left = 214
               end
               inherited btnHelp: TButton
-                Left = 340
+                Left = 334
               end
               inherited btnDeselectAll: TButton
-                Top = 423
+                Top = 439
               end
               inherited btnConvertirEnFiltre: TButton
-                Left = 256
+                Left = 250
               end
               inherited btnExtraireLesIndex: TButton
-                Left = 296
+                Left = 290
               end
             end
           end
@@ -972,16 +984,16 @@ object frmVueEnPlan: TfrmVueEnPlan
     Left = 176
     Height = 54
     Top = 388
-    Width = 551
+    Width = 545
     Anchors = [akTop, akLeft, akRight]
     ClientHeight = 54
-    ClientWidth = 551
+    ClientWidth = 545
     TabOrder = 1
     object ProgressBar1: TProgressBar
       Left = 6
       Height = 24
       Top = 24
-      Width = 537
+      Width = 531
       Anchors = [akLeft, akRight, akBottom]
       Smooth = True
       TabOrder = 0
@@ -990,7 +1002,7 @@ object frmVueEnPlan: TfrmVueEnPlan
       Left = 6
       Height = 16
       Top = 4
-      Width = 537
+      Width = 531
       Anchors = [akTop, akLeft, akRight]
       AutoSize = False
       Caption = 'lbEtapeProgression'

@@ -1,10 +1,10 @@
 object frmExportVersSIGExt: TfrmExportVersSIGExt
   Left = 822
-  Height = 492
+  Height = 427
   Top = 237
   Width = 702
   Caption = 'frmExportVersSIGExt'
-  ClientHeight = 492
+  ClientHeight = 427
   ClientWidth = 702
   Font.CharSet = ANSI_CHARSET
   Font.Color = clBlack
@@ -19,7 +19,7 @@ object frmExportVersSIGExt: TfrmExportVersSIGExt
   object pnlProgression: TPanel
     Left = 4
     Height = 42
-    Top = 446
+    Top = 381
     Width = 694
     Anchors = [akLeft, akRight, akBottom]
     BevelOuter = bvLowered
@@ -46,26 +46,26 @@ object frmExportVersSIGExt: TfrmExportVersSIGExt
   end
   object Panel1: TPanel
     Left = 4
-    Height = 442
+    Height = 377
     Top = 4
     Width = 694
     Anchors = [akTop, akLeft, akRight, akBottom]
     BevelOuter = bvLowered
-    ClientHeight = 442
+    ClientHeight = 377
     ClientWidth = 694
     TabOrder = 1
     object lbFichier: TLabel
       Left = 4
       Height = 16
-      Top = 37
+      Top = 33
       Width = 110
       Caption = 'Fichier à générer'
       ParentColor = False
     end
     object btnProcess: TButton
-      Left = 443
+      Left = 444
       Height = 30
-      Top = 410
+      Top = 343
       Width = 119
       Anchors = [akRight, akBottom]
       Caption = 'Générer'
@@ -75,7 +75,7 @@ object frmExportVersSIGExt: TfrmExportVersSIGExt
     object BitBtn1: TBitBtn
       Left = 569
       Height = 30
-      Top = 408
+      Top = 343
       Width = 119
       Anchors = [akRight, akBottom]
       Caption = '&Fermer'
@@ -84,18 +84,19 @@ object frmExportVersSIGExt: TfrmExportVersSIGExt
     end
     object Panel2: TPanel
       Left = 4
-      Height = 343
-      Top = 64
+      Height = 282
+      Top = 60
       Width = 687
       Anchors = [akTop, akLeft, akRight, akBottom]
+      BevelInner = bvRaised
       BevelOuter = bvLowered
-      ClientHeight = 343
+      ClientHeight = 282
       ClientWidth = 687
       TabOrder = 2
       object rgbxModeExport: TRadioGroup
         Left = 312
-        Height = 132
-        Top = 60
+        Height = 102
+        Top = 34
         Width = 236
         AutoFill = True
         ChildSizing.LeftRightSpacing = 6
@@ -105,7 +106,7 @@ object frmExportVersSIGExt: TfrmExportVersSIGExt
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
-        ClientHeight = 111
+        ClientHeight = 81
         ClientWidth = 232
         Enabled = False
         ItemIndex = 0
@@ -118,8 +119,8 @@ object frmExportVersSIGExt: TfrmExportVersSIGExt
       end
       object chkgrpCenterlinesSilhouettes: TCheckGroup
         Left = 4
-        Height = 132
-        Top = 64
+        Height = 102
+        Top = 34
         Width = 301
         AutoFill = True
         Caption = 'chkgrpCenterlinesSilhouettes'
@@ -131,7 +132,7 @@ object frmExportVersSIGExt: TfrmExportVersSIGExt
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
-        ClientHeight = 111
+        ClientHeight = 81
         ClientWidth = 297
         Items.Strings = (
           'Entrances'
@@ -170,14 +171,14 @@ object frmExportVersSIGExt: TfrmExportVersSIGExt
       object pnlDefaultColors: TPanel
         Left = 4
         Height = 136
-        Top = 200
+        Top = 140
         Width = 301
         BevelOuter = bvLowered
         ClientHeight = 136
         ClientWidth = 301
         TabOrder = 3
         object btnCenterlineColor: TColorButton
-          Left = 192
+          Left = 200
           Height = 32
           Top = 4
           Width = 99
@@ -186,7 +187,7 @@ object frmExportVersSIGExt: TfrmExportVersSIGExt
           ButtonColor = clBlue
         end
         object btnSilhouetteColor: TColorButton
-          Left = 192
+          Left = 200
           Height = 32
           Top = 68
           Width = 99
@@ -195,10 +196,10 @@ object frmExportVersSIGExt: TfrmExportVersSIGExt
           ButtonColor = 15316246
         end
         object editCenterlineLinewidth: TCurrencyEdit
-          Left = 192
+          Left = 200
           Height = 24
           Top = 40
-          Width = 96
+          Width = 99
           Alignment = taRightJustify
           DisplayFormat = '0.00'
           MaxValue = 0
@@ -239,10 +240,10 @@ object frmExportVersSIGExt: TfrmExportVersSIGExt
           ParentColor = False
         end
         object editSilhouetteOpacity: TCurrencyEdit
-          Left = 192
+          Left = 200
           Height = 24
           Top = 104
-          Width = 96
+          Width = 99
           Alignment = taRightJustify
           DecimalPlaces = 0
           DisplayFormat = '0'
@@ -255,7 +256,7 @@ object frmExportVersSIGExt: TfrmExportVersSIGExt
       object Panel3: TPanel
         Left = 312
         Height = 136
-        Top = 200
+        Top = 140
         Width = 236
         BevelOuter = bvLowered
         ClientHeight = 136
@@ -329,9 +330,9 @@ object frmExportVersSIGExt: TfrmExportVersSIGExt
         end
       end
       object chkUseLeafletLocalLibrary: TCheckBox
-        Left = 129
+        Left = 424
         Height = 20
-        Top = 32
+        Top = 4
         Width = 189
         Caption = 'chkUseLeafletLocalLibrary'
         TabOrder = 5
@@ -340,7 +341,7 @@ object frmExportVersSIGExt: TfrmExportVersSIGExt
     object editExportFilename: TEdit
       Left = 132
       Height = 24
-      Top = 37
+      Top = 33
       Width = 507
       Anchors = [akTop, akLeft, akRight]
       TabOrder = 3
@@ -349,7 +350,7 @@ object frmExportVersSIGExt: TfrmExportVersSIGExt
     object btnSelectFilename: TButton
       Left = 639
       Height = 25
-      Top = 36
+      Top = 32
       Width = 47
       Anchors = [akTop, akRight]
       Caption = '...'
@@ -359,7 +360,7 @@ object frmExportVersSIGExt: TfrmExportVersSIGExt
     object lbEPSGCavite: TStaticText
       Left = 4
       Height = 23
-      Top = 413
+      Top = 348
       Width = 300
       Anchors = [akLeft, akBottom]
       BorderStyle = sbsSunken
@@ -369,7 +370,7 @@ object frmExportVersSIGExt: TfrmExportVersSIGExt
     object editTitreDocument: TEdit
       Left = 133
       Height = 24
-      Top = 8
+      Top = 4
       Width = 553
       Anchors = [akTop, akLeft, akRight]
       TabOrder = 6
@@ -378,7 +379,7 @@ object frmExportVersSIGExt: TfrmExportVersSIGExt
     object Label8: TLabel
       Left = 4
       Height = 16
-      Top = 8
+      Top = 4
       Width = 116
       Caption = 'Titre du document'
       ParentColor = False

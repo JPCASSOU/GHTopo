@@ -482,9 +482,6 @@ begin
     for NumeroThread := 1 to NB_MAX_THREADS do FreeAndNil(MythreadArray[NumeroThread]);
     SetLength(MyThreadArray, 0);
     t := Now() - t;
-    //FDlgMultithreadProcessing.Refresh;
-    //FDlgMultithreadProcessing.QAfficherMessage(Format('%d threads, %d values in %.8f', [NB_MAX_THREADS, NbBranches, t * 86400]));
-    //Application.ProcessMessages;
 
   except
 

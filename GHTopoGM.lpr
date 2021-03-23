@@ -12,7 +12,8 @@ uses
   , Forms
   , frmGHTopoMainBar
   { you can add units after this }
-  , TAChartLazarusPkg, CadrePascalScript, frmPSDrawing2D, UnitRemoteFunctions, laz_synapse;
+  , TAChartLazarusPkg
+  ; //, CadrePascalScript, frmPSDrawing2D, UnitRemoteFunctions, laz_synapse;
 {$R *.res}
 begin
   Application.Scaled := True;

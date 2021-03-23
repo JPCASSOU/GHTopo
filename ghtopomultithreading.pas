@@ -171,7 +171,12 @@ uses
 
 procedure TThreadFactoriseCompensationMatrix.Execute;
 begin
-  FactoriseCompensationMatrix();
+  Synchronize(nil);
+  while (not Terminated) do
+  begin
+    FactoriseCompensationMatrix();
+  end;
+
 end;
 
 procedure TThreadFactoriseCompensationMatrix.FactoriseCompensationMatrix();
@@ -246,7 +251,12 @@ end;
 
 procedure TThreadMakeCompensationMatrix.Execute;
 begin
-  CalcCompensationMatrix();
+  Synchronize(nil);
+  while (not Terminated) do
+  begin
+    CalcCompensationMatrix();
+  end;
+
 end;
 
 procedure TThreadMakeCompensationMatrix.CalcCompensationMatrix();
@@ -295,8 +305,6 @@ begin
   if (FIdxEnd > QIdxMax) then FIdxEnd := QIdxMax;
   FProcProgression := P;
   inherited Create(false); // false -> exécution immédiate
-
-
 end;
 
 function TThreadMakeCompensationMatrix.AttendPour(): integer;
@@ -340,7 +348,11 @@ end;
 
 procedure TThreadBranchesProcessing.Execute;
 begin
-  CalcAccroissementBranches();
+  Synchronize(nil);
+  while (not Terminated) do
+  begin
+    CalcAccroissementBranches();
+  end;
 end;
 
 procedure TThreadBranchesProcessing.CalcAccroissementBranches();
@@ -503,17 +515,21 @@ var
   QEntite: TBaseStation;
   WU: Boolean;
 begin
-  // Ne fonctionne pas !!!  (segfault inepliqué)
-  for i := FIdxStart to FIdxEnd do
+  Synchronize(nil);
+  while (not Terminated) do
   begin
-    if (assigned(FProcProgression)) then FProcProgression(FNoThread, FIdxStart, FIdxEnd, i);
-    QVA    := FDocTopo.GetViseeAntenne(i);
-    WU := CalcViseeAntenne(QVA, QEntite);
-    if (WU) then
+    for i := FIdxStart to FIdxEnd do
     begin
-      FBDDEntites.AddEntiteAntenne(QEntite);
+      if (assigned(FProcProgression)) then FProcProgression(FNoThread, FIdxStart, FIdxEnd, i);
+      QVA    := FDocTopo.GetViseeAntenne(i);
+      WU := CalcViseeAntenne(QVA, QEntite);
+      if (WU) then
+      begin
+        FBDDEntites.AddEntiteAntenne(QEntite);
+      end;
     end;
   end;
+
 end;
 
 

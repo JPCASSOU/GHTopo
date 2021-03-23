@@ -94,7 +94,7 @@ object frmVue3DExt: TfrmVue3DExt
       Action = acParamVue3D
       ShowCaption = False
       ShowHint = True
-      
+      ParentShowHint = False
     end
     object SpeedButton22: TSpeedButton
       Left = 112
@@ -104,7 +104,7 @@ object frmVue3DExt: TfrmVue3DExt
       Action = acExportNuageDePoints
       ShowCaption = False
       ShowHint = True
-      
+      ParentShowHint = False
     end
     object SpeedButton20: TSpeedButton
       Left = 60
@@ -114,7 +114,7 @@ object frmVue3DExt: TfrmVue3DExt
       Action = acExporterSVG
       ShowCaption = False
       ShowHint = True
-      
+      ParentShowHint = False
     end
     object SpeedButton16: TSpeedButton
       Left = 112
@@ -124,7 +124,7 @@ object frmVue3DExt: TfrmVue3DExt
       Action = acProjXZ
       ShowCaption = False
       ShowHint = True
-      
+      ParentShowHint = False
     end
     object SpeedButton13: TSpeedButton
       Left = 58
@@ -134,7 +134,7 @@ object frmVue3DExt: TfrmVue3DExt
       Action = acProjYZ
       ShowCaption = False
       ShowHint = True
-      
+      ParentShowHint = False
     end
     object SpeedButton12: TSpeedButton
       Left = 4
@@ -144,7 +144,7 @@ object frmVue3DExt: TfrmVue3DExt
       Action = acProjXY
       ShowCaption = False
       ShowHint = True
-      
+      ParentShowHint = False
     end
     object SpeedButton17: TSpeedButton
       Left = 112
@@ -154,7 +154,7 @@ object frmVue3DExt: TfrmVue3DExt
       Action = acProjIso
       ShowCaption = False
       ShowHint = True
-      
+      ParentShowHint = False
     end
     object SpeedButton1: TSpeedButton
       Left = 58
@@ -164,7 +164,7 @@ object frmVue3DExt: TfrmVue3DExt
       Action = acRedessiner
       ShowCaption = False
       ShowHint = True
-      
+      ParentShowHint = False
     end
     object SpeedButton14: TSpeedButton
       Left = 4
@@ -174,7 +174,7 @@ object frmVue3DExt: TfrmVue3DExt
       Action = acRegenerer
       ShowCaption = False
       ShowHint = True
-      
+      ParentShowHint = False
     end
     object Label1: TLabel
       Left = 4

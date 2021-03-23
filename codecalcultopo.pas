@@ -630,7 +630,7 @@ begin
   ViderTableJonctionsBranches();
   AfficherMemoryUsage();
   // Purger la table des branches
-  //try
+  try
     // Branche0
     UneVisee := EmptyVisee('');
     SetLength(Branche.PointsTopo, 0);              // N
@@ -671,9 +671,10 @@ begin
 
     AfficherMemoryUsage();
     Result := True;
-  //except
+  except
+    //on E: Exception do
     pass;
-  //end;
+  end;
 end;
 
 
@@ -1246,7 +1247,7 @@ begin
   begin
     if (not MyThreadArray[NumeroThread].Terminated) then Sleep(20);
   end;
-  AfficherMessage('Vidage 000');
+  AfficherMessage('TraiterViseesEnAntenne: Vidage 000');
   // 3. Attente des fins de traitement par les threads
   for NumeroThread := 1 to NB_MAX_THREADS do
   begin
@@ -1254,17 +1255,17 @@ begin
     FDlgMultithreadProcessing.QAfficherMessage(Format('Thread %d achieved with %d status code', [NumeroThread, EWE]));
   end;
   // 4. libération des threads
-  AfficherMessage('Vidage 001');
+  AfficherMessage('TraiterViseesEnAntenne: Vidage 001');
   for NumeroThread := 1 to NB_MAX_THREADS do try FreeAndNil(MythreadArray[NumeroThread]); except pass; end;
-  AfficherMessage('Vidage 002');
+  AfficherMessage('TraiterViseesEnAntenne: Vidage 002');
   SetLength(MyThreadArray, 0);
-  AfficherMessage('Vidage 003');
+  AfficherMessage('TraiterViseesEnAntenne: Vidage 003');
   FDlgMultithreadProcessing.Refresh;
-  AfficherMessage('Vidage 004');
+  AfficherMessage('TraiterViseesEnAntenne: Vidage 004');
   FDlgMultithreadProcessing.QAfficherMessage(Format('%d threads, %d values in %.8f', [NB_MAX_THREADS, NbAntennes, t * 86400]));
-  AfficherMessage('Vidage 005');
+  AfficherMessage('TraiterViseesEnAntenne: Vidage 005');
   Application.ProcessMessages;
-  AfficherMessage('Vidage 006');
+  AfficherMessage('TraiterViseesEnAntenne: Vidage 006');
   //****************************************************************************
   {$ELSE}
   //NbAntennes := FDocTopo.GetNbAntennes();

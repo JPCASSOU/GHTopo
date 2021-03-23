@@ -108,6 +108,7 @@ type
     // vers la console
     procedure cls();
 
+
     procedure printf(const FMT: string; const Argv: array of const);
     procedure DispPSOutput(const Msg: string);
     // éval expressions
@@ -151,6 +152,11 @@ type
 
 
     procedure DT_EndNewSerie();
+    // Entrées
+    procedure DT_AddNewEntrance(const RefSer, RefSt: integer; const XEntree, YEntree, ZEntree: double; const R, G, B: integer; const NomEntree, IDTerrain, Observ: string);
+    // Réseaux
+    procedure DT_AddNewReseau(const QTypeReseau: integer; const R, G, B: integer; const QNomReseau, QObsReseau: string);
+
 
     // Coordonnées d'une station
     function  BDE_ExtractCoordsFromSerSt(const QSerie: TNumeroSerie; const QStation: TNumeroStation; out QX, QY, QZ: double): boolean;
@@ -459,8 +465,9 @@ begin
     sender.AddMethod(self     , @TCdrPascalScript.DT_EndNewSerie                     , 'procedure DT_EndNewSerie();');
     sender.AddMethod(self     , @TCdrPascalScript.DT_RemoveSerieByNumSerie           , 'procedure DT_RemoveSerieByNumSerie(const QNumeroSerie: integer);');
     sender.AddMethod(self     , @TCdrPascalScript.DT_RemoveSerieByIdx                , 'procedure DT_RemoveSerieByIdx(const Idx: integer);');
+    sender.AddMethod(self     , @TCdrPascalScript.DT_AddNewEntrance                  , 'procedure DT_AddNewEntrance(const RefSer, RefSt: integer; const XEntree, YEntree, ZEntree: double; const R, G, B: integer; const NomEntree, IDTerrain, Observ: string);');
+    sender.AddMethod(self     , @TCdrPascalScript.DT_AddNewReseau                    , 'procedure DT_AddNewReseau(const QTypeReseau: integer; const R, G, B: integer; const QNomReseau, QObsReseau: string); ');
 
-    //sender.AddMethod(self     , @TCdrPascalScript.DT_ExtractDataFromVisee            , 'function DT_ExtractDataFromVisee(const QNumeroSerie, QNumeroStation: integer; out V: array of const): boolean;');
     // BDD entités
     sender.AddMethod(self     , @TCdrPascalScript.BDE_ExtractCoordsFromSerSt         , 'function  BDE_ExtractCoordsFromSerSt(const QSerie, QStation: integer; out QX, QY, QZ: double): boolean;');
 
@@ -1114,6 +1121,34 @@ begin
   if (QPtArr = -1) then FCurrentSerie.SetNoPointArr(FCurrentSerie.GetNbVisees() - 1);
   FDocuTopo.AddSerie(FCurrentSerie);
 end;
+
+procedure TCdrPascalScript.DT_AddNewEntrance(const RefSer, RefSt: integer; const XEntree, YEntree, ZEntree: double; const R, G, B: integer; const NomEntree, IDTerrain, Observ: string);
+var
+  EE: TEntrance;
+begin
+  EE.eRefSer  := RefSer;
+  EE.eRefSt   := RefSt;
+  EE.eXEntree := XEntree;
+  EE.eYEntree := YEntree;
+  EE.eZEntree := ZEntree;
+  EE.eCouleur := RGBToColor(R and 255, G and 255, B and 255);
+  EE.eNomEntree  := NomEntree;
+  EE.eIDTerrain  := IDTerrain;
+  EE.eObserv     := Observ;
+  FDocuTopo.AddEntrance(EE);
+end;
+procedure TCdrPascalScript.DT_AddNewReseau(const QTypeReseau: integer; const R, G, B: integer; const QNomReseau, QObsReseau: string);
+var
+  RR: TReseau;
+begin
+  RR.TypeReseau   := QTypeReseau;
+  RR.ColorReseau  := RGBToColor(R and 255, G and 255, B and 255);
+  RR.NomReseau    := QNomReseau;
+  RR.ObsReseau    := QObsReseau;
+  FDocuTopo.AddReseau(RR);
+end;
+
+
 
 //******************************************************************************
 // La BDD Entités

@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="9"/>
+    <BuildModes Active="Default"/>
+    <Units Count="27">
+      <Unit0>
+        <Filename Value="GHTopoCompiler.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="86"/>
+        <CursorPos Y="110"/>
+        <UsageCount Value="34"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="toporobotclasses2012.pas"/>
+        <UnitName Value="ToporobotClasses2012"/>
+        <EditorIndex Value="17"/>
+        <TopLine Value="659"/>
+        <CursorPos X="26" Y="667"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="StructuresDonnees.pas"/>
+        <EditorIndex Value="14"/>
+        <TopLine Value="439"/>
+        <CursorPos X="6" Y="455"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="frmJournal.pas"/>
+        <EditorIndex Value="11"/>
+        <CursorPos X="25" Y="4"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="CompilationParameters.inc"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="16"/>
+        <CursorPos X="2" Y="34"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="Common.pas"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="1110"/>
+        <CursorPos X="10" Y="1128"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="SelectionLangues.inc"/>
+        <EditorIndex Value="13"/>
+        <CursorPos X="4" Y="4"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="unitobjetserie.pas"/>
+        <UnitName Value="UnitObjetSerie"/>
+        <EditorIndex Value="25"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="unittsageomag.pas"/>
+        <UnitName Value="UnitTSAGeoMag"/>
+        <EditorIndex Value="26"/>
+        <TopLine Value="100"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="C:\lazarus\fpc\3.0.0\source\packages\fcl-base\src\custapp.pp"/>
+        <UnitName Value="CustApp"/>
+        <EditorIndex Value="8"/>
+        <TopLine Value="299"/>
+        <CursorPos X="3" Y="301"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="ConversionsCoords\datum.pas"/>
+        <EditorIndex Value="9"/>
+        <TopLine Value="216"/>
+        <CursorPos X="56" Y="234"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="lambert.pas"/>
+        <EditorIndex Value="12"/>
+        <TopLine Value="30"/>
+        <CursorPos X="30" Y="46"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="unitlistessimpleswithgeneriques.pas"/>
+        <UnitName Value="UnitListesSimplesWithGeneriques"/>
+        <EditorIndex Value="23"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="C:\lazarus\lcl\graphics.pp"/>
+        <UnitName Value="Graphics"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="10"/>
+        <CursorPos Y="37"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="C:\lazarus\lcl\graphtype.pp"/>
+        <UnitName Value="GraphType"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="15"/>
+        <CursorPos X="3" Y="33"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="UnitClassPalette.pas"/>
+        <EditorIndex Value="18"/>
+        <TopLine Value="290"/>
+        <CursorPos Y="323"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="ConversionsCoords\convertisseurjpc.pas"/>
+        <UnitName Value="ConvertisseurJPC"/>
+        <EditorIndex Value="7"/>
+        <TopLine Value="168"/>
+        <CursorPos X="168" Y="189"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit16>
+      <Unit17>
+        <Filename Value="C:\lazarus\components\lazutils\fileutil.pas"/>
+        <UnitName Value="FileUtil"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="10"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
+      </Unit17>
+      <Unit18>
+        <Filename Value="dlghelpsystem.pas"/>
+        <UnitName Value="dlgHelpSystem"/>
+        <EditorIndex Value="10"/>
+        <TopLine Value="308"/>
+        <CursorPos Y="330"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit18>
+      <Unit19>
+        <Filename Value="C:\lazarus\fpc\3.0.0\source\rtl\objpas\sysutils\sysstrh.inc"/>
+        <EditorIndex Value="16"/>
+        <TopLine Value="203"/>
+        <CursorPos X="10" Y="219"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
+      </Unit19>
+      <Unit20>
+        <Filename Value="C:\lazarus\fpc\3.0.0\source\rtl\objpas\sysutils\sysstr.inc"/>
+        <EditorIndex Value="15"/>
+        <TopLine Value="2679"/>
+        <CursorPos X="3" Y="2682"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
+      </Unit20>
+      <Unit21>
+        <Filename Value="UnitMessages_fr.pas"/>
+        <EditorIndex Value="24"/>
+        <TopLine Value="5"/>
+        <CursorPos X="92" Y="25"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit21>
+      <Unit22>
+        <Filename Value="unitentitesextended.pas"/>
+        <UnitName Value="UnitEntitesExtended"/>
+        <EditorIndex Value="21"/>
+        <TopLine Value="2451"/>
+        <CursorPos X="76" Y="2464"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit22>
+      <Unit23>
+        <Filename Value="codecalcultopo.pas"/>
+        <UnitName Value="CodeCalculTopo"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="1429"/>
+        <CursorPos X="25" Y="1446"/>
+        <UsageCount Value="16"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit23>
+      <Unit24>
+        <Filename Value="unitcoupedeveloppee.pas"/>
+        <UnitName Value="unitCoupeDeveloppee"/>
+        <EditorIndex Value="19"/>
+        <TopLine Value="1431"/>
+        <CursorPos X="9" Y="1461"/>
+        <UsageCount Value="15"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit24>
+      <Unit25>
+        <Filename Value="unitcoupedeveloppee_bak.pas"/>
+        <UnitName Value="unitCoupeDeveloppee"/>
+        <EditorIndex Value="20"/>
+        <TopLine Value="1462"/>
+        <CursorPos X="67" Y="1491"/>
+        <UsageCount Value="15"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit25>
+      <Unit26>
+        <Filename Value="unitexportgis.pas"/>
+        <UnitName Value="unitExportGIS"/>
+        <EditorIndex Value="22"/>
+        <TopLine Value="548"/>
+        <CursorPos X="25" Y="590"/>
+        <UsageCount Value="14"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit26>
+    </Units>
+    <JumpHistory Count="28" HistoryIndex="27">
+      <Position1>
+        <Filename Value="unitentitesextended.pas"/>
+        <Caret Line="2487" Column="43" TopLine="2468"/>
+      </Position1>
+      <Position2>
+        <Filename Value="unitcoupedeveloppee.pas"/>
+      </Position2>
+      <Position3>
+        <Filename Value="unitcoupedeveloppee_bak.pas"/>
+      </Position3>
+      <Position4>
+        <Filename Value="GHTopoCompiler.lpr"/>
+        <Caret Line="73" Column="5" TopLine="54"/>
+      </Position4>
+      <Position5>
+        <Filename Value="GHTopoCompiler.lpr"/>
+        <Caret Line="31" Column="15" TopLine="4"/>
+      </Position5>
+      <Position6>
+        <Filename Value="GHTopoCompiler.lpr"/>
+        <Caret Line="78" Column="16" TopLine="35"/>
+      </Position6>
+      <Position7>
+        <Filename Value="GHTopoCompiler.lpr"/>
+        <Caret Line="85" Column="16" TopLine="42"/>
+      </Position7>
+      <Position8>
+        <Filename Value="GHTopoCompiler.lpr"/>
+        <Caret Line="116" Column="35" TopLine="79"/>
+      </Position8>
+      <Position9>
+        <Filename Value="GHTopoCompiler.lpr"/>
+        <Caret Line="87" Column="25" TopLine="65"/>
+      </Position9>
+      <Position10>
+        <Filename Value="GHTopoCompiler.lpr"/>
+        <Caret Line="89" Column="47" TopLine="65"/>
+      </Position10>
+      <Position11>
+        <Filename Value="GHTopoCompiler.lpr"/>
+        <Caret Line="102" Column="25" TopLine="77"/>
+      </Position11>
+      <Position12>
+        <Filename Value="unitentitesextended.pas"/>
+        <Caret Line="1568" Column="27" TopLine="1544"/>
+      </Position12>
+      <Position13>
+        <Filename Value="GHTopoCompiler.lpr"/>
+        <Caret Line="101" Column="28" TopLine="77"/>
+      </Position13>
+      <Position14>
+        <Filename Value="ConversionsCoords\convertisseurjpc.pas"/>
+        <Caret Line="200" Column="5" TopLine="176"/>
+      </Position14>
+      <Position15>
+        <Filename Value="ConversionsCoords\convertisseurjpc.pas"/>
+        <Caret Line="672" Column="53" TopLine="651"/>
+      </Position15>
+      <Position16>
+        <Filename Value="ConversionsCoords\convertisseurjpc.pas"/>
+        <Caret Line="750" Column="53" TopLine="711"/>
+      </Position16>
+      <Position17>
+        <Filename Value="unitentitesextended.pas"/>
+        <Caret Line="1581" Column="69" TopLine="1571"/>
+      </Position17>
+      <Position18>
+        <Filename Value="ConversionsCoords\convertisseurjpc.pas"/>
+        <Caret Line="200" Column="34" TopLine="175"/>
+      </Position18>
+      <Position19>
+        <Filename Value="ConversionsCoords\convertisseurjpc.pas"/>
+        <Caret Line="855" Column="72" TopLine="850"/>
+      </Position19>
+      <Position20>
+        <Filename Value="ConversionsCoords\convertisseurjpc.pas"/>
+        <Caret Line="1008" Column="10" TopLine="969"/>
+      </Position20>
+      <Position21>
+        <Filename Value="ConversionsCoords\convertisseurjpc.pas"/>
+        <Caret Line="189" Column="8" TopLine="170"/>
+      </Position21>
+      <Position22>
+        <Filename Value="ConversionsCoords\convertisseurjpc.pas"/>
+        <Caret Line="203" Column="11" TopLine="170"/>
+      </Position22>
+      <Position23>
+        <Filename Value="GHTopoCompiler.lpr"/>
+        <Caret Line="77" Column="18" TopLine="62"/>
+      </Position23>
+      <Position24>
+        <Filename Value="frmJournal.pas"/>
+        <Caret Line="15" Column="23"/>
+      </Position24>
+      <Position25>
+        <Filename Value="frmJournal.pas"/>
+        <Caret Line="4" Column="25"/>
+      </Position25>
+      <Position26>
+        <Filename Value="unitentitesextended.pas"/>
+      </Position26>
+      <Position27>
+        <Filename Value="GHTopoCompiler.lpr"/>
+        <Caret Line="38" Column="37" TopLine="13"/>
+      </Position27>
+      <Position28>
+        <Filename Value="GHTopoCompiler.lpr"/>
+        <Caret Line="83" Column="49" TopLine="74"/>
+      </Position28>
+    </JumpHistory>
+  </ProjectSession>
+</CONFIG>

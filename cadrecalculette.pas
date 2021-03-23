@@ -734,6 +734,7 @@ begin
     QActiveTabIndex              := QTabIndex;
     {$ELSE}
     CdrPascalScript1.Initialiser(FEvaluateurExpressions);
+
     QActiveTabIndex   := 0;
     {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
     CdrTextures1.Initialiser();

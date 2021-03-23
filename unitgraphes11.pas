@@ -2150,6 +2150,7 @@ begin
         WrtLinFmt('    <LABEL id="%s" value="">%s</LABEL><BR>'    , [JS_DOCUMENT_FORM_lbPenteNextPoint  , '--']);
       EndForm();
     EndDiv();
+    WriteLine('  <noscript>' + 'JavaScript is required' + '</noscript>' );
     WriteLine('</BODY>');
     WriteLine('</HTML>');
   finally

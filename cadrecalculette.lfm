@@ -13,6 +13,7 @@ object CdrCalculette: TCdrCalculette
   Font.Pitch = fpVariable
   Font.Quality = fqDraft
   Font.Style = [fsBold]
+  LCLVersion = '2.0.0.4'
   ParentFont = False
   TabOrder = 0
   DesignLeft = 286
@@ -120,6 +121,7 @@ object CdrCalculette: TCdrCalculette
         ClientWidth = 1343
         TabOrder = 2
         object PairSplitter1: TPairSplitter
+          Cursor = crDefault
           Left = 2
           Height = 616
           Top = 2
@@ -169,7 +171,7 @@ object CdrCalculette: TCdrCalculette
             ClientWidth = 1006
             ClientHeight = 616
             object PairSplitter3: TPairSplitter
-              Cursor = crVSplit
+              Cursor = crDefault
               Left = 0
               Height = 616
               Top = 0
@@ -280,6 +282,7 @@ object CdrCalculette: TCdrCalculette
         TabOrder = 0
       end
       object PairSplitter2: TPairSplitter
+        Cursor = crDefault
         Left = 0
         Height = 704
         Top = 0
@@ -1239,6 +1242,7 @@ object CdrCalculette: TCdrCalculette
         ClientWidth = 1340
         TabOrder = 1
         object PairSplitter7: TPairSplitter
+          Cursor = crDefault
           Left = 2
           Height = 673
           Top = 2
@@ -2033,7 +2037,7 @@ object CdrCalculette: TCdrCalculette
       ClientHeight = 704
       ClientWidth = 1222
       object PairSplitter8: TPairSplitter
-        Cursor = crVSplit
+        Cursor = crDefault
         Left = 0
         Height = 704
         Top = 0
@@ -2095,6 +2099,7 @@ object CdrCalculette: TCdrCalculette
           ClientWidth = 1222
           ClientHeight = 614
           object PairSplitter9: TPairSplitter
+            Cursor = crDefault
             Left = 0
             Height = 614
             Top = 0
@@ -2110,7 +2115,7 @@ object CdrCalculette: TCdrCalculette
               ClientWidth = 396
               ClientHeight = 614
               object PairSplitter10: TPairSplitter
-                Cursor = crVSplit
+                Cursor = crDefault
                 Left = 0
                 Height = 614
                 Top = 0

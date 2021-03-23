@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="9"/>
+    <BuildModes Active="Default"/>
+    <Units Count="4">
+      <Unit0>
+        <Filename Value="LibConversionJPC.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <CursorPos X="76" Y="12"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="StructuresDonnees.pas"/>
+        <UnitName Value="StructuresDonnees"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="10"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="CompilationParameters.inc"/>
+        <EditorIndex Value="2"/>
+        <CursorPos Y="2"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="C:\lazarus\lcl\graphics.pp"/>
+        <UnitName Value="Graphics"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="19"/>
+        <CursorPos X="44" Y="42"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit3>
+    </Units>
+    <JumpHistory Count="4" HistoryIndex="3">
+      <Position1>
+        <Filename Value="CompilationParameters.inc"/>
+      </Position1>
+      <Position2>
+        <Filename Value="CompilationParameters.inc"/>
+        <Caret Line="2" Column="2"/>
+      </Position2>
+      <Position3>
+        <Filename Value="LibConversionJPC.lpr"/>
+        <Caret Line="7" Column="16"/>
+      </Position3>
+      <Position4>
+        <Filename Value="C:\lazarus\lcl\graphics.pp"/>
+        <Caret Line="42" Column="44" TopLine="19"/>
+      </Position4>
+    </JumpHistory>
+  </ProjectSession>
+</CONFIG>

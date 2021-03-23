@@ -539,6 +539,7 @@ begin
     MiouMiou('  colorOscillation: integer;');
     MiouMiou('  p: PBGRAPixel;');
   end;
+
   MiouMiou('begin');
     MiouMiou(Format('  QTileOverlap := %d;', [editTileOverlap.AsInteger]));
     case cmbPerlinFunc.ItemIndex of
@@ -546,11 +547,12 @@ begin
       1: EWE := 'CreatePerlinNoiseMap';
       2: EWE := 'CreateCustomTexture';
     end;
-    MiouMiou('  // GetPart crée également l''objet Temp');
+
+    MiouMiou('  // GetPart crée également l''objet Temp   ');
     case (cmbPerlinFunc.ItemIndex) of
       0, 1:
       begin
-        MiouMiou(Format(' result := %s(%d, %d, %d, %.2f, %.2f, %.5f, %s);',
+        MiouMiou(Format('  result := %s(%d, %d, %d, %.2f, %.2f, %.5f, %s);',
                     [EWE,
                      editSizeTextureX.AsInteger,
                      editSizeTextureX.AsInteger,
@@ -587,6 +589,7 @@ begin
       2:
       begin
         MiouMiou('  // Marble or wooden like texture');
+
         MiouMiou(Format('  result := %s(%d, %d, %d, %.2f, %.2f, %.5f, %s);',
                     [EWE,
                      editSizeTextureX.AsInteger,
@@ -598,8 +601,17 @@ begin
                      cmbResampleFilter.Items[cmbResampleFilter.ItemIndex]
                      ]));
                      //*)
-       MiouMiou(Format('  S1 := BGRA(%d, %d, %d, %d);', [sclLightColorB.Position, sclLightColorG.Position, sclLightColorR.Position, sclLightColorA.Position]));
-       MiouMiou(Format('  S2 := BGRA(%d, %d, %d, %d);', [sclColorB.Position, sclColorG.Position, sclColorR.Position, sclColorA.Position]));
+       MiouMiou(Format('  S1 := BGRA(%d, %d, %d, %d);', [sclLightColorB.Position,
+                                                         sclLightColorG.Position,
+                                                         sclLightColorR.Position,
+                                                         sclLightColorA.Position
+                                                        ]));
+       MiouMiou(Format('  S2 := BGRA(%d, %d, %d, %d);', [
+                                                         sclColorB.Position,
+                                                         sclColorG.Position,
+                                                         sclColorR.Position,
+                                                         sclColorA.Position
+                                                        ]));
        MiouMiou('  p := result.Data;');
        MiouMiou('  for i := 0 to result.NbPixels-1 do');
        MiouMiou('  begin');

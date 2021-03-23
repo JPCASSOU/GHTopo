@@ -1,11 +1,11 @@
 object frmPrintingCenterExt: TfrmPrintingCenterExt
-  Left = 92
+  Left = 383
   Height = 679
-  Top = 61
+  Top = 71
   Width = 969
   Caption = 'frmPrintingCenterExt'
-  ClientHeight = 0
-  ClientWidth = 0
+  ClientHeight = 679
+  ClientWidth = 969
   Font.CharSet = ANSI_CHARSET
   Font.Color = clBlack
   Font.Height = -13
