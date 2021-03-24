@@ -1,7 +1,7 @@
 object dlgDisplayGraphe: TdlgDisplayGraphe
-  Left = 608
+  Left = 227
   Height = 776
-  Top = 232
+  Top = 399
   Width = 1303
   Align = alClient
   Caption = 'dlgDisplayGraphe'
@@ -189,9 +189,9 @@ object dlgDisplayGraphe: TdlgDisplayGraphe
               TabOrder = 0
             end
             object grdDistancier: TStringGrid
-              Left = 4
+              Left = 3
               Height = 344
-              Top = 28
+              Top = 32
               Width = 469
               Anchors = [akTop, akLeft, akRight, akBottom]
               Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goColSizing, goRelaxedRowSelect, goDblClickAutoSize, goSmoothScroll, goFixedColSizing]
@@ -250,89 +250,83 @@ object dlgDisplayGraphe: TdlgDisplayGraphe
             Height = 595
             Width = 805
             inherited tabShtPlan: TTabSheet
-              ClientHeight = 566
-              ClientWidth = 795
               inherited CdrDGCDrawingContext1: TCdrDGCDrawingContext
-                Height = 566
-                Width = 797
-                ClientHeight = 566
-                ClientWidth = 797
+                Height = 482
+                Width = 751
+                ClientHeight = 482
+                ClientWidth = 751
                 inherited pnlVue: TPanel
-                  Height = 530
-                  Width = 766
-                  ClientHeight = 530
-                  ClientWidth = 766
+                  Height = 446
+                  Width = 720
+                  ClientHeight = 446
+                  ClientWidth = 720
                   inherited Vue: TPaintBox
-                    Height = 528
-                    Width = 764
+                    Height = 444
+                    Width = 718
                   end
                 end
                 inherited lbMousePosition: TStaticText
-                  Top = 535
-                  Width = 662
+                  Top = 451
+                  Width = 616
                 end
                 inherited SpeedButton12: TSpeedButton
-                  Left = 765
+                  Left = 719
                   Flat = False
                 end
                 inherited SpeedButton13: TSpeedButton
-                  Left = 765
+                  Left = 719
                   Flat = False
                 end
                 inherited SpeedButton14: TSpeedButton
-                  Left = 765
+                  Left = 719
                   Flat = False
                 end
                 inherited SpeedButton15: TSpeedButton
-                  Left = 765
+                  Left = 719
                   Flat = False
                 end
                 inherited SpeedButton16: TSpeedButton
-                  Left = 765
+                  Left = 719
                   Flat = False
                 end
                 inherited SpeedButton17: TSpeedButton
-                  Left = 765
+                  Left = 719
                   Flat = False
                 end
                 inherited SpeedButton18: TSpeedButton
-                  Left = 765
-                  Top = 500
+                  Left = 719
+                  Top = 416
                   Flat = False
                 end
                 inherited SpeedButton19: TSpeedButton
-                  Left = 702
-                  Top = 534
+                  Left = 656
+                  Top = 450
                   Flat = False
                 end
                 inherited SpeedButton20: TSpeedButton
-                  Left = 734
-                  Top = 534
+                  Left = 688
+                  Top = 450
                   Flat = False
                 end
                 inherited SpeedButton21: TSpeedButton
-                  Left = 765
-                  Top = 534
+                  Left = 719
+                  Top = 450
                 end
                 inherited SpeedButton22: TSpeedButton
-                  Left = 670
-                  Top = 534
+                  Left = 624
+                  Top = 450
                   Flat = False
                 end
               end
-            end
-            inherited tabShtRoadMap: TTabSheet
-              ClientHeight = 566
-              ClientWidth = 795
             end
             inherited tabExportHTML: TTabSheet
               ClientHeight = 566
               ClientWidth = 797
               inherited cmbDeviceCible: TComboBox
-                Width = 789
+                Width = 787
               end
               inherited editHTMLOutput: TFileNameEdit
-                Width = 789
+                Width = 787
               end
             end
           end
@@ -341,6 +335,8 @@ object dlgDisplayGraphe: TdlgDisplayGraphe
             Width = 609
           end
           inherited pnlProgression: TPanel
+            Left = 32
+            Top = 444
             Width = 741
             ClientWidth = 741
             inherited ProgressBar1: TProgressBar

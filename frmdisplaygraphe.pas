@@ -241,6 +241,8 @@ begin
   grdDistancier.CopyToClipboard();
 end;
 
+
+
 // calcul d'un distancier avec les itinéraires
 procedure TdlgDisplayGraphe.Button2Click(Sender: TObject);
 var

@@ -15,8 +15,8 @@ object CdrGrapheItineraire: TCdrGrapheItineraire
   Font.Style = [fsBold]
   ParentFont = False
   TabOrder = 0
-  DesignLeft = 1143
-  DesignTop = 362
+  DesignLeft = 968
+  DesignTop = 140
   object Panel2: TPanel
     Left = 4
     Height = 96
@@ -400,6 +400,7 @@ object CdrGrapheItineraire: TCdrGrapheItineraire
         BorderWidth = 2
         ButtonColorSize = 16
         ButtonColor = 14155775
+        OnColorChanged = btnBackgroundCarteColorChanged
       end
       object btnColorCenterline: TColorButton
         Left = 152
@@ -408,7 +409,8 @@ object CdrGrapheItineraire: TCdrGrapheItineraire
         Width = 139
         BorderWidth = 2
         ButtonColorSize = 16
-        ButtonColor = clMaroon
+        ButtonColor = clBlue
+        OnColorChanged = btnColorCenterlineColorChanged
       end
       object Label6: TLabel
         Left = 4
@@ -457,6 +459,24 @@ object CdrGrapheItineraire: TCdrGrapheItineraire
         Caption = 'Fichier HTML de sortie:'
         ParentColor = False
       end
+      object Label12: TLabel
+        Left = 316
+        Height = 16
+        Top = 96
+        Width = 51
+        Caption = 'Stations'
+        ParentColor = False
+      end
+      object btnColorStations: TColorButton
+        Left = 380
+        Height = 25
+        Top = 96
+        Width = 139
+        BorderWidth = 2
+        ButtonColorSize = 16
+        ButtonColor = clMaroon
+        OnColorChanged = btnColorStationsColorChanged
+      end
     end
   end
   object lbMouseCoords: TStaticText
@@ -470,9 +490,9 @@ object CdrGrapheItineraire: TCdrGrapheItineraire
     TabOrder = 2
   end
   object pnlProgression: TPanel
-    Left = 36
+    Left = 28
     Height = 49
-    Top = 320
+    Top = 392
     Width = 695
     Anchors = [akTop, akLeft, akRight]
     ClientHeight = 49

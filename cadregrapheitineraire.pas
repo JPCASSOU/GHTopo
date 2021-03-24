@@ -37,6 +37,7 @@ type
     cmbDeviceCible: TComboBox;
     btnBackgroundCarte: TColorButton;
     btnColorCenterline: TColorButton;
+    btnColorStations: TColorButton;
     editHTMLHeight: TCurrencyEdit;
     editHTMLHeight1: TCurrencyEdit;
     editHTMLWidth: TCurrencyEdit;
@@ -48,6 +49,7 @@ type
     grdRoadmap: TStringGrid;
     Label1: TLabel;
     Label10: TLabel;
+    Label12: TLabel;
     lbEtape: TLabel;
     Label2: TLabel;
     Label4: TLabel;
@@ -70,7 +72,10 @@ type
     tabExportHTML: TTabSheet;
     tabShtPlan: TTabSheet;
     tabShtRoadMap: TTabSheet;
+    procedure btnBackgroundCarteColorChanged(Sender: TObject);
     procedure btnCalculerItineraireClick(Sender: TObject);
+    procedure btnColorCenterlineColorChanged(Sender: TObject);
+    procedure btnColorStationsColorChanged(Sender: TObject);
     procedure btnCopierTableauClick(Sender: TObject);
     procedure btnCouleurClick(Sender: TObject);
     procedure btnCreerFicheStationClick(Sender: TObject);
@@ -80,6 +85,11 @@ type
     procedure btnPickStartFromCarteClick(Sender: TObject);
     procedure cmbDeviceCibleChange(Sender: TObject);
     procedure cmbUniteBoussoleChange(Sender: TObject);
+  strict private
+    FMapBackgroundColor: TColor;
+    FMapCenterlineColor: TColor;
+    FMapStationsColor  : TColor;
+
   private
     FCurrentIdxItineraire: integer;
     FCurrentStation: TBZClassNode;
@@ -101,6 +111,10 @@ type
     procedure RefreshGraphe(const MyPath: TPathBetweenNodes);
     procedure DessinerGraphe(const MyPath: TPathBetweenNodes);
     function  GetCurrentStation(): TBZClassNode;
+    procedure SetBackgroundColor(const C: TColor);
+    procedure SetCenterlineColor(const C: TColor);
+
+
 end;
 
 
@@ -114,6 +128,13 @@ uses
 function TCdrGrapheItineraire.Initialiser(const B: TBDDEntites; const G: TPathFindingGraphe): boolean;
 begin
   Result := false;
+  FMapBackgroundColor := clCream;
+  FMapCenterlineColor := clBlue;
+  FMapStationsColor   := clMaroon;
+
+  btnBackgroundCarte.ButtonColor := FMapBackgroundColor;
+  btnColorCenterline.ButtonColor := FMapCenterlineColor;
+  btnColorStations.ButtonColor   := FMapStationsColor;
 
   FCurrentIdxItineraire := 0;
 
@@ -182,14 +203,34 @@ begin
                      Trim(editNomItineraire.Text),
                      btnCouleur.ButtonColor);
 
- // ShowMessageFmt('Fuck the Christ 001: %d.%d -> %d.%d', [EE1.Entite_Serie, EE1.Entite_Station, EE2.Entite_Serie, EE2.Entite_Station]);
   EWE := FGraphe.RechercherPlusCourtChemin(MyPath);
- // ShowMessage('Fuck the Christ 002');
   if (EWE) then FGraphe.PutItineraire(FCurrentIdxItineraire, MyPath);
   RefreshGraphe(MyPath);
   DessinerGraphe(MyPath);
 
 end;
+
+
+
+procedure TCdrGrapheItineraire.btnColorCenterlineColorChanged(Sender: TObject);
+begin
+  FMapCenterlineColor := btnColorCenterline.ButtonColor;
+end;
+
+
+
+procedure TCdrGrapheItineraire.btnColorStationsColorChanged(Sender: TObject);
+begin
+  FMapStationsColor := btnColorStations.ButtonColor;
+end;
+
+
+
+procedure TCdrGrapheItineraire.btnBackgroundCarteColorChanged(Sender: TObject);
+begin
+   FMapBackgroundColor := btnBackgroundCarte.ButtonColor;
+end;
+
 procedure TCdrGrapheItineraire.CalculerItineraireByIndex(const Idx: integer);
 var
   MyPath: TPathBetweenNodes;
@@ -226,8 +267,8 @@ begin
   QMenuWidth := 200;
   FGraphe.ExporterGrapheEnJavascript('Graphe du réseau', editHTMLOutput.FileName,
                                       Trim(editStationDepart.Text), Trim(editStationArrivee.Text),
-                                      btnBackgroundCarte.ButtonColor,
-                                      btnColorCenterline.ButtonColor,
+                                      FMapBackgroundColor, //btnBackgroundCarte.ButtonColor,
+                                      FMapCenterlineColor, //btnColorCenterline.ButtonColor,
                                       editHTMLWidth.AsInteger,
                                       editHTMLHeight.AsInteger,
                                       QMenuWidth);
@@ -282,6 +323,7 @@ begin
   end;
   if (GHTopoQuestionOuiNon('Quitter IMMEDIATEMENT GHTopo')) then Application.Terminate;
 end;
+
 
 procedure TCdrGrapheItineraire.btnPickEndFromCarteClick(Sender: TObject);
 begin
@@ -464,11 +506,11 @@ var
   QSt: TNumeroStation;
 begin
   AfficherMessageErreur('DessinerGraphe()');
-  CdrDGCDrawingContext1.Initialiser(FGraphe.XMini - 10.0, FGraphe.YMini - 10.0, FGraphe.XMaxi + 10.0, FGraphe.YMaxi + 10.0, True, clCream);
+  CdrDGCDrawingContext1.Initialiser(FGraphe.XMini - 10.0, FGraphe.YMini - 10.0, FGraphe.XMaxi + 10.0, FGraphe.YMaxi + 10.0, True, FMapBackgroundColor);
   CdrDGCDrawingContext1.SetProcOnClick(GetCoordsPointClicked);
   CdrDGCDrawingContext1.BeginDrawing();
     CdrDGCDrawingContext1.AddStyleSheet('Nodes'  , clRed         , 255, psSolid, 1, 0.00, clCream, 128, bsSolid, 'Arial', clMaroon, 255, 15, 2.00, [fsBold], '');
-    CdrDGCDrawingContext1.AddStyleSheet('Arcs'   , clGreen       , 255, psSolid, 1, 0.00, clAqua , 128, bsSolid, 'Arial', clGreen, 255, 14, 2.00, [], '');
+    CdrDGCDrawingContext1.AddStyleSheet('Arcs'   , FMapCenterlineColor, 255, psSolid, 1, 0.00, clAqua , 128, bsSolid, 'Arial', clGreen, 255, 14, 2.00, [], '');
     CdrDGCDrawingContext1.AddStyleSheet('Chemin' , MyPath.Color  , 255, psSolid, 3, 0.00, clAqua , 128, bsSolid, 'Arial', clMaroon, 255, 10, 3.00, [fsBold], '');
     CdrDGCDrawingContext1.BeginGroupe('Noeuds');
       Nb := FGraphe.GetNbStations();
@@ -523,6 +565,16 @@ end;
 function TCdrGrapheItineraire.GetCurrentStation(): TBZClassNode;
 begin
   result := FCurrentStation;
+end;
+
+procedure TCdrGrapheItineraire.SetBackgroundColor(const C: TColor);
+begin
+
+end;
+
+procedure TCdrGrapheItineraire.SetCenterlineColor(const C: TColor);
+begin
+
 end;
 
 
