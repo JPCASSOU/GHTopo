@@ -373,7 +373,7 @@ object CdrGrapheItineraire: TCdrGrapheItineraire
         Value = 200
       end
       object btnExportHTML: TButton
-        Left = 0
+        Left = 4
         Height = 25
         Top = 232
         Width = 167
@@ -490,13 +490,13 @@ object CdrGrapheItineraire: TCdrGrapheItineraire
     TabOrder = 2
   end
   object pnlProgression: TPanel
-    Left = 28
+    Left = 12
     Height = 49
     Top = 392
-    Width = 695
+    Width = 739
     Anchors = [akTop, akLeft, akRight]
     ClientHeight = 49
-    ClientWidth = 695
+    ClientWidth = 739
     TabOrder = 3
     object lbEtape: TLabel
       Left = 4
@@ -510,7 +510,7 @@ object CdrGrapheItineraire: TCdrGrapheItineraire
       Left = 4
       Height = 20
       Top = 24
-      Width = 684
+      Width = 728
       Anchors = [akTop, akLeft, akRight, akBottom]
       Smooth = True
       TabOrder = 0

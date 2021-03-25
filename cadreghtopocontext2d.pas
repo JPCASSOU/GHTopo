@@ -595,12 +595,21 @@ begin
   // Le format Text, obsolète, pose de gros problèmes ici
   try
     SetCurrentNumeroEntrance(0);
+    AfficherMessageErreur('---- 0001');
+
     SetCurrentNumeroReseau(0);
+    AfficherMessageErreur('---- 0002');
+
     SetCurrentNumeroSecteur(0);
+    AfficherMessageErreur('---- 0003');
     SetCurrentNumeroCode(0);
+    AfficherMessageErreur('---- 0004');
     SetCurrentNumeroExpe(0);
+    AfficherMessageErreur('---- 0005');
 
     SetCurrentStationBySerSt(1, 0);
+    AfficherMessageErreur('---- 0006');
+
     SetCurrentNumeroSerieStationPourDistoX(1, -1);
     FStationNearToMouse := FCurrentStation;
   except

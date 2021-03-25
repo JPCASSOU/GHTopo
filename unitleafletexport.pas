@@ -121,6 +121,7 @@ type
     procedure EndScriptSection();
     procedure WriteLine(const S: string);
     procedure WrtLinFmt(const Fmt: String; const Args: array of const);
+
     procedure IndentLine(const ResetIndent: boolean = false);
     procedure UnIndentLine(const ResetIndent: boolean = false);
     procedure BeginCSSClass(const QCSSClassName: string);
@@ -136,20 +137,20 @@ type
     procedure EndJSFunction();
     function  HasAlreadyLayerVarName(const L: string): boolean;
 
-    procedure jsIF(const QCondition: string; const QTag: string='');
+    procedure jsIF(const QCondition: string; const QTag: string = '');
     procedure jsELSE(const QTag: string = '');
     procedure jsENDIF(const QTag: string = '');
 
     procedure jsFOR(const QVarCounter, QVarNb: string; const QStart: integer=0; const QTag: string = '');
-    procedure jsNEXT(const QVarCounter: string; const QTag: string='');
+    procedure jsNEXT(const QVarCounter: string; const QTag: string = '');
 
-    procedure jsWHILE(const QCondition: string; const QTag: string='');
+    procedure jsWHILE(const QCondition: string; const QTag: string = '');
     procedure jsWEND(const QTag: string = '');
 
     procedure jsSELECT_CASE(const QSelecteur: string; const QTag: string = '');
-    procedure jsCASE(const QItem: integer; const QTag: string='');
+    procedure jsCASE(const QItem: integer; const QTag: string = '');
     procedure jsBREAK();
-    procedure jsCASE_ELSE(const QTag: string='');
+    procedure jsCASE_ELSE(const QTag: string = '');
     procedure jsEND_SELECT(const QTag: string='');
   private
     FUseLocalJSLibraries: boolean;
@@ -404,6 +405,8 @@ procedure TLeafletExport.WrtLinFmt(const Fmt: String; const Args: array of const
 begin
   WriteLn(FP, Format(Fmt, Args));
 end;
+
+
 procedure TLeafletExport.IndentLine(const ResetIndent: boolean = false);
 var
   n: Integer;
@@ -609,7 +612,7 @@ begin
 end;
 procedure TLeafletExport.EndBody();
 begin
-  WriteLine('  <noscript>' + 'JavaScript is required' + '</noscript>' );
+  WriteLine('  <noscript>' + 'JavaScript is required' + '</noscript>');
   WriteLine('</BODY>');
 end;
 
@@ -784,10 +787,11 @@ const
   HAUTEUR_PNL_COORDS_IN_PIXELS  = 100;
   VAR_QDLR = 'QDemiLargeurRectangle';
   VAR_QDHR = 'QDemiHauteurRectangle';
+  FMT_LINK_REL_HREF  = '  <link rel="%s" href="%s" />';
+  JS_NAME_stylesheet = 'stylesheet';
 var
   URL_OSM_Contributors, WU: String;
   EWE: TLFStringArray;
-
   procedure QDefineAllVarLayers();
   var
     i: Integer;
@@ -976,7 +980,6 @@ var
             WriteLine('})' + QBindPopUp());
             jsBREAK();
           UnIndentLine();
-
         jsCASE_ELSE('');
           IndentLine();
             WrtLinFmt('QL.marker([%s.Lat, %s.Lon])%s', [LOCAL_VAR_QMyMarker, LOCAL_VAR_QMyMarker, QBindPopUp()]);
@@ -1075,9 +1078,8 @@ begin
   try
     BeginHTML();
       BeginHEAD('Report sur OpenStreetMap: ' + FDocTitle);
-      if (FUseLocalJSLibraries) then WrtLinFmt('  <link rel="%s" href="%s" />', ['stylesheet', URL_LOCAL_LEAFLET_CSS])
-                                else WrtLinFmt('  <link rel="%s" href="%s" />', ['stylesheet', URL_LEAFLET_CSS]);
-
+      if (FUseLocalJSLibraries) then WrtLinFmt(FMT_LINK_REL_HREF, [JS_NAME_stylesheet, URL_LOCAL_LEAFLET_CSS])
+                                else WrtLinFmt(FMT_LINK_REL_HREF, [JS_NAME_stylesheet, URL_LEAFLET_CSS]);
       BeginCSS_Styles();
         WrtLinFmt('  html, body { margin:%dpx; padding:%d; }', [0, 0]);
         // CSS de la barre de titre
@@ -1137,8 +1139,6 @@ begin
         DefineClassTMarker();
         DefineClassMarkerList();
         WriteLine('    // Variables globales');
-
-
         DeclareGlobalVariable(NAMEREF_MAP, 'Pointeur sur la carte');
 
         DefineGlobalObject(JS_TMARKERLIST_INSTANCE, JS_TMARKERLIST_CLASSNAME, 'Liste des markers');
@@ -1147,8 +1147,8 @@ begin
         WriteSectionSeparator();
         WriteLine('// Spécifique Alain DOLE, qui bosse avec un système de coordonnées datant du Moyen Age');
         BeginJSFunction('ConvertLatLonToLT3', 'QL, QLat, QLon');
-          WriteLine('    var V00824 = 0.08248325676;  ');
-          WriteLine('    var V06959 = 0.6959127966;  ');
+          WriteLine('    var V00824 = 0.08248325676;');
+          WriteLine('    var V06959 = 0.6959127966;');
           WriteLine('    var MToKM = 0.001;');
           WriteLine('    var latitude  = Math.PI * QLat / 180.0; ');
           WriteLine('    var longitude = Math.PI * QLon / 180.0;');

@@ -168,6 +168,13 @@ type TListeJonctionsCoupeDeveloppee = class(TListeSimple<TJonctionCoupeDeveloppe
 end;
 
 type
+{ TListeOfTGHStringArray }
+
+ TListeOfTGHStringArray = class(TListeSimple<TGHStringArray>)
+  private
+  public
+    procedure SortByFirstColumn();
+end;
 
 { TTableViseesAntenne }
 
@@ -348,6 +355,7 @@ begin
   if (0 = Nb) then Exit(false);
   result := self.RemoveElement(Nb - 1);
 end;
+
 
 { TListeOfGISLayers }
 
@@ -908,6 +916,50 @@ begin
     pass;
   end;
 end;
+
+{ TListeOfTGHStringArray }
+function SortByFirstColumnOfTGHStringArray(Item1, Item2: Pointer): Integer;
+var
+  E1, E2: ^TGHStringArray;
+  bidon1, bidon2: string;
+begin
+  E1 := Item1;
+  E2 := Item2;
+  bidon1 := E1[0];
+  bidon2 := E2[0];
+  if      (bidon1 < bidon2) then Result := -1
+  else if (bidon1 = bidon2) then Result :=  0
+  else                           Result :=  1;
+end;
+function SortBySerStDepart(Item1, Item2: Pointer): Integer;
+var
+  E1, E2: ^TGHStringArray;
+  bidon1, bidon2: TIDBaseStation;
+  function Q666(const S: string): TIDBaseStation;
+  var
+    EWE: TToporobotIDStation;
+  begin
+    EWE    := DecomposeStationToporobot(Trim(S));
+    Result := MakeTIDBaseStation(EWE.aSerie, EWE.aStation, false);
+  end;
+begin
+  E1 := Item1;
+  E2 := Item2;
+  bidon1 := Q666(E1[0]);
+  bidon2 := Q666(E2[0]);
+  if      (bidon1 < bidon2) then Result := -1
+  else if (bidon1 = bidon2) then Result :=  0
+  else                           Result :=  1;
+end;
+
+
+procedure TListeOfTGHStringArray.SortByFirstColumn();
+begin
+  self.Sort(SortBySerStDepart);
+end;
+
+
+
 
 
 end.

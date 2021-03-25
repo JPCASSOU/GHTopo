@@ -45,9 +45,9 @@ object dlgSelectGHTopoFiles: TdlgSelectGHTopoFiles
     Height = 517
     Top = 4
     Width = 850
-    ActivePage = TabSheet3
+    ActivePage = TabSheet1
     Anchors = [akTop, akLeft, akRight, akBottom]
-    TabIndex = 2
+    TabIndex = 0
     TabOrder = 2
     object TabSheet1: TTabSheet
       Caption = 'Dossiers utilisateur'
@@ -172,7 +172,6 @@ object dlgSelectGHTopoFiles: TdlgSelectGHTopoFiles
                 Caption = 'PocketTopo TXT'
                 OnChange = rbxPocketTopoTXTChange
                 TabOrder = 4
-                Visible = False
               end
             end
             object btnDropUserFolder: TButton

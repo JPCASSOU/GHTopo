@@ -105,6 +105,7 @@ resourcestring
                                                'Fichiers GHTopo XML (*.gtx)|*.gtx|' +
                                                'Fichiers Toporobot Tab [deprecated] (*.Tab)|*.Tab|' +
                                                'Fichiers Toporobot Text [deprecated] (*.Text)|*.Text|' +
+                                               'Fichiers PocketTopo TXT|*.txt' +
                                                'Fichiers JSON (*.json)|*.json|' +
                                                'Tous (*.*)|*.*';
   rsKML_FILE_FILTER                          = 'Fichier Google Earth (*.kml)|*.kml|Tous (*.*)|*.*';

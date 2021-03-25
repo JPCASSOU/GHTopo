@@ -878,9 +878,7 @@ begin
   try
     if (TD.Initialiser()) then
     begin
-      AfficherMessage('*** 006');
       TD.ShowModal;
-      AfficherMessage('*** 007');
       if (TD.ModalResult = mrOK) then
       begin
         QFileName := TD.GetFileName();

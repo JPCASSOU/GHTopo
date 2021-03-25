@@ -198,6 +198,7 @@ var
     end;
   end;
 begin
+  result := false;
   Nb := FDocTopoAAjouter.GetNbSeries();
   ShowMessage('AjouterLesSeries()');
   AfficherMessageErreur(Format('%s.AjouterLesSeries(): %d series', [ClassName, Nb]));
@@ -448,6 +449,15 @@ begin
   else if (Pos('.gtx', FC) > 0) then // fichier GHTopo XML ?
   begin
     if (FDocTopoAAjouter.LoadFromXML(FC) < 0) then
+    begin
+      AfficherMessageErreur('Le fichier comporte des erreurs. Il doit être audité dans un éditeur XML');
+      FDocTopoAAjouter.Finaliser();
+      Exit;
+    end;
+  end
+  else if (Pos('.txt', FC) > 0) then // fichier GHTopo XML ?
+  begin
+    if (FDocTopoAAjouter.LoadFromPocketTopoTXT(FC) < 0) then
     begin
       AfficherMessageErreur('Le fichier comporte des erreurs. Il doit être audité dans un éditeur XML');
       FDocTopoAAjouter.Finaliser();

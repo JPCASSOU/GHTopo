@@ -1491,7 +1491,6 @@ begin
       Exit;
     end;
   end
-  (*
   else if (Pos('.txt', FC) > 0) then // fichier PocketTopo ?
   begin
     if (FDocumentToporobot.LoadFromPocketTopoTXT(FC) < 0) then
