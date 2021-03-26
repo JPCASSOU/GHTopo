@@ -17,7 +17,7 @@ unit Common;
 // 23/05/2017: TStringArray est un type de données de la FCL 3.0.2. Remplacé par TGHStringArray
 // 20/06/2017: Correction dans function CalculerVisee()
 // 29/11/2018: Refactoration complète de l'unité. Plus de 20 fonctions et 600 lignes de code supprimées
-// 30/12/2019: Point de contrôle temporel (contrôle de version)
+// 26/03/2021: Point de contrôle temporel (contrôle de version)
 interface
 uses
   {$INCLUDE SelectionLangues.inc} // insère les unités en fonction de la langue
