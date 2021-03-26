@@ -161,7 +161,7 @@
         <PackageName Value="LCL"/>
       </Item16>
     </RequiredPackages>
-    <Units Count="68">
+    <Units Count="73">
       <Unit0>
         <Filename Value="GHTopoGM.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -569,6 +569,26 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="UnitRemoteFunctions"/>
       </Unit67>
+      <Unit68>
+        <Filename Value="FuncImportPocketTopoTxt.inc"/>
+        <IsPartOfProject Value="True"/>
+      </Unit68>
+      <Unit69>
+        <Filename Value="FuncLoadSaveFichierTEXT.inc"/>
+        <IsPartOfProject Value="True"/>
+      </Unit69>
+      <Unit70>
+        <Filename Value="FuncLoadSaveFichierTab.inc"/>
+        <IsPartOfProject Value="True"/>
+      </Unit70>
+      <Unit71>
+        <Filename Value="FuncLoadSaveFichierXML.inc"/>
+        <IsPartOfProject Value="True"/>
+      </Unit71>
+      <Unit72>
+        <Filename Value="FuncLoadSaveFichierJSON.inc"/>
+        <IsPartOfProject Value="True"/>
+      </Unit72>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

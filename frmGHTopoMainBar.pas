@@ -1067,7 +1067,7 @@ begin
   ForceDirectories(MyFolderQSave);
   MyQSaveFileName := MyFolderQSave + MakeFilenameFromDate('QSave_', Now(), 'xtb');
   ShowMessage('QSave: ' + MyQSaveFileName);
-  FDocumentToporobot.SaveToFile(MyQSaveFileName, mtabEXTENDEDTAB, tfWINDOWS);
+  FDocumentToporobot.SaveToXTB(MyQSaveFileName, mtabEXTENDEDTAB, tfWINDOWS);
 end;
 
 procedure TGHTopoMainMenuBar.acRecalcDeclimagsOfExpesExecute(Sender: TObject);
@@ -1195,9 +1195,9 @@ begin
     lbOperationEnCours.Caption := 'Sauvegarde de ' + QFileName;
     Application.ProcessMessages;
     case QFilterIndex of
-      1: FDocumentToporobot.SaveToFile(QFileName,mtabEXTENDEDTAB, tfWINDOWS);
+      1: FDocumentToporobot.SaveToXTB(QFileName,mtabEXTENDEDTAB, tfWINDOWS);
       2: FDocumentToporobot.SaveToXML(QFileName); // futur format standard de GHTopo
-      3: FDocumentToporobot.SaveToFile(QFileName,mtabTOPOROBOT, tfMAC);
+      3: FDocumentToporobot.SaveToXTB(QFileName,mtabTOPOROBOT, tfMAC);
       //4: FDocumentToporobot.SaveToJSON(QFileName);
     end; // case FilterIndex
     // actualisation du nouveau nom de fichier
@@ -1503,7 +1503,7 @@ begin
   //*)
   else
   begin // sinon, c'est un fichier supposé Tab ou XTB
-    if (FDocumentToporobot.LoadFichierTab(FC)<0) then
+    if (FDocumentToporobot.LoadFromXTB(FC)<0) then
     begin
       AfficherMessageErreur('Le fichier comporte des erreurs - Voir le rapport');
       DisplayTextEditor(GetGHTopoDirectory() + ChangeFileExt(ExtractFileName(FDocumentToporobot.GetDatabaseName), '.err'), True);

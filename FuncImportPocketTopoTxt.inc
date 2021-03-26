@@ -1,33 +1,15 @@
 //FuncImportPocketTopoTxt.inc
 // charger un fichier PocketTopo TXT
-//function TToporobotStructure2012.LoadFromPocketTopoTXT(const FichierTXT: TStringDirectoryFilename): integer;  deprecated;
-
-
-
-type TLineError = (errLnNONE,
-                   errLnUNIMPLEMENTED,
-                   errLnEMPTY_LINE,
-                   errLnCOMMENT_LINE,
-                   errLnIS_STATION_1_0,
-                   errLnCHANGE_CURRENT_STATION,
-                   errLnINVALID_ID_STATION_DEP,
-                   errLnINVALID_ST_ARR,
-                   errLnSTATION_DETECTED,
-                   errLnREPRISE_SERIE,
-                   errLnIGNORED,
-                   errLnOTHER,
-                   errLnSTOP_SIGNAL);
+function TToporobotStructure2012.LoadFromPocketTopoTXT(const FichierTXT: TStringDirectoryFilename): integer;  deprecated;
 var
   EPSGDefault       : TLabelSystemesCoordsEPSG;
   EWE               : TGHStringArray;
   pTXT              : TextFile;
   LigneTXT          : String;
-  WU                : String;
-  ErrMsg , QNomEtude: string;
-  QCurrentIdDepart, QCurrentIdArrivee: String;
-  p: integer;
-  i, Nb: integer;
-  NbLignesLues, nbSeries, QNbViseesAMoyenner, qna, QVisee, QInternalIdx, VV: Integer;
+  //WU                : String;
+  QNomEtude: string;
+  p, i, j, Nb: integer;
+  NbLignesLues, nbSeries, QInternalIdx: Integer;
   QDateSeanceTopo: TDateTime;
   MyExpe: TExpe;
   MyCode: TCode;
@@ -39,11 +21,11 @@ var
   MySerie: TObjSerie;
   MyVisee: TUneVisee;
 
-  QLongueur, QAzimut, QPente: Extended;
-  QArrViseesAMoyenner: array of TMesureViseeDistoX;
+
   QStationDepart, QStationArrivee, QLaStationCourante: TToporobotIDStation;
   EWE0, EWE1: TGHStringArray;
   QNumeroDeSerieCourant : TNumeroSerie;
+  MyEntrance: TEntrance;
 
   procedure ReadAndDispLigneLue(out MyLine: string);
   begin
@@ -52,50 +34,50 @@ var
     Inc(NbLignesLues);
     //AfficherMessageErreur(Format('%d: %s', [NbLignesLues, MyLine]));
   end;
-
 begin
   Result := -1;
   QDateSeanceTopo := Now();
   ReInitialiser(True);
-  //self.ClearListeSeries();
   EPSGDefault.CodeEPSG := DEFAULT_SYSTEME_COORDONNEES_CODE_EPSG;
   EPSGDefault.NomEPSG  := DEFAULT_SYSTEME_COORDONNEES_NOM;
 
-  WU := Format('%s.LoadFromPocketTopoTXT: %s', [ClassName, FichierTXT]);
-  AfficherMessageErreur(WU + ' - Fonctionnalite en développement');
+  AfficherMessageErreur(Format('%s.LoadFromPocketTopoTXT: %s', [ClassName, FichierTXT]));
   // Fichier introuvable ? OK, On sort
   if (not FileExists(FichierTXT)) then  Exit(-32);
-  // nom étude par défaut
+  // nom étude par défaut = nom du fichier
   SetNomEtude(ExtractFileNameWithoutExt(FichierTXT));
   SetCodeEPSGSystemeCoordonnees(EPSGDefault);
+  MyEntrance.eRefSer    := 1;
+  MyEntrance.eRefSt     := 0;
+  MyEntrance.eCouleur   := clBlue;
+  MyEntrance.eNomEntree := 'Main Entrance';
+  MyEntrance.eIDTerrain := '1.0';
+  MyEntrance.eXEntree   := 0.00;
+  MyEntrance.eYEntree   := 0.00;
+  MyEntrance.eZEntree   := 0.00;
+  MyEntrance.eObserv    := '';
+  AddEntrance(MyEntrance);
 
-
-
-
-
-
-  CreateNewEntrance();
-  CreateNouveauReseau();
-  CreateNouveauSecteur();
   MyCode := MakeUsualTCode(1, 360.00, 360.00, 1.00, 0.01, 1.00, 1.00, 0.00, 0.00, 0.00, 'Topo du ' + DatePascalToDateSQL(QDateSeanceTopo));
   self.AddCode(MyCode);
-  MyExpe := MakeTExpe(1, YearOf(QDateSeanceTopo), MonthOf(QDateSeanceTopo), DayOf(QDateSeanceTopo), 2, cdmAUTOMATIQUE, 0.00, 'Speleometre', 'Speleographe', 'Expe01');
+  MyExpe := MakeTExpe(1, YearOf(QDateSeanceTopo), MonthOf(QDateSeanceTopo), DayOf(QDateSeanceTopo), 6, cdmAUTOMATIQUE, 0.00, 'Speleometre', 'Speleographe', 'Expe01');
   self.AddExpe(MyExpe);
-
-  // et on les extrait
+  AfficherMessageErreur(Format('*** %d entrances, %d reseaux, %d secteurs, %d codes, %d seances', [GetNbEntrances(), GetNbReseaux(), GetNbSecteurs(), GetNbCodes(), GetNbExpes()]));
+  for i := 0 to GetNbCodes() - 1 do
+  begin
+    MyCode := GetCode(i);
+    AfficherMessageErreur(Format('-- %d: Code: %d, UB: %.2f, UC: %.2f', [i, MyCode.IDCode, MyCode.GradAz, MyCode.GradInc]));
+  end;
+  for i := 0 to GetNbExpes() - 1 do
+  begin
+    MyExpe := GetExpe(i);
+    AfficherMessageErreur(Format('-- %d: Expe: %d, %.4d-%.2d-%.2d, %s', [i, MyExpe.IDExpe, MyExpe.AnneeExpe, MyExpe.MoisExpe, MyExpe.JourExpe, MyExpe.Commentaire]));
+  end;
   MyCode := GetLastCode();
   MyExpe := GetLastExpe();
-  AfficherMessageErreur(Format('-- Code %d/%d: %s', [MyCode.IDCode, GetNbCodes(), MyCode.Commentaire]));
-  AfficherMessageErreur(Format('-- Expé %d/%d: %s', [MyExpe.IDExpe, GetNbExpes(), DatePascalToDateSQL(EncodeDate(MyExpe.AnneeExpe, MyExpe.MoisExpe, MyExpe.JourExpe))]));
-  QCurrentIdDepart  := '1.0';
-  QCurrentIdArrivee := '1.0';
-
   try
     ListeOfTGHStringArray := TListeOfTGHStringArray.Create;
     ListeOfTGHStringArray.ClearListe();
-
-
-
     AssignFile(pTXT, FichierTXT);
     NbLignesLues := 0;
     try
@@ -113,30 +95,26 @@ begin
       begin
         ReadAndDispLigneLue(LigneTXT);
         if (''  = Trim(LigneTXT)) then Continue; // ligne vide = on continue
-        if ('#' = LigneTXT[1])   then Continue; // dièse en tête           = commentaire
-        if ('[' = LigneTXT[1])   then Continue; // crochet ouvrant en tête = ligne ignorée
+        if ('#' = LigneTXT[1])    then Continue; // dièse en tête           = commentaire
+        if ('[' = LigneTXT[1])    then Continue; // crochet ouvrant en tête = ligne ignorée
 
         if (1 = pos('stop', LowerCase(LigneTXT))) then Break;  // signal d'arrêt du traitement à inclure dans le fichier
         //0        1         2         3         4         5         6         7         8         9         0
         //1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
         //     1.0              0,00          0,00      0,00
-
-
-        EWE := SplitFixedColLine(LigneTXT, [1, 11, 23, 33, 41, 50, 57, 100]);
+        EWE := SplitFixedColLine(LigneTXT, [1, 11, 23, 33, 41, 50, 58, 100]);
         ListeOfTGHStringArray.AddElement(EWE);
-        //QCurrentIdArrivee:= IIF(EWE[1];
-        //1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
-        //     1.0         1.1       0.050   81.53  -11.88  [1]
       end;
-
     finally
       CloseFile(pTXT);
     end;
     // contrôle et traitements
     Nb := ListeOfTGHStringArray.GetNbElements();
     AfficherMessageErreur(Format('==== %d', [Nb]));
+    // On trie la liste en fonction de la première colonne (regroupement des séries)
     ListeOfTGHStringArray.SortByFirstColumn();
-    // on extrait les antennes
+    // on extrait les antennes (lignes dont le champ 1 est vide)
+    // et on vire les lignes concernées
     for i := Nb -1 downto 0 do
     begin
       EWE := ListeOfTGHStringArray.GetElement(i);
@@ -150,28 +128,28 @@ begin
       MyAntenne.SerieDepart := QStationDepart.aSerie;
       MyAntenne.PtDepart    := QStationDepart.aStation;
       MyAntenne.Longueur    := ConvertirEnNombreReel(Trim(EWE[2]), -1.00);
-      MyAntenne.Azimut      := ConvertirEnNombreReel(Trim(EWE[3]), 0.00);
-      MyAntenne.Pente       := ConvertirEnNombreReel(Trim(EWE[4]), 0.00);
-      MyAntenne.Commentaires:= '';
-      MyAntenne.IDTerrainStation := '';
-
+      MyAntenne.Azimut      := ConvertirEnNombreReel(Trim(EWE[3]),  0.00);
+      MyAntenne.Pente       := ConvertirEnNombreReel(Trim(EWE[4]),  0.00);
+      //MyAntenne.Commentaires:= '';
+      //MyAntenne.IDTerrainStation := '';
       if (MyAntenne.Longueur > 0.00) then AddViseeAntenne(MyAntenne);
     end;
     AfficherMessageErreur(Format('==== %d antennes ajoutées', [GetNbAntennes()]));
+    (*
     Nb := ListeOfTGHStringArray.GetNbElements();
-    AfficherMessageErreur(Format('==== %d', [Nb]));
     for i := 0 to Nb -1 do
     begin
       EWE := ListeOfTGHStringArray.GetElement(i);
       AfficherMessageErreur(EWE[0] + '; ' + EWE[1] + '; ' + EWE[2] + '; ' + EWE[3] + '; ' + EWE[4] + '; ' +  EWE[5] + '; ');
     end;
-    // nombre de séries:
+    //*)
     CreateNewSerie(1, 0, 1, 'Galerie principale');
     nbSeries := GetNbSeries();
     AfficherMessageErreur(Format('%d séries', [nbSeries]));
 
     // les nouvelles séries = lignes de la forme
     //   363.33      386.0       0.000    0.00    0.00         "retrancher 26 deg aux azimuts"
+    // On crée les séries et on jette les lignes concernées
     Nb := ListeOfTGHStringArray.GetNbElements();
     for i := Nb -1 downto 0 do
     begin
@@ -181,70 +159,37 @@ begin
       if ((QStationArrivee.aSerie > 0) and (0 = QStationArrivee.aStation)) then
       begin
         CreateNewSerie(QStationDepart.aSerie, QStationDepart.aStation, QStationArrivee.aSerie, 'Depart en ' + Trim(EWE[0]));
-
         ListeOfTGHStringArray.RemoveElement(i);
       end;
     end;
-    (*
-     NSR.ClearStations();          // Opération 1: Vider la liste des visées
-    NSR.SetChanceObstacle(0, 0);  // Opération 2: Chances et obstacles
-      MySerieCible.SetChanceObstacle(MySerieSource.GetChance(), MySerieSource.GetObstacle());                       // Opération 2: Chances et obstacles
-          MySerieCible.SetSeriePtExtremites(MySerieSource.GetNoSerieDep(), MySerieSource.GetNoPointDep(),               // Opération 3: Extrémités de la série
-                                            MySerieSource.GetNoSerieArr(), MySerieSource.GetNoPointArr());
-          MySerieCible.SetNumeroSerie(MySerieSource.GetNumeroDeSerie());                                                // Opération 4: Numéro de série
-          MySerieCible.SetNomObsSerie(MySerieSource.GetNomSerie(), '*** Imported *** ' + MySerieSource.GetObsSerie());  // Opération 5: Nom et observations sur la série
-          MySerieCible.SetRaideur(MySerieSource.GetRaideur());                                                          // Opération 6: Raideur
-          MySerieCible.SetCouleur(MySerieSource.GetCouleur());                                                          // Opération 7: Couleur
-          MySerieCible.SetNumeroEntrance(0);                                                                            // Opération 8: Entrée de rattachement
-          MySerieCible.SetNumeroReseau(0);                                                                              // Opération 9: Réseau de rattachement
-
-
-    //*)
-
-
-
     nbSeries := GetNbSeries();
     AfficherMessageErreur(Format('%d séries', [nbSeries]));
     SortSeries();
+    (*
     for i := 0 to nbSeries -1 do
     begin
       MySerie := GetSerie(i);
       AfficherMessageErreur(Format('%d: %d: %d.%d -> %d.%d: %s', [i, MySerie.GetNumeroDeSerie(), MySerie.GetNoSerieDep(), MySerie.GetNoPointDep(), MySerie.GetNoSerieArr(), MySerie.GetNoPointArr(), MySerie.GetNomSerie()]));
     end;
-
+    //*)
     // moyenner les visées
     Nb := ListeOfTGHStringArray.GetNbElements();
-    QLongueur := 0.00;
-    QAzimut   := 0.00;
-    QPente    := 0.00;
-    QNbViseesAMoyenner := 0;
-    SetLength(QArrViseesAMoyenner, 0);
+    // Ici, on supprime les lignes 'doublons' (ie: Colonnes 0 et 1 identiques)
+    // sans moyenner les valeurs .
+    // TODO: Moyenner les valeurs de ces lignes
     for i := Nb -1 downto 1 do
     begin
-
-
       EWE0 := ListeOfTGHStringArray.GetElement(i-1);
       EWE1 := ListeOfTGHStringArray.GetElement(i);
 
-      (*
-      QUneVisee.Device   := 0;
-      QUneVisee.Longueur := ConvertirEnNombreReel(EWE1[2], -1.00);
-      QUneVisee.Azimut   := ConvertirEnNombreReel(EWE1[3],  0.00);
-      QUneVisee.Pente    := ConvertirEnNombreReel(EWE1[4],  0.00);
-      //*)
-
       QStationDepart0  := Trim(EWE0[0]); QStationArrivee0  := Trim(EWE0[1]);
       QStationDepart1  := Trim(EWE1[0]); QStationArrivee1  := Trim(EWE1[1]);
-      //QArrViseesAMoyenner;
       if ((QStationDepart1 = QStationDepart0) and (QStationArrivee1 = QStationArrivee0)) then
       begin
-        //qna := length(QArrViseesAMoyenner);
-        //SetLength(QArrViseesAMoyenner, 1 + qna);
-        //QArrViseesAMoyenner[qna] := QUneVisee;
-
         ListeOfTGHStringArray.RemoveElement(i);
       end;
     end;
+    (*
     Nb := ListeOfTGHStringArray.GetNbElements();
     AfficherMessageErreur(Format('= Doublons supprimés === %d', [Nb]));
     for i := 0 to Nb -1 do
@@ -252,12 +197,13 @@ begin
       EWE := ListeOfTGHStringArray.GetElement(i);
       AfficherMessageErreur(EWE[0] + '; ' + EWE[1] + '; ' + EWE[2] + '; ' + EWE[3] + '; ' + EWE[4] + '; ' +  EWE[5] + '; ');
     end;
+    //*)
     // remplissage des séries
     Nb := ListeOfTGHStringArray.GetNbElements();
     AfficherMessageErreur(Format('= Séries === %d', [Nb]));
     QNumeroDeSerieCourant := 0;
 
-    for i := 0 to Nb -1 do
+    for i := 0 to Nb - 1 do
     begin
       EWE := ListeOfTGHStringArray.GetElement(i);
       QLaStationCourante := DecomposeStationToporobot(Trim(EWE[0]));
@@ -271,11 +217,15 @@ begin
       MyVisee.Expe      := MyExpe.IDExpe;
       MyVisee.IDSecteur := 0;
       MyVisee.TypeVisee := tgDEFAULT;
-
-
       MyVisee.Longueur := ConvertirEnNombreReel(EWE[2], -1.00);
       MyVisee.Azimut   := ConvertirEnNombreReel(EWE[3],  0.00);
       MyVisee.Pente    := ConvertirEnNombreReel(EWE[4],  0.00);
+      MyVisee.LG       := 0.00;
+      MyVisee.LD       := 0.00;
+      MyVisee.HZ       := 0.00;
+      MyVisee.HN       := 0.00;
+      MyVisee.Commentaires    := StringReplace(Trim(EWE[6]), '"', '', [rfReplaceAll]);
+
       MySerie.AddVisee(MyVisee);
     end;
     // et affichage de contrôle
@@ -287,20 +237,36 @@ begin
       MySerie := GetSerie(i);
       MySerie.SetNoSerieArr(MySerie.GetNumeroDeSerie());
       MySerie.SetNoPointArr(MySerie.GetNbVisees() - 1);
+      MySerie.SetChanceObstacle(0, 0);
+      MySerie.SetNumeroEntrance(0);
+      MySerie.SetNumeroReseau(0);
+      MySerie.SetNomObsSerie('', '');
+
+
       AfficherMessageErreur(Format('%d: %d (%d pts): %d.%d -> %d.%d: %s', [i, MySerie.GetNumeroDeSerie(), MySerie.GetNbVisees(),MySerie.GetNoSerieDep(), MySerie.GetNoPointDep(), MySerie.GetNoSerieArr(), MySerie.GetNoPointArr(), MySerie.GetNomSerie()]));
+      for j := 0 to MySerie.GetNbVisees() - 1 do
+      begin
+        MyVisee := MySerie.GetVisee(j);
+        AfficherMessageErreur(Format('  -> %d: T=%d, S=%d, C=%d, E=%d - %.2f, %.2f, %.2f', [
+                                     j, Ord(MyVisee.TypeVisee), MyVisee.IDSecteur, MyVisee.Code, MyVisee.Expe,
+                                     MyVisee.Longueur, MyVisee.Azimut, MyVisee.Pente
+                                     ]));
+      end;
     end;
-
-
-
-
     ListeOfTGHStringArray.ClearListe();
-    SetCurrentNumeroCode(1);
-    SetCurrentNumeroExpe(1);
-    SetCurrentNumeroEntrance(0);
-    SetCurrentNumeroReseau(0);
-    SetCurrentNumeroSecteur(0);
-    SetCurrentNumeroSerie(1);
-
+    for i := 0 to GetNbCodes() - 1 do
+    begin
+      MyCode := GetCode(i);
+      AfficherMessageErreur(Format('-- %d: Code: %d, UB: %.2f, UC: %.2f', [i, MyCode.IDCode, MyCode.GradAz, MyCode.GradInc]));
+    end;
+    for i := 0 to GetNbExpes() - 1 do
+    begin
+      MyExpe := GetExpe(i);
+      AfficherMessageErreur(Format('-- %d: Expe: %d, %.4d-%.2d-%.2d, %s', [i, MyExpe.IDExpe, MyExpe.AnneeExpe, MyExpe.MoisExpe, MyExpe.JourExpe, MyExpe.Commentaire]));
+    end;
+    //**************************
+    Preconditionner(FichierTXT);
+    //**************************
     Result := GetNbSeries();
   finally
     FreeAndNil(ListeOfTGHStringArray);

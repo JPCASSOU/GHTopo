@@ -1,7 +1,7 @@
 object frmCalculette: TfrmCalculette
-  Left = 158
+  Left = 154
   Height = 834
-  Top = 299
+  Top = 122
   Width = 1365
   Caption = 'frmCalculette'
   ClientHeight = 834

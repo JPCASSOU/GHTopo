@@ -79,6 +79,8 @@ unit ToporobotClasses2012;
 // 15/02/2019 : Support des directives INCLUDE pour les listes simples et les visées en antenne
 // 01/01/2020 : Calcul des LRUD depuis les visées radiantes
 // 03/08/2020 : Point de contrôle temporel (contrôle de version)
+// 24/03/2021 : Import du format PocketTopo TXT
+// 24/03/2021 : Les fonctions d'ouverture et sauvegarde vont dans des fichiers FuncLoadSave*.inc
 //
 //
 //-----------------------------------------------------
@@ -140,7 +142,9 @@ uses
   SysUtils,
   Graphics,
   UnitTSAGeoMag,
-  DOM, XMLWrite, XMLRead;
+  fpjson, jsonparser,       // pour JSON
+  DOM, XMLWrite, XMLRead;   // pour XML
+
 // REFONTE DU CONTENEUR TTOPOROBOTSTRUCTURE
 //------------------------------------------------------------------------------
 type
@@ -158,9 +162,9 @@ type
     FSystemeDeCoordonneesCodeEPSG : TLabelSystemesCoordsEPSG;
 
     // coordonnées et station de référence
-    FPositionPointZero: TPoint3Df;
-    FRefSer        : integer;
-    FRefPt         : integer;
+    FPositionPointZero        : TPoint3Df;
+    FRefSerie                 : TNumeroSerie;
+    FRefPt                    : TNumeroStation;
     // listes simples
     FTableNameSpaces          : TTableNamespaces;  // espaces de noms       ; ex: TP19
     FListeMessagesErreur      : TListeMessagesErreur;
@@ -190,16 +194,17 @@ type
 
     // série et station courants
     FCurrentNumeroSerie    : TNumeroSerie;
-    FCurrentIndexStation   : integer;
+    FCurrentIndexStation   : TNumeroStation;
     // pour mises en surbrillance
     FCurrentNameSpace      : integer;
-    FCurrentNumeroEntrance : integer;
-    FCurrentNumeroExpe     : integer;
-    FCurrentNumeroCode     : integer;
-    FCurrentNumeroReseau   : integer;
-    FCurrentNumeroSecteur  : integer;
-
-    function VerifieSerie1(): boolean;
+    FCurrentNumeroEntrance : TNumeroEntrance;
+    FCurrentNumeroExpe     : TNumeroExpe;
+    FCurrentNumeroCode     : TNumeroCode;
+    FCurrentNumeroReseau   : TNumeroReseau;
+    FCurrentNumeroSecteur  : TNumeroSecteur;
+    // contrôles, tris et définition des références
+    procedure Preconditionner(const QFilename: TStringDirectoryFilename);
+    function  VerifieSerie1(): boolean;
     procedure AddMessageErreur(const M: TMessaqeErreurGHTopoCompiler); overload;
     procedure AddMessageErreur(const T: TTableExaminee; const QCriticite: TCriticiteMessaqeErreurGHTopo; const QIndex: Int64; const QMsg: string); overload;
 
@@ -212,7 +217,7 @@ type
     procedure SetCurrentNumeroSerie(const S: TNumeroSerie);
     function  GetCurrentNumeroSerie(): TNumeroSerie;
     procedure SetCurrentIndexPointOfSerie(const S: integer);
-    procedure SetCurrentIndexSeriePoint(const S, P: integer);
+    procedure SetCurrentIndexSeriePoint(const Ser: TNumeroSerie; const Pt: TNumeroStation);
     function  GetCurrentIndexPointOfSerie(): integer;
 
     // gestion des espaces de noms
@@ -230,11 +235,11 @@ type
     procedure SetCurrentNumeroNamespace(const C: integer);
 
 
-    function  GetCurrentNumeroEntrance(): TNumeroEntrance;
-    function  GetCurrentNumeroCode(): TNumeroCode;
-    function  GetCurrentNumeroExpe(): TNumeroExpe;
-    function  GetCurrentNumeroReseau(): TNumeroReseau;
-    function  GetCurrentNumeroSecteur(): TNumeroSecteur;
+    function  GetCurrentNumeroEntrance() : TNumeroEntrance;
+    function  GetCurrentNumeroCode()     : TNumeroCode;
+    function  GetCurrentNumeroExpe()     : TNumeroExpe;
+    function  GetCurrentNumeroReseau()   : TNumeroReseau;
+    function  GetCurrentNumeroSecteur()  : TNumeroSecteur;
     function  GetCurrentNumeroNamespace(): integer;
 
     procedure SetProcDisplayProgression(const ProcProgression: TProcDisplayProgression);
@@ -244,16 +249,23 @@ type
     // s'agit-il d'un document GHTopo étendu ?
     function IsGHTopoCodesInstrumentsExtended(): boolean;
     // chargement document topo
-    function  LoadFichierTab(const FichierTAB: TStringDirectoryFilename): integer;
+    function  LoadFromXTB(const FichierTAB: TStringDirectoryFilename): integer;
+    procedure SaveToXTB(const FichierTAB: TStringDirectoryFilename; const ModeSaveTAB: TModeSaveTAB; const TextFileFormat: TTextFileFormat);
     function  LoadFromXML(const FichierXML: TStringDirectoryFilename): integer;
-    function  LoadFromPocketTopoTXT(const FichierTXT: TStringDirectoryFilename): integer; deprecated;
-    function  LoadFichierText(const FichierText: TStringDirectoryFilename): integer; deprecated;
-    // LoadFromPocketTopoTXT() a été supprimé: non utilisé; PocketTopo exporte en Toporobot Text
-    // sauvegarde document
-    procedure SaveToFile(const FichierTAB: TStringDirectoryFilename;
-                         const ModeSaveTAB: TModeSaveTAB;
-                         const TextFileFormat: TTextFileFormat);
     procedure SaveToXML(const FichierXML: TStringDirectoryFilename);
+    function  LoadFromJSON(const FichierJSON: TStringDirectoryFilename): integer;
+    procedure SaveToJSON(const FichierJSON: TStringDirectoryFilename);
+
+    // import depuis Toporobot Text et PocketTopo TXT
+    function  LoadFichierText(const FichierText: TStringDirectoryFilename): integer; deprecated;
+    function  LoadFromPocketTopoTXT(const FichierTXT: TStringDirectoryFilename): integer; deprecated;
+
+    // export vers autres logiciels
+    procedure ExportVisualTopo(const FichierTRO: TStringDirectoryFilename; const DoExportViseesRadiantes: boolean);  // Visual Topo
+    procedure ExporterVersToporobotTEXT(const QFileName: TStringDirectoryFilename;
+                                        const LongueurMaxAntenne: double;
+                                        const DoExportAntennaShots: boolean); deprecated;   // Toporobot TEXT
+
     //procedure SaveToJSON(const Filename: TStringDirectoryFilename);
     // section General
     procedure SetNomEtude(const S: string);
@@ -261,7 +273,7 @@ type
     procedure SetDatabaseName(const S: string);
     function  GetNomEtude(): string;
     function  GetCommentairesEtude(): string;
-    procedure SetRefSeriePoint(const Ser, Pt: integer);
+    procedure SetRefSeriePoint(const Ser: TNumeroSerie; const Pt: TNumeroStation);
     // systèmes de coordonnées
     procedure SetCodeEPSGSystemeCoordonnees(const CodeEPSG: TLabelSystemesCoordsEPSG); overload;
     procedure SetCodeEPSGSystemeCoordonnees(const qCodeEPSG: integer; const qNomEPSG: string); overload;
@@ -403,15 +415,12 @@ type
     function GetIdxCodeByNumero(const N: TNumeroCode): integer;
     function GetIdxExpeByNumero(const N: TNumeroExpe): integer;
     function GetIdxSerieByNumero(const qIdx: TNumeroSerie): integer;
-    function GetRefPoint(): integer;
-    function GetRefSerie(): integer;
+
+    function GetRefSerie(): TNumeroSerie;
+    function GetRefPoint(): TNumeroStation;
     // infos générales sur les données de la cavité
     function GetInfosCavite(const LS: TStrings): integer;
-    // export vers autres logiciels
-    procedure ExportVisualTopo(const FichierTRO: TStringDirectoryFilename; const DoExportViseesRadiantes: boolean);  // Visual Topo
-    procedure ExporterVersToporobotTEXT(const QFileName: TStringDirectoryFilename;
-                                        const LongueurMaxAntenne: double;
-                                        const DoExportAntennaShots: boolean); deprecated;   // Toporobot TEXT
+
     // génération d'un dossier complet Therion
     procedure GenererThConfig(const THConfig, QFichierTH, QFichierXVI: TStringDirectoryFilename; const QScale: integer; const QGridSize: double);
     procedure GenererDossierTherion(const DossierTherion: TStringDirectoryFilename; const QScale: integer; const QGridSize: double);
@@ -443,7 +452,7 @@ type
     procedure CheckerLesAntennes();
     procedure CheckerLesCodes();
     procedure CheckerLesExpes();
-    function  CheckSerie(const MySerie: TObjSerie; const QIdx: integer): integer; // retourne: -1 si série vide; numéro de visée si erreur, 0 si OK
+    function  CheckSerie(const MySerie: TObjSerie): integer; // retourne: -1 si série vide; numéro de visée si erreur, 0 si OK
     function  CheckVisee(const V: TUneVisee; out MsgErr: string): TErrorVisee;
     // recalcul des déclinaisons magnétiques
     procedure RecalculerDeclinaisonsMagnetiquesExpes();
@@ -467,13 +476,7 @@ type
     procedure PutLabelTerrain(const NoLabelTerrain: integer; const ALabelTerrain: TToporobotIDStation);
     function  RemoveLabelTerrain(const Idx: integer): boolean;
 
-    // ajout de données depuis fichiers CSV
-    procedure AddEntrancesFromFile(const FileName: TStringDirectoryFilename; const DoReplaceExisting: boolean);
-    procedure AddReseauxFromFile(const FileName: TStringDirectoryFilename; const DoReplaceExisting: boolean);
-    procedure AddSecteursFromFile(const FileName: TStringDirectoryFilename; const DoReplaceExisting: boolean);
-    procedure AddCodesFromFile(const FileName: TStringDirectoryFilename; const DoReplaceExisting: boolean);
-    procedure AddExpesFromFile(const FileName: TStringDirectoryFilename; const DoReplaceExisting: boolean);
-    procedure AddAntennesFromFile(const FileName: TStringDirectoryFilename; const DoReplaceExisting: boolean);
+    // ajout de données depuis fichiers CSV (supprimé car inutilisé)
 
     // réattribution des codes, réseaux et expés pour les visées en antennes
     function  ReattribuerCodesExpesViseesAntennes(): boolean;
@@ -504,9 +507,7 @@ function RegenererEbaucheXTB(const NomEbauche: string; const DefaultCodeEPSG: in
 
 implementation
 uses
-    DGCDummyUnit; // Anti-erreur 'Fin du conde source non trouvée'
-// Inclusion des constantes GtxKey
-{$INCLUDE GTX_Keys.inc}
+  DGCDummyUnit; // Anti-erreur 'Fin du conde source non trouvée'
 
 const FMTSTS = 's%d_%d';
 
@@ -815,20 +816,20 @@ begin
   FPositionPointZero := P0;
 end;
 
-function TToporobotStructure2012.GetRefSerie(): integer;
+function TToporobotStructure2012.GetRefSerie(): TNumeroSerie;
 begin
-  Result := FRefSer;
+  Result := FRefSerie;
 end;
 
-function TToporobotStructure2012.GetRefPoint(): integer;
+function TToporobotStructure2012.GetRefPoint(): TNumeroStation;
 begin
   Result := FRefPt;
 end;
 
-procedure TToporobotStructure2012.SetRefSeriePoint(const Ser, Pt: integer);
+procedure TToporobotStructure2012.SetRefSeriePoint(const Ser: TNumeroSerie; const Pt: TNumeroStation);
 begin
-  FRefSer := Ser;
-  FRefPt  := Pt;
+  FRefSerie := Ser;
+  FRefPt    := Pt;
 end;
 
 procedure TToporobotStructure2012.SetNomEtude(const S: string);
@@ -904,10 +905,10 @@ begin
   FCurrentNumeroSerie := S;
 end;
 
-procedure TToporobotStructure2012.SetCurrentIndexSeriePoint(const S, P: integer);
+procedure TToporobotStructure2012.SetCurrentIndexSeriePoint(const Ser: TNumeroSerie; const Pt: TNumeroStation);
 begin
-  self.SetCurrentNumeroSerie(S);
-  self.SetCurrentIndexPointOfSerie(P);
+  self.SetCurrentNumeroSerie(Ser);
+  self.SetCurrentIndexPointOfSerie(Pt);
 end;
 
 procedure TToporobotStructure2012.SetCurrentNumeroCode(const C: TNumeroCode);
@@ -1127,10 +1128,8 @@ end;
 function TToporobotStructure2012.RemoveSerie(const Idx: integer): boolean;
 var
   MySerie: TObjSerie;
-  Nb     : Integer;
 begin
   Result := False;
-  Nb := GetNbSeries();
   try
     try
       MySerie := self.GetSerie(Idx);
@@ -1370,12 +1369,12 @@ end;
 procedure TToporobotStructure2012.SortSeries();
   procedure QSortSeries(lidx, ridx: integer);
   var
-    k, e, mid: integer;
+    k, e: integer;
     QSer1, QSer2: TObjSerie;
 
   begin
     if (lidx >= ridx) then Exit;
-    mid := (lidx + ridx) div 2;
+    //mid := (lidx + ridx) div 2;
     FListeDesSeries.Exchange(lidx, ridx);
     e:=lidx;
     for k:=lidx+1 to ridx do
@@ -1419,458 +1418,13 @@ begin
   end;
 end;
 
-// charger depuis fichier Tab ou XTB
-// /!\ Ne pas faire les conversions en UTF8 ici:
-// Le format interne de GHTopo est ANSI pour compatibilité avec Windows.
-// Les directives INCLUDE ne fonctionnent pas pour les séries
-function TToporobotStructure2012.LoadFichierTab(const FichierTAB: TStringDirectoryFilename): integer;
-var
-  EPSGDefault : TLabelSystemesCoordsEPSG;
-  MyFiltre    : TFiltrePersonnalise;
-  NoLigneTAB, i: integer;
-  yyy, mmm, ddd: Word;
-  // variables de lignes
-  LigneTab: String;
-  PrmsLn, QArrStrg: TGHStringArray;
-  ErrMsg, QStr: String;
-  // liste provisoire pour lecture de la section -6
-  ProvListeEntrees: TStringList;
-  // série
-  UneSerie: TObjSerie;
-  NbErrorsInLoading: Integer;
-  blaireau, QN, QFichierCorrect: Integer;
-  MyNameSpace: TNameSpace;
-  UneEntree: TEntrance;
-
-  procedure WriteWarning(const Msg: string);
-  begin
-    AfficherMessageErreur(Msg);
-  end;
-  // Vérifie s'il y a une instruction INCLUDE
-  // (qui doit être impérativement en début de ligne)
-  // et retourne Vrai si OK en passant le nom de fichier
-  // Le fichier à inclure doit être dans le même dossier que le fichier principal
-  function HasInstructionInclude(const QMyLigne: string; out QFichierInclude: TStringDirectoryFilename): boolean;
-  const
-    DIRECTIVE_INCLUDE = '$INCLUDE:';
-  var
-    P, Q: SizeInt;
-    EWE: String;
-    QMyDir: TStringDirectoryFilename;
-  begin
-    Result := False;
-    if (1 = Pos(DIRECTIVE_INCLUDE, QMyLigne)) then
-    begin
-      AfficherMessageErreur('HasInstructionInclude: ' + QMyLigne);
-      // extraction du chemin
-      QMyDir := ExtractFilePath(FichierTAB);
-      // extraction du nom du fichier
-      P := Pos(':', QMyLigne);
-      Q := Length(QMyLigne) - P + 1;
-      EWE := Trim(Copy(QMyLigne, P+1, Q));
-      // assemblage du chemin et du nom de fichier spécifié
-      QFichierInclude := QMyDir + EWE;
-      AfficherMessageErreur(QFichierInclude);
-      // et on vérifie si le fichier existe
-      Result := FileExists(QFichierInclude);
-    end;
-  end;
-
-  // Procédure récursive de lecture
-  // Retourne 0 si aucune erreur
-  //         -1 si échec de lecture du fichier ppal
-  //         -2 si fichier INCLUDE introuvable
-  //         -3 si échec de lecture du fichier INCLUDE
-  function LireUnFichier(const QFilename: string): integer;
-  var
-    pTAB                : TextFile;
-    QFileIsToporobotTabStrict: boolean;
-    Ex: Integer;
-    Prefix1, Prefix2    : Integer;
-    QMonFichierAInclure: TStringDirectoryFilename;
-    qVisee : TUneVisee;
-    // items de tables simples
-    UneEntree: TEntrance;
-    UnReseau : TReseau;
-    UnSecteur: TSecteur;
-    UneExpe  : TExpe;
-    UnCode   : TCode;
-    UneViseeAntenne: TViseeAntenne;
-    MyNameSpace: TNameSpace;
-    // il y a des séries ?
-    //HasSeries: boolean;
-    function LireLigne: string;
-    var
-      Lign: string;
-    begin
-      ReadLn(pTab, Lign);
-      Inc(NoLigneTAB);
-      Result:= Lign;// PurgerAccents(Lign);
-    end;
-  begin
-    Result := -1;
-    QFileIsToporobotTabStrict := Pos('tab', LowerCase(ExtractFileExt(FichierTAB))) > 0;
-    AssignFile(pTAB, QFilename);
-    try
-      ReSet(pTAB);
-      while Not Eof(pTAB) do
-      begin
-        try // traitement local d'exceptions dans la lecture des lignes
-          // réinitialisation du message d'erreur par défaut
-          ErrMsg  := rsRD_TAB_MSG_ERR;
-          Prefix1 := 0;
-          LigneTab := LireLigne;
-          if (HasInstructionInclude(LigneTab, QMonFichierAInclure)) then
-          begin
-            Result := LireUnFichier(QMonFichierAInclure);
-          end;
-          if (Trim(LigneTab)='')    then Prefix1 := -100  // lignes vides
-          else if (LigneTab[1]='#') then Prefix1 := -1000 // commentaires sur une ligne
-          else if LigneTab[1]='{' then    // commentaires sur plusieurs lignes
-          begin
-            AfficherMessage(Format(rsRD_TAB_D_MULTI_OBS,[NoLigneTAB]));
-            while Not (LigneTab[1]='}') do LigneTab := LireLigne; /// PurgerAccents(LireLigne);
-            AfficherMessage(Format(rsRD_TAB_F_MULTI_OBS,[NoLigneTAB]));
-          end
-          else begin
-            PrmsLn   := split(LigneTab, SEPARATOR_TAB);
-            Prefix1  := StrToIntDef(PrmsLn[0], -110);
-          end;
-          // routage selon le préfixe
-          case Prefix1 of
-            -9999: Break; // Arrêt forcé du traitement (utiliser avec précaution)
-            -1000: AfficherMessage(Format(rsRD_TAB_LN_OBS,[NoLigneTab]));   // commentaire
-             -900: ; // balise de pause
-             -110: ; // Ligne invalide; ignorée
-             -100: ; // ignorer les lignes vides
-              -20: AfficherMessage(Format(rsRD_TAB_LASTSAVES,[PrmsLn[1], PrmsLn[2]])); // horodatage
-              -19: begin
-                     self.SetNomEtude(Trim(PrmsLn[1])); // Nouvelle section: Nom de l'étude
-                     self.SetCommentairesEtude(Trim(PrmsLn[2]));
-                   end;
-
-              -18: begin // Nouvelle section: Espace de noms (pour les synthèses)
-                     //00  01 02       03       04     05 06
-                     //-18	0	255 	0 	0 	Pont_de_Gerbaut	Gouffre du Pont de Gerbaut
-                     MyNameSpace.Couleur := RGBToColor(StrToIntDef(Trim(PrmsLn[2]), 255),
-                                                       StrToIntDef(Trim(PrmsLn[3]), 0),
-                                                       StrToIntDef(Trim(PrmsLn[4]), 0));
-                     MyNameSpace.Nom          := Trim(PrmsLn[5]);
-                     MyNameSpace.Description  := Trim(PrmsLn[6]);
-                     AfficherMessageErreur('Namespace trouvé:' + MyNameSpace.Nom);
-                     self.AddNameSpace(MyNameSpace);
-                   end;
-              -16: begin // Nouvelle section: Filtres personnalisés
-
-                //#### #-16	IDFiltre	NomFiltre	CouleurFiltre_R	CouleurFiltre_G	CouleurFiltre_B	FiltreExpr	Description
-                     //-16	0	Aquatopo	0	128	0	SERIE=227
-                     MyFiltre.CouleurFiltre :=  RGBToColor(StrToIntDef(PrmsLn[2], 0),
-                                                           StrToIntDef(PrmsLn[3], 0),
-                                                           StrToIntDef(PrmsLn[4], 0));
-                     MyFiltre.NomFiltre     := Trim(PrmsLn[5]);
-                     MyFiltre.Expression    := Trim(PrmsLn[6]);
-                     MyFiltre.Description   := Trim(PrmsLn[7]);
-                     AddFiltrePerso(MyFiltre);  //*)
-
-                   end;
-              -15: begin // Nouvelle section: Système de coordonnées :
-                     EPSGDefault.CodeEPSG := StrToIntDef(Trim(PrmsLn[1]), DEFAULT_SYSTEME_COORDONNEES_CODE_EPSG);
-                     EPSGDefault.NomEPSG  := '';
-                     SetCodeEPSGSystemeCoordonnees(EPSGDefault);
-                   end;
-              -10: begin // Nouvelle section: secteurs
-                     UnSecteur.CouleurSecteur := RGBToColor(StrToIntDef(PrmsLn[2], 0),
-                                                 StrToIntDef(PrmsLn[3], 0),
-                                                 StrToIntDef(PrmsLn[4], 0));
-                     UnSecteur.NomSecteur     := Trim(PrmsLn[5]);
-                     AddSecteur(UnSecteur);
-                   end;
-               -9: begin  // visées en antenne
-                     UneViseeAntenne.Reseau           := StrToIntDef(PrmsLn[2], 0);
-                     UneViseeAntenne.Secteur          := StrToIntDef(PrmsLn[3], 0);
-                     UneViseeAntenne.SerieDepart      := StrToIntDef(PrmsLn[4], 0);
-                     UneViseeAntenne.PtDepart         := StrToIntDef(PrmsLn[5], 0);
-                     UneViseeAntenne.Longueur         := ConvertirEnNombreReel(PrmsLn[9], 0.00);
-                     UneViseeAntenne.Azimut           := ConvertirEnNombreReel(PrmsLn[10], 0.00);
-                     UneViseeAntenne.Pente            := ConvertirEnNombreReel(PrmsLn[11], 0.00);
-                     UneViseeAntenne.MarkedForDelete  := False;
-                     AddViseeAntenne(UneViseeAntenne);
-                   end;
-               -8: begin  // réseaux
-                     UnReseau.ColorReseau := RGBToColor(StrToIntDef(PrmsLn[2], 0),
-                                                        StrToIntDef(PrmsLn[3], 0),
-                                                        StrToIntDef(PrmsLn[4], 0));
-                     UnReseau.TypeReseau  := StrToIntDef(PrmsLn[5], 0);
-                     UnReseau.NomReseau   := Trim(PrmsLn[6]);
-                     UnReseau.ObsReseau   := Trim(PrmsLn[7]);
-                     AddReseau(UnReseau);
-                   end;
-               -7: ; // Classeurs (désactivé)
-               -6: begin  // Section -6: Entrée
-                     ProvListeEntrees.Add(PrmsLn[2] + '|' + PrmsLn[3] + '|' + PrmsLn[10] );
-                   end;
-               -5: begin  // Entrées
-                     //nombre d'entrées nul = on définit l'entrée par défaut
-                     if (0 = GetNbEntrances()) then
-                     begin
-                       SetDefaultCoords(ConvertirEnNombreReel(PrmsLn[2], 0.00),
-                                        ConvertirEnNombreReel(PrmsLn[3], 0.00),
-                                        ConvertirEnNombreReel(PrmsLn[4], 0.00));
-                       SetRefSeriePoint(StrToIntDef(PrmsLn[5],1), StrtoIntDef(PrmsLn[6], 0));
-                     end;
-                     //Commentaires:=PrmsLn[7];
-                     // Ajouter les entrées
-                     // le nombre d'entrées retenu est celui décompté dans
-                     // la section -5
-                     //eNumEntree:= GetNbEntrees + 1;
-                     // On ajoute l'entrée récupérée en -6
-                     try
-                       QN := GetNbEntrances();
-                       QStr := ProvListeEntrees.Strings[QN];
-                       QArrStrg   := Split(QStr, '|');
-                       UneEntree.eNomEntree := Trim(QArrStrg[0]);
-                       UneEntree.eIDTerrain := Trim(QArrStrg[1]);
-                       UneEntree.eCouleur   := GHTopoColorToColorDef(Trim(QArrStrg[2]), clGray);
-                       ///eCouleur   := Col
-                     except
-                       AfficherMessage(Format(rsWARNINGENTRYADDED,[QN]));
-                       UneEntree.eNomEntree := Format(rsRD_TAB_ENTRANCE,[QN]);
-                       UneEntree.eCouleur   := clRed;
-                     end;
-                     UneEntree.eXEntree  := ConvertirEnNombreReel(PrmsLn[2], 0.00);
-                     UneEntree.eYEntree  := ConvertirEnNombreReel(PrmsLn[3], 0.00);
-                     UneEntree.eZEntree  := ConvertirEnNombreReel(PrmsLn[4], 0.00);
 
 
-                     //------------
-                     // entrées non géoréférencées ?
-                     if (UneEntree.eXEntree < 100.00) or (UneEntree.eYEntree < 100.00) or (UneEntree.eZEntree < 500.00)
-                     then WriteWarning(Format(GetResourceString(rsRD_TAB_ENTR_NOGEOREF), [NoLigneTAB, QN, UneEntree.eNomEntree]));
-                     UneEntree.eRefSer   := StrToIntDef(PrmsLn[5],1);
-                     UneEntree.eRefSt    := StrtoInt(PrmsLn[6]);
-                     if ((UneEntree.eRefSer < 1) or (UneEntree.eRefSt < 0)) then
-                        WriteWarning(Format(rsRD_TAB_ENTR_BADLINK, [NoLigneTAB, QN, UneEntree.eNomEntree, UneEntree.eRefSer, UneEntree.eRefSt]));
-                     UneEntree.eObserv   := PrmsLn[7];
-                     AddEntrance(UneEntree);
-                   end;
-               -4: pass;
-               -3: pass;
-               -2: begin // Expés
-                     UneExpe.IDExpe := StrToInt(PrmsLn[1]);
-                     if (UneExpe.IDExpe <= 0) then
-                     begin
-                        ErrMsg:=rsRD_TAB_BAD_TRIP;
-                        raise Exception.Create(ErrMsg);
-                     end;
-                     {$WARNING: TEXpe.DateExpe à implementer - }
-                     UneExpe.JourExpe      := StrToIntDef(PrmsLn[2],1);
-                     UneExpe.MoisExpe      := StrToIntDef(PrmsLn[3],1);
-                     UneExpe.AnneeExpe     := StrToIntDef(PrmsLn[4],2000);
-                     //UneExpe.DateExpe      := GetSecuredDate(StrToIntDef(PrmsLn[4],2000),
-                     //                                        StrToIntDef(PrmsLn[3],1),
-                     //                                        StrToIntDef(PrmsLn[2],1));
-
-                     if (UneExpe.JourExpe=0) or (UneExpe.MoisExpe=0) or (UneExpe.AnneeExpe=0) then
-                     begin
-                       WriteWarning(Format(rsRD_TAB_BAD_DATE,
-                                          [NoLigneTAB]));
-                       DecodeDate(Now(), yyy, mmm, ddd);
-                       UneExpe.JourExpe := ddd;
-                       UneExpe.MoisExpe := mmm;
-                       UneExpe.AnneeExpe:= yyy;
-                     end;
-                     {$WARNING: End TEXpe.DateExpe à implementer}
-                     UneExpe.Operateur     := PrmsLn[5];             // spéléomètre
-                     UneExpe.ClubSpeleo    := PrmsLn[6];             // spéléographe
-                     {$WARNING A revoir et vérifier. Si c'est un TAB pur, calcul de la déclimag en automatique}
-                     if (QFileIsToporobotTabStrict) then
-                     begin
-                       UneExpe.ModeDecl              :=  cdmAUTOMATIQUE;   // déclinaison auto ?
-                       UneExpe.DeclinaisonInDegrees  := -ConvertirEnNombreReel(PrmsLn[8], 0.00); // déclinaison Toporobot = -déclinaison VisualTopo/GHTopo
-                     end else
-                     begin
-                       UneExpe.ModeDecl      := TModeCalculDeclimag(StrToIntDef(PrmsLn[7], 1));   // déclinaison auto ?
-                       UneExpe.DeclinaisonInDegrees  := ConvertirEnNombreReel(PrmsLn[8], 0.00); // déclinaison
-                     end;
-                     //Inclinaison   := ConvertirEnNombreReel(PrmsLn[9], 0.00); // correction clino x10
-                     UneExpe.IdxCouleur    := StrToInt(PrmsLn[10]);  // couleur
-                     UneExpe.Commentaire   := PrmsLn[11];            // commentaire
-                     AddExpe(UneExpe);
-                   end;
-               -1: begin // Codes
-                     UnCode.IDCode     := StrToInt(PrmsLn[1]);    // ID Code
-                     if (UnCode.IDCode <= 0) then
-                     begin
-                        //WriteWarning(Format('WARNING ! (%d) - Numéro de Code incorrect (Valeur: %d) - Mis à %d',[NoLigneTAB, IDCode, FNbCodes]));
-                        ErrMsg:=rsRD_TAB_BAD_CODE;
-                        raise Exception.Create(ErrMsg);
-                     end;
-                     UnCode.GradAz     := ConvertirEnNombreReel(PrmsLn[2], UNITE_ANGULAIRE_DU_CODE_ZERO);  // unité boussole
-                     UnCode.GradInc    := ConvertirEnNombreReel(PrmsLn[3], UNITE_ANGULAIRE_DU_CODE_ZERO);  // unite  CLINO
-                     UnCode.PsiL       := ConvertirEnNombreReel(PrmsLn[4], 0.01);  // precision longueur
-                     UnCode.PsiAz      := ConvertirEnNombreReel(PrmsLn[5], 0.1);  // precision azimut
-                     UnCode.PsiP       := ConvertirEnNombreReel(PrmsLn[6], 0.1);  // precision pente
-                     {$WARNING: Support de FactLong a valider}
-                     UnCode.FactLong   := 1.00;
-                     //UnCode.FactLong   := ConvertirEnNombreReel(PrmsLn[7], 1.00)/100;  // Facteur des longueurs
-                     UnCode.AngLimite  := ConvertirEnNombreReel(PrmsLn[8], 0.00);  // angle limite
-                     UnCode.Commentaire := PrmsLn[9];              // commentaire
-                     //ReservedInt := StrToIntDef(PrmsLn[10],0);
-                     UnCode.ParamsFuncCorrAz  := MakeTParamFoncCorrectionAngulaire(ConvertirEnNombreReel(PrmsLn[11], 0.00),
-                                                                                   ConvertirEnNombreReel(PrmsLn[12], 0.00),
-                                                                                   ConvertirEnNombreReel(PrmsLn[13], 0.00));
-                     UnCode.ParamsFuncCorrInc := MakeTParamFoncCorrectionAngulaire(ConvertirEnNombreReel(PrmsLn[14], 0.00),
-                                                                                   ConvertirEnNombreReel(PrmsLn[15], 0.00),
-                                                                                   ConvertirEnNombreReel(PrmsLn[16], 0.00));
-                     UnCode.ErreurTourillon   := ConvertirEnNombreReel(PrmsLn[17], 0.00);
-                     // provisoire: Diamètre des boules-cibles
-                     UnCode.DiametreBoule1 := 0.00;
-                     UnCode.DiametreBoule2 := 0.00;
-                     AddCode(UnCode);
-                   end;
-               0: ; // pas de section 0
-             // end
-           otherwise  // on est dans les séries !
-             // Si le préfixe 2 (2e colonne) =-1 =>nouvelle série
-             Prefix1 := StrToInt(PrmsLn[0]);
-             if (Prefix1 > 0) then
-             begin
-               Prefix2 := StrToInt(PrmsLn[1]);
-               if (Prefix2 = -1) then
-               begin
-                 if (Prefix1 = 1) then    // si c'est la première série, on crée
-                 begin
-                   UneSerie := TObjSerie.Create;
-                   UneSerie.ClearStations();
-                 end
-                 else  // sinon on ferme la série courante et on crée la suivante
-                 begin
-                   self.AddSerie(UneSerie);
-                   UneSerie := TObjSerie.Create;
-                 end;
-                 UneSerie.SetNumeroSerie(TNumeroSerie(Prefix1));
-                 UneSerie.SetSeriePtExtremites(StrToInt(PrmsLn[2]),
-                                               StrToInt(PrmsLn[3]),
-                                               StrToInt(PrmsLn[4]),
-                                               StrToInt(PrmsLn[5]));
-                 // NbPoints: Non utilisé
-                 UneSerie.SetChanceObstacle(StrToInt(PrmsLn[7]), StrToInt(PrmsLn[8]));
-                 UneSerie.SetNomSerie(PrmsLn[9]);
-                 UneSerie.SetObsSerie(PrmsLn[10]);
-                 UneSerie.SetNumeroReseau(StrToIntDef(PrmsLn[11],0));
-                 UneSerie.SetRaideur(ConvertirEnNombreReel(Prmsln[12], 1.02));        // raideur de la série
-                 UneSerie.SetNumeroEntrance(StrToIntDef(Prmsln[13], 0));               // entrée de rattachement
-               end
-               else
-               begin
-                 qVisee.TypeVisee   := tgDEFAULT;
-                 qVisee.Code        := StrToInt(PrmsLn[2]);
-                 qVisee.Expe        := StrToInt(PrmsLn[3]);
-                 qVisee.Longueur    := ConvertirEnNombreReel(PrmsLn[4], 0.00);
-                 if (qVisee.Longueur < 0.00) then
-                 begin
-                   WriteWarning(Format(rsRD_TAB_NEG_LONG, [NoLigneTAB, qVisee.Longueur]));
-                   qVisee.Longueur := Abs(qVisee.Longueur);
-                 end;
-                 qVisee.Azimut      := ConvertirEnNombreReel(PrmsLn[5], 0.00);
-                 qVisee.Pente       := ConvertirEnNombreReel(PrmsLn[6], 0.00);
-                 qVisee.LG          := ConvertirEnNombreReel(PrmsLn[7], 0.00);  //LG
-                 qVisee.LD          := ConvertirEnNombreReel(PrmsLn[8], 0.00);  //LD
-                 qVisee.HZ          := ConvertirEnNombreReel(PrmsLn[9], 0.00);
-                 qVisee.HN          := ConvertirEnNombreReel(PrmsLn[10], 0.00);
-                 qVisee.Commentaires:= PrmsLn[11];
-                 qVisee.IDTerrainStation := FormatterIDTerrainStation(PrmsLn[12]);
-                 blaireau    := StrToIntDef(PrmsLn[13], 0);
-                 qVisee.TypeVisee   := GetTypeDeVisee(blaireau); // galerie fossile supposée
-                 qVisee.IDSecteur   := StrToIntDef(PrmsLn[14], 0);
-                 UneSerie.AddVisee(qVisee);
-               end;
-             end   // if Prefix2
-           end; // case Prefix1
-
-           Result := 0;
-        except
-          Inc(NbErrorsInLoading);
-          WriteWarning('');
-          WriteWarning(Format(rsRD_ERROR_LN,[NoLigneTab, ErrMsg]));
-          WriteWarning(Format(rsRD_CONTNT_LN,[LigneTab]));
-          WriteWarning(rsRD_TAB_FIELD_VALUES);
-          for Ex := 0 to High(PrmsLn) do
-          begin
-            WriteWarning(Format(' PrmsLn[%.2d] = "%s"',[Ex, PrmsLn[Ex]]));
-            WriteWarning('');
-          end;
-        end;
-      end; // while Not Eof(pTAB) do begin
-    finally
-      CloseFile(pTAB);
-    end;
-  end;
-begin
-  Result := -1;
-  AfficherMemoryUsage();
-  AfficherMessage(Format('%s.LoadFichierTAB(%s)',[ClassName, FichierTAB]));
-
-  // exemple d'affichage à l'exécution du numero de la ligne (utile pour déboguer)
-  //AfficherMessage(  {$INCLUDE %FILE%} );
-  //AfficherMessage(  {$INCLUDE %LINE%} );
-  // nom étude par défaut
-  SetNomEtude('Etude001');
-  SetCommentairesEtude('');
-
-  EPSGDefault.CodeEPSG := DEFAULT_SYSTEME_COORDONNEES_CODE_EPSG;
-  EPSGDefault.NomEPSG  := DEFAULT_SYSTEME_COORDONNEES_NOM;
-  SetCodeEPSGSystemeCoordonnees(EPSGDefault);
-  ReInitialiser(True);
-  NoLigneTAB := 0;
-  NbErrorsInLoading := 0;
-
-  ProvListeEntrees := TStringList.Create;
-  ProvListeEntrees.Clear;
-  // Lecture du fichier
-  QFichierCorrect := LireUnFichier(FichierTAB);
-  // On ferme la dernière série
-  self.AddSerie(UneSerie);
-  // Espaces de noms: s'il y en a aucun, on en crée un par défaut
-  if (0 = GetNbNameSpaces()) then
-  begin
-    AfficherMessage('Aucun espace de noms trouvé - Création d''un namespace par défaut');
-    AddNameSpace(NAMESPACE_NAME_BY_DEFAULT, NAMESPACE_COLOR_BY_DEFAULT, NAMESPACE_DESC_BY_DEFAULT);
-  end;
-  AfficherMessageErreur(Format('%d namespaces', [GetNbNameSpaces()]));
-  for i := 0 to GetNbNameSpaces() - 1 do
-  begin
-    MyNameSpace := GetNameSpace(i);
-    AfficherMessageErreur(Format('%d: %s', [i, MyNameSpace.Nom]));
-  end;
-  //**************************
-  self.SetDatabaseName(ExtractFileNameWithoutExt(FichierTAB));
-  VerifieSerie1();                // Cause courante de plantages: Absence de la série 1
-  CheckerLesDonneesTopo();
-  RecenserLesIDsTerrain();
-  RecenserPointsOfInterest();
-  SortCodes();
-  SortExpes();
-  //SortSeries(); TODO  Trier les séries ?
-  UneEntree := GetEntrance(0);
-  self.SetRefSeriePoint(UneEntree.eRefSer, UneEntree.eRefSt);
-  self.SetDefaultCoords(UneEntree.eXEntree, UneEntree.eYEntree, UneEntree.eZEntree);
-  //****************************
-  Result := self.GetNbSeries();
-
-  // suppression d la liste provisoire des entrées
-  try
-    ProvListeEntrees.Clear;
-  finally
-    FreeAndNil(ProvListeEntrees);
-  end;
-  AfficherMemoryUsage();
-end;
 
 function TToporobotStructure2012.VerifieSerie1(): boolean;
 var
   QSR, MySerie: TObjSerie;
-  i, nb, QIdx: integer;
+  QIdx: integer;
 begin
   result := false;
   AfficherMessage(Format('%s.VerifieSerie1', [ClassName]));
@@ -1913,6 +1467,13 @@ begin
   result := True;
 end;
 
+// charger depuis fichier Tab ou XTB
+// /!\ Ne pas faire les conversions en UTF8 ici:
+// Le format interne de GHTopo est ANSI pour compatibilité avec Windows.
+// Les directives INCLUDE ne fonctionnent pas pour les séries
+//
+{$INCLUDE FuncLoadSaveFichierTab.inc}
+//******************************************************************************
 
 // Statut: Opérationnel mais les commentaires des séries et stations sont ignorés
 // Le format .Text est deprecated et supporté en lecture seule par GHTopo
@@ -1922,1002 +1483,25 @@ end;
 // Shuanghe: OK
 // Charentais OK
 // Carrière de Bellegarde avec antennes: OK
-function TToporobotStructure2012.LoadFichierText(const FichierText: TStringDirectoryFilename): integer; deprecated;
-const
-  // colonnes des champs
-  COL_COMMENT     = 00; // parenthèse de commentaire éventuel
-  COL_NUM_SECTION = 01; // numéro de section ou numéro de série
-  COL_NUM_ITEM    = 02; // numéro d'item (expé, code, point topo)
+//function TToporobotStructure2012.LoadFichierText(const FichierText: TStringDirectoryFilename): integer; deprecated;
+{$INCLUDE FuncLoadSaveFichierTEXT.inc}
+//**********************************************************************************************************************
 
-  COL_SESSION     = 03; // numéro de session (inutilisé)
-  COL_CODE        = 04; // code attaché à la station
-  COL_EXPE        = 05; // numéro de séance
-
-  COL_VAR_DATA    = 06; // colonne suivant les colonnes de préfixes et index
-  COL_NOMENTREE   = COL_VAR_DATA; // nom de l'entrée
-  COL_XENTREE     = COL_VAR_DATA;
-  COL_YENTREE     = COL_XENTREE + 1;
-  COL_ZENTREE     = COL_YENTREE + 1;
-  COL_ENT_SER     = COL_ZENTREE + 1;
-  COL_ENT_ST      = COL_ENT_SER + 1;
-
-  COL_DATE_EXPE   = COL_VAR_DATA;
-  COL_SPELEOMETRE = COL_DATE_EXPE + 1;
-  COL_SPELEOGRAPH = COL_SPELEOMETRE + 1;
-  COL_MODEDECL    = COL_SPELEOGRAPH + 1;
-  COL_DECL_VALUE  = COL_MODEDECL + 1;
-  COL_INCL_VALUE  = COL_DECL_VALUE + 1;
-  COL_COULEUR     = COL_INCL_VALUE + 1;
-
-  COL_U_AZIMUT    = COL_VAR_DATA;
-  COL_U_PENTE     = COL_U_AZIMUT + 1;
-  COL_PSI_L       = COL_U_PENTE + 1;
-  COL_PSI_AZ      = COL_PSI_L +1;
-  COL_PSI_P       = COL_PSI_AZ + 1;
-  //COL_OLD_DECL    = COL_PSI_P  + 1;
-  COL_FACT_LONG   = COL_PSI_P + 1;
-  COL_ANG_LIMITE  = COL_FACT_LONG + 1;
-
-  COL_SER_DEP     = COL_VAR_DATA;
-  COL_PT_DEP      = COL_SER_DEP + 1;
-  COL_SER_ARR     = COL_PT_DEP + 1;
-  COL_PT_ARR      = COL_SER_ARR + 1;
-  COL_NB_PTS      = COL_PT_ARR + 1;
-  COL_CHANCE      = COL_NB_PTS + 1;
-  COL_OBSTACLE    = COL_CHANCE + 1;
-
-  COL_LONG        = COL_VAR_DATA;
-  COL_AZ          = COL_LONG + 1;
-  COL_P           = COL_AZ + 1;
-  COL_LG          = COL_P + 1;
-  COL_LD          = COL_LG + 1;
-  COL_HZ          = COL_LD + 1;
-  COL_HN          = COL_HZ + 1;
-
-  TEMPORARYTABFILE = '~GhtopoTemp.txt';
-
-var
-  EPSGDefault : TLabelSystemesCoordsEPSG;
-  // fichier d'erreur
-  pTEXT        : TextFile;
-  // liste provisoire pour entrées
-  ProvListeEntrees: TStringList;
-  // séries, réseaux, etc
-  UneEntree : TEntrance;
-  UneExpe : TExpe;
-  UnCode  : TCode;
-  UneSerie: TObjSerie;
-  qVisee  : TUneVisee;
-  // ligne de données
-  NoLigneTEXT,
-  NbErrorsInLoading: integer;
-  LigneTEXT: string;
-  PrmsLn   : TGHStringArray;
-  // la ligne contient une parenthèse de tête ?
-  HasParenthesis: boolean;
-  // messages d'erreur
-  ErrMsg  : string;
-  // Préfixes de section
-  Prefix1,
-  Prefix2 : integer;
-
-  // divers
-  str         : string;
-  llanfair_pg : string;
-  // dates
-  yyy, mmm, ddd: word;
-  // Index courant
-  //IdxCourant: integer;
-  IdxCourantStation: integer;
-  NomDeLaSerie: String;
-  WU: String;
-  mioumiou: Boolean;
-  IdxCourant, QN: Integer;
-
-  myViseeAntenne: TViseeAntenne;
-  // Conversion de lignes Mac > PC
-  procedure ConvertTextMacToPC(var Lin: string);
-  begin
-    // convertir accentués
-    Lin := StringReplace(Lin, #136, 'a', [rfReplaceAll]);
-    Lin := StringReplace(Lin, #142, 'e', [rfReplaceAll]);
-    Lin := StringReplace(Lin, #143, 'e', [rfReplaceAll]);
-    Lin := StringReplace(Lin, #148, 'i', [rfReplaceAll]);
-    Lin := StringReplace(Lin, #137, 'a', [rfReplaceAll]);
-    Lin := StringReplace(Lin, #144, 'e', [rfReplaceAll]);
-    Lin := StringReplace(Lin, #144, 'e', [rfReplaceAll]);
-    Lin := StringReplace(Lin, #141, 'c', [rfReplaceAll]);
-  end;
-  // extraire une visée en antenne
-  function ExtraireViseeEnAntenne(const qStr: string;
-                                  const qIdxReseau: integer;
-                                  const qIdxSerie: integer;
-                                  const qIdxPoint: integer;
-                                  const qMyVisee: TUneVisee;
-                                  var qVA : TViseeAntenne): boolean;
-  var
-    myStr: String;
-    CrO, CrF: integer;
-    EWE: TGHStringArray;
-  begin
-    Result := False;
-    myStr := Trim(qStr);
-    try
-      // Visées en antenne sont de la forme [%.2f %.2f %.2f]
-      // crochets indispensables
-      // recherche de crochets et suppression
-      CrO := Pos('[', myStr);
-      if (CrO = 0) then Exit;
-      if (CrO > 0) then System.Delete(myStr, CrO, 1);
-      CrF := Pos(']', myStr);
-      if (CrF > 0) then System.Delete(myStr, CrF, 1);
-      EWE := Split(myStr, ' ');
-      qVA.SerieDepart      := qIdxSerie;
-      qVA.PtDepart         := qIdxPoint;
-      //qVA.IDTerrainStation := qMyVisee.IDTerrainStation;
-      //qVA.Code             := qMyVisee.Code;
-      //qVA.Expe             := qMyVisee.Expe;
-      qVA.Reseau           := qIdxReseau;
-      qVA.Secteur          := qMyVisee.IDSecteur;
-      //qVA.Commentaires     := '';
-      qVA.Longueur         := ConvertirEnNombreReel(Trim(EWE[0]), -1.00);
-      qVA.Azimut           := ConvertirEnNombreReel(Trim(EWE[1]), 0.00);
-      qVA.Pente            := ConvertirEnNombreReel(Trim(EWE[2]), 0.00);
-      qVA.MarkedForDelete  := false;
-      //AfficherMessage(Format('%f, %f, %f',[qVA.Longueur, qVA.Azimut, qVA.Pente]));
-      Result := (qVA.Longueur > 0.00);
-    except
-    end;
-  end;
-  // afficher avertissement
-  procedure WriteWarning(const wm: string);
-  begin
-    AfficherMessage(wm);
-  end;
-begin
-  //self.ClearListeSeries();
-  EPSGDefault.CodeEPSG := DEFAULT_SYSTEME_COORDONNEES_CODE_EPSG;
-  EPSGDefault.NomEPSG  := DEFAULT_SYSTEME_COORDONNEES_NOM;
-
-  WU := Format('%s.LoadFichierText: %s', [ClassName, FichierText]);
-  AfficherMessage(WU);
-  AfficherMessageErreur(WU);
-  Result := -1;
-  // Fichier introuvable ? OK, On sort
-  if not FileExists(FichierText) then  begin Result:=-32; Exit; end;
-  // nom étude par défaut
-  SetNomEtude('Etude001');
-  SetCommentairesEtude('Issued from Toporobot Text format (fixed columns)');
-  SetCodeEPSGSystemeCoordonnees(EPSGDefault);
-
-
-  try // try..finally niveau 0
-     //*************************************************************************
-     // Pour pallier à tout problème de formats de fichiers textes,
-     // et notamments ceux liés aux fins de ligne,
-     // on fait une conversion.
-     // Pour économiser une variable, on utilise une variable utilisée + tard
-     LigneTEXT := AnsiToUtf8(ExtractFilePath(FichierText)+ TEMPORARYTABFILE);
-     ConvertTextFile(FichierText, LigneTEXT, tfMAC, tfWINDOWS);
-     AfficherMessage(GetResourceString(rsSEPARATOR_LINE));
-     // nom de la base
-     SetDatabaseName(ExtractFileNameWithoutExt(FichierText)); // Laz 1.8: ExtractFileNameWithoutExt() remplace ExtractFileNameOnly()
-     // Initialisation des listes
-     ReInitialiser(True);
-     AfficherMessage(Format('%s: %s', [{$I %FILE%}, {$I %LINE%}]));
-     // code EPSG par défaut
-     SetCodeEPSGSystemeCoordonnees(EPSGDefault);
-
-     // début du véritable traitement
-     // liste provisoire pour lecture des sections -6
-     ProvListeEntrees:=TStringList.Create;
-     // ouverture fichier Text
-     AssignFile(pTEXT, LigneTEXT);
-     AfficherMessage('--> Lecture du fichier');
-     AfficherMessage(Format('--> %d expés, %d codes', [GetNbExpes(), GetNbCodes()]));
-
-     try // niveau 1: pour le fichier Text
-       Reset(pTEXT);
-       // lire tout le fichier
-       NoLigneTEXT:=0;
-       NbErrorsInLoading:=0;
-       ErrMsg:= rsRD_TAB_MSG_ERR;
-       IdxCourant := -1;
-       while Not Eof(pTEXT) do
-       begin
-         try // traitement local d'exceptions dans la lecture des lignes
-           Prefix1:=0;
-           Inc(NoLigneTEXT);
-           ReadLn(pTEXT, LigneTEXT);
-           //AfficherMessage('--> ' + LigneTEXT);
-           //AfficherMessage(Format('Ligne %d - %s', [NoLigneTEXT, LigneTEXT]));
-           //AfficherMessage(LigneTEXT);
-           //ConvertTextMacToPC(LigneTEXT);
-           if Trim(LigneTEXT)=''    then Prefix1:=-100       // lignes vides
-           else if LigneTEXT[1]='#' then Prefix1:=-1000     // commentaires sur une ligne
-           else
-           begin
-             // Commentaire = parenthèse de tête présente
-             HasParenthesis := (LigneTEXT[1] = '(');
-             //if (HasParenthesis) then Continue;
-             // attraper le préfixe de section (en évitant une décomposition)
-             str := Trim(Copy(LigneTEXT, 2, 5));
-             Prefix1   := StrToIntDef(str, -110);
-
-             if (HasParenthesis) then  // On zappe les commentaires (difficultés d'implémentation)
-             begin
-               //Continue;
-               // classique décomposition ...
-               PrmsLn      := SplitFixedColLine(LigneTEXT, [1, 2, 7, 13, 17, 21, 25, 80,100]);
-               llanfair_pg := Trim(PrmsLn[COL_VAR_DATA]);
-                case Prefix1 of
-                 -5: begin // entrées
-
-                       UneEntree := GetEntrance(IdxCourant);
-                       // on concatène les lignes
-                       UneEntree.eObserv := UneEntree.eObserv + llanfair_pg;
-
-                       PutEntrance(IdxCourant, UneEntree);
-                     end;
-                 -4: ;     // sessions (obsolète)
-                 -3: ;     // section non affectée
-                 -2: begin // expés
-                       IdxCourant := GetNbExpes() - 1;
-                       UneExpe    := GetExpe(IdxCourant);
-                       // on concatène les lignes
-
-                       UneExpe.Commentaire := UneExpe.Commentaire + llanfair_pg;
-                       PutExpe(IdxCourant, UneExpe);
-                     end;
-                 -1: begin // code
-                       IdxCourant := GetNbCodes() - 1;
-                       UnCode     := GetCode(IdxCourant);
-                       // on concatène les lignes
-                       UnCode.Commentaire := UnCode.Commentaire + llanfair_pg;
-                       PutCode(IdxCourant, UnCode);
-                     end;
-               else  // séries
-                 // Zapper cette section
-                 begin
-                   //Continue;
-                   if (Prefix1 > 0) then
-                   begin
-                     Prefix2:=StrToInt(PrmsLn[COL_NUM_ITEM]);
-                     if (Prefix2 = -1) then
-                     begin // tête de série
-                       IdxCourant := GetNbSeries - 1;
-                       UneSerie := GetSerie(IdxCourant);
-                       UneSerie.SetObsSerie(UneSerie.GetObsSerie + llanfair_pg);
-                     end else
-                     begin // sinon, station
-                       //Continue;
-                       IdxCourant := GetNbSeries - 1;
-                       IdxCourantStation := UneSerie.GetNbVisees - 1;
-                       qVisee := UneSerie.GetVisee(IdxCourantStation);
-                       if (ExtraireViseeEnAntenne(llanfair_pg,
-                                                  UneSerie.GetNumeroReseau(),
-                                                  UneSerie.GetNumeroDeSerie(),
-                                                  IdxCourantStation,
-                                                  qVisee,
-                                                  myViseeAntenne)) then
-                       begin
-                         AddViseeAntenne(myViseeAntenne);
-                         llanfair_pg := '';
-                       end;
-                       qVisee.Commentaires := qVisee.Commentaires + llanfair_pg;
-                       UneSerie.PutVisee(IdxCourantStation, qVisee);
-                     end;
-                   end;
-                 end;
-               end;
-               // on zappe tout le reste ...
-               Continue;
-             end;  // if HasParenthesis
-             case Prefix1 of
-
-                -9999: begin // Arrêt forcé du traitement
-                             // utiliser cette balise avec de grandes précautions
-                             // et de préférence à la fin d'une série
-                         WriteWarning('');
-                         WriteWarning(Format(rsRD_TAB_STOP_9999, [NoLigneTEXT]));
-                         WriteWarning('');
-                         Break;
-                       end;
-                -1000: AfficherMessage(Format(GetResourceString(rsRD_TAB_LN_OBS),[NoLigneTEXT]));  // commentaire
-                 -900: Continue; // balise de pause
-                 -110: Continue; // Ligne invalide; ignorée
-                 -100: Continue; // ignorer les lignes vides
-                   -7: Continue; //AfficherMessage(GetResourceString(rsRD_TAB_CLASSEURS)); // Section -7 : Classeurs -- Ignoré par GHTopo
-                   -6: begin  // Section -6: Entrée
-                         PrmsLn := SplitFixedColLine(LigneTEXT, [1, 2, 7, 13, 17, 21, 25, 80, 100]);
-                         ProvListeEntrees.Add(PrmsLn[COL_NOMENTREE]);
-                         Continue;
-                       end;
-                   -5: begin  // Entrées
-                         PrmsLn := SplitFixedColLine(LigneTEXT, [1, 2, 7, 13, 17, 21, 25, 37, 49, 61, 67, 73, 80]);
-                         //nombre d'entrées nul = on définit l'entrée par défaut
-                         // TODO: Revoir cette zone
-                         if (0 = self.GetNbEntrances()) then
-                         begin
-                           SetDefaultCoords(ConvertirEnNombreReel(PrmsLn[COL_XENTREE], 0.00),
-                                            ConvertirEnNombreReel(PrmsLn[COL_YENTREE], 0.00),
-                                            ConvertirEnNombreReel(PrmsLn[COL_ZENTREE], 0.00)
-                                           );
-
-                           SetRefSeriePoint(StrToIntDef(PrmsLn[COL_ENT_SER],1),
-                                            StrtoIntDef(PrmsLn[COL_ENT_ST], 0)
-                                           );
-
-                         end;
-                         // Ajouter les entrées
-                         // le nombre d'entrées retenu est celui décompté dans
-                         // la section -5
-                         with UneEntree do
-                         begin
-                           QN := GetNbEntrances();
-                           eIDTerrain := '';  // non supporté par TOPOROBOT
-                           // On ajoute l'entrée récupérée en -6
-                           try
-                             eNomEntree:=ProvListeEntrees.Strings[QN];
-                           except
-                             AfficherMessage(Format(rsWARNINGENTRYADDED,[QN]));
-                             eNomEntree:= Format(rsRD_TAB_ENTRANCE,[QN]);
-                           end;
-                           eXEntree  := ConvertirEnNombreReel(PrmsLn[COL_XENTREE], 0.00);
-                           eYEntree  := ConvertirEnNombreReel(PrmsLn[COL_YENTREE], 0.00);
-                           eZEntree  := ConvertirEnNombreReel(PrmsLn[COL_ZENTREE], 0.00);
-                           // couleurs non supportées = couleur par défault
-                           eCouleur  := clGray;
-                           //------------
-                           // entrées non géoréférencées ?
-                           if (eXEntree < 100.00) or
-                              (eYEntree < 100.00) or
-                              (eZEntree < 100.00)
-                           then WriteWarning(Format(GetResourceString(rsRD_TAB_ENTR_NOGEOREF),
-                                                   [NoLigneTEXT,QN, eNomEntree]));
-                           eRefSer   := StrToIntDef(PrmsLn[COL_ENT_SER],1);
-                           eRefSt    := StrtoInt(PrmsLn[COL_ENT_ST]);
-                           if ((eRefSer < 1) or (eRefSt < 0)) then
-                                  WriteWarning(Format(rsRD_TAB_ENTR_BADLINK,
-                                       [NoLigneTEXT, QN, eNomEntree, eRefSer, eRefSt]));
-                           eObserv   := '';
-                         end; // with UneEntree
-                         // n'ajouter l'entrée que si elle comporte une RefSerie non nulle
-                         mioumiou := (UneEntree.eRefSer > 0);
-                         if (mioumiou) then self.AddEntrance(UneEntree);
-                         // index courant
-                         IdxCourant := GetNbEntrances() - 1;
-                         Continue;
-                       end;
-                   -4: Continue;  // sessions; ignoré
-                   -3: Continue;  // réservé; ignoré
-                   -2: begin // Expés
-                         //Ajoute l'expé dans la liste
-                         PrmsLn := SplitFixedColLine(LigneTEXT, [1, 2, 7, 13, 17, 21, 25, 36, 50, 64, 65, 73, 77, 81,100]);
-                         with UneExpe do
-                         begin
-                           IDExpe        := StrToInt(PrmsLn[COL_NUM_ITEM]);
-                           if (IDExpe<=0) then begin
-                              ErrMsg:=rsRD_TAB_BAD_TRIP;
-                              raise Exception.Create(ErrMsg);
-                           end;
-                           // décomposition de la date
-                           {$WARNING: TEXpe.DateExpe à implementer}
-                           str := Trim(PrmsLn[COL_DATE_EXPE]);
-                           JourExpe      := StrToIntDef(Copy(STR, 0, 2), 0);
-                           MoisExpe      := StrToIntDef(Copy(STR, 4, 2), 1);
-                           AnneeExpe     := StrToIntDef(Copy(STR, 7, 2), 1);
-                           if (JourExpe = 0) or (MoisExpe = 0) or (AnneeExpe = 0) then
-                           begin
-                             WriteWarning(Format(rsRD_TAB_BAD_DATE,
-                                                [NoLigneTEXT]));
-                             DecodeDate(Now, yyy, mmm, ddd);
-                             JourExpe := ddd;
-                             MoisExpe := mmm;
-                             AnneeExpe:= yyy;
-                           end;
-                           {$WARNING: End TEXpe.DateExpe à implementer}
-                           Operateur     := PrmsLn[COL_SPELEOMETRE];             // spéléomètre
-                           ClubSpeleo    := PrmsLn[COL_SPELEOGRAPH];             // spéléographe
-                           ModeDecl      := TModeCalculDeclimag(StrToIntDef(PrmsLn[COL_MODEDECL], 1));   // déclinaison auto ?
-                           DeclinaisonInDegrees  := ConvertirEnNombreReel(PrmsLn[COL_DECL_VALUE], 0.00); // déclinaison
-                           //Inclinaison   := ConvertirEnNombreReel(PrmsLn[COL_INCL_VALUE], 0.00); // correction clino x10
-                           IdxCouleur    := StrToIntDef(PrmsLn[COL_COULEUR], 0);  // couleur
-                           Commentaire   := ''; //PrmsLn[11];            // commentaire
-
-                         end;  // with UneExpe
-                         AfficherMessage(Format('%s: %s', [{$I %FILE%}, {$I %LINE%}]));
-                         AddExpe(UneExpe);
-                         Continue;
-                       end;
-                   -1: begin // Codes
-                         //                                                           U_AZ
-                         //                                                            |   U_P
-                         //                                                            |   |   PSI_L
-                         //                                                            |   |   |   PSI_A
-                         //                                                            |   |   |   |   PSI_P
-                         //                                                            |   |   |   |   |   FACT
-                         //                                                            |   |   |   |   |   |   ANG_LIM
-                         //                                                            |   |   |   |   |   |   |
-                         PrmsLn := SplitFixedColLine(LigneTEXT, [1, 2, 7, 13, 17, 21, 25, 33, 41, 49, 57, 65, 73, 81, 100]);
-                         with UnCode do
-                         begin
-                           IDCode     := StrToInt(PrmsLn[COL_NUM_ITEM]);    // ID Code
-                           if (IDCode<=0) then
-                           begin
-                             ErrMsg:=rsRD_TAB_BAD_CODE;
-                             raise Exception.Create(ErrMsg);
-                           end;
-                           GradAz     := ConvertirEnNombreReel(PrmsLn[COL_U_AZIMUT], DEGRES_PAR_TOUR);  // unité boussole
-                           GradInc    := ConvertirEnNombreReel(PrmsLn[COL_U_PENTE] , DEGRES_PAR_TOUR);  // unite  CLINO
-                           PsiL       := ConvertirEnNombreReel(PrmsLn[COL_PSI_L], 0.01);  // precision longueur
-                           PsiAz      := ConvertirEnNombreReel(PrmsLn[COL_PSI_AZ], 0.5);  // precision azimut
-                           PsiP       := ConvertirEnNombreReel(PrmsLn[COL_PSI_P], 0.5);  // precision pente
-                           // TODO: Support de FactLong a valider
-                           FactLong   := 1.00; // ConvertirEnNombreReel(PrmsLn[COL_FACT_LONG], 1.00)/100.00;  // Facteur des longueurs
-                           AngLimite  := ConvertirEnNombreReel(PrmsLn[COL_ANG_LIMITE], 0.00);  // angle limite
-                           ErreurTourillon  := 0.00;
-                           DiametreBoule1   := 0.00;
-                           DiametreBoule2   := 0.00;
-                           ParamsFuncCorrAz := MakeTParamFoncCorrectionAngulaire(0.00, 0.00, 0.00);   // non supporté par LimeLight
-                           ParamsFuncCorrAz := MakeTParamFoncCorrectionAngulaire(0.00, 0.00, 0.00);
-
-                           Commentaire:= ''; //PrmsLn[9];              // commentaire
-                         end; // with UnCode
-                         AfficherMessage(Format('%s: %s', [{$I %FILE%}, {$I %LINE%}]));
-                         AddCode(UnCode);
-                         Continue;
-                       end;
-                    0: begin
-                         Continue;  // pas de section 0
-                       end
-             else // on est dans les séries
-               begin
-                 PrmsLn := SplitFixedColLine(LigneTEXT, [1, 2, 7, 13, 17, 21, 25, 80, 100]);
-                 // Si le préfixe 2 (2e colonne) =-1 =>nouvelle série
-                 Prefix1 := StrToInt(PrmsLn[COL_NUM_SECTION]);
-                 if (Prefix1 > 0) then
-                 begin
-                   Prefix2 := StrToInt(PrmsLn[COL_NUM_ITEM]);
-                   // C'est le header de série ?
-                   // les headers de série comportent deux lignes !
-                   if (Prefix2 = -2) then
-                   begin
-                     // première ligne
-                     NomDeLaSerie := Trim(PrmsLn[COL_VAR_DATA]);
-                     //AfficherMessage(Format('Une serie a ajouter: Prefix1: %d - Prefix2 = %d - %s',[Prefix1, Prefix2, NomDeLaSerie]));
-                     // Lecture de la 2e ligne
-                     Inc(NoLigneTEXT);
-                     ReadLn(pTEXT, LigneTEXT);
-
-                     // décomposition
-                     //*******************************************************************************
-                     //                                                           SD
-                     //                                                            |   PD
-                     //                                                            |   |   SA
-                     //                                                            |   |   |   PA
-                     //                                                            |   |   |   |   NB
-                     //                                      Serie                 |   |   |   |   |   CH
-                     //                                                            |   |   |   |   |   |   OBS
-                     //                                                            |   |   |   |   |   |   |
-                     PrmsLn := SplitFixedColLine(LigneTEXT, [1, 2, 7, 13, 17, 21, 25, 33, 41, 49, 57, 65, 73, 81, 100]);
-                     //AfficherMessage(Format('%d %d - %s', [Prefix1, Prefix2,  UneSerie.GetNomSerie]));
-                     // si c'est la première série, on crée
-                     //AfficherMessage(LigneTEXT);
-                     //AfficherMessage(PrmsLn[1]);
-                     Prefix1 := StrToInt(PrmsLn[1]);
-                     if (Prefix1 = 1) then
-                     begin
-                       UneSerie := TObjSerie.Create;
-                       UneSerie.SetNumeroSerie(1);
-                       //AfficherMessage(Format('Prefix = %d - Serie 1 creee',[Prefix1]));
-                     end
-                     else  // sinon on ferme la série courante et on crée la suivante
-                     begin
-                       self.AddSerie(UneSerie);
-                       UneSerie := TObjSerie.Create;
-                     end;
-                     with UneSerie do
-                     begin
-                       SetNumeroSerie(TNumeroSerie(Prefix1));
-                       SetNomSerie(NomDeLaSerie);
-                       SetSeriePtExtremites(StrToInt(PrmsLn[COL_SER_DEP]),
-                                            StrToInt(PrmsLn[COL_PT_DEP]),
-                                            StrToInt(PrmsLn[COL_SER_ARR]),
-                                            StrToInt(PrmsLn[COL_PT_ARR])
-                                           );
-                       SetChanceObstacle(StrToInt(PrmsLn[COL_CHANCE]),
-                                         StrToInt(PrmsLn[COL_OBSTACLE]));
-                       SetNumeroReseau(0); // non supporté par TOPOROBOT
-                       SetObsSerie('');
-                       SetRaideur(1.00); // Raideur: Non supporté par TOPOROBOT
-                     end; //with UneSerie do
-                   end else
-                   begin // on lit les visées
-                     //                 ('-->'+LigneTab);
-                     //*******************************************************************************
-                     //                                                           Long
-                     //                                                            |   Azimut
-                     //                                                            |   |   Pente
-                     //                                      Parenthèse            |   |   |   LG
-                     //                                      | Serie               |   |   |   |   LD
-                     //                                      | |   Station         |   |   |   |   |   HZ
-                     //                                      | |   |  Code         |   |   |   |   |   |   HN
-                     //                                      | |   |  |    |Session|   |   |   |   |   |   |
-                     //                                      | |   |  |    | Expé  |   |   |   |   |   |   |
-                     PrmsLn := SplitFixedColLine(LigneTEXT, [1, 2, 7, 13, 17, 21, 25, 33, 41, 49, 57, 65, 73, 81, 100]);
-
-                     with qVisee do
-                     begin
-                       TypeVisee   := tgDEFAULT;
-                       Code        := StrToInt(PrmsLn[COL_CODE]);
-                       Expe        := StrToInt(PrmsLn[COL_EXPE]);
-                       Longueur    := ConvertirEnNombreReel(PrmsLn[COL_LONG], 0.00);
-                       if (Longueur < 0.00) then
-                       begin
-                         WriteWarning(Format(rsRD_TAB_NEG_LONG, [NoLigneTEXT, Longueur]));
-                         Longueur:=Abs(Longueur);
-                       end;
-                       Azimut      := ConvertirEnNombreReel(PrmsLn[COL_AZ], 0.00);
-                       Pente       := ConvertirEnNombreReel(PrmsLn[COL_P], 0.00);
-                       LG          := ConvertirEnNombreReel(PrmsLn[COL_LG], 0.00);  //LG
-                       LD          := ConvertirEnNombreReel(PrmsLn[COL_LD], 0.00);  //LD
-                       HZ          := ConvertirEnNombreReel(PrmsLn[COL_HZ], 0.00);
-                       HN          := ConvertirEnNombreReel(PrmsLn[COL_HN], 0.00);
-                       Commentaires:= '';
-                       IDSecteur   := 0;
-                       IDTerrainStation := '';   // Non supporté par TOPOROBOT
-                       TypeVisee        := tgDEFAULT; // Non supporté par TOPOROBOT
-                     end; // with qVisee do
-                     UneSerie.AddVisee(qVisee);
-                   end;   // if Prefix2
-                 end; // case
-               end;
-             end; //  case Prefix1 of
-           end;
-           IdxCourantStation := UneSerie.GetNbVisees - 1;
-           // imprimer la ligne traitée
-           //AfficherMessage('Ligne traitée');
-         except
-           AfficherMessageErreur(Format('[%d] %s', [NoLigneTEXT, LigneTEXT]));
-         end;
-       end;  //while Not Eof(pTEXT) do
-       // On ferme la dernière série
-       AddSerie(UneSerie);
-       //--------------------------------------------------------------------------
-       //**************************
-       self.SetDatabaseName(ExtractFileNameWithoutExt(FichierText));
-       VerifieSerie1();                // Cause courante de plantages: Absence de la série 1
-       CheckerLesDonneesTopo();
-       RecenserLesIDsTerrain();
-       RecenserPointsOfInterest();
-       SortCodes();
-       SortExpes();
-       //SortSeries(); TODO  Trier les séries ?
-       UneEntree := GetEntrance(0);
-       self.SetRefSeriePoint(UneEntree.eRefSer, UneEntree.eRefSt);
-       self.SetDefaultCoords(UneEntree.eXEntree, UneEntree.eYEntree, UneEntree.eZEntree);
-       Result := GetNbSeries();
-       AfficherMessage('Fichier TEXT OK');
-     finally
-       CloseFile(pTEXT);
-     end; // niveau 1: pour le fichier Text
-  finally
-    FreeAndNil(ProvListeEntrees);//ProvListeEntrees.Free;
-  end; //try..finally niveau 0
-end;
-
-// charger un fichier PocketTopo TXT
-function TToporobotStructure2012.LoadFromPocketTopoTXT(const FichierTXT: TStringDirectoryFilename): integer;  deprecated;
+//// charger un fichier PocketTopo TXT
+//function TToporobotStructure2012.LoadFromPocketTopoTXT(const FichierTXT: TStringDirectoryFilename): integer;  deprecated;
 {$INCLUDE funcimportpockettopotxt.inc}
-
 //******************************************************************************
-procedure TToporobotStructure2012.SaveToFile(const FichierTAB: TStringDirectoryFilename; const ModeSaveTAB: TModeSaveTAB; const TextFileFormat: TTextFileFormat);
-const
 
-  LINE_STATION = FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                 FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                 FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+
-                 FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+
-                 FORMAT_STRING;
+// ouverture d'un fichier XML (gtx)
+//function  TToporobotStructure2012.LoadFromXML(const FichierXML: TStringDirectoryFilename): integer;
+{$INCLUDE FuncLoadSaveFichierXML.inc}
+//******************************************************************************
 
-  FMT_LINE_NAMESPACE   = FORMAT_NB_INTEGER  + TAB + FORMAT_NB_INTEGER + TAB +
-                         '%d ' + TAB + '%d ' + TAB + '%d ' + TAB + // couleur
-                         FORMAT_STRING  + TAB + FORMAT_STRING;     // noms
-var
-  ENDL     : string;
-  Sr, St, i: integer;
-  QNbFiltresPerso   : integer;
-  QNbNamespaces, QNbEntrees, QNbReseaux, QNbSecteurs  : integer;
-  QNbCodes, QNbExpes: integer;
-  QNbAntennes       : integer;
+//function TToporobotStructure2012.LoadFromJSON(const FichierXML: TStringDirectoryFilename): integer;
+// procedure TToporobotStructure2012.SaveToJSON(const FichierXML: TStringDirectoryFilename);
+{$INCLUDE FuncLoadSaveFichierJSON.inc}
+//******************************************************************************
 
-  pTAB: TextFile;
-  Entrance: TEntrance;
-  Serie: TObjSerie;
-  Station: TUneVisee;
-  s : string;
-  R : TReseau;
-  SC: TSecteur;
-  VA: TViseeAntenne;
-  EPSG: TLabelSystemesCoordsEPSG;
-  MyFiltrePerso: TFiltrePersonnalise;
-  MyNamespace: TNameSpace;
-  procedure WrtLn(const Str: string); inline;
-  begin
-    Write(pTAB, Str+ENDL);
-  end;
-  procedure WrtCommentaire(const Str: string); inline;
-  begin
-    if (ModeSaveTAB = mtabEXTENDEDTAB) then Write(pTAB, '#### '+Str+ENDL);
-  end;
-begin
-  case TextFileFormat of  // mise en place des fins de lignes
-    tfWINDOWS: begin s:='Windows';   ENDL := #13+#10; end;
-    tfMAC    : begin s:='Macintosh'; ENDL := #13    ; end;
-    tfUNIX   : begin s:='Unix';      ENDL := #10    ; end;
-  end;
-  AfficherMessage(Format('TToporobotStructure.SaveFile(%s) as %s format',[FichierTAB, s]));
-  try
-    // Sauvegarder ancien fichier
-
-    AssignFile(pTAB, FichierTAB);
-    ReWrite(pTAB);
-    AfficherMessage('   Saving header');
-    // Sections ajoutées au format TOPOROBOT
-    // Fichiers XTB uniquement
-    if (ModeSaveTAB = mtabEXTENDEDTAB) then
-    begin
-      // Section -20: Date de dernières modifications, version du fichier et du logiciel
-      AfficherMessage('--> Horodating saves at #20 section');
-
-      WrtLn(Format(FORMAT_NB_INTEGER + TAB +
-                   FORMAT_STRING + TAB +
-                   FORMAT_STRING + TAB +
-                   FORMAT_STRING,
-                   [-20,
-                    DateToStr(Now), TimeToStr(Now),
-                    self.FDataBaseName
-                   ]));
-      {$IFDEF GROS_MINET}
-      WrtLn('# Sylvestre CLEMENT');
-      {$ELSE}
-      WrtLn('# (fr) L''auteur de GHTopo est christianophobe et hait le Christ');
-      WrtLn('# (en) The author of GHTopo hates Christ');
-      WrtLn('# (de) Der Autor von GHTopo hasst Christus');
-      WrtLn('# (nl) De Autor van GHTopo haat Christus');
-      WrtLn('# (es) El autor de GHTopo odia a Cristo');
-      WrtLn('# (it) L''autore di GHTopo odia Cristo');
-      WrtLn('# (pt) O autor de GHTopo odeia Cristo');
-      WrtLn('# (va) Movit omnes auctor GHTopo odit Christum');
-      {$ENDIF}
-      //WrtLn('# ');
-
-      // Sections -19 : Libellé et commentaires de l'étude (XTB uniquement)
-      AfficherMessage('--> Writing general infos at #-19 to #-18 sections');
-      WrtLn(Format(FORMAT_NB_INTEGER + TAB +
-                    FORMAT_STRING + TAB + FORMAT_STRING,
-                   [-19, self.FNomEtude, self.FCommentaireEtude]));
-      // Section -18: Espaces de noms (XTB uniquement);
-      AfficherMessage('--> Saving namespace at #-18 section');
-      WrtLn('');
-      QNbNamespaces := self.GetNbNameSpaces();
-      WrtCommentaire(MakeHeaderRubriquesOfAnRow(TAB, -18, ['IDNamespace', 'CouleurNamespace_R', 'CouleurNamespace_G', 'CouleurNamespace_B', 'Namespace', 'Description']));
-
-      WrtCommentaire(Format('%d namespaces', [QNbNamespaces]));
-      WrtLn('');
-      if (QNbNamespaces > 0) then
-      begin
-        for i := 0 to QNbNamespaces - 1 do
-        begin
-          MyNamespace := self.GetNameSpace(i);
-          WrtLn(Format(FMT_LINE_NAMESPACE, [-18, i,
-                                            Red(MyNamespace.Couleur), Green(MyNamespace.Couleur), Blue(MyNamespace.Couleur),
-                                            MyNamespace.Nom, MyNamespace.Description]));
-        end;
-      end
-      else WrtLn(Format(FMT_LINE_NAMESPACE, [-18, 0,
-                                             Red(NAMESPACE_COLOR_BY_DEFAULT), Green(NAMESPACE_COLOR_BY_DEFAULT), Blue(NAMESPACE_COLOR_BY_DEFAULT),
-                                             NAMESPACE_NAME_BY_DEFAULT, NAMESPACE_DESC_BY_DEFAULT]));
-      WrtLn('');
-      //************************************************************************
-      // Section -16: Filtres personnalisés (XTB uniquement);
-      AfficherMessage('--> Saving filters at #-16 section');
-      WrtLn('');
-      QNbFiltresPerso := GetNbFiltresPersos();
-      WrtCommentaire(MakeHeaderRubriquesOfAnRow(TAB, -16, ['IDFiltre', 'NomFiltre', 'CouleurFiltre_R', 'CouleurFiltre_G', 'CouleurFiltre_B', 'FiltreExpr', 'Description']));
-      WrtCommentaire(Format('%d filtres perso', [QNbFiltresPerso]));
-
-      if (QNbFiltresPerso > 0) then
-      begin
-        for i := 0 to QNbFiltresPerso - 1 do
-        begin
-          MyFiltrePerso := self.GetFiltrePerso(i);
-          WrtLn(Format(FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB +
-                       FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB +
-                       FORMAT_STRING + TAB +
-                       FORMAT_STRING + TAB + FORMAT_STRING,
-                       [-16, i,
-                        Red(MyFiltrePerso.CouleurFiltre), Green(MyFiltrePerso.CouleurFiltre), Blue(MyFiltrePerso.CouleurFiltre),
-                        MyFiltrePerso.NomFiltre,
-                        MyFiltrePerso.Expression, MyFiltrePerso.Description
-                        ]));
-        end;
-      end;
-      // Section -15: Système de coordonnées géographiques (XTB uniquement)
-      // TODO: Désactivé pour l'instant - A réimplémenter
-      AfficherMessage('--> Writing coordinates system at #-15 section');
-      WrtLn('');
-      WrtCommentaire(MakeHeaderRubriquesOfAnRow(TAB, -15, ['Code EPSG', 'Coordinates system description']));
-      //WrtCommentaire('#-15'+ TAB + 'Code EPSG' + TAB + 'Coordinates system description');
-      // -15	31563	LT3	Lambert 3 France
-      WrtLn('');
-      EPSG := GetCodeEPSGSystemeCoordonnees;
-
-      WrtLn(Format(FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER + TAB + FORMAT_STRING,  [-15, EPSG.CodeEPSG, EPSG.NomEPSG]));
-
-
-      //*************************************
-      // Section -10: Secteurs (Format XTB uniquement)
-      AfficherMessage('--> Saving #-10 Sectors section');
-      WrtLn('');
-      WrtCommentaire('Sectors list');
-      WrtLn('');
-      WrtCommentaire(MakeHeaderRubriquesOfAnRow(TAB, -10, ['IdxSecteur', 'Color R', 'Color G', 'Color B', 'NomSecteur']));
-      WrtLn('');
-      QNbSecteurs := GetNbSecteurs();
-      if (QNbSecteurs > 1) then
-      begin
-        for i:=1 to QNbSecteurs - 1 do
-        begin
-          SC := GetSecteur(i);
-          WrtLn(Format(FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                       FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                       FORMAT_STRING,
-                       [-10,
-                        i,
-                        Red(SC.CouleurSecteur),
-                        Green(SC.CouleurSecteur),
-                        Blue(SC.CouleurSecteur),
-                        SC.NomSecteur
-                        ]));
-        end;
-      end;
-      // Section -9: Visées en antennes (Format XTB uniquement)
-      QNbAntennes := self.GetNbAntennes();
-      if (QNbAntennes > 0) then
-      begin
-        AfficherMessage('--> Saving #-9 Antenna shots section');
-
-        WrtLn('');
-        WrtCommentaire('Antenna-shots list');
-        WrtLn('');
-        WrtCommentaire(MakeHeaderRubriquesOfAnRow(TAB, -9, ['ID', 'ID Reseau', 'ID Secteur', 'Serie', 'Point', 'Code (unused)', 'Expe (unused)', 'IDTerrain', 'Longueur', 'Azimut', 'Pente', 'Observ.']));
-        WrtLn('');
-
-        for i := 1 to QNbAntennes - 1 do
-        begin
-          VA := GetViseeAntenne(i);
-          if (VA.Longueur > 0.001) then
-          begin
-            //-9	1	2	1102	10	101	101	GHLMF	12.56	289.00	-14.00	le chat dans la souricière
-            WrtLn(Format(FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+
-                              TAB + FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + // série, point
-                              TAB + FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + // code, expé
-                              TAB + FORMAT_STRING +          // ID terrain
-                              TAB + FORMAT_NB_REAL_2_DEC+
-                              TAB + FORMAT_NB_REAL_2_DEC+
-                              TAB + FORMAT_NB_REAL_2_DEC+
-                              TAB + FORMAT_STRING ,
-                     [-9, i, VA.Reseau, VA.Secteur,
-                             VA.SerieDepart, VA.PtDepart,
-                             0, 0, //VA.Code, VA.Expe,           // Visées en antenne: Code et expés hérité de leur station d'accrochage
-                             '', //VA.IDTerrainStation,
-                             VA.Longueur, VA.Azimut, VA.Pente,
-                             ''  //VA.Commentaires
-                     ]));
-          end;
-        end;
-
-      end;
-
-      // Section -8: Réseaux (Format XTB uniquement)
-      AfficherMessage('--> Saving #-8 Networks section');
-      WrtLn('');
-      WrtCommentaire('Networks list');
-      WrtLn('');
-      WrtCommentaire(MakeHeaderRubriquesOfAnRow(TAB, -9, ['IdxReseau', 'Color R', 'Color G', 'Color B', 'TypeReseau', 'NomReseau', 'ObsReseau']));
-      WrtLn('');
-      QNbReseaux := GetNbReseaux();
-      if (QNbReseaux > 1) then
-      begin
-        for i:=1 to QNbReseaux - 1 do
-        begin
-          R:=GetReseau(i);
-          WrtLn(Format(FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                       FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                       FORMAT_NB_INTEGER +TAB+
-                       FORMAT_STRING + TAB +
-                       FORMAT_STRING,
-                       [-8,
-                        i,
-                        Red(R.ColorReseau),
-                        Green(R.ColorReseau),
-                        Blue(R.ColorReseau),
-                        R.TypeReseau,
-                        R.NomReseau,
-                        R.ObsReseau
-                        ]));
-        end;
-      end;
-    end; //  if (ModeSaveTAB = mtabEXTENDEDTAB) then begin
-    // Classeur (débrayé)
-    //WriteLn(pTAB, Format(FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER,[-7,1,1,1,1]));
-    //WrtLn(Format(FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER,[-7,1,1,1,1]));
-    // Sauvegarde des entrées
-    AfficherMessage('--> Saving #-6 Entrances section');
-    WrtLn('');
-    WrtCommentaire('Entrances list');
-    WrtLn('');
-    WrtCommentaire(MakeHeaderRubriquesOfAnRow(TAB, -6, ['ID Entrance', 'NomEntrance', 'Serie', 'Station', 'X Entrance', 'Y Entrance', 'Z Entrance', 'Observ']));
-    WrtLn('');
-    QNbEntrees := GetNbEntrances();
-    for i := 0 to QNbEntrees - 1 do
-    begin
-      Entrance := GetEntrance(i);
-      AfficherMessage(Format('%d/%d: %d.%d:  %s', [i, QNbEntrees, Entrance.eRefSer, Entrance.eRefSt, Entrance.eNomEntree]));
-      WrtLn(Format(FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB +
-                   FORMAT_STRING + TAB + FORMAT_STRING + TAB +
-                   FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB +
-                   FORMAT_NB_REAL_3_DEC + TAB + FORMAT_NB_REAL_3_DEC + TAB + FORMAT_NB_REAL_3_DEC + TAB +
-                   FORMAT_STRING + TAB + FORMAT_STRING,
-                  [-6, i+1,
-                   Entrance.eNomEntree,
-                   Entrance.eIDTerrain,
-                   Entrance.eRefSer,  Entrance.eRefSt,
-                   Entrance.eXEntree, Entrance.eYEntree, Entrance.eZEntree,
-                   Entrance.eObserv,
-                   ColorToGHTopoColor(Entrance.eCouleur)
-                   ]));
-    end;
-
-    AfficherMessage('--> Saving #-5 Deprecated Entrances section');
-    WrtCommentaire(MakeHeaderRubriquesOfAnRow(TAB, -5, ['X Entrance', 'Y Entrance', 'Z Entrance', 'Serie', 'Station', 'Observ', '*** Deprecated section. Data moved to #6 section ***']));
-    WrtLn('');
-    for i:=0 to QNbEntrees - 1 do
-    begin
-      Entrance := GetEntrance(i);
-      WrtLn(Format(FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB +
-                   FORMAT_NB_REAL_3_DEC + TAB + FORMAT_NB_REAL_3_DEC + TAB + FORMAT_NB_REAL_3_DEC + TAB +
-                   FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB + FORMAT_STRING,
-                          [-5, i+1,
-                          Entrance.eXEntree,
-                          Entrance.eYEntree,
-                          Entrance.eZEntree,
-                          Entrance.eRefSer,
-                          Entrance.eRefSt,
-                          Entrance.eObserv
-                          ]));
-    end;
-    WrtLn('');
-    WrtCommentaire('Trips list');
-    WrtLn('');
-    AfficherMessage('--> Saving Expes');
-    WrtCommentaire(MakeHeaderRubriquesOfAnRow(TAB, -2, ['IDExpe', 'Day', 'Month', 'Year', 'Team', 'Surveyor', 'Modedecl', 'Declination', 'dummy', 'IdxColor', 'Observ.']));
-    WrtLn('');
-    QNbExpes := GetNbExpes();
-    if (QNbExpes > 0) then
-    begin
-      for  i:= 1 to QNbExpes - 1 do
-      begin
-        WrtLn(MakeToporobotTabLineOfExpe(-2, GetExpe(i)));
-      end;
-    end;
-    // Codes
-    //-1	999	400.00	400.00	0.00	0.00	0.00	100.00	-100.00	Fixpunkt
-
-    AfficherMessage('--> Saving Codes');
-    WrtLn('');
-    WrtCommentaire('Instruments codes list');
-    WrtLn('');
-    QNbCodes := GetNbCodes();
-    if (QNbCodes > 1) then
-    begin
-      for i:=1 to QNbCodes - 1 do
-      begin
-        WrtLn(MakeToporobotTabLineOfCode(-1, ModeSaveTAB, GetCode(i)));
-      end;
-      WrtLn('');
-    end;
-    // Séries
-    case ModeSaveTAB of
-      mtabEXTENDEDTAB: AfficherMessage('--> Saving Series at mtabEXTENDEDTAB mode');
-      mtabTOPOROBOT  : AfficherMessage('--> Saving Series at mtabTOPOROBOT mode');
-    end;
-    WrtLn('');
-    WrtCommentaire('Series and stations');
-    WrtLn('');
-    for Sr:=1 to GetNbSeries() - 1 do
-    begin
-      WrtLn('');
-      Serie := GetSerie(Sr);
-      //AfficherMessage(Format('---> %d : %s (%d pts)',[Serie.GetNumeroDeSerie(), Serie.GetNomSerie, Serie.GetNbVisees]));
-      with Serie do
-      begin
-        case ModeSaveTAB of
-          mtabEXTENDEDTAB:
-            WrtLn(Format(FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                                 FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                                 FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                                 FORMAT_NB_INTEGER+TAB+
-                                 FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                                 FORMAT_STRING+TAB+FORMAT_STRING+TAB+
-                                 FORMAT_NB_INTEGER+TAB+FORMAT_NB_REAL_3_DEC+TAB+
-                                 FORMAT_NB_INTEGER,
-                                 [GetNumeroDeSerie(), -1,
-                                  GetNoSerieDep(), GetNoPointDep(),
-                                  GetNoSerieArr(), GetNoPointArr(),
-                                  GetNbVisees() - 1,
-                                  GetChance(), GetObstacle(),
-                                  GetNomSerie(),
-                                  GetObsSerie(),
-                                  GetNumeroReseau(),
-                                  GetRaideur(),
-                                  GetNumeroEntrance()
-                                 ]));
-          mtabTOPOROBOT:
-            WrtLn(Format(FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                                 FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                                 FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                                 FORMAT_NB_INTEGER+TAB+
-                                 FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                                 FORMAT_STRING,
-                                 [GetNumeroDeSerie(), -1,
-                                  GetNoSerieDep, GetNoPointDep,
-                                  GetNoSerieArr, GetNoPointArr,
-                                  GetNbVisees - 1,
-                                  GetChance, GetObstacle,
-                                  SafeTruncateString(GetNomSerie, 20)
-                                 ]));
-        end;
-        for St := 0 to Serie.GetNbVisees - 1 do
-        begin
-          Station:=Serie.GetVisee(St);
-          with Station do begin
-            case ModeSaveTAB of
-              mtabEXTENDEDTAB:
-              begin
-                WrtLn(Format(LINE_STATION + TAB + FORMAT_STRING + TAB + FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER,
-                                [Serie.GetNumeroDeSerie(), St,
-                                 Code, Expe,
-                                 Longueur, Azimut, Pente,
-                                 LG, LD, HZ, HN,
-                                 Commentaires,
-                                 IDTerrainStation,
-                                 TypeVisee,
-                                 IDSecteur
-                                ]));
-              end;
-              mtabTOPOROBOT:
-              begin
-                WrtLn(Format(LINE_STATION,
-                                [Serie.GetNumeroDeSerie(), St,
-                                 Code, Expe,
-                                 Longueur, Azimut, Pente,
-                                 LG, LD, HZ, HN,
-                                 Commentaires
-                                ]));
-              end;
-            end;
-          end;
-        end;
-      end;
-    end;
-    AfficherMessage('TToporobotStructure.SaveToFile OK');
-  finally
-    CloseFile(pTAB);
-  end;
-end;
 
 
 //* Méthodes relatives aux entrées
@@ -3279,7 +1863,7 @@ begin
 end;
 function  TToporobotStructure2012.RemoveCode(const Idx: integer): boolean; inline;
 begin
-  FTableCodes.RemoveElement(Idx);
+  Result := FTableCodes.RemoveElement(Idx);
 end;
 function TToporobotStructure2012.GetNbCodes(): integer;
 begin
@@ -3404,7 +1988,7 @@ function TToporobotStructure2012.NettoyerAntennes(const longMax: double; const q
 var
   EWE: TViseeAntenne;
   n: Integer;
-  B0, B1, B2, B3, B4: boolean;
+  B0, B1, B2, B3: boolean;
 begin
   Result := 0;
   AfficherMessage(Format('%s.NettoyerAntennes: %.3f (origine: %d.%d)', [self.ClassName, longMax, qIdxSerie, qIdxStation]));
@@ -3819,14 +2403,13 @@ end;
 procedure TToporobotStructure2012.CheckerLesSeries();
 var
   MySerieCourante, MySerieErreur: TObjSerie;
-  i, Nb  , QQ, NbreDeStations, EWE: Integer;
+  i, Nb, NbreDeStations, EWE, QQ: Integer;
 begin
   Nb := GetNbSeries();
   NbreDeStations := 0;
   AfficherMessageErreur(Format('-- %s.CheckerLesSeries: %d series',[ClassName, Nb]));
   for i := 1 to Nb - 1 do
   begin
-
     MySerieCourante    := GetSerie(i);
     // détection des doublons
     if (HasDoublonsInNumsSeries(MySerieCourante.GetNumeroDeSerie(), EWE)) then
@@ -3837,18 +2420,15 @@ begin
                                  i  , MySerieCourante.GetNumeroDeSerie(), MySerieCourante.GetNomSerie()]));
     end;
     NbreDeStations     += MySerieCourante.GetNbVisees();
-    QQ := CheckSerie(MySerieCourante, i);
+    QQ := CheckSerie(MySerieCourante);
   end;
-
-
-
   if (NbreDeStations < 2) then AddMessageErreur(tmeSERIES, cmeWARNING, 0, Format(GetResourceString(rsCHK_MSG_SERIE_NB_STATIONS_WARNING), [NbreDeStations]))
                           else AddMessageErreur(tmeSERIES, cmeNOTE   , 0, Format(GetResourceString(rsCHK_MSG_SERIE_NB_TOTAL_STATIONS), [NbreDeStations]));
 end;
 
 
 // // retourne: -1 si série vide; numéro de visée si erreur, 0 si OK
-function TToporobotStructure2012.CheckSerie(const MySerie: TObjSerie; const QIdx: integer): integer;
+function TToporobotStructure2012.CheckSerie(const MySerie: TObjSerie): integer;
 const
   SEUIL_SERIE_LONGUEUR_NULLE = 0.009;
   SEUIL_SERIE_TRES_COURTE = 0.10;
@@ -4123,9 +2703,8 @@ procedure TToporobotStructure2012.RecalculerDeclinaisonsMagnetiquesExpes();
 var
   CalculateurDeclimag : TSAGeoMag;
   i, NbE: Integer;
-  EE: TEntrance;
   EX: TExpe;
-  Lat, Lon, Decl: double;
+  Lat, Lon: double;
   PTI, PTO: TPoint2Df;
   EPSG: TLabelSystemesCoordsEPSG;
   MyCentroide: TPoint3Df;
@@ -4242,7 +2821,6 @@ function TToporobotStructure2012.HasPtTopoBySerSt(const qSr, qPt: integer): bool
 var
   S, P: Integer;
   mySerie: TObjSerie;
-  myVisee: TUneVisee;
   EWE: Integer;
 begin
   Result := False;
@@ -4252,7 +2830,6 @@ begin
     EWE := mySerie.GetNumeroDeSerie;
     for P := 0 to mySerie.GetNbVisees - 1 do
     begin
-      myVisee := mySerie.GetVisee(P);
       if ((qSr = EWE) and (qPt = P)) then
       begin
          Result := True;
@@ -4279,7 +2856,6 @@ var
   N: Integer;
   S1, S2: String;
   QFound: Boolean;
-  QListFound: TStringList;
 begin
   Result := False;
   Cle := UpperCase(Trim(Cle));
@@ -4731,14 +3307,15 @@ begin
   AfficherMessage(Format('-- %s.CheckerLesAntennes: %d visees rayonnantes',[ClassName, Nb]));
 
 end;
-// TODO: Contrôles à implémenter
 procedure TToporobotStructure2012.CheckerLesCodes();
 var
+  {$NOTE Controles à implémenter}
   i, Nb: Integer;
   MyCode: TCode;
   function CheckerUnCode(const QC: TCode): boolean;
   begin
-
+    result := false;
+    pass;
   end;
 begin
   Nb := GetNbCodes();
@@ -4749,16 +3326,18 @@ begin
     MakeCode0(1, 'Code 1 regenerated');
     Exit;
   end;
+  for i := 0 to Nb-1 do CheckerUnCode(GetCode(i));
 end;
 
-// TODO: Contrôles à implémenter
 procedure TToporobotStructure2012.CheckerLesExpes();
 var
+  {$NOTE Controles à implémenter}
   i, Nb: Integer;
   MyExpe: TExpe;
   function CheckerUneExpe(const QC: TExpe): boolean;
   begin
-
+    result := false;
+    pass;
   end;
 begin
   Nb := GetNbExpes();
@@ -4769,6 +3348,7 @@ begin
     MakeExpe0(1, 'Expe 1 regenerated');
     Exit;
   end;
+  for i := 0 to Nb-1 do CheckerUneExpe(GetExpe(i));
 end;
 
 // TODO: Export vers Thérion A valider
@@ -4889,7 +3469,7 @@ var
     OldIdxCode   : integer;
     OldIDStation : string;
     CurIDStation : string;
-    Tag, foo, bar, QS0, QS1: string; // Commentaires et ID littéraux de stations
+    Tag, foo     : string; // Commentaires et ID littéraux de stations
     miou: Int64;
     lulu: Double;
   begin
@@ -4971,7 +3551,7 @@ var
     WrtLn('');
     WrtLn('    ' + TH_KW_ENDCENTERLINE);
     foo := Format(FMTSTS, [S.GetNoSerieDep, S.GetNoPointDep]);
-    bar := Format('%s@SERIE%d',[foo, S.GetNoSerieDep]);
+    //bar := Format('%s@SERIE%d',[foo, S.GetNoSerieDep]);
   end;
 begin
   AfficherMessage(Format('%s.ExportToTherion(%s)',[ClassName, FichierTH]));
@@ -5032,406 +3612,8 @@ begin
   end;
 end;
 
-// ouverture d'un fichier XML (gtx)
-function  TToporobotStructure2012.LoadFromXML(const FichierXML: TStringDirectoryFilename): integer;
-var
-  EPSGDefault: TLabelSystemesCoordsEPSG;
-  MyDocXML   : TXMLDocument;
-  GHTopoRoot : TDOMElement;
-  // items de tables simples
-  UnNameSpace           : TNameSpace;
-  UnFiltrePerso         : TFiltrePersonnalise;
-  UneEntree             : TEntrance;
-  UnReseau              : TReseau;
-  UnSecteur             : TSecteur;
-  UneExpe               : TExpe;
-  UnCode                : TCode;
-  UneViseeAntenne       : TViseeAntenne;
-  UneSerie              : TObjSerie;
-  UneVisee              : TUneVisee;
-  // noeuds
-  EWE, WU, WOK, QAT     : TDOMNode;
-  // listes DOM
-  ListeRubriquesGeneral : TDOMNodeList;
-  ListeDesFiltres       : TDOMNodeList;
-  ListeDesEntrees       : TDOMNodeList;
-  ListeDesReseaux       : TDOMNodeList;
-  ListeDesSecteurs      : TDOMNodeList;
-  ListeDesExpes         : TDOMNodeList;
-  ListeDesCodes         : TDOMNodeList;
-  ListeDesSeries        : TDOMNodeList;
-  ListeDesAntennes      : TDOMNodeList;
-  ListeStations         : TDOMNodeList;
-  ListeNamespaces       : TDOMNodeList;
-  QMyDate: TDateTime;
-  St, i: Integer;
-  qSerDepart, qPtDepart, qSerArrivee, qPtArrivee: Integer;
-  qIdxSerie: TNumeroSerie;
-  procedure KWYXZ(const S666: string); inline;
-  begin
-    AfficherMessage(Format('-- Found "%s" section', [S666]));
-  end;
-  function QExtractTextContent(var QQQ: TDOMNode): string; inline;
-  begin
-    Result := Trim(PasStrToXMLStr(QQQ.TextContent));
-  end;
-
-  function ExtractStringOfNode(var QN: TDOMNode; const XMLKey: string): string;
-  var
-    QIN1: TDOMNode;
-  begin
-    QIN1 := QN.Attributes.GetNamedItem(XMLKey);
-    Result := QExtractTextContent(QIN1);
-  end;
-  function ExtractIntOfNode(var QN: TDOMNode; const XMLKey: string; const QDefaultValue: integer): integer;
-  var
-    QIN1: TDOMNode;
-  begin
-    QIN1 := QN.Attributes.GetNamedItem(XMLKey);
-    Result := StrToIntDef(QIN1.TextContent, QDefaultValue);
-  end;
-  function ExtractByteOfNode(var QN: TDOMNode; const XMLKey: string; const QDefaultValue: byte): byte;
-  var
-    QIN1: TDOMNode;
-  begin
-    QIN1 := QN.Attributes.GetNamedItem(XMLKey);
-    Result := StrToIntDef(QIN1.TextContent, QDefaultValue);
-  end;
-  function ExtractRealOfNode(var QN: TDOMNode; const XMLKey: string; const QDefaultValue: double): double;
-  var
-    QIN1: TDOMNode;
-  begin
-    QIN1 := QN.Attributes.GetNamedItem(XMLKey);
-    Result := ConvertirEnNombreReel(QIN1.TextContent, QDefaultValue);
-  end;
-  function ExtractColorOfNode(var QN: TDOMNode): TColor;
-  var
-    qR, qG, qB: Byte;
-  begin
-    qR := ExtractByteOfNode(QN, GTX_ATTR_COLOR_R, 255);
-    qG := ExtractByteOfNode(QN, GTX_ATTR_COLOR_G, 255);
-    qB := ExtractByteOfNode(QN, GTX_ATTR_COLOR_B, 255);
-    Result := RGBToColor(qR, qG, qB);
-  end;
-begin
-  Result := -1;
-  AfficherMemoryUsage();
-  AfficherMessage(Format('%s.LoadFromXML(%s)', [ClassName, FichierXML]));
-   // nom étude par défaut
-  SetNomEtude('Etude001');
-  SetCommentairesEtude('Issued from XML format');
-  EPSGDefault.CodeEPSG := DEFAULT_SYSTEME_COORDONNEES_CODE_EPSG;
-  EPSGDefault.NomEPSG  := DEFAULT_SYSTEME_COORDONNEES_NOM;
-
-  SetCodeEPSGSystemeCoordonnees(EPSGDefault);
-  // réinit du document
-  self.ReInitialiser(True);
-  MyDocXML := TXMLDocument.Create;
-  try
-    ReadXMLFile(MyDocXML, FichierXML);
-    GHTopoRoot := MyDocXML.DocumentElement;
-    // section General
-    AfficherMessage('-> Reading section: ' + GTX_KEY_SECTION_GENERAL);
-    EWE := GHTopoRoot.FindNode(GTX_KEY_SECTION_GENERAL);
-    AfficherMessageErreur(Format('%s: %s', [{$I %FILE%}, {$I %LINE%}]));
-    //ShowMessageFmt('%s: %s', [{$I %FILE%}, {$I %LINE%}]);
-    if (EWE <> Nil) then
-    begin
-      ListeRubriquesGeneral := EWE.ChildNodes;
-      WU := ListeRubriquesGeneral.Item[0];
-      SetNomEtude(ExtractStringOfNode(WU, GTX_ATTR_NOM_ETUDE));
-      EPSGDefault.CodeEPSG := ExtractIntOfNode(WU, GTX_ATTR_COORDS_SYSTEM_EPSG, DEFAULT_SYSTEME_COORDONNEES_CODE_EPSG);
-      EPSGDefault.NomEPSG  := ExtractStringOfNode(WU, GTX_ATTR_COORDS_SYSTEM_NOM);
-      SetCodeEPSGSystemeCoordonnees(EPSGDefault);
-      SetCommentairesEtude(ExtractStringOfNode(WU, GTX_ATTR_COMMENTAIRES_ETUDE));
-    end;
-    AfficherMessageErreur(Format('%s: %s', [{$I %FILE%}, {$I %LINE%}]));
-    // espaces de noms
-    AfficherMessage('-> Reading section: ' + GTX_KEY_SECTION_NAMESPACES);
-    EWE := GHTopoRoot.FindNode(GTX_KEY_SECTION_NAMESPACES);
-    if (EWE <> Nil) then
-    begin
-      ListeNamespaces := EWE.ChildNodes;
-      for i := 0 to ListeNamespaces.Count - 1 do
-      begin
-        try
-          WU := ListeNamespaces.Item[i];
-          UnNameSpace.Couleur      := ExtractColorOfNode(WU);
-          UnNameSpace.Nom          := ExtractStringOfNode(WU, GTX_ATTR_NAMESPACE_NAME);
-          UnNameSpace.Description  := ExtractStringOfNode(WU, GTX_ATTR_NAMESPACE_DESCRIPTION);
-          self.AddNameSpace(UnNameSpace);
-        except
-        end;
-      end;
-    end;
-    AfficherMessageErreur(Format('%s: %s', [{$I %FILE%}, {$I %LINE%}]));
-    // filtres personnalisés
-    AfficherMessage('-> Reading section: ' + GTX_KEY_SECTION_FILTERS);
-    EWE := GHTopoRoot.FindNode(GTX_KEY_SECTION_FILTERS);
-    if (EWE <> Nil) then
-    begin
-      ListeDesFiltres := EWE.ChildNodes;
-      for i := 0 to ListeDesFiltres.Count - 1 do
-      begin
-        try
-          WU := ListeDesFiltres.Item[i];
-          UnFiltrePerso.NomFiltre      := ExtractStringOfNode(WU, GTX_ATTR_FILTER_NAME);
-          UnFiltrePerso.CouleurFiltre  := ExtractColorOfNode(WU);
-          UnFiltrePerso.Expression     := ExtractStringOfNode(WU, GTX_ATTR_FILTER_EXPRESSION);
-          UnFiltrePerso.Description    := ExtractStringOfNode(WU, GTX_ATTR_FILTER_DESCRIPTION);
-          self.AddFiltrePerso(UnFiltrePerso);
-        except
-        end;
-      end;
-    end;
-    AfficherMessageErreur(Format('%s: %s', [{$I %FILE%}, {$I %LINE%}]));
-    // lister les entrées
-    AfficherMessage('-> Reading section: ' + GTX_KEY_SECTION_ENTRANCES);
-    EWE := GHTopoRoot.FindNode(GTX_KEY_SECTION_ENTRANCES);
-    if (EWE <> Nil) then
-    begin
-      ListeDesEntrees := EWE.ChildNodes;
-      for i := 0 to ListeDesEntrees.Count - 1 do
-      begin
-        try
-          WU := ListeDesEntrees.Item[i];
-          UneEntree.eIDTerrain  := ExtractStringOfNode(WU, GTX_ATTR_ENTRANCE_IDTERRAIN);
-          UneEntree.eNomEntree  := ExtractStringOfNode(WU, GTX_ATTR_ENTRANCE_NAME);
-          UneEntree.eRefSer     := ExtractIntOfNode(WU, GTX_ATTR_ENTRANCE_REFSERIE, 1);
-          UneEntree.eRefSt      := ExtractIntOfNode(WU, GTX_ATTR_ENTRANCE_REFPT, 0);
-          UneEntree.eXEntree    := ExtractRealOfNode(WU, GTX_ATTR_ENTRANCE_X, -1.00);
-          UneEntree.eYEntree    := ExtractRealOfNode(WU, GTX_ATTR_ENTRANCE_Y, -1.00);
-          UneEntree.eZEntree    := ExtractRealOfNode(WU, GTX_ATTR_ENTRANCE_Z, -1.00);
-          UneEntree.eCouleur    := GHTopoColorToColorDef(ExtractStringOfNode(WU, GTX_ATTR_ENTRANCE_COLOR), clBlue);
-          UneEntree.eObserv     := ExtractStringOfNode(WU, GTX_ATTR_ENTRANCE_OBS);
-          self.AddEntrance(UneEntree);
-        except
-        end;
-      end;
-    end;
-    AfficherMessageErreur(Format('%s: %s', [{$I %FILE%}, {$I %LINE%}]));
-    // lister les réseaux
-    AfficherMessage('-> Read section: ' + GTX_KEY_SECTION_RESEAUX);
-    EWE := GHTopoRoot.FindNode(GTX_KEY_SECTION_RESEAUX);
-    if (EWE <> Nil) then
-    begin
-      ListeDesReseaux := EWE.ChildNodes;
-      for i := 0 to ListeDesReseaux.Count - 1 do
-      begin
-        try
-          WU := ListeDesReseaux.Item[i];
-          UnReseau.ColorReseau := ExtractColorOfNode(WU);
-          UnReseau.TypeReseau  := ExtractIntOfNode(WU, GTX_ATTR_RESEAU_TYPE, 0);
-          UnReseau.NomReseau   := ExtractStringOfNode(WU, GTX_ATTR_RESEAU_NAME);
-          UnReseau.ObsReseau   := ExtractStringOfNode(WU, GTX_ATTR_RESEAU_OBS);
-          self.AddReseau(UnReseau);
-        except
-        end;
-      end;
-    end;
-    AfficherMessageErreur(Format('%s: %s', [{$I %FILE%}, {$I %LINE%}]));
-    //ShowMessageFmt('%s: %s', [{$I %FILE%}, {$I %LINE%}]);
-    // lister les secteurs
-    AfficherMessage('-> Read section: ' + GTX_KEY_SECTION_SECTEURS);
-    EWE := GHTopoRoot.FindNode(GTX_KEY_SECTION_SECTEURS);
-    if (EWE <> Nil) then
-    begin
-      ListeDesSecteurs := EWE.ChildNodes;
-      for i := 0 to ListeDesSecteurs.Count - 1 do
-      begin
-        try
-          WU := ListeDesSecteurs.Item[i];
-          UnSecteur.CouleurSecteur := ExtractColorOfNode(WU);
-          UnSecteur.NomSecteur     := ExtractStringOfNode(WU, GTX_ATTR_SECTEUR_NAME);
-          self.AddSecteur(UnSecteur);
-        except
-        end;
-      end;
-    end;
-    AfficherMessageErreur(Format('%s: %s', [{$I %FILE%}, {$I %LINE%}]));
-    // lister les codes
-    AfficherMessage('-> Read section: ' + GTX_KEY_SECTION_CODES);
-    EWE := GHTopoRoot.FindNode(GTX_KEY_SECTION_CODES);
-    if (EWE <> Nil) then
-    begin
-      ListeDesCodes := EWE.ChildNodes;
-      for i := 0 to ListeDesCodes.Count - 1 do
-      begin
-        try
-          WU := ListeDesCodes.Item[i];
-          UnCode.IDCode                      := ExtractIntOfNode(WU, GTX_ATTR_CODE_NUMERO, 0);
-          UnCode.FactLong                    := ExtractRealOfNode(WU, GTX_ATTR_CODE_FACT_LONG, 1.00);
-          UnCode.GradAz                      := ExtractRealOfNode(WU, GTX_ATTR_CODE_UCOMPASS, 360.00);
-          UnCode.GradInc                     := ExtractRealOfNode(WU, GTX_ATTR_CODE_UCLINO, 360.00);
-          UnCode.AngLimite                   := ExtractRealOfNode(WU, GTX_ATTR_CODE_ANGLIMITE, 0.00);
-          UnCode.PsiL                        := ExtractRealOfNode(WU, GTX_ATTR_CODE_PSI_L, 0.01);
-          UnCode.PsiAz                       := ExtractRealOfNode(WU, GTX_ATTR_CODE_PSI_A, 0.01);
-          UnCode.PsiP                        := ExtractRealOfNode(WU, GTX_ATTR_CODE_PSI_P, 0.01);
-          UnCode.ErreurTourillon             := ExtractRealOfNode(WU, GTX_ATTR_CODE_ERROR_TOURILLON, 0.00);
-          UnCode.DiametreBoule1              := ExtractRealOfNode(WU, GTX_ATTR_CODE_DIAM_BOULE1, 0.00);
-          UnCode.DiametreBoule2              := ExtractRealOfNode(WU, GTX_ATTR_CODE_DIAM_BOULE2, 0.00);
-          UnCode.ParamsFuncCorrAz.Co         := ExtractRealOfNode(WU, GTX_ATTR_CODE_FUNC_CORR_AZ_CO          , 0.00);
-          UnCode.ParamsFuncCorrAz.ErreurMax  := ExtractRealOfNode(WU, GTX_ATTR_CODE_FUNC_CORR_AZ_ERR_MAX     , 0.00);
-          UnCode.ParamsFuncCorrAz.PosErrMax  := ExtractRealOfNode(WU, GTX_ATTR_CODE_FUNC_CORR_AZ_POS_ERR_MAX , 0.00);
-          UnCode.ParamsFuncCorrInc.Co        := ExtractRealOfNode(WU, GTX_ATTR_CODE_FUNC_CORR_INC_CO         , 0.00);
-          UnCode.ParamsFuncCorrInc.ErreurMax := ExtractRealOfNode(WU, GTX_ATTR_CODE_FUNC_CORR_INC_ERR_MAX    , 0.00);
-          UnCode.ParamsFuncCorrInc.PosErrMax := ExtractRealOfNode(WU, GTX_ATTR_CODE_FUNC_CORR_INC_POS_ERR_MAX, 0.00);
-          UnCode.Commentaire   := ExtractStringOfNode(WU, GTX_ATTR_CODE_OBS);
-          self.AddCode(UnCode);
-        except
-        end;
-      end;
-    end;
-    AfficherMessageErreur(Format('%s: %s', [{$I %FILE%}, {$I %LINE%}]));
-    //ShowMessageFmt('%s: %s', [{$I %FILE%}, {$I %LINE%}]);
-
-    // lister les expés
-    AfficherMessage('======================');
-    EWE := GHTopoRoot.FindNode(GTX_KEY_SECTION_EXPES);
-    AfficherMessage('-> Read section: ' + GTX_KEY_SECTION_EXPES);
-    if (EWE <> Nil) then
-    begin
-      ListeDesExpes := EWE.ChildNodes;
-      for i := 0 to ListeDesExpes.Count - 1 do
-      begin
-        try
-          WU := ListeDesExpes.Item[i];
-          UneExpe.IDExpe        := ExtractIntOfNode(WU, GTX_ATTR_EXPE_NUMERO, 0);
-          {$WARNING: TEXpe.DateExpe à implementer}
-          //UneExpe.DateExpe := ;
-          QMyDate               := DateSQLToDatePascal(ExtractStringOfNode(WU, GTX_ATTR_EXPE_DATE));
-
-          UneExpe.AnneeExpe     := YearOf(QMyDate);
-          UneExpe.MoisExpe      := MonthOf(QMyDate);
-          UneExpe.JourExpe      := DayOf(QMyDate);
-          UneExpe.IdxCouleur    := ExtractIntOfNode(WU, GTX_ATTR_EXPE_IDXCOLOR, 0);
-          UneExpe.Operateur     := ExtractStringOfNode(WU, GTX_ATTR_EXPE_SURVEY1);
-          UneExpe.ClubSpeleo    := ExtractStringOfNode(WU, GTX_ATTR_EXPE_SURVEY2);
-          UneExpe.ModeDecl      := TModeCalculDeclimag(ExtractIntOfNode(WU, GTX_ATTR_EXPE_MODEDECL, 0));
-          UneExpe.DeclinaisonInDegrees := ExtractRealOfNode(WU, GTX_ATTR_EXPE_DECLINAT, 0.00);
-          UneExpe.Commentaire   := ExtractStringOfNode(WU, GTX_ATTR_EXPE_OBS);
-          self.AddExpe(UneExpe);
-        except
-        end;
-      end;
-    end;
-    AfficherMessageErreur(Format('%s: %s', [{$I %FILE%}, {$I %LINE%}]));
-    // lister les séries
-    AfficherMessage('-> Read section: ' + GTX_KEY_SECTION_SERIES);
-    EWE := GHTopoRoot.FindNode(GTX_KEY_SECTION_SERIES);
-    if (EWE <> Nil) then
-    begin
-      ListeDesSeries := EWE.ChildNodes;
-      AfficherMessage(Format('%d séries', [ListeDesSeries.Count]));
-      for i := 0 to ListeDesSeries.Count - 1 do
-      begin
-        UneSerie := TObjSerie.Create;
-        try
-          UneSerie.ClearStations;
-          WU  := ListeDesSeries.Item[i];
-          qIdxSerie    := TNumeroSerie(ExtractIntOfNode(WU, GTX_ATTR_SERIE_Numero, 0));
-          UneSerie.SetNumeroSerie(qIdxSerie);
-          UneSerie.SetNomSerie(ExtractStringOfNode(WU, GTX_ATTR_SERIE_NAME));
-          UneSerie.SetObsSerie(ExtractStringOfNode(WU, GTX_ATTR_SERIE_OBS));
-          //AfficherMessageErreur(Format('%s: %s - %s', [{$I %FILE%}, {$I %LINE%}, UneSerie.GetNomSerie()]));
-          qSerDepart  := ExtractIntOfNode(WU, GTX_ATTR_SERIE_SERDEP, 0);
-
-          qPtDepart   := ExtractIntOfNode(WU, GTX_ATTR_SERIE_PTDEP , 0);
-          qSerArrivee := ExtractIntOfNode(WU, GTX_ATTR_SERIE_SERARR, 0);
-          qPtArrivee  := ExtractIntOfNode(WU, GTX_ATTR_SERIE_PTARR , 0);
-          UneSerie.SetSeriePtExtremites(qSerDepart, qPtDepart, qSerArrivee, qPtArrivee);
-          UneSerie.SetChance(ExtractIntOfNode(WU, GTX_ATTR_SERIE_CHANCE, 0));
-          UneSerie.SetObstacle(ExtractIntOfNode(WU, GTX_ATTR_SERIE_OBSTACLE, 0));
-          UneSerie.SetNumeroEntrance(TNumeroEntrance(ExtractIntOfNode(WU, GTX_ATTR_SERIE_ENTRANCE, 0)));
-          UneSerie.SetNumeroReseau(TNumeroReseau(ExtractIntOfNode(WU, GTX_ATTR_SERIE_RESEAU, 0)));
-          UneSerie.SetRaideur(ExtractRealOfNode(WU, GTX_ATTR_SERIE_RAIDEUR, 1.00));
-          UneSerie.SetCouleur(clBlue);
-
-          // les stations
-          QAT := WU.FindNode(GTX_KEY_STATIONS);
-          if (QAT <> NIL) then
-          begin
-            ListeStations := QAT.ChildNodes;
-            //AfficherMessage(Format('Série %d %s - %d stations', [UneSerie.GetIndexSerie, UneSerie.GetNomSerie, ListeStations.Count]));
-            for St := 0 to ListeStations.Count - 1 do
-            begin
-              try
-                WOK := ListeStations.Item[St];
-                UneVisee.NoVisee := St;
-                UneVisee.IDTerrainStation := ExtractStringOfNode(WOK, GTX_ATTR_VISEE_LBL);
-                UneVisee.IDSecteur        := ExtractIntOfNode(WOK, GTX_ATTR_VISEE_SECTEUR, 0);
-                UneVisee.TypeVisee        := TTypeDeVisee(ExtractIntOfNode(WOK, GTX_ATTR_VISEE_TYPE, 0));
-
-                UneVisee.Code             := TNumeroCode(ExtractIntOfNode(WOK, GTX_ATTR_VISEE_CODE, 0));
-                UneVisee.Expe             := TNumeroExpe(ExtractIntOfNode(WOK, GTX_ATTR_VISEE_EXPE, 0));
 
 
-                UneVisee.Longueur         := ExtractRealOfNode(WOK, GTX_ATTR_VISEE_LONG, 0.00);
-                UneVisee.Azimut           := ExtractRealOfNode(WOK, GTX_ATTR_VISEE_AZ  , 0.00);
-                UneVisee.Pente            := ExtractRealOfNode(WOK, GTX_ATTR_VISEE_P   , 0.00);
-
-                UneVisee.LG               := ExtractRealOfNode(WOK, GTX_ATTR_VISEE_LG  , 0.00);
-                UneVisee.LD               := ExtractRealOfNode(WOK, GTX_ATTR_VISEE_LD  , 0.00);
-                UneVisee.HZ               := ExtractRealOfNode(WOK, GTX_ATTR_VISEE_HZ  , 0.00);
-                UneVisee.HN               := ExtractRealOfNode(WOK, GTX_ATTR_VISEE_HN  , 0.00);
-
-                UneVisee.Commentaires     := ExtractStringOfNode(WOK, GTX_ATTR_VISEE_OBS);
-
-                UneSerie.AddVisee(UneVisee);
-              except
-              end;
-            end; // for stations
-            self.AddSerie(UneSerie);
-          end;
-        except // try séries
-        end;
-      end;  // for séries
-    end;
-    AfficherMessageErreur(Format('%s: %s', [{$I %FILE%}, {$I %LINE%}]));
-    // lister les antennes
-    EWE := GHTopoRoot.FindNode(GTX_KEY_SECTION_ANTENNAS);
-    if (EWE <> Nil) then
-    begin
-      ListeDesAntennes := EWE.ChildNodes;
-      for i := 0 to ListeDesAntennes.Count - 1 do
-      begin
-        try
-          if (i mod 2000 = 0) then AfficherMessage(Format('Antenne %d of %d', [i, ListeDesAntennes.Count]), false);
-          WU := ListeDesAntennes.Item[i];
-          //UneViseeAntenne.IDTerrainStation   := ExtractStringOfNode(WU, GTX_KEY_ANTENNA_LABEL);
-          UneViseeAntenne.Reseau             := ExtractIntOfNode(WU, GTX_KEY_ANTENNA_NETWORK  , 0);
-          UneViseeAntenne.Secteur            := ExtractIntOfNode(WU, GTX_KEY_ANTENNA_SECTEUR  , 0);
-          UneViseeAntenne.SerieDepart        := ExtractIntOfNode(WU, GTX_KEY_ANTENNA_SERIE    , 0);
-          UneViseeAntenne.PtDepart           := ExtractIntOfNode(WU, GTX_KEY_ANTENNA_POINT    , 0);
-          UneViseeAntenne.Longueur           := ExtractRealOfNode(WU, GTX_KEY_ANTENNA_LONG, 0.00);
-          UneViseeAntenne.Azimut             := ExtractRealOfNode(WU, GTX_KEY_ANTENNA_AZIMUT, 0.00);
-          UneViseeAntenne.Pente              := ExtractRealOfNode(WU, GTX_KEY_ANTENNA_PENTE, 0.00);
-          //UneViseeAntenne.Commentaires       := ExtractStringOfNode(WU, GTX_KEY_ANTENNA_OBS);
-          UneViseeAntenne.MarkedForDelete    := false;
-          self.AddViseeAntenne(UneViseeAntenne);
-        except
-        end;
-      end;
-    end;
-    AfficherMessageErreur(Format('%s: %s', [{$I %FILE%}, {$I %LINE%}]));
-    //**************************
-    self.SetDatabaseName(ExtractFileNameWithoutExt(FichierXML));
-    VerifieSerie1();                // Cause courante de plantages: Absence de la série 1
-    CheckerLesDonneesTopo();
-    RecenserLesIDsTerrain();
-    RecenserPointsOfInterest();
-    SortCodes();
-    SortExpes();
-    //SortSeries(); TODO  Trier les séries ?
-    UneEntree := GetEntrance(0);
-    self.SetRefSeriePoint(UneEntree.eRefSer, UneEntree.eRefSt);
-    self.SetDefaultCoords(UneEntree.eXEntree, UneEntree.eYEntree, UneEntree.eZEntree);
-    //****************************
-    Result := self.GetNbSeries();
-  finally
-    FreeAndNil(MyDocXML);//MyDocXML.Free;
-  end;
-end;
 
 
 
@@ -5444,7 +3626,6 @@ var
   SR: TObjSerie;
   VS: TUneVisee;
   i, j: Integer;
-  WU1, WU2: String;
 begin
   Result := False;
   for i := 1 to GetNbSeries - 1 do
@@ -5456,12 +3637,8 @@ begin
       // test sur l'ID de série et station
       if ((VA.SerieDepart = SR.GetNumeroDeSerie()) and (VA.PtDepart = j)) then
       begin
-        //VA.IDTerrainStation := VS.IDTerrainStation;
-        //VA.Code        := VS.Code;
-        //VA.Expe        := VS.Expe;
         VA.Secteur     := VS.IDSecteur;
         VA.Reseau      := SR.GetNumeroReseau();
-        //VA.IDTerrainStation := '';
         Result := True;
         Exit;
       end;
@@ -5477,196 +3654,6 @@ function TToporobotStructure2012.ExtractViseesAntennesOfStation(const NoSerie: T
 begin
   Result := FTableViseesAntenne.ExtractAntennesFromBasePoint(NoSerie, NoStation, False, ArrAntennesFound);
 end;
-
-
-
-
-// pour le moment, on exporte au format Text de Toporobot
-// Statut: OK, mais des détails à revoir.
-// Entrées multiples OK
-// Nota: Support du TLM330 non implémenté volontairement
-//*)
-procedure TToporobotStructure2012.ExporterVersToporobotTEXT(const QFileName: TStringDirectoryFilename;
-                                                            const LongueurMaxAntenne: double;
-                                                            const DoExportAntennaShots: boolean);
-                                                            deprecated 'Le format TOPOROBOT Text est peu pratique';
-var
-  fp: TextFile;
-  EWE: String;
-  myEntree: TEntrance;
-  i, Nb, j, NbV: Integer;
-  myExpe: TExpe;
-  myCode: TCode;
-  mySerie: TObjSerie;
-  myVisee: TUneVisee;
-  NbA: Integer;
-  k: Integer;
-  myAntenne: TViseeAntenne;
-  q: Integer;
-  zdar: String;
-  function makeColonnesEnTete(const IsCommentaire: boolean;
-                              const Section, ID1, ID2, ID3, ID4: integer): string;
-  begin
-    Result := IIF(IsCommentaire, '(', ' ') +
-              FormatterFixedColumn(Format(FORMAT_NB_INTEGER, [Section]), 5, taRightJustify) +
-              FormatterFixedColumn(Format(FORMAT_NB_INTEGER, [ID1])    , 6, taRightJustify) +
-              FormatterFixedColumn(Format(FORMAT_NB_INTEGER, [ID2])    , 4, taRightJustify) +
-              FormatterFixedColumn(Format(FORMAT_NB_INTEGER, [ID3])    , 4, taRightJustify) +
-              FormatterFixedColumn(Format(FORMAT_NB_INTEGER, [ID4])    , 4, taRightJustify);
-  end;
-begin
-  AfficherMessage(Format('%s.ExporterVersToporobotTEXT: %s', [ClassName, QFileName]));
-  AssignFile(fp, QFileName);
-  try
-    ReWrite(fp);
-    // section -6 = entrée
-    Nb := GetNbEntrances();
-    for i := 0 to Nb - 1 do
-    begin
-      myEntree := self.GetEntrance(i);
-      EWE := makeColonnesEnTete(false, -6, i + 1, 1, 1, 1) + ' ' + myEntree.eNomEntree;
-      WriteLn(fp, EWE);
-    end;
-    for i := 0 to Nb - 1 do
-    begin
-      myEntree := self.GetEntrance(i);
-      // section -5 = Coordonnées
-      //-5     1   1   1   1   629000.72   178000.68     1777.71     1     0
-      EWE := makeColonnesEnTete(false, -5, i+1, 1, 1, 1) +
-             FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [myEntree.eXEntree]), 12, taRightJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [myEntree.eYEntree]), 12, taRightJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [myEntree.eZEntree]), 12, taRightJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_INTEGER,    [myEntree.eRefSer]), 6, taRightJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_INTEGER,    [myEntree.eRefSt]), 6, taRightJustify);
-      WriteLn(fp, EWE);
-    end;
-
-    // section -4: Horodatage
-    //-4     1   1   1   1 14/12/08 11:47:22  Guest
-    for i := 1 to 2 do
-    begin
-      EWE := makeColonnesEnTete(false, -4, i, 1, 1, 1) +
-             FormatterFixedColumn(FormatterDateHeureToporobot(Now), 18, taRightJustify) +
-             '  ' + 'Guest';
-      WriteLn(fp, EWE);
-    end;
-    // Section -3: Inutilisée
-    EWE := makeColonnesEnTete(false, -3, 1, 1, 1, 1);
-    WriteLn(fp, EWE);
-    // Section -2: Expés
-    // -2     1   1   1   1 25/08/07  MCH           AH            1    0.00   0   1
-    Nb := self.GetNbExpes;
-    for i := 1 to Nb - 1 do
-    begin
-      myExpe := GetExpe(i);
-      {$WARNING: TEXpe.DateExpe à implementer}
-      EWE := makeColonnesEnTete(false, -2, myExpe.IDExpe, 1, 1, 1) +
-             FormatterFixedColumn(Format('%.2d/%.2d/%.2d', [myExpe.JourExpe, myExpe.MoisExpe, myExpe.AnneeExpe mod 100]), 9, taRightJustify) +
-             '  ' +
-             FormatterFixedColumn(myExpe.Operateur, 13, taLeftJustify) + ' ' +
-             FormatterFixedColumn(myExpe.ClubSpeleo, 13, taLeftJustify) + ' ' +
-             FormatterFixedColumn(Format(FORMAT_NB_INTEGER, [0]), 2, taLeftJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [0.00]), 7, taRightJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_INTEGER, [0]), 4, taRightJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_INTEGER, [1]), 4, taRightJustify);
-      WriteLn(fp, EWE);
-    end;
-    // Section -1: Codes
-    //-1     1   1   1   1  360.00  360.00    0.05    1.00    1.00  100.00  100.00
-    Nb := self.GetNbCodes;
-    for i := 1 to Nb - 1 do
-    begin
-      myCode := GetCode(i);
-      EWE := makeColonnesEnTete(false, -1, myCode.IDCode, 1, 1, 1) +
-             FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [myCode.GradAz]), 8, taRightJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [myCode.GradInc]), 8, taRightJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [0.05]), 8, taRightJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [1.00]), 8, taRightJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [1.00]), 8, taRightJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [100.00]), 8, taRightJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [100.00]), 8, taRightJustify);
-      WriteLn(fp, EWE);
-    end;
-    // Sections > 0 = séries
-    Nb := self.GetNbSeries;
-    for i := 1 to Nb - 1 do
-    begin
-      mySerie := GetSerie(i);
-      //1    -2   1   1   1 GALERIE D'ENTREE D10H10
-      EWE := makeColonnesEnTete(false, mySerie.GetNumeroDeSerie(), -2, 1, 1, 1) +
-             ' ' + mySerie.GetNomSerie;
-      WriteLn(fp, EWE);
-      //1    -1   1   1   1       1       0       1       6       6       3       0
-      EWE := makeColonnesEnTete(false, mySerie.GetNumeroDeSerie(), -1, 1, 1, 1) +
-             FormatterFixedColumn(Format(FORMAT_NB_INTEGER, [mySerie.GetNoSerieDep]), 8, taRightJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_INTEGER, [mySerie.GetNoPointDep]), 8, taRightJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_INTEGER, [mySerie.GetNoSerieArr]), 8, taRightJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_INTEGER, [mySerie.GetNoPointArr]), 8, taRightJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_INTEGER, [mySerie.GetNbVisees - 1]), 8, taRightJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_INTEGER, [mySerie.GetChance]), 8, taRightJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_INTEGER, [mySerie.GetObstacle]), 8, taRightJustify);
-      WriteLn(fp, EWE);
-      nbV := mySerie.GetNbVisees;
-      EWE := makeColonnesEnTete(false, mySerie.GetNumeroDeSerie(), 0, 1, 1, 1) +
-             FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [0.00]), 8, taRightJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [0.00]), 8, taRightJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [0.00]), 8, taRightJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [0.00]), 8, taRightJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [0.00]), 8, taRightJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [0.00]), 8, taRightJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [0.00]), 8, taRightJustify);
-      WriteLn(fp, EWE);
-      for j := 1 to nbV -1 do   // et non 'for j = 0 to nbV - 1'
-      begin
-        myVisee := mySerie.GetVisee(j);
-        EWE := makeColonnesEnTete(false, mySerie.GetNumeroDeSerie(), j, 1, myVisee.Code, myVisee.Expe) +
-               FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [myVisee.Longueur]), 8, taRightJustify) +
-               FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [myVisee.Azimut]), 8, taRightJustify) +
-               FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [myVisee.Pente]), 8, taRightJustify) +
-               FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [myVisee.LG]), 8, taRightJustify) +
-               FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [myVisee.LD]), 8, taRightJustify) +
-               FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [myVisee.HZ]), 8, taRightJustify) +
-               FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [myVisee.HN]), 8, taRightJustify);
-        WriteLn(fp, EWE);
-
-        // export des commentaires
-        q := 0;
-        zdar := Trim(myVisee.Commentaires);
-        if (zdar <> '') then
-        begin
-          EWE := makeColonnesEnTete(true, mySerie.GetNumeroDeSerie(), j, 0, myVisee.Code, myVisee.Expe) + ' ' + zdar;
-          WriteLn(fp, EWE);
-          q+=1;
-        end;
-        // exporter ici les visées en antenne
-        if (DoExportAntennaShots) then
-        begin
-          NbA := GetNbAntennes;
-          if (NbA > 0) then
-          begin
-            for k := 0 to NbA - 1 do
-            begin
-              myAntenne := GetViseeAntenne(k);
-              if ((myAntenne.SerieDepart = mySerie.GetNumeroDeSerie()) and
-                  (myAntenne.PtDepart    = j) and
-                  (myAntenne.Longueur < LongueurMaxAntenne)) then
-              begin
-                // PocketTopo stocke les antennes dans les commentaires du point d'accrochage
-                EWE := makeColonnesEnTete(true, myAntenne.SerieDepart, myAntenne.PtDepart, q, 0, 0) + //myAntenne.Code, myAntenne.Expe) +
-                       Format(' [%.2f %.1f %.1f]', [myAntenne.Longueur, myAntenne.Azimut, myAntenne.Pente]);
-                WriteLn(fp, EWE);
-                q += 1;
-              end;
-            end;
-          end;
-        end;
-      end;
-    end;
-  finally
-    CloseFile(fp);
-  end;
-end;
-
 procedure TToporobotStructure2012.ExportListeAntennesCSV(const FileName: TStringDirectoryFilename);
 var
   fp: TextFile;
@@ -5723,8 +3710,8 @@ const
            FORMAT_STRING;
 
 var
-  fp: TextFile;
-  EWE, QNomSerie: String;
+  fp : TextFile;
+  EWE: String;
   NbSeries, i, nv, v: Integer;
   MySerie: TObjSerie;
   MyReseau: TReseau;
@@ -5759,7 +3746,6 @@ begin
     for i := 0 to NbSeries - 1 do
     begin
       MySerie    := GetSerie(i);
-      QNomSerie  := MySerie.GetNomSerie();
       MyReseau   := GetReseau(MySerie.GetNumeroReseau());
       MyEntrance := GetEntrance(MySerie.GetNumeroEntrance());
       nv := MySerie.GetNbVisees();
@@ -5891,9 +3877,6 @@ begin
   NewStation.aSerie   := NewSerie;     NewStation.aStation := NewPoint;
   Result := MoveAntennesToAutreStation(OldStation, NewStation, DoDelete);
 end;
-
-
-
 
 procedure TToporobotStructure2012.RecenserLesIDsTerrain();
 var
@@ -6107,8 +4090,7 @@ end;
 
 procedure TToporobotStructure2012.RecenserPointsOfInterest();
 var
-  POI: TPointOfInterest;
-  NbSts, i, j, NbV: Integer;
+  i, j, NbV: Integer;
   MySerie: TObjSerie;
   MyVisee: TUneVisee;
   MyPOI  : TPointOfInterest;
@@ -6118,7 +4100,6 @@ var
 begin
   AfficherMessage(Format('%s.RecenserPointsOfInterest(%d series)', [ClassName, GetNbSeries()]));
   FTablePointsOfInterest.ClearListe();
-  NbSts := 0;
   for i := 0 to GetNbSeries() - 1 do
   begin
     MySerie := GetSerie(i);
@@ -6199,7 +4180,6 @@ function TToporobotStructure2012.getMaxIdxSerie(): TNumeroSerie;
 var
   nb, i: Integer;
   EWE: TObjSerie;
-  WU: TEntrance;
 begin
   Result := -1;
   nb     := self.GetNbSeries();
@@ -6220,31 +4200,7 @@ function TToporobotStructure2012.getMaxIdxSecteur(): integer;
 begin
   result := GetNbSecteurs();
 end;
-// import de données depuis des fichiers CSV
-procedure TToporobotStructure2012.AddEntrancesFromFile(const FileName: TStringDirectoryFilename; const DoReplaceExisting: boolean);
-begin
-  AfficherMessage(Format('%s.AddEntrancesFromFile: %s', [ClassName, FileName]));
-end;
-procedure TToporobotStructure2012.AddCodesFromFile(const FileName: TStringDirectoryFilename; const DoReplaceExisting: boolean);
-begin
-  AfficherMessage(Format('%s.AddCodesFromFile: %s', [ClassName, FileName]));
-end;
-procedure TToporobotStructure2012.AddExpesFromFile(const FileName: TStringDirectoryFilename; const DoReplaceExisting: boolean);
-begin
-  AfficherMessage(Format('%s.AddExpesFromFile: %s', [ClassName, FileName]));
-end;
-procedure TToporobotStructure2012.AddReseauxFromFile(const FileName: TStringDirectoryFilename; const DoReplaceExisting: boolean);
-begin
-  AfficherMessage(Format('%s.AddReseauxFromFile: %s', [ClassName, FileName]));
-end;
-procedure TToporobotStructure2012.AddSecteursFromFile(const FileName: TStringDirectoryFilename; const DoReplaceExisting: boolean);
-begin
-  AfficherMessage(Format('%s.AddSecteursFromFile: %s', [ClassName, FileName]));
-end;
-procedure TToporobotStructure2012.AddAntennesFromFile(const FileName: TStringDirectoryFilename; const DoReplaceExisting: boolean);
-begin
-  AfficherMessage(Format('%s.AddAntennesFromFile: %s', [ClassName, FileName]));
-end;
+
 
 // remplacement d'index
 procedure TToporobotStructure2012.ReplaceIndexSeriesInEntrances(const OldIndex, NewIndex: TNumeroSerie);
@@ -6293,7 +4249,6 @@ begin
 end;
 procedure TToporobotStructure2012.ReplaceIndexInAntennes(const OldIndex, NewIndex: integer; const ModeRemplacement: TModeRemplacementAntennes);
 var
-  EWE: String;
   Nb, i: Integer;
   MyAntenne: TViseeAntenne;
 begin
@@ -6406,279 +4361,7 @@ end;
 
 // Lecture/écriture au format XML
 // (futur format standard de GHTopo)
-procedure TToporobotStructure2012.SaveToXML(const FichierXML: TStringDirectoryFilename);
-const
-  IDX_MINI = 1;
-var
-  i: Integer;
-  MyDocXML          : TXMLDocument;
-  GHTopoRoot        : TDOMElement;
-  SectionGeneral    : TDOMElement;
-  SectionNamespaces : TDOMElement;
-  SectionFiltres    : TDOMElement;
-  SectionEntrances, SectionReseaux, SectionSecteurs   : TDOMElement;
-  SectionCodes, SectionSeances                        : TDOMElement;
-  SubSection, SubSubSection, SubSubSubSection         : TDOMElement;
-  SectionSeries         : TDOMElement;
-  SectionAntennes       : TDOMElement;
-  E  : TEntrance;
-  R  : TReseau;
-  SC : TSecteur;
-  C  : TCode;
-  EX : TExpe;
-  SER: TObjSerie;
-  ST : TUneVisee;
-  ANT: TViseeAntenne;
-  EPSG: TLabelSystemesCoordsEPSG;
-  //NV: TReleaseNotes;
-  FF: TFiltrePersonnalise;
-  S, QNbAntennes, QNbFiltres, QNbNameSpaces: Integer;
-  SS: TNameSpace;
-  procedure KWYXZ(const S666: string);
-  begin
-    AfficherMessage(Format('-- Writing "%s" section', [S666]));
-  end;
-begin
-  AfficherMessage(Format('%s.SaveToXML(%s)', [ClassName, FichierXML]));
-  MyDocXML := TXMLDocument.Create;
-  try
-    // racine du document = nom du logiciel
-    GHTopoRoot := MyDocXML.CreateElement('GHTopo');
-    MyDocXML.AppendChild(GHTopoRoot);
-    // section Général
-    SectionGeneral := MyDocXML.CreateElement(GTX_KEY_SECTION_GENERAL);
-      GHTopoRoot.AppendChild(SectionGeneral);
-      SubSection := MyDocXML.CreateElement(GTX_KEY_CAVITE);
-      //SubSection.SetAttribute(GTX_ATTR_NAMESPACE, PasStrToXMLStr(GetNameSpace()));
-      SubSection.SetAttribute(GTX_ATTR_NOM_ETUDE, PasStrToXMLStr(GetNomEtude()));
-      EPSG := GetCodeEPSGSystemeCoordonnees;
-      SubSection.SetAttribute(GTX_ATTR_COORDS_SYSTEM_EPSG, Format(FORMAT_NB_INTEGER, [EPSG.CodeEPSG]));
-      SubSection.SetAttribute(GTX_ATTR_COORDS_SYSTEM_NOM, PasStrToXMLStr(EPSG.NomEPSG));
-      SubSection.SetAttribute(GTX_ATTR_COMMENTAIRES_ETUDE, PasStrToXMLStr(GetCommentairesEtude));
-      SectionGeneral.AppendChild(SubSection);
-    // section Espaces de noms
-    QNbNameSpaces := self.GetNbNameSpaces();
-    if (QNbNameSpaces > 0) then
-    begin
-      SectionNamespaces := MyDocXML.CreateElement(GTX_KEY_SECTION_NAMESPACES);
-      GHTopoRoot.AppendChild(SectionNamespaces);
-      KWYXZ(GTX_KEY_SECTION_NAMESPACES);
-      for i := 0 to QNbNameSpaces - 1 do
-      begin
-        SS := GetNameSpace(i);
-        SubSection := MyDocXML.CreateElement(GTX_KEY_NAMESPACE);
-          SubSection.SetAttribute(GTX_ATTR_NAMESPACE             , Format(FORMAT_NB_INTEGER, [i]));
-          SubSection.SetAttribute(GTX_ATTR_NAMESPACE_NAME        , PasStrToXMLStr(SS.Nom));
-          SubSection.SetAttribute(GTX_ATTR_COLOR_R     , Format(FORMAT_NB_INTEGER, [Red(SS.Couleur)]));
-          SubSection.SetAttribute(GTX_ATTR_COLOR_G     , Format(FORMAT_NB_INTEGER, [Green(SS.Couleur)]));
-          SubSection.SetAttribute(GTX_ATTR_COLOR_B     , Format(FORMAT_NB_INTEGER, [Blue(SS.Couleur)]));
-          SubSection.SetAttribute(GTX_ATTR_NAMESPACE_DESCRIPTION , PasStrToXMLStr(SS.Description));
-        SectionNamespaces.AppendChild(SubSection);
-      end;
-    end;
 
-    // section Filtres perso
-    QNbFiltres := self.GetNbFiltresPersos();
-    if (QNbFiltres > 0) then
-    begin
-      SectionFiltres := MyDocXML.CreateElement(GTX_KEY_SECTION_FILTERS);
-      GHTopoRoot.AppendChild(SectionFiltres);
-      KWYXZ(GTX_KEY_SECTION_FILTERS);
-      for i := 0 to QNbFiltres - 1 do
-      begin
-        FF := GetFiltrePerso(i);
-        SubSection := MyDocXML.CreateElement(GTX_KEY_FILTER);
-          SubSection.SetAttribute(GTX_ATTR_FILTER_IDX        , Format(FORMAT_NB_INTEGER, [i]));
-          SubSection.SetAttribute(GTX_ATTR_FILTER_NAME       , PasStrToXMLStr(FF.NomFiltre));
-          SubSection.SetAttribute(GTX_ATTR_COLOR_R           , Format(FORMAT_NB_INTEGER, [Red(FF.CouleurFiltre)]));
-          SubSection.SetAttribute(GTX_ATTR_COLOR_G           , Format(FORMAT_NB_INTEGER, [Green(FF.CouleurFiltre)]));
-          SubSection.SetAttribute(GTX_ATTR_COLOR_B           , Format(FORMAT_NB_INTEGER, [Blue(FF.CouleurFiltre)]));
-          SubSection.SetAttribute(GTX_ATTR_FILTER_EXPRESSION , PasStrToXMLStr(FF.Expression));
-          SubSection.SetAttribute(GTX_ATTR_FILTER_DESCRIPTION, PasStrToXMLStr(FF.Description));
-        SectionFiltres.AppendChild(SubSection);
-      end;
-    end;
-    // section Entrées
-    SectionEntrances := MyDocXML.CreateElement(GTX_KEY_SECTION_ENTRANCES);
-      GHTopoRoot.AppendChild(SectionEntrances);
-      KWYXZ(GTX_KEY_SECTION_ENTRANCES);
-      for i:= 0 to GetNbEntrances() - 1 do
-      begin
-        E := GetEntrance(i);
-        SubSection := MyDocXML.CreateElement(GTX_KEY_ENTRANCE);
-          SubSection.SetAttribute(GTX_ATTR_ENTRANCE_IDX      , Format(FORMAT_NB_INTEGER, [i]));
-          SubSection.SetAttribute(GTX_ATTR_ENTRANCE_IDTERRAIN, Format(FORMAT_STRING, [PasStrToXMLStr(E.eIDTerrain)]));
-          SubSection.SetAttribute(GTX_ATTR_ENTRANCE_NAME     , Format(FORMAT_STRING, [PasStrToXMLStr(E.eNomEntree)]));
-          SubSection.SetAttribute(GTX_ATTR_ENTRANCE_REFSERIE , Format(FORMAT_NB_INTEGER, [E.eRefSer]));
-          SubSection.SetAttribute(GTX_ATTR_ENTRANCE_REFPT    , Format(FORMAT_NB_INTEGER, [E.eRefSt]));
-          SubSection.SetAttribute(GTX_ATTR_ENTRANCE_X, Format(FORMAT_NB_REAL_3_DEC, [E.eXEntree]));
-          SubSection.SetAttribute(GTX_ATTR_ENTRANCE_Y, Format(FORMAT_NB_REAL_3_DEC, [E.eYEntree]));
-          SubSection.SetAttribute(GTX_ATTR_ENTRANCE_Z, Format(FORMAT_NB_REAL_3_DEC, [E.eZEntree]));
-          SubSection.SetAttribute(GTX_ATTR_ENTRANCE_COLOR, ColorToGHTopoColor(E.eCouleur));
-          SubSection.SetAttribute(GTX_ATTR_ENTRANCE_OBS, PasStrToXMLStr(E.eObserv));
-        SectionEntrances.AppendChild(SubSection);
-      end;
-    // section Réseaux (5 champs sur 5)
-    SectionReseaux := MyDocXML.CreateElement(GTX_KEY_SECTION_RESEAUX);
-      KWYXZ(GTX_KEY_SECTION_RESEAUX);
-      GHTopoRoot.AppendChild(SectionReseaux);
-      for i := IDX_MINI to GetNbReseaux - 1 do
-      begin
-        R := GetReseau(i);
-        SubSection := MyDocXML.CreateElement(GTX_KEY_RESEAU);
-          SubSection.SetAttribute(GTX_ATTR_RESEAU_IDX, Format(FORMAT_NB_INTEGER, [i]));
-          SubSection.SetAttribute(GTX_ATTR_COLOR_R, Format(FORMAT_NB_INTEGER, [Red(R.ColorReseau)]));
-          SubSection.SetAttribute(GTX_ATTR_COLOR_G, Format(FORMAT_NB_INTEGER, [Green(R.ColorReseau)]));
-          SubSection.SetAttribute(GTX_ATTR_COLOR_B, Format(FORMAT_NB_INTEGER, [Blue(R.ColorReseau)]));
-          SubSection.SetAttribute(GTX_ATTR_RESEAU_TYPE, Format(FORMAT_NB_INTEGER, [R.TypeReseau]));
-          SubSection.SetAttribute(GTX_ATTR_RESEAU_NAME,  PasStrToXMLStr(R.NomReseau));
-          SubSection.SetAttribute(GTX_ATTR_RESEAU_OBS,  PasStrToXMLStr(R.ObsReseau));
-        SectionReseaux.AppendChild(SubSection);
-      end;
-    // section Secteurs (5 champs sur 5)
-    SectionSecteurs := MyDocXML.CreateElement(GTX_KEY_SECTION_SECTEURS);
-      KWYXZ(GTX_KEY_SECTION_SECTEURS);
-      GHTopoRoot.AppendChild(SectionSecteurs);
-      for i := IDX_MINI to GetNbSecteurs - 1 do
-      begin
-        SC := GetSecteur(i);
-        SubSection := MyDocXML.CreateElement(GTX_KEY_SECTEUR);
-          SubSection.SetAttribute(GTX_ATTR_SECTEUR_IDX    , Format(FORMAT_NB_INTEGER, [i]));
-          SubSection.SetAttribute(GTX_ATTR_COLOR_R, Format(FORMAT_NB_INTEGER, [Red(SC.CouleurSecteur)]));
-          SubSection.SetAttribute(GTX_ATTR_COLOR_G, Format(FORMAT_NB_INTEGER, [Green(SC.CouleurSecteur)]));
-          SubSection.SetAttribute(GTX_ATTR_COLOR_B, Format(FORMAT_NB_INTEGER, [Blue(SC.CouleurSecteur)]));
-          SubSection.SetAttribute(GTX_ATTR_SECTEUR_NAME   , PasStrToXMLStr(SC.NomSecteur));
-        SectionSecteurs.AppendChild(SubSection);
-      end;
-
-    // section Codes -- Champs OK
-    SectionCodes := MyDocXML.CreateElement(GTX_KEY_SECTION_CODES);
-      KWYXZ(GTX_KEY_SECTION_CODES);
-      GHTopoRoot.AppendChild(SectionCodes);
-      for i := IDX_MINI to GetNbCodes - 1 do
-      begin
-        C := GetCode(i);
-        SubSection := MyDocXML.CreateElement(GTX_KEY_CODE);
-          SubSection.SetAttribute(GTX_ATTR_CODE_NUMERO                     , Format(FORMAT_NB_INTEGER, [C.IDCode]));                   //  IDCode
-          SubSection.SetAttribute(GTX_ATTR_CODE_TYPE                       , Format(FORMAT_NB_INTEGER, [0])); //C.ReservedInt]));              //  ReservedInt
-          // TODO: Support de FactLong a valider
-          SubSection.SetAttribute(GTX_ATTR_CODE_FACT_LONG                  , Format(FORMAT_NB_REAL_3_DEC, [1.00])); ///// SubSection.SetAttribute(GTX_ATTR_CODE_FACT_LONG     , Format(FORMAT_NB_REAL_3_DEC, [C.FactLong]));               //  FactLong    : double; // pour compatibilité ascendante
-          SubSection.SetAttribute(GTX_ATTR_CODE_UCOMPASS                   , Format(FORMAT_NB_REAL_2_DEC, [C.GradAz]));                 //  GradAz
-          SubSection.SetAttribute(GTX_ATTR_CODE_UCLINO                     , Format(FORMAT_NB_REAL_2_DEC, [C.GradInc]));                //  GradInc     : double;
-          SubSection.SetAttribute(GTX_ATTR_CODE_ANGLIMITE                  , Format(FORMAT_NB_REAL_2_DEC, [C.AngLimite]));              //  AngLimite   : double;
-          SubSection.SetAttribute(GTX_ATTR_CODE_PSI_L                      , Format(FORMAT_NB_REAL_3_DEC, [C.PsiL]));                   //  PsiL        : double;
-          SubSection.SetAttribute(GTX_ATTR_CODE_PSI_A                      , Format(FORMAT_NB_REAL_3_DEC, [C.PsiAz]));                  //  PsiAz       : double;
-          SubSection.SetAttribute(GTX_ATTR_CODE_PSI_P                      , Format(FORMAT_NB_REAL_3_DEC, [C.PsiP]));                   //  PsiP        : double;
-          SubSection.SetAttribute(GTX_ATTR_CODE_ERROR_TOURILLON            , Format(FORMAT_NB_REAL_3_DEC, [C.ErreurTourillon]));
-          SubSection.SetAttribute(GTX_ATTR_CODE_DIAM_BOULE1                , Format(FORMAT_NB_REAL_3_DEC, [C.DiametreBoule1]));
-          SubSection.SetAttribute(GTX_ATTR_CODE_DIAM_BOULE2                , Format(FORMAT_NB_REAL_3_DEC, [C.DiametreBoule1]));
-
-
-          SubSection.SetAttribute(GTX_ATTR_CODE_OBS                        , PasStrToXMLStr(C.Commentaire));                              //  Commentaire : string;
-          SubSection.SetAttribute(GTX_ATTR_CODE_FUNC_CORR_AZ_CO            , Format(FORMAT_NB_REAL_6_DEC, [C.ParamsFuncCorrAz.Co]));
-          SubSection.SetAttribute(GTX_ATTR_CODE_FUNC_CORR_AZ_ERR_MAX       , Format(FORMAT_NB_REAL_6_DEC, [C.ParamsFuncCorrAz.ErreurMax]));
-          SubSection.SetAttribute(GTX_ATTR_CODE_FUNC_CORR_AZ_POS_ERR_MAX   , Format(FORMAT_NB_REAL_6_DEC, [C.ParamsFuncCorrAz.PosErrMax]));
-          SubSection.SetAttribute(GTX_ATTR_CODE_FUNC_CORR_INC_CO           , Format(FORMAT_NB_REAL_6_DEC, [C.ParamsFuncCorrInc.Co]));
-          SubSection.SetAttribute(GTX_ATTR_CODE_FUNC_CORR_INC_ERR_MAX      , Format(FORMAT_NB_REAL_6_DEC, [C.ParamsFuncCorrInc.ErreurMax]));
-          SubSection.SetAttribute(GTX_ATTR_CODE_FUNC_CORR_INC_POS_ERR_MAX  , Format(FORMAT_NB_REAL_6_DEC, [C.ParamsFuncCorrInc.PosErrMax]));
-
-        SectionCodes.AppendChild(SubSection);
-      end;
-    // section Expés - Champs OK
-    SectionSeances := MyDocXML.CreateElement(GTX_KEY_SECTION_EXPES);
-      KWYXZ(GTX_KEY_SECTION_EXPES);
-      GHTopoRoot.AppendChild(SectionSeances);
-      for i := IDX_MINI to GetNbExpes - 1 do
-      begin
-        EX := GetExpe(i);
-        {$WARNING: TEXpe.DateExpe à implementer}
-        SubSection := MyDocXML.CreateElement(GTX_KEY_EXPE);
-          SubSection.SetAttribute(GTX_ATTR_EXPE_NUMERO   , Format(FORMAT_NB_INTEGER   , [EX.IDExpe]));                                             // IDExpe      : integer;
-          SubSection.SetAttribute(GTX_ATTR_EXPE_DATE     , DateYYYYMMDDToDateSQL(EX.AnneeExpe, EX.MoisExpe, EX.JourExpe));    // JourExpe    : integer;MoisExpe    : integer;AnneeExpe   : integer;
-          SubSection.SetAttribute(GTX_ATTR_EXPE_IDXCOLOR , Format(FORMAT_NB_INTEGER   , [EX.IdxCouleur]));                                            // //Couleur     : Integer;
-          SubSection.SetAttribute(GTX_ATTR_EXPE_DECLINAT , Format(FORMAT_NB_REAL_6_DEC, [EX.DeclinaisonInDegrees]));                                      // Declinaison : double;
-          SubSection.SetAttribute(GTX_ATTR_EXPE_MODEDECL , Format(FORMAT_NB_INTEGER   , [Ord(EX.ModeDecl)]));                                           // ModeDecl    : integer; // deprecated;
-          SubSection.SetAttribute(GTX_ATTR_EXPE_INCLINAT , Format(FORMAT_NB_REAL_6_DEC, [0.00])); //EX.Inclinaison]));                                      //  Inclinaison : double;
-          SubSection.SetAttribute(GTX_ATTR_EXPE_SURVEY1  , PasStrToXMLStr(EX.Operateur));                                                          // Speleometre : String;
-          SubSection.SetAttribute(GTX_ATTR_EXPE_SURVEY2  , PasStrToXMLStr(EX.ClubSpeleo));                                                         //  Speleographe: string;
-          SubSection.SetAttribute(GTX_ATTR_EXPE_OBS      , PasStrToXMLStr(EX.Commentaire));                                                        //  Commentaire : string;
-        SectionSeances.AppendChild(SubSection);
-      end;
-    // section Séries
-    SectionSeries := MyDocXML.CreateElement(GTX_KEY_SECTION_SERIES);
-      GHTopoRoot.AppendChild(SectionSeries);
-      KWYXZ(GTX_KEY_SECTION_SERIES);
-      for i := IDX_MINI to GetNbSeries - 1 do
-      begin
-        SER := GetSerie(i);
-        SubSection := MyDocXML.CreateElement(GTX_KEY_SERIE);
-          SubSection.SetAttribute(GTX_ATTR_SERIE_Numero  , Format(FORMAT_NB_INTEGER, [SER.GetNumeroDeSerie()]));
-          SubSection.SetAttribute(GTX_ATTR_SERIE_NAME    , SER.GetNomSerie);
-          SubSection.SetAttribute(GTX_ATTR_SERIE_ENTRANCE, Format(FORMAT_NB_INTEGER, [SER.GetNumeroEntrance()]));
-          SubSection.SetAttribute(GTX_ATTR_SERIE_RESEAU  , Format(FORMAT_NB_INTEGER, [SER.GetNumeroReseau]));
-          SubSection.SetAttribute(GTX_ATTR_SERIE_SERDEP  , Format(FORMAT_NB_INTEGER, [SER.GetNoSerieDep()]));
-          SubSection.SetAttribute(GTX_ATTR_SERIE_PTDEP   , Format(FORMAT_NB_INTEGER, [SER.GetNoPointDep()]));
-          SubSection.SetAttribute(GTX_ATTR_SERIE_SERARR  , Format(FORMAT_NB_INTEGER, [SER.GetNoSerieArr()]));
-          SubSection.SetAttribute(GTX_ATTR_SERIE_PTARR   , Format(FORMAT_NB_INTEGER, [SER.GetNoPointArr()]));
-          SubSection.SetAttribute(GTX_ATTR_SERIE_COLOR   , Format(FORMAT_STRING, [ColorToHTMLColor(SER.GetCouleur())]));
-          SubSection.SetAttribute(GTX_ATTR_SERIE_CHANCE  , Format(FORMAT_NB_INTEGER, [SER.GetChance]));
-          SubSection.SetAttribute(GTX_ATTR_SERIE_OBSTACLE, Format(FORMAT_NB_INTEGER, [SER.GetObstacle]));
-          SubSection.SetAttribute(GTX_ATTR_SERIE_OBS     , PasStrToXMLStr(SER.GetObsSerie));
-          SubSection.SetAttribute(GTX_ATTR_SERIE_RAIDEUR , Format(FORMAT_NB_REAL_6_DEC, [SER.GetRaideur]));
-
-        SectionSeries.AppendChild(SubSection);
-        SubSubSection := MyDocXML.CreateElement(GTX_KEY_STATIONS);
-        SubSection.AppendChild(SubSubSection);
-        for S := 0 to SER.GetNbVisees - 1 do
-        begin
-          ST := SER.GetVisee(S);
-          SubSubSubSection := MyDocXML.CreateElement(GTX_KEY_VISEE);
-            SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_ID      , Format(FMTSERST, [SER.GetNumeroDeSerie(), S]));     //
-            SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_LBL     , PasStrToXMLStr(ST.IDTerrainStation));         // IDTerrainStation: string;
-            SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_SECTEUR , Format(FORMAT_NB_INTEGER, [ST.IDSecteur]));             // IDSecteur : integer;
-            SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_TYPE    , Format(FORMAT_NB_INTEGER, [Ord(ST.TypeVisee)]));           // TypeVisee : TTypeDeVisee;
-            SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_CODE    , Format(FORMAT_NB_INTEGER, [ST.Code]));                     // Code      : integer;
-            SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_EXPE    , Format(FORMAT_NB_INTEGER, [ST.Expe]));                     // Expe      : integer;
-            SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_LONG    , Format(FORMAT_NB_REAL_3_DEC, [ST.Longueur]));               // Longueur  : double;
-            SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_AZ      , Format(FORMAT_NB_REAL_3_DEC, [ST.Azimut]));                 // Azimut    : double;
-            SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_P       , Format(FORMAT_NB_REAL_3_DEC, [ST.Pente]));                  // Pente     : double;
-            SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_LG      , Format(FORMAT_NB_REAL_3_DEC, [ST.LG]));                     // LG        : double;
-            SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_LD      , Format(FORMAT_NB_REAL_3_DEC, [ST.LD]));                     // LD        : double;
-            SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_HZ      , Format(FORMAT_NB_REAL_3_DEC, [ST.HZ]));                     // HZ        : double;
-            SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_HN      , Format(FORMAT_NB_REAL_3_DEC, [ST.HN]));                     // HN        : double;
-            SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_OBS     , PasStrToXMLStr(ST.Commentaires));                             // Commentaires    : string;
-          SubSubSection.AppendChild(SubSubSubSection);
-        end;
-      end;
-    // section Antennes (à la fin du document XML)
-    QNbAntennes := GetNbAntennes();
-    if (QNbAntennes > 0) then
-    begin
-      SectionAntennes := MyDocXML.CreateElement(GTX_KEY_SECTION_ANTENNAS);
-      KWYXZ(GTX_KEY_SECTION_ANTENNAS);
-      GHTopoRoot.AppendChild(SectionAntennes);
-      for i := IDX_MINI to QNbAntennes - 1 do
-      begin
-        ANT := GetViseeAntenne(i);
-        SubSection := MyDocXML.CreateElement(GTX_KEY_ANTENNA_SHOT);
-          SubSection.SetAttribute(GTX_KEY_ANTENNA_NETWORK , Format(FORMAT_NB_INTEGER, [ANT.Reseau]));                      // Reseau              : integer;
-          SubSection.SetAttribute(GTX_KEY_ANTENNA_SECTEUR , Format(FORMAT_NB_INTEGER, [ANT.Secteur]));                     // Secteur             : integer;
-          SubSection.SetAttribute(GTX_KEY_ANTENNA_SERIE   , Format(FORMAT_NB_INTEGER, [ANT.SerieDepart]));                 // SerieDepart         : integer;
-          SubSection.SetAttribute(GTX_KEY_ANTENNA_POINT   , Format(FORMAT_NB_INTEGER, [ANT.PtDepart]));                    // PtDepart            : integer;
-          SubSection.SetAttribute(GTX_KEY_ANTENNA_LONG    , Format(FORMAT_NB_REAL_3_DEC, [ANT.Longueur]));                  // Longueur            : double;      //         'Longueur
-          SubSection.SetAttribute(GTX_KEY_ANTENNA_AZIMUT  , Format(FORMAT_NB_REAL_3_DEC, [ANT.Azimut]));                    // Azimut              : double;      //         'Azimut
-          SubSection.SetAttribute(GTX_KEY_ANTENNA_PENTE   , Format(FORMAT_NB_REAL_3_DEC, [ANT.Pente]));                     // Pente               : double;      //         'Pente
-        SectionAntennes.AppendChild(SubSection);
-      end;
-    end;
-    KWYXZ('--> Serializing XML file');
-    // sérialisation du fichier
-    WriteXMLFile(MyDocXML, FichierXML);
-    KWYXZ('--> Done');
-  finally
-    FreeAndNil(MyDocXML);//MyDocXML.Free;
-  end;
-end;
 //*****************************************************************************
 // Simplifier les visées en antenne d'une station
 procedure TToporobotStructure2012.ResetMarkersToDelete(); inline;
@@ -6691,8 +4374,7 @@ begin
   Result := FTableViseesAntenne.Purger();
 end;
 
-procedure TToporobotStructure2012.SimplifyAntennesOfStation(const QSerie: TNumeroSerie; const QPoint: integer;
-                                                            const Tolerance: double);
+procedure TToporobotStructure2012.SimplifyAntennesOfStation(const QSerie: TNumeroSerie; const QPoint: integer; const Tolerance: double);
 var
   MySerie: TObjSerie;
   QIdx: integer;
@@ -6889,6 +4571,23 @@ begin
   Result := (NbOccur > 1);
 end;
 
+// contrôles, tris et définition des références
+procedure TToporobotStructure2012.Preconditionner(const QFilename: TStringDirectoryFilename);
+var
+  UneEntree: TEntrance;
+begin
+   self.SetDatabaseName(ExtractFileNameWithoutExt(QFilename));
+   VerifieSerie1();                // Cause courante de plantages: Absence de la série 1
+   CheckerLesDonneesTopo();
+   RecenserLesIDsTerrain();
+   RecenserPointsOfInterest();
+   SortCodes();
+   SortExpes();
+   //SortSeries(); TODO  Trier les séries ?
+   UneEntree := GetEntrance(0);
+   self.SetRefSeriePoint(UneEntree.eRefSer, UneEntree.eRefSt);
+   self.SetDefaultCoords(UneEntree.eXEntree, UneEntree.eYEntree, UneEntree.eZEntree);
+end;
 
 (*
 procedure TToporobotStructure2012.SaveToJSON(const Filename: TStringDirectoryFilename);

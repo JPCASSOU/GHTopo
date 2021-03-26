@@ -127,6 +127,8 @@ var
 implementation
 
 {$R *.lfm}
+uses
+  DGCDummyUnit;
 
 { TdlgMaintenanceDocTopo }
 
@@ -236,7 +238,7 @@ begin
         if (CreateAndCopySerie(FDocTopo.GetSerie(i), MySerieCible)) then MySubsetXTB.AddSerie(MySerieCible);
       end;
     end;
-    MySubsetXTB.SaveToFile(QFilename, mtabEXTENDEDTAB, tfWINDOWS);
+    MySubsetXTB.SaveToXTB(QFilename, mtabEXTENDEDTAB, tfWINDOWS);
     // finalisation
     MySubsetXTB.Finaliser();
     // La série 1 du document original est détruite . Why ??? Réponse: Toujours ce pb de pointeur avec les TObjSerie. Résolu par CreateAndCopySerie();

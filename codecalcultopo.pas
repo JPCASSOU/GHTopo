@@ -1169,8 +1169,8 @@ var
     VS.LG               := 0.00;
     VS.HZ               := 0.00;
     VS.HN               := 0.00;
-    VS.Commentaires     := VA.Commentaires;
-    VS.IDTerrainStation := VA.IDTerrainStation;
+    VS.Commentaires     := ''; //VA.Commentaires;
+    VS.IDTerrainStation := ''; //VA.IDTerrainStation;
     VS.TypeVisee        := tgVISEE_RADIANTE;
     CalculerVisee(VS, MyCode, MyExpe, DX, DY, 1.00, DZ, DP);
 
@@ -1210,8 +1210,8 @@ var
     // couleur par défaut
     OutEE.CouleurDegrade:= FPalette256.GetColorByIndex(MyExpe.IdxCouleur); //clGray ;
     // commentaires
-    OutEE.IDTerrain     := VA.IDTerrainStation;
-    OutEE.oCommentaires := VA.Commentaires;
+    OutEE.IDTerrain     := ''; //VA.IDTerrainStation;
+    OutEE.oCommentaires := ''; //VA.Commentaires;
     OutEE.IsPOI         := false;
     // passage ici = OK
     result := true;
@@ -1284,7 +1284,6 @@ begin
   end;
   {$ENDIF MULTI_THREADING}
   t := Now() - t;
-  AfficherMessage('666');
   AfficherMessageErreur(Format('Temps de calcul des %d antennes: %.8f sec', [NbAntennes, t * 86400]));
   result := True;
 end;

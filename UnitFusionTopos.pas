@@ -306,7 +306,7 @@ begin
     end
     else
     begin // sinon, c'est un fichier supposé Tab ou XTB
-      if (FD.LoadFichierTab(QFilename)<0) then
+      if (FD.LoadFromXTB(QFilename)<0) then
       begin
         AfficherMessageErreur('Le fichier comporte des erreurs - Voir le rapport');
         Exit(false);

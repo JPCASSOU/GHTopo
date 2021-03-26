@@ -528,12 +528,12 @@ type
    Secteur             : TNumeroSecteur;
    SerieDepart         : TNumeroSerie;
    PtDepart            : integer;
-   IDTerrainStation    : string;
+   //IDTerrainStation    : string;
    Longueur            : double;      //         'Longueur
    Azimut              : double;      //         'Azimut
    Pente               : double;      //         'Pente
    MarkedForDelete     : boolean;
-   Commentaires        : string;
+   //Commentaires        : string;
 end;
 type TViseeAntenneFound = record
   Idx : Int64;
@@ -1152,7 +1152,6 @@ type TDistoXVersionFirmware  = type word;
 type TDistoXVersionHardware  = type word;
 
 type TMesureViseeDistoX = record
-  //TypeViseeDistoX : TTypeViseeDistoX;
   Device          : TDistoXSerialNumber;
   Longueur        : double;
   Azimut          : double;

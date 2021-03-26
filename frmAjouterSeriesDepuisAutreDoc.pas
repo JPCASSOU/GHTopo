@@ -466,7 +466,7 @@ begin
   end
   else
   begin // sinon, c'est un fichier supposé Tab ou XTB
-    if (FDocTopoAAjouter.LoadFichierTab(FC)<0) then
+    if (FDocTopoAAjouter.LoadFromXTB(FC)<0) then
     begin
       AfficherMessageErreur('Le fichier comporte des erreurs - Voir le rapport');
       // Echec = on détruit l'objet

@@ -435,14 +435,12 @@ begin
                           '%d, %d, %d, ' +
                           '%d, %d, '+
                           '%d, %d, '+
-                          '%.3f, %.3f, %.3f,'+
-                          '"%s")', [
+                          '%.3f, %.3f, %.3f)', [
                           -(NB_MAXI_SERIES_PAR_CAVITE * EWE.SerieDepart + MULTIPLICATEUR_STATION * EWE.PtDepart),
                           EWE.EntranceRatt, EWE.Reseau, EWE.Secteur,
                           0, 0, //, E.Code, EWE.Expe,           // Visées en antenne: Code et expés hérité de leur station d'accrochage
                           EWE.SerieDepart, EWE.PtDepart,
-                          EWE.Longueur, EWE.Azimut, EWE.Pente,
-                          mysqli_real_escape_string(EWE.Commentaires)]);
+                          EWE.Longueur, EWE.Azimut, EWE.Pente]);
         WU += IIF(i = (Nb - 1), ';', ', ');
         WriteLine(WU);
       end;

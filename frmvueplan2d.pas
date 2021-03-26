@@ -682,9 +682,9 @@ begin
   if (DoDialogSaveFile(GetResourceString(rsGHTOPO_FILE_FILTER_WO_TEXT), '.xtb', QFileName, QFilterIndex)) then
   begin
     case QFilterIndex of
-      1: FDocTopo.SaveToFile(QFileName,mtabEXTENDEDTAB, tfWINDOWS);
+      1: FDocTopo.SaveToXTB(QFileName,mtabEXTENDEDTAB, tfWINDOWS);
       2: FDocTopo.SaveToXML(QFileName); // futur format standard de GHTopo
-      3: FDocTopo.SaveToFile(QFileName,mtabTOPOROBOT, tfMAC);
+      3: FDocTopo.SaveToXTB(QFileName,mtabTOPOROBOT, tfMAC);
     end; // case FilterIndex
     // actualisation du nouveau nom de fichier
     FCurrentNomFichierXTB := QFileName;
