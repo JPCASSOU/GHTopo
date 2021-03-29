@@ -1276,7 +1276,7 @@ begin
             WrtLinFmt('%s.alert("Elément " + EWE + " introuvable");', [NAMEREF_WINDOW]);
           jsENDIF('');
         EndJSFunction();
-        // Redimensionner la carte
+        // Redimensionner la carte (en attente)
         BeginJSFunction(JS_FUNCTION_ONRESIZE, '');
           (*
           WrtLinFmt('var %s = %s.getElementById("%s");', [LOCAL_VAR_BARTITRE, NAMEREF_DOCUMENT, NAMEREF_BARRE_TITRE]);

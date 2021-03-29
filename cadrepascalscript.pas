@@ -188,7 +188,7 @@ type
                                       const NbX, NbY: integer; const Sens: byte): boolean;
     {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
     // display graphisme
-    function  PS2D_BeginDrawing(): boolean;
+    function  PS2D_BeginDrawing(const w, h: integer): boolean;
     procedure PS2D_EndAndDisplayDrawing();
     procedure PS2D_SetBackgroundColor(const R, G, B, A: byte);
     
@@ -491,45 +491,38 @@ begin
     sender.AddMethod(self     , @TCdrPascalScript.MNT_ExtractAltitudeFromXY          , 'function  MNT_ExtractAltitudeFromXY(const QX, QY: double; out QZ: double): boolean');
     sender.AddMethod(self     , @TCdrPascalScript.MNT_GenerateSetOfProfils           , 'function  MNT_GenerateSetOfProfils(const X1, Y1, X2, Y2, X3, Y3: double; const NbX, NbY: integer; const Sens: byte): boolean;');
   {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
-   // display graphisme
-    sender.AddMethod(self     , @TCdrPascalScript.PS2D_BeginDrawing                  , 'function  PS2D_BeginDrawing(): boolean;');
-    sender.AddMethod(self     , @TCdrPascalScript.PS2D_EndAndDisplayDrawing          , 'procedure PS2D_EndAndDisplayDrawing();');
+  // display graphisme
+  sender.AddMethod(self     , @TCdrPascalScript.PS2D_BeginDrawing                  , 'function  PS2D_BeginDrawing(const w, h: integer): boolean;');
+  sender.AddMethod(self     , @TCdrPascalScript.PS2D_EndAndDisplayDrawing          , 'procedure PS2D_EndAndDisplayDrawing();');
 
-    sender.AddMethod(self     , @TCdrPascalScript.PS2D_SetBackgroundColor            , 'procedure PS2D_SetBackgroundColor(const R, G, B, A: byte);');
-    EWE := 'function  PS2D_AddStyleSheet(const QStylename: string; ' +
-           'const QPenColorR, QPenColorG, QPenColorB, QPenOpacity: byte; const QPenWidtdhInPX: byte;' +
-           'const QBshColorR, QBshColorG, QBshColorB, QBshOpacity: byte; const QBshStyle: byte;' +
-           'const QFntName: string; const QFntColorR, QFntColorG, QFntColorB, QFntOpacity: byte;' +
-           'const QFntSizeInPX: byte; const QFntStyle: byte): integer;';
+  sender.AddMethod(self     , @TCdrPascalScript.PS2D_SetBackgroundColor            , 'procedure PS2D_SetBackgroundColor(const R, G, B, A: byte);');
+  EWE := 'function  PS2D_AddStyleSheet(const QStylename: string; ' +
+         'const QPenColorR, QPenColorG, QPenColorB, QPenOpacity: byte; const QPenWidtdhInPX: byte;' +
+         'const QBshColorR, QBshColorG, QBshColorB, QBshOpacity: byte; const QBshStyle: byte;' +
+         'const QFntName: string; const QFntColorR, QFntColorG, QFntColorB, QFntOpacity: byte;' +
+         'const QFntSizeInPX: byte; const QFntStyle: byte): integer;';
 
-    sender.AddMethod(self     , @TCdrPascalScript.PS2D_AddStyleSheet                 , EWE);
-    sender.AddMethod(self     , @TCdrPascalScript.PS2D_SetStyleSheet                 , 'procedure PS2D_SetStyleSheet(const Idx:integer);');
+  sender.AddMethod(self     , @TCdrPascalScript.PS2D_AddStyleSheet                 , EWE);
+  sender.AddMethod(self     , @TCdrPascalScript.PS2D_SetStyleSheet                 , 'procedure PS2D_SetStyleSheet(const Idx:integer);');
 
-    sender.AddMethod(self     , @TCdrPascalScript.PS2D_BeginPolyline                 , 'function  PS2D_BeginPolyline(const QName: string; const Closed: boolean): boolean;');
-    sender.AddMethod(self     , @TCdrPascalScript.PS2D_AddVertex                     , 'procedure PS2D_AddVertex(const QX, QY: double);');
-    sender.AddMethod(self     , @TCdrPascalScript.PS2D_EndPolyline                   , 'procedure PS2D_EndPolyline();');
-    sender.AddMethod(self     , @TCdrPascalScript.PS2D_AddTexte                      , 'function  PS2D_AddTexte(const QX, QY, AngleOrientation: double; const QAlignment:byte; const Texte: string): boolean;');
-    sender.AddMethod(self     , @TCdrPascalScript.PS2D_AddEllipse                    , 'function  PS2D_AddEllipse(const QX, QY, QR1, QR2: double): boolean;');
-    sender.AddMethod(self     , @TCdrPascalScript.PS2D_AddRectangle                  , 'function  PS2D_AddRectangle(const QX1, QY1, QX2, QY2: double): boolean;');
-    sender.AddMethod(self     , @TCdrPascalScript.PS2D_AddLine                       , 'function  PS2D_AddLine(const QX1, QY1, QX2, QY2: double): boolean;');
-    sender.AddMethod(self     , @TCdrPascalScript.FTP_BeginConnexion                 , 'function  FTP_BeginConnexion(const QHost: string; const QPort: integer; const QUser, QPassword: string;  out QReturnCode: integer; out QReturnMsg: string): boolean;');
-    sender.AddMethod(self     , @TCdrPascalScript.FTP_EndConnexion                   , 'procedure FTP_EndConnexion();');
-    sender.AddMethod(self     , @TCdrPascalScript.FTP_GetFileName                    , 'function  FTP_GetFileName(const Idx: integer): String;');
-    sender.AddMethod(self     , @TCdrPascalScript.FTP_GetNbFilesOfLast               , 'function  FTP_GetNbFilesOfLast(): integer;');
-    sender.AddMethod(self     , @TCdrPascalScript.FTP_ListFilenamesOf                , 'function  FTP_ListFilenamesOf(const Path: string): integer;');
-    sender.AddMethod(self     , @TCdrPascalScript.FTP_SendFile                       , 'function  FTP_SendFile(const QFilename: string): boolean;');
-    sender.AddMethod(self     , @TCdrPascalScript.FTP_SetRemoteDirectory             , 'procedure FTP_SetRemoteDirectory(const D: string);');
-    //sender.AddMethod(self     , @TCdrPascalScript.FTP_, '');
-    //sender.AddMethod(self     , @TCdrPascalScript.FTP_, '');
-    //sender.AddMethod(self     , @TCdrPascalScript.FTP_, '');
-
-
-
-
-
-
-
-
+  sender.AddMethod(self     , @TCdrPascalScript.PS2D_BeginPolyline                 , 'function  PS2D_BeginPolyline(const QName: string; const Closed: boolean): boolean;');
+  sender.AddMethod(self     , @TCdrPascalScript.PS2D_AddVertex                     , 'procedure PS2D_AddVertex(const QX, QY: double);');
+  sender.AddMethod(self     , @TCdrPascalScript.PS2D_EndPolyline                   , 'procedure PS2D_EndPolyline();');
+  sender.AddMethod(self     , @TCdrPascalScript.PS2D_AddTexte                      , 'function  PS2D_AddTexte(const QX, QY, AngleOrientation: double; const QAlignment:byte; const Texte: string): boolean;');
+  sender.AddMethod(self     , @TCdrPascalScript.PS2D_AddEllipse                    , 'function  PS2D_AddEllipse(const QX, QY, QR1, QR2: double): boolean;');
+  sender.AddMethod(self     , @TCdrPascalScript.PS2D_AddRectangle                  , 'function  PS2D_AddRectangle(const QX1, QY1, QX2, QY2: double): boolean;');
+  sender.AddMethod(self     , @TCdrPascalScript.PS2D_AddLine                       , 'function  PS2D_AddLine(const QX1, QY1, QX2, QY2: double): boolean;');
+  // transferts FTP
+  sender.AddMethod(self     , @TCdrPascalScript.FTP_BeginConnexion                 , 'function  FTP_BeginConnexion(const QHost: string; const QPort: integer; const QUser, QPassword: string;  out QReturnCode: integer; out QReturnMsg: string): boolean;');
+  sender.AddMethod(self     , @TCdrPascalScript.FTP_EndConnexion                   , 'procedure FTP_EndConnexion();');
+  sender.AddMethod(self     , @TCdrPascalScript.FTP_GetFileName                    , 'function  FTP_GetFileName(const Idx: integer): String;');
+  sender.AddMethod(self     , @TCdrPascalScript.FTP_GetNbFilesOfLast               , 'function  FTP_GetNbFilesOfLast(): integer;');
+  sender.AddMethod(self     , @TCdrPascalScript.FTP_ListFilenamesOf                , 'function  FTP_ListFilenamesOf(const Path: string): integer;');
+  sender.AddMethod(self     , @TCdrPascalScript.FTP_SendFile                       , 'function  FTP_SendFile(const QFilename: string): boolean;');
+  sender.AddMethod(self     , @TCdrPascalScript.FTP_SetRemoteDirectory             , 'procedure FTP_SetRemoteDirectory(const D: string);');
+  //sender.AddMethod(self     , @TCdrPascalScript.FTP_, '');
+  //sender.AddMethod(self     , @TCdrPascalScript.FTP_, '');
+  //sender.AddMethod(self     , @TCdrPascalScript.FTP_, '');
 end;
 
 //********************************************************************************
@@ -631,8 +624,6 @@ begin
   if (GHTopoQuestionOuiNon('Effacer le script courant')) then NewScript();
 end;
 
-
-
 procedure TCdrPascalScript.acPSExecuteExecute(Sender: TObject);
 var
   n, i: integer;
@@ -673,10 +664,7 @@ begin
     ResExec := (PSScriptDebugger1.Exec.RunScript and (PSScriptDebugger1.Exec.ExceptionCode = erNoError));
     if (not ResExec) then
     begin
-      EWE := Format('Run-time error: %d - %s', [
-                    PSScriptDebugger1.ExecErrorCode,
-                    PSScriptDebugger1.ExecErrorToString
-                    ]);
+      EWE := Format('Run-time error: %d - %s', [PSScriptDebugger1.ExecErrorCode, PSScriptDebugger1.ExecErrorToString]);
       lsbPSMessages.Items.Add(EWE);
     end;
     ShowMessage('Script terminé');
@@ -689,7 +677,6 @@ begin
     begin
       for i:= 0 to PSScriptDebugger1.CompilerMessageCount - 1 do
           DispPSCompilerMsg(PSScriptDebugger1.CompilerErrorToStr(i));
-
     end;
     lsbPSMessages.ItemIndex := lsbPSMessages.Count - 1;
     // se positionner au droit de l'erreur
@@ -1030,10 +1017,6 @@ begin
   V[6] := FormatterNombreOOo(MyVisee.Pente, 3);
   V[7] := MyVisee.Commentaires;
   //*)
-
-
-
-
 end;
 
 
@@ -1313,12 +1296,12 @@ begin
 end;
 {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
 // Graphisme 2D
-function TCdrPascalScript.PS2D_BeginDrawing(): boolean;
+function TCdrPascalScript.PS2D_BeginDrawing(const w, h: integer): boolean;
 begin
   result := false;
   FPSDrawing2D  := TdlgDispGraphisme2D.Create(self);
   try
-    if (FPSDrawing2D.Initialiser()) then
+    if (FPSDrawing2D.Initialiser(w, h)) then
     begin
       Result := true;
     end;
@@ -1404,7 +1387,6 @@ var
   EWE: String;
 begin
   Result := false;
-
   EWE := Format('%s.FTP_BeginConnexion()', [ClassName]);
   AfficherMessage(EWE);
   DispPSOutput(EWE);

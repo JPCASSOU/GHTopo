@@ -19,7 +19,7 @@ type
     FPolylineClosed       : boolean;
 
   public
-    function Initialiser(): boolean;
+    function Initialiser(const w, h: integer): boolean;
     procedure Finaliser();
     procedure SetBackgroundColor(const R, G, B, A: byte);
     function  AddStyleSheet(const QStylename: string;
@@ -47,8 +47,12 @@ implementation
 
 { TdlgDispGraphisme2D }
 
-function TdlgDispGraphisme2D.Initialiser(): boolean;
+function TdlgDispGraphisme2D.Initialiser(const w, h: integer): boolean;
 begin
+  self.Position     := poScreenCenter;
+  self.ClientWidth  := w;
+  self.ClientHeight := h;
+
   Result := CdrDGCDrawingContext1.Initialiser(-100, -100, 100, 100, True, clWhite);
   FCurrentIdxStyleSheet := 0;
   FPolylineClosed       := false;
