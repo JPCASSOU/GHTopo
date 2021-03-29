@@ -187,6 +187,7 @@ end;
      procedure SimplifyAntennesOfStation(const QSerie: TNumeroSerie; const QPoint: integer;
                                          const QCode : TCode; const QExpe : TExpe;
                                          const ToleranceSimplification: double);
+     //procedure ExportToCloudCompare(const FichierCSV: TStringDirectoryFilename);
 end;
 
 
@@ -765,6 +766,16 @@ begin
   end;
 end;
 
+(*
+procedure TTableViseesAntenne.ExportToCloudCompare(const FichierCSV: TStringDirectoryFilename);
+var
+  i, Nb: Integer;
+begin
+  Nb := GetNbElements();
+  AfficherMessage(format('%s.ExportToCloudCompare: %d data in "%s"', [Nb, FichierCSV]));
+
+end;
+//*)
 
 //******************************************************************************
 function TTableCodes.GetElementByIndex(const Idx: TNumeroCode): TCode;

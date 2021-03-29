@@ -310,7 +310,6 @@ implementation
 {.$UNDEF  DISP_FRM_VUEENPLAN}
 
 
-
 uses
   unitAnalyseReseau2
     {$IFDEF MSWINDOWS}

@@ -28,7 +28,7 @@ uses
   {$INCLUDE SelectionLangues.inc} // insère les unités en fonction de la langue
   StructuresDonnees,
   Common,
-  math,
+  math, Types,
   ToporobotClasses2012,
   UnitEntitesExtended,
   unitCroquisTerrain,
@@ -2188,7 +2188,57 @@ var
     FZP2 := MakeTPoint(QX, QY);
     CuiCui();
   end;
+  procedure QDrawEtiquette(const LBL: string);
+  var
+    TxtExtent: TSize;
+  begin
+    if (not FOverlayed) then
+    begin
+      if (QEtiquetteOk) then
+      begin
+        if (FEtiquetteOnSurvolPlan_First) then
+        begin
+          QEtiquetteRect1 := Rect(0, 0, FEtiquetteOnSurvolPlan_ow, FEtiquetteOnSurvolPlan_oh);
+          QEtiquetteRect2 := Rect(FEtiquetteOnSurvolPlan_ox                            , FEtiquetteOnSurvolPlan_oy - FEtiquetteOnSurvolPlan_oh,
+                                  FEtiquetteOnSurvolPlan_ox + FEtiquetteOnSurvolPlan_ow, FEtiquetteOnSurvolPlan_oy);
+          Vue.Canvas.CopyRect(QEtiquetteRect2, FEtiquetteOnSurvolPlan_Tampon.Canvas, QEtiquetteRect1);
+        end;
+        {on récupère les dimensions du rectangle de texte}
+        //case QE of
+        //  tpVISEES   : EWE := Format(FMTSERST, [QStationNearToMouse.Entite_Serie, QStationNearToMouse.Entite_Station]);
+        //  tpENTRANCES: EWE := Format(FMTSERST, [QEntrance1.eRefSer, QEntrance1.eRefSt]);  // Bug avec TextWidth au-delà d'un certain nombre de caractères
+        //end;
+        TxtExtent := FEtiquetteOnSurvolPlan_Tampon.Canvas.TextExtent(LBL);
+        wwt := TxtExtent.cx + 8; //FEtiquetteOnSurvolPlan_Tampon.Canvas.TextWidth(LBL) + 8;
+        hht := TxtExtent.cy; //FEtiquetteOnSurvolPlan_Tampon.Canvas.TextHeight(LBL);
+        {mémorise ce que va écraser le rectangle}
+        QEtiquetteRect1 := Rect(FEtiquetteOnSurvolPlan_X1, FEtiquetteOnSurvolPlan_Y1 - hht, FEtiquetteOnSurvolPlan_X1 + wwt, FEtiquetteOnSurvolPlan_Y1);
+        QEtiquetteRect2 := Rect(0, 0, wwt, hht);
+        FEtiquetteOnSurvolPlan_Tampon.Canvas.CopyRect(QEtiquetteRect2, Vue.Canvas, QEtiquetteRect1);
+        Vue.Canvas.Pen.Color     := clYellow;
+        Vue.Canvas.brush.style   := bsSolid;
+        //case QE of
+        //  tpVISEES   : Vue.Canvas.brush.color   := clCream;
+        //  tpENTRANCES: Vue.Canvas.brush.color   := clLime;
+        //end;
+        Vue.Canvas.brush.color   := clCream;
+        Vue.Canvas.Rectangle(QEtiquetteRect1);
+        //Vue.Canvas.brush.style   := bsClear;
+        Vue.Canvas.TextOut(FEtiquetteOnSurvolPlan_x1, FEtiquetteOnSurvolPlan_y1 - hht, LBL);
+
+        {mémorise les coordonnées de ce rectangle}
+        FEtiquetteOnSurvolPlan_ox := FEtiquetteOnSurvolPlan_x1;
+        FEtiquetteOnSurvolPlan_oy := FEtiquetteOnSurvolPlan_y1;
+        FEtiquetteOnSurvolPlan_ow := wwt;
+        FEtiquetteOnSurvolPlan_oh := hht;
+        FEtiquetteOnSurvolPlan_First := true;
+      end; // if (QEtiquetteOk) then
+    end; // if (not FOverlayed) then
+  end;
+
 begin
+  QDistanceXYZ := 0.00;
+  QAzimut := 0.00;
   if (not FCanDraw) then Exit;
   PP := MakeTPoint(X, Y);
   FMyPos   := GetCoordsMonde(PP);
@@ -2196,47 +2246,11 @@ begin
   FEtiquetteOnSurvolPlan_X1 := PP.X;
   FEtiquetteOnSurvolPlan_Y1 := PP.Y;
   QEtiquetteOk := (FBDDEntites.GetStationOrEntranceFromXYZ(FMyPos.X, FMyPos.Y, 0.00, MAX_DISTANCE_CAPTURE, [tpVISEES], false, QCurrentInternalIdxEntite, QStationNearToMouse, QEntrance1, QDistanceXYZ, QE));
-  if (not FOverlayed) then
-  begin
-    if (QEtiquetteOk) then
-    begin
-      if (FEtiquetteOnSurvolPlan_First) then
-      begin
-        QEtiquetteRect1 := Rect(0, 0, FEtiquetteOnSurvolPlan_ow, FEtiquetteOnSurvolPlan_oh);
-        QEtiquetteRect2 := Rect(FEtiquetteOnSurvolPlan_ox                            , FEtiquetteOnSurvolPlan_oy - FEtiquetteOnSurvolPlan_oh,
-                                FEtiquetteOnSurvolPlan_ox + FEtiquetteOnSurvolPlan_ow, FEtiquetteOnSurvolPlan_oy);
-        Vue.Canvas.CopyRect(QEtiquetteRect2, FEtiquetteOnSurvolPlan_Tampon.Canvas, QEtiquetteRect1);
-      end;
-      {on récupère les dimensions du rectangle de texte}
-      //case QE of
-      //  tpVISEES   : EWE := Format(FMTSERST, [QStationNearToMouse.Entite_Serie, QStationNearToMouse.Entite_Station]);
-      //  tpENTRANCES: EWE := Format(FMTSERST, [QEntrance1.eRefSer, QEntrance1.eRefSt]);  // Bug avec TextWidth au-delà d'un certain nombre de caractères
-      //end;
-      EWE := Format(FMTSERST, [QStationNearToMouse.Entite_Serie, QStationNearToMouse.Entite_Station]);
-      wwt := FEtiquetteOnSurvolPlan_Tampon.Canvas.TextWidth(EWE) + 8;
-      hht := FEtiquetteOnSurvolPlan_Tampon.Canvas.TextHeight(EWE);
-      {mémorise ce que va écraser le rectangle}
-      QEtiquetteRect1 := Rect(FEtiquetteOnSurvolPlan_X1, FEtiquetteOnSurvolPlan_Y1 - hht, FEtiquetteOnSurvolPlan_X1 + wwt, FEtiquetteOnSurvolPlan_Y1);
-      QEtiquetteRect2 := Rect(0, 0, wwt, hht);
-      FEtiquetteOnSurvolPlan_Tampon.Canvas.CopyRect(QEtiquetteRect2, Vue.Canvas, QEtiquetteRect1);
-      Vue.Canvas.Pen.Color     := clYellow;
-      Vue.Canvas.brush.style   := bsSolid;
-      //case QE of
-      //  tpVISEES   : Vue.Canvas.brush.color   := clCream;
-      //  tpENTRANCES: Vue.Canvas.brush.color   := clLime;
-      //end;
-      Vue.Canvas.brush.color   := clCream;
-      Vue.Canvas.Rectangle(QEtiquetteRect1);
-      Vue.Canvas.brush.style   := bsClear;
-      Vue.Canvas.TextOut(FEtiquetteOnSurvolPlan_x1, FEtiquetteOnSurvolPlan_y1 - hht, EWE);
-      {mémorise les coordonnées de ce rectangle}
-      FEtiquetteOnSurvolPlan_ox := FEtiquetteOnSurvolPlan_x1;
-      FEtiquetteOnSurvolPlan_oy := FEtiquetteOnSurvolPlan_y1;
-      FEtiquetteOnSurvolPlan_ow := wwt;
-      FEtiquetteOnSurvolPlan_oh := hht;
-      FEtiquetteOnSurvolPlan_First := true;
-    end; // if (QEtiquetteOk) then
-  end; // if (not FOverlayed) then
+  //if (FModesTravail = mtDISTANCE_SECOND_POINT) then
+  //  QDrawEtiquette(Format('Dist: %.3f m', [QDistanceXYZ]))
+  //else
+  QDrawEtiquette(Format(FMTSERST, [QStationNearToMouse.Entite_Serie, QStationNearToMouse.Entite_Station]));
+
 
   Vue.Canvas.Pen.Color := clSilver;
   Vue.Canvas.Pen.Width := 0;

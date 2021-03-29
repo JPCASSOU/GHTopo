@@ -1453,17 +1453,6 @@ begin
   MySerie.SetNomObsSerie('Serie 1 reconstruite', 'Serie 1 absente dans le fichier original - Recréée');
   self.AddSerie(MySerie);
   self.SortSeries();     // et on trie la table
-  // controle (facultatif)
-  (*
-  nb := GetNbSeries();
-  AfficherMessageErreur('Le document comporte une série 1 absente qui a été reconstruite');
-  AfficherMessageErreur(format('Liste des %d séries', [nb]));
-  for i := 0 to nb - 1 do
-  begin
-    MySerie := GetSerie(i);
-    AfficherMessageErreur(Format('%d - %d - %s - %d', [i, MySerie.GetNumeroDeSerie(), MySerie.GetNomSerie(), MySerie.GetNbVisees()]));
-  end;
-  //*)
   result := True;
 end;
 
@@ -1471,33 +1460,34 @@ end;
 // /!\ Ne pas faire les conversions en UTF8 ici:
 // Le format interne de GHTopo est ANSI pour compatibilité avec Windows.
 // Les directives INCLUDE ne fonctionnent pas pour les séries
-//
+// function  TToporobotStructure2012.LoadFromXTB(const FichierTAB: TStringDirectoryFilename): integer;
+// procedure TToporobotStructure2012.SaveToXTB(const FichierTAB: TStringDirectoryFilename; const ModeSaveTAB: TModeSaveTAB; const TextFileFormat: TTextFileFormat);
 {$INCLUDE FuncLoadSaveFichierTab.inc}
 //******************************************************************************
 
 // Statut: Opérationnel mais les commentaires des séries et stations sont ignorés
 // Le format .Text est deprecated et supporté en lecture seule par GHTopo
 // Il est surtout destiné à PocketTopo
-// DONE: Entrées sans série de départ sont ignorées
-// @deprecated
-// Shuanghe: OK
-// Charentais OK
-// Carrière de Bellegarde avec antennes: OK
-//function TToporobotStructure2012.LoadFichierText(const FichierText: TStringDirectoryFilename): integer; deprecated;
+// function TToporobotStructure2012.LoadFichierText(const FichierText: TStringDirectoryFilename): integer; deprecated;
+// procedure TToporobotStructure2012.ExporterVersToporobotTEXT(const QFileName: TStringDirectoryFilename;
+//                                                             const LongueurMaxAntenne: double;
+//                                                             const DoExportAntennaShots: boolean);
+//                                                             deprecated 'Le format TOPOROBOT Text est peu pratique';
 {$INCLUDE FuncLoadSaveFichierTEXT.inc}
 //**********************************************************************************************************************
 
 //// charger un fichier PocketTopo TXT
-//function TToporobotStructure2012.LoadFromPocketTopoTXT(const FichierTXT: TStringDirectoryFilename): integer;  deprecated;
-{$INCLUDE funcimportpockettopotxt.inc}
+// function TToporobotStructure2012.LoadFromPocketTopoTXT(const FichierTXT: TStringDirectoryFilename): integer;  deprecated;
+{$INCLUDE FuncImportPocketTopoTxt.inc}
 //******************************************************************************
 
 // ouverture d'un fichier XML (gtx)
-//function  TToporobotStructure2012.LoadFromXML(const FichierXML: TStringDirectoryFilename): integer;
+// function  TToporobotStructure2012.LoadFromXML(const FichierXML: TStringDirectoryFilename): integer;
+// procedure TToporobotStructure2012.SaveToXML(const FichierXML: TStringDirectoryFilename);
 {$INCLUDE FuncLoadSaveFichierXML.inc}
 //******************************************************************************
 
-//function TToporobotStructure2012.LoadFromJSON(const FichierXML: TStringDirectoryFilename): integer;
+// function  TToporobotStructure2012.LoadFromJSON(const FichierXML: TStringDirectoryFilename): integer;
 // procedure TToporobotStructure2012.SaveToJSON(const FichierXML: TStringDirectoryFilename);
 {$INCLUDE FuncLoadSaveFichierJSON.inc}
 //******************************************************************************

@@ -46,7 +46,10 @@ const
   JS_MARKER_LOCAL_VARNAME   = 'MyMarker';
 
   // accès aux éléments de la page
-  NAMEREF_TITRE                       = 'Titre';
+  NAMEREF_WINDOW                      = 'window';
+  NAMEREF_DOCUMENT                    = 'document';
+
+  NAMEREF_BARRE_TITRE                 = 'BarreTitre';
   NAMEREF_PANNEAU_LATERAL             = 'PanneauLateral';
   NAMEREF_PANNEAU_SEARCH              = 'PanneauRecherche';
   NAMEREF_PANNEAU_PICK_COORDONNEES    = 'PanneauPickCoordonnees';
@@ -63,11 +66,12 @@ const
   JS_DOCUMENT_FORM_btnSearch                  = 'btnFindWhat';
   JS_DOCUMENT_FORM_btnSearch_ProcOnSubmit     = 'FindStationByEtiquette';
 
-  JS_DOCUMENT_FORM_lsbMarkers_Name         = 'document.' + JS_DOCUMENT_FORM_LISTE_NAME + '.' + JS_DOCUMENT_LSBMARKER_NAME;
+  JS_DOCUMENT_FORM_lsbMarkers_Name         = NAMEREF_DOCUMENT + '.' + JS_DOCUMENT_FORM_LISTE_NAME + '.' + JS_DOCUMENT_LSBMARKER_NAME;
   JS_DOCUMENT_FORM_lsbMarkers_ProcOnSelect = 'CentrerCarteSurItem';
   // Callbacks de la carte
   JS_MAP_CALLBACK_MapOnClick               = 'MyMapOnClick';
   JS_MAP_CALLBACK_MapOnMouseMove           = 'MyMapOnMouseMove';
+
 const
   JS_PREFIX_OF_TYPE_MARKER           = 'TypeMarkerOf';
   JS_PREFIX_OF_SIZE_MARKER           = 'SizeMarkerOf';
@@ -106,7 +110,7 @@ type
     FCurrJSFuncName    : string;
     FListeLayers       : TListeOSMLayers;  // contient les couches
     FCurrentIndentation: string;
-    procedure BeginBody(const OnLoadProc: string);
+    procedure BeginBody(const OnLoadProc, OnResizeProc: string);
     procedure BeginCSS_Styles();
     procedure BeginDiv(const DivID: string);
     procedure BeginForm(const FormID: string);
@@ -261,6 +265,7 @@ const
 
 
   JS_FUNCTION_INITIALISER    = 'Initialiser';
+  JS_FUNCTION_ONRESIZE       = 'ResizeMap';
 
   JS_FUNCTION_CREATE_MARKER  = 'CreateMarker';
   JS_FUNCTION_DRAW_MARKER    = 'DrawMarker';
@@ -605,10 +610,10 @@ procedure TLeafletExport.EndScriptSection();
 begin
   WriteLine('  </SCRIPT>');
 end;
-procedure TLeafletExport.BeginBody(const OnLoadProc: string);
+procedure TLeafletExport.BeginBody(const OnLoadProc, OnResizeProc: string);
 begin
   WriteLine('<!-- Mise en page du document -->');
-  WrtLinFmt('<BODY onLoad="%s()">', [OnLoadProc]);
+  WrtLinFmt('<BODY onLoad="%s()" onResize="%s()">', [OnLoadProc, OnResizeProc]);
 end;
 procedure TLeafletExport.EndBody();
 begin
@@ -1083,7 +1088,7 @@ begin
       BeginCSS_Styles();
         WrtLinFmt('  html, body { margin:%dpx; padding:%d; }', [0, 0]);
         // CSS de la barre de titre
-        BeginCSSClass(NAMEREF_TITRE);
+        BeginCSSClass(NAMEREF_BARRE_TITRE);
           WrtLinFmt('%s:%s;'     , ['color', QColorToHTMLColor(clWhite)]);
           WrtLinFmt('%s:%dpx %s;', ['font', 28, 'Arial']);
           WrtLinFmt('%s:%s;'     , ['font-weight', 'bold']);
@@ -1207,9 +1212,12 @@ begin
 end;
 procedure TLeafletExport.WriteFooter();  // ok
 const
-  LOCAL_VAR_001    = 'QLatLon';
-  LOCAL_VAR_latlng = 'latlng';
-  LOCAl_VAR_EWE    = 'EWE';
+  LOCAL_VAR_001        = 'QLatLon';
+  LOCAL_VAR_latlng     = 'latlng';
+  LOCAL_VAR_EWE        = 'EWE';
+  LOCAL_VAR_BARTITRE   = 'MyDivBarTitre';
+  LOCAL_VAR_CARTE      = 'MyDivCarte';
+  LOCAL_VAR_MAP_HEIGHT = 'MapHeight';
 begin
         UnIndentLine(True);
         IndentLine();
@@ -1239,7 +1247,7 @@ begin
         BeginJSFunction(JS_MAP_CALLBACK_MapOnClick, 'event');
           WrtLinFmt('var %s = event.latlng;', [LOCAL_VAR_001]);
           {$IFDEF POUR_ALAIN_DOLE}
-          WrtLinFmt('var LB = document.getElementById("%s");', [JS_DOCUMENT_FORM_editPickCoords]);
+          WrtLinFmt('var LB = %s.getElementById("%s");', [NAMEREF_DOCUMENT, JS_DOCUMENT_FORM_editPickCoords]);
           WrtLinFmt('var %s = ConvertLatLonToLT3(L, %s.lat, %s.lng);', [LOCAl_VAR_EWE, LOCAL_VAR_001, LOCAL_VAR_001]);
           WrtLinFmt('LB.value = %s.X.toFixed(%d) + "%s" + %s.Y.toFixed(%d);', [LOCAl_VAR_EWE, 3, ', ', LOCAl_VAR_EWE, 3]);
           {$ELSE}
@@ -1248,7 +1256,7 @@ begin
         EndJSFunction();
         BeginJSFunction(JS_MAP_CALLBACK_MapOnMouseMove, 'event');
           WrtLinFmt('var %s = event.latlng;', [LOCAL_VAR_001]);
-          WrtLinFmt('var LB = document.getElementById("%s");', [JS_DOCUMENT_FORM_lbCoordinates]);
+          WrtLinFmt('var LB = %s.getElementById("%s");', [NAMEREF_DOCUMENT, JS_DOCUMENT_FORM_lbCoordinates]);
           {$IFDEF POUR_ALAIN_DOLE}
           WrtLinFmt('var %s = ConvertLatLonToLT3(L, %s.lat, %s.lng);', [LOCAl_VAR_EWE, LOCAL_VAR_001, LOCAL_VAR_001]);
           WrtLinFmt('LB.innerHTML = "%s" + %s.X.toFixed(%d) + "%s" + %s.Y.toFixed(%d);', ['X = ', LOCAl_VAR_EWE, 3, ' - Y = ', LOCAl_VAR_EWE, 3]);
@@ -1265,14 +1273,27 @@ begin
             WrtLinFmt('CentrerSurPoint(%s.Lat, %s.Lon, %s.getZoom());', [JS_MARKER_LOCAL_VARNAME, JS_MARKER_LOCAL_VARNAME, NAMEREF_MAP]);
             WrtLinFmt('%s.selectedIndex = QIdx;', [JS_DOCUMENT_FORM_lsbMarkers_Name]);
           jsELSE('');
-            WriteLine('window.alert("Elément " + EWE + " introuvable");');
+            WrtLinFmt('%s.alert("Elément " + EWE + " introuvable");', [NAMEREF_WINDOW]);
           jsENDIF('');
         EndJSFunction();
-      EndScriptSection();
+        // Redimensionner la carte
+        BeginJSFunction(JS_FUNCTION_ONRESIZE, '');
+          (*
+          WrtLinFmt('var %s = %s.getElementById("%s");', [LOCAL_VAR_BARTITRE, NAMEREF_DOCUMENT, NAMEREF_BARRE_TITRE]);
+          WrtLinFmt('var %s = %s.getElementById("%s");', [LOCAL_VAR_CARTE   , NAMEREF_DOCUMENT, NAMEREF_MAP]);
+          WrtLinFmt('var %s = %s.innerHeight - %s.clientHeight;', [LOCAL_VAR_MAP_HEIGHT, NAMEREF_WINDOW, NAMEREF_BARRE_TITRE]);
+          WrtLinFmt('%s.setAttribute("style", "height:" + %s.toString() + "px;");', [LOCAL_VAR_CARTE, LOCAL_VAR_MAP_HEIGHT]);
+          //*)
+          //console.log("OnResize: " + window.innerWidth.toString() + "x" + window.innerHeight.toString() + "  - Hauteur titre: " + BarTitre.clientHeight.toString() +  "  - Hauteur carte: " +MyCarte.style.height.toString());
+        EndJSFunction();
+       EndScriptSection();
     EndHEAD();
-    BeginBody(JS_FUNCTION_INITIALISER);
+
+
+
+    BeginBody(JS_FUNCTION_INITIALISER, JS_FUNCTION_ONRESIZE);
       // Le titre
-      BeginDiv(NAMEREF_TITRE);
+      BeginDiv(NAMEREF_BARRE_TITRE);
       WrtLinFmt('    %s', [FDocTitle]);
       EndDiv();
       // La carte .

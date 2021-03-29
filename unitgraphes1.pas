@@ -1117,7 +1117,7 @@ begin
         BeginDiv(NAMEREF_PANNEAU_ROADMAP); //    // Feuille de route
           BeginForm(JS_DOCUMENT_FORM_NAME_ROADMAP);                      // la liste des items
             WrtLinFmt('    <LABEL id="%s" value="">%s</LABEL><BR>'    , [JS_DOCUMENT_FORM_lbRoadmapNbPoints, 'lbRoadmapNbPoints']);
-            WrtLinFmt('    <select id="%s" name="%s" size="%d" style="width:%d%%" onChange="%s()"> </select><BR>', [JS_DOCUMENT_FORM_lsbRoadMap , JS_DOCUMENT_FORM_lsbRoadMap, 10, 100, JS_DOCUMENT_FORM_lsbRoadmap_ProcOnSelect]);
+            WrtLinFmt('    <select id="%s" name="%s" style="width:%d%%" onChange="%s()"> </select><BR>', [JS_DOCUMENT_FORM_lsbRoadMap , JS_DOCUMENT_FORM_lsbRoadMap, 100, JS_DOCUMENT_FORM_lsbRoadmap_ProcOnSelect]);
             WrtLinFmt('    <LABEL id="%s" value="">%s</LABEL><BR>'    , [JS_DOCUMENT_FORM_lbCanvasMousePos  , '--']);
             WriteLine('    <HR>');
             WrtLinFmt('    <LABEL id="%s" value="">%s</LABEL><BR>'    , [JS_DOCUMENT_FORM_lbAzimutNextPoint , '--']);

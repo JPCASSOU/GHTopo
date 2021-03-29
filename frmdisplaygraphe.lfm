@@ -1,7 +1,7 @@
 object dlgDisplayGraphe: TdlgDisplayGraphe
-  Left = 227
+  Left = 236
   Height = 776
-  Top = 399
+  Top = 135
   Width = 1303
   Align = alClient
   Caption = 'dlgDisplayGraphe'

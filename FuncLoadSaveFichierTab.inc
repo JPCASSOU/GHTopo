@@ -574,10 +574,7 @@ begin
       // -15	31563	LT3	Lambert 3 France
       WrtLn('');
       EPSG := GetCodeEPSGSystemeCoordonnees;
-
       WrtLn(Format(FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER + TAB + FORMAT_STRING,  [-15, EPSG.CodeEPSG, EPSG.NomEPSG]));
-
-
       //*************************************
       // Section -10: Secteurs (Format XTB uniquement)
       AfficherMessage('--> Saving #-10 Sectors section');
@@ -609,13 +606,11 @@ begin
       if (QNbAntennes > 0) then
       begin
         AfficherMessage('--> Saving #-9 Antenna shots section');
-
         WrtLn('');
         WrtCommentaire('Antenna-shots list');
         WrtLn('');
         WrtCommentaire(MakeHeaderRubriquesOfAnRow(TAB, -9, ['ID', 'ID Reseau', 'ID Secteur', 'Serie', 'Point', 'Code (unused)', 'Expe (unused)', 'IDTerrain', 'Longueur', 'Azimut', 'Pente', 'Observ.']));
         WrtLn('');
-
         for i := 1 to QNbAntennes - 1 do
         begin
           VA := GetViseeAntenne(i);
@@ -639,9 +634,7 @@ begin
                      ]));
           end;
         end;
-
       end;
-
       // Section -8: Réseaux (Format XTB uniquement)
       AfficherMessage('--> Saving #-8 Networks section');
       WrtLn('');
@@ -672,9 +665,6 @@ begin
         end;
       end;
     end; //  if (ModeSaveTAB = mtabEXTENDEDTAB) then begin
-    // Classeur (débrayé)
-    //WriteLn(pTAB, Format(FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER,[-7,1,1,1,1]));
-    //WrtLn(Format(FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER,[-7,1,1,1,1]));
     // Sauvegarde des entrées
     AfficherMessage('--> Saving #-6 Entrances section');
     WrtLn('');

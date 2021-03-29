@@ -439,16 +439,16 @@ begin
   sender.AddMethod(self, @TCdrPascalScript.cls         , 'procedure cls()');
   sender.AddMethod(self, @TCdrPascalScript.cls         , 'procedure ClrScr()');
   {$ifdef CALCULETTE_EMBEDDED_IN_GHTOPO}
-    sender.AddMethod(FDocuTopo, @TToporobotStructure2012.GetNomEtude               , 'function  GetNomEtude(): string;');
-    sender.AddMethod(FDocuTopo, @TToporobotStructure2012.GetNbNameSpaces           , 'function  GetNbNameSpaces(): integer;');
-    sender.AddMethod(FDocuTopo, @TToporobotStructure2012.GetNbSeries               , 'function  GetNbSeries(): integer;');
-    sender.AddMethod(FDocuTopo, @TToporobotStructure2012.GetNbEntrances            , 'function  GetNbEntrees(): integer;');
-    sender.AddMethod(FDocuTopo, @TToporobotStructure2012.GetNbReseaux              , 'function  GetNbReseaux(): integer;');
-    sender.AddMethod(FDocuTopo, @TToporobotStructure2012.GetNbExpes                , 'function  GetNbExpes(): integer;');
-    sender.AddMethod(FDocuTopo, @TToporobotStructure2012.GetNbCodes                , 'function  GetNbCodes(): integer;');
-    sender.AddMethod(FDocuTopo, @TToporobotStructure2012.GetNbSecteurs             , 'function  GetNbSecteurs(): integer;');
-    sender.AddMethod(FDocuTopo, @TToporobotStructure2012.GetNbAntennes             , 'function  GetNbAntennes(): integer;');
-    sender.AddMethod(FDocuTopo, @TToporobotStructure2012.CheckerLesDonneesTopo     , 'procedure CheckerLesDonneesTopo();');
+    sender.AddMethod(FDocuTopo, @TToporobotStructure2012.GetNomEtude                 , 'function  GetNomEtude(): string;');
+    sender.AddMethod(FDocuTopo, @TToporobotStructure2012.GetNbNameSpaces             , 'function  GetNbNameSpaces(): integer;');
+    sender.AddMethod(FDocuTopo, @TToporobotStructure2012.GetNbSeries                 , 'function  GetNbSeries(): integer;');
+    sender.AddMethod(FDocuTopo, @TToporobotStructure2012.GetNbEntrances              , 'function  GetNbEntrees(): integer;');
+    sender.AddMethod(FDocuTopo, @TToporobotStructure2012.GetNbReseaux                , 'function  GetNbReseaux(): integer;');
+    sender.AddMethod(FDocuTopo, @TToporobotStructure2012.GetNbExpes                  , 'function  GetNbExpes(): integer;');
+    sender.AddMethod(FDocuTopo, @TToporobotStructure2012.GetNbCodes                  , 'function  GetNbCodes(): integer;');
+    sender.AddMethod(FDocuTopo, @TToporobotStructure2012.GetNbSecteurs               , 'function  GetNbSecteurs(): integer;');
+    sender.AddMethod(FDocuTopo, @TToporobotStructure2012.GetNbAntennes               , 'function  GetNbAntennes(): integer;');
+    sender.AddMethod(FDocuTopo, @TToporobotStructure2012.CheckerLesDonneesTopo       , 'procedure CheckerLesDonneesTopo();');
     sender.AddMethod(self     , @TCdrPascalScript.DT_GetNbreStationsOfSerieByIdx     , 'function  GetNbStationsOfSerieByIdx(const Idx: integer): integer;');
     sender.AddMethod(self     , @TCdrPascalScript.DT_GetNbreStationsOfSerieByNoSerie , 'function  GetNbStationsOfSerieByNoSerie(const NumeroSerie: integer): integer;');
     sender.AddMethod(self     , @TCdrPascalScript.DT_GetNumeroEtNomDeSerieByIdx      , 'function DT_GetNumeroEtNomDeSerieByIdx(const Idx: integer; out QNumSerie: integer; out QNomSerie: string; out QNbVisees: integer): boolean;');

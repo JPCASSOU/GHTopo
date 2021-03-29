@@ -13,11 +13,10 @@ object CdrAntennes: TCdrAntennes
   Font.Pitch = fpVariable
   Font.Quality = fqDraft
   Font.Style = [fsBold]
-  LCLVersion = '2.0.0.4'
   ParentFont = False
   TabOrder = 0
-  DesignLeft = 253
-  DesignTop = 424
+  DesignLeft = 412
+  DesignTop = 202
   object BitBtn1: TBitBtn
     Left = 4
     Height = 30
@@ -188,7 +187,7 @@ object CdrAntennes: TCdrAntennes
     object Label2: TLabel
       Left = 296
       Height = 16
-      Top = 72
+      Top = 40
       Width = 34
       Caption = 'Série'
       ParentColor = False
@@ -196,7 +195,7 @@ object CdrAntennes: TCdrAntennes
     object editSimplyfySerieNoSerie: TCurrencyEdit
       Left = 352
       Height = 24
-      Top = 68
+      Top = 36
       Width = 72
       Alignment = taRightJustify
       DecimalPlaces = 0
@@ -209,7 +208,7 @@ object CdrAntennes: TCdrAntennes
     object editSimplyfySerieNoStation: TCurrencyEdit
       Left = 352
       Height = 24
-      Top = 96
+      Top = 64
       Width = 72
       Alignment = taRightJustify
       DecimalPlaces = 0
@@ -222,7 +221,7 @@ object CdrAntennes: TCdrAntennes
     object Label3: TLabel
       Left = 296
       Height = 16
-      Top = 96
+      Top = 64
       Width = 45
       Caption = 'Station'
       ParentColor = False
@@ -230,7 +229,7 @@ object CdrAntennes: TCdrAntennes
     object Button1: TButton
       Left = 424
       Height = 25
-      Top = 68
+      Top = 36
       Width = 39
       Caption = '...'
       OnClick = Button1Click
