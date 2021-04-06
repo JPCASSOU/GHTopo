@@ -310,6 +310,7 @@ type
     // pour le dessin des étiquettes au survol du plan
     // très bonne rapidité avec la Coume
     // très bonne rapidité avec Langoiran et Citon
+    (*
     FEtiquetteOnSurvolPlan_First: boolean;
     FEtiquetteOnSurvolPlan_Tampon: TImage;   // et non TBitmap
     FEtiquetteOnSurvolPlan_ox: integer;
@@ -318,6 +319,7 @@ type
     FEtiquetteOnSurvolPlan_oh: integer;
     FEtiquetteOnSurvolPlan_X1: integer;
     FEtiquetteOnSurvolPlan_Y1: integer;
+    //*)
     // Overlay (à la manière des sites web merdiques)
     FModeFonctionnementGHTopoContext2D: TModeFonctionnementGHTopoContext2D;
     FOverlayed: boolean;
@@ -690,7 +692,7 @@ begin
   AfficherMemoryUsage();                // afficher mémoire utilisée
   pnlQuickSaisieVisee.Visible := false; // cacher le miniform de visées
   // pour le dessin des étiquettes au survol du plan
-  FEtiquetteOnSurvolPlan_First  := false;
+  (*FEtiquetteOnSurvolPlan_First  := false;
   FEtiquetteOnSurvolPlan_Tampon := TImage.Create(self);
   FEtiquetteOnSurvolPlan_ox     := 0;
   FEtiquetteOnSurvolPlan_oy     := 0;
@@ -698,7 +700,7 @@ begin
   FEtiquetteOnSurvolPlan_oh     := 0;
   FEtiquetteOnSurvolPlan_X1     := 0;
   FEtiquetteOnSurvolPlan_Y1     := 0;
-
+  //*)
   //***************************************
   Result   := True;
   //except
@@ -710,7 +712,7 @@ begin
     pass;
 
   finally
-    FreeAndNil(FEtiquetteOnSurvolPlan_Tampon);
+    //FreeAndNil(FEtiquetteOnSurvolPlan_Tampon);
   end;
 end;
 
@@ -2188,6 +2190,7 @@ var
     FZP2 := MakeTPoint(QX, QY);
     CuiCui();
   end;
+  (*
   procedure QDrawEtiquette(const LBL: string);
   var
     TxtExtent: TSize;
@@ -2235,21 +2238,23 @@ var
       end; // if (QEtiquetteOk) then
     end; // if (not FOverlayed) then
   end;
-
+  //*)
 begin
   QDistanceXYZ := 0.00;
   QAzimut := 0.00;
   if (not FCanDraw) then Exit;
   PP := MakeTPoint(X, Y);
   FMyPos   := GetCoordsMonde(PP);
-  lbGCSMouse.Caption := Format('X = %s, Y = %s',[FormatterNombreAvecSepMilliers(FMyPos.X, 0), FormatterNombreAvecSepMilliers(FMyPos.Y, 0)]);
-  FEtiquetteOnSurvolPlan_X1 := PP.X;
-  FEtiquetteOnSurvolPlan_Y1 := PP.Y;
+
+  //FEtiquetteOnSurvolPlan_X1 := PP.X;
+  //FEtiquetteOnSurvolPlan_Y1 := PP.Y;
   QEtiquetteOk := (FBDDEntites.GetStationOrEntranceFromXYZ(FMyPos.X, FMyPos.Y, 0.00, MAX_DISTANCE_CAPTURE, [tpVISEES], false, QCurrentInternalIdxEntite, QStationNearToMouse, QEntrance1, QDistanceXYZ, QE));
+  lbGCSMouse.Caption := Format('[%s], %s, %s',[Format(FMTSERST, [QStationNearToMouse.Entite_Serie, QStationNearToMouse.Entite_Station]),
+                                             FormatterNombreAvecSepMilliers(FMyPos.X, 0), FormatterNombreAvecSepMilliers(FMyPos.Y, 0)]);
   //if (FModesTravail = mtDISTANCE_SECOND_POINT) then
   //  QDrawEtiquette(Format('Dist: %.3f m', [QDistanceXYZ]))
   //else
-  QDrawEtiquette(Format(FMTSERST, [QStationNearToMouse.Entite_Serie, QStationNearToMouse.Entite_Station]));
+  //QDrawEtiquette(Format(FMTSERST, [QStationNearToMouse.Entite_Serie, QStationNearToMouse.Entite_Station]));
 
 
   Vue.Canvas.Pen.Color := clSilver;

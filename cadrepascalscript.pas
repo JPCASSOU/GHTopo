@@ -21,7 +21,7 @@ uses
 
   //GenerationFichesPointsTopo,
   UnitObjetSerie,
-  unitProfilTopo,
+  //unitProfilTopo,
   {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
   Classes, SysUtils, Forms, Controls, Buttons, ActnList, ExtCtrls, PairSplitter, StdCtrls, Dialogs,
   SynEdit, SynHighlighterPas,
@@ -137,7 +137,7 @@ type
     function  DT_GetNbreStationsOfSerieByIdx(const Idx: integer): integer;
     function  DT_GetNbreStationsOfSerieByNoSerie(const NoSerie: integer): integer;
     function  DT_GetNumeroEtNomDeSerieByIdx(const Idx: integer; out QNumSerie: TNumeroSerie; out QNomSerie: string; out QNbVisees: integer): boolean;
-    function  DT_ExtractDataFromVisee(const QNumeroSerie: TNumeroSerie; const QNumeroStation: TNumeroStation; out V: array of string): boolean;
+    //function  DT_ExtractDataFromVisee(const QNumeroSerie: TNumeroSerie; const QNumeroStation: TNumeroStation; out V: array of string): boolean;
 
     function  DT_BeginNewSerie(const QNumeroSerie: integer;
                                const QNoEntrance, QNoReseau: integer;
@@ -346,6 +346,10 @@ procedure TCdrPascalScript.RecenserAdditionalProcs(Sender: TPSScriptDebugger);
 var
   EWE: String;
 begin
+ // sender.Defines.Clear;
+  //sender.Defines.Add('TGHStringArray = array[0 .. 63] of string');
+
+
 
   sender.AddFunction(@pass                     , 'procedure pass;');
   sender.AddFunction(@GetGHTopoVersion         , 'function GetGHTopoVersion(): string;');
@@ -354,6 +358,8 @@ begin
   sender.AddFunction(@ExtractFileExt           , 'function ExtractFileExt(const FileName: string): string;');
   sender.AddFunction(@ExtractFileName          , 'function ExtractFileName(const FileName: string): string;');
   sender.AddFunction(@GetGUID                  , 'function GetGUID(): string;');
+
+  //sender.AddFunction(@split                    , 'function Split(const MyStr: string; const Sep: char): TGHStringArray;');
 
   sender.AddFunction(@Format                   , 'function format(Const Fmt : String; const Args : Array of const) : String;');
   sender.AddFunction(@Format                   , 'function sprintf(Const Fmt : String; const Args : Array of const) : String;');
@@ -648,7 +654,6 @@ begin
 
   PSScriptDebugger1.ClearBreakPoints;
   PSScriptDebugger1.Script.Clear;
-  //PSScriptDebugger1.Comp.OnUses         := self.ScriptOnUses;
   PSScriptDebugger1.Comp.OnBeforeOutput := psCompilerBeforeOutput;
   for i := 0 to n - 1 do  PSScriptDebugger1.Script.Add(PreprocessLine(editPascalScript.Lines[i]));
   CompilationOK := PSScriptDebugger1.Compile;
@@ -797,12 +802,17 @@ begin
 end;
 
 procedure TCdrPascalScript.NewScript(const ScriptName: string = 'NewScript01');
+const
+  QName_MAX_SIZE_PARAM_ARRAY = 'MAX_SIZE_PARAM_ARRAY';
+  QNameTGHStringArray        = 'TGHStringArray';
+  QGlobalVarSR               = 'SR';
 begin
   editPascalScript.Lines.Clear;
   editPascalScript.Lines.Add(format('program %s;', [ScriptName]));
-  editPascalScript.Lines.Add('type TVectorResult = array[0..31] of string;');
+  //editPascalScript.Lines.Add(format('const %s = %d;', [QName_MAX_SIZE_PARAM_ARRAY, 63]));
+  //editPascalScript.Lines.Add(format('type %s = array[%d .. %s] of string;', [QNameTGHStringArray, 0, QName_MAX_SIZE_PARAM_ARRAY]));
   editPascalScript.Lines.Add('var');
-  editPascalScript.Lines.Add('  VR   : TVectorResult;');
+  //editPascalScript.Lines.Add(Format('  %s   : %s;', [QGlobalVarSR, QNameTGHStringArray]));
   editPascalScript.Lines.Add('  i, Nb: integer;');
   editPascalScript.Lines.Add('begin');
   editPascalScript.Lines.Add('  // Votre code ici');
@@ -986,7 +996,7 @@ begin
   except
   end;
 end;
-
+{
 function TCdrPascalScript.DT_ExtractDataFromVisee(const QNumeroSerie: TNumeroSerie; const QNumeroStation: TNumeroStation; out V: array of string): boolean;
 var
   SR: TObjSerie;
@@ -1019,7 +1029,7 @@ begin
   V[7] := MyVisee.Commentaires;
   //*)
 end;
-
+///}
 
 procedure TCdrPascalScript.DT_RemoveSerieByNumSerie(const QNumeroSerie: integer);
 var

@@ -2182,6 +2182,7 @@ object CdrPascalScript: TCdrPascalScript
       '  X: double;'
       '  Y: double;'
       'end;'
+      'type TGHStringArray   = array[0 .. 63] of string; '
     )
     left = 48
     top = 136

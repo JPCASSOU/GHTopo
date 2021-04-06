@@ -9,8 +9,8 @@ object CdrDGCDrawingContext: TCdrDGCDrawingContext
   OnResize = FrameResize
   ParentFont = False
   TabOrder = 0
-  DesignLeft = 1140
-  DesignTop = 182
+  DesignLeft = 780
+  DesignTop = 582
   object pnlVue: TPanel
     Left = 0
     Height = 542

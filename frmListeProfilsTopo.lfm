@@ -1,7 +1,7 @@
 object dlgLesProfilsTopo: TdlgLesProfilsTopo
-  Left = 725
+  Left = 158
   Height = 638
-  Top = 370
+  Top = 309
   Width = 1186
   Caption = 'dlgLesProfilsTopo'
   ClientHeight = 638
