@@ -1,6 +1,7 @@
 unit GHTopoMultiThreading;
 {$INCLUDE CompilationParameters.inc}
 {$ASSERTIONS ON}
+{$ERROR Implémenter les sections critiques (voir code après le end.) }
 interface
 uses
   StructuresDonnees,
@@ -13,7 +14,8 @@ uses
   UnitListesSimplesWithGeneriques,
   ToporobotClasses2012,
   UnitEntitesExtended,
-  Classes, SysUtils, Graphics;
+  Classes, SysUtils, Graphics,
+  LCLProc, LCLType, LCLIntf; // Utiliser les TCriticalSection de la LCL, et non celles de la RTL
 
 type
 
@@ -36,13 +38,21 @@ private
   FMatrix_LowIndex    : TArrayOfIntegers;
   FMatrix_HighIndex   : TArrayOfIntegers;
 
+  // multithread section critique
+  FAFinished       : boolean;
+  FCriticalSection : TCriticalSection;
+
+
+
 protected   // = visible dans une instance d'une classe mais pas dans celle de ses descendants
 
   procedure Execute; override;
   procedure CalcCompensationMatrix();
+  property  AFinished: boolean read FAFinished write FAFinished;
 public
   property Terminated; // cette propriété est 'protected' dans TThread
-  Constructor Create(const DocTopo: TToporobotStructure2012;
+  Constructor Create(const CriticalSection: TCriticalSection;
+                     const DocTopo: TToporobotStructure2012;
                      const IncidenceMatrix: TMatriceCreuse;
                      const VecteurPonderation: TArrayOfFloats;
                      const Matrix_LowIndex  : TArrayOfIntegers;
@@ -76,14 +86,20 @@ type
     FMatrix_LowIndex    : TArrayOfIntegers;
     FMatrix_HighIndex   : TArrayOfIntegers;
 
+    // multithread section critique
+    FAFinished       : boolean;
+    FCriticalSection : TCriticalSection;
+
+
+
   protected   // = visible dans une instance d'une classe mais pas dans celle de ses descendants
 
     procedure Execute; override;
     procedure FactoriseCompensationMatrix();
   public
     property Terminated; // cette propriété est 'protected' dans TThread
-    Constructor Create(const DocTopo: TToporobotStructure2012;
-
+    Constructor Create(const CriticalSection: TCriticalSection;
+                       const DocTopo: TToporobotStructure2012;
                        const CompensationMatrix: TMatriceCreuse;
                        const LMatrix: TMatriceCreuse;
                        const Matrix_LowIndex  : TArrayOfIntegers;
@@ -95,6 +111,7 @@ type
 
                        //const lPtr: PTMatrix);
     function AttendPour(): integer;
+    property AFinished: boolean read FAFinished write FAFinished;
   end;
 //******************************************************************************
 
@@ -115,20 +132,26 @@ private
   // liste des branches
   FTableBranches  : TTableBranchesXYZ;
 
+  // multithread section critique
+  FAFinished       : boolean;
+  FCriticalSection : TCriticalSection;
+
+
+
 protected   // = visible dans une instance d'une classe mais pas dans celle de ses descendants
 
   procedure Execute; override;
   procedure CalcAccroissementBranches();
 public
   property Terminated; // cette propriété est 'protected' dans TThread
-  Constructor Create(const DocTopo: TToporobotStructure2012;
+  Constructor Create(const CriticalSection: TCriticalSection;
+                     const DocTopo: TToporobotStructure2012;
                      const TableBranches: TTableBranchesXYZ;
                      const NbThreads, NoThread: integer;
                      const NbItems, IdxStart, IdxEnd: integer;
                      const P: TProcOfObjectUsesInteger);
   function AttendPour(): integer;
-
-                     //const lPtr: PTMatrix);
+  property AFinished: boolean read FAFinished write FAFinished;
 end;
 
 
@@ -148,9 +171,11 @@ private
   FNoThread       : integer;
   // liste des branches
   FTableBranches  : TTableBranchesXYZ;
+  // multithread section critique
+  FAFinished       : boolean;
+  FCriticalSection : TCriticalSection;
 
 protected   // = visible dans une instance d'une classe mais pas dans celle de ses descendants
-
   procedure Execute; override;
 public
   property Terminated; // cette propriété est 'protected' dans TThread
@@ -160,7 +185,7 @@ public
                      const NbItems, IdxStart, IdxEnd: integer;
                      const P: TProcOfObjectUsesInteger);
   function AttendPour(): integer;
-
+  property AFinished: boolean read FAFinished write FAFinished;
 end;
 
 implementation
@@ -171,6 +196,8 @@ uses
 
 procedure TThreadFactoriseCompensationMatrix.Execute;
 begin
+  FAFinished := false;
+  Sections critiques à implémenter
   Synchronize(nil);
   while (not Terminated) do
   begin
@@ -207,7 +234,8 @@ begin
 
 end;
 
-constructor TThreadFactoriseCompensationMatrix.Create(const DocTopo: TToporobotStructure2012;
+constructor TThreadFactoriseCompensationMatrix.Create(const CriticalSection: TCriticalSection;
+                                                       const DocTopo: TToporobotStructure2012;
                                                        const CompensationMatrix: TMatriceCreuse;
                                                        const LMatrix: TMatriceCreuse;
                                                        const Matrix_LowIndex  : TArrayOfIntegers;
@@ -218,7 +246,8 @@ constructor TThreadFactoriseCompensationMatrix.Create(const DocTopo: TToporobotS
 
 var
   QIdxMax: Integer;
-begin
+begin        .
+  FCriticalSection    := CriticalSection;
   FDocTopo            := DocTopo;
   FCompensationMatrix := CompensationMatrix;
   FLMatrix            := LMatrix;
@@ -251,6 +280,9 @@ end;
 
 procedure TThreadMakeCompensationMatrix.Execute;
 begin
+  FAFinished := false;
+
+  Sections critiques à implémenter
   Synchronize(nil);
   while (not Terminated) do
   begin
@@ -276,7 +308,8 @@ begin
   end;
 end;
 
-constructor TThreadMakeCompensationMatrix.Create(const DocTopo: TToporobotStructure2012;
+constructor TThreadMakeCompensationMatrix.Create(const CriticalSection: TCriticalSection;
+                                                 const DocTopo: TToporobotStructure2012;
                                                  const IncidenceMatrix: TMatriceCreuse;
                                                  const VecteurPonderation: TArrayOfFloats;
                                                  const Matrix_LowIndex: TArrayOfIntegers;
@@ -288,6 +321,8 @@ constructor TThreadMakeCompensationMatrix.Create(const DocTopo: TToporobotStruct
 var
   QIdxMax: Integer;
 begin
+  FCriticalSection    := CriticalSection;
+
   FDocTopo            := DocTopo;
   FIncidenceMatrix    := IncidenceMatrix;
   FVecteurPonderation := VecteurPonderation;
@@ -316,6 +351,7 @@ end;
 
 //******************************************************************************
 constructor TThreadBranchesProcessing.Create(
+                     const CriticalSection: TCriticalSection;
                      const DocTopo: TToporobotStructure2012;
                      const TableBranches: TTableBranchesXYZ;
                      const NbThreads, NoThread: integer;
@@ -324,6 +360,7 @@ constructor TThreadBranchesProcessing.Create(
 var
   QIdxMax: Integer;
 begin
+  FCriticalSection := CriticalSection;
   FDocTopo        := DocTopo;
   FTableBranches  := TableBranches;
   FreeOnTerminate := False;
@@ -348,7 +385,9 @@ end;
 
 procedure TThreadBranchesProcessing.Execute;
 begin
-  Synchronize(nil);
+  FAFinished := false;
+  Sections critiques à implémenter
+    Synchronize(nil);
   while (not Terminated) do
   begin
     CalcAccroissementBranches();
@@ -534,3 +573,157 @@ end;
 
 
 end.
+//************************************************************************
+//************************************************************************
+//************************************************************************
+//************************************************************************
+
+{
+ ***************************************************************************
+ *                                                                         *
+ *   This source is free software; you can redistribute it and/or modify   *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This code is distributed in the hope that it will be useful, but      *
+ *   WITHOUT ANY WARRANTY; without even the implied warranty of            *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU     *
+ *   General Public License for more details.                              *
+ *                                                                         *
+ *   A copy of the GNU General Public License is available on the World    *
+ *   Wide Web at <http://www.gnu.org/copyleft/gpl.html>. You can also      *
+ *   obtain it by writing to the Free Software Foundation,                 *
+ *   Inc., 51 Franklin Street - Fifth Floor, Boston, MA 02110-1335, USA.   *
+ *                                                                         *
+ ***************************************************************************
+
+  Abstract:
+    Demo to show how 5 threads increases a counter.
+    With and without critical sections.
+
+    With critical sections you will always get 50000.
+    Without you will see different results on each run and depending on your
+    system.
+}
+unit CriticalSectionUnit1;
+
+{$mode objfpc}{$H+}
+
+interface
+
+uses
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Buttons,
+  StdCtrls, LCLProc, LCLType, LCLIntf;
+
+type
+
+  { TMyThread }
+
+  TMyThread = class(TThread)
+  private
+    FAFinished: boolean;
+  public
+    procedure Execute; override;
+    property AFinished: boolean read FAFinished write FAFinished;
+  end;
+
+  { TForm1 }
+
+  TForm1 = class(TForm)
+    CountWithoutCritSecButton: TButton;
+    CountWithCritSecButton: TButton;
+    Label1: TLabel;
+    procedure CountWithCritSecButtonClick(Sender: TObject);
+    procedure CountWithoutCritSecButtonClick(Sender: TObject);
+  private
+  public
+    CriticalSection: TCriticalSection;
+    Counter: integer;
+    UseCriticalSection: boolean;
+    procedure DoCounting;
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.lfm}
+
+{ TForm1 }
+
+procedure TForm1.CountWithCritSecButtonClick(Sender: TObject);
+begin
+  UseCriticalSection:=true;
+  DoCounting;
+end;
+
+procedure TForm1.CountWithoutCritSecButtonClick(Sender: TObject);
+begin
+  UseCriticalSection:=false;
+  DoCounting;
+end;
+
+procedure TForm1.DoCounting;
+var
+  i: Integer;
+  Threads: array[1..5] of TMyThread;
+  AllFinished: Boolean;
+begin
+  Counter:=0;
+
+  // create the CriticalSection
+  InitializeCriticalSection(CriticalSection);
+
+  // start 5 threads
+  for i:=Low(Threads) to High(Threads) do
+    Threads[i]:=TMyThread.Create(false);
+  // wait till all threads finished
+  repeat
+    AllFinished:=true;
+    for i:=Low(Threads) to High(Threads) do
+      if not Threads[i].AFinished then AllFinished:=false;
+  until AllFinished;
+  // free the threads
+  for i:=Low(Threads) to High(Threads) do
+    Threads[i].Free;
+
+  // free the CriticalSection
+  DeleteCriticalSection(CriticalSection);
+
+  // show the Counter
+  Label1.Caption:='Counter='+IntToStr(Counter);
+end;
+
+{ TMyThread }
+
+procedure TMyThread.Execute;
+var
+  i: Integer;
+  CurCounter: LongInt;
+  j: Integer;
+begin
+  FAFinished:=false;
+  // increment the counter many times
+  // Because the other threads are doing the same, it will frequently happen,
+  // that 2 (or more) threads read the same number, increment it by one and
+  // write the result back, overwriting the result of the other threads.
+  for i:=1 to 100000 do begin
+    if Form1.UseCriticalSection then
+      EnterCriticalSection(Form1.CriticalSection);
+    try
+      CurCounter:=Form1.Counter;
+      for j:=1 to 1000 do ;
+      inc(CurCounter);
+      Form1.Counter:=CurCounter;
+    finally
+      if Form1.UseCriticalSection then
+        LeaveCriticalSection(Form1.CriticalSection);
+    end;
+  end;
+  FAFinished:=true;
+end;
+
+end.
+

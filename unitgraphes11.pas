@@ -675,7 +675,7 @@ var
   EWE: TGHStringArray;
 begin
   result := false;
-  if (not FileExists(Filename)) then exit;
+  if (not FileExistsUTF8(Filename)) then exit;
   AfficherMessage(Format('%s.LoadItinerairesFromFile: %s', [ClassName, Filename]));
   LS := TStringList.Create;
   try

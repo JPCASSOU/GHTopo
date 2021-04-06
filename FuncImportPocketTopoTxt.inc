@@ -43,7 +43,7 @@ begin
 
   AfficherMessageErreur(Format('%s.LoadFromPocketTopoTXT: %s', [ClassName, FichierTXT]));
   // Fichier introuvable ? OK, On sort
-  if (not FileExists(FichierTXT)) then  Exit(-32);
+  if (not FileExistsUTF8(FichierTXT)) then  Exit(-32);
   // nom étude par défaut = nom du fichier
   SetNomEtude(ExtractFileNameWithoutExt(FichierTXT));
   SetCodeEPSGSystemeCoordonnees(EPSGDefault);

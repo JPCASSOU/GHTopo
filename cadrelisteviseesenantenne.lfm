@@ -6,6 +6,7 @@ object CdrListeViseesEnAntenne: TCdrListeViseesEnAntenne
   Align = alClient
   ClientHeight = 654
   ClientWidth = 996
+  LCLVersion = '2.0.0.4'
   ParentFont = False
   TabOrder = 0
   DesignLeft = 458
@@ -98,7 +99,7 @@ object CdrListeViseesEnAntenne: TCdrListeViseesEnAntenne
       Anchors = [akTop, akRight]
       ShowCaption = False
       ShowHint = True
-      
+      ParentShowHint = False
     end
     object SpeedButton4: TSpeedButton
       Left = 683
@@ -109,7 +110,7 @@ object CdrListeViseesEnAntenne: TCdrListeViseesEnAntenne
       Anchors = [akTop, akRight]
       ShowCaption = False
       ShowHint = True
-      
+      ParentShowHint = False
     end
     object SpeedButton6: TSpeedButton
       Left = 775
@@ -120,7 +121,7 @@ object CdrListeViseesEnAntenne: TCdrListeViseesEnAntenne
       Anchors = [akTop, akRight]
       ShowCaption = False
       ShowHint = True
-      
+      ParentShowHint = False
     end
     object editNumeroSerie: TCurrencyEdit
       Left = 136
@@ -153,7 +154,7 @@ object CdrListeViseesEnAntenne: TCdrListeViseesEnAntenne
       Anchors = [akTop, akRight]
       ShowCaption = False
       ShowHint = True
-      
+      ParentShowHint = False
     end
     object SpeedButton9: TSpeedButton
       Left = 744
@@ -164,7 +165,7 @@ object CdrListeViseesEnAntenne: TCdrListeViseesEnAntenne
       Anchors = [akTop, akRight]
       ShowCaption = False
       ShowHint = True
-      
+      ParentShowHint = False
     end
     object lbSerie: TLabel
       Left = 4
@@ -205,7 +206,7 @@ object CdrListeViseesEnAntenne: TCdrListeViseesEnAntenne
       Action = acFirstSerie
       ShowCaption = False
       ShowHint = True
-      
+      ParentShowHint = False
     end
     object SpeedButton12: TSpeedButton
       Left = 108
@@ -215,7 +216,7 @@ object CdrListeViseesEnAntenne: TCdrListeViseesEnAntenne
       Action = acPrevious10Serie
       ShowCaption = False
       ShowHint = True
-      
+      ParentShowHint = False
     end
     object SpeedButton13: TSpeedButton
       Left = 200
@@ -225,7 +226,7 @@ object CdrListeViseesEnAntenne: TCdrListeViseesEnAntenne
       Action = acNex10tSerie
       ShowCaption = False
       ShowHint = True
-      
+      ParentShowHint = False
     end
     object SpeedButton14: TSpeedButton
       Left = 257
@@ -235,7 +236,7 @@ object CdrListeViseesEnAntenne: TCdrListeViseesEnAntenne
       Action = acLastSerie
       ShowCaption = False
       ShowHint = True
-      
+      ParentShowHint = False
     end
     object sclStationsOfSerie: TScrollBar
       Left = 292
@@ -266,7 +267,7 @@ object CdrListeViseesEnAntenne: TCdrListeViseesEnAntenne
       Action = acNextSerie
       ShowCaption = False
       ShowHint = True
-      
+      ParentShowHint = False
     end
     object SpeedButton15: TSpeedButton
       Left = 80
@@ -276,7 +277,7 @@ object CdrListeViseesEnAntenne: TCdrListeViseesEnAntenne
       Action = acPreviousSerie
       ShowCaption = False
       ShowHint = True
-      
+      ParentShowHint = False
     end
   end
   object lsbViseesAntennes: TListBox

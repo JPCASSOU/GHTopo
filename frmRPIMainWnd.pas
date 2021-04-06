@@ -5,6 +5,7 @@
 //             à l'exception de celle de TBDDEntites
 //             et des palettes locales: TCdrExpe, TdlgSelectElement
 // 10/05/2020: Mise à jour de tous les cadres
+// 06/04/2021: Unification des Load** et Save**
 unit frmRPIMainWnd;
 {$INCLUDE CompilationParameters.inc}
 interface
@@ -12,6 +13,7 @@ uses
   {$INCLUDE SelectionLangues.inc} // insère les unités en fonction de la langue
   Common,
   Graphics,
+  LazFileUtils,
   StructuresDonnees,
   ToporobotClasses2012,
   CodeCalculTopo,
@@ -29,7 +31,8 @@ uses
   CadreDistoXLazSerial,
   CadreGHTopoContext2D,
   BZGraphesTypes, BZGraphesClasses, CadreViseesAntenne,
-  Classes, SysUtils, FileUtil, LazFileUtils, Forms, Controls, Dialogs, ActnList, Menus, ComCtrls, ExtCtrls, StdCtrls, Buttons, PairSplitter, EditBtn, FileCtrl, SynEdit;
+  Classes, SysUtils,
+  Forms, Controls, Dialogs, ActnList, Menus, ComCtrls, ExtCtrls, StdCtrls, Buttons, PairSplitter, EditBtn, FileCtrl, SynEdit;
 const
   ECRAN_RPI_WIDTH  = 1024;  // écran 8 ''
   ECRAN_RPI_HEIGHT =  600;
@@ -515,7 +518,7 @@ var
   MyQSaveData, MyQSaveKrobard, QBackUpFolder: TStringDirectoryFilename;
   procedure QSave(const QData, QKrobard: TStringDirectoryFilename);
   begin
-    FDocumentToporobot.SaveToFile(QData, mtabEXTENDEDTAB, tfWINDOWS);
+    FDocumentToporobot.SaveToXTB(QData, mtabEXTENDEDTAB, tfWINDOWS);
     FCroquisTerrain.SaveToXML(QKrobard);
   end;
 begin
@@ -883,7 +886,7 @@ begin
   end
   else
   begin
-    if (not FileExists(FData)) then
+    if (not FileExistsUTF8(FData)) then
     begin
       showMessageFmt(GetResourceString(rsMSG_FILENOTFOUND), [FData]);
       Exit;
@@ -946,7 +949,7 @@ begin
   end
   else
   begin // sinon, c'est un fichier supposé Tab ou XTB
-    if (FDocumentToporobot.LoadFichierTab(FC) < 0) then
+    if (FDocumentToporobot.LoadFromXTB(FC) < 0) then
     begin
       ShowMessage('Le fichier comporte des erreurs - Voir le rapport');
       DisplayTextEditor(GetGHTopoDirectory() + ChangeFileExt(ExtractFileName(FDocumentToporobot.GetDatabaseName), '.err'), True);
@@ -1228,7 +1231,7 @@ begin
     begin
       QFileNameData    := editCurrentDirectory.Directory + PathDelim + trim(editFileName.Text) + '.xtb';
       QFileNameKrobard := editCurrentDirectory.Directory + PathDelim + trim(editFileName.Text) + '.xml';
-      if (FileExists(QFileNameData)) then
+      if (FileExistsUTF8(QFileNameData)) then
       begin
         if (not GHTopoQuestionOuiNon(Format(rsWARN_FILE_ALREADY_EXISTS, [QFileNameData]))) then
         begin
@@ -1237,7 +1240,7 @@ begin
           FCurrentDocTopoName := ExtractFileNameOnly(QFileNameData);
         end;
       end;
-      FDocumentToporobot.SaveToFile(QFileNameData, mtabEXTENDEDTAB, tfWINDOWS);
+      FDocumentToporobot.SaveToXTB(QFileNameData, mtabEXTENDEDTAB, tfWINDOWS);
       FCroquisTerrain.SaveToXML(QFileNameKrobard);
       FModeUseMiniDialogSaveXTB := aesNONE;
       pnlSaveAs.Visible := false;

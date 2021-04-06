@@ -10,7 +10,9 @@ uses
   {$IFDEF MSWINDOWS}
   windows, shlobj,
   {$ENDIF MSWINDOWS}
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics,
+  Classes, SysUtils,
+  LazFileUtils,
+  Forms, Controls, Graphics,
   Dialogs, FileCtrl, ComCtrls, ExtCtrls, StdCtrls, Buttons, EditBtn, PairSplitter,
   IniFiles;
 
@@ -441,7 +443,7 @@ begin
   for i := n - 1 downto 0 do
   begin
     EWE := FListeRecentFiles.Strings[i];
-    if (not FileExists(EWE)) then FListeRecentFiles.Delete(i);
+    if (not FileExistsUTF8(EWE)) then FListeRecentFiles.Delete(i);
   end;
   n := FListeRecentFiles.Count;
   if (n = 0) then exit;

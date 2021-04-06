@@ -2,8 +2,6 @@ unit UnitRemoteFunctions;
 // Tranfert de fichiers et de dossiers via FTP vers le site synclinal
 //********************************************************************
 // Utilisable par GHTopo (notamment pour publication des graphes)
-
-
 {$mode delphi}
 
 interface
@@ -21,7 +19,6 @@ type
  TRemoteServicesFTP = class(TFTPSend)
   private
     FCurrentRemoteDirectory : string;
-    FDirList                : TStringList;
 
   public
     procedure SetCurrentRemoteDirectory(const PathFromRoot: TStringDirectoryFilename);
@@ -34,7 +31,7 @@ type
     function  ListFilenamesOf(const Path: string): integer;
     function  GetFileName(const Idx: integer): String;
     function  GetNbFilesOfLast(): integer;
-    function  CreateDirectory(const PathFromRoot, QDirectory: TStringDirectoryFilename; const YAller: boolean): boolean;
+    function  CreateDirectory(const PathFromRoot, QDirectory: TStringDirectoryFilename): boolean;
 
 end;
 
@@ -94,7 +91,7 @@ begin
   result := FtpList.Count;
 end;
 
-function TRemoteServicesFTP.CreateDirectory(const PathFromRoot, QDirectory: TStringDirectoryFilename; const YAller: boolean): boolean;
+function TRemoteServicesFTP.CreateDirectory(const PathFromRoot, QDirectory: TStringDirectoryFilename): boolean;
 var
   DD: String;
 begin
@@ -126,7 +123,7 @@ function TRemoteServicesFTP.SendFile(const QFilename: TStringDirectoryFilename):
 begin
   result := false;
   AfficherMessageErreur(Format('Envoi de %s vers %s', [QFilename, FCurrentRemoteDirectory]));
-  //if (not FileExists(QFilename)) then exit;
+  //if (not FileExistsUTF8(QFilename)) then exit;
   //try
     self.ChangeToRootDir;
     self.ChangeWorkingDir(FCurrentRemoteDirectory);

@@ -8,7 +8,9 @@ uses
   {$INCLUDE SelectionLangues.inc} // insère les unités en fonction de la langue
   StructuresDonnees, ToporobotClasses2012, UnitEntitesExtended,
   CallDialogsStdVersion, ConvertisseurJPC,
-  unitExportCenterlinesSilhouettesToGIS, Common, Classes, SysUtils, FileUtil,
+  unitExportCenterlinesSilhouettesToGIS, Common, Classes, SysUtils,
+  LazFileUtils,
+
   curredit, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls, Buttons,
   EditBtn, ComCtrls;
 
@@ -168,7 +170,7 @@ begin
     QFilename := trim(editExportFilename.Text);
     QDirectory := ExtractFilePath(trim(editExportFilename.Text));
     if (not DirectoryExists(QDirectory)) then ForceDirectories(QDirectory);
-    if (FileExists(qFilename)) then
+    if (FileExistsUTF8(qFilename)) then
     begin
       if (Not GHTopoQuestionOuiNon(Format('Le fichier %s existe - Ecraser ?', [qFilename]))) then Exit;
     end;

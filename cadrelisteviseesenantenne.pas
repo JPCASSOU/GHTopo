@@ -233,7 +233,7 @@ begin
   AssignFile(fp, FileName);
   try
     Rewrite(fp);
-    WriteLn(fp, 'No' + #9 + 'Serie' + #9 + 'Point' + #9 + 'Longueur' + #9 + 'Azimut' + #9 + 'Pente' + #9 + 'Obs');
+    WriteLn(fp, 'No' + #9 + 'Serie' + #9 + 'Point' + #9 + 'Longueur' + #9 + 'Azimut' + #9 + 'Pente');
     for i := 1 to QNbAntennes - 1 do
     begin
       VA := FMyDocTopo.GetViseeAntenne(FListeIdxAntennesRetenues.GetElement(i));
@@ -244,8 +244,7 @@ begin
                Format('%d', [VA.PtDepart]) + #9 +
                FormatterNombreOOo(VA.Longueur, 3) + #9 +
                FormatterNombreOOo(VA.Azimut  , 3) + #9 +
-               FormatterNombreOOo(VA.Pente   , 3) + #9 +
-               Trim(VA.Commentaires);
+               FormatterNombreOOo(VA.Pente   , 3);
         Writeln(fp, EWE);
       end;
     end;
@@ -347,7 +346,7 @@ begin
   MyBaseStation   := MySerie.GetVisee(MyNumeroStation);
   // pour éviter la création d'une boîte de dialogue dédiée:
   // saisie à l'ancienne
-  if (InputQuery('Ajout manuel d''une antenne', 'Long; Azimut; Pente; Commentaires', EWE)) then
+  if (InputQuery('Ajout manuel d''une antenne', 'Long; Azimut; Pente', EWE)) then
   begin
     WU := Split(EWE, ';');
     QLong   := ConvertirEnNombreReel(Trim(WU[0]), -1.00);
@@ -365,8 +364,6 @@ begin
     MyAntenne.Longueur     := QLong;
     MyAntenne.Azimut       := QAzimut;
     MyAntenne.Pente        := QPente;
-    MyAntenne.IDTerrainStation := '';
-    MyAntenne.Commentaires := mysqli_real_escape_string(Trim(WU[3]));
     FMyDocTopo.AddViseeAntenne(MyAntenne);
     ListerLesAntennesOfSerie(MySerie, 0);
   end;

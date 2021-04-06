@@ -134,8 +134,8 @@ uses
   Common,
   UnitListesSimplesWithGeneriques,
   unitobjetserie,
-
-  FileUtil, dateutils,
+  LazFileUtils,
+  dateutils,
   UnitClassPalette,
   math,
   Classes,

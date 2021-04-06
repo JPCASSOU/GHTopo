@@ -8,6 +8,7 @@ uses
   Common,
   Graphics,
   math,
+  LazFileUtils,
   FastGEO,
   CallDialogsStdVersion,
   frmPSDrawing2D,
@@ -1151,7 +1152,7 @@ function TCdrPascalScript.MNT_LoadMaillage(const QFilenameMAI: string): integer;
 begin
    result := -1;
   if (Not Assigned(FMyMaillage))     then exit(-64);
-  if (not FileExists(QFilenameMAI))  then exit(-2);
+  if (not FileExistsUTF8(QFilenameMAI))  then exit(-2);
   if (FMyMaillage.IsValidMaillage()) then exit(1); // LoadMaillage(GetGHTopoDirectory() + 'castet_miu.mai');
   Result := IIF(FMyMaillage.LoadMaillage(QFilenameMAI), 0, -1);
 end;
@@ -1399,7 +1400,7 @@ end;
 
 function  TCdrPascalScript.FTP_CreateDirectory(const PathFromRoot, QDirectory: TStringDirectoryFilename): boolean;
 begin
-  Result := FTransfertFTP.CreateDirectory(PathFromRoot, QDirectory, false);
+  Result := FTransfertFTP.CreateDirectory(PathFromRoot, QDirectory);
 end;
 
 procedure TCdrPascalScript.FTP_SetRemoteDirectory(const PathFromRoot: TStringDirectoryFilename);
@@ -1419,7 +1420,7 @@ begin
   EWE := Format('%s.FTP_SendFile(): %s to %s', [ClassName, QFilename, FTransfertFTP.GetCurrentRemoteDirectory()]);
   AfficherMessage(EWE);
   DispPSOutput(EWE);
-  if (not FileExists(QFilename)) then
+  if (not FileExistsUTF8(QFilename)) then
   begin
     DispPSOutput('-- Fichier inexistant: ' + QFilename);
     exit;

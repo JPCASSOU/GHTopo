@@ -271,7 +271,7 @@ Implementation
 Constructor TCoordinateTranslator.Create(aPathStr:String);
  Begin
   Inherited Create;
-  If Not FileExists(aPathStr+'\proj_def.dat') Then
+  If Not FileExistsUTF8(aPathStr+'\proj_def.dat') Then
    raise Exception.Create(Format(cPjErrorInitPath,[aPathStr]));
   fProjStr:=cPjDefaultProjection;
   fPJ := _pj_init_plus_path(PChar(fProjStr),PChar(aPathStr));

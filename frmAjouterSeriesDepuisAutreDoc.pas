@@ -13,7 +13,9 @@ uses
   ConvertisseurJPC,
   CadreListeSeries,
 
-  Classes, SysUtils, FileUtil, curredit, Forms, Controls, Graphics, Dialogs,
+  Classes, SysUtils,
+  LazFileUtils,
+  curredit, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, StdCtrls, Buttons, ComCtrls, DateTimePicker;
 
 type TTodoActionWithExistentSerie = (aesAPPEND_VISEES, aesREPLACE_VISEES, aesIGNORE_SERIE);
@@ -431,7 +433,7 @@ function TdlgAddSeriesFromOtherDoc.ChargerLaTopoExt(const FC: TStringDirectoryFi
 begin
   Result := false;
   AfficherMessage(Format('%s.ChargerLaTopoExt: %s', [ClassName, FC]));
-  if (not FileExists(FC)) then Exit(false);
+  if (not FileExistsUTF8(FC)) then Exit(false);
   FDocTopoAAjouter.ReInitialiser(True);
 
   FDocTopoAAjouter.SetDatabaseName('Doc_to_append');

@@ -189,7 +189,7 @@ begin
   Result:=-1;
   with self do
   begin
-    if Not FileExists(MyFichierNot) then
+    if Not FileExistsUTF8(MyFichierNot) then
     begin
 
       // si fichier inexistant, ajouter une annotation

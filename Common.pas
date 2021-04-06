@@ -28,7 +28,7 @@ uses
   , Grids, Clipbrd, LCLType, types // pour les grilles et le presse-papiers
   , Process
   , math
-  , FileUtil
+  , LazFileUtils
   , Graphics
   , Forms
   , unitUtilsCPU
@@ -428,6 +428,7 @@ uses
        frmRPIMainWnd,
     {$ELSE}
        frmJournal,
+
     {$ENDIF}
   {$ENDIF}
   {$IFDEF LINUX}
@@ -435,8 +436,9 @@ uses
        frmRPIMainWnd,
      {$ENDIF}
   {$ENDIF}
-  UnitTSAGeoMag,
   UnitRemoteFunctions,
+  UnitTSAGeoMag,
+
   ConvertisseurJPC in './UnitesMutualisees/convertisseurjpc.pas'; // API JPC
 
 function FTP_TestConnexion(const QFTPParams: TFTPParameters; const QPassWord: string; out QReturnCode: integer; out QReturnMsg: string): boolean;
@@ -464,7 +466,7 @@ begin
   try
     if (TD.SetParamsAndConnect(QFTPParams.HostName, StrToIntDef(QFTPParams.Port, 21), QFTPParams.User, QPassWord, QReturnCode, QReturnMsg)) then
     begin
-      TD.CreateDirectory(QPath, QDirectory, false);
+      TD.CreateDirectory(QPath, QDirectory);
     end;
     TD.Finaliser();
     result := True;
@@ -849,7 +851,7 @@ var
   LS   : TStringList;
 begin
   Result := False;
-  if Not(FileExists(InputFileName)) then Exit;
+  if Not(FileExistsUTF8(InputFileName)) then Exit;
   case OutputFormat of
     tfWINDOWS: ENDL := #13+#10;
     tfUNIX   : ENDL := #10;
@@ -3010,7 +3012,7 @@ begin
 // Now we will create the TProcess object, and
   Result := 0;
   // On vérifie si le programme existe
-  if (not FileExists(ProgName)) then exit(-2);
+  if (not FileExistsUTF8(ProgName)) then exit(-2);
   AProcess := TProcess.Create(nil);
   try
     try

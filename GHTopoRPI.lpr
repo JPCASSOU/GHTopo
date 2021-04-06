@@ -10,7 +10,7 @@ uses
   Forms
   //, dlgSplashScreen
   { you can add units after this }
-  , frmRPIMainWnd
+  , frmRPIMainWnd, laz_synapse
   , TAChartLazarusPkg, datetimectrls         // Indispensable ici
   //, CadreRoseDiagramme, CadreDepthDiagramme  // A désactiver sur Raspberry
   ;

@@ -87,6 +87,7 @@ uses
   StructuresDonnees,
   unitConteneurCodeCalcul,
   {$IFDEF MULTI_THREADING}
+  LCLProc, LCLType, LCLIntf; // Utiliser les TCriticalSection de la LCL, et non celles de la RTL
   GHTopoMultiThreading,
   {$ENDIF MULTI_THREADING}
   ToporobotClasses2012,
@@ -274,6 +275,7 @@ var
   QNbNodes    : integer;
   i, j        : integer;
   {$IFDEF MULTI_THREADING}
+  MyCriticalSection: TCriticalSection;
   MyThreadArray  : array  of TThreadMakeCompensationMatrix;
   lStart, lFinish: integer;
   EWE            : integer;
@@ -399,6 +401,7 @@ var
    LowIndex  : array of Integer;
    HighIndex : array of Integer;
    {$IFDEF MULTI_THREADING}
+   MyCriticalSection: TCriticalSection;
    MyThreadArray  : array  of TThreadFactoriseCompensationMatrix;
    lStart, lFinish: integer;
    EWE            : integer;
@@ -1126,6 +1129,7 @@ var
   t              : TDateTime;
   n, NbAntennes : integer;
   {$IFDEF MULTI_THREADING}
+  MyCriticalSection: TCriticalSection;
   MyThreadArray  : array  of TThreadViseesEnAntennesProcessing;
   lStart, lFinish: integer;
   EWE            : integer;

@@ -159,7 +159,7 @@ begin
   AfficherMessageErreur(WU);
   Result := -1;
   // Fichier introuvable ? OK, On sort
-  if not FileExists(FichierText) then  begin Result:=-32; Exit; end;
+  if not FileExistsUTF8(FichierText) then  begin Result:=-32; Exit; end;
   // nom étude par défaut
   SetNomEtude('Etude001');
   SetCommentairesEtude('Issued from Toporobot Text format (fixed columns)');

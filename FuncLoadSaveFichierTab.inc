@@ -48,7 +48,7 @@ var
       QFichierInclude := QMyDir + EWE;
       AfficherMessageErreur(QFichierInclude);
       // et on vérifie si le fichier existe
-      Result := FileExists(QFichierInclude);
+      Result := FileExistsUTF8(QFichierInclude);
     end;
   end;
 

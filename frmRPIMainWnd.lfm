@@ -1,7 +1,7 @@
 object RPIMainWnd: TRPIMainWnd
-  Left = 761
+  Left = 302
   Height = 584
-  Top = 424
+  Top = 308
   Width = 1150
   Caption = 'RPIMainWnd'
   ClientHeight = 584
@@ -1266,8 +1266,6 @@ object RPIMainWnd: TRPIMainWnd
             end
             inherited pnlTamponMesures: TPanel
               Top = 199
-              ClientHeight = 58
-              ClientWidth = 456
               inherited lbTamponLine0: TLabel
                 Width = 442
               end
@@ -2335,9 +2333,9 @@ object RPIMainWnd: TRPIMainWnd
     TabOrder = 2
   end
   object pnlProgression: TPanel
-    Left = 292
+    Left = 164
     Height = 46
-    Top = 508
+    Top = 424
     Width = 740
     Anchors = [akLeft, akRight, akBottom]
     BevelOuter = bvLowered

@@ -26,6 +26,7 @@ uses
   BGRABitmap,
   GL, GLU, //OpenGLContext,
   FastGEO,
+  LazFileUtils,
   SysUtils,Classes, Graphics, Dialogs;
 // intersection droite/triangle
 type TIntersectPlanTriangle = record
@@ -1247,7 +1248,7 @@ begin
   // opaque par défaut
   FOpacity := 128;
   Result := false;
-  if Not (FileExists(FichierMaillage)) then Exit;
+  if Not (FileExistsUTF8(FichierMaillage)) then Exit;
   AssignFile(PFileMAI,FichierMaillage);
   try
     // Lecture du fichier
@@ -2314,7 +2315,7 @@ begin
   AfficherMessageErreur(Format('%s.TriangulerAvecUnOutilExterne: %s', [ClassName, ProgramMailleurExterne]));
   result := false;
   AfficherMessageErreur('--> 00: Test du mailleur ' + ProgramMailleurExterne);
-  if (not FileExists(ProgramMailleurExterne)) then
+  if (not FileExistsUTF8(ProgramMailleurExterne)) then
   begin
     AfficherMessage('*** Mailleur introuvable - Arrêt');
     exit;

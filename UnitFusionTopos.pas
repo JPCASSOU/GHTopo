@@ -97,7 +97,7 @@ end;
 
 procedure TContainerFusionTopo.AddFichierAFusionner(const FN: TStringDirectoryFilename);
 begin
-  if (FileExists(FN)) then FListeFichiersAFusionner.Add(FN);
+  if (FileExistsUTF8(FN)) then FListeFichiersAFusionner.Add(FN);
 end;
 
 function TContainerFusionTopo.GetNbFichiersAFusionner(): integer;
@@ -279,7 +279,7 @@ function TContainerFusionTopo.ChargerLaTopo(const FD: TToporobotStructure2012; c
 begin
   AfficherMessage(Format('                 %s.ChargerLaTopo: %s', [ClassName, QFilename]));
   result := false;
-  if (not FileExists(QFilename)) then
+  if (not FileExistsUTF8(QFilename)) then
   begin
     AfficherMessageErreur(Format(GetResourceString(rsMSG_FILENOTFOUND), [QFilename]));
     Exit(false);

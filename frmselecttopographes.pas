@@ -9,7 +9,7 @@ uses
   Classes, SysUtils,
   CallDialogsStdVersion,
   Common,
-  FileUtil, Forms, Controls, Graphics, Dialogs, Buttons, StdCtrls;
+  LazFileUtils, Forms, Controls, Graphics, Dialogs, Buttons, StdCtrls;
 
 type
 
@@ -100,7 +100,7 @@ begin
   lsbTopographes.Clear;
   lsbTopographes.Items.Add('Gros Minet');
   try
-    if (FileExists(EWE)) then lsbTopographes.Items.LoadFromFile(EWE);
+    if (FileExistsUTF8(EWE)) then lsbTopographes.Items.LoadFromFile(EWE);
   except
   end;
   lsbTopographes.ItemIndex := 0;

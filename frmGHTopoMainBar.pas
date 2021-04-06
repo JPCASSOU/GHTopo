@@ -1640,12 +1640,11 @@ begin
     // les fichiers récents
     FListeRecentFiles.Clear;
     WU := GetGHTopoDirectory() + LAST_DOCS_OPENDED_FILENAME;
-    if (FileExists(WU)) then FListeRecentFiles.LoadFromFile(WU);
+    if (FileExistsUTF8(WU)) then FListeRecentFiles.LoadFromFile(WU);
     // les paramètres FTP
     FFTPParameters.HostName := INI.ReadString(INI_SECTION_FTP_SETTINGS, INI_FTP_HOSTNAME, DEFAULT_FTP_HOSTNAME);
     FFTPParameters.Port     := INI.ReadString(INI_SECTION_FTP_SETTINGS, INI_FTP_PORT    , DEFAULT_FTP_PORT);
     FFTPParameters.User     := INI.ReadString(INI_SECTION_FTP_SETTINGS, INI_FTP_User    , DEFAULT_FTP_USER);
-
     Result := true;
   finally
     FreeAndNil(INI);//INI.Free;     // After the ini file was used it must be freed to prevent memory leaks.
