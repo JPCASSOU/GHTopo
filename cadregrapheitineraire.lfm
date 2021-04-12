@@ -159,6 +159,8 @@ object CdrGrapheItineraire: TCdrGrapheItineraire
         Width = 751
         ClientHeight = 482
         ClientWidth = 751
+        DesignLeft = 1140
+        DesignTop = 182
         inherited pnlVue: TPanel
           Height = 446
           Width = 720

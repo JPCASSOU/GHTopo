@@ -714,8 +714,6 @@ begin
     for i := 1 to grdDonnees.RowCount - 1 do grdDonnees.Cells[0,i] := IntToStr(i);
 
     RemplirLesComboboxDepuisGrille();
-
-
     // aide pour la grille de conversion
     lbHintGrdConversions.Caption := GetResourceString(rsDLG_CALC_HINT_GRD_CONVERSIONS);
 

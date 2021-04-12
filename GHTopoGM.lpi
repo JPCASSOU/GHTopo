@@ -161,7 +161,7 @@
         <PackageName Value="LCL"/>
       </Item16>
     </RequiredPackages>
-    <Units Count="73">
+    <Units Count="74">
       <Unit0>
         <Filename Value="GHTopoGM.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -589,6 +589,11 @@
         <Filename Value="FuncLoadSaveFichierJSON.inc"/>
         <IsPartOfProject Value="True"/>
       </Unit72>
+      <Unit73>
+        <Filename Value="ghtopomultithreading2.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GHTopoMultiThreading2"/>
+      </Unit73>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

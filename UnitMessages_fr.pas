@@ -773,8 +773,22 @@ resourcestring
   rsDLG_CALC_TAB_RESOL_TRIANGLES             = 'Résolution de triangles';
   rsDLG_CALC_TAB_CARACTERISTIQUES_SECTIONS   = 'Aires et inerties';
 
+  // onglet PascalScript
+  rsTAB_PS_AC_RUN                            = 'Exécuter le script';
+  rsTAB_PS_AC_STOP                           = 'Arrêter le script';
+  rsTAB_PS_AC_NEW                            = 'Nouveau script';
+  rsTAB_PS_AC_OPEN                           = 'Ouvrir un script';
+  rsTAB_PS_AC_SAVE                           = 'Sauvegarder le script';
+  rsTAB_PS_AC_COPY_OUTPUT                    = 'Copier la console de sortie';
+  rsTAB_PS_TabShtConsoleOutput_CAPTION       = 'Console de sortie du script';
+  rsTAB_PS_TabShtMessagesCompilo_CAPTION     = 'Messages de l''interpréteur';
+
+
+  //****************************************************************************
 
   rsLB_DOCUMENT_TITLE                        = 'Titre du document';
+
+
 
 
   // gestion du presse papiers pour l''import de données dans la grille Stations

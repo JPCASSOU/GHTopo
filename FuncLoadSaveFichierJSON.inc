@@ -1,5 +1,6 @@
 // FuncLoadSaveFichierJSON.inc
 // Fichier de déclaration des clés pour le format GHTopo XML GTX
+{$ERROR En attente}
 const
   JSON_ATTR_COLOR_R     = 'ColorR';
   JSON_ATTR_COLOR_G     = 'ColorG';

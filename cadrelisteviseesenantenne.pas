@@ -70,7 +70,6 @@ type
     procedure hcColsTitresSectionResize(HeaderControl: TCustomHeaderControl; Section: THeaderSection);
     procedure lsbViseesAntennesDrawItem(Control: TWinControl; Index: Integer; ARect: TRect; State: TOwnerDrawState);
     procedure sclStationsOfSerieChange(Sender: TObject);
-
   private
     FIsReady    : boolean;
     FMyDocTopo  : TToporobotStructure2012;
@@ -138,23 +137,17 @@ begin
     FListeIdxAntennesRetenues.ClearListe();
     SetCurrentInternalIdxSerie(QCurrentNumeroSerie);
     ListerLesAntennesOfSerie(FMyDocTopo.GetSerie(FInternalIdxSerie));
-
     result := True;
   except
   end;
   FIsReady := Result;
 end;
 
-
-
-
-
 procedure TCdrListeViseesEnAntenne.Finaliser();
 begin
   FIsReady := false;
   try
     FListeIdxAntennesRetenues.ClearListe();
-
   finally
     FreeAndNil(FListeIdxAntennesRetenues);
   end;

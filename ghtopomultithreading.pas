@@ -289,6 +289,9 @@ begin
     CalcCompensationMatrix();
   end;
 
+
+
+
 end;
 
 procedure TThreadMakeCompensationMatrix.CalcCompensationMatrix();
@@ -675,6 +678,8 @@ begin
 
   // create the CriticalSection
   InitializeCriticalSection(CriticalSection);
+
+
 
   // start 5 threads
   for i:=Low(Threads) to High(Threads) do

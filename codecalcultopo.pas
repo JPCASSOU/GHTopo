@@ -165,6 +165,8 @@ type
     function  GenererFichierSyntheseAvecCoordonnees(const FileName: string): boolean;
 end;
 
+
+
 implementation
 uses
   DGCDummyUnit,
@@ -1253,6 +1255,8 @@ begin
   end;
   AfficherMessage('TraiterViseesEnAntenne: Vidage 000');
   // 3. Attente des fins de traitement par les threads
+
+
   for NumeroThread := 1 to NB_MAX_THREADS do
   begin
     EWE := MyThreadArray[NumeroThread].AttendPour();

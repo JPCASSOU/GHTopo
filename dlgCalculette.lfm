@@ -1,11 +1,11 @@
 object frmCalculette: TfrmCalculette
-  Left = 154
-  Height = 834
-  Top = 122
-  Width = 1365
+  Left = -1659
+  Height = 716
+  Top = 188
+  Width = 1172
   Caption = 'frmCalculette'
-  ClientHeight = 834
-  ClientWidth = 1365
+  ClientHeight = 716
+  ClientWidth = 1172
   Font.CharSet = ANSI_CHARSET
   Font.Color = clBlack
   Font.Height = -13
@@ -15,13 +15,14 @@ object frmCalculette: TfrmCalculette
   Font.Style = [fsBold]
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
   OnShow = FormShow
   Position = poScreenCenter
   LCLVersion = '2.0.0.4'
   object BitBtn1: TBitBtn
-    Left = 1119
+    Left = 926
     Height = 26
-    Top = 804
+    Top = 686
     Width = 120
     Anchors = [akRight, akBottom]
     DefaultCaption = True
@@ -38,9 +39,9 @@ object frmCalculette: TfrmCalculette
     TabOrder = 2
   end
   object BitBtn2: TBitBtn
-    Left = 1243
+    Left = 1050
     Height = 26
-    Top = 804
+    Top = 686
     Width = 120
     Anchors = [akRight, akBottom]
     Cancel = True
@@ -59,13 +60,13 @@ object frmCalculette: TfrmCalculette
   end
   object Panel1: TPanel
     Left = 0
-    Height = 798
+    Height = 680
     Top = 4
-    Width = 1359
+    Width = 1166
     Anchors = [akTop, akLeft, akRight, akBottom]
     BevelOuter = bvLowered
-    ClientHeight = 798
-    ClientWidth = 1359
+    ClientHeight = 680
+    ClientWidth = 1166
     Font.CharSet = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -13
@@ -77,18 +78,14 @@ object frmCalculette: TfrmCalculette
     TabOrder = 1
     inline CdrCalculette1: TCdrCalculette
       Left = 1
-      Height = 796
+      Height = 678
       Top = 1
-      Width = 1357
-      ClientHeight = 796
-      ClientWidth = 1357
-      DesignLeft = 403
-      DesignTop = 260
+      Width = 1164
+      ClientHeight = 678
+      ClientWidth = 1164
       inherited PageControl1: TPageControl
-        Height = 796
-        Width = 1357
-        ActivePage = CdrCalculette1.tabShtInerties
-        TabIndex = 6
+        Height = 678
+        Width = 1164
         inherited tabShtCalculatrice: TTabSheet
           inherited Panel8: TPanel
             inherited SpeedButton1: TSpeedButton
@@ -189,56 +186,65 @@ object frmCalculette: TfrmCalculette
           end
         end
         inherited tabShtPascalScript: TTabSheet
+          ClientHeight = 649
+          ClientWidth = 1156
           inherited CdrPascalScript1: TCdrPascalScript
-            Height = 704
-            Width = 1222
-            ClientHeight = 704
-            ClientWidth = 1222
+            Height = 649
+            Width = 1156
+            ClientHeight = 649
+            ClientWidth = 1156
             inherited pnlEditor: TPanel
-              Height = 648
-              Width = 1214
-              ClientHeight = 648
-              ClientWidth = 1214
+              Height = 593
+              Width = 1148
+              ClientHeight = 593
+              ClientWidth = 1148
               inherited PairSplitter4: TPairSplitter
-                Height = 646
-                Width = 1212
+                Height = 591
+                Width = 1146
                 inherited PairSplitterSide7: TPairSplitterSide
-                  Width = 1212
-                  ClientWidth = 1212
+                  Width = 1146
+                  ClientWidth = 1146
                   inherited PairSplitter6: TPairSplitter
-                    Width = 1212
+                    Width = 1146
                     inherited PairSplitterSide12: TPairSplitterSide
-                      Width = 919
-                      ClientWidth = 919
+                      Width = 853
+                      ClientWidth = 853
                       inherited editPascalScript: TSynEdit
-                        Width = 919
+                        Width = 853
                       end
                     end
                   end
                 end
                 inherited PairSplitterSide8: TPairSplitterSide
-                  Height = 240
-                  Width = 1212
-                  ClientWidth = 1212
-                  ClientHeight = 240
-                  inherited PairSplitter5: TPairSplitter
-                    Height = 240
-                    Width = 1212
-                    inherited PairSplitterSide9: TPairSplitterSide
-                      Height = 240
-                      ClientHeight = 240
+                  Height = 281
+                  Width = 1146
+                  ClientWidth = 1146
+                  ClientHeight = 281
+                  inherited PageControlMsgsOutputs: TPageControl
+                    Height = 281
+                    Width = 1146
+                    inherited tabShtCompiloMessages: TTabSheet
+                      ClientHeight = 252
+                      ClientWidth = 1138
                       inherited lsbPSMessages: TListBox
-                        Height = 240
+                        Height = 252
+                        Width = 1138
                       end
                     end
-                    inherited PairSplitterSide10: TPairSplitterSide
-                      Height = 240
-                      Width = 835
-                      ClientWidth = 835
-                      ClientHeight = 240
+                    inherited tabShtConsoleOutput: TTabSheet
+                      ClientHeight = 252
+                      ClientWidth = 1138
                       inherited editPSOutPut: TSynEdit
-                        Height = 240
-                        Width = 835
+                        Height = 249
+                        Width = 1095
+                      end
+                      inherited Panel2: TPanel
+                        Left = 1096
+                        Height = 248
+                        ClientHeight = 248
+                        inherited SpeedButton11: TSpeedButton
+                          Flat = False
+                        end
                       end
                     end
                   end
@@ -263,7 +269,7 @@ object frmCalculette: TfrmCalculette
               end
             end
             inherited lbStatusPSScript: TStaticText
-              Left = 1082
+              Left = 1016
             end
           end
         end
@@ -283,16 +289,8 @@ object frmCalculette: TfrmCalculette
           end
         end
         inherited tabShtInerties: TTabSheet
-          ClientHeight = 767
-          ClientWidth = 1349
           inherited Panel2: TPanel
-            Height = 760
-            Width = 1203
-            ClientHeight = 760
-            ClientWidth = 1203
             inherited PageControl2: TPageControl
-              Height = 749
-              Width = 886
               inherited TabSheet1: TTabSheet
                 inherited CdrDGCDrawingContext1: TCdrDGCDrawingContext
                   Height = 657
@@ -365,97 +363,84 @@ object frmCalculette: TfrmCalculette
                 end
               end
               inherited TabSheet2: TTabSheet
-                ClientHeight = 720
-                ClientWidth = 878
                 inherited CdrDGCDrawingContext2: TCdrDGCDrawingContext
-                  Height = 720
-                  Width = 878
-                  ClientHeight = 720
-                  ClientWidth = 878
+                  Height = 657
+                  Width = 751
+                  ClientHeight = 657
+                  ClientWidth = 751
                   DesignTop = 201
                   inherited pnlVue: TPanel
-                    Height = 684
-                    Width = 847
-                    ClientHeight = 684
-                    ClientWidth = 847
+                    Height = 621
+                    Width = 720
+                    ClientHeight = 621
+                    ClientWidth = 720
                     inherited Vue: TPaintBox
-                      Height = 682
-                      Width = 845
+                      Height = 619
+                      Width = 718
                     end
                   end
                   inherited lbMousePosition: TStaticText
-                    Top = 689
-                    Width = 743
+                    Top = 626
+                    Width = 616
                   end
                   inherited SpeedButton12: TSpeedButton
-                    Left = 846
+                    Left = 719
                     Flat = False
                   end
                   inherited SpeedButton13: TSpeedButton
-                    Left = 846
+                    Left = 719
                     Flat = False
                   end
                   inherited SpeedButton14: TSpeedButton
-                    Left = 846
+                    Left = 719
                     Flat = False
                   end
                   inherited SpeedButton15: TSpeedButton
-                    Left = 846
+                    Left = 719
                     Flat = False
                   end
                   inherited SpeedButton16: TSpeedButton
-                    Left = 846
+                    Left = 719
                     Flat = False
                   end
                   inherited SpeedButton17: TSpeedButton
-                    Left = 846
+                    Left = 719
                     Flat = False
                   end
                   inherited SpeedButton18: TSpeedButton
-                    Left = 846
-                    Top = 654
+                    Left = 719
+                    Top = 591
                     Flat = False
                   end
                   inherited SpeedButton19: TSpeedButton
-                    Left = 783
-                    Top = 688
+                    Left = 656
+                    Top = 625
                     Flat = False
                   end
                   inherited SpeedButton20: TSpeedButton
-                    Left = 815
-                    Top = 688
+                    Left = 688
+                    Top = 625
                     Flat = False
                   end
                   inherited SpeedButton21: TSpeedButton
-                    Left = 846
-                    Top = 688
+                    Left = 719
+                    Top = 625
                   end
                   inherited SpeedButton22: TSpeedButton
-                    Left = 751
-                    Top = 688
+                    Left = 624
+                    Top = 625
                     Flat = False
                   end
                 end
               end
             end
           end
-          inherited Panel12: TPanel
-            Height = 665
-            ClientHeight = 665
-            inherited grdCoordonneesSection: TStringGrid
-              Height = 325
-            end
-            inherited Panel14: TPanel
-              Top = 333
-            end
-          end
         end
         inherited tabShtTextures: TTabSheet
-          ClientHeight = 704
           inherited CdrTextures1: TCdrTextures
-            Height = 704
+            Height = 703
             Width = 1222
-            ClientHeight = 704
+            ClientHeight = 703
             ClientWidth = 1222
             inherited Panel2: TPanel
               Left = 811
@@ -477,7 +462,7 @@ object frmCalculette: TfrmCalculette
               Left = 811
             end
             inherited editCodePascalTexture: TSynEdit
-              Height = 532
+              Height = 531
               Width = 801
             end
           end
@@ -488,7 +473,7 @@ object frmCalculette: TfrmCalculette
   object lbDocTopoName: TStaticText
     Left = 2
     Height = 21
-    Top = 807
+    Top = 689
     Width = 552
     Anchors = [akLeft, akBottom]
     BorderStyle = sbsSunken

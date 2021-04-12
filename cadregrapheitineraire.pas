@@ -97,8 +97,6 @@ type
     FGraphe: TPathFindingGraphe;
     FDisplayDevices: array of TDisplayDevice;
 
-
-
     procedure DisplayProgression(const Etape: string; const Done, Starting, Ending, Step: integer);
     procedure GetCoordsPointClicked();
     procedure RemplirComboBoxDevices();
@@ -113,8 +111,6 @@ type
     function  GetCurrentStation(): TBZClassNode;
     procedure SetBackgroundColor(const C: TColor);
     procedure SetCenterlineColor(const C: TColor);
-
-
 end;
 
 

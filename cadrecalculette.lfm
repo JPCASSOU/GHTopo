@@ -1,11 +1,11 @@
 object CdrCalculette: TCdrCalculette
   Left = 0
-  Height = 732
+  Height = 665
   Top = 0
-  Width = 1230
+  Width = 1083
   Align = alClient
-  ClientHeight = 732
-  ClientWidth = 1230
+  ClientHeight = 665
+  ClientWidth = 1083
   Font.CharSet = ANSI_CHARSET
   Font.Color = clBlack
   Font.Height = -13
@@ -13,20 +13,19 @@ object CdrCalculette: TCdrCalculette
   Font.Pitch = fpVariable
   Font.Quality = fqDraft
   Font.Style = [fsBold]
-  LCLVersion = '2.0.0.4'
   ParentFont = False
   TabOrder = 0
-  DesignLeft = 286
-  DesignTop = 336
+  DesignLeft = 288
+  DesignTop = 187
   object PageControl1: TPageControl
     Left = 0
-    Height = 732
+    Height = 665
     Top = 0
-    Width = 1230
-    ActivePage = tabShtTextures
+    Width = 1083
+    ActivePage = tabShtPascalScript
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
-    TabIndex = 7
+    TabIndex = 3
     TabOrder = 0
     OnChange = PageControl1Change
     object tabShtCalculatrice: TTabSheet
@@ -1216,7 +1215,7 @@ object CdrCalculette: TCdrCalculette
     end
     object tabShtGenerateurQRCode: TTabSheet
       Caption = 'tabShtGenerateurQRCode'
-      ClientHeight = 704
+      ClientHeight = 703
       ClientWidth = 1222
       object lbQRCodeGenerator: TStaticText
         Left = 2
@@ -1232,19 +1231,19 @@ object CdrCalculette: TCdrCalculette
       end
       object Panel10: TPanel
         Left = 2
-        Height = 677
+        Height = 676
         Top = 28
         Width = 1340
         Anchors = [akTop, akLeft, akRight, akBottom]
         BevelInner = bvRaised
         BevelOuter = bvLowered
-        ClientHeight = 677
+        ClientHeight = 676
         ClientWidth = 1340
         TabOrder = 1
         object PairSplitter7: TPairSplitter
           Cursor = crDefault
           Left = 2
-          Height = 673
+          Height = 672
           Top = 2
           Width = 1336
           Align = alClient
@@ -1252,11 +1251,11 @@ object CdrCalculette: TCdrCalculette
           object PairSplitterSide13: TPairSplitterSide
             Cursor = crArrow
             Left = 0
-            Height = 673
+            Height = 672
             Top = 0
             Width = 416
             ClientWidth = 416
-            ClientHeight = 673
+            ClientHeight = 672
             object SpeedButton15: TSpeedButton
               Left = 144
               Height = 42
@@ -1288,7 +1287,7 @@ object CdrCalculette: TCdrCalculette
             object btnCreateGUID: TButton
               Left = 4
               Height = 25
-              Top = 549
+              Top = 548
               Width = 106
               Anchors = [akLeft, akBottom]
               Caption = 'GUID'
@@ -1298,7 +1297,7 @@ object CdrCalculette: TCdrCalculette
             object editGUID: TEdit
               Left = 112
               Height = 24
-              Top = 549
+              Top = 548
               Width = 296
               Anchors = [akLeft, akRight, akBottom]
               TabOrder = 1
@@ -1306,7 +1305,7 @@ object CdrCalculette: TCdrCalculette
             object lbPosCursorSynEdit: TStaticText
               Left = 252
               Height = 20
-              Top = 512
+              Top = 511
               Width = 156
               Anchors = [akRight, akBottom]
               BorderStyle = sbsSunken
@@ -1569,7 +1568,7 @@ object CdrCalculette: TCdrCalculette
             end
             object editTextToEncodeQR: TMemo
               Left = 4
-              Height = 441
+              Height = 440
               Top = 68
               Width = 406
               Anchors = [akTop, akLeft, akRight, akBottom]
@@ -1587,25 +1586,25 @@ object CdrCalculette: TCdrCalculette
           object PairSplitterSide14: TPairSplitterSide
             Cursor = crArrow
             Left = 421
-            Height = 673
+            Height = 672
             Top = 0
             Width = 915
             ClientWidth = 915
-            ClientHeight = 673
+            ClientHeight = 672
             object pnlQRCode: TPanel
               Left = 0
-              Height = 673
+              Height = 672
               Top = 0
               Width = 915
               Align = alClient
               BevelInner = bvRaised
               BevelOuter = bvLowered
-              ClientHeight = 673
+              ClientHeight = 672
               ClientWidth = 915
               TabOrder = 0
               object VueQRCode: TBarcodeQR
                 Left = 2
-                Height = 669
+                Height = 668
                 Top = 2
                 Width = 911
                 Align = alClient
@@ -1622,58 +1621,57 @@ object CdrCalculette: TCdrCalculette
     end
     object tabShtPascalScript: TTabSheet
       Caption = 'tabShtPascalScript'
-      ClientHeight = 704
-      ClientWidth = 1222
+      ClientHeight = 636
+      ClientWidth = 1075
       inline CdrPascalScript1: TCdrPascalScript
-        Height = 704
-        Width = 1222
-        ClientHeight = 704
-        ClientWidth = 1222
+        Height = 636
+        Width = 1075
+        ClientHeight = 636
+        ClientWidth = 1075
         inherited pnlEditor: TPanel
-          Height = 648
-          Width = 1214
-          ClientHeight = 648
-          ClientWidth = 1214
+          Height = 580
+          Width = 1067
+          ClientHeight = 580
+          ClientWidth = 1067
           inherited PairSplitter4: TPairSplitter
-            Height = 646
-            Width = 1212
+            Height = 578
+            Width = 1065
             inherited PairSplitterSide7: TPairSplitterSide
-              Width = 1212
-              ClientWidth = 1212
+              Width = 1065
+              ClientWidth = 1065
               inherited PairSplitter6: TPairSplitter
-                Width = 1212
+                Width = 1065
                 inherited PairSplitterSide12: TPairSplitterSide
-                  Width = 919
-                  ClientWidth = 919
+                  Width = 772
+                  ClientWidth = 772
                   inherited editPascalScript: TSynEdit
-                    Width = 919
+                    Width = 772
                   end
                 end
               end
             end
             inherited PairSplitterSide8: TPairSplitterSide
-              Height = 240
-              Width = 1212
-              ClientWidth = 1212
-              ClientHeight = 240
-              inherited PairSplitter5: TPairSplitter
-                Height = 240
-                Width = 1212
-                inherited PairSplitterSide9: TPairSplitterSide
-                  Height = 240
-                  ClientHeight = 240
-                  inherited lsbPSMessages: TListBox
-                    Height = 240
-                  end
-                end
-                inherited PairSplitterSide10: TPairSplitterSide
-                  Height = 240
-                  Width = 835
-                  ClientWidth = 835
-                  ClientHeight = 240
+              Height = 268
+              Width = 1065
+              ClientWidth = 1065
+              ClientHeight = 268
+              inherited PageControlMsgsOutputs: TPageControl
+                Height = 268
+                Width = 1065
+                inherited tabShtConsoleOutput: TTabSheet
+                  ClientHeight = 239
+                  ClientWidth = 1057
                   inherited editPSOutPut: TSynEdit
-                    Height = 240
-                    Width = 835
+                    Height = 239
+                    Width = 1011
+                  end
+                  inherited Panel2: TPanel
+                    Left = 1011
+                    Height = 239
+                    ClientHeight = 239
+                    inherited SpeedButton11: TSpeedButton
+                      Flat = False
+                    end
                   end
                 end
               end
@@ -1698,7 +1696,7 @@ object CdrCalculette: TCdrCalculette
           end
         end
         inherited lbStatusPSScript: TStaticText
-          Left = 1082
+          Left = 935
         end
       end
     end

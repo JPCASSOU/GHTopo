@@ -25,6 +25,7 @@ type  { TfrmCalculette }
     lbDocTopoName: TStaticText;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
+    procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
     FMyTabIndex: integer;
@@ -146,6 +147,11 @@ procedure TfrmCalculette.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
   CanClose := false;
   if (GHTopoQuestionOuiNon('Fermer')) then CanClose := True;
+end;
+
+procedure TfrmCalculette.FormCreate(Sender: TObject);
+begin
+
 end;
 
 

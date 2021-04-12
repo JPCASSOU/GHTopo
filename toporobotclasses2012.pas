@@ -142,7 +142,7 @@ uses
   SysUtils,
   Graphics,
   UnitTSAGeoMag,
-  fpjson, jsonparser,       // pour JSON
+  //fpjson, jsonparser,       // pour JSON
   DOM, XMLWrite, XMLRead;   // pour XML
 
 // REFONTE DU CONTENEUR TTOPOROBOTSTRUCTURE
@@ -253,8 +253,9 @@ type
     procedure SaveToXTB(const FichierTAB: TStringDirectoryFilename; const ModeSaveTAB: TModeSaveTAB; const TextFileFormat: TTextFileFormat);
     function  LoadFromXML(const FichierXML: TStringDirectoryFilename): integer;
     procedure SaveToXML(const FichierXML: TStringDirectoryFilename);
-    function  LoadFromJSON(const FichierJSON: TStringDirectoryFilename): integer;
-    procedure SaveToJSON(const FichierJSON: TStringDirectoryFilename);
+    //En attente
+    //function  LoadFromJSON(const FichierJSON: TStringDirectoryFilename): integer;
+    //procedure SaveToJSON(const FichierJSON: TStringDirectoryFilename);
 
     // import depuis Toporobot Text et PocketTopo TXT
     function  LoadFichierText(const FichierText: TStringDirectoryFilename): integer; deprecated;
@@ -1489,7 +1490,7 @@ end;
 
 // function  TToporobotStructure2012.LoadFromJSON(const FichierXML: TStringDirectoryFilename): integer;
 // procedure TToporobotStructure2012.SaveToJSON(const FichierXML: TStringDirectoryFilename);
-{$INCLUDE FuncLoadSaveFichierJSON.inc}
+//{$INCLUDE FuncLoadSaveFichierJSON.inc}
 //******************************************************************************
 
 
@@ -1535,7 +1536,6 @@ begin
     EWE.eNomEntree   := 'Nouvelle entree';
     self.AddEntrance(EWE);
     result := true;
-    //AfficherMessage(Format('%d entrées', [GetNbEntrances()]));
   except
   end;
 end;
@@ -1579,8 +1579,6 @@ begin
   Result := FTableIDsTerrain.GetElement(NumLabelTerrain);
 end;
 
-
-
 procedure TToporobotStructure2012.PutLabelTerrain(const NoLabelTerrain: integer; const ALabelTerrain: TToporobotIDStation);
 begin
   FTableIDsTerrain.PutElement(NoLabelTerrain, ALabelTerrain);
@@ -1597,10 +1595,6 @@ function TToporobotStructure2012.GetNbLabelTerrain: integer;
 begin
   Result := FTableIDsTerrain.GetNbElements;
 end;
-
-
-
-
 
 function TToporobotStructure2012.CreateNouveauReseau(): boolean;
 var
@@ -1860,11 +1854,7 @@ begin
   Result := FTableCodes.GetNbElements();
 end;
 
-
-
-
 function TToporobotStructure2012.CreateNouveauCode(): boolean;
-
 var
   nb: Integer;
   EWE: TCode;

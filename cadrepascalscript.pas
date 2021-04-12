@@ -23,7 +23,7 @@ uses
   UnitObjetSerie,
   //unitProfilTopo,
   {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
-  Classes, SysUtils, Forms, Controls, Buttons, ActnList, ExtCtrls, PairSplitter, StdCtrls, Dialogs,
+  Classes, SysUtils, Forms, Controls, Buttons, ActnList, ExtCtrls, PairSplitter, StdCtrls, Dialogs, ComCtrls,
   SynEdit, SynHighlighterPas,
   //Ipfilebroker,
   uPSComponent,
@@ -45,6 +45,7 @@ type
     acPSStop: TAction;
     acSavePSScript: TAction;
     acNewScript: TAction;
+    acCopyOutput: TAction;
     Action2: TAction;
     Action3: TAction;
     Action4: TAction;
@@ -56,16 +57,15 @@ type
     lsbPSFunctions: TListBox;
     lsbPSMessages: TListBox;
     memoHelp: TMemo;
+    PageControlMsgsOutputs: TPageControl;
     PairSplitter4: TPairSplitter;
-    PairSplitter5: TPairSplitter;
     PairSplitter6: TPairSplitter;
-    PairSplitterSide10: TPairSplitterSide;
     PairSplitterSide11: TPairSplitterSide;
     PairSplitterSide12: TPairSplitterSide;
     PairSplitterSide7: TPairSplitterSide;
     PairSplitterSide8: TPairSplitterSide;
-    PairSplitterSide9: TPairSplitterSide;
     Panel1: TPanel;
+    Panel2: TPanel;
     pnlEditor: TPanel;
     pnlButtons: TPanel;
     PSCustomPlugin1: TPSCustomPlugin;
@@ -73,6 +73,9 @@ type
     PSScriptDebugger1: TPSScriptDebugger;
     SpeedButton1: TSpeedButton;
     SpeedButton10: TSpeedButton;
+    SpeedButton11: TSpeedButton;
+    SpeedButton12: TSpeedButton;
+    SpeedButton13: TSpeedButton;
     SpeedButton2: TSpeedButton;
     SpeedButton3: TSpeedButton;
     SpeedButton4: TSpeedButton;
@@ -82,6 +85,9 @@ type
     SpeedButton8: TSpeedButton;
     SpeedButton9: TSpeedButton;
     SynPasSyn1: TSynPasSyn;
+    tabShtCompiloMessages: TTabSheet;
+    tabShtConsoleOutput: TTabSheet;
+    procedure acCopyOutputExecute(Sender: TObject);
     procedure acLoadPSScriptExecute(Sender: TObject);
     procedure acNewScriptExecute(Sender: TObject);
     procedure acPSExecuteExecute(Sender: TObject);
@@ -108,6 +114,7 @@ type
 
     // vers la console
     procedure cls();
+
 
 
     procedure printf(const FMT: string; const Argv: array of const);
@@ -137,6 +144,7 @@ type
     function  DT_GetNbreStationsOfSerieByIdx(const Idx: integer): integer;
     function  DT_GetNbreStationsOfSerieByNoSerie(const NoSerie: integer): integer;
     function  DT_GetNumeroEtNomDeSerieByIdx(const Idx: integer; out QNumSerie: TNumeroSerie; out QNomSerie: string; out QNbVisees: integer): boolean;
+    function  DT_ModifyEntrance(const QIdx: integer; const RefSer, RefSt: integer; const XEntree, YEntree, ZEntree: double; const R, G, B: integer; const NomEntree, IDTerrain, Observ: string): boolean;
     //function  DT_ExtractDataFromVisee(const QNumeroSerie: TNumeroSerie; const QNumeroStation: TNumeroStation; out V: array of string): boolean;
 
     function  DT_BeginNewSerie(const QNumeroSerie: integer;
@@ -234,7 +242,7 @@ type
     procedure NewScript(const ScriptName: string = 'NewScript01');
 
     ////////////////////////////////////////////////////////////////////////////////
-
+    procedure InitCaptions();
   public
     {$ifdef CALCULETTE_EMBEDDED_IN_GHTOPO}
     function Initialiser(const QEvaluateurExpr: TEvaluateurExpressions;
@@ -331,7 +339,7 @@ begin
   FOnLineHelpOfFuncs := TStringList.Create;
   FOnLineHelpOfFuncs.Sorted := false;
   FOnLineHelpOfFuncs.Clear;
-  FPSDrawing2D           := nil;;
+  FPSDrawing2D           := nil;
   {$ifdef CALCULETTE_EMBEDDED_IN_GHTOPO}
     FCurrentSerieAssigned := false;
     FLesFichesTopo       := nil;
@@ -341,6 +349,8 @@ begin
   {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
   PSScriptDebugger1.Compile;
   PSScriptDebugger1.ClearBreakPoints;
+  InitCaptions();
+  result := true;
 end;
 procedure TCdrPascalScript.RecenserAdditionalProcs(Sender: TPSScriptDebugger);
 var
@@ -473,6 +483,7 @@ begin
     sender.AddMethod(self     , @TCdrPascalScript.DT_RemoveSerieByNumSerie           , 'procedure DT_RemoveSerieByNumSerie(const QNumeroSerie: integer);');
     sender.AddMethod(self     , @TCdrPascalScript.DT_RemoveSerieByIdx                , 'procedure DT_RemoveSerieByIdx(const Idx: integer);');
     sender.AddMethod(self     , @TCdrPascalScript.DT_AddNewEntrance                  , 'procedure DT_AddNewEntrance(const RefSer, RefSt: integer; const XEntree, YEntree, ZEntree: double; const R, G, B: integer; const NomEntree, IDTerrain, Observ: string);');
+    sender.AddMethod(self     , @TCdrPascalScript.DT_ModifyEntrance                  , 'function  DT_ModifyEntrance(const QIdx: integer; const RefSer, RefSt: integer; const XEntree, YEntree, ZEntree: double; const R, G, B: integer; const NomEntree, IDTerrain, Observ: string): boolean;');
     sender.AddMethod(self     , @TCdrPascalScript.DT_AddNewReseau                    , 'procedure DT_AddNewReseau(const QTypeReseau: integer; const R, G, B: integer; const QNomReseau, QObsReseau: string); ');
 
     // BDD entités
@@ -626,6 +637,11 @@ begin
   end;
 end;
 
+procedure TCdrPascalScript.acCopyOutputExecute(Sender: TObject);
+begin
+  editPSOutPut.CopyToClipboard;
+end;
+
 procedure TCdrPascalScript.acNewScriptExecute(Sender: TObject);
 begin
   if (GHTopoQuestionOuiNon('Effacer le script courant')) then NewScript();
@@ -648,6 +664,7 @@ var
 
   end;
 begin
+  PageControlMsgsOutputs.ActivePageIndex := 0;
   // récupérer le script
   n := editPascalScript.Lines.Count;
   if (0 = n) then Exit;
@@ -664,6 +681,7 @@ begin
   end;
   if (CompilationOK) then
   begin
+    PageControlMsgsOutputs.ActivePageIndex := 1;
     // sauvegarde intermédiaire seulement si le script compile OK
     EWE := GetGHTopoDirectory() + DOSSIER_DE_MES_SCRIPTS + '/' + MakeFilenameFromDate('QSaveScript_', Now(), 'pas');
     editPascalScript.Lines.SaveToFile(EWE);
@@ -678,6 +696,7 @@ begin
   end
   else
   begin
+    PageControlMsgsOutputs.ActivePageIndex := 0;
     ShowMessage('Erreur dans le script');
     if (PSScriptDebugger1.CompilerMessageCount > 0) then
     begin
@@ -818,6 +837,24 @@ begin
   editPascalScript.Lines.Add('  // Votre code ici');
 
   editPascalScript.Lines.Add('end.');
+end;
+
+procedure TCdrPascalScript.InitCaptions();
+  procedure SetAcHint(const ACDC: TAction; const QCaption: string);
+  begin
+    ACDC.Caption := GetResourceString(QCaption);
+    ACDC.Hint    := GetResourceString(QCaption);
+  end;
+begin
+  SetAcHint(acCopyOutput      , rsTAB_PS_AC_COPY_OUTPUT);
+  SetAcHint(acPSExecute       , rsTAB_PS_AC_RUN);
+  SetAcHint(acPSStop          , rsTAB_PS_AC_STOP);
+  SetAcHint(acLoadPSScript    , rsTAB_PS_AC_OPEN);
+  SetAcHint(acSavePSScript    , rsTAB_PS_AC_SAVE);
+  SetAcHint(acNewScript       , rsTAB_PS_AC_NEW);
+
+  tabShtCompiloMessages.Caption := GetResourceString(rsTAB_PS_TabShtMessagesCompilo_CAPTION);
+  tabShtConsoleOutput.Caption   := GetResourceString(rsTAB_PS_TabShtConsoleOutput_CAPTION);
 end;
 
 procedure TCdrPascalScript.DispPSOutput(const Msg: string);
@@ -1131,6 +1168,32 @@ begin
   EE.eObserv     := Observ;
   FDocuTopo.AddEntrance(EE);
 end;
+function TCdrPascalScript.DT_ModifyEntrance(const QIdx: integer; const RefSer, RefSt: integer; const XEntree, YEntree, ZEntree: double; const R, G, B: integer; const NomEntree, IDTerrain, Observ: string): boolean;
+var
+  EE: TEntrance;
+  Nb: Integer;
+begin
+  result := false;
+  Nb := FDocuTopo.GetNbEntrances();
+  if (Nb = 0) then Exit;
+  if (QIdx >= Nb) then exit;
+  try
+    EE := FDocuTopo.GetEntrance(QIdx);
+    EE.eRefSer  := RefSer;
+    EE.eRefSt   := RefSt;
+    EE.eXEntree := XEntree;
+    EE.eYEntree := YEntree;
+    EE.eZEntree := ZEntree;
+    EE.eCouleur := RGBToColor(R and 255, G and 255, B and 255);
+    EE.eNomEntree  := NomEntree;
+    EE.eIDTerrain  := IDTerrain;
+    EE.eObserv     := Observ;
+    FDocuTopo.PutEntrance(QIdx, EE);
+    result := True;
+  except
+  end;
+end;
+
 procedure TCdrPascalScript.DT_AddNewReseau(const QTypeReseau: integer; const R, G, B: integer; const QNomReseau, QObsReseau: string);
 var
   RR: TReseau;
@@ -1160,7 +1223,7 @@ end;
 // Le maillage
 function TCdrPascalScript.MNT_LoadMaillage(const QFilenameMAI: string): integer;
 begin
-   result := -1;
+  result := -1;
   if (Not Assigned(FMyMaillage))     then exit(-64);
   if (not FileExistsUTF8(QFilenameMAI))  then exit(-2);
   if (FMyMaillage.IsValidMaillage()) then exit(1); // LoadMaillage(GetGHTopoDirectory() + 'castet_miu.mai');
