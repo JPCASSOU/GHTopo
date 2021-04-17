@@ -6,9 +6,10 @@ object CdrPascalScript: TCdrPascalScript
   Align = alClient
   ClientHeight = 726
   ClientWidth = 1096
+  LCLVersion = '2.0.0.4'
   TabOrder = 0
-  DesignLeft = 634
-  DesignTop = 139
+  DesignLeft = 247
+  DesignTop = 95
   object pnlEditor: TPanel
     Left = 5
     Height = 670

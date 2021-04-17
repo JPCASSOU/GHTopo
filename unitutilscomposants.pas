@@ -33,6 +33,8 @@ uses
 
   procedure InitialiserComboBoxQuadrillage(const QCmbx: TComboBox; const QIdx: TQdrType);
   procedure InitialiserComboBoxRepresentationVisees(const QCmbx: TComboBox; const QIdx: TModeRepresentationGaleries);
+  procedure InitialiserComboBoxModeDessinMaillage(const QCmbx: TComboBox; const QIdx: TMNTModeDessinMaillage);
+
 
   procedure PositionnerFenetre(const Wnd: TForm; const X, Y, L, H: integer);
   //procedure DrawBandeauDeuil(const Cnv: TBGRACanvas);
@@ -192,6 +194,16 @@ begin
   QCmbx.ItemIndex := ord(QIdx);
 end;
 
+procedure InitialiserComboBoxModeDessinMaillage(const QCmbx: TComboBox; const QIdx: TMNTModeDessinMaillage);
+begin
+  QCmbx.Style := csDropDownList;
+  QCmbx.Clear;
+  QCmbx.Items.add(GetResourceString(rsMNT_DM_NONE));
+  QCmbx.Items.add(GetResourceString(rsMNT_DM_WIREFRAME));
+  QCmbx.Items.add(GetResourceString(rsMNT_DM_TRANSPARENCE));
+  QCmbx.ItemIndex := Ord(QIdx);
+end;
+
 procedure PositionnerFenetre(const Wnd: TForm; const X, Y, L, H: integer);
 begin
   Wnd.Left := X;
@@ -242,8 +254,6 @@ var
   TraX, TraY: integer;
   Pipistrelle: array[0..1, 0..13] of TPoint;
 begin
-  //AfficherMessage(' --> DrawPipistrelle');
-
   TraX := TmpBuffer.Width - UnitLongueur * 16;
   TraY := TmpBuffer.Height - UnitLongueur * 16;
   for i := 0 to 13 do

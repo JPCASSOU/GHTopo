@@ -1209,6 +1209,11 @@ object GHTopoContext2DA: TGHTopoContext2DA
       ImageIndex = 21
       OnExecute = acAddPOIHereExecute
     end
+    object acDisplLastPointsClicked: TAction
+      Category = 'Infos'
+      Caption = 'Afficher les derniers points cliqués sur le plan'
+      OnExecute = acDisplLastPointsClickedExecute
+    end
   end
   object PopUpCdrVue2D: TPopupMenu
     Images = imgLstCtxtV2D
@@ -1327,6 +1332,9 @@ object GHTopoContext2DA: TGHTopoContext2DA
     end
     object MenuItem12: TMenuItem
       Action = acTransmitBasePointForHighlighting
+    end
+    object MenuItem21: TMenuItem
+      Action = acDisplLastPointsClicked
     end
   end
   object imgLstCtxtV2D: TImageList

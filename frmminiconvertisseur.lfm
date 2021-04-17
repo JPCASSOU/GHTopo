@@ -90,8 +90,8 @@ object dlgMiniConvertisseur: TdlgMiniConvertisseur
     end
     object Button1: TButton
       Left = 430
-      Height = 51
-      Top = 5
+      Height = 52
+      Top = 4
       Width = 75
       Anchors = [akTop, akRight, akBottom]
       Caption = 'Permuter'

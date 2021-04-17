@@ -29,9 +29,11 @@ uses
   StructuresDonnees,
   Common,
   math, Types,
+  UnitListesSimplesWithGeneriques,
   ToporobotClasses2012,
   UnitEntitesExtended,
   unitCroquisTerrain,
+
   unitobjetserie,
   UnitClasseMaillage,
   UnitGraphes1,
@@ -45,7 +47,8 @@ uses
   , BGRAGradients
   , UnitTGHTopoDrawDrawingContext,
   CallDialogsStdVersion,
-  unitUtilsComposants, BZGraphesTypes, BZGraphesClasses,
+  unitUtilsComposants,
+  BZGraphesTypes, BZGraphesClasses,
   Classes, SysUtils, FileUtil, curredit, Forms, Dialogs, Controls,
   ExtCtrls, StdCtrls, ActnList, Menus, Buttons, LCLType, Spin;
 
@@ -54,6 +57,7 @@ uses
 {$IFDEF GHTOPO_SIMPLIFIE}
 CONST FCurrIdxOnglet = 0;
 {$ENDIF GHTOPO_SIMPLIFIE}
+const NB_MAX_PTS_CLICKED = 64;
 
 type
 
@@ -105,6 +109,7 @@ type
     acDispPopUp: TAction;
     acDeleteThisPOI: TAction;
     acAddPOIHere: TAction;
+    acDisplLastPointsClicked: TAction;
     acZoomPlus: TAction;
     acZoomMoins: TAction;
     acTransmitBasePointForHighlighting: TAction;
@@ -170,6 +175,7 @@ type
     MenuItem19: TMenuItem;
     MenuItem2: TMenuItem;
     MenuItem20: TMenuItem;
+    MenuItem21: TMenuItem;
     MenuItem22: TMenuItem;
     MenuItem23: TMenuItem;
     MenuItem24: TMenuItem;
@@ -269,6 +275,7 @@ type
     procedure acSetCurrentSerieExecute(Sender: TObject);
     procedure acSupprimerSerieExecute(Sender: TObject);
     procedure acEditThisSerieExecute(Sender: TObject);
+    procedure acDisplLastPointsClickedExecute(Sender: TObject);
     procedure acTransmitBasePointForHighlightingExecute(Sender: TObject);
     procedure acZoomFenetreExecute(Sender: TObject);
     procedure acZoomMoinsExecute(Sender: TObject);
@@ -320,11 +327,17 @@ type
     FEtiquetteOnSurvolPlan_X1: integer;
     FEtiquetteOnSurvolPlan_Y1: integer;
     //*)
-    // Overlay (à la manière des sites web merdiques)
+
+
     FModeFonctionnementGHTopoContext2D: TModeFonctionnementGHTopoContext2D;
+    // Overlay (à la manière des sites web merdiques)
     FOverlayed: boolean;
+    // liste des derniers points cliqués cur le plan
+
+    FListeLastPointsClicked: TListePoints2Df;
 
 
+    procedure AddNewPointClicked(const X, Y: double);
     procedure DisplayToast(const Msg: string);
 
     procedure QDeplacerVue(const QX, QY: integer);
@@ -565,6 +578,10 @@ begin
   {$ENDIF GHTOPO_SIMPLIFIE}
 
   FModeFonctionnementGHTopoContext2D := MF;
+  // liste des derniers points cliqués
+  FListeLastPointsClicked := TListePoints2Df.Create;
+  FListeLastPointsClicked.ClearListe();
+
 
   FOverlayed               := false;
   FCanDraw                 := False;
@@ -643,8 +660,11 @@ begin
   MyOnglet                         := GetOngletByIndex(0);
   MyOnglet.ongDrawFastCenterline   := FBDDEntites.GetLongueurDuReseau() > LONGUEUR_LIMITE_RESEAU;
   MyOnglet.ongQdrType              := qtGRID;
-  MyOnglet.ongDegradeAltMini       := FBDDEntites.GetColorZMini();
-  MyOnglet.ongDegradeAltMaxi       := FBDDEntites.GetColorZMaxi();
+  MyOnglet.ongDegradeAltMiniReseau := FBDDEntites.GetColorZMini();
+  MyOnglet.ongDegradeAltMaxiReseau := FBDDEntites.GetColorZMaxi();
+
+  MyOnglet.ongDegradeAltMiniMNT    := clGreen;
+  MyOnglet.ongDegradeAltMaxiMNT    := clMaroon;
   MyOnglet.ongModeRepresentation   := rgSEANCES;
   MyOnglet.ongFillOpacite          := 128;
   MyOnglet.ongName                 := Format(rsCDR_VUE2D_TAB_VUE, [0]);
@@ -744,6 +764,15 @@ begin
   Result := FCroquisTerrain;
 end;
 
+procedure TGHTopoContext2DA.AddNewPointClicked(const X, Y: double);
+var
+  PP: TPoint2Df;
+begin
+  PP := MakeTPoint2Df(X, Y);
+  FListeLastPointsClicked.AddElement(PP);
+  if (FListeLastPointsClicked.GetNbElements() > NB_MAX_PTS_CLICKED) then FListeLastPointsClicked.RemoveElement(0);
+end;
+
 //*****************************************************************************
 procedure TGHTopoContext2DA.InitCaptions();
   procedure SetAcHint(const ACDC: TAction; const QCaption: string);
@@ -769,6 +798,8 @@ begin
   SetAcHint(acDisplayMiniformVisee            , rsCDR_VUE2D_AC_DISP_MINIFORM_VISEE);
   SetAcHint(acSetCurrentBaseStation           , rsCDR_VUE2D_SET_ACTIVE_STATION);
   SetAcHint(acDispPopUp                       , rsCDR_VUE2D_DISP_POPUP);
+
+  SetAcHint(acDisplLastPointsClicked          , rsCDR_VUE2D_AC_DISP_LAST_CLICKED);
   {$IFDEF GROS_MINET}  // fonctionnalités désactivées pour Gros_Minet
     acCreerEntreeFromThisPoint.Visible     := false;
     acOpenCroquis.Visible                  := false;
@@ -1205,6 +1236,27 @@ end;
 procedure TGHTopoContext2DA.acEditThisSerieExecute(Sender: TObject);
 begin
   if (Assigned(FProcTransmitBasePoint)) then FProcTransmitBasePoint(FStationNearToMouse, tdoAcnBASESTATION_EDITSERIE);
+end;
+
+procedure TGHTopoContext2DA.acDisplLastPointsClickedExecute(Sender: TObject);
+var
+  Nb, i: Integer;
+  EWE: String;
+  PT: TPoint2Df;
+begin
+  Nb := FListeLastPointsClicked.GetNbElements();
+  if (0 = Nb) then
+  begin
+    ShowMessage('Aucun point dans le tampon - Avez-vous utilisé Ctrl+Click ?');
+    Exit;
+  end;
+  EWE := '';
+  for i := 0 to Nb - 1 do
+  begin
+    PT := FListeLastPointsClicked.GetElement(i);
+    EWE += FormatterNombreWithDotDecimal(PT.X) + ', ' + FormatterNombreWithDotDecimal(PT.Y) + ', ' + #13#10;
+  end;
+  DisplayTextEditor(EWE);
 end;
 
 procedure TGHTopoContext2DA.acTransmitBasePointForHighlightingExecute(Sender: TObject);
@@ -1874,6 +1926,8 @@ var
 begin
   if (not FCanDraw) then Exit;
   if (not FBDDEntites.GetStationOrEntranceFromXYZ(FMyPos.X, FMyPos.Y, 0.0, MAX_DISTANCE_CAPTURE, [tpVISEES], false, FCurrentInternalIdxEntite, FStationNearToMouse, QEntrance1, QDistance, QE)) then Exit;
+  //// si Shift est enfoncé,
+
   SetStationInfo(FStationNearToMouse);
   acSetCurrentBaseStation.Caption := Format('Définir %d.%d comme station courante', [FStationNearToMouse.Entite_Serie, FStationNearToMouse.Entite_Station]);
   if (ssShift in Shift) then
@@ -1881,6 +1935,10 @@ begin
     FBDDEntites.HighLightVisees(mslSERIE, FStationNearToMouse.Entite_Serie);
     self.RefreshDessin();
     exit;
+  end;
+  if (ssCtrl in Shift) then
+  begin
+    AddNewPointClicked(FMyPos.X, FMyPos.Y);
   end;
   if (pnlFullInfos.Visible) then DisplayFullInfosStation(FStationNearToMouse);
   case FModesTravail of
@@ -2249,8 +2307,9 @@ begin
   //FEtiquetteOnSurvolPlan_X1 := PP.X;
   //FEtiquetteOnSurvolPlan_Y1 := PP.Y;
   QEtiquetteOk := (FBDDEntites.GetStationOrEntranceFromXYZ(FMyPos.X, FMyPos.Y, 0.00, MAX_DISTANCE_CAPTURE, [tpVISEES], false, QCurrentInternalIdxEntite, QStationNearToMouse, QEntrance1, QDistanceXYZ, QE));
-  lbGCSMouse.Caption := Format('[%s], %s, %s',[Format(FMTSERST, [QStationNearToMouse.Entite_Serie, QStationNearToMouse.Entite_Station]),
-                                             FormatterNombreAvecSepMilliers(FMyPos.X, 0), FormatterNombreAvecSepMilliers(FMyPos.Y, 0)]);
+  lbGCSMouse.Caption := Format('%s, %s [%s]', [FormatterNombreAvecSepMilliers(FMyPos.X, 0), FormatterNombreAvecSepMilliers(FMyPos.Y, 0),
+                                               Format(FMTSERST, [QStationNearToMouse.Entite_Serie, QStationNearToMouse.Entite_Station])
+                                              ]);
   //if (FModesTravail = mtDISTANCE_SECOND_POINT) then
   //  QDrawEtiquette(Format('Dist: %.3f m', [QDistanceXYZ]))
   //else
@@ -2470,7 +2529,7 @@ begin
   DbgTag := Format('%s: %s', [{$I %FILE%}, {$I %LINE%}]);
   if (DoRedrawVue) then  // acquittement par redessin
   begin
-    FBDDEntites.CalcCouleursByDepth(O.ongDegradeAltMini, O.ongDegradeAltMaxi);
+    FBDDEntites.CalcCouleursByDepth(O.ongDegradeAltMiniReseau, O.ongDegradeAltMaxiReseau);
     SetViewLimits(O.ongC1, O.ongC2, DbgTag);
     self.RefreshDessin();
   end;
@@ -2500,7 +2559,7 @@ begin
   DbgTag := Format('%s: %s', [{$I %FILE%}, {$I %LINE%}]);
   SetViewLimits(FCurrentOnglet.ongC1, FCurrentOnglet.ongC2, DbgTag);
   // recalculer les dégradés
-  FBDDEntites.CalcCouleursByDepth(FCurrentOnglet.ongDegradeAltMini, FCurrentOnglet.ongDegradeAltMaxi);
+  FBDDEntites.CalcCouleursByDepth(FCurrentOnglet.ongDegradeAltMiniReseau, FCurrentOnglet.ongDegradeAltMaxiReseau);
   self.RefreshDessin();
 end;
 
@@ -3029,7 +3088,7 @@ begin
   MyOnglet := GetCurrentOnglet();
   BGC := BGRA(Red(MyOnglet.ongBackGround), Green(MyOnglet.ongBackGround), Blue(MyOnglet.ongBackGround), 255);
   // recalculer les dégradés si DoRecalcDegrades est armé
-  if (DoRecalcDegrades) then FBDDEntites.CalcCouleursByDepth(MyOnglet.ongDegradeAltMini, MyOnglet.ongDegradeAltMaxi);
+  if (DoRecalcDegrades) then FBDDEntites.CalcCouleursByDepth(MyOnglet.ongDegradeAltMiniReseau, MyOnglet.ongDegradeAltMaxiReseau);
   TmpBuffer:= TGHTopoDrawingContext.Create(ImgWidth, ImgHeight, BGC);
   try
     if (Not TmpBuffer.Initialiser(FDocuTopo,
@@ -3058,16 +3117,14 @@ begin
       TmpBuffer.DrawMaillage(chkDrawMaillage.Checked, editIsoValeur.Value, btnLineContourColor.ButtonColor, editLineContourOpacity.Value);
        // uniquement en mode écran
        if (not DoExportInFile) then TmpBuffer.DrawCurrentStationTopo(FCurrentStation);
-       // Overlay éventuel
-       if (FOverlayed) then
+
+       {$IFDEF GHTOPO_SIMPLIFIE}
+       if (FOverlayed) then // Overlay éventuel (GHTopo simplifié uniquement)
        begin
          TmpBuffer.DrawOverlay();
-         {$IFDEF GHTOPO_SIMPLIFIE}
          TmpBuffer.DrawShortestPath(FGraphe, FShortestPath);
-         {$ENDIF GHTOPO_SIMPLIFIE}
-
-
        end;
+       {$ENDIF GHTOPO_SIMPLIFIE}
        DrawPipistrelle(TmpBuffer);
     TmpBuffer.EndDrawing();
     if (DoExportInFile) then TmpBuffer.SaveToFile(QFileName) else TmpBuffer.Draw(Vue.Canvas, 0, 0, True);

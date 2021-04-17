@@ -64,16 +64,13 @@ function TContainerFusionTopo.Initialiser(const FD: TToporobotStructure2012;
                                           const DoReprojectEntrancesCoordinates: boolean): boolean;
 begin
   Result := false;
-  AfficherMessage(Format('%s.Initialiser 666()', [ClassName]));
+  AfficherMessage(Format('%s.Initialiser()', [ClassName]));
   FPtrDocTopoDest   := FD;
   FPtrConvertisseur := CV;
   FSystemEPSG := SystemeEPSG;
 
   AfficherMessage(Format('--> Système de coordonnées: EPSG:%d - %s', [FSystemEPSG.CodeEPSG, FSystemEPSG.NomEPSG]));
-
   AfficherMessage('--> Document destination: ' + FPtrDocTopoDest.GetNomEtude());
-
-
   FPtrConvertisseur := CV;
   FDoReprojectEntrancesCoordinates := DoReprojectEntrancesCoordinates;
   FListeFichiersAFusionner := TStringList.Create;

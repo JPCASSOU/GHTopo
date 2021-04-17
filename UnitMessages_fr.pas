@@ -155,6 +155,9 @@ resourcestring
     rsFUSIONNER_TOPOS                        = 'Fusionner des documents GHTopo (expérimental)';
 
   rsMNU_EDITION                              = '&Edition';
+    rsCOPY_TO_CLIPBOARD                      = 'Copier';
+    rsCOPY_ALL_TEXT_TO_CLIPBOARD             = 'Copier le texte';
+
   rsMNU_TOPOGRAPHIE                          = '&Topographie';
     rsCHECKBASE                              = 'Vérifier les données';
     rsCOMPILE                                = '&Calculer le réseau';
@@ -541,6 +544,11 @@ resourcestring
     rsQDGRID                                 = 'Grille';
     rsQDCROSS                                = 'Croix';
     rsQDPOINTS                               = 'Points';
+  rsMODE_DESSIN_MAILLAGE                     = 'Dessin du maillage';
+    rsMNT_DM_NONE                            = 'Aucun';
+    rsMNT_DM_WIREFRAME                       = 'Fil de fer';
+    rsMNT_DM_TRANSPARENCE                    = 'Transparence';
+
 
   rsPSDXF_TITLE                              = 'Export graphique: [%s]';
     rsGRAPHICS_PS                            = 'PostScript PS';
@@ -1312,6 +1320,7 @@ resourcestring
   rsCDR_VUE2D_DISP_POPUP                     = 'Afficher le menu de la vue en plan';
   rsCDR_VUE2D_AC_CROQUIS_OPEN                = 'Ouvrir un croquis';
   rsCDR_VUE2D_AC_CROQUIS_SAVE                = 'Enregistrer le croquis';
+  rsCDR_VUE2D_AC_DISP_LAST_CLICKED           = 'Afficher les derniers points cliqués sur le plan';
 
   rsCDR_VUE2D_AC_CROQUIS_NEW_ANNOTATION      = 'Nouvelle annotation';
   rsCDR_VUE2D_AC_CROQUIS_NEW_POLYLIGNE       = 'Nouvelle polyligne';

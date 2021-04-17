@@ -17,16 +17,21 @@ type
   TdlgEditeur = class(TForm)
     acSaveAs: TAction;
     acQuit: TAction;
+    acCopyAllText: TAction;
     ActionList1: TActionList;
     MainMenu1: TMainMenu;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
+    mnuEdition: TMenuItem;
+    MenuItem5: TMenuItem;
     mnuFile: TMenuItem;
     EditorText: TSynEdit;
+    procedure acCopyAllTextExecute(Sender: TObject);
     procedure acQuitExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
+
   private
     { private declarations }
   public
@@ -45,16 +50,33 @@ implementation
 { TdlgEditeur }
 
 procedure TdlgEditeur.FormShow(Sender: TObject);
+  procedure SetAcHint(const ACDC: TAction; const QCaption: string);
+  begin
+    ACDC.Caption := GetResourceString(QCaption);
+    ACDC.Hint    := GetResourceString(QCaption);
+  end;
 begin
   mnuFile.Caption  := GetResourceString(rsMNU_FILE);
-  acSaveAs.Caption := GetResourceString(rsSAVEAS);
-  acQuit.Caption   := GetResourceString(rsQUIT_EDITOR);
+    SetAcHint(acSaveAs      , rsSAVEAS);
+    SetAcHint(acQuit        , rsQUIT_EDITOR);
+  mnuEdition.Caption  := GetResourceString(rsMNU_EDITION);
+    SetAcHint(acCopyAllText , rsCOPY_ALL_TEXT_TO_CLIPBOARD);
 end;
+
 
 procedure TdlgEditeur.acQuitExecute(Sender: TObject);
 begin
   self.Close;
 end;
+
+procedure TdlgEditeur.acCopyAllTextExecute(Sender: TObject);
+begin
+  EditorText.CopyToClipboard;
+end;
+
+
+
+
 
 procedure TdlgEditeur.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
@@ -62,8 +84,7 @@ begin
   CanClose := GHTopoQuestionOuiNon(EnlevePerluete(rsQUIT_EDITOR));
 end;
 
-function TdlgEditeur.InitialiseEditor(const FileTexte: string;
-  const EditMode: Boolean): boolean;
+function TdlgEditeur.InitialiseEditor(const FileTexte: string; const EditMode: Boolean): boolean;
 begin
   Result := False;
   try

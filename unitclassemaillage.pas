@@ -743,8 +743,8 @@ end;
 procedure TMaillage.ConstruireMaillageTriangleWire(const QScale, QMagn: double);
 var
   i, Nb: integer;
-  MM: double;
-  QZMin, QZMax: double;
+  MM, FZ: double;
+  QZMin, QZMax : double;
   TR   : TMNTTriangleABC;
   VA, VB, VC: TMNTVertex;
 
@@ -762,9 +762,11 @@ begin
   AfficherMessage(Format('-- > Magn  = %f',[QMagn]));
   Nb := GetNbTriangles();
   if (0 = Nb) then exit;
-  MM := QScale * QMagn;
-  QZMin := FCoordsMini.Z * MM;
-  QZMax := FCoordsMaxi.Z * MM;
+  MM := QScale;
+  FZ := QScale * QMagn;
+
+  QZMin := FCoordsMini.Z * FZ;
+  QZMax := FCoordsMaxi.Z * FZ;
   for i := 0 to Nb - 1 do
   begin
     TR := GetTriangle(i);
@@ -776,21 +778,21 @@ begin
       if (FDoUseDegrades) then
       begin
         QAffecterCouleur(VA.Couleur, FOpacity);
-        glVertex3f(VA.X * MM, VA.Y * MM, VA.Z * MM);
+        glVertex3f(VA.X * MM, VA.Y * MM, VA.Z * FZ);
         QAffecterCouleur(VB.Couleur, FOpacity);
-        glVertex3f(VB.X * MM, VB.Y * MM, VB.Z * MM);
+        glVertex3f(VB.X * MM, VB.Y * MM, VB.Z * FZ);
         QAffecterCouleur(VC.Couleur, FOpacity);
-        glVertex3f(VC.X * MM, VC.Y * MM, VC.Z * MM);
+        glVertex3f(VC.X * MM, VC.Y * MM, VC.Z * FZ);
         QAffecterCouleur(VA.Couleur, FOpacity);
-        glVertex3f(VA.X * MM, VA.Y * MM, VA.Z * MM);
+        glVertex3f(VA.X * MM, VA.Y * MM, VA.Z * FZ);
       end
       else
       begin
         QAffecterCouleur(FColorMin, FOpacity);
-        glVertex3f(VA.X * MM, VA.Y * MM, VA.Z * MM);
-        glVertex3f(VB.X * MM, VB.Y * MM, VB.Z * MM);
-        glVertex3f(VC.X * MM, VC.Y * MM, VC.Z * MM);
-        glVertex3f(VA.X * MM, VA.Y * MM, VA.Z * MM);
+        glVertex3f(VA.X * MM, VA.Y * MM, VA.Z * FZ);
+        glVertex3f(VB.X * MM, VB.Y * MM, VB.Z * FZ);
+        glVertex3f(VC.X * MM, VC.Y * MM, VC.Z * FZ);
+        glVertex3f(VA.X * MM, VA.Y * MM, VA.Z * FZ);
       end;
     glEnd;
   end;
@@ -801,7 +803,7 @@ end;
 procedure TMaillage.ConstruireMaillageTriangleSolide(const QScale, QMagn: double);
 var
   i: integer;
-  MM: double;
+  MM, FZ: double;
   TR: TMNTTriangleABC;
   procedure QAffecterCouleur(const QC: TColor; const QA: byte);
   var
@@ -818,26 +820,26 @@ var
     begin
       QAffecterCouleur(QVA.Couleur, FOpacity);
       glNormal3F(QVA.NormX, QVA.NormY, QVA.NormZ);
-      glVertex3f(QVA.X * MM, QVA.Y * MM, QVA.Z * MM);
+      glVertex3f(QVA.X * MM, QVA.Y * MM, QVA.Z * FZ);
 
       QAffecterCouleur(QVB.Couleur, FOpacity);
       glNormal3F(QVB.NormX, QVB.NormY, QVB.NormZ);
-      glVertex3f(QVB.X * MM, QVB.Y * MM, QVB.Z * MM);
+      glVertex3f(QVB.X * MM, QVB.Y * MM, QVB.Z * FZ);
 
       QAffecterCouleur(QVC.Couleur, FOpacity);
       glNormal3F(QVC.NormX, QVC.NormY, QVC.NormZ);
-      glVertex3f(QVC.X * MM, QVC.Y * MM, QVC.Z * MM);
+      glVertex3f(QVC.X * MM, QVC.Y * MM, QVC.Z * FZ);
 
     end
     else
     begin
       QAffecterCouleur(FColorMin, FOpacity);
       glNormal3F(QVA.NormX, QVA.NormY, QVA.NormZ);
-      glVertex3f(QVA.X * MM, QVA.Y * MM, QVA.Z * MM);
+      glVertex3f(QVA.X * MM, QVA.Y * MM, QVA.Z * FZ);
       glNormal3F(QVB.NormX, QVB.NormY, QVB.NormZ);
-      glVertex3f(QVB.X * MM, QVB.Y * MM, QVB.Z * MM);
+      glVertex3f(QVB.X * MM, QVB.Y * MM, QVB.Z * FZ);
       glNormal3F(QVC.NormX, QVC.NormY, QVC.NormZ);
-      glVertex3f(QVC.X * MM, QVC.Y * MM, QVC.Z * MM);
+      glVertex3f(QVC.X * MM, QVC.Y * MM, QVC.Z * FZ);
     end;
   end;
 begin
@@ -846,7 +848,8 @@ begin
   AfficherMessage(Format('--> Couleur max: %d %d %d %d',[Red(FColorMin), Green(FColorMin), Blue(FColorMin), FOpacity]));
   AfficherMessage(Format('--> Couleur min: %d %d %d %d',[Red(FColorMax), Green(FColorMax), Blue(FColorMax), FOpacity]));
   glBegin(GL_TRIANGLES);
-  MM := QScale * QMagn;
+  MM := QScale;
+  FZ := QScale * QMagn;
   // recto
   for i := 0 to GetNbTriangles - 1 do
   begin

@@ -97,7 +97,6 @@ begin
         if (''  = Trim(LigneTXT)) then Continue; // ligne vide = on continue
         if ('#' = LigneTXT[1])    then Continue; // dièse en tête           = commentaire
         if ('[' = LigneTXT[1])    then Continue; // crochet ouvrant en tête = ligne ignorée
-
         if (1 = pos('stop', LowerCase(LigneTXT))) then Break;  // signal d'arrêt du traitement à inclure dans le fichier
         //0        1         2         3         4         5         6         7         8         9         0
         //1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
@@ -130,8 +129,6 @@ begin
       MyAntenne.Longueur    := ConvertirEnNombreReel(Trim(EWE[2]), -1.00);
       MyAntenne.Azimut      := ConvertirEnNombreReel(Trim(EWE[3]),  0.00);
       MyAntenne.Pente       := ConvertirEnNombreReel(Trim(EWE[4]),  0.00);
-      //MyAntenne.Commentaires:= '';
-      //MyAntenne.IDTerrainStation := '';
       if (MyAntenne.Longueur > 0.00) then AddViseeAntenne(MyAntenne);
     end;
     AfficherMessageErreur(Format('==== %d antennes ajoutées', [GetNbAntennes()]));
@@ -225,7 +222,6 @@ begin
       MyVisee.HZ       := 0.00;
       MyVisee.HN       := 0.00;
       MyVisee.Commentaires    := StringReplace(Trim(EWE[6]), '"', '', [rfReplaceAll]);
-
       MySerie.AddVisee(MyVisee);
     end;
     // et affichage de contrôle
@@ -241,8 +237,6 @@ begin
       MySerie.SetNumeroEntrance(0);
       MySerie.SetNumeroReseau(0);
       MySerie.SetNomObsSerie('', '');
-
-
       AfficherMessageErreur(Format('%d: %d (%d pts): %d.%d -> %d.%d: %s', [i, MySerie.GetNumeroDeSerie(), MySerie.GetNbVisees(),MySerie.GetNoSerieDep(), MySerie.GetNoPointDep(), MySerie.GetNoSerieArr(), MySerie.GetNoPointArr(), MySerie.GetNomSerie()]));
       for j := 0 to MySerie.GetNbVisees() - 1 do
       begin

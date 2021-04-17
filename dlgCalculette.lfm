@@ -2,10 +2,10 @@ object frmCalculette: TfrmCalculette
   Left = -1659
   Height = 716
   Top = 188
-  Width = 1172
+  Width = 1051
   Caption = 'frmCalculette'
   ClientHeight = 716
-  ClientWidth = 1172
+  ClientWidth = 1051
   Font.CharSet = ANSI_CHARSET
   Font.Color = clBlack
   Font.Height = -13
@@ -15,12 +15,10 @@ object frmCalculette: TfrmCalculette
   Font.Style = [fsBold]
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
-  OnCreate = FormCreate
-  OnShow = FormShow
   Position = poScreenCenter
   LCLVersion = '2.0.0.4'
   object BitBtn1: TBitBtn
-    Left = 926
+    Left = 805
     Height = 26
     Top = 686
     Width = 120
@@ -39,7 +37,7 @@ object frmCalculette: TfrmCalculette
     TabOrder = 2
   end
   object BitBtn2: TBitBtn
-    Left = 1050
+    Left = 929
     Height = 26
     Top = 686
     Width = 120
@@ -62,11 +60,11 @@ object frmCalculette: TfrmCalculette
     Left = 0
     Height = 680
     Top = 4
-    Width = 1166
+    Width = 1045
     Anchors = [akTop, akLeft, akRight, akBottom]
     BevelOuter = bvLowered
     ClientHeight = 680
-    ClientWidth = 1166
+    ClientWidth = 1045
     Font.CharSet = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -13
@@ -80,12 +78,14 @@ object frmCalculette: TfrmCalculette
       Left = 1
       Height = 678
       Top = 1
-      Width = 1164
+      Width = 1043
       ClientHeight = 678
-      ClientWidth = 1164
+      ClientWidth = 1043
+      DesignLeft = 136
+      DesignTop = 408
       inherited PageControl1: TPageControl
         Height = 678
-        Width = 1164
+        Width = 1043
         inherited tabShtCalculatrice: TTabSheet
           inherited Panel8: TPanel
             inherited SpeedButton1: TSpeedButton
@@ -172,14 +172,53 @@ object frmCalculette: TfrmCalculette
           end
         end
         inherited tabShtGenerateurQRCode: TTabSheet
+          ClientHeight = 649
+          ClientWidth = 1035
           inherited Panel10: TPanel
+            Height = 622
+            Width = 1153
+            ClientHeight = 622
+            ClientWidth = 1153
             inherited PairSplitter7: TPairSplitter
+              Height = 618
+              Width = 1149
               inherited PairSplitterSide13: TPairSplitterSide
+                Height = 618
+                ClientHeight = 618
                 inherited SpeedButton15: TSpeedButton
                   Flat = False
                 end
                 inherited SpeedButton18: TSpeedButton
                   Flat = False
+                end
+                inherited btnCreateGUID: TButton
+                  Top = 494
+                end
+                inherited editGUID: TEdit
+                  Top = 494
+                end
+                inherited lbPosCursorSynEdit: TStaticText
+                  Top = 457
+                end
+                inherited editTextToEncodeQR: TMemo
+                  Height = 386
+                end
+              end
+              inherited PairSplitterSide14: TPairSplitterSide
+                Height = 618
+                Width = 728
+                ClientWidth = 728
+                ClientHeight = 618
+                inherited pnlQRCode: TPanel
+                  Height = 618
+                  Width = 728
+                  Align = alClient
+                  ClientHeight = 618
+                  ClientWidth = 728
+                  inherited VueQRCode: TBarcodeQR
+                    Height = 614
+                    Width = 724
+                  end
                 end
               end
             end

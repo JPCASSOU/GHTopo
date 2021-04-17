@@ -5,6 +5,7 @@ unit VueEn3DOpenGLExt;
 // Appel par passage de pointeur sur BDD entités: OK
 // Appel par chargement de fichier: En cours
 // 01/06/2015 : Support des maillages de surface
+// 15/04/2021 : Magnification Z OK
 {$INCLUDE CompilationParameters.inc}
 interface
 uses
@@ -21,23 +22,17 @@ type
   { TfrmVueEn3DOpenGLExt }
 
   TfrmVueEn3DOpenGLExt = class(TForm)
-    btnColorZMaxiMaillage: TColorButton;
-    btnColorZMiniMaillage: TColorButton;
     btnDetourerMNT: TButton;
     btnParametrerVue: TButton;
     Button2: TButton;
     Button3: TButton;
     CdrVue3DOpenGLExt1: TCdrVue3DOpenGLExt;
-    chkDegradeAltitudes: TCheckBox;
     chkFiltrer: TCheckBox;
-    cmbModeDessinMaillage: TComboBox;
     editFOV: TCurrencyEdit;
     editPhi: TCurrencyEdit;
     editTheta: TCurrencyEdit;
     grbxParamsMaillage: TGroupBox;
     Label1: TLabel;
-    Label11: TLabel;
-    Label12: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     lbStatusMaillage: TStaticText;
@@ -49,19 +44,16 @@ type
     sclFOV: TScrollBar;
     sclPhi: TScrollBar;
     sclTheta: TScrollBar;
-    trkbMaillageOpacity: TTrackBar;
     procedure btnParametrerVueClick(Sender: TObject);
     procedure btnDetourerMNTClick(Sender: TObject);
     procedure Button2Click(Sender: TObject);
 
-    procedure cmbModeDessinMaillageChange(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
 
     procedure FormShow(Sender: TObject);
     procedure sclPhiChange(Sender: TObject);
     procedure sclThetaChange(Sender: TObject);
     procedure sclFOVChange(Sender: TObject);
-    procedure trkbMaillageOpacityChange(Sender: TObject);
   private
     { private declarations }
     FBDDEntites : TBDDEntites;
@@ -93,24 +85,24 @@ procedure TfrmVueEn3DOpenGLExt.InitialiserVue();
 var
   QPV: TVue3DParams;
 begin
-  QPV.ElementsDrawn              := [edBounds, edPolygonals, edVolumes];
-  QPV.Theta              := 45.00;
-  QPV.Phi                := 32.00;
-  QPV.FovOrZoom          := 60.00;
-  QPV.ColorCube          := clRed;
-  QPV.ColorBackGround    := clBlack;
-  QPV.ColorReferentiel   := clMaroon;
+  QPV.ElementsDrawn       := [edBounds, edPolygonals, edVolumes];
+  QPV.Theta               := 45.00;
+  QPV.Phi                 := 32.00;
+  QPV.FovOrZoom           := 60.00;
+  QPV.ColorCube           := clRed;
+  QPV.ColorBackGround     := clBlack;
+  QPV.ColorReferentiel    := clMaroon;
 
-  QPV.CoefMagnification  := 1.00;
-  QPV.ModeRepresentation := rgSEANCES;            // mode de dessin par défaut = séances
-  QPV.ColorZMini         := clGreen;
-  QPV.ColorZMaxi         := clMaroon;
+  QPV.CoefMagnification   := 1.00;
+  QPV.ModeRepresentation  := rgSEANCES;            // mode de dessin par défaut = séances
+  QPV.ColorZMiniReseau    := clGreen;
+  QPV.ColorZMaxiReseau    := clMaroon;
   // le maillage
-  QPV.MaillageColorZMini := clGreen;
-  QPV.MaillageColorZMaxi := clMaroon;
-  QPV.MaillageOpacity    := 128;
-  QPV.MaillageModeDessin := M3D_MESH;
-  QPV.MaillageUseDegrades:= false;
+  QPV.ColorZMiniMNT       := clGreen;
+  QPV.ColorZMaxiMNT       := clMaroon;
+  QPV.MaillageOpacity     := 128;
+  QPV.MaillageModeDessin  := M3D_MESH;
+  QPV.MaillageUseDegrades := false;
   CdrVue3DOpenGLExt1.InitialiserVue3D(QPV,
                                       FBDDEntites,
                                       FMyMaillage,
@@ -119,11 +111,6 @@ begin
   sclTheta.Position := trunc(QPV.Theta);
   sclPhi.Position   := trunc(QPV.Phi);
   sclFOV.Position   := trunc(QPV.FovOrZoom);
-  chkDegradeAltitudes.Checked := QPV.MaillageUseDegrades;
-  trkbMaillageOpacity.Position   := QPV.MaillageOpacity;
-  btnColorZMiniMaillage.ButtonColor := QPV.MaillageColorZMini;
-  btnColorZMaxiMaillage.ButtonColor := QPV.MaillageColorZMaxi;
-  cmbModeDessinMaillage.ItemIndex   := Ord(QPV.MaillageModeDessin);
   grbxParamsMaillage.Enabled        := FMyMaillage.IsValidMaillage();
 
   CdrVue3DOpenGLExt1.SetParamsVue3D(QPV, True);
@@ -133,12 +120,6 @@ var
   QPV: TVue3DParams;
 begin
   QPV := CdrVue3DOpenGLExt1.GetParamsVue3D();
-  QPV.MaillageModeDessin  := TMNTModeDessinMaillage(cmbModeDessinMaillage.ItemIndex);
-  QPV.MaillageColorZMini  := btnColorZMiniMaillage.ButtonColor;
-  QPV.MaillageColorZMaxi  := btnColorZMaxiMaillage.ButtonColor;
-  QPV.MaillageOpacity     := trkbMaillageOpacity.Position;
-  QPV.MaillageUseDegrades := chkDegradeAltitudes.Checked;
-
   CdrVue3DOpenGLExt1.SetParamsVue3D(QPV, True);
 end;
 
@@ -156,6 +137,7 @@ var
   QPV: TVue3DParams;
 begin
   QPV := CdrVue3DOpenGLExt1.GetParamsVue3D();
+  //showmessage('Maillage: '+ inttostr(ord(QPV.MaillageModeDessin)));
   if (ParametrerOngletVue3D(QPV)) then
   begin
     QPV.DoFiltrer  := false;
@@ -163,6 +145,7 @@ begin
     QPV.Phi        := sclPhi.Position;
     QPV.FovOrZoom  := sclFOV.Position;
     CdrVue3DOpenGLExt1.SetParamsVue3D(QPV, True);
+   // showmessage('Maillage: '+ inttostr(ord(QPV.MaillageModeDessin)));
   end;
 end;
 
@@ -175,7 +158,6 @@ begin
   BB.C2 := FBDDEntites.GetCoinHautDroit();
   BB.C1.Z := -666;
   BB.C2.Z := 8848;
-
   FMyMaillage.DisableDisplayOutOfBoundingBox(BB);
   ReconstruireScene();
 end;
@@ -218,18 +200,7 @@ end;
 
 
 
-procedure TfrmVueEn3DOpenGLExt.cmbModeDessinMaillageChange(Sender: TObject);
-var
-  QPV: TVue3DParams;
-begin
-  CdrVue3DOpenGLExt1.SetParamsMaillage(TMNTModeDessinMaillage(cmbModeDessinMaillage.ItemIndex),
-                                       chkDegradeAltitudes.Checked,
-                                       btnColorZMaxiMaillage.ButtonColor,
-                                       btnColorZMiniMaillage.ButtonColor,
-                                       trkbMaillageOpacity.Position);
 
-
-end;
 
 
 procedure TfrmVueEn3DOpenGLExt.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -280,14 +251,7 @@ begin
   CdrVue3DOpenGLExt1.SetParamsVue3D(QPV, false);
 end;
 
-procedure TfrmVueEn3DOpenGLExt.trkbMaillageOpacityChange(Sender: TObject);
-var
-  QPV: TVue3DParams;
-begin
-  QPV := CdrVue3DOpenGLExt1.GetParamsVue3D();
-  QPV.MaillageOpacity := trkbMaillageOpacity.Position;
-  CdrVue3DOpenGLExt1.SetParamsVue3D(QPV, false);
-end;
+
 
 
 
@@ -299,10 +263,6 @@ begin
   try
     FMyMaillage := QM;
     FBDDEntites := QBDD;
-    cmbModeDessinMaillage.Clear;
-    cmbModeDessinMaillage.Items.Add('Aucun');
-    cmbModeDessinMaillage.Items.Add('Fil de fer');
-    cmbModeDessinMaillage.Items.Add('Transparence');
     result := True;
   except
   end;

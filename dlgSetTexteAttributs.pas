@@ -40,8 +40,8 @@ type
 
   public
     { public declarations }
-    procedure SetTexteAttributs(const AT: TTexteAttributs);
-    function  GetTexteAttributs: TTexteAttributs;
+    function  Initialiser(const AT: TTexteAttributs): boolean;
+    function  GetTexteAttributs(): TTexteAttributs;
   end;
 
 var
@@ -53,8 +53,9 @@ implementation
 
 { TfrmSelectTexteAttributs }
 
-procedure TfrmSelectTexteAttributs.SetTexteAttributs(const AT: TTexteAttributs);
+function TfrmSelectTexteAttributs.Initialiser(const AT: TTexteAttributs): boolean;
 begin
+  result := false;
   RadioButton1.Checked     := True;
   editFontName.Text        := AT.FontName;
   btnFontColor.ButtonColor := AT.FontColor;
@@ -79,7 +80,7 @@ begin
     RadioButton1.Checked := True;
   end;
 
-
+  result := true;
 end;
 
 function TfrmSelectTexteAttributs.GetTexteAttributs: TTexteAttributs;

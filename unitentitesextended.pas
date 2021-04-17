@@ -241,9 +241,9 @@ type
                                          out   Distance: double;
                                          out   ER: TBDDEntitesFindViseeOrEntrance) : boolean;
 
-    function GetEntiteViseeFromSerSt(const Ser: TNumeroSerie; const St: TNumeroStation; out EE: TBaseStation): boolean;
-    function FindStationByCle(const DoMatchExact: boolean; const Cle: string; out E: TBaseStation): Boolean;
-    function FindEntranceByCle(const DoMatchExact: boolean; const Cle: string; out E: TEntrance): boolean;
+    function  GetEntiteViseeFromSerSt(const Ser: TNumeroSerie; const St: TNumeroStation; out EE: TBaseStation): boolean;
+    function  FindStationByCle(const DoMatchExact: boolean; const Cle: string; out E: TBaseStation): Boolean;
+    function  FindEntranceByCle(const DoMatchExact: boolean; const Cle: string; out E: TEntrance): boolean;
 
 
     // statistiques
@@ -286,21 +286,20 @@ type
 
     // calculer une visée puis l'ajouter
     // ceci afin de pouvoir visualiser immédiatement une visée sans avoir à recalculer le réseau
-    function GenererEntiteDepuisUneVisee(const QStation: TToporobotIDStation;
+    function  GenererEntiteDepuisUneVisee(const QStation: TToporobotIDStation;
                                          const QV: TUneVisee; out EE: TBaseStation): boolean;
-
     // extraction des data précalculées pour les diagrammes
-    function GetClassesRepartDepthDiagram(): TVecteurDouble; inline;
-    function GetClassesRepartRoseDiagram(): TVecteurDouble; inline;
+    function  GetClassesRepartDepthDiagram(): TVecteurDouble; inline;
+    function  GetClassesRepartRoseDiagram(): TVecteurDouble; inline;
     // export vers Therion DXVI
     procedure ExportVersTherionXVI(const FichierXVI: TStringDirectoryFilename);
     // Croquis de terrain: Calcul des coordonnées absolues depuis
     // un point référencé par un TIDBasePoint et un Offset
-    function CalcCoordinatesFromBasePtAndOffset(const BP: TIDBaseStation; const Offset: TPoint3Df; out CA: TPoint3Df): boolean;
+    function  CalcCoordinatesFromBasePtAndOffset(const BP: TIDBaseStation; const Offset: TPoint3Df; out CA: TPoint3Df): boolean;
     // surlignage
     procedure HighLightVisees(const S: TModeSelectionListe; const N: integer);
     // dégradé
-    function  CalcColorDegrade(const Z: double): TColor;
+    function  CalcColorDegradeByAltitude(const Z: double): TColor;
 end;
 
 
@@ -1826,7 +1825,7 @@ begin
   for i:= LOW_INDEX to Nb - 1 do
   begin
     EWE := GetEntiteVisee(i);
-    EWE.CouleurDegrade := CalcColorDegrade( 0.50 * (EWE.PosExtr0.Z + EWE.PosStation.Z));
+    EWE.CouleurDegrade := CalcColorDegradeByAltitude( 0.50 * (EWE.PosExtr0.Z + EWE.PosStation.Z));
     PutEntiteVisee(i, EWE);
   end;
 end;
@@ -2262,7 +2261,7 @@ var
           end;
         rgDEPTH:
           begin
-            QQC := CalcColorDegrade(V.PosStation.Z);
+            QQC := CalcColorDegradeByAltitude(V.PosStation.Z);
           end;
       end;
       SetLength(Quad, 4);
@@ -2966,7 +2965,7 @@ begin
   end;
 end;
 
-function TBDDEntites.CalcColorDegrade(const Z: double): TColor;
+function TBDDEntites.CalcColorDegradeByAltitude(const Z: double): TColor;
 begin
   Result := GetColorDegrade(Z, FCoinBasGauche.Z, FCoinHautDroit.Z, FCouleurZMin, FCouleurZMax);
 end;

@@ -6,7 +6,7 @@ unit UnitObjetSerie;
 // - Le cadre Series, nouvelle version
 // 06/09/2014: Ajout des membres Accroissements
 // 09/05/2016: Cet objet passe aux génériques
-// 13/06/2019: Point de contrôle temporel (contrôle de version)
+// 13/04/2021: Point de contrôle temporel (contrôle de version)
 {$INCLUDE CompilationParameters.inc}
 interface
 

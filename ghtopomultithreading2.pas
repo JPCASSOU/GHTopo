@@ -79,7 +79,6 @@ begin
   begin
     FListeOfThreads[i] := TMyThread.Create(false);
     FListeOfThreads[i].SetCriticalSection(FCriticalSection);
-
   end;
 end;
 
@@ -98,7 +97,7 @@ procedure TListOfThreads.Finaliser;
 var
   i: Integer;
 begin
-  for i :=Low(FListeOfThreads) do High(FListeOfThreads) do
+  for i := Low(FListeOfThreads) do High(FListeOfThreads) do
   begin
     try
       FreeAndNil(FListeOfThreads[i]);
@@ -122,20 +121,12 @@ end;
 
 procedure TMyThread.Execute;
 begin
-   FAFinished:=false;
-  // increment the counter many times
-  // Because the other threads are doing the same, it will frequently happen,
-  // that 2 (or more) threads read the same number, increment it by one and
-  // write the result back, overwriting the result of the other threads.
+  FAFinished := false;
   // le traitement ici
   for i:= FStart to FEnd  do begin
     EnterCriticalSection(FCriticalSection);
     try
       FCallback(i); // fonction de callback effectuant le traitement
-      //CurCounter:=Form1.Counter;
-      //for j:=1 to 1000 do ;
-      //inc(CurCounter);
-      //Form1.Counter:=CurCounter;
     finally
       LeaveCriticalSection(FCriticalSection);
     end;

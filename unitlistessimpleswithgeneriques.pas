@@ -213,6 +213,11 @@ type TListeTPoint2DfTagged = class(TListeSimple<TPoint2DfTagged>)
   public
 end;
 
+type TListePoints2Df = class(TListeSimple<TPoint2Df>)
+  private
+  public
+end;
+
 //******************************************************************************
 // classes enrichies
 type TTableCodes = class(TListeSimple<TCode>)

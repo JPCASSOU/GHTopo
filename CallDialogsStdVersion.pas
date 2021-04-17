@@ -24,9 +24,7 @@ uses
   ConvertisseurJPC,
   UnitObjetSerie,
   UnitEntitesExtended,
-  UnitClassPalette,
   UnitClasseMaillage,
-  UnitListesSimplesWithGeneriques,
   unitProfilTopo
   , Forms, Dialogs, Controls, Graphics, StdCtrls
   , Grids
@@ -343,7 +341,6 @@ begin
         QY := TD.editY_Cible1JPC.Value;
         Result := True;
       end;
-
     end;
   finally
     FreeAndNil(TD);
@@ -365,24 +362,22 @@ var
 begin
   Result := False;
   ResultatCalcul := 0.00;
-
   TD := TfrmCalculette.Create(Application);
-
   try
-    TD.SetDefaultExpression(Expression);
-    TD.SetCoordonnees(Coords);
-    TD.SetTabIndex(QTabIndex);
-    {$IFDEF CALCULETTE_EMBEDDED_IN_GHTOPO}
-    TD.SetDocuTopo(FD, FBE, MM, FL);
-    {$ENDIF CALCULETTE_EMBEDDED_IN_GHTOPO}
-    TD.ShowModal;
-
-    if (TD.ModalResult = mrOK) then
+    if (TD.Initialiser(QTabIndex, FD, FBE, MM)) then
     begin
-      ResultatCalcul:= TD.GetResultatCalcul;
-      Declimag      := TD.GetDeclimag;
-      Coords        := TD.GetCoordonnees;
-      Result := True;
+      TD.SetDefaultExpression(Expression);
+      TD.SetCoordonnees(Coords);
+      TD.SetTabIndex(QTabIndex);
+      TD.ShowModal;
+
+      if (TD.ModalResult = mrOK) then
+      begin
+        ResultatCalcul:= TD.GetResultatCalcul;
+        Declimag      := TD.GetDeclimag;
+        Coords        := TD.GetCoordonnees;
+        Result := True;
+      end;
     end;
   finally
     TD.Release;
@@ -665,13 +660,16 @@ begin
   Result := false;
   TD := TfrmParametrerOngletVue2D.Create(Application);
   try
-    TD.SetModeParametrageDialog(mpdVUE3D);
-    TD.SetValuesOnglet3D(O);
-    TD.ShowModal;
-    if (TD.ModalResult = mrOK) then
+    if (TD.Initialiser()) then
     begin
-      O := TD.GetValuesOnglet3D();
-      Result := True;
+      TD.SetModeParametrageDialog(mpdVUE3D);
+      TD.SetValuesOnglet3D(O);
+      TD.ShowModal;
+      if (TD.ModalResult = mrOK) then
+      begin
+        O := TD.GetValuesOnglet3D();
+        Result := True;
+      end;
     end;
   finally
     TD.Release;
@@ -704,9 +702,11 @@ begin
   Result := AT;
   TD := TfrmSelectTexteAttributs.Create(Application);
   try
-    TD.SetTexteAttributs(AT);
-    TD.ShowModal;
-    if (TD.ModalResult = mrOK) then Result := TD.GetTexteAttributs;
+    if (TD.Initialiser(AT)) then
+    begin
+      TD.ShowModal;
+      if (TD.ModalResult = mrOK) then Result := TD.GetTexteAttributs();
+    end;
   finally
     TD.Release;
   end;
@@ -769,7 +769,7 @@ end;
 {$IFDEF LINUX}
 procedure CapturerVueVersPNG(const QHandle: THandle; const QFileName: string);
 begin
-  ;
+  pass;
 end;
 {$ENDIF}
 // Enregistrement de fichiers
@@ -861,7 +861,6 @@ begin
         exit(True);
       end;
     end;
-
   finally
     TD.Finaliser();
     FreeAndNil(TD);
@@ -885,7 +884,6 @@ begin
         exit(True);
       end;
     end;
-
   finally
     TD.Finaliser();
     FreeAndNil(TD); // TD.Release;

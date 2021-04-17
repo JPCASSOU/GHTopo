@@ -11,7 +11,6 @@ uses
   UnitClasseMaillage,
   ToporobotClasses2012,
   UnitEntitesExtended,
-  FastGEO,
   {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
   Classes, SysUtils,
   Forms, Controls, Graphics, Dialogs, Buttons,
@@ -25,18 +24,24 @@ type  { TfrmCalculette }
     lbDocTopoName: TStaticText;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
-    procedure FormCreate(Sender: TObject);
-    procedure FormShow(Sender: TObject);
   private
     FMyTabIndex: integer;
     {$ifdef CALCULETTE_EMBEDDED_IN_GHTOPO}
     FDocuTopo: TToporobotStructure2012;
     FBDDEntites: TBDDEntites;
     FMaillage: TMaillage;
-    FLassoDeSelection: TGeoPolygon2D;
+    //FLassoDeSelection: TGeoPolygon2D;
     {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
 
   public
+    {$ifdef CALCULETTE_EMBEDDED_IN_GHTOPO}
+    function Initialiser(const QTabIndex: integer;
+                         const QDocTopo: TToporobotStructure2012;
+                         const QBDDEntites: TBDDEntites;
+                         const QMaillage: TMaillage): boolean;
+    {$ELSE}
+    function Initialiser(cconst QTabIndex: integer): boolean;
+    {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
     { public declarations }
     procedure SetDefaultExpression(const S: string);
     procedure SetCoordonnees(const P: TPoint2Df);
@@ -45,10 +50,6 @@ type  { TfrmCalculette }
     function GetResultatCalcul(): double;
     function GetCodeEPSG(): TLabelSystemesCoordsEPSG;
     procedure SetTabIndex(const Idx: integer);
-    {$ifdef CALCULETTE_EMBEDDED_IN_GHTOPO}
-    procedure SetDocuTopo(const FD: TToporobotStructure2012; const BDE: TBDDEntites; const MM: TMaillage; const L: TGeoPolygon2D);
-    {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
-
   end;
 
 var
@@ -59,6 +60,47 @@ uses
   CallDialogsStdVersion;
 
 {$R *.lfm}
+{$ifdef CALCULETTE_EMBEDDED_IN_GHTOPO}
+function TfrmCalculette.Initialiser(const QTabIndex: integer;
+                     const QDocTopo: TToporobotStructure2012;
+                     const QBDDEntites: TBDDEntites;
+                     const QMaillage: TMaillage): boolean;
+{$ELSE}
+function TfrmCalculette.Initialiser(cconst QTabIndex: integer): boolean;
+{$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
+var
+  MH, MV: Integer;
+begin
+  result := false;
+  MH := 40;
+  MV := 40;
+  self.Top := MV;
+  self.Left:= MH;
+  self.Width    := Screen.Width  - 2 * MH;
+  self.Height   := Screen.Height - 5 * MV;
+  self.Position := poScreenCenter;
+  self.Caption := GetResourceString(rsDLG_CALC_TITLE);
+  {$IFDEF CALCULETTE_EMBEDDED_IN_GHTOPO}
+  FDocuTopo   := QDocTopo;
+  FBDDEntites := QBDDEntites;
+  FMaillage   := QMaillage;
+  //FLassoDeSelection := L;
+  if (Not CdrCalculette1.Initialiser(FMyTabIndex, FDocuTopo, FBDDEntites, FMaillage)) then
+  begin
+    ShowMessage('Calculette inoperante');
+    self.Close;
+  end;
+  lbDocTopoName.Caption := IIF(Assigned(FDocuTopo), 'Classe du document: ' + FDocuTopo.ClassName, '---');
+  {$ELSE CALCULETTE_EMBEDDED_IN_GHTOPO}
+  if (Not CdrCalculette1.Initialiser(0)) then
+  begin
+    ShowMessage('Calculette inoperante');
+    self.Close;
+  end;
+  lbDocTopoName.Caption := '---';
+  {$ENDIF CALCULETTE_EMBEDDED_IN_GHTOPO}
+  result := True;
+end;
 
 { TfrmCalculette }
 procedure TfrmCalculette.SetDefaultExpression(const S: string);
@@ -70,15 +112,7 @@ procedure TfrmCalculette.SetTabIndex(const Idx: integer);
 begin
   FMyTabIndex := Idx;
 end;
-{$ifdef CALCULETTE_EMBEDDED_IN_GHTOPO}
-procedure TfrmCalculette.SetDocuTopo(const FD: TToporobotStructure2012; const BDE: TBDDEntites; const MM: TMaillage; const L: TGeoPolygon2D);
-begin
-  FDocuTopo   := FD;
-  FBDDEntites := BDE;
-  FMaillage   := MM;
-  FLassoDeSelection := L;
-end;
-{$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
+
 procedure TfrmCalculette.SetCoordonnees(const P: TPoint2Df);
 begin
   CdrCalculette1.SetCoordonneesA(P);
@@ -97,34 +131,8 @@ begin
   Result := CdrCalculette1.GetCoordonneesA();
 end;
 
-procedure TfrmCalculette.FormShow(Sender: TObject);
-var
-  MH, MV: Integer;
-begin
-  MH := 40;
-  MV := 40;
-  self.Top := MV;
-  self.Left:= MH;
-  self.Width    := Screen.Width  - 2 * MH;
-  self.Height   := Screen.Height - 5 * MV;
-  self.Position := poScreenCenter;
-  self.Caption := GetResourceString(rsDLG_CALC_TITLE);
-  {$IFDEF CALCULETTE_EMBEDDED_IN_GHTOPO}
-  if (Not CdrCalculette1.Initialiser(FMyTabIndex, FDocuTopo, FBDDEntites, FMaillage)) then
-  begin
-    ShowMessage('Calculette inoperante');
-    self.Close;
-  end;
-  lbDocTopoName.Caption := IIF(Assigned(FDocuTopo), 'Classe du document: ' + FDocuTopo.ClassName, '---');
-  {$ELSE CALCULETTE_EMBEDDED_IN_GHTOPO}
-  if (Not CdrCalculette1.Initialiser(0)) then
-  begin
-    ShowMessage('Calculette inoperante');
-    self.Close;
-  end;
-  lbDocTopoName.Caption := '---';
-  {$ENDIF CALCULETTE_EMBEDDED_IN_GHTOPO}
-end;
+
+
 
 function TfrmCalculette.GetCodeEPSG(): TLabelSystemesCoordsEPSG;
 begin
@@ -149,10 +157,7 @@ begin
   if (GHTopoQuestionOuiNon('Fermer')) then CanClose := True;
 end;
 
-procedure TfrmCalculette.FormCreate(Sender: TObject);
-begin
 
-end;
 
 
 

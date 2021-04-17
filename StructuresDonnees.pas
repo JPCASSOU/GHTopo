@@ -780,8 +780,12 @@ type TVue2DParams  = record
   ongDrawFastCenterline : boolean;
   ongQdrColor           : TColor;
   ongElementsDrawn      : TSetElementsDrawn;
-  ongDegradeAltMini     : TColor;
-  ongDegradeAltMaxi     : TColor;
+
+  ongDegradeAltMiniReseau: TColor;
+  ongDegradeAltMaxiReseau: TColor;
+
+  ongDegradeAltMiniMNT  : TColor;
+  ongDegradeAltMaxiMNT  : TColor;
 
   ongViseesLargeurInPX  : integer;
   ongViseesLargeurInMM  : double;
@@ -850,15 +854,15 @@ type TVue3DParams  = record
   ColorReferentiel       : TColor;
   FillOpacity            : byte;
   ModeRepresentation     : TModeRepresentationGaleries;
-  ColorZMini             : TColor;
-  ColorZMaxi             : TColor;
+  ColorZMiniReseau       : TColor;
+  ColorZMaxiReseau       : TColor;
+  ColorZMiniMNT          : TColor;
+  ColorZMaxiMNT          : TColor;
   ViseesLargeur          : integer;
 
   MaillageModeDessin     : TMNTModeDessinMaillage;
   MaillageOpacity        : byte;
   MaillageUseDegrades    : boolean;
-  MaillageColorZMini     : TColor;
-  MaillageColorZMaxi     : TColor;
 end;
 type TCoupeDeveloppeeParams  = record
   Name : string;

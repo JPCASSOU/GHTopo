@@ -1363,7 +1363,7 @@ var
 begin
   if (not FMakingPolyLineGon) then begin FLastError := format('%s.EndPolyline() sans %s.BeginPolyline()', [ClassName, ClassName]); Exit; end;
   Nb := FTemporaryPolyLineGon.GetNbVertex();
-  if (Nb < 3) then begin FLastError := Format('Polygone "%s" invalide, %d sommets', [FTemporaryPolyLineGon.Name, FTemporaryPolyLineGon.GetNbVertex()]); exit; end;
+  if (Nb < 3) then begin FLastError := Format('Invalid polygon "%s", %d vertex', [FTemporaryPolyLineGon.Name, FTemporaryPolyLineGon.GetNbVertex()]); exit; end;
   try
     MyPolyLine := TDGCPolyline.Create(FTemporaryPolyLineGon.IdxStyleSheet, FTemporaryPolyLineGon.Name, FTemporaryPolyLineGon.DoFlush);
     for i := 0 to Nb - 1 do MyPolyLine.AddVertex(FTemporaryPolyLineGon.GetVertex(i));
@@ -1380,9 +1380,9 @@ var
   MyPolygon : TDGCPolygon;
   i, Nb: Integer;
 begin
-  if (not FMakingPolyLineGon) then begin FLastError := format('%s.EndPolygon() sans %s.BeginPolygon()', [ClassName, ClassName]); Exit; end;
+  if (not FMakingPolyLineGon) then begin FLastError := format('%s.EndPolygon() without %s.BeginPolygon()', [ClassName, ClassName]); Exit; end;
   Nb := FTemporaryPolyLineGon.GetNbVertex();
-  if (Nb < 3) then begin FLastError := Format('Polygone "%s" invalide, %d sommets', [FTemporaryPolyLineGon.Name, FTemporaryPolyLineGon.GetNbVertex()]); exit; end;
+  if (Nb < 3) then begin FLastError := Format('Invalid Polygone "%s", %d vertex', [FTemporaryPolyLineGon.Name, FTemporaryPolyLineGon.GetNbVertex()]); exit; end;
   try
     MyPolygon := TDGCPolygon.Create(FTemporaryPolyLineGon.IdxStyleSheet, FTemporaryPolyLineGon.Name, FTemporaryPolyLineGon.DoFlush);
     for i := 0 to Nb - 1 do MyPolygon.AddVertex(FTemporaryPolyLineGon.GetVertex(i));
@@ -1399,9 +1399,9 @@ var
   i, Nb: Integer;
   MyCurve: TDGCCurve;
 begin
-  if (not FMakingPolyLineGon) then begin FLastError := format('%s.EndCurve() sans %s.BeginCurve()', [ClassName, ClassName]); Exit; end;
+  if (not FMakingPolyLineGon) then begin FLastError := format('%s.EndCurve() without %s.BeginCurve()', [ClassName, ClassName]); Exit; end;
   Nb := FTemporaryPolyLineGon.GetNbVertex();
-  if (Nb < 2) then begin FLastError := Format('Courbe "%s" invalide, %d sommets', [FTemporaryPolyLineGon.Name, FTemporaryPolyLineGon.GetNbVertex()]); exit; end;
+  if (Nb < 2) then begin FLastError := Format('Invalid curve "%s", %d vertex', [FTemporaryPolyLineGon.Name, FTemporaryPolyLineGon.GetNbVertex()]); exit; end;
   try
     MyCurve := TDGCCurve.Create(FTemporaryPolyLineGon.IdxStyleSheet,
                                 FTemporaryPolyLineGon.Name,

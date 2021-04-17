@@ -200,8 +200,12 @@ begin
   FVue3DParams.ViseesLargeur       := QVue2DParams.ongViseesLargeurInPX;
 
   FVue3DParams.ColorCube           := clBlue;
-  FVue3DParams.ColorZMini          := QVue2DParams.ongDegradeAltMini;
-  FVue3DParams.ColorZMaxi          := QVue2DParams.ongDegradeAltMaxi;
+  FVue3DParams.ColorZMiniReseau    := QVue2DParams.ongDegradeAltMiniReseau;
+  FVue3DParams.ColorZMaxiReseau    := QVue2DParams.ongDegradeAltMaxiReseau;
+
+  FVue3DParams.ColorZMiniMNT       := QVue2DParams.ongDegradeAltMiniMNT;
+  FVue3DParams.ColorZMaxiMNT       := QVue2DParams.ongDegradeAltMaxiMNT;
+
   FVue3DParams.DoFiltrer           := True; //chkFiltrer.Checked;
 
   editFiltres3D.Text       := FVue3DParams.Filtres;

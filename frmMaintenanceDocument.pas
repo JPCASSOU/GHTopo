@@ -256,7 +256,6 @@ begin
   E2 := editNouvelIDExpe.AsInteger;
   FDocTopo.ReplaceIdxExpes(E1, E2);
   FDocTopo.ReplaceIndexInStations(E1, E2, mrsEXPES);
-  //FDocTopo.ReplaceIndexInAntennes(E1, E2, [mraEXPES]);
   FDocTopo.ReattribuerCodesExpesViseesAntennes();
 end;
 

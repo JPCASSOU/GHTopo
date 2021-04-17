@@ -15,8 +15,8 @@ object CdrGrapheItineraire: TCdrGrapheItineraire
   Font.Style = [fsBold]
   ParentFont = False
   TabOrder = 0
-  DesignLeft = 968
-  DesignTop = 140
+  DesignLeft = 918
+  DesignTop = 294
   object Panel2: TPanel
     Left = 4
     Height = 96

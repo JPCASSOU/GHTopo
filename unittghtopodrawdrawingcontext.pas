@@ -118,9 +118,10 @@ type
     procedure DrawCroquisTerrain();
     procedure DrawCurrentStationTopo(const QCurrentStation: TBaseStation);
     procedure DrawMaillage(const QMaillageDisplayed: boolean; const QIsovaleur: double; const ContourLinesColor: TColor; const ContourLinesOpacity: byte);
-    procedure DrawOverlay();
+
     {$IFDEF GHTOPO_SIMPLIFIE}
-     procedure DrawShortestPath(const FG: TPathFindingGraphe; const FP: TPathBetweenNodes);
+    procedure DrawOverlay();
+    procedure DrawShortestPath(const FG: TPathFindingGraphe; const FP: TPathBetweenNodes);
     {$ENDIF GHTOPO_SIMPLIFIE}
 
 
@@ -490,7 +491,7 @@ begin
     rgRESEAUX      : Result := FBDDEntites.GetCouleurEntiteRGBByReseau(QQE);
     rgSECTEURS     : Result := FBDDEntites.GetCouleurEntiteRGBBySecteur(QQE);
     rgSEANCES      : Result := FBDDEntites.GetCouleurEntiteRGBByExpe(QQE);
-    rgDEPTH        : Result := FBDDEntites.CalcColorDegrade(QQE.PosStation.Z);
+    rgDEPTH        : Result := FBDDEntites.CalcColorDegradeByAltitude(QQE.PosStation.Z);
     rgTYPES_VISEES : Result := ChooseColorByTypeEntite(QQE.Type_Entite);
   else
     Result := clGray;
@@ -798,8 +799,8 @@ var
   C1, C2: TPoint3Df;
 begin
   DefineBrosseEtCrayon(bsClear, FVue2DParams.ongBackGround, 0, psSolid, 0, clRed, 255);
-  C1 := FBDDEntites.GetCoinBasGauche;
-  C2 := FBDDEntites.GetCoinHautDroit;
+  C1 := FBDDEntites.GetCoinBasGauche();
+  C2 := FBDDEntites.GetCoinHautDroit();
   DrawRectangle(MakeTPoint2Df(C1.X, C1.Y), MakeTPoint2Df(C2.X, C2.Y), false);
 end;
 //******************************************************************************
@@ -948,7 +949,7 @@ begin
   //except
   //end;
 end;
-
+{$IFDEF GHTOPO_SIMPLIFIE}
 procedure TGHTopoDrawingContext.DrawOverlay();
 var
   Q: Integer;
@@ -963,7 +964,7 @@ begin
   self.CanvasBGRA.MoveTo(Q, 0);
   self.CanvasBGRA.LineTo(Q, self.CanvasBGRA.Height);
 end;
-{$IFDEF GHTOPO_SIMPLIFIE}
+
 procedure TGHTopoDrawingContext.DrawShortestPath(const FG: TPathFindingGraphe; const FP: TPathBetweenNodes);
 var
   i, Nb: Integer;

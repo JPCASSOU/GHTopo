@@ -19,8 +19,6 @@ type
     FDocTopo : TToporobotStructure2012;
     FWithData: boolean;
     fp       : TextFile;
-
-
     procedure WriteLine(const L: string);
     procedure BeginTable(const TableName: string);
     procedure AddField(const Fieldname, FieldType, FieldComplements: string); overload;

@@ -134,8 +134,11 @@ type
     function  GetPhi()           : double;
     function  GetZoom()          : double;
     function  GetFactZ()         : double;
-    function  GetColorZMini()    : TColor;
-    function  GetColorZMaxi()    : TColor;
+    function  GetColorZMiniReseau(): TColor;
+    function  GetColorZMaxiReseau(): TColor;
+    function  GetColorZMiniMNT()    : TColor;
+    function  GetColorZMaxiMNT()    : TColor;
+
     function  GetFiltres()       : string;
     function  GetDoFiltrer()     : boolean;
 
@@ -213,9 +216,9 @@ begin
   FBDDEntites.SetMinMax(P.DoFiltrer);
   CalcOrigineEtGrandeDiagonale();
   // calcul des dégradés (ssi les couleurs changent)
-  if ((P.ColorZMini <> FVue3DParams.ColorZMini) OR (P.ColorZMaxi <> FVue3DParams.ColorZMaxi)) then
+  if ((P.ColorZMiniReseau <> FVue3DParams.ColorZMiniReseau) OR (P.ColorZMaxiReseau <> FVue3DParams.ColorZMaxiReseau)) then
   begin
-    FBDDEntites.CalcCouleursByDepth(P.ColorZMini, P.ColorZMaxi);
+    FBDDEntites.CalcCouleursByDepth(P.ColorZMiniReseau, P.ColorZMaxiReseau);
   end;
   FVue3DParams := P;
 
@@ -247,42 +250,53 @@ begin
   end;
 end;
 
-function TCdrVue3DExt.GetTheta: double;
+function TCdrVue3DExt.GetTheta(): double;
 begin
   Result := FVue3DParams.Theta;
 end;
 
-function TCdrVue3DExt.GetPhi: double;
+function TCdrVue3DExt.GetPhi(): double;
 begin
   Result := FVue3DParams.Phi;
 end;
 
-function TCdrVue3DExt.GetZoom: double;
+function TCdrVue3DExt.GetZoom(): double;
 begin
   Result := FVue3DParams.FovOrZoom;
 end;
 
-function TCdrVue3DExt.GetFactZ: double;
+function TCdrVue3DExt.GetFactZ(): double;
 begin
   Result := FVue3DParams.CoefMagnification;
 end;
 
-function TCdrVue3DExt.GetColorZMini: TColor;
+function TCdrVue3DExt.GetColorZMiniReseau(): TColor;
 begin
-  Result := FVue3DParams.ColorZMini;
+  Result := FVue3DParams.ColorZMiniReseau;
 end;
 
-function TCdrVue3DExt.GetColorZMaxi: TColor;
+function TCdrVue3DExt.GetColorZMaxiReseau(): TColor;
 begin
-  Result := FVue3DParams.ColorZMaxi;
+   Result := FVue3DParams.ColorZMaxiReseau;
 end;
 
-function TCdrVue3DExt.GetFiltres: string;
+function TCdrVue3DExt.GetColorZMiniMNT(): TColor;
+begin
+  Result := FVue3DParams.ColorZMiniMNT;
+end;
+
+function TCdrVue3DExt.GetColorZMaxiMNT(): TColor;
+begin
+  Result := FVue3DParams.ColorZMaxiMNT;
+end;
+
+
+function TCdrVue3DExt.GetFiltres(): string;
 begin
   Result := FVue3DParams.Filtres;
 end;
 
-function TCdrVue3DExt.GetDoFiltrer: boolean;
+function TCdrVue3DExt.GetDoFiltrer(): boolean;
 begin
   Result := FVue3DParams.DoFiltrer;
 end;

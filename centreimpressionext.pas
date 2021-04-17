@@ -109,8 +109,6 @@ type
     FRXMaxi      : double;
     FRYMini      : double;
     FRYMaxi      : double;
-    // variables diverses
-
     // échelle du dessin
     FEchelle: double;
     // quadrillage

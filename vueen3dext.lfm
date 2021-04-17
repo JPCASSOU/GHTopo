@@ -1,7 +1,7 @@
 object frmVue3DExt: TfrmVue3DExt
-  Left = 357
+  Left = 54
   Height = 770
-  Top = 192
+  Top = 150
   Width = 1086
   Align = alClient
   Caption = 'frmVue3DExt'

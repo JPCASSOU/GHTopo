@@ -90,7 +90,6 @@ begin
   Result := False;
   editLeafletCtxtWidthinPercent.AsInteger := 85; //85%
   editLeafletCtxtHeight.AsInteger         := Screen.Height - 200;
-
   try
     FDocTopo      := QDocTopo;
     FBDDEntites   := QBDD;
@@ -120,9 +119,6 @@ begin
     chkUseLeafletLocalLibrary.Checked := false;
     chkUseLeafletLocalLibrary.enabled := DirectoryExists(GetGHTopoDirectory() + 'Leaflet');
 
-
-
-
     chkgrpCenterlinesSilhouettes.Caption := GetResourceString(rsEXPORT_SIG_CENTERLINE_SILHOUETTES);
     chkgrpCenterlinesSilhouettes.Items.Clear;
     chkgrpCenterlinesSilhouettes.Items.Add(GetResourceString(rsEXPORT_SIG_ENTRANCES));
@@ -131,13 +127,7 @@ begin
     chkgrpCenterlinesSilhouettes.Items.Add(GetResourceString(rsEXPORT_SIG_POI));
     chkgrpCenterlinesSilhouettes.Items.Add(GetResourceString(rsEXPORT_SIG_NODES));
 
-
-    chkgrpCenterlinesSilhouettes.Checked[0] := True;
-    chkgrpCenterlinesSilhouettes.Checked[1] := true;
-    chkgrpCenterlinesSilhouettes.Checked[2] := True;
-    chkgrpCenterlinesSilhouettes.Checked[3] := True;
-    chkgrpCenterlinesSilhouettes.Checked[4] := True;
-
+    for i := 0 to 4 do chkgrpCenterlinesSilhouettes.Checked[i] := True;
 
     rgbxModeExport.Items.Clear;
     rgbxModeExport.Items.Add(GetResourceString(rsEXPORT_SIG_USE_COLOR_UNIQUE));

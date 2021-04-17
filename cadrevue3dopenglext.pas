@@ -17,6 +17,7 @@ unit CadreVue3DOpenGLExt;
 // 23/11/2018 : Petites corrections, notamment pour les réseaux très étendus
 // 12/12/2018 : Unification des paramètres de vue 3D, suppression de nombreuses variables, corrections
 // 04/05/2020 : Pointage temporel
+// 15/04/2021 : Magnification Z OK
 interface
 uses
   StructuresDonnees,
@@ -83,16 +84,20 @@ type
     function  GetMaillage(): TMaillage;
     procedure SetParamsVue3D(const QVue3DParams: TVue3DParams; const DoRegenMaillage: boolean);
     function  GetParamsVue3D(): TVue3DParams;
-    procedure SetColorsByDepth(const QColorZMini, QColorZMaxi: TColor);
+    procedure SetColorsReseauByDepth(const QColorZMini, QColorZMaxi: TColor);
     function  GetTheta: double;
     function  GetPhi  : double;
     function  GetFactZ: double;
-    function  GetColorZMini: TColor;
-    function  GetColorZMaxi: TColor;
+    function  GetColorZMiniReseau: TColor;
+    function  GetColorZMaxiReseau: TColor;
+
+    function  GetColorZMiniMNT   : TColor;
+    function  GetColorZMaxiMNT   : TColor;
+
     function  GetFiltres(): string;
     function  GetDoFiltrer(): boolean;
     //procedure SetTransparenceMaillage(
-    procedure SetParamsMaillage(const TM: TMNTModeDessinMaillage; const DoUseDegrade: boolean; const ColorZMaxi, ColorZMini: TColor; const Opacity: byte);
+    procedure SetParamsMaillage(const TM: TMNTModeDessinMaillage; const DoUseDegrade: boolean; const ColorZMini, ColorZMaxi: TColor; const Opacity: byte);
   end;
 
 implementation
@@ -155,10 +160,10 @@ begin
     // préparation tables temporaires
     FBDDEntites.MetaFiltre(MyFiltre, QDevelViseesVisibles);
     FBDDEntites.SetMinMax(True);                                                                      // mini et maxi avec filtres
-    FBDDEntites.CalcCouleursByDepth(FVue3DParams.ColorZMini, FVue3DParams.ColorZMaxi);                                                                // dégradé de couleurs
+    FBDDEntites.CalcCouleursByDepth(FVue3DParams.ColorZMiniReseau, FVue3DParams.ColorZMaxiReseau);    // dégradé de couleurs
     // cube enveloppe
-    FCoin1 := FBDDEntites.GetCoinBasGauche;
-    FCoin2 := FBDDEntites.GetCoinHautDroit;
+    FCoin1 := FBDDEntites.GetCoinBasGauche();
+    FCoin2 := FBDDEntites.GetCoinHautDroit();
     // démarrage du contexte OpenGL
     Result := InitContextOpenGL();
     Result := True;
@@ -166,7 +171,7 @@ begin
   end;
 end;
 
-procedure TCdrVue3DOpenGLExt.FinaliserVue3D;
+procedure TCdrVue3DOpenGLExt.FinaliserVue3D();
 begin
   pass;
 end;
@@ -192,15 +197,27 @@ begin
   Result := FVue3DParams.CoefMagnification;
 end;
 
-function TCdrVue3DOpenGLExt.GetColorZMini: TColor;
+function TCdrVue3DOpenGLExt.GetColorZMiniReseau: TColor;
 begin
-  Result := FVue3DParams.ColorZMini;
+  Result := FVue3DParams.ColorZMiniReseau;
 end;
 
-function TCdrVue3DOpenGLExt.GetColorZMaxi: TColor;
+function TCdrVue3DOpenGLExt.GetColorZMaxiReseau: TColor;
 begin
-  Result := FVue3DParams.ColorZMaxi;
+  Result := FVue3DParams.ColorZMaxiReseau;
 end;
+
+function TCdrVue3DOpenGLExt.GetColorZMiniMNT: TColor;
+begin
+  Result := FVue3DParams.ColorZMiniMNT;
+end;
+
+function TCdrVue3DOpenGLExt.GetColorZMaxiMNT: TColor;
+begin
+  Result := FVue3DParams.ColorZMaxiMNT;
+end;
+
+
 
 function TCdrVue3DOpenGLExt.GetFiltres(): string;
 begin
@@ -220,12 +237,12 @@ end;
 
 
 
-procedure TCdrVue3DOpenGLExt.SetColorsByDepth(const QColorZMini, QColorZMaxi: TColor);
+procedure TCdrVue3DOpenGLExt.SetColorsReseauByDepth(const QColorZMini, QColorZMaxi: TColor);
 begin
   AfficherMessage(Format('%s.SetColorsByDepth($%X, $%X)', [ClassName, QColorZMini, QColorZMaxi]));
-  FVue3DParams.ColorZMini       := QColorZMini;
-  FVue3DParams.ColorZMaxi       := QColorZMaxi;
-  FBDDEntites.CalcCouleursByDepth(QColorZMini, QColorZMaxi);
+  FVue3DParams.ColorZMiniReseau       := QColorZMini;
+  FVue3DParams.ColorZMaxiReseau       := QColorZMaxi;
+  FBDDEntites.CalcCouleursByDepth(FVue3DParams.ColorZMiniReseau, FVue3DParams.ColorZMaxiReseau);
 end;
 
 procedure TCdrVue3DOpenGLExt.SetParamsVue3D(const QVue3DParams: TVue3DParams; const DoRegenMaillage: boolean);
@@ -242,8 +259,8 @@ begin
   //ConstruireScene();
   if (DoRegenMaillage) then  SetParamsMaillage(FVue3DParams.MaillageModeDessin,
                                                FVue3DParams.MaillageUseDegrades,
-                                               FVue3DParams.MaillageColorZMaxi,
-                                               FVue3DParams.MaillageColorZMini,
+                                               FVue3DParams.ColorZMiniMNT,
+                                               FVue3DParams.ColorZMaxiMNT,
                                                FVue3DParams.MaillageOpacity)
                        else  ReconstruitVue();
 end;
@@ -368,14 +385,15 @@ var
 begin
     Fcs1.X := FCoin1.X * MULTIPLICATEUR;
     Fcs1.Y := FCoin1.Y * MULTIPLICATEUR;
-    Fcs1.Z := FCoin1.Z * MULTIPLICATEUR;
+    Fcs1.Z := FCoin1.Z * MULTIPLICATEUR * FVue3DParams.CoefMagnification;
     Fcs2.X := FCoin2.X * MULTIPLICATEUR;
     Fcs2.Y := FCoin2.Y * MULTIPLICATEUR;
-    //
-    Q1 := FCoin2.Z * MULTIPLICATEUR;
-    Q2 := FCoin1.Z * MULTIPLICATEUR + 0.20 * Hypot2D(Fcs2.X - Fcs1.X, Fcs2.Y - Fcs1.Y);
+    Fcs2.Z := FCoin2.Z * MULTIPLICATEUR * FVue3DParams.CoefMagnification;
+    // TODO: A revoir
+    Q1 := Fcs2.Z;
+    Q2 := Fcs1.Z + 0.20 * Hypot2D(Fcs2.X - Fcs1.X, Fcs2.Y - Fcs1.Y);
     Fcs2.Z := Max(Q1, Q2);
-  t[0] := Fcs1.Z;  t[1] := Q1;
+  t[0] := Fcs1.Z;  t[1] := Q1; //Fcs2.Z;
   for i:=0 to 1 do begin
     glBegin(GL_LINE_LOOP);
      glVertex3d(Fcs1.X, Fcs1.Y, t[i]);
@@ -399,33 +417,35 @@ end;
 procedure TCdrVue3DOpenGLExt.MakePOLYGONALES(const M: double);
 var
   i, Nb : Integer;
-  EWE   : TBaseStation;
+  BP   : TBaseStation;
   c     : TGLColor;
+  FZ: Double;
 begin
+  FZ := M * FVue3DParams.CoefMagnification;
   Nb := FBDDEntites.GetNbEntitesVisees();
   AfficherMessage(Format('%s.MakePOLYGONALES(%d entities)', [ClassName, Nb]));
   glBegin(GL_LINES);
   for i:= LOW_INDEX to Nb - 1 do
    begin
-     EWE := FBDDEntites.GetEntiteVisee(i);
-     if (EWE.Enabled) then
+     BP := FBDDEntites.GetEntiteVisee(i);
+     if (BP.Enabled) then
      begin
-       case EWE.Type_Entite of
+       case BP.Type_Entite of
          tgDEFAULT,
          tgFOSSILE,
          tgVADOSE,
          tgENNOYABLE,
          tgSIPHON,
          tgTUNNEL,
-         tgMINE     : c := PascalToGLColor(FBDDEntites.GetColorViseeFromModeRepresentation(FVue3DParams.ModeRepresentation, EWE));
+         tgMINE     : c := PascalToGLColor(FBDDEntites.GetColorViseeFromModeRepresentation(FVue3DParams.ModeRepresentation, BP));
          tgSURFACE  : c := PascalToGLColor(clGray);
          tgVISEE_RADIANTE: c := PascalToGLColor(clSilver);
        else
          Continue;
        end;
        glColor3d(c.R, c.G, c.B);
-       glVertex3d(EWE.PosExtr0.X * M, EWE.PosExtr0.Y * M, EWE.PosExtr0.Z * M);
-       glVertex3d(EWE.PosStation.X * M, EWE.PosStation.Y * M, EWE.PosStation.Z * M);
+       glVertex3d(BP.PosExtr0.X * M, BP.PosExtr0.Y * M, BP.PosExtr0.Z * FZ);
+       glVertex3d(BP.PosStation.X * M, BP.PosStation.Y * M, BP.PosStation.Z * FZ);
      end;
    end;
   glEnd;
@@ -433,9 +453,10 @@ end;
 procedure TCdrVue3DOpenGLExt.MakeRADIANT_SHOTS(const M: double);
 var
   i, Nb: Integer;
-  EWE: TBaseStation;
-  QGrayScale: double;
+  BP: TBaseStation;
+  QGrayScale, FZ: double;
 begin
+  FZ := M * FVue3DParams.CoefMagnification;
   Nb := FBDDEntites.GetNbEntitesAntennes();
   if (Nb = 0) then Exit;
   AfficherMessage(Format('%s.MakeRADIANT_SHOTS(%d entities)', [ClassName, Nb]));
@@ -444,9 +465,9 @@ begin
     glColor3f(QGrayScale, QGrayScale, QGrayScale);
     for i:= LOW_INDEX to Nb - 1 do
     begin
-      EWE := FBDDEntites.GetEntiteAntenne(i);
-      glVertex3d(EWE.PosExtr0.X * M, EWE.PosExtr0.Y * M, EWE.PosExtr0.Z * M);
-      glVertex3d(EWE.PosStation.X * M, EWE.PosStation.Y * M, EWE.PosStation.Z * M);
+      BP := FBDDEntites.GetEntiteAntenne(i);
+      glVertex3d(BP.PosExtr0.X * M, BP.PosExtr0.Y * M, BP.PosExtr0.Z * FZ);
+      glVertex3d(BP.PosStation.X * M, BP.PosStation.Y * M, BP.PosStation.Z * FZ);
     end;
   glEnd();
 end;
@@ -454,8 +475,10 @@ end;
 procedure TCdrVue3DOpenGLExt.MakeVOLUMES(const M: double);
 const
   NB_FACETTES = 14;
+
 var
   i: integer;
+  FZ: double;
   Vertex  : array[1..NB_FACETTES] of TPoint3Df;
   Normales: array[1..NB_FACETTES] of TPoint3Df;
   function GetNormale(const dx, dy, dz: double):TPoint3Df;
@@ -480,6 +503,7 @@ var
     z1, z2: Double;
     v1, v2: TPoint3Df;
   begin
+
     // vertex
     (*
                 V4 ---------------------------- V10
@@ -522,25 +546,25 @@ var
       if (Not Enabled) then Exit;
       if (Not IsViseetInCaveOrTunnel(EE)) then Exit;
 
-      z1 := 0.50 * (PosOPG.Z + PosExtr0.Z) * M;
-      z2 := 0.50 * (PosOPD.Z + PosExtr0.Z) * M;
+      z1 := 0.50 * (PosOPG.Z + PosExtr0.Z);
+      z2 := 0.50 * (PosOPD.Z + PosExtr0.Z);
 
-      Vertex[1] := MakeTPoint3Df(PosExtr0.X * M, PosExtr0.Y * M, PosOPG.Z * M);
-      Vertex[2] := MakeTPoint3Df(PosOPD.X * M, PosOPD.Y * M, z1);
-      Vertex[3] := MakeTPoint3Df(Vertex[2].X, Vertex[2].Y, z2);
-      Vertex[4] := MakeTPoint3Df(Vertex[1].X, Vertex[1].Y, PosOPD.Z * M);
-      Vertex[5] := MakeTPoint3Df(PosOPG.X * M, PosOPG.Y * M, z2);
-      Vertex[6] := MakeTPoint3Df(Vertex[5].X, Vertex[5].Y, z1);
+      Vertex[1] := MakeTPoint3Df(PosExtr0.X * M, PosExtr0.Y * M, PosOPG.Z * FZ);
+      Vertex[2] := MakeTPoint3Df(PosOPD.X * M, PosOPD.Y * M, z1 * FZ);
+      Vertex[3] := MakeTPoint3Df(Vertex[2].X, Vertex[2].Y, z2 * FZ);
+      Vertex[4] := MakeTPoint3Df(Vertex[1].X, Vertex[1].Y, PosOPD.Z * FZ);
+      Vertex[5] := MakeTPoint3Df(PosOPG.X * M, PosOPG.Y * M, z2 * FZ);
+      Vertex[6] := MakeTPoint3Df(Vertex[5].X, Vertex[5].Y, z1 * FZ);
 
-      z1 := 0.50 * (PosPG.Z + PosStation.Z) * M;
-      z2 := 0.50 * (PosPD.Z + PosStation.Z) * M;
+      z1 := 0.50 * (PosPG.Z + PosStation.Z);
+      z2 := 0.50 * (PosPD.Z + PosStation.Z);
 
-      Vertex[7] := MakeTPoint3Df(PosStation.X * M, PosStation.Y * M, PosPG.Z * M);
-      Vertex[8] := MakeTPoint3Df(PosPD.X * M, PosPD.Y * M, z1);
-      Vertex[9] := MakeTPoint3Df(Vertex[8].X, Vertex[8].Y, z2);
-      Vertex[10]:= MakeTPoint3Df(Vertex[7].X, Vertex[7].Y, PosPD.Z * M);
-      Vertex[11]:= MakeTPoint3Df(PosPG.X * M, PosPG.Y * M, z2);
-      Vertex[12]:= MakeTPoint3Df(Vertex[11].X, Vertex[11].Y, z1);
+      Vertex[7] := MakeTPoint3Df(PosStation.X * M, PosStation.Y * M, PosPG.Z * FZ);
+      Vertex[8] := MakeTPoint3Df(PosPD.X * M, PosPD.Y * M, z1 * FZ);
+      Vertex[9] := MakeTPoint3Df(Vertex[8].X, Vertex[8].Y, z2 * FZ);
+      Vertex[10]:= MakeTPoint3Df(Vertex[7].X, Vertex[7].Y, PosPD.Z * FZ);
+      Vertex[11]:= MakeTPoint3Df(PosPG.X * M, PosPG.Y * M, z2 * FZ);
+      Vertex[12]:= MakeTPoint3Df(Vertex[11].X, Vertex[11].Y, z1 * FZ);
       // calcul des normales
       Normales[1]:= MakeTPoint3Df(0.0, 0.0, -1.0);
       Normales[2]:=GetNormale(PosOPD.X - PosExtr0.X,
@@ -619,17 +643,15 @@ var
     glEnd;
   end;
 begin
+ FZ := M * FVue3DParams.CoefMagnification;
  AfficherMessage(Format('%s.DrawGLConduits(%d entities)', [ClassName, FBDDEntites.GetNbEntitesVisees()]));
- for i:=LOW_INDEX to FBDDEntites.GetNbEntitesVisees() - 1 do
- begin
-   DrawTube(FBDDEntites.GetEntiteVisee(i));
- end;
+ for i := LOW_INDEX to FBDDEntites.GetNbEntitesVisees() - 1 do DrawTube(FBDDEntites.GetEntiteVisee(i));
 end;
 
 procedure TCdrVue3DOpenGLExt.MakeMAILLAGE(const M: double);
 begin
   AfficherMessage(Format('%s.MakeMaillage(%d triangles, %d vertex)', [ClassName, FMyMaillage.GetNbTriangles, FMyMaillage.GetNbVertex]));
-  FMyMaillage.ConstruireMaillages(M, 1.00);
+  FMyMaillage.ConstruireMaillages(M, FVue3DParams.CoefMagnification);     //1.00
 end;
 
 // affichage de la vue
@@ -644,16 +666,12 @@ var
     // La matrice du modèle
     glMatrixMode (GL_MODELVIEW);
     glLoadIdentity();
-
     // Fin des transformations du modèle
-
-
     {$IFDEF OPENGL_ANCIENNE_METHODE}
     //------------- transformations d'ensemble
-    glTranslated(0,0, -(Fcs2.Z - Fcs1.Z) * FVue3DParams.CoefMagnification * 10.00); // FMagnification * 10
+    glTranslated(0,0, -(Fcs2.Z - Fcs1.Z) *  10.00); // FMagnification * 10
     glRotated(-(90 - FVue3DParams.Phi)  , 1,0,0);
     glRotated(FVue3DParams.Theta, 0,0,1);
-
     {$ELSE}
     gluLookAt(FExcentr.X, FExcentr.Y, FExcentr.Z,
               FExcentr.X, FExcentr.Y, FExcentr.Z,
@@ -666,27 +684,20 @@ var
     // -les trois derniers servent à ce que la caméra visualise la direction (x,y,z) spécifiée ; ici la caméra visualise (0.3,-0.3,0.3).
 
     {$ENDIF OPENGL_ANCIENNE_METHODE}
-
-
-
     AfficherMessageErreur(Format('glTranslated(%.4f, %.4f, %.4f)', [-FExcentr.X, -FExcentr.Y, -FExcentr.Z]));
      // calcul d'excentrement = le cube englobant est centré en (0,0,0)
     glTranslated(-FExcentr.X,
                  -FExcentr.Y,
-                 -FExcentr.Z);
+                 -FExcentr.Z );//* FVue3DParams.CoefMagnification);
     QEchelle := 1.00;
-    glScalef(QEchelle, QEchelle, QEchelle * FVue3DParams.CoefMagnification);
-
-
-
-
+    //glScalef(QEchelle, QEchelle, QEchelle * FVue3DParams.CoefMagnification);
     // le dessin ici
     //************************************
     glDisable(GL_BLEND);
     glDisable(GL_COLOR_MATERIAL);
     // dessin d'objets volumiques
     glLightfv (GL_LIGHT0, GL_AMBIENT, @Flight_ambient); // lumière ambiante
-    glEnable(GL_LIGHTING);   	                      // Active l'éclairage
+    glEnable(GL_LIGHTING);   	                          // Active l'éclairage
     glEnable(GL_LIGHT0);
     // dessin des volumes cavité
     //AfficherMessage('-- >Volumes');
@@ -725,34 +736,24 @@ var
     // le cube enveloppe
     cc := PascalToGLColor(FVue3DParams.ColorCube);
     glColor3d(cc.R, cc.G, cc.B);
-    //AfficherMessage('-- >Cube enveloppe');
     if (edBounds      in FVue3DParams.ElementsDrawn) then glCallList(FglListCUBE);
-    //AfficherMessage('-- >Polygonales');
     if (edPolygonals  in FVue3DParams.ElementsDrawn) then glCallList(FglListPOLYGONALS);
-    //AfficherMessage('-- >Visees radiantes');
     if (edANTENNES    in FVue3DParams.ElementsDrawn) then glCallList(FglListRADIANT_SHOTS);
   end;
 begin
   // /!\ Eviter les AfficherMessage sauf en débogage: ils ralentissent considérablement l'affichage 3D
-  AfficherMessage(Format('%s.ReconstruitVue()',[ClassName]));
+  //AfficherMessage(Format('%s.ReconstruitVue()',[ClassName]));
   if (Not FDoDraw) then Exit;
   // on fait en sorte que le réseau est centré en (0,0,0) de la scène OpenGL
   {$IFDEF OPENGL_ANCIENNE_METHODE}
-  FExcentr.X := 0.50 * (Fcs2.X - Fcs1.X);
-  FExcentr.X := Fcs1.X + FExcentr.X;
-  FExcentr.Y := 0.50 * (Fcs2.Y - Fcs1.Y);
-  FExcentr.Y := Fcs1.Y + FExcentr.Y;
-  FExcentr.Z := 0.50 * (FVue3DParams.CoefMagnification * (Fcs2.Z - Fcs1.Z));
-  FExcentr.Z := Fcs1.Z + (FVue3DParams.CoefMagnification * FExcentr.Z);
+  FExcentr.X := 0.50 * (Fcs2.X - Fcs1.X) + Fcs1.X;
+  FExcentr.Y := 0.50 * (Fcs2.Y - Fcs1.Y) + Fcs1.Y;
+  FExcentr.Z := 0.50 * (Fcs2.Z - Fcs1.Z) + Fcs1.Z;
   {$ELSE}
 
 
 
   {$ENDIF OPENGL_ANCIENNE_METHODE}
-
-  // Positionnement de la caméra
-
-
   // Préparation du contexte OpenGL
   glViewport(0,0,OpenGLControl1.Width, OpenGLControl1.Height);  // fenêtre de vue
   glEnable(GL_DEPTH_TEST);
@@ -767,7 +768,7 @@ begin
   {$IFDEF OPENGL_ANCIENNE_METHODE}
      glMatrixMode (GL_PROJECTION);
      glLoadIdentity();
-     gluPerspective(FVue3DParams.FovOrZoom, OpenGLControl1.Width / OpenGLControl1.Height, 0.01, 1000.0);    // Fonctionne bien
+     gluPerspective(FVue3DParams.FovOrZoom, OpenGLControl1.Width / OpenGLControl1.Height, 0.001, 100.0);    // Fonctionne bien
 
   {$ELSE}
 
@@ -786,13 +787,13 @@ begin
 end;
 procedure TCdrVue3DOpenGLExt.SetParamsMaillage(const TM: TMNTModeDessinMaillage;
                                                const DoUseDegrade: boolean;
-                                               const ColorZMaxi, ColorZMini: TColor;
+                                               const ColorZMini, ColorZMaxi: TColor;
                                                const Opacity: byte);
 begin
 
   FMyMaillage.SetModeDessinMaillage(TM);
-  FMyMaillage.SetMaxCouleur(ColorZMaxi);
   FMyMaillage.SetMinCouleur(ColorZMini);
+  FMyMaillage.SetMaxCouleur(ColorZMaxi);
   FMyMaillage.SetAlphaBlending(Opacity);
   FMyMaillage.SetUsingDegrade(DoUseDegrade);
   if (FVue3DParams.MaillageModeDessin in [M3D_WIRE_FRAME, M3D_MESH]) then FVue3DParams.ElementsDrawn := FVue3DParams.ElementsDrawn + [edMaillages]

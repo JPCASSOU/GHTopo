@@ -1,7 +1,7 @@
 object dlgSelectGHTopoFiles: TdlgSelectGHTopoFiles
-  Left = 472
+  Left = 525
   Height = 559
-  Top = 537
+  Top = 241
   Width = 859
   Caption = 'dlgSelectGHTopoFiles'
   ClientHeight = 559

@@ -7,6 +7,7 @@ uses
   StructuresDonnees,
   Common,
   Graphics,
+  dateutils,
   math,
   LazFileUtils,
   FastGEO,
@@ -114,6 +115,8 @@ type
 
     // vers la console
     procedure cls();
+
+    procedure DisplaySystemInfos();
 
 
 
@@ -441,6 +444,8 @@ begin
 
   sender.AddFunction(@CalcDistanceJaroWinkler     , 'function CalcDistanceJaroWinkler(const S1, S2: string): double;');
   sender.AddFunction(@CalcDistanceDamerauLevenshtein, 'function CalcDistanceDamerauLevenshtein(const S1, S2: string): integer;');
+  // infos système (mémoire, proc, HDD, etc ...);
+  sender.AddMethod(self, @TCdrPascalScript.DisplaySystemInfos, 'procedure DisplaySystemInfos();');
   // évaluation d'expressions
   sender.AddMethod(self, @TCdrPascalScript.EvalExpr    , 'function Eval(const Expr: string): double;');
   // ces fonctions utilisent des variables privées de TCdrPascalScript;
@@ -741,17 +746,14 @@ var
   ResultType: TPSType;
   QReturnType: string;
 begin
-  lsbPSFunctions.Sorted := false;
-  lsbPSFunctions.Clear;
+
   FOnLineHelpOfFuncs.Clear;
   n := PSScriptDebugger1.Comp.GetRegProcCount;
   DispPSOutput(inttostr(n));
   if (n = 0) then exit;
-
   for i := 0 to n - 1 do
   begin
     WU := PSScriptDebugger1.Comp.GetRegProc(i);
-    lsbPSFunctions.Items.Add(Format(FORMAT_STRING, [LowerCase(WU.Name)]));
     QReturnType:= '';
     (*
     try
@@ -783,19 +785,14 @@ begin
     except
       on E: Exception do DispPSOutput('Fuck the Christ ' + WU.Name + ' ' + E.Message);
     end;
-
-
     //*)
     QAT := format('%s %s(', [QReturnType, WU.Name]);
     p := WU.Decl.ParamCount;
-
-
     if (p > 0) then
     begin
       for j := 0 to p - 1 do
       begin
         EWE := WU.Decl.Params[j];
-         //lsbPSFunctions.Items.Add(Format('--> %s: %s',[LowerCase(EWE.Name), LowerCase(EWE.aType.Name)]));
         QQ := IIF(j < (p-1), '; ', '');
         try
           QAT := QAT + format('%s: %s%s', [LowerCase(EWE.Name), LowerCase(EWE.aType.Name), QQ]);
@@ -811,7 +808,16 @@ begin
     QAT += ');';
     FOnLineHelpOfFuncs.Add(QAT);
   end;
-  //lsbPSFunctions.ItemIndex:=0;
+  // et on trie
+  FOnLineHelpOfFuncs.Sort;
+  // avant de peupler la Listbox
+  lsbPSFunctions.Sorted := false;
+  lsbPSFunctions.Clear;
+  for i := 0 to n - 1 do
+  begin
+    lsbPSFunctions.Items.Add(FOnLineHelpOfFuncs.Strings[i]);
+  end;
+  lsbPSFunctions.ItemIndex := 0;
 end;
 
 procedure TCdrPascalScript.DispPSCompilerMsg(const Msg: string);
@@ -954,9 +960,74 @@ begin
   editPSOutPut.Clear;
 end;
 
+procedure TCdrPascalScript.DisplaySystemInfos();
+const
+  FMT_ECRANS_RESOL = 'Display #%d: %dx%d - %s';
+var
+  i, NbMonitors, W, H: Integer;
+  WU: String;
+  DateCompilation: TDateTime;
+  M: TMonitor;
+  YYYY, MM, DD, HH, MN, SS, MS: Word;
+begin
+  DispPSOutput('System informations:');
+  DispPSOutput('========================================');
+  DispPSOutput('Processor:');
+  DispPSOutput('-----------');
+  DispPSOutput('Target CPU: ' + {$I %FPCTARGETCPU%});
+  DispPSOutput(Format('Nb of cores: %d', [GetNbCoresOfProcessor()]));
+  DispPSOutput('');
+  NbMonitors := Screen.MonitorCount;
+  DispPSOutput('Display:');
+  DispPSOutput('----------');
+  DispPSOutput(Format('%d monitors', [NbMonitors]));
+  for i:= 0 to NbMonitors - 1 do
+  begin
+    M := Screen.Monitors[i];
+    W := M.Width;
+    H := M.Height;
+    DispPSOutput(Format( FMT_ECRANS_RESOL, [M.MonitorNum,W, H, BoolToStr(M.Primary, 'Primary', 'Auxiliary')]));
+  end;
+  DispPSOutput('');
+  DispPSOutput('Operating system:');
+  DispPSOutput('------------------------');
+  {$IFDEF MSWINDOWS}
+    DispPSOutput(Format('OS: %s', ['Microsoft Windows']));
+  {$ENDIF}
+  {$IFDEF LINUX}
+    DispPSOutput(Format('OS: %s', ['Linux']));      //TODO: Obtenir la version de Linux
+  {$ENDIF}
+  DispPSOutput('');
+  DispPSOutput(ApplicationName);
+  DispPSOutput('-------');
+  DispPSOutput('Target OS: ' + {$I %FPCTARGETOS%});
+  DateCompilation      := FileDateToDateTime(FileAge(ParamStr(0)));
+  DecodeDateTime(DateCompilation, YYYY, MM, DD, HH, MN, SS, MS);
+
+  DispPSOutput(Format(GetResourceString(rsGHTOPOVERSION), [DD, MM, YYYY, HH, MN, SS]));
+  DispPSOutput(GetResourceString(rsTYPE_INTERFACE_DESKTOP));
+  DispPSOutput(GetResourceString(rsCOORDS_CONVERTER_AUTHOR));
+  DispPSOutput('FPC Compiler: ' + {$I %FPCVERSION%});
+  WU := 'Compilation: ' + {$I %DATE%} + ' ' + {$I %TIME%};
+  DispPSOutput(WU);
+  DispPSOutput('');
+  {$ifdef CALCULETTE_EMBEDDED_IN_GHTOPO}
+    DispPSOutput('Multithreading: ' + MULTI_OR_MONO_THREADED);
+    {$IFDEF USE_MATRIX_DATASTRUCTURE_LIST_OF_LISTS}
+    WU := 'Array of TList<float32>';
+    {$ELSE}
+    WU := 'Array of arrays of float32';
+    {$ENDIF}
+    DispPSOutput('Data structures for matrix storage: ' + WU);
+    DispPSOutput('OpenGL Viewer: ' + {$IFDEF USE_VIEWER_OPENGL} 'En' {$ELSE} 'Dis' {$ENDIF} + 'abled');
+  {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
+  DispPSOutput('========================================');
+end;
+
 procedure TCdrPascalScript.printf(const FMT: string; const Argv: array of const);
 begin
-  self.editPSOutPut.Lines.Add(Format(FMT, Argv));
+  //self.editPSOutPut.Lines.Add(Format(FMT, Argv));
+  DispPSOutput(Format(FMT, Argv));
 end;
 ////////////////////////////////////////////////////////////////////////////////
 // Spécifique GHTopo
@@ -1294,6 +1365,8 @@ end;
 function TCdrPascalScript.MNT_GenerateSetOfProfils(const X1, Y1, X2, Y2, X3, Y3: double;
                                                    const NbX, NbY: integer;
                                                    const Sens: byte): boolean;
+const
+  Nb_PROFILES_BY_DIRECTION = 'Direction %s: %d profiles generated';
 var
   Nx, Ny, qdxH, qdyH, qdxL, qdyL: double;
   RectZone: array[0..3] of TPoint2Df;
@@ -1317,6 +1390,8 @@ var
       MNT_AddProfil(format('Profil Y%d',[i]), QX1, QY1, QX2, QY2);
     end;
     result := True; // Result du MNT_GenerateSetOfProfils() et non celui de MiouXX()
+    DispPSOutput(Format(Nb_PROFILES_BY_DIRECTION, ['xx', NbY]));
+
   end;
   procedure MiouYY();
   var
@@ -1334,6 +1409,8 @@ var
       QY2 := RectZone[3].Y + i * QPasX * saL;
       MNT_AddProfil(format('Profil X%d',[i]), QX1, QY1, QX2, QY2);
     end;
+    DispPSOutput(Format(Nb_PROFILES_BY_DIRECTION, ['yy', NbX]));
+
     result := True; // Result du MNT_GenerateSetOfProfils() et non celui de MiouYY()
   end;
 begin
@@ -1367,6 +1444,7 @@ begin
          MiouYY();
        end;
   end;
+  DispPSOutput(Format('%d x %d profiles generated', [NbX, NbY]));
 end;
 {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
 // Graphisme 2D

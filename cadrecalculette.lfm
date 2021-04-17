@@ -15,17 +15,17 @@ object CdrCalculette: TCdrCalculette
   Font.Style = [fsBold]
   ParentFont = False
   TabOrder = 0
-  DesignLeft = 288
-  DesignTop = 187
+  DesignLeft = 233
+  DesignTop = 213
   object PageControl1: TPageControl
     Left = 0
     Height = 665
     Top = 0
     Width = 1083
-    ActivePage = tabShtPascalScript
+    ActivePage = tabShtGenerateurQRCode
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
-    TabIndex = 3
+    TabIndex = 2
     TabOrder = 0
     OnChange = PageControl1Change
     object tabShtCalculatrice: TTabSheet
@@ -1215,8 +1215,8 @@ object CdrCalculette: TCdrCalculette
     end
     object tabShtGenerateurQRCode: TTabSheet
       Caption = 'tabShtGenerateurQRCode'
-      ClientHeight = 703
-      ClientWidth = 1222
+      ClientHeight = 636
+      ClientWidth = 1075
       object lbQRCodeGenerator: TStaticText
         Left = 2
         Height = 24
@@ -1231,31 +1231,31 @@ object CdrCalculette: TCdrCalculette
       end
       object Panel10: TPanel
         Left = 2
-        Height = 676
+        Height = 609
         Top = 28
-        Width = 1340
+        Width = 1193
         Anchors = [akTop, akLeft, akRight, akBottom]
         BevelInner = bvRaised
         BevelOuter = bvLowered
-        ClientHeight = 676
-        ClientWidth = 1340
+        ClientHeight = 609
+        ClientWidth = 1193
         TabOrder = 1
         object PairSplitter7: TPairSplitter
           Cursor = crDefault
           Left = 2
-          Height = 672
+          Height = 605
           Top = 2
-          Width = 1336
+          Width = 1189
           Align = alClient
           Position = 416
           object PairSplitterSide13: TPairSplitterSide
             Cursor = crArrow
             Left = 0
-            Height = 672
+            Height = 605
             Top = 0
             Width = 416
             ClientWidth = 416
-            ClientHeight = 672
+            ClientHeight = 605
             object SpeedButton15: TSpeedButton
               Left = 144
               Height = 42
@@ -1287,7 +1287,7 @@ object CdrCalculette: TCdrCalculette
             object btnCreateGUID: TButton
               Left = 4
               Height = 25
-              Top = 548
+              Top = 481
               Width = 106
               Anchors = [akLeft, akBottom]
               Caption = 'GUID'
@@ -1297,7 +1297,7 @@ object CdrCalculette: TCdrCalculette
             object editGUID: TEdit
               Left = 112
               Height = 24
-              Top = 548
+              Top = 481
               Width = 296
               Anchors = [akLeft, akRight, akBottom]
               TabOrder = 1
@@ -1305,7 +1305,7 @@ object CdrCalculette: TCdrCalculette
             object lbPosCursorSynEdit: TStaticText
               Left = 252
               Height = 20
-              Top = 511
+              Top = 444
               Width = 156
               Anchors = [akRight, akBottom]
               BorderStyle = sbsSunken
@@ -1568,7 +1568,7 @@ object CdrCalculette: TCdrCalculette
             end
             object editTextToEncodeQR: TMemo
               Left = 4
-              Height = 440
+              Height = 373
               Top = 68
               Width = 406
               Anchors = [akTop, akLeft, akRight, akBottom]
@@ -1586,27 +1586,26 @@ object CdrCalculette: TCdrCalculette
           object PairSplitterSide14: TPairSplitterSide
             Cursor = crArrow
             Left = 421
-            Height = 672
+            Height = 605
             Top = 0
-            Width = 915
-            ClientWidth = 915
-            ClientHeight = 672
+            Width = 768
+            ClientWidth = 768
+            ClientHeight = 605
             object pnlQRCode: TPanel
               Left = 0
-              Height = 672
+              Height = 605
               Top = 0
-              Width = 915
-              Align = alClient
+              Width = 768
               BevelInner = bvRaised
               BevelOuter = bvLowered
-              ClientHeight = 672
-              ClientWidth = 915
+              ClientHeight = 605
+              ClientWidth = 768
               TabOrder = 0
               object VueQRCode: TBarcodeQR
                 Left = 2
-                Height = 668
+                Height = 601
                 Top = 2
-                Width = 911
+                Width = 764
                 Align = alClient
                 TabOrder = 0
                 StrictSize = True
