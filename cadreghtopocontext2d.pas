@@ -1245,17 +1245,14 @@ var
   PT: TPoint2Df;
 begin
   Nb := FListeLastPointsClicked.GetNbElements();
-  if (0 = Nb) then
-  begin
-    ShowMessage('Aucun point dans le tampon - Avez-vous utilisé Ctrl+Click ?');
-    Exit;
-  end;
+  if (0 = Nb) then Exit;
   EWE := '';
   for i := 0 to Nb - 1 do
   begin
     PT := FListeLastPointsClicked.GetElement(i);
     EWE += FormatterNombreWithDotDecimal(PT.X) + ', ' + FormatterNombreWithDotDecimal(PT.Y) + ', ' + #13#10;
   end;
+
   DisplayTextEditor(EWE);
 end;
 

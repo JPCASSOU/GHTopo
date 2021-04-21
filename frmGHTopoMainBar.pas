@@ -101,6 +101,8 @@ type
     MenuItem58: TMenuItem;
     MenuItem59: TMenuItem;
     MenuItem60: TMenuItem;
+    MenuItem61: TMenuItem;
+    mnuMultiThreading: TMenuItem;
     mnuExportTopoEnX3D: TMenuItem;
     mnuOutils: TMenuItem;
     MenuItem47: TMenuItem;
@@ -246,6 +248,7 @@ type
     procedure lbCurrentCodeEPSGClick(Sender: TObject);
     procedure MenuItem45Click(Sender: TObject);
     procedure MenuItem60Click(Sender: TObject);
+    procedure mnuMultiThreadingClick(Sender: TObject);
 
     procedure mnuExportTopoEnX3DClick(Sender: TObject);
     procedure RecalculerEtActualiser(const P: boolean);
@@ -318,6 +321,7 @@ uses
     , frmLesListesSimples    // gestion des listes simples
     , frmFrontalSeries       // frontal liste des séries
     , frmVuePlan2D           // vue en plan
+    , frmTestMultithreading      // test de multithreading
     ;
 
 const
@@ -577,6 +581,22 @@ begin
   end;
   //*)
 
+end;
+
+procedure TGHTopoMainMenuBar.mnuMultiThreadingClick(Sender: TObject);
+var
+  TD: TdlgMultiThreading;
+begin
+  TD := TdlgMultiThreading.Create(Application);
+  try
+    if (TD.Initialiser(FDocumentToporobot)) then
+    begin
+      TD.ShowModal;
+
+    end;
+  finally
+    TD.Release;
+  end;
 end;
 
 procedure TGHTopoMainMenuBar.mnuExportTopoEnX3DClick(Sender: TObject);

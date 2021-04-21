@@ -1365,8 +1365,6 @@ end;
 function TCdrPascalScript.MNT_GenerateSetOfProfils(const X1, Y1, X2, Y2, X3, Y3: double;
                                                    const NbX, NbY: integer;
                                                    const Sens: byte): boolean;
-const
-  Nb_PROFILES_BY_DIRECTION = 'Direction %s: %d profiles generated';
 var
   Nx, Ny, qdxH, qdyH, qdxL, qdyL: double;
   RectZone: array[0..3] of TPoint2Df;
@@ -1390,8 +1388,6 @@ var
       MNT_AddProfil(format('Profil Y%d',[i]), QX1, QY1, QX2, QY2);
     end;
     result := True; // Result du MNT_GenerateSetOfProfils() et non celui de MiouXX()
-    DispPSOutput(Format(Nb_PROFILES_BY_DIRECTION, ['xx', NbY]));
-
   end;
   procedure MiouYY();
   var
@@ -1409,8 +1405,6 @@ var
       QY2 := RectZone[3].Y + i * QPasX * saL;
       MNT_AddProfil(format('Profil X%d',[i]), QX1, QY1, QX2, QY2);
     end;
-    DispPSOutput(Format(Nb_PROFILES_BY_DIRECTION, ['yy', NbX]));
-
     result := True; // Result du MNT_GenerateSetOfProfils() et non celui de MiouYY()
   end;
 begin
@@ -1444,7 +1438,6 @@ begin
          MiouYY();
        end;
   end;
-  DispPSOutput(Format('%d x %d profiles generated', [NbX, NbY]));
 end;
 {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
 // Graphisme 2D

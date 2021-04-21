@@ -17,7 +17,7 @@
 //******************************************************************************
 
 {$DEFINE MULTI_THREADING}
-{$UNDEF MULTI_THREADING}
+{$UNDEF MULTI_THREADING}     // Aucun gain en multithread !  Difficulté +++
 
 {$DEFINE CALCULETTE_EMBEDDED_IN_GHTOPO}
 {.$UNDEF CALCULETTE_EMBEDDED_IN_GHTOPO}

@@ -1083,6 +1083,13 @@ object GHTopoMainMenuBar: TGHTopoMainMenuBar
         Caption = 'MenuItem60'
         OnClick = MenuItem60Click
       end
+      object MenuItem61: TMenuItem
+        Caption = '-'
+      end
+      object mnuMultiThreading: TMenuItem
+        Caption = 'Test de multithreading'
+        OnClick = mnuMultiThreadingClick
+      end
     end
   end
   object MainMenuActionsList: TActionList

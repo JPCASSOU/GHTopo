@@ -15,8 +15,8 @@ object CdrSerieIndependant: TCdrSerieIndependant
   Font.Style = [fsBold]
   ParentFont = False
   TabOrder = 0
-  DesignLeft = 521
-  DesignTop = 294
+  DesignLeft = 1025
+  DesignTop = 367
   object pnlEnteteSerie: TPanel
     Left = -1
     Height = 135

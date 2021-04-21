@@ -1,7 +1,7 @@
 object frmPrintingCenterExt: TfrmPrintingCenterExt
-  Left = 462
+  Left = 452
   Height = 679
-  Top = 419
+  Top = 302
   Width = 969
   Caption = 'frmPrintingCenterExt'
   ClientHeight = 679

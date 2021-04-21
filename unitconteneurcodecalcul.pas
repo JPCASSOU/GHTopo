@@ -9,7 +9,7 @@ uses
   {$INCLUDE SelectionLangues.inc} // insère les unités en fonction de la langue
   StructuresDonnees,
   {$IFDEF MULTI_THREADING}
-  GHTopoMultiThreading,
+  GHTopoMultiThreading2,
   {$ENDIF MULTI_THREADING}
   UnitListesSimplesWithGeneriques,
   ToporobotClasses2012,
@@ -20,13 +20,20 @@ uses
   frmDisplayMultiThreadProcessings, // pour le multithread
   Forms; // pour Application  ;
 
-type  TConteneurCodeCalcul = class
+type
+
+{ TConteneurCodeCalcul }
+
+  TConteneurCodeCalcul = class
+  strict private
+    procedure ProcessBranche(const NoThread, Idx: integer);
   private  // visible uniquement dans la classe et non ds les classes héritées
     // callback pour suivi de progression
     FTableJonctions     : TTableJonctionsXYZ;
     FTableBranches      : TTableBranchesXYZ;
 
     procedure AfficherProgressionMonoThread(const Etape: string; const Done, Starting, Ending, Step: integer);
+
   protected // = visible dans les classes héritées
     FProcDispProgressionMonoThread: TProcDisplayProgression;
     FDlgMultithreadProcessing: TdlgDispMultiThreadProcessing;
@@ -420,7 +427,34 @@ begin
 end;
 
 // calcul des accroissements sur les trois axes des branches
-// TODO: Vérifier ce code au niveau des corrections sur pentes.
+procedure TConteneurCodeCalcul.ProcessBranche(const NoThread, Idx: integer);
+var
+  Branche: TBrancheXYZ;
+  DX, DY, DZ, DP: double;
+  Vs: Integer;
+  Visee: TUneVisee;
+begin
+  //Branche:= GetBranche(Br);
+  Branche:= GetBranche(Idx);
+    DX := 0.0; DY := 0.0; DZ := 0.0; DP := 0.0;
+    for Vs := 0 to High(Branche.PointsTopo) do //Branche.PointsTopo.GetNbElements() - 1 do
+    begin
+      Visee := Branche.PointsTopo[Vs];
+      CalculerVisee(Visee,
+                    FDocTopo.GetCodeByNumero(Visee.Code),
+                    FDocTopo.GetExpeByNumero(Visee.Expe),
+                    DX, DY,
+                    1.00,
+                    DZ, DP);
+      Branche.PointsTopo[Vs] := Visee; ////PutBrStation(Br, Vs, Visee);
+    end; //for Vs:=0 to Branche.PointsTopo.Count-1 do begin
+    Branche.DeltaX := DX;
+    Branche.DeltaY := DY;
+    Branche.DeltaZ := DZ;
+  //PutBranche(Br, Branche);
+  PutBranche(Idx, Branche);
+end;
+
 procedure TConteneurCodeCalcul.CalculerAccroissements();
 var
   t              : TDateTime;
@@ -429,70 +463,27 @@ var
   Branche: TBrancheXYZ;
   LLL: double;
   WU: Boolean;
-  {$IFDEF MULTI_THREADING}
-  MyThreadArray  : array  of TThreadBranchesProcessing;
-  lStart, lFinish: integer;
-  EWE            : integer;
-  NbEtapes       : integer;
-  NumEtape       , NumeroThread: integer;
-  {$ELSE}
   Vs: integer;
   Visee: TUneVisee;
   DX, DY, DZ, DP: double;
-  {$ENDIF MULTI_THREADING}
 begin
 
   t := Now();
   NbBranches := GetNbBranches();
   AfficherMessage(format('%s.CalculerAccroissements(%d branches) [%s]', [ClassName, NbBranches, MULTI_OR_MONO_THREADED]));
   //****************************************************************************
-  {$IFDEF MULTI_THREADING}
+  {.$IFDEF MULTI_THREADING}
   //NbBranches := GetNbBranches() - 1;
 
   AfficherMessage(Format('--> CalculerAccroissements(%d thread for %d rows)', [NB_MAX_THREADS, NbBranches]));
-  if (NB_MAX_THREADS < 1) or (NbBranches < 1) then exit;
-  try
 
-    SetLength(MyThreadArray, 0);
-    SetLength(MyThreadArray, 1 + NB_MAX_THREADS);
-    // 1. répartition du travail entre les threads
-    lStart    := 1;
-    for NumeroThread := 1 to NB_MAX_THREADS do
-    begin
-      lFinish := ifthen(NumeroThread < NB_MAX_THREADS, NumeroThread * (NbBranches div NB_MAX_THREADS), NbBranches);
-      MyThreadArray[NumeroThread] := TThreadBranchesProcessing.Create(FDocTopo, FTableBranches,
-                                                                      NB_MAX_THREADS, NumeroThread,
-                                                                      NbBranches, lStart, lFinish,
-                                                                      nil); //, lData);
-      lStart := lFinish + 1;
-    end;
-
-    // 2. démarrage des threads
-    for NumeroThread := 1 to NB_MAX_THREADS do
-    begin
-      if (not MyThreadArray[NumeroThread].Terminated) then Sleep(20);
-    end;
-    // 3. Attente des fins de traitement par les threads
-    for NumeroThread := 1 to NB_MAX_THREADS do
-    begin
-      EWE := MyThreadArray[NumeroThread].AttendPour();
-      FDlgMultithreadProcessing.QAfficherMessage(Format('Thread %d achieved with %d status code', [NumeroThread, EWE]));
-    end;
-    // 4. libération des threads
-    for NumeroThread := 1 to NB_MAX_THREADS do FreeAndNil(MythreadArray[NumeroThread]);
-    SetLength(MyThreadArray, 0);
-    t := Now() - t;
-
-  except
-
-
-  end;
   ///*)
-  {$ELSE}
+  {.$ELSE}
   if (Assigned(self.FProcDispProgressionMonoThread)) then self.FProcDispProgressionMonoThread('Calcul accroissements des branches', -1, -1, -1, 100);
-  //NbBranches := GetNbBranches();
   for Br:=1 to NbBranches - 1 do
   begin
+    ProcessBranche(-1, Br);
+    (*
     Branche:= GetBranche(Br);
       DX := 0.0; DY := 0.0; DZ := 0.0; DP := 0.0;
       for Vs := 0 to High(Branche.PointsTopo) do //Branche.PointsTopo.GetNbElements() - 1 do
@@ -510,8 +501,9 @@ begin
       Branche.DeltaY := DY;
       Branche.DeltaZ := DZ;
     PutBranche(Br, Branche);
+    //*)
   end; // for Br:=1 to TableBranches.Count-1 do begin
-  {$ENDIF MULTI_THREADING}
+  {.$ENDIF MULTI_THREADING}
   //****************************************************************************
   // Travaux non multithreadables
   // Nettoyage des branches à accroissement nul

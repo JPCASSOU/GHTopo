@@ -1,7 +1,7 @@
 object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
-  Left = 1226
+  Left = 482
   Height = 448
-  Top = 207
+  Top = 252
   Width = 833
   BorderStyle = bsDialog
   Caption = 'Settings vue 2D'
@@ -552,8 +552,8 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
     Height = 248
     Top = 4
     Width = 428
-    ActivePage = tabShtGeneral
-    TabIndex = 0
+    ActivePage = tabShtQuadrillage
+    TabIndex = 1
     TabOrder = 3
     object tabShtGeneral: TTabSheet
       Caption = 'tabShtGeneral'

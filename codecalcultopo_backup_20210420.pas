@@ -1,4 +1,4 @@
-unit CodeCalculTopo;
+unit CodeCalculTopo_Backup_20210420;
 {$INCLUDE CompilationParameters.inc}
 //****************************************************
 // Projet     : GHTopo
@@ -250,6 +250,16 @@ begin
   begin
     // /!\ La matrice d'incidence des graphes orientés ne supporte pas les boucles, par construction
     // cf https://fr.wikipedia.org/wiki/Matrice_d%27incidence
+    // En raison de la quantité considérable de code à élaborer au vu du très faible nombre d'occurrences de boucles simples,
+    // on fait le choix de ne pas supporter cette configuration.
+    // Toutefois, on signale la série incriminée.
+    (*
+    if ((Branche.NoeudDepart = j) and (Branche.NoeudArrivee = j)) then
+    begin
+      EWE := Format('[i=%d] La branche %d (%d->%d) appartenant à la série %d se ferme sur elle-même', [i, Branche.NoeudDepart, Branche.NoeudArrivee, Branche.NoBranche, Branche.NoSerie]);
+      AfficherMessageErreur(EWE);
+    end;
+    //*)
     if      (Branche.NoeudDepart  = j) then R_Matrix.SetValeur(Idx, j, -1)
     else if (Branche.NoeudArrivee = j) then R_Matrix.SetValeur(Idx, j,  1)
                                        else R_Matrix.SetValeur(Idx, j,  0);
@@ -262,8 +272,10 @@ var
   {$IFDEF MULTI_THREADING}
   QListeThreads : TListOfThreads;
   {$ENDIF}
-  QNbBranches, QNbNodes, i: integer;
+  i,j, QNbBranches, QNbNodes: integer;
+  Branche: TBrancheXYZ;
   EWE: String;
+  WU : integer;
   t: TDateTime;
   //YaAutoloop: boolean;
 begin
@@ -276,7 +288,7 @@ begin
   AfficherMessageErreur(format('%s.MakeRMatrix(%d) [Multithreaded]', [classname, QNbBranches]));
   QListeThreads := TListOfThreads.Create;
   try
-    if (QListeThreads.InitialiserEtLancer(NB_MAX_THREADS, true, ProcessARowRMatrix, QNbBranches)) then
+    if (QListeThreads.InitialiserEtLancer(NB_MAX_THREADS, true, ProcessARowRMatrix, QNbBranches, 1)) then
     begin
       QListeThreads.Finaliser();
     end;
@@ -287,12 +299,34 @@ begin
   //*)
   for i := 1 to QNbBranches - 1 do
   begin
+    //YaAutoloop  := false;
     if (i MOD 100 = 0) then
     begin
       EWE := Format('Matrice d''incidence: ' + rsLINEOFNB, [i, QNbBranches]);
       if (Assigned(self.FProcDispProgressionMonoThread)) then self.FProcDispProgressionMonoThread(EWE, i, 0, QNbBranches, 200);
     end;
     ProcessARowRMatrix(-1, i);
+    (*
+    Branche := GetBranche(i);
+    for j := 1 to QNbNodes do
+    begin
+      // /!\ La matrice d'incidence des graphes orientés ne supporte pas les boucles, par construction
+      // cf https://fr.wikipedia.org/wiki/Matrice_d%27incidence
+      // En raison de la quantité considérable de code à élaborer au vu du très faible nombre d'occurrences de boucles simples,
+      // on fait le choix de ne pas supporter cette configuration.
+      // Toutefois, on signale la série incriminée.
+      if ((Branche.NoeudDepart = j) and (Branche.NoeudArrivee = j)) then
+      begin
+        EWE := Format('[i=%d] La branche %d (%d->%d) appartenant à la série %d se ferme sur elle-même', [i, Branche.NoeudDepart, Branche.NoeudArrivee, Branche.NoBranche, Branche.NoSerie]);
+        AfficherMessageErreur(EWE);
+      end;
+      if      (Branche.NoeudDepart  = j) then R_Matrix.SetValeur(i, j, -1)
+      else if (Branche.NoeudArrivee = j) then R_Matrix.SetValeur(i, j,  1)
+                                         else R_Matrix.SetValeur(i, j,  0);
+    end;
+
+    //if (YaAutoloop) then Continue;
+    //*)
   end;
   //{$ENDIF MULTI_THREADING}
   t := Now() - t;
@@ -351,7 +385,9 @@ procedure TCodeDeCalcul.MakeBMatrix();
 var
   t           : TDateTime;
   QNbNodes    : integer;
-  i, j        : integer;
+  i, j, k     : integer;
+  q, fi, li: integer;
+  ww, R1, R2: double;
 begin
 
   AfficherMessage(GetResourceString(rsBUILDMATRICE) + ' ' + MULTI_OR_MONO_THREADED);
@@ -367,18 +403,59 @@ begin
   AfficherMessage('---> '+ GetResourceString(rsFIND_SUM_LIMITS));
   Application.ProcessMessages;
   t := Now();
-  for i := 1 to QNbNodes do ProcessALowIndexRow(-1, i);
-  for i := 1 to QNbNodes do ProcessAHighIndexRow(-1, i);
+  for i:= 1 to QNbNodes do
+  begin
+    ProcessALowIndexRow(-1, i);
+    //if (i MOD 20 = 0) then AfficherMessage(Format(GetResourceString(rsLINEOFNB),[i, QNbNodes]));
+    (*
+    for j:= 1 to R_Matrix.MaxRow do //QNbBranches - 1 do
+    begin
+      if (Abs(R_Matrix.GetValeur(j, i)) > 0.00) then
+      begin
+        FBMatrix_LowIndex[i] := j;
+        Break;
+      end;
+    end;
+    //*)
+  end;
+
+  Application.ProcessMessages;
+  for i := 1 to QNbNodes do
+  begin
+    ProcessAHighIndexRow(-1, i);
+
+    //if (i MOD 20 = 0) then AfficherMessage(Format(GetResourceString(rsLINEOFNB),[i, QNbNodes]));
+    (*
+    for j := R_Matrix.MaxRow downto 1 do     //for j := QNbBranches - 1 downto 1 do
+    begin
+      // Ne pas utiliser la fonction IsZero (lenteur)
+      if (Abs(R_Matrix.GetValeur(j,i)) > 0.00) then
+      begin
+        FBMatrix_HighIndex[i] := j;
+        Break;
+      end;
+    end;
+    //*)
+  end;
   AfficherMessage('---> '+ GetResourceString(rsPRODUIT_MAT_Rt_W_R));
   Application.ProcessMessages;
   for i := 1 to QNbNodes do
   begin
     if (i MOD 100 = 0) then
     begin
+      Application.ProcessMessages;
       if (Assigned(self.FProcDispProgressionMonoThread)) then self.FProcDispProgressionMonoThread(Format('Matrice de compensation: ' + rsLINEOFNB, [i, QNbNodes]), i, 0, QNbNodes, 100);
       AfficherMessage(Format(rsLINEOFNB, [i, QNbNodes]), False);
     end;
     ProcessARowBMatrix(-1, i);
+    (*
+    for j := 1 to i do
+    begin
+      ww := 0;
+      for k := FBMatrix_LowIndex[i] to FBMatrix_HighIndex[i] do ww += R_Matrix.GetValeur(k,i) * W_mtx[k] * R_Matrix.GetValeur(k,j);
+      B_Matrix.SetValeur(i, j, WW);
+    end;
+    //*)
   end;
   Application.ProcessMessages;
   // remplissage de la symétrie
@@ -396,8 +473,10 @@ var
    t: TDateTime;
    i, j, k   , QNbNodes: integer;
    LowIndex  : array of Integer;
+   HighIndex : array of Integer;
+
    vv        : double;
-   ww, Q2: double;
+   ww        , Qik, Qjk, Q2: double;
 begin
    Result := false;
    t := Now();
@@ -449,7 +528,9 @@ begin
        begin
          ww := 0;
          for k := LowIndex[i] to i-1 do
+         begin
            ww += QL.GetValeur(i,k) * QL.GetValeur(j,k);  // très forte accélération de la vitesse de calcul
+         end;
          QL.SetValeur(j,i, (B_Matrix.GetValeur(i,j) - ww) / (QL.GetValeur(i,i) + 1e-24));
        end;
      end;
@@ -733,41 +814,84 @@ begin
     Branche.PointsTopo[s] := V; //PutBrStation(i, s, V);
   end;
   PutBranche(Idx, Branche);
+
 end;
 
 procedure TCodeDeCalcul.RepartirEcarts();
 var
-  {$IFDEF MULTI_THREADING}
-  QListeThreads  : TListOfThreads;
-  {$ENDIF MULTI_THREADING}
-  i, QNbBranches: integer;
-  t: TDateTime;
+  i, s, QNbBranches: integer;
+  V, V1, V2: TUneVisee;
+  Branche: TBrancheXYZ;
+  EcartX : double;
+  EcartY : double;
+  EcartZ : double;
+  EpsX, EpsY, EpsZ: double;
+
+  XXo,YYo, ZZo: double;
+  R      : double;
+  DevelBranche: Double;
 begin;
   AfficherMessage('');
   AfficherMessage(GetResourceString(rsREPARTIR_ECARTS));
   QNbBranches := GetNbBranches();
   AfficherMessageErreur(Format('Deformation du reseau: %d branches', [QNbBranches]));
   AfficherMessageErreur('=========================================');
-  //AfficherMessageErreur('Branche; X1; Y1; Z1; X2; Y2; Z2; Devel; EcartX; EcartY; EcartZ; EcartTotal; EpsX; EpsY; EpsZ; EpsTotal');
-  t := Now();
-  {$IFDEF MULTI_THREADING}
-  AfficherMessageErreur(format('%s.RepartirEcarts(%d) [Multithreaded]', [classname, QNbBranches]));
-  QListeThreads := TListOfThreads.Create;
-  try
-    if (QListeThreads.InitialiserEtLancer(NB_MAX_THREADS, true, ProcessRepartitionEcartsOfBranche, QNbBranches)) then
+  AfficherMessageErreur('Branche; X1; Y1; Z1; X2; Y2; Z2; Devel; EcartX; EcartY; EcartZ; EcartTotal; EpsX; EpsY; EpsZ; EpsTotal');
+
+  for i:=1 to QNbBranches - 1 do
+  begin
+    ProcessRepartitionEcartsOfBranche(-1, i);
+    (*
+    Branche := GetBranche(i);
+
+    EcartX := (Branche.XArrivee - Branche.XDepart) - Branche.DeltaX;
+    EcartY := (Branche.YArrivee - Branche.YDepart) - Branche.DeltaY;
+    EcartZ := (Branche.ZArrivee - Branche.ZDepart) - Branche.DeltaZ;
+    // calcul de R
+    R := 1e-10;
+    for s := 0 to High(Branche.PointsTopo) do  //Branche.PointsTopo.GetNbElements() - 1do
     begin
-      QListeThreads.Finaliser();
+      V := Branche.PointsTopo[s];
+      R += Hypot3D(V.DeltaX, V.DeltaY, V.DeltaZ);
     end;
-  finally
-    FreeAndNil(QListeThreads);
-  end;
-  {$ELSE}
-  AfficherMessageErreur(format('%s.RepartirEcarts(%d) [Monothreaded]', [classname, QNbBranches]));
-  for i:=1 to QNbBranches - 1 do ProcessRepartitionEcartsOfBranche(-1, i);
-  {$ENDIF MULTI_THREADING}
-  t := now() - t;
-  AfficherMessageErreur(Format('Temps de calcul des accroissements des %d branches: %.8f sec', [QNbBranches, t * 86400]));
+    DevelBranche := R;
+    // mettre l'azimut de V[1] dans V[0]
+    if (High(Branche.PointsTopo) > 0) then //if (Branche.PointsTopo.Count > 1) then
+    begin
+      V1 := Branche.PointsTopo[0];   //V1 := GetBrStation(i,0);
+      V2 := Branche.PointsTopo[1];   //V2 := GetBrStation(i,1);
+      V1.Azimut  :=  V2.Azimut;
+      Branche.PointsTopo[0] := V1;   // PutBrStation(i, 0, V1);
+    end;
+    // calcul de répartition
+    EpsX := EcartX / DevelBranche;
+    EpsY := EcartY / DevelBranche;
+    EpsZ := EcartZ / DevelBranche;
+
+    R    := 1e-10;
+    XXo  := Branche.XDepart;
+    YYo  := Branche.YDepart;
+    ZZo  := Branche.ZDepart;
+    for s := 0 to High(Branche.PointsTopo) do //for s := 0 to Branche.PointsTopo.GetNbElements() - 1 do
+    begin
+      V := Branche.PointsTopo[s]; //V :=GetBrStation(i, s);
+      R += Hypot3D(V.DeltaX, V.DeltaY, V.DeltaZ);
+
+      XXo += V.DeltaX;       //   XXo := XXo + V.DeltaX;
+      YYo += V.DeltaY;       //   YYo := YYo + V.DeltaY;
+      ZZo += V.DeltaZ;       //   ZZo := ZZo + V.DeltaZ;
+
+      V.DeltaX := XXo + R * EpsX;
+      V.DeltaY := YYo + R * EpsY;
+      V.DeltaZ := ZZo + R * EpsZ;
+
+      Branche.PointsTopo[s] := V; //PutBrStation(i, s, V);
+    end;
+    PutBranche(i, Branche);
+    //*)
+  end;    // for i, Br
   AfficherMessageErreur('=========================================');
+
 end;
 
 
@@ -1017,6 +1141,14 @@ var
 begin
   MyBranche := GetBranche(Idx);
   if (Not TraiterBranche(MyBranche, Idx)) then AfficherMessageErreur(Format('*** Erreur pour la branche %d - %s', [Idx, MyBranche.NomBranche]));
+  (*
+   try
+        MyBranche := GetBranche(Br);
+        if (Not TraiterBranche(MyBranche, Br)) then AfficherMessageErreur(Format('*** Erreur pour la branche %d - %s', [Br, MyBranche.NomBranche]));
+      except
+        on E: Exception do AfficherMessage(Format('[ERROR] Branche: %d - Message; %s', [Br, E.Message]));
+      end;
+   //*)
 end;
 
 procedure TCodeDeCalcul.CalculContoursGaleriesExtended(const FichierTOP: string; const DoGenerateFile: boolean);
@@ -1029,6 +1161,162 @@ var
   EPSG        : TLabelSystemesCoordsEPSG;
   MyBranche   : TBrancheXYZ;
   t: TDateTime;
+  function TraiterBranche(const QBranche: TBrancheXYZ; const Br: integer): boolean; deprecated;
+  var
+    TabVisee    : array of TUneVisee; //TStation;
+    St          : Integer;
+    AlphaD      : Double;
+    qCosAlphaD  : double;
+    qSinAlphaD  : double;
+    NbViseesInBrche: Integer;
+    QEntite     : TBaseStation;
+    Cnt         , QNbExpes: integer;
+    QEntrance   : TEntrance;
+    AReseau     : TReseau;
+    MyExpe      : TExpe;
+    EWE1, EWE2: Boolean;
+  begin
+    Result := False;
+    try
+      NbViseesInBrche := 1 + High(QBranche.PointsTopo); // QBranche.PointsTopo.GetNbElements();
+      Cnt := 0;
+      AReseau := FDocTopo.GetReseau(QBranche.NoReseau);
+      SetLength(TabVisee, 0);
+      SetLength(TabVisee, 2 + NbViseesInBrche);
+      for St:= 0 to NbViseesInBrche - 1 do TabVisee[St] := QBranche.PointsTopo[st];
+      //AfficherMessage(Format('----> Points OK - Idx max TabVisee: %d .. %d; NbViseesInBrche = %d', [Low(TabVisee), high(TabVisee), NbViseesInBrche]));
+      TabVisee[0].LD := TabVisee[1].LD;
+      TabVisee[0].LG := TabVisee[1].LG;
+      TabVisee[0].HZ := TabVisee[1].HZ;
+      TabVisee[0].HN := TabVisee[1].HN;
+      TabVisee[0].TypeVisee := TabVisee[1].TypeVisee;
+      if (NbViseesInBrche = 1) then
+      begin
+        TabVisee[1]   :=  TabVisee[0];
+      end
+      else
+      begin
+        TabVisee[NbViseesInBrche]        := TabVisee[NbViseesInBrche - 1];
+        TabVisee[NbViseesInBrche].DeltaX := TabVisee[NbViseesInBrche - 1].DeltaX + (TabVisee[NbViseesInBrche - 1].DeltaX - TabVisee[NbViseesInBrche - 2].DeltaX);
+        TabVisee[NbViseesInBrche].DeltaY := TabVisee[NbViseesInBrche - 1].DeltaY + (TabVisee[NbViseesInBrche - 1].DeltaY - TabVisee[NbViseesInBrche - 2].DeltaY);
+      end;
+      // calcul contours
+      QNbExpes := FDocTopo.GetNbExpes();
+      for St := 1 to NbViseesInBrche - 1 do
+      begin
+        try
+          if (St = 1) then
+          begin
+            AlphaD := CalculerAngleBissecteur(TabVisee[St].DeltaX - TabVisee[St-1].DeltaX,
+                                              TabVisee[St].DeltaY - TabVisee[St-1].DeltaY,
+                                              TabVisee[St].DeltaX - TabVisee[St-1].DeltaX,
+                                              TabVisee[St].DeltaY - TabVisee[St-1].DeltaY);
+          end;
+            sincos(AlphaD, qSinAlphaD, qCosAlphaD);
+            if (FDocTopo.GetIdxCodeByNumero(TabVisee[St].Code) = -1) then
+            begin
+              AfficherMessage(Format('*** [WARNING] Branche: %d - St: %d - Code %d incorrect mis à 1', [Br, St, TabVisee[St].Code]));
+              TabVisee[St].Code := 1;
+              QEntite.DateLeve  := Now();
+            end;
+            QEntite.eCode       := TabVisee[St].Code;
+            if (FDocTopo.GetIdxExpeByNumero(TabVisee[St].Expe) = -1) then
+            begin
+              AfficherMessage(Format('*** [WARNING] Branche: %d - St: %d - Expe %d incorrecte mise à 1', [Br, St, TabVisee[St].Expe]));
+              TabVisee[St].Expe := 1;
+              QEntite.DateLeve       := Now();
+            end;
+            QEntite.eExpe       := TabVisee[St].Expe;
+            QEntite.eSecteur    := TabVisee[St].IDSecteur;
+            QEntite.eEntrance   := QBranche.NoEntranceRatt;
+            QEntite.eReseau     := QBranche.NoReseau;
+            QEntite.Type_Entite := TabVisee[St].TypeVisee;
+
+            MyExpe                  := FDocTopo.GetExpeByNumero(TabVisee[St].Expe);
+            {$WARNING: TEXpe.DateExpe à implementer}
+            QEntite.DateLeve        := GetSecuredDate(MyExpe.AnneeExpe, MyExpe.MoisExpe, MyExpe.JourExpe);
+            QEntite.eEntrance       := QBranche.NoEntranceRatt;
+            QEntite.Entite_Serie    := QBranche.NoSerie;
+            QEntite.Entite_Station  := TabVisee[St].NoVisee;
+            // données originales
+            QEntite.oLongueur       := TabVisee[St].Longueur;
+            QEntite.oAzimut         := TabVisee[St].Azimut;
+            QEntite.oPente          := TabVisee[St].Pente;
+            QEntite.oLG             := TabVisee[St].LG;
+            QEntite.oLD             := TabVisee[St].LD;
+            QEntite.oHZ             := TabVisee[St].HZ;
+            QEntite.oHN             := TabVisee[St].HN;
+            // centerline
+            QEntite.PosExtr0   := MakeTPoint3Df(TabVisee[St-1].DeltaX, TabVisee[St-1].DeltaY, TabVisee[St-1].DeltaZ);
+            QEntite.PosStation := MakeTPoint3Df(TabVisee[St].DeltaX, TabVisee[St].DeltaY, TabVisee[St].DeltaZ);
+            // habillage
+            QEntite.PosOPG.X := QEntite.PosExtr0.X - TabVisee[St-1].LG * qCosAlphaD;
+            QEntite.PosOPG.Y := QEntite.PosExtr0.Y - TabVisee[St-1].LG * qSinAlphaD;
+            QEntite.PosOPD.X := QEntite.PosExtr0.X + TabVisee[St-1].LD * qCosAlphaD;
+            QEntite.PosOPD.Y := QEntite.PosExtr0.Y + TabVisee[St-1].LD * qSinAlphaD;
+
+            QEntite.PosOPD.Z := QEntite.PosExtr0.Z + TabVisee[St-1].HZ;
+            QEntite.PosOPG.Z := QEntite.PosExtr0.Z - TabVisee[St-1].HN;
+            AlphaD := CalculerAngleBissecteur(TabVisee[St].DeltaX - TabVisee[St-1].DeltaX,
+                                              TabVisee[St].DeltaY - TabVisee[St-1].DeltaY,
+                                              TabVisee[St+1].DeltaX - TabVisee[St].DeltaX,
+                                              TabVisee[St+1].DeltaY - TabVisee[St].DeltaY);
+            SinCos(AlphaD, qSinAlphaD, qCosAlphaD);
+            QEntite.PosPG.X := QEntite.PosStation.X - TabVisee[St].LG * qCosAlphaD;
+            QEntite.PosPG.Y := QEntite.PosStation.Y - TabVisee[St].LG * qSinAlphaD;
+            QEntite.PosPD.X := QEntite.PosStation.X + TabVisee[St].LD * qCosAlphaD;
+            QEntite.PosPD.Y := QEntite.PosStation.Y + TabVisee[St].LD * qSinAlphaD;
+            QEntite.PosPD.Z := QEntite.PosStation.Z + TabVisee[St].HZ;
+            QEntite.PosPG.Z := QEntite.PosStation.Z - TabVisee[St].HN;
+            QEntite.CouleurDegrade := clBlue;                                                        // couleur pour dégradé
+            EWE1 := Pos(LowerCase(KEYWORD_POI_TODO), LowerCase(TabVisee[St].Commentaires)) > 0;
+            EWE2 := Pos(LowerCase(KEYWORD_POI_DONE), LowerCase(TabVisee[St].Commentaires)) > 0;
+
+            QEntite.IsPOI := (EWE1 OR EWE2);    // Points d'intérêt
+            QEntite.Highlighted   := false;
+            QEntite.IDTerrain     := TabVisee[St].IDTerrainStation;
+            QEntite.oCommentaires := TabVisee[St].Commentaires;
+
+
+          case QEntite.Type_Entite of
+            tgENTRANCE:  // les entrées ne sont pas des entités comme les autres et font l'objet d'une liste séparée.
+              begin
+                pass;
+                (*
+                QEntrance.eRefSer      := QEntite.Entite_Serie;
+                QEntrance.eRefSt       := QEntite.Entite_Station;
+                QEntrance.eNomEntree   := QEntite.oCommentaires;
+                QEntrance.eObserv      := '';
+                QEntrance.eXEntree     := QEntite.PosStation.X;
+                QEntrance.eYEntree     := QEntite.PosStation.Y;
+                QEntrance.eZEntree     := QEntite.PosStation.Z;
+                MyBDDEntites.AddEntrance(QEntrance);
+
+                //*)
+                Inc(Cnt);
+              end;
+            tgDEFAULT,
+            tgFOSSILE,
+            tgVADOSE,
+            tgENNOYABLE,
+            tgSIPHON,
+            tgSURFACE,
+            tgTUNNEL,
+            tgMINE:
+              begin
+                FBDDEntites.AddEntiteVisee(QEntite);
+                Inc(Cnt);
+              end;
+          else
+            AfficherMessage('Type de entité inconnu');
+          end;
+        except
+        end;
+      end;   // for Br
+      Result := (NbViseesInBrche = (Cnt + 1)); // Valeur de retour: OK si égalité entre le nombre de visées initial et le nombre de visées effectivement ajouté.
+    except
+    end;
+  end;
 begin;
   AfficherMessage('');
   AfficherMessage('CalculContoursGaleriesExtended: ' + FichierTOP);
@@ -1043,26 +1331,36 @@ begin;
     recopierTablesEntreesReseauxSecteursCodesExpes();
     // construction de la liste des visées
     {$IFDEF MULTI_THREADING}
-    AfficherMessageErreur(format('%s.CalculContoursGaleriesExtended(%d) [Multithreaded]', [classname, NbreBranches]));
+    AfficherMessageErreur(format('%s.MakeRMatrix(%d) [Multithreaded]', [classname, NbreBranches]));
     QListeThreads := TListOfThreads.Create;
     try
-      if (QListeThreads.InitialiserEtLancer(NB_MAX_THREADS, true, ProcessABrancheToBDDEntites, NbreBranches)) then
+      if (QListeThreads.InitialiserEtLancer(NB_MAX_THREADS, true, ProcessABrancheToBDDEntites(), NbreBranches)) then
       begin
         QListeThreads.Finaliser;
       end;
     finally
       FreeAndNil(QListeThreads);
     end;
+
     {$ELSE}
     AfficherMessage(GetResourceString(rsSCAN_BRCHS));
-    for Br:= 1 to NbreBranches - 1 do ProcessABrancheToBDDEntites(-1, Br);
+    for Br:= 1 to NbreBranches - 1 do
+    begin
+      ProcessABrancheToBDDEntites(-1, Br);
+      (*
+      try
+        MyBranche := GetBranche(Br);
+        if (Not TraiterBranche(MyBranche, Br)) then AfficherMessageErreur(Format('*** Erreur pour la branche %d - %s', [Br, MyBranche.NomBranche]));
+      except
+        on E: Exception do AfficherMessage(Format('[ERROR] Branche: %d - Message; %s', [Br, E.Message]));
+      end;
+      //*)
+    end;
     AfficherMessageErreur(rsSCAN_BRCHS + ' OK');
-
+    FBDDEntites.RecenserDates();   // recenser les dates
     {$ENDIF MULTI_THREADING}
     t := now() - t;
-    AfficherMessageErreur('RecenserDates()');
-    FBDDEntites.RecenserDates();   // recenser les dates
-    AfficherMessageErreur(Format('Temps de calcul des %d contours des branches jj: %.8f sec', [NbreBranches, t * 86400]));
+    AfficherMessageErreur(Format('Temps de calcul des %d branches: %.8f sec', [NbreBranches, t * 86400]));
     AfficherMessage('Calcul contours galeries OK');
     if (DoGenerateFile) then pass;
   finally
@@ -1169,11 +1467,97 @@ var
   {$IFDEF MULTI_THREADING}
   QListeThreads  : TListOfThreads;
   {$ENDIF MULTI_THREADING}
+
+  QEntite: TBaseStation;
+  HH, MM, MS, SS: word;
+  t0, t1: TDateTime;
+  OldVA, QVA: TViseeAntenne;
+  function CalcViseeAntenne(const VA: TViseeAntenne; out   OutEE: TBaseStation): boolean; deprecated;
+  var
+    VS      : TUneVisee;
+    DX, DY, DZ, DP: double;
+    EE: TBaseStation;
+    MyCode: TCode;
+    MyExpe: TExpe;
+  begin
+    result := false;
+    DX := 0.00; DY := 0.00; DZ := 0.00;
+    if (FBDDEntites.GetEntiteViseeFromSerSt(VA.SerieDepart, VA.PtDepart, EE)) then
+    begin
+      DX := EE.PosStation.X;
+      DY := EE.PosStation.Y;
+      DZ := EE.PosStation.Z;
+      // les codes et expés de l'antenne héritent de ceux de la station d'accrochage
+      MyCode := FDocTopo.GetCodeByNumero(EE.eCode);
+      MyExpe := FDocTopo.GetExpeByNumero(EE.eExpe);
+    end
+    else
+    begin
+      exit(false);
+    end;
+    VS.IDSecteur        := 0; // VA.Secteur; // TODO: Secteur à implémenter
+    VS.Code             := EE.eCode;
+    VS.Expe             := EE.eExpe;
+    VS.Longueur         := VA.Longueur;
+    VS.Azimut           := VA.Azimut;
+    VS.Pente            := VA.Pente;
+    VS.LG               := 0.00;
+    VS.LG               := 0.00;
+    VS.HZ               := 0.00;
+    VS.HN               := 0.00;
+    VS.Commentaires     := ''; //VA.Commentaires;
+    VS.IDTerrainStation := ''; //VA.IDTerrainStation;
+    VS.TypeVisee        := tgVISEE_RADIANTE;
+    CalculerVisee(VS, MyCode, MyExpe, DX, DY, 1.00, DZ, DP);
+
+    DX := EE.PosStation.X + VS.DeltaX;
+    DY := EE.PosStation.Y + VS.DeltaY;
+    DZ := EE.PosStation.Z + VS.DeltaZ;
+    //******************************
+    // TODO: Dans GHCaveDraw, les antennes ne doivent servir que de guides et
+    //       n'ont pas à être capturées
+    OutEE.Entite_Serie    := -VA.SerieDepart; // -QNo;
+    OutEE.Entite_Station  :=  VA.PtDepart;//0;
+    // code et expé (hérités de ceux de la station d'accrochage)
+    OutEE.eCode       := EE.eCode;
+    OutEE.eExpe       := EE.eExpe;
+    OutEE.eSecteur    := VA.Secteur;
+    OutEE.eEntrance   := VA.EntranceRatt;
+    OutEE.eReseau     := VA.Reseau;
+    OutEE.Type_Entite := tgVISEE_RADIANTE;
+    OutEE.DateLeve    := Now();
+    OutEE.Enabled         := True;   // drapeau
+    // données originales
+    OutEE.oLongueur       := VA.Longueur;
+    OutEE.oAzimut         := VA.Azimut;
+    OutEE.oPente          := VA.Pente;
+    OutEE.oLG             := 0.00;
+    OutEE.oLD             := 0.00;
+    OutEE.oHZ             := 0.00;
+    OutEE.oHN             := 0.00;
+    // centerline
+    OutEE.PosExtr0   := EE.PosStation;
+    OutEE.PosStation := MakeTPoint3Df(DX, DY, DZ);
+    // habillage
+    OutEE.PosOPG := EE.PosStation;
+    OutEE.PosOPD := EE.PosStation;
+    OutEE.PosPG  := MakeTPoint3Df(DX, DY, DZ);
+    OutEE.PosPD  := MakeTPoint3Df(DX, DY, DZ);
+    // couleur par défaut
+    OutEE.CouleurDegrade:= FPalette256.GetColorByIndex(MyExpe.IdxCouleur); //clGray ;
+    // commentaires
+    OutEE.IDTerrain     := ''; //VA.IDTerrainStation;
+    OutEE.oCommentaires := ''; //VA.Commentaires;
+    OutEE.IsPOI         := false;
+    // passage ici = OK
+    result := true;
+  end;
 begin
   //AfficherMessageErreur(format('%s.TraiterViseesEnAntenne()', [classname]));
   result := false;
   NbAntennes := FDocTopo.GetNbAntennes();
   t := now();
+
   {$IFDEF MULTI_THREADING}
   AfficherMessageErreur(format('%s.TraiterViseesEnAntenne(%d) [Multithreaded]', [classname, NbAntennes]));
   QListeThreads := TListOfThreads.Create;
@@ -1193,7 +1577,10 @@ begin
     for n := 1 to NbAntennes - 1 do
     begin
       ProcessAViseeEnAntenne(-1, n);
+      //QVA    := FDocTopo.GetViseeAntenne(n);
       if ((Assigned(self.FProcDispProgressionMonoThread)) and ((n MOD 250) = 0)) then self.FProcDispProgressionMonoThread(Format(GetResourceString(rsCALCUL_ANTENNES), [n]), n, 0, NbAntennes - 1, 1000);
+
+      //if (CalcViseeAntenne(QVA, QEntite)) then FBDDEntites.AddEntiteAntenne(QEntite);
     end
   end else
   begin

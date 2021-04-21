@@ -719,6 +719,8 @@ type TProcDisplayProgression = procedure (const Etape: string; const Done, Start
 //type TProcOfObject = procedure of object;
 type TProcOfObjectWithOneBoolParameter    = procedure(const P: boolean) of object;
 type TProcOfObjectWithOneIntParameter     = procedure(const P: integer) of object;
+type TThreadProcOfObjectWithOneIntParameter = procedure(const NoThread, Idx: integer) of object;
+
 type TProcOfObjectWithTNumeroSerie        = procedure(const N: TNumeroSerie) of object;
 type TProcOfObjectReturnsAsBoolean        = function(): boolean of object;
 type TProcOfObjectWithOneStringParameter  = procedure (const Msg: string) of object;
