@@ -1,6 +1,7 @@
 unit unitUtilsCPU;
-
+{$ERROR  Inutilisé, seul le nombre de coeurs est pris en compte}
 {$INCLUDE CompilationParameters.inc}
+
 
 interface
 

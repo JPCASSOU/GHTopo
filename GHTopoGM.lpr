@@ -5,9 +5,8 @@ program GHTopoGM;
 
 uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
-  cthreads,
+  cthreads, cmem,
   {$ENDIF}{$ENDIF}
- 
   Interfaces // this includes the LCL widgetset
   , Forms
   , frmGHTopoMainBar
@@ -16,6 +15,7 @@ uses
   ; //, CadrePascalScript, frmPSDrawing2D, UnitRemoteFunctions, laz_synapse;
 {$R *.res}
 begin
+
   Application.Scaled := True;
   Application.Title:='GHTopoFPC';
   RequireDerivedFormResource := True;

@@ -356,7 +356,7 @@ begin
     for i := 0 to Nb -1 do
     begin
       EWE := FBDDEntites.GetEntiteVisee(i);
-      WU  += Format(FMTSERST, [EWE.Entite_Serie, EWE.Entite_Station]) + TAB +
+      WU  += EWE.toString() + TAB +
              EWE.IDTerrain + TAB +
              GetDescTypeVisee(EWE.Type_Entite) + TAB +
              FormatterNombreOOo(EWE.oLongueur, 3, False) + TAB +
@@ -819,9 +819,9 @@ var
     c: Integer;
   begin
     ResetColorRow(lsbVisees, ARect, bg, tc);
-    DrawColTexte(lsbVisees, ARect, HeaderControl1.Sections.Items[0], false, Format(FMTSERST, [EWE.Entite_Serie, EWE.Entite_Station]));
-    DrawColTexte(lsbVisees, ARect, HeaderControl1.Sections.Items[1], True, EWE.IDTerrain);
-    DrawColTexte(lsbVisees, ARect, HeaderControl1.Sections.Items[2], True, GetDescTypeVisee(EWE.Type_Entite));
+    DrawColTexte(lsbVisees, ARect, HeaderControl1.Sections.Items[0], false, EWE.toString());
+    DrawColTexte(lsbVisees, ARect, HeaderControl1.Sections.Items[1], True , EWE.IDTerrain);
+    DrawColTexte(lsbVisees, ARect, HeaderControl1.Sections.Items[2], True , GetDescTypeVisee(EWE.Type_Entite));
     if (IsViseeInSerie(EWE)) then
     begin
       DrawColTexte(lsbVisees, ARect, HeaderControl1.Sections.Items[3], True, FormatterNombreOOo(EWE.oLongueur, 3, False));

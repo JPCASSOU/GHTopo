@@ -300,7 +300,7 @@ begin
   if (grdViseesEnAntenne.Row < 1) then Exit;
   MyAntenne := FMyDocToporobot.GetViseeAntenne(grdViseesEnAntenne.Row);
   EWE := Format('Deplacer Antenne: %d.%d - %.2f, %.2f, %.2f', [MyAntenne.SerieDepart, MyAntenne.PtDepart, MyAntenne.Longueur, MyAntenne.Azimut,  MyAntenne.Pente]);
-  WU  := Format(FMTSERST, [MyAntenne.SerieDepart, MyAntenne.PtDepart]);
+  WU  := MyAntenne.toString();
   if (InputQuery('Changement de point de base', 'Nouveau point de base (couple serie et station ss.pp)', WU)) then
   begin
     if (FMyDocToporobot.FindPtTopoByCle(QDoMatchExact, WU, QSer, QPt)) then

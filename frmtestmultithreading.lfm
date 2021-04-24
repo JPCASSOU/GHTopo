@@ -1,7 +1,7 @@
 object dlgMultiThreading: TdlgMultiThreading
-  Left = 407
+  Left = 302
   Height = 405
-  Top = 266
+  Top = 194
   Width = 745
   Caption = 'Test de multithreading'
   ClientHeight = 405
@@ -191,6 +191,14 @@ object dlgMultiThreading: TdlgMultiThreading
       Top = 80
       Width = 418
       TabOrder = 2
+    end
+    object lbProcessing: TStaticText
+      Left = 272
+      Height = 17
+      Top = 24
+      Width = 65
+      Caption = 'lbProcessing'
+      TabOrder = 3
     end
   end
 end

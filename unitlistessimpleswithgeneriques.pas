@@ -27,6 +27,7 @@ uses
 type
 
 { TListeSimple }
+ //TThreadList
 
  TListeSimple<T> = class(TFPList)
   private
@@ -178,7 +179,7 @@ end;
 
 { TTableViseesAntenne }
 
- TTableViseesAntenne = class(TListeSimple<TViseeAntenne>)
+ type TTableViseesAntenne = class(TListeSimple<TViseeAntenne>)
    private
    public
      function  Purger(): integer;
@@ -293,7 +294,6 @@ procedure TListeSimple<T>.ClearListe();
 var
   i, n: Integer;
 begin
-  //AfficherMessage(Format('%s.ClearListe()', [classname]));
   n := self.Count;
   if (n > 0) then
   for i:=Count-1 downto 0 Do

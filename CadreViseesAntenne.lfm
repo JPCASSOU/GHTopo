@@ -13,6 +13,7 @@ object CdrAntennes: TCdrAntennes
   Font.Pitch = fpVariable
   Font.Quality = fqDraft
   Font.Style = [fsBold]
+  LCLVersion = '2.0.0.4'
   ParentFont = False
   TabOrder = 0
   DesignLeft = 412

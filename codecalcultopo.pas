@@ -87,8 +87,7 @@ uses
   StructuresDonnees,
   unitConteneurCodeCalcul,
   {$IFDEF MULTI_THREADING}
-  //LCLProc, LCLType, LCLIntf; // Utiliser les TCriticalSection de la LCL, et non celles de la RTL
-  GHTopoMultiThreading2,
+     {$ERROR: Multithreading inadapté}
   {$ENDIF MULTI_THREADING}
   ToporobotClasses2012,
   unitobjetserie,
@@ -259,32 +258,15 @@ end;
 
 procedure TCodeDeCalcul.MakeRMatrix();
 var
-  {$IFDEF MULTI_THREADING}
-  QListeThreads : TListOfThreads;
-  {$ENDIF}
   QNbBranches, QNbNodes, i: integer;
   EWE: String;
   t: TDateTime;
+
   //YaAutoloop: boolean;
 begin
   QNbBranches := GetNbBranches();
   QNbNodes    := GetMaxNode();
   t := Now();
-  {$WARNING: Probablement non parallélisable}
-  (*
-  {$IFDEF MULTI_THREADING}
-  AfficherMessageErreur(format('%s.MakeRMatrix(%d) [Multithreaded]', [classname, QNbBranches]));
-  QListeThreads := TListOfThreads.Create;
-  try
-    if (QListeThreads.InitialiserEtLancer(NB_MAX_THREADS, true, ProcessARowRMatrix, QNbBranches)) then
-    begin
-      QListeThreads.Finaliser();
-    end;
-  finally
-    FreeAndNil(QListeThreads);
-  end;
-  {$ELSE}
-  //*)
   for i := 1 to QNbBranches - 1 do
   begin
     if (i MOD 100 = 0) then
@@ -294,7 +276,6 @@ begin
     end;
     ProcessARowRMatrix(-1, i);
   end;
-  //{$ENDIF MULTI_THREADING}
   t := Now() - t;
   AfficherMessageErreur(Format('Temps de construction de la matrice d''incidence R: %.8f', [t * 86400]));
   R_Matrix.RemoveAllZeroes();
@@ -737,9 +718,6 @@ end;
 
 procedure TCodeDeCalcul.RepartirEcarts();
 var
-  {$IFDEF MULTI_THREADING}
-  QListeThreads  : TListOfThreads;
-  {$ENDIF MULTI_THREADING}
   i, QNbBranches: integer;
   t: TDateTime;
 begin;
@@ -750,21 +728,8 @@ begin;
   AfficherMessageErreur('=========================================');
   //AfficherMessageErreur('Branche; X1; Y1; Z1; X2; Y2; Z2; Devel; EcartX; EcartY; EcartZ; EcartTotal; EpsX; EpsY; EpsZ; EpsTotal');
   t := Now();
-  {$IFDEF MULTI_THREADING}
-  AfficherMessageErreur(format('%s.RepartirEcarts(%d) [Multithreaded]', [classname, QNbBranches]));
-  QListeThreads := TListOfThreads.Create;
-  try
-    if (QListeThreads.InitialiserEtLancer(NB_MAX_THREADS, true, ProcessRepartitionEcartsOfBranche, QNbBranches)) then
-    begin
-      QListeThreads.Finaliser();
-    end;
-  finally
-    FreeAndNil(QListeThreads);
-  end;
-  {$ELSE}
   AfficherMessageErreur(format('%s.RepartirEcarts(%d) [Monothreaded]', [classname, QNbBranches]));
   for i:=1 to QNbBranches - 1 do ProcessRepartitionEcartsOfBranche(-1, i);
-  {$ENDIF MULTI_THREADING}
   t := now() - t;
   AfficherMessageErreur(Format('Temps de calcul des accroissements des %d branches: %.8f sec', [QNbBranches, t * 86400]));
   AfficherMessageErreur('=========================================');
@@ -1021,9 +986,6 @@ end;
 
 procedure TCodeDeCalcul.CalculContoursGaleriesExtended(const FichierTOP: string; const DoGenerateFile: boolean);
 var
-  {$IFDEF MULTI_THREADING}
-  QListeThreads  : TListOfThreads;
-  {$ENDIF MULTI_THREADING}
   VA          : TViseeAntenne;
   Br          , NbreBranches: Integer;
   EPSG        : TLabelSystemesCoordsEPSG;
@@ -1042,23 +1004,9 @@ begin;
     FBDDEntites.SetCodeEPSG(EPSG.CodeEPSG);
     recopierTablesEntreesReseauxSecteursCodesExpes();
     // construction de la liste des visées
-    {$IFDEF MULTI_THREADING}
-    AfficherMessageErreur(format('%s.CalculContoursGaleriesExtended(%d) [Multithreaded]', [classname, NbreBranches]));
-    QListeThreads := TListOfThreads.Create;
-    try
-      if (QListeThreads.InitialiserEtLancer(NB_MAX_THREADS, true, ProcessABrancheToBDDEntites, NbreBranches)) then
-      begin
-        QListeThreads.Finaliser;
-      end;
-    finally
-      FreeAndNil(QListeThreads);
-    end;
-    {$ELSE}
     AfficherMessage(GetResourceString(rsSCAN_BRCHS));
     for Br:= 1 to NbreBranches - 1 do ProcessABrancheToBDDEntites(-1, Br);
     AfficherMessageErreur(rsSCAN_BRCHS + ' OK');
-
-    {$ENDIF MULTI_THREADING}
     t := now() - t;
     AfficherMessageErreur('RecenserDates()');
     FBDDEntites.RecenserDates();   // recenser les dates
@@ -1166,26 +1114,11 @@ function TCodeDeCalcul.TraiterViseesEnAntenne(): boolean;
 var
   t              : TDateTime;
   n, NbAntennes : integer;
-  {$IFDEF MULTI_THREADING}
-  QListeThreads  : TListOfThreads;
-  {$ENDIF MULTI_THREADING}
 begin
   //AfficherMessageErreur(format('%s.TraiterViseesEnAntenne()', [classname]));
   result := false;
   NbAntennes := FDocTopo.GetNbAntennes();
   t := now();
-  {$IFDEF MULTI_THREADING}
-  AfficherMessageErreur(format('%s.TraiterViseesEnAntenne(%d) [Multithreaded]', [classname, NbAntennes]));
-  QListeThreads := TListOfThreads.Create;
-  try
-    if (QListeThreads.InitialiserEtLancer(NB_MAX_THREADS, true, ProcessAViseeEnAntenne, NbAntennes)) then
-    begin
-      QListeThreads.Finaliser;
-    end;
-  finally
-    FreeAndNil(QListeThreads);
-  end;
-  {$ELSE}
   //NbAntennes := FDocTopo.GetNbAntennes();
   AfficherMessage(Format(GetResourceString(rsCALCUL_ANTENNES), [NbAntennes]));
   if (NbAntennes > 0) then
@@ -1199,7 +1132,6 @@ begin
   begin
     AfficherMessage(' --> No antenna shots');
   end;
-  {$ENDIF MULTI_THREADING}
   t := Now() - t;
   AfficherMessageErreur(Format('Temps de calcul des %d antennes: %.8f sec', [NbAntennes, t * 86400]));
   result := True;

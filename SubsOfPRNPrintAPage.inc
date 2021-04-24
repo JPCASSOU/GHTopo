@@ -250,7 +250,7 @@
       if (E.Type_Entite = tgVISEE_RADIANTE) then Continue;
       Printer.Canvas.Pen.Color := clGray;
       P1 := Coord2Draft(E.PosStation.X, E.PosStation.Y);
-      Printer.Canvas.TextOut(P1.X+2+RD, P1.Y+2+RD, Format(FMTSERST, [E.Entite_Serie, E.Entite_Station]));//Trim(E.IDTerrain));
+      Printer.Canvas.TextOut(P1.X+2+RD, P1.Y+2+RD, E.toString());
     end;
     Printer.Canvas.Brush.Color := clWhite;
     Printer.Canvas.Font.Color  := clBlack;
@@ -357,7 +357,7 @@
     begin
       MyJonction := FBDDEntites.GetJonction(i);
       P1 := Coord2Draft(MyJonction.X, MyJonction.Y);
-      Printer.Canvas.TextOut(P1.x + 2, P1.Y + 2, Format(FMTSERST, [MyJonction.NoSer, MyJonction.NoSt]));
+      Printer.Canvas.TextOut(P1.x + 2, P1.Y + 2, MyJonction.ToString());
     end;
   end;
   // visées radiantes

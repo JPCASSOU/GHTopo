@@ -1054,7 +1054,7 @@ var
         begin
           ResetColorRow(lsbListe, ARect, bg, tc);
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[0], false, Format(FORMAT_NB_INTEGER, [Index]));
-          DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[1], true , Format(FMTSERST, [PP.Serie, PP.Station]));
+          DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[1], true , pp.toString());
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[2], true , PP.LabelTerrain);
           DrawColRectColoreWithTexte(lsbListe, ARect, hcColsTitres.Sections.Items[3], True, bg, PP.Couleur, '');
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[4], true , PP.Description);
@@ -1084,9 +1084,9 @@ var
           ResetColorRow(lsbListe, ARect, bg, tc);
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[0], false, Format(FORMAT_NB_INTEGER, [sp.BaseStation.aSerie]));
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[1], true , Format(FORMAT_NB_REAL_3_DEC, [sp.LongueurSerie]));
-          DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[2], true , Format(FMTSERST, [sp.BaseStation.aSerie, sp.BaseStation.aStation]));
+          DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[2], true , sp.BaseStation.ToString());
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[3], true , sp.ObservLastStation);
-          DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[4], true , Format(FMTSERST, [sp.NearestStation.aSerie, sp.NearestStation.aStation]));
+          DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[4], true , sp.NearestStation.ToString());
           DistColor   := GetColorDegrade(sp.Distance, 0.001, Min(editRayonCaptureProxi.Value, DIST_OUT_OF_ORDER), clLime, clRed);
           DrawColRectColoreWithTexte(lsbListe, ARect, hcColsTitres.Sections.Items[5], True, bg, DistColor, Format(FORMAT_NB_REAL_3_DEC, [sp.Distance]));
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[6], true , sp.Statut);
@@ -1095,8 +1095,8 @@ var
         begin
           ResetColorRow(lsbListe, ARect, bg, tc);
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[0], false, Format('%d', [se.NumeroSerie]));
-          DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[1], true , Format(FMTSERST, [se.StationDebut.aSerie, se.StationDebut.aStation]));
-          DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[2], true , Format(FMTSERST, [se.StationFin.aSerie, se.StationFin.aStation]));
+          DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[1], true , se.StationDebut.ToString());
+          DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[2], true , se.StationFin.ToString());
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[3], true , se.NomSerie);
         end;
       else
@@ -1147,7 +1147,7 @@ begin
          if (assigned(FProcOfObjectWithXY)) then
          begin
            MyNode := FBDDEntites.GetJonction(lsbListe.ItemIndex);
-           FProcOfObjectWithXY(MyNode.X, MyNode.Y, Format(FMTSERST, [MyNode.NoSer, MyNode.NoSt]));
+           FProcOfObjectWithXY(MyNode.X, MyNode.Y, MyNode.ToString());
          end;
        end;
     mbddPOI:

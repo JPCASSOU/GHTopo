@@ -975,7 +975,7 @@ begin
   DispPSOutput('Processor:');
   DispPSOutput('-----------');
   DispPSOutput('Target CPU: ' + {$I %FPCTARGETCPU%});
-  DispPSOutput(Format('Nb of cores: %d', [GetNbCoresOfProcessor()]));
+  DispPSOutput(Format('Nb of cores: %d', [GetNbCoresProcessor()]));
   DispPSOutput('');
   NbMonitors := Screen.MonitorCount;
   DispPSOutput('Display:');

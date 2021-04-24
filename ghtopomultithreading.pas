@@ -1,7 +1,7 @@
 unit GHTopoMultiThreading;
-{$INCLUDE CompilationParameters.inc}
-{$ASSERTIONS ON}
 {$ERROR Implémenter les sections critiques (voir code après le end.) }
+{$INCLUDE CompilationParameters.inc}
+
 interface
 uses
   StructuresDonnees,
@@ -42,8 +42,6 @@ private
   FAFinished       : boolean;
   FCriticalSection : TCriticalSection;
 
-
-
 protected   // = visible dans une instance d'une classe mais pas dans celle de ses descendants
 
   procedure Execute; override;
@@ -61,8 +59,6 @@ public
                      const NbThreads, NoThread: integer;
                      const NbItems, IdxStart, IdxEnd: integer;
                      const P: TProcOfObjectUsesInteger);
-
-                     //const lPtr: PTMatrix);
   function AttendPour(): integer;
 end;
 

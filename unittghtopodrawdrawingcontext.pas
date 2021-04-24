@@ -632,7 +632,7 @@ begin
       E := FBDDEntites.GetEntiteVisee(i);
       if (E.Type_Entite = tgVISEE_RADIANTE) then Continue;
       if (not E.Enabled) then Continue;
-      DrawTexte(E.PosStation.X + 0.3, E.PosStation.Y + 0.3, 1, Format(FMTSERST, [E.Entite_Serie, E.Entite_Station]));
+      DrawTexte(E.PosStation.X + 0.3, E.PosStation.Y + 0.3, 1, E.toString());
     except
     end;
   end;
@@ -691,6 +691,7 @@ var
   R : integer;
 begin
   R := 4;
+  DefineFonte('Arial', clBlue, [fsBold], 16);
   for i := 0 to FBDDEntites.GetNbEntitesVisees() - 1 do
   begin
     try
@@ -705,10 +706,12 @@ begin
         DefineBrosseEtCrayon(bsSolid, clAqua, 255, psSolid, 0, clAqua, 255);
         DrawShape(E.PosStation.X, E.PosStation.Y, 1, R, R);
         RestoreBrosseEtCrayon();
+        DrawTexte(E.PosStation.X + 1.0, E.PosStation.Y + 1.0, 1, E.toString());
       end;
     except
     end;
   end;
+  RestoreFonte();
 end;
 procedure TGHTopoDrawingContext.DrawGaleries(const DoDrawFast: boolean);
 var

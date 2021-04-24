@@ -1009,7 +1009,6 @@ var
               InRange(QP.Z, -ECRETAGE, ECRETAGE);
   end;
   procedure MiouMiou(const Miou: TBaseStation);
-  const FMTSERSTID = FMTSERST + ': %s';
   begin
     if (Not (QIsValidCoords(Miou.PosExtr0) AND
              QIsValidCoords(Miou.PosStation))) then Exit;
@@ -1017,38 +1016,38 @@ var
     begin
       XMaxi := Miou.PosExtr0.X;
       if (Miou.Enabled) then FMetafilteredCoinHautDroit.X := XMaxi;
-      FIDStationXMaxi := Format(FMTSERSTID, [Miou.Entite_Serie, Miou.Entite_Station, Miou.IDTerrain]);
+      FIDStationXMaxi := Miou.toStringWithIDTerrain();
     end;
     if (Miou.PosExtr0.X < XMini) then
     begin
       XMini := Miou.PosExtr0.X;
       if (Miou.Enabled) then FMetafilteredCoinBasGauche.X := XMini;
-      FIDStationXMini := Format(FMTSERSTID, [Miou.Entite_Serie, Miou.Entite_Station, Miou.IDTerrain])
+      FIDStationXMini := Miou.toStringWithIDTerrain();
     end;
 
     if (Miou.PosExtr0.Y > YMaxi) then
     begin
       YMaxi := Miou.PosExtr0.Y;
       if (Miou.Enabled) then FMetafilteredCoinHautDroit.Y := YMaxi;
-      FIDStationYMaxi := Format(FMTSERSTID, [Miou.Entite_Serie, Miou.Entite_Station, Miou.IDTerrain])
+      FIDStationYMaxi := Miou.toStringWithIDTerrain();
     end;
     if (Miou.PosExtr0.Y < YMini) then
     begin
       YMini := Miou.PosExtr0.Y;
       if (Miou.Enabled) then FMetafilteredCoinBasGauche.Y := YMini;
-      FIDStationYMini := Format(FMTSERSTID, [Miou.Entite_Serie, Miou.Entite_Station, Miou.IDTerrain])
+      FIDStationYMini := Miou.toStringWithIDTerrain();
     end;
     if (Miou.PosExtr0.Z > ZMaxi) then
     begin
       ZMaxi := Miou.PosExtr0.Z;
       if (Miou.Enabled) then FMetafilteredCoinHautDroit.Z := ZMaxi;
-      FIDStationZMaxi := Format(FMTSERSTID, [Miou.Entite_Serie, Miou.Entite_Station, Miou.IDTerrain])
+      FIDStationZMaxi := Miou.toStringWithIDTerrain();
     end;
     if (Miou.PosExtr0.Z < ZMini) then
     begin
       ZMini := Miou.PosExtr0.Z;
       if (Miou.Enabled) then FMetafilteredCoinBasGauche.Z := ZMini;
-      FIDStationZMini := Format(FMTSERSTID, [Miou.Entite_Serie, Miou.Entite_Station, Miou.IDTerrain])
+      FIDStationZMini := Miou.toStringWithIDTerrain();
     end;
     //*)
     // Station
@@ -1056,39 +1055,39 @@ var
     begin
       XMaxi := Miou.PosStation.X;
       if (Miou.Enabled) then FMetafilteredCoinHautDroit.X := XMaxi;
-      FIDStationXMaxi := Format(FMTSERSTID, [Miou.Entite_Serie, Miou.Entite_Station, Miou.IDTerrain])
+      FIDStationXMaxi := Miou.toStringWithIDTerrain();
     end;
     if (Miou.PosStation.X < XMini) then
     begin
       XMini := Miou.PosStation.X;
       if (Miou.Enabled) then FMetafilteredCoinBasGauche.X := XMini;
-      FIDStationXMini := Format(FMTSERSTID, [Miou.Entite_Serie, Miou.Entite_Station, Miou.IDTerrain])
+      FIDStationXMini := Miou.toStringWithIDTerrain();
     end;
 
     if (Miou.PosStation.Y > YMaxi) then
     begin
       YMaxi := Miou.PosStation.Y;
       if (Miou.Enabled) then FMetafilteredCoinHautDroit.Y := YMaxi;
-      FIDStationYMaxi := Format(FMTSERSTID, [Miou.Entite_Serie, Miou.Entite_Station, Miou.IDTerrain])
+      FIDStationYMaxi := Miou.toStringWithIDTerrain();
     end;
     if (Miou.PosStation.Y < YMini) then
     begin
       YMini := Miou.PosStation.Y;
       if (Miou.Enabled) then FMetafilteredCoinBasGauche.Y := YMini;
-      FIDStationYMini := Format(FMTSERSTID, [Miou.Entite_Serie, Miou.Entite_Station, Miou.IDTerrain])
+      FIDStationYMini := Miou.toStringWithIDTerrain();
     end;
 
     if (Miou.PosStation.Z > ZMaxi) then
     begin
       ZMaxi := Miou.PosStation.Z;
       if (Miou.Enabled) then FMetafilteredCoinHautDroit.Z := ZMaxi;
-      FIDStationZMaxi := Format(FMTSERSTID, [Miou.Entite_Serie, Miou.Entite_Station, Miou.IDTerrain])
+      FIDStationZMaxi := Miou.toStringWithIDTerrain();
     end;
     if (Miou.PosStation.Z < ZMini) then
     begin
       ZMini := Miou.PosStation.Z;
       if (Miou.Enabled) then FMetafilteredCoinBasGauche.Z := ZMini;
-      FIDStationZMini := Format(FMTSERSTID, [Miou.Entite_Serie, Miou.Entite_Station, Miou.IDTerrain])
+      FIDStationZMini := Miou.toStringWithIDTerrain();
     end;
   end;
 begin

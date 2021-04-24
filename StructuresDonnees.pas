@@ -222,6 +222,7 @@ const
 const FMTSERST       = '%d.%d';   // notation standard GHTopo 123.456
 const FMT_NDSER_PT   = '%d-%d';   // pour la liste des jonctions
 const FMTSERST_VTOPO = '%d_%d';   // pour Visual Topo
+const FMTSERSTID    = FMTSERST + ': %s';
 ///*****************************************************************************
 // seuil au-delà duquel il faut tracer les réseaux en mode rapide
 const LONGUEUR_LIMITE_RESEAU = 160 * 1000;
@@ -522,6 +523,9 @@ end;
 // Nota: Les codes et expés d'une visée radiante héritent de ceux de la station d'accrochage
 type
   pViseeAntenne = ^TViseeAntenne;
+
+  { TViseeAntenne }
+
   TViseeAntenne = record
    EntranceRatt        : TNumeroEntrance;
    Reseau              : TNumeroReseau;
@@ -534,6 +538,7 @@ type
    Pente               : double;      //         'Pente
    MarkedForDelete     : boolean;
    //Commentaires        : string;
+   function toString(): string;
 end;
 type TViseeAntenneFound = record
   Idx : Int64;
@@ -575,7 +580,11 @@ type TSerieEncadree = record
 end;
 
 // structure pour croquis et export GHCavedraw
-type TBaseStation = record
+type
+
+{ TBaseStation }
+
+ TBaseStation = record
    // serie et point
    //IDStation         : TIDBaseStation;
    IDTerrain         : string;
@@ -617,6 +626,8 @@ type TBaseStation = record
    Highlighted          : boolean;
    // champs texte => en fin de ligne
    oCommentaires        : string;
+   function toString(): string;
+   function toStringWithIDTerrain(): string;
 end;
 //*)
 
@@ -1073,7 +1084,11 @@ type TFiltrePersonnalise = record
 end;
 // Points d'intérêt
 type TPOIStatut = (poiUNKNOWN, poiTODO, poiDONE);
-type TPointOfInterest = record
+type
+
+{ TPointOfInterest }
+
+ TPointOfInterest = record
   Statut        : TPOIStatut;
   Serie         : TNumeroSerie;
   Station       : integer;
@@ -1081,6 +1096,7 @@ type TPointOfInterest = record
   Couleur       : TColor;
   LabelTerrain  : string;
   Description   : string;
+  function toString(): string;
 end;
 type TCriticiteMessaqeErreurGHTopo = (cmeNOTE, cmeWARNING, cmeERROR, cmeCRITICAL, cmeERROR_AUTOFIXED);
 type TTableExaminee                = (tmeENTRANCES, tmeRESEAUX, tmeSECTEURS, tmeCODES, tmeEXPES, tmeSERIES);
@@ -1190,12 +1206,38 @@ type TProcOfObjectWithXY           = procedure(const QX, QY: double; const TagSt
 
 // pour le multithread
 type TProcOfObjectUsesInteger = procedure(const IDThread: integer; const QStart, QEnd, QDone: integer) of object;
-const NB_MAX_THREADS = 2;
+const NB_MAX_THREADS = 4;
 // pour le clavier numérique
 type TPaveNumModeSaisie = (pnmINTEGER, pnmREAL, pnmTOPOROBOT_STATION);
 
 
 implementation
+
+{ TViseeAntenne }
+
+function TViseeAntenne.toString(): string;
+begin
+  Format(FMTSERST, [self.SerieDepart, self.PtDepart]);
+end;
+
+{ TPointOfInterest }
+
+function TPointOfInterest.toString(): string;
+begin
+  Result := Format(FMTSERST, [self.Serie, self.Station]);
+end;
+
+{ TBaseStation }
+
+function TBaseStation.toString(): string;
+begin
+  Result := Format(FMTSERST, [self.Entite_Serie, self.Entite_Station]);
+end;
+
+function TBaseStation.toStringWithIDTerrain(): string;
+begin
+  Result := Format(FMTSERSTID, [Self.Entite_Serie, Self.Entite_Station, Self.IDTerrain]);
+end;
 
 { TJonctionXYZ }
 
@@ -1203,10 +1245,6 @@ function TJonctionXYZ.ToString(): string;
 begin
   Result := Format(FMTSERST, [self.NoSer, self.NoSt]);
 end;
-
-
-
-
 
 { TToporobotIDStation }
 

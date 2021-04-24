@@ -501,6 +501,9 @@ type
     function CalcLRUD_AStationOfSerieByNumSerSt(const QNumeroSerie: TNumeroSerie; const QNumeroStation: integer): boolean;
     // recherche de doublons
     function HasDoublonsInNumsSeries(const NS: TNumeroSerie; out QInternalIdx: integer): boolean;
+
+    //*************
+    function GetPtrTableViseesAntenne(): TTableViseesAntenne;
 end;
 //------------------------------------------------------------------
 function RegenererEbaucheXTB(const NomEbauche: string; const DefaultCodeEPSG: integer): boolean;
@@ -3185,7 +3188,7 @@ begin
             for j := 0 to NbA - 1 do
             begin
               MyAntenne := ArrAntennesFound[j].VA;
-              FromStationID:=Format(FMTSERST_VTOPO,[MyAntenne.SerieDepart, MyAntenne.PtDepart]);
+              FromStationID := Format(FMTSERST_VTOPO,[MyAntenne.SerieDepart, MyAntenne.PtDepart]);
               WriteLn(pTRO, Format('%10s %10s %.2f   %.2f %.2f     *      *      *      * N I M %s',
                                [FromStationID, '        *',
                                 MyAntenne.Longueur, MyAntenne.Azimut, MyAntenne.Pente,  '']));
@@ -3485,7 +3488,6 @@ var
     for St := 1 to S.GetNbVisees - 1 do
     begin
       MyStation := S.GetVisee(St);
-      //if NoSt=Serie.PointsTopo.Count-1 then ToStationID:=Format(FMTSERSTVTOPO,[S.SerieArr, S.PtArr])
       if (St = S.GetNbVisees - 1) then
         CurIDStation := Format(FMTSTS, [S.GetNoSerieArr, S.GetNoPointArr])
       else
@@ -4550,6 +4552,12 @@ begin
   end;
   Result := (NbOccur > 1);
 end;
+
+function TToporobotStructure2012.GetPtrTableViseesAntenne(): TTableViseesAntenne;
+begin
+  result := FTableViseesAntenne;
+end;
+
 
 // contrôles, tris et définition des références
 procedure TToporobotStructure2012.Preconditionner(const QFilename: TStringDirectoryFilename);

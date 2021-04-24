@@ -194,11 +194,7 @@ begin
 
   memoAdditionnalInfos.Lines.Add('--');
   memoAdditionnalInfos.Lines.Add('Target CPU: ' + {$I %FPCTARGETCPU%});
-  memoAdditionnalInfos.Lines.Add(Format('Nb cores  : %d', [GetNbCoresOfProcessor()]));
-  {$IFDEF MULTI_THREADING}
-  memoAdditionnalInfos.Lines.Add('Multithreading: ' + MULTI_OR_MONO_THREADED);
-  {$ENDIF MULTI_THREADING}
-
+  memoAdditionnalInfos.Lines.Add(Format('Nb cores  : %d', [GetNbCoresProcessor()]));
   memoAdditionnalInfos.Lines.Add('Target OS: ' + {$I %FPCTARGETOS%});
   memoAdditionnalInfos.Lines.Add('FPC Compiler: ' + {$I %FPCVERSION%});
   EWE := 'Compilation: ' + {$I %DATE%} + ' ' + {$I %TIME%};

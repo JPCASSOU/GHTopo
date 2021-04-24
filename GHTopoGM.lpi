@@ -111,57 +111,60 @@
         <Mode0 Name="default"/>
       </Modes>
     </RunParams>
-    <RequiredPackages Count="16">
+    <RequiredPackages Count="17">
       <Item1>
-        <PackageName Value="laz_synapse"/>
+        <PackageName Value="MultiThreadProcsLaz"/>
       </Item1>
       <Item2>
-        <PackageName Value="TurboPowerIPro"/>
+        <PackageName Value="laz_synapse"/>
       </Item2>
       <Item3>
-        <PackageName Value="DateTimeCtrls"/>
+        <PackageName Value="TurboPowerIPro"/>
       </Item3>
       <Item4>
-        <PackageName Value="BGRABitmapPack"/>
+        <PackageName Value="DateTimeCtrls"/>
       </Item4>
       <Item5>
-        <PackageName Value="pascalscript"/>
+        <PackageName Value="BGRABitmapPack"/>
       </Item5>
       <Item6>
-        <PackageName Value="LazControls"/>
+        <PackageName Value="pascalscript"/>
       </Item6>
       <Item7>
-        <PackageName Value="lazmrumenu"/>
+        <PackageName Value="LazControls"/>
       </Item7>
       <Item8>
-        <PackageName Value="LazOpenGLContext"/>
+        <PackageName Value="lazmrumenu"/>
       </Item8>
       <Item9>
-        <PackageName Value="LazSerialPort"/>
+        <PackageName Value="LazOpenGLContext"/>
       </Item9>
       <Item10>
-        <PackageName Value="TAChartLazarusPkg"/>
+        <PackageName Value="LazSerialPort"/>
       </Item10>
       <Item11>
-        <PackageName Value="Printer4Lazarus"/>
+        <PackageName Value="TAChartLazarusPkg"/>
       </Item11>
       <Item12>
-        <PackageName Value="pack_powerpdf"/>
+        <PackageName Value="Printer4Lazarus"/>
       </Item12>
       <Item13>
-        <PackageName Value="lazbarcodes"/>
+        <PackageName Value="pack_powerpdf"/>
       </Item13>
       <Item14>
-        <PackageName Value="rxnew"/>
+        <PackageName Value="lazbarcodes"/>
       </Item14>
       <Item15>
-        <PackageName Value="SynEdit"/>
+        <PackageName Value="rxnew"/>
       </Item15>
       <Item16>
-        <PackageName Value="LCL"/>
+        <PackageName Value="SynEdit"/>
       </Item16>
+      <Item17>
+        <PackageName Value="LCL"/>
+      </Item17>
     </RequiredPackages>
-    <Units Count="76">
+    <Units Count="78">
       <Unit0>
         <Filename Value="GHTopoGM.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -607,6 +610,16 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="CodeCalculTopo_Backup_20210420"/>
       </Unit75>
+      <Unit76>
+        <Filename Value="ghtopomultithreading3.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="GHTopoMultiThreading3"/>
+      </Unit76>
+      <Unit77>
+        <Filename Value="bzparallelthread.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="BZParallelThread"/>
+      </Unit77>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

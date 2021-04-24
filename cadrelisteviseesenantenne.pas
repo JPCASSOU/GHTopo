@@ -382,7 +382,7 @@ begin
       VA  := FMyDocTopo.GetViseeAntenne(EWE);
       WU  += Format('%d', [VA.Reseau]) + #9 +
              Format('%d', [VA.Secteur]) + #9 +
-             Format(FMTSERST, [VA.SerieDepart, VA.PtDepart]) + #9 +
+             va.toString() + #9 +
              FormatterNombreOOo(VA.Longueur, 3) + #9 +
              FormatterNombreOOo(VA.Azimut  , 3) + #9 +
              FormatterNombreOOo(VA.Pente   , 3) + #13#10;
@@ -450,7 +450,7 @@ var
     ResetColorRow(lsbViseesAntennes, ARect, bg, tc);
     DrawColTexte(lsbViseesAntennes, ARect, hcColsTitres.Sections.Items[0], false, Format('%d', [V.Reseau]));
     DrawColTexte(lsbViseesAntennes, ARect, hcColsTitres.Sections.Items[1], true , Format('%d', [V.Secteur]));
-    DrawColTexte(lsbViseesAntennes, ARect, hcColsTitres.Sections.Items[2], true , Format(FMTSERST, [V.SerieDepart, V.PtDepart]));
+    DrawColTexte(lsbViseesAntennes, ARect, hcColsTitres.Sections.Items[2], true , v.toString());
     DrawColTexte(lsbViseesAntennes, ARect, hcColsTitres.Sections.Items[3], true , FormatterNombreOOo(V.Longueur, 3));
     DrawColTexte(lsbViseesAntennes, ARect, hcColsTitres.Sections.Items[4], true , FormatterNombreOOo(V.Azimut, 3));
     DrawColTexte(lsbViseesAntennes, ARect, hcColsTitres.Sections.Items[5], true , FormatterNombreOOo(V.Pente, 3));

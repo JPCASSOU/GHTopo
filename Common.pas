@@ -31,7 +31,7 @@ uses
   , LazFileUtils
   , Graphics
   , Forms
-  , unitUtilsCPU
+  //, unitUtilsCPU
   , LConvEncoding
   , sha1
   , FastGEO
@@ -68,24 +68,21 @@ const ARRAY_OF_FILTERS: array[0..22] of String = (
       rsMETAFILTRE_NAMESPACE    // 22
       );
 
-
-
-
-
-
-
 // pseudo-mot clé ne faisant rien, équivalent de l'instruction pass du Python
 // utilisé dans les embranchements sans action à faire de structures de contrôle
 procedure pass; inline;
+
 // fonctions utilitaires (console, mémoire)
 procedure AfficherMessage(const Msg: string; const DoCRLF: boolean = true);
 procedure AfficherMessageErreur(const Msg: string);
 procedure ClearConsole();
 procedure ClearConsoleErreur();
+
+function  GetNbCoresProcessor(): Cardinal;
 // Uniquement pour les Raspberry et consorts
 procedure DimensionnerEtCentrerFenetre(const FRM: TForm);
 procedure AfficherMemoryUsage();
-function  GetNbCoresOfProcessor(): integer;
+
 procedure ExecuteExternalProgram(const MyCommandLine: string);
 function  MakeTitleMainWindowGHTopo(const S: string): string;
 function  DescribeCriticiteErreur(const c: TCriticiteMessaqeErreurGHTopo): string;
@@ -599,10 +596,10 @@ end;
 // fonctions utilitaires (console, mémoire)
 //******************************************************************************
 // pseudo-mot clé ne faisant rien
-procedure pass; inline;
-begin
-  ;; //asm NOP end;
-end;
+procedure pass; inline;    // void pass()
+begin                      // {
+  ;; //asm NOP end;        // __asm__{ NOP}
+end;                       // }
 
 
 // non factorisation de ce code pour éviter une dépendance
@@ -770,19 +767,7 @@ begin
   {$ENDIF}
 end;
 
-// récupérer le nombre de coeurs d'un processeur
-function GetNbCoresOfProcessor(): integer;
-var
-  MyCPU: TCPU;
-begin
-  Result := 1;
-  MyCPU := TCPU.Create;
-  try
-    Result := MyCPU.Count;
-  finally
-    FreeAndNil(MyCPU);
-  end;
-end;
+
 // exécuter un programme externe
 procedure ExecuteExternalProgram(const MyCommandLine: string);
 begin
@@ -2617,7 +2602,6 @@ var
   QIdxNameSpace, QNoSerie: TNumeroSerie;
   WU, EWE: String;
 begin
-  //Result := Format(FMTSERST, [ND.NoSer, ND.NoSt]);
   DecomposeNumeroSerie(ND.NoSer, QIdxNameSpace, QNoSerie);
   WU  := IIF(QIdxNameSpace = 0, '', Format('@%d', [QIdxNameSpace]));
   EWE := IIF(ND.IDJonction = '', '', ' - ' + ND.IDJonction);
@@ -3523,6 +3507,35 @@ begin
   Result := D[LengthS1, LengthS2];
 end;
 
+function GetNbCoresProcessor(): Cardinal;
+{$IFDEF MSWINDOWS}
+var
+  lpSysInfo: TSystemInfo;
+begin
+  //lpSysInfo := nil;
+  GetSystemInfo({%H-}lpSysInfo);
+  Result := lpSysInfo.dwNumberOfProcessors;
+end;
+{$ELSE}
+begin
+  //Result := 1;
+  result := sysconf(_SC_NPROCESSORS_ONLN);
+end;
+{$ENDIF}
+
+
+(*var
+  MyCPU: TCPU;
+begin
+  Result := 1;
+  MyCPU := TCPU.Create;
+  try
+    Result := MyCPU.Count;
+  finally
+    FreeAndNil(MyCPU);
+  end;
+end;
+//*)
 
 
 

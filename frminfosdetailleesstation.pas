@@ -141,7 +141,7 @@ var
 begin
   FMyTableEntites := FD;
   FMyStation := S;
-  EWE := Format(FMTSERST, [FMyStation.Entite_Serie, FMyStation.Entite_Station]);
+  EWE := FMyStation.toString();
   WU  := IIF((Trim(FMyStation.IDTerrain) = ''), EWE, FMyStation.IDTerrain);
   self.Caption      := Format('Station: %d.%d: [%s]', [FMyStation.Entite_Serie, FMyStation.Entite_Station, FMyStation.IDTerrain]);
 

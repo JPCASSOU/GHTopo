@@ -101,7 +101,6 @@ type
     MenuItem58: TMenuItem;
     MenuItem59: TMenuItem;
     MenuItem60: TMenuItem;
-    MenuItem61: TMenuItem;
     mnuMultiThreading: TMenuItem;
     mnuExportTopoEnX3D: TMenuItem;
     mnuOutils: TMenuItem;
@@ -321,7 +320,7 @@ uses
     , frmLesListesSimples    // gestion des listes simples
     , frmFrontalSeries       // frontal liste des séries
     , frmVuePlan2D           // vue en plan
-    , frmTestMultithreading      // test de multithreading
+    //, frmTestMultithreading      // test de multithreading
     ;
 
 const
@@ -344,7 +343,7 @@ end;
 procedure TGHTopoMainMenuBar.SetCurrentStation(const S: TNumeroSerie; const P: integer; const L: string = '');
 begin
   FCurrentStation := MakeTToporobotIDStation(0, S, P, L);
-  lbCurrentStation.Caption := Format(FMTSERST, [FCurrentStation.aSerie, FCurrentStation.aStation]);
+  lbCurrentStation.Caption := FCurrentStation.ToString();
 end;
 
 function TGHTopoMainMenuBar.GetCurrentStation(): TToporobotIDStation;
@@ -584,6 +583,9 @@ begin
 end;
 
 procedure TGHTopoMainMenuBar.mnuMultiThreadingClick(Sender: TObject);
+begin
+end;
+(*
 var
   TD: TdlgMultiThreading;
 begin
@@ -592,13 +594,13 @@ begin
     if (TD.Initialiser(FDocumentToporobot)) then
     begin
       TD.ShowModal;
-
+      TD.Finaliser();
     end;
   finally
     TD.Release;
   end;
 end;
-
+//----------------------------------------------------------------------------*)
 procedure TGHTopoMainMenuBar.mnuExportTopoEnX3DClick(Sender: TObject);
 var
   QIdx: integer;
@@ -1399,11 +1401,7 @@ begin
   T0 := Now();
   try
     //ShowMessage('555');
-    {$IfDef MULTI_THREADING}
-    AfficherMessageErreur(Format('-- Calcul parallélisé sur %d threads', [NB_MAX_THREADS]));
-    {$ELSE}
     AfficherMessageErreur('-- Calcul non parallélisé');
-    {$ENDIF}
     AfficherMessageErreur('');
 
     CodeCalcul.Initialiser(FDocumentToporobot, FBDDEntites);

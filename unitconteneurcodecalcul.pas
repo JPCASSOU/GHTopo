@@ -9,7 +9,7 @@ uses
   {$INCLUDE SelectionLangues.inc} // insère les unités en fonction de la langue
   StructuresDonnees,
   {$IFDEF MULTI_THREADING}
-  GHTopoMultiThreading2,
+   {$ERROR: Multithreading inadapté}
   {$ENDIF MULTI_THREADING}
   UnitListesSimplesWithGeneriques,
   ToporobotClasses2012,
@@ -47,7 +47,6 @@ type
     function  Initialiser(const FD: TToporobotStructure2012; const BDE: TBDDEntites): boolean;
     procedure Finaliser();
     procedure ViderTableJonctionsBranches();
-
     // version Noeuds et Branches
     procedure AddJunction(const Jnct: TJonctionXYZ);
     function  GetJonction(const NoJonction: integer): TJonctionXYZ;
@@ -93,7 +92,6 @@ begin
   FTableJonctions := TTableJonctionsXYZ.Create;
   FTableBranches  := TTableBranchesXYZ.Create;
   ViderTableJonctionsBranches();
-
   // dialogue de progression
   FDlgMultithreadProcessing := TdlgDispMultiThreadProcessing.Create(Application);
   if (FDlgMultithreadProcessing.Initialiser(4)) then // nombre de threads: 4
@@ -124,14 +122,6 @@ begin
   if (0 = Done mod Step) then Exit;
   FDlgMultithreadProcessing.AfficherProgressionOfMonoThread(Etape, Done, Starting, Ending, Step);
 end;
-
-
-
-
-
-
-
-
 
 //******************************************************************************
 // méthodes relatives aux jonctions
@@ -198,11 +188,8 @@ begin
       AddJunction(J);
     end;
     Application.ProcessMessages;
-    // écriture de la liste des jonctions dans le log
-
     // On passe ici ? OK, c'est bon
     Result := GetNbJonctions();
-
     AfficherMessage(format('-- > %d junctions', [Result]));
   finally
     // on libère la table provisoire
@@ -232,8 +219,6 @@ procedure TConteneurCodeCalcul.RemoveBranche(const NumBrch: integer);   // OK
 begin
   FTableBranches.RemoveElement(NumBrch);
 end;
-
-
 
 procedure TConteneurCodeCalcul.ViderTableJonctionsBranches;
 begin
@@ -328,7 +313,6 @@ begin
     if (Assigned(self.FProcDispProgressionMonoThread)) then self.FProcDispProgressionMonoThread(Format('Découpage en arcs de la série %d / %d', [Ser, QNbSeries - 1]), Ser, 0 , QNbSeries - 1, 100);
     Serie := FDocTopo.GetSerie(Ser);
     Nd := GetIdxJonctionBySerSt(Serie.GetNoSerieDep, Serie.GetNoPointDep);
-
     // début de série = nouvelle branche
     //++++++++++++++++++++
     // Numéro de série = ID de la série
@@ -400,7 +384,6 @@ begin
     //AfficherMessage(Format('--> %d: %f %f %f',[Ser, Entr.eDeltaX, Entr.eDeltaY, Entr.eDeltaZ]));
     Visee.Code := 0; //1
     Visee.Expe := 0; //1
-
     l1 := 0.0;    a1 := 0.00;    p1 := 0.00;
     GetBearingInc(QDeltaX, QDeltaY, QDeltaZ, l1, a1, p1, UNITE_ANGULAIRE_DU_CODE_ZERO, UNITE_ANGULAIRE_DU_CODE_ZERO); // Bug avec 400 grades
     Visee.NoVisee  := 1;
@@ -415,7 +398,6 @@ begin
     Visee.IDTerrainStation := Format(FMTSERST,[Entr.eRefSer, Entr.eRefSt]);
     Visee.TypeVisee        := tgENTRANCE;
     Visee.Commentaires     := SafeTruncateString(Entr.eNomEntree, 15);
-
     AddBranche(Branche0);
     QBranche := GetBranche(Br);    //;;;
     addViseeAtBranche(QBranche, Visee);                                 //AddBrStation(Br, Visee);
@@ -471,39 +453,8 @@ begin
   t := Now();
   NbBranches := GetNbBranches();
   AfficherMessage(format('%s.CalculerAccroissements(%d branches) [%s]', [ClassName, NbBranches, MULTI_OR_MONO_THREADED]));
-  //****************************************************************************
-  {.$IFDEF MULTI_THREADING}
-  //NbBranches := GetNbBranches() - 1;
-
-  AfficherMessage(Format('--> CalculerAccroissements(%d thread for %d rows)', [NB_MAX_THREADS, NbBranches]));
-
-  ///*)
-  {.$ELSE}
   if (Assigned(self.FProcDispProgressionMonoThread)) then self.FProcDispProgressionMonoThread('Calcul accroissements des branches', -1, -1, -1, 100);
-  for Br:=1 to NbBranches - 1 do
-  begin
-    ProcessBranche(-1, Br);
-    (*
-    Branche:= GetBranche(Br);
-      DX := 0.0; DY := 0.0; DZ := 0.0; DP := 0.0;
-      for Vs := 0 to High(Branche.PointsTopo) do //Branche.PointsTopo.GetNbElements() - 1 do
-      begin
-        Visee := Branche.PointsTopo[Vs];
-        CalculerVisee(Visee,
-                      FDocTopo.GetCodeByNumero(Visee.Code),
-                      FDocTopo.GetExpeByNumero(Visee.Expe),
-                      DX, DY,
-                      1.00,
-                      DZ, DP);
-        Branche.PointsTopo[Vs] := Visee; ////PutBrStation(Br, Vs, Visee);
-      end; //for Vs:=0 to Branche.PointsTopo.Count-1 do begin
-      Branche.DeltaX := DX;
-      Branche.DeltaY := DY;
-      Branche.DeltaZ := DZ;
-    PutBranche(Br, Branche);
-    //*)
-  end; // for Br:=1 to TableBranches.Count-1 do begin
-  {.$ENDIF MULTI_THREADING}
+  for Br:=1 to NbBranches - 1 do ProcessBranche(-1, Br);
   //****************************************************************************
   // Travaux non multithreadables
   // Nettoyage des branches à accroissement nul

@@ -455,8 +455,7 @@ var
         begin
           DC.AddMarker(QLayer.LayerVarName,
                        MyPOI.Coordinates.X, MyPOI.Coordinates.Y, MyPOI.Coordinates.Z,
-                       QLat, QLon,
-                       format(FMTSERST, [MyPOI.Serie, MyPOI.Station]),
+                       QLat, QLon, MyPOI.toString(),
                        MyPOI.Description,
                        Format('X = %s, Y = %s, Z = %s', [FormatterNombreAvecSepMilliers(MyPOI.Coordinates.X), FormatterNombreAvecSepMilliers(MyPOI.Coordinates.Y), FormatterNombreAvecSepMilliers(MyPOI.Coordinates.Z)]),
                        '',
@@ -491,7 +490,7 @@ var
         DC.AddMarker(QLayer.LayerVarName,
                      MyNode.X, MyNode.Y, MyNode.Z,
                      PP.U, PP.V,
-                     format(FMTSERST, [MyNode.NoSer, MyNode.NoSt]),
+                     MyNode.ToString(),
                      MyNode.IDJonction,
                      Format('X = %s, Y = %s, Z = %s', [FormatterNombreAvecSepMilliers(MyNode.X), FormatterNombreAvecSepMilliers(MyNode.Y), FormatterNombreAvecSepMilliers(MyNode.Z)]),
                      '',

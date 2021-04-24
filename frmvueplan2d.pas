@@ -742,7 +742,7 @@ end;
 
 procedure TfrmVueEnPlan.CentrerBasepointSurPlan(const BP: TToporobotIDStation);
 begin
-  GHTopoContext2DA1.LocaliserUneStationByCle(Format(FMTSERST, [BP.aSerie, BP.aStation]));
+  GHTopoContext2DA1.LocaliserUneStationByCle(BP.ToString());
 end;
 
 procedure TfrmVueEnPlan.CentrerXYSurPlan(const QX, QY: double; const TagString: string);

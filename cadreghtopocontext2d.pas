@@ -1595,7 +1595,7 @@ var
   WU: String;
   n: Integer;
 begin
-  WU := Format(FMTSERST, [FStationNearToMouse.Entite_Serie, FStationNearToMouse.Entite_Station]);
+  WU := FStationNearToMouse.toString();
   EE := MakeTEntrance('Entrance ' + WU,
                       WU,
                       FStationNearToMouse.PosStation.X, FStationNearToMouse.PosStation.Y, FStationNearToMouse.PosStation.Z,
@@ -2305,8 +2305,7 @@ begin
   //FEtiquetteOnSurvolPlan_Y1 := PP.Y;
   QEtiquetteOk := (FBDDEntites.GetStationOrEntranceFromXYZ(FMyPos.X, FMyPos.Y, 0.00, MAX_DISTANCE_CAPTURE, [tpVISEES], false, QCurrentInternalIdxEntite, QStationNearToMouse, QEntrance1, QDistanceXYZ, QE));
   lbGCSMouse.Caption := Format('%s, %s [%s]', [FormatterNombreAvecSepMilliers(FMyPos.X, 0), FormatterNombreAvecSepMilliers(FMyPos.Y, 0),
-                                               Format(FMTSERST, [QStationNearToMouse.Entite_Serie, QStationNearToMouse.Entite_Station])
-                                              ]);
+                                               QStationNearToMouse.toString()]);
   //if (FModesTravail = mtDISTANCE_SECOND_POINT) then
   //  QDrawEtiquette(Format('Dist: %.3f m', [QDistanceXYZ]))
   //else
@@ -2958,7 +2957,7 @@ begin
   EWE := Trim(K);
   if (FBDDEntites.FindStationByCle(false, EWE, QMyBaseStation)) then
   begin
-    EWE := Format(FMTSERST, [QMyBaseStation.Entite_Serie, QMyBaseStation.Entite_Station]);
+    EWE := QMyBaseStation.toString();
     self.CentrerVueSurPointXY(QMyBaseStation.PosStation.X, QMyBaseStation.PosStation.Y, True, EWE);
     self.SetCurrentStation(QMyBaseStation, True);
   end
