@@ -1,7 +1,7 @@
 object dlgInfosQRStation: TdlgInfosQRStation
-  Left = 140
+  Left = 299
   Height = 611
-  Top = 59
+  Top = 320
   Width = 1026
   BorderStyle = bsDialog
   Caption = 'dlgInfosQRStation'
@@ -16,7 +16,7 @@ object dlgInfosQRStation: TdlgInfosQRStation
   Font.Quality = fqDraft
   Font.Style = [fsBold]
   Position = poScreenCenter
-  LCLVersion = '1.8.0.6'
+  LCLVersion = '2.0.0.4'
   object BitBtn1: TBitBtn
     Left = 904
     Height = 30

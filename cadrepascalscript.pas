@@ -594,11 +594,6 @@ begin
   if (n = -1) then exit;
   EWE := FOnLineHelpOfFuncs.Strings[n];
   memoHelp.Text := EWE;
-
-  //PSScriptDebugger1.Comp.;
-  //PS := PSScriptDebugger1.Comp.GetProc(n);
-  //  DisplayHelpForProc(PS);
-  //ShowMessage(inttostr(PSScriptDebugger1.Comp.GetProcCount));
 end;
 
 procedure TCdrPascalScript.acSavePSScriptExecute(Sender: TObject);

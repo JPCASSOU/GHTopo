@@ -1,11 +1,11 @@
 object frmVueEnPlan: TfrmVueEnPlan
-  Left = 302
+  Left = 304
   Height = 743
-  Top = 278
-  Width = 1274
+  Top = 236
+  Width = 1281
   Caption = 'Vue en plan'
   ClientHeight = 743
-  ClientWidth = 1274
+  ClientWidth = 1281
   Font.CharSet = ANSI_CHARSET
   Font.Height = -13
   Font.Name = 'Arial'
@@ -21,7 +21,7 @@ object frmVueEnPlan: TfrmVueEnPlan
     Left = 0
     Height = 742
     Top = 0
-    Width = 1273
+    Width = 1280
     Anchors = [akTop, akLeft, akRight, akBottom]
     Position = 893
     object PairSplitterSide1: TPairSplitterSide
@@ -213,15 +213,15 @@ object frmVueEnPlan: TfrmVueEnPlan
       Left = 898
       Height = 742
       Top = 0
-      Width = 375
-      ClientWidth = 375
+      Width = 382
+      ClientWidth = 382
       ClientHeight = 742
       object PairSplitter2: TPairSplitter
         Cursor = crVSplit
         Left = 0
         Height = 742
         Top = 0
-        Width = 375
+        Width = 382
         Align = alClient
         Position = 268
         SplitterType = pstVertical
@@ -230,18 +230,18 @@ object frmVueEnPlan: TfrmVueEnPlan
           Left = 0
           Height = 268
           Top = 0
-          Width = 375
-          ClientWidth = 375
+          Width = 382
+          ClientWidth = 382
           ClientHeight = 268
           object Panel3: TPanel
             Left = 0
             Height = 68
             Top = 0
-            Width = 375
+            Width = 382
             Anchors = [akTop, akLeft, akRight]
             BevelOuter = bvLowered
             ClientHeight = 68
-            ClientWidth = 375
+            ClientWidth = 382
             TabOrder = 0
             object SpeedButton10: TSpeedButton
               Left = 4
@@ -374,7 +374,7 @@ object frmVueEnPlan: TfrmVueEnPlan
               ParentShowHint = False
             end
             object Panel4: TPanel
-              Left = 274
+              Left = 281
               Height = 62
               Top = 2
               Width = 99
@@ -764,7 +764,7 @@ object frmVueEnPlan: TfrmVueEnPlan
             end
           end
           object lbStatutCroquisTerrain: TStaticText
-            Left = 313
+            Left = 320
             Height = 17
             Top = 72
             Width = 59
@@ -776,11 +776,11 @@ object frmVueEnPlan: TfrmVueEnPlan
             Left = 1
             Height = 125
             Top = 135
-            Width = 371
+            Width = 378
             Anchors = [akTop, akLeft, akRight, akBottom]
             BevelOuter = bvLowered
             ClientHeight = 125
-            ClientWidth = 371
+            ClientWidth = 378
             Font.CharSet = ANSI_CHARSET
             Font.Color = clBlack
             Font.Height = -13
@@ -907,74 +907,301 @@ object frmVueEnPlan: TfrmVueEnPlan
               TabOrder = 12
             end
           end
+          object chkTopoNavig: TCheckBox
+            Left = 316
+            Height = 20
+            Top = 108
+            Width = 48
+            Caption = 'GPS'
+            OnChange = chkTopoNavigChange
+            TabOrder = 4
+          end
         end
         object PairSplitterSide4: TPairSplitterSide
           Cursor = crArrow
           Left = 0
           Height = 469
           Top = 273
-          Width = 375
-          ClientWidth = 375
+          Width = 382
+          ClientWidth = 382
           ClientHeight = 469
           object Panel2: TPanel
             Left = 0
             Height = 469
             Top = 0
-            Width = 375
+            Width = 382
             Align = alClient
             BevelOuter = bvLowered
             ClientHeight = 469
-            ClientWidth = 375
+            ClientWidth = 382
             TabOrder = 0
             inline CdrListesPourVisualisateurs1: TCdrListesPourVisualisateurs
               Left = 1
               Height = 467
               Top = 1
-              Width = 373
+              Width = 380
               ClientHeight = 467
-              ClientWidth = 373
+              ClientWidth = 380
               inherited hcColsTitres: THeaderControl
-                Width = 367
+                Width = 374
               end
               inherited cmbModeListe: TComboBox
-                Width = 163
+                Width = 170
               end
               inherited btnLocaliser: TButton
                 Top = 411
               end
               inherited lsbListeElements: TCheckListBox
+                Left = 2
                 Height = 315
-                Width = 367
+                Top = 96
+                Width = 374
               end
               inherited chkDoHighLightCurrentItem: TCheckBox
                 Top = 411
               end
               inherited lbRegenerationListe: TStaticText
-                Width = 351
+                Width = 358
               end
               inherited btnHighlightSelected: TButton
                 Left = 3
                 Top = 439
               end
               inherited editSeriesARetenir: TEdit
-                Width = 210
+                Width = 217
               end
               inherited btnCocher: TButton
-                Left = 214
+                Left = 221
               end
               inherited btnHelp: TButton
-                Left = 334
+                Left = 341
               end
               inherited btnDeselectAll: TButton
                 Top = 439
               end
               inherited btnConvertirEnFiltre: TButton
-                Left = 250
+                Left = 257
               end
               inherited btnExtraireLesIndex: TButton
-                Left = 290
+                Left = 297
               end
             end
+          end
+        end
+      end
+      object pnlGrapheReseau: TPanel
+        Left = 8
+        Height = 213
+        Top = 139
+        Width = 364
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        BevelOuter = bvLowered
+        ClientHeight = 213
+        ClientWidth = 364
+        Color = 11796479
+        ParentColor = False
+        TabOrder = 1
+        OnClick = pnlGrapheReseauClick
+        object lsbPathRoadMap: TComboBox
+          Left = 60
+          Height = 24
+          Top = 84
+          Width = 292
+          Anchors = [akTop, akLeft, akRight]
+          ItemHeight = 16
+          OnChange = lsbPathRoadMapChange
+          Style = csDropDownList
+          TabOrder = 0
+        end
+        object lbNbPathStations: TLabel
+          Left = 60
+          Height = 16
+          Top = 64
+          Width = 109
+          Caption = 'lbNbPathStations'
+          ParentColor = False
+        end
+        object btnStationDepart: TButton
+          Left = 60
+          Height = 25
+          Top = 4
+          Width = 91
+          Caption = '1.1'
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -15
+          Font.Name = 'Arial'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          OnClick = btnStationDepartClick
+          ParentFont = False
+          TabOrder = 1
+        end
+        object btnExchange: TButton
+          Left = 193
+          Height = 52
+          Top = 4
+          Width = 67
+          Anchors = [akTop, akLeft, akRight]
+          Caption = 'EXC'
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -15
+          Font.Name = 'Arial'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          OnClick = btnExchangeClick
+          ParentFont = False
+          TabOrder = 2
+        end
+        object btnStationArrivee: TButton
+          Left = 60
+          Height = 25
+          Top = 32
+          Width = 91
+          Caption = '1.1'
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -15
+          Font.Name = 'Arial'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          OnClick = btnStationArriveeClick
+          ParentFont = False
+          TabOrder = 3
+        end
+        object btnPickPathStationDep: TButton
+          Left = 152
+          Height = 25
+          Top = 4
+          Width = 35
+          Caption = '...'
+          OnClick = btnPickPathStationDepClick
+          TabOrder = 4
+        end
+        object btnPickPathStationArr: TButton
+          Left = 152
+          Height = 25
+          Top = 32
+          Width = 35
+          Caption = '...'
+          OnClick = btnPickPathStationArrClick
+          TabOrder = 5
+        end
+        object Label1: TLabel
+          Left = 5
+          Height = 16
+          Top = 4
+          Width = 25
+          Caption = 'Dep'
+          ParentColor = False
+        end
+        object Label2: TLabel
+          Left = 5
+          Height = 16
+          Top = 32
+          Width = 19
+          Caption = 'Arr'
+          ParentColor = False
+        end
+        object Panel6: TPanel
+          Left = 5
+          Height = 97
+          Top = 112
+          Width = 349
+          Anchors = [akTop, akLeft, akRight, akBottom]
+          BevelOuter = bvLowered
+          ClientHeight = 97
+          ClientWidth = 349
+          Color = 16777173
+          ParentColor = False
+          TabOrder = 6
+          object lbNextWpt: TStaticText
+            Left = 105
+            Height = 24
+            Top = 8
+            Width = 235
+            Alignment = taCenter
+            Anchors = [akTop, akLeft, akRight]
+            BorderStyle = sbsSingle
+            Caption = '---'
+            Color = 10550186
+            Font.CharSet = ANSI_CHARSET
+            Font.Color = clBlack
+            Font.Height = -15
+            Font.Name = 'Sans'
+            Font.Pitch = fpVariable
+            Font.Quality = fqDraft
+            Font.Style = [fsBold]
+            ParentFont = False
+            ParentColor = False
+            TabOrder = 0
+          end
+          object lbNextWptAzimut: TStaticText
+            Left = 105
+            Height = 28
+            Top = 36
+            Width = 235
+            Alignment = taCenter
+            Anchors = [akTop, akLeft, akRight]
+            BorderStyle = sbsSingle
+            Caption = '0'
+            Color = clAqua
+            Font.CharSet = ANSI_CHARSET
+            Font.Color = clRed
+            Font.Height = -16
+            Font.Name = 'Sans'
+            Font.Pitch = fpVariable
+            Font.Quality = fqDraft
+            Font.Style = [fsBold]
+            ParentFont = False
+            ParentColor = False
+            TabOrder = 1
+          end
+          object lbNextWptDistance: TStaticText
+            Left = 105
+            Height = 24
+            Top = 68
+            Width = 235
+            Anchors = [akTop, akLeft, akRight]
+            BorderStyle = sbsSingle
+            Caption = '0'
+            Font.CharSet = ANSI_CHARSET
+            Font.Color = clBlack
+            Font.Height = -13
+            Font.Name = 'Sans'
+            Font.Pitch = fpVariable
+            Font.Quality = fqDraft
+            Font.Style = [fsBold]
+            ParentFont = False
+            TabOrder = 2
+          end
+          object Label3: TLabel
+            Left = 4
+            Height = 16
+            Top = 8
+            Width = 62
+            Caption = 'Pt suivant'
+            ParentColor = False
+          end
+          object Label4: TLabel
+            Left = 4
+            Height = 16
+            Top = 36
+            Width = 25
+            Caption = 'Cap'
+            ParentColor = False
+          end
+          object Label5: TLabel
+            Left = 4
+            Height = 16
+            Top = 68
+            Width = 54
+            Caption = 'Distance'
+            ParentColor = False
           end
         end
       end
@@ -984,16 +1211,16 @@ object frmVueEnPlan: TfrmVueEnPlan
     Left = 176
     Height = 54
     Top = 388
-    Width = 545
+    Width = 552
     Anchors = [akTop, akLeft, akRight]
     ClientHeight = 54
-    ClientWidth = 545
+    ClientWidth = 552
     TabOrder = 1
     object ProgressBar1: TProgressBar
       Left = 6
       Height = 24
       Top = 24
-      Width = 531
+      Width = 538
       Anchors = [akLeft, akRight, akBottom]
       Smooth = True
       TabOrder = 0
@@ -1002,7 +1229,7 @@ object frmVueEnPlan: TfrmVueEnPlan
       Left = 6
       Height = 16
       Top = 4
-      Width = 531
+      Width = 538
       Anchors = [akTop, akLeft, akRight]
       AutoSize = False
       Caption = 'lbEtapeProgression'

@@ -26,7 +26,6 @@ type
     { private declarations }
     FDocuTopo  : TToporobotStructure2012;
     FBDDEntites: TBDDEntites;
-
   public
     { public declarations }
     function Initialiser(const B: TToporobotStructure2012;

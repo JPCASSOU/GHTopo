@@ -36,7 +36,9 @@ uses
 
   unitobjetserie,
   UnitClasseMaillage,
-  UnitGraphes1,
+  //{$IFDEF GHTOPO_SIMPLIFIE}
+  UnitGraphes1, BZGraphesTypes, BZGraphesClasses,
+  //{$ENDIF GHTOPO_SIMPLIFIE}
   FastGEO,
   //types,
   dateutils,
@@ -48,7 +50,6 @@ uses
   , UnitTGHTopoDrawDrawingContext,
   CallDialogsStdVersion,
   unitUtilsComposants,
-  BZGraphesTypes, BZGraphesClasses,
   Classes, SysUtils, FileUtil, curredit, Forms, Dialogs, Controls,
   ExtCtrls, StdCtrls, ActnList, Menus, Buttons, LCLType, Spin;
 
@@ -352,10 +353,10 @@ type
     FRedessinInProcess   : boolean;
     FBDDEntites          : TBDDEntites;               // BDD entités
     FDocuTopo            : TToporobotStructure2012;   // interaction avec le document GHTopo
-    {$IFDEF GHTOPO_SIMPLIFIE}
+    //{$IFDEF GHTOPO_SIMPLIFIE}
     FGraphe              : TPathFindingGraphe;
     FShortestPath        : TPathBetweenNodes;
-    {$ENDIF GHTOPO_SIMPLIFIE}
+    //{$ENDIF GHTOPO_SIMPLIFIE}
     {$IFNDEF GHTOPO_SIMPLIFIE}
     FCurrIdxOnglet    : byte;
     {$ENDIF GHTOPO_SIMPLIFIE}
@@ -442,10 +443,8 @@ type
                           const QDT: TToporobotStructure2012;
                           const QBDD: TBDDEntites;
                           const QCT: TCroquisTerrain;
-                          {$IFDEF GHTOPO_SIMPLIFIE}
                           const QGraphe: TPathFindingGraphe;
                           const QShortestPath: TPathBetweenNodes;
-                          {$ENDIF GHTOPO_SIMPLIFIE}
                           const QMaillage: TMaillage;
                           const QProcUseMetaFiltre: TProcedureOfObject;
                           const QProcRefresh: TProcOfObjectWithOneBoolParameter;
@@ -491,6 +490,7 @@ type
     function  GetCurrentStation(): TBaseStation;
     procedure SetCurrentStation(const E: TBaseStation; const DoRedraw: boolean);
     procedure SetCurrentStationBySerSt(const S: TNumeroSerie; const P: TNumeroStation = -1);
+    function  GetCurrentStationNearToMousePos(): TBaseStation;
     // série courante pour le DistoX
     procedure SetCurrentNumeroSerieStationPourDistoX(const S: TNumeroSerie; const P: TNumeroStation);
     function  GetCurrentNumeroSeriePourDistoX(): TNumeroSerie;
@@ -537,8 +537,8 @@ type
     function IsMaillageValide(): boolean;
     {$IFDEF GHTOPO_SIMPLIFIE}
     procedure TraiterMesureIssueDuDistoX(const MV: TMesureViseeDistoX; const TV: TTypeViseeDistoX; const TagString: string = '');
-    procedure SetShortestPath(const P: TPathBetweenNodes);
     {$ENDIF GHTOPO_SIMPLIFIE}
+    procedure SetShortestPath(const P: TPathBetweenNodes);
     procedure ExporterPlanEnImage(const ImgWidth, ImgHeight: integer; const DoRecalcDegrades: boolean; const QFileName: string);
     procedure RefreshDessin();
 
@@ -552,10 +552,8 @@ function TGHTopoContext2DA.Initialiser(const MF: TModeFonctionnementGHTopoContex
                                        const QDT: TToporobotStructure2012;
                                        const QBDD: TBDDEntites;
                                        const QCT: TCroquisTerrain;
-                                       {$IFDEF GHTOPO_SIMPLIFIE}
                                        const QGraphe: TPathFindingGraphe;
                                        const QShortestPath: TPathBetweenNodes;
-                                       {$ENDIF GHTOPO_SIMPLIFIE}
                                        const QMaillage: TMaillage;
                                        const QProcUseMetaFiltre: TProcedureOfObject;
                                        const QProcRefresh: TProcOfObjectWithOneBoolParameter;
@@ -593,11 +591,8 @@ begin
   FDocuTopo            := QDT;
   FCroquisTerrain      := QCT;
   FBDDEntites          := QBDD;
-  {$IFDEF GHTOPO_SIMPLIFIE}
   FGraphe              := QGraphe;
   FShortestPath        := QShortestPath;
-  {$ENDIF GHTOPO_SIMPLIFIE}
-
   FMyMaillage          := QMaillage;
   FMaillageDisplayed   := False;
 
@@ -890,6 +885,11 @@ var
 begin
   ST := IIF( (P = -1), 1, P);
   if (FBDDEntites.GetEntiteViseeFromSerSt(S, St, QMyCurrStation)) then SetCurrentStation(QMyCurrStation, false);
+end;
+
+function TGHTopoContext2DA.GetCurrentStationNearToMousePos(): TBaseStation;
+begin
+  result := FStationNearToMouse;
 end;
 
 procedure TGHTopoContext2DA.SetCurrentNumeroSerieStationPourDistoX(const S: TNumeroSerie; const P: TNumeroStation);
@@ -3114,13 +3114,13 @@ begin
        // uniquement en mode écran
        if (not DoExportInFile) then TmpBuffer.DrawCurrentStationTopo(FCurrentStation);
 
-       {$IFDEF GHTOPO_SIMPLIFIE}
+       //{$IFDEF GHTOPO_SIMPLIFIE}
        if (FOverlayed) then // Overlay éventuel (GHTopo simplifié uniquement)
        begin
          TmpBuffer.DrawOverlay();
          TmpBuffer.DrawShortestPath(FGraphe, FShortestPath);
        end;
-       {$ENDIF GHTOPO_SIMPLIFIE}
+       {.$ENDIF GHTOPO_SIMPLIFIE}
        DrawPipistrelle(TmpBuffer);
     TmpBuffer.EndDrawing();
     if (DoExportInFile) then TmpBuffer.SaveToFile(QFileName) else TmpBuffer.Draw(Vue.Canvas, 0, 0, True);
@@ -3187,10 +3187,11 @@ begin
     //tvdEMULATED   : AfficherMessageErreur(Format('Mesure émulée: %.3f, %.3f, %.3f', [V.Longueur, V.Azimut, V.Pente]));
   end;
 end;
+{$ENDIF GHTOPO_SIMPLIFIE}
 procedure TGHTopoContext2DA.SetShortestPath(const P: TPathBetweenNodes);
 begin
   FShortestPath := P;
 end;
-{$ENDIF GHTOPO_SIMPLIFIE}
+
 
 end.

@@ -1415,16 +1415,16 @@ var
   MyNode  : TBZClassNode;
 begin
   result := false;
-  Q1 := FBDDEntites.FindStationByCle(false, Trim(StationDepart), EE1);
+  Q1 := FBDDEntites.FindStationByCle(false, Trim(StationDepart) , EE1);
   Q2 := FBDDEntites.FindStationByCle(false, Trim(StationArrivee), EE2);
   if (not Q1) then
   begin
-    ShowMessageFmt('Le Point de départ %s est introuvable', [StationDepart]);
+    ShowMessageFmt(GetResourceString(rsMSG_GRAPHE_POINT_NOT_FOUND), ['début', StationDepart]);
     Exit;
   end;
   if (not Q2) then
   begin
-    ShowMessageFmt('Le Point d''arrivée %s est introuvable', [StationArrivee]);
+    ShowMessageFmt(GetResourceString(rsMSG_GRAPHE_POINT_NOT_FOUND), ['fin', StationArrivee]);
     Exit;
   end;
   FShortestPath.Initialiser(EE1.Entite_Serie, EE1.Entite_Station, EE2.Entite_Serie, EE2.Entite_Station, 'Vers la sortie', clRed);

@@ -1,7 +1,7 @@
 object dlgEditeur: TdlgEditeur
-  Left = 316
+  Left = 299
   Height = 560
-  Top = 235
+  Top = 395
   Width = 852
   Caption = 'dlgEditeur'
   ClientHeight = 540

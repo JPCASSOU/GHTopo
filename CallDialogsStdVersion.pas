@@ -1668,9 +1668,9 @@ end;
 function SaisirIDStation(const Msg: string; var S: string): boolean;
 begin
   {$IFDEF RASPBERRY_PI}
-  Result := InputQuery(Msg, 'ID:', S);
-  {$ELSE}
   Result := DisplayClavierNumerique(Msg, pnmTOPOROBOT_STATION, S);//InputQuery(Msg, 'ID:', S);
+  {$ELSE}
+  Result := InputQuery(Msg, 'ID:', S);
   {$ENDIF RASPBERRY_PI}
 end;
 

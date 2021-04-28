@@ -825,12 +825,12 @@ var
     if (IsViseeInSerie(EWE)) then
     begin
       DrawColTexte(lsbVisees, ARect, HeaderControl1.Sections.Items[3], True, FormatterNombreOOo(EWE.oLongueur, 3, False));
-      DrawColTexte(lsbVisees, ARect, HeaderControl1.Sections.Items[4], True, FormatterNombreOOo(EWE.oAzimut, 3, False));
-      DrawColTexte(lsbVisees, ARect, HeaderControl1.Sections.Items[5], True, FormatterNombreOOo(EWE.oPente, 3, False));
-      DrawColTexte(lsbVisees, ARect, HeaderControl1.Sections.Items[6], True, FormatterNombreOOo(EWE.oLG, 3, False));
-      DrawColTexte(lsbVisees, ARect, HeaderControl1.Sections.Items[7], True, FormatterNombreOOo(EWE.oLD, 3, False));
-      DrawColTexte(lsbVisees, ARect, HeaderControl1.Sections.Items[8], True, FormatterNombreOOo(EWE.oHZ, 3, False));
-      DrawColTexte(lsbVisees, ARect, HeaderControl1.Sections.Items[9], True, FormatterNombreOOo(EWE.oHN, 3, False));
+      DrawColTexte(lsbVisees, ARect, HeaderControl1.Sections.Items[4], True, FormatterNombreOOo(EWE.oAzimut  , 3, False));
+      DrawColTexte(lsbVisees, ARect, HeaderControl1.Sections.Items[5], True, FormatterNombreOOo(EWE.oPente   , 3, False));
+      DrawColTexte(lsbVisees, ARect, HeaderControl1.Sections.Items[6], True, FormatterNombreOOo(EWE.oLG      , 3, False));
+      DrawColTexte(lsbVisees, ARect, HeaderControl1.Sections.Items[7], True, FormatterNombreOOo(EWE.oLD      , 3, False));
+      DrawColTexte(lsbVisees, ARect, HeaderControl1.Sections.Items[8], True, FormatterNombreOOo(EWE.oHZ      , 3, False));
+      DrawColTexte(lsbVisees, ARect, HeaderControl1.Sections.Items[9], True, FormatterNombreOOo(EWE.oHN      , 3, False));
     end
     else
     begin
@@ -929,10 +929,10 @@ begin
   grdStatsReseauxSecteurs.ColCount := 13;
   grdStatsReseauxSecteurs.ColWidths[0] := 40;
   for i := 1 to grdStatsReseauxSecteurs.ColCount - 1 do grdStatsReseauxSecteurs.ColWidths[i] := 110;
-
+  grdStatsReseauxSecteurs.ColWidths[1] := 320;
   S666Str(0, 0, True, 'ID' );
   S666Str(1, 0, True, 'Nom');
-  grdStatsReseauxSecteurs.ColWidths[1] := 320;
+
   S666Str(2, 0, True, 'Dev');
   S666Str(3, 0, True, 'X Min');
   S666Str(4, 0, True, 'X Max');

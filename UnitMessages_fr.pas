@@ -1414,6 +1414,8 @@ resourcestring
   rsDLG_SEARCH_IN_DATABASES_LB_RESULTS       = 'Résultats de la recherche: %d éléments trouvés';
   rsDLG_SEARCH_IN_DATABASES_EDIT_FINDWHAT    = 'Recherche';
   rsDLG_SEARCH_IN_DATABASES_BTN_FINDWHAT     = 'Rechercher';
+
+  rsMSG_GRAPHE_POINT_NOT_FOUND               = 'Le point de %s %s est introuvable';
 //================================================================================
 implementation
 

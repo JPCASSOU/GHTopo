@@ -18,15 +18,14 @@ uses
   UnitEntitesExtended,
   unitclassemaillage,
   unitCroquisTerrain,
-  UnitGraphes1,
   CadreGHTopoContext2D,
   FastGEO,
   CallDialogsStdVersion,
   unitUtilsComposants,
   CadreListesPourVueGraphique,
+  UnitGraphes1, BZGraphesTypes, BZGraphesClasses,
   UnitObjetSerie,
-  CadreDGCDrawingContext,
-  FileUtil, curredit, Forms, Controls, Graphics, Dialogs, ExtCtrls, ComCtrls, Buttons, ActnList, PairSplitter, StdCtrls, ExtDlgs;
+  FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls, ComCtrls, Buttons, ActnList, PairSplitter, StdCtrls, ExtDlgs;
 
 type
 
@@ -64,6 +63,11 @@ type
     acOpenCroquis: TAction;
     acExportPlanEnPNG: TAction;
     ActionList1: TActionList;
+    btnExchange: TButton;
+    btnPickPathStationArr: TButton;
+    btnPickPathStationDep: TButton;
+    btnStationArrivee: TButton;
+    btnStationDepart: TButton;
     btnStyleObjet1: TStaticText;
     btnStyleObjet10: TStaticText;
     btnStyleObjet2: TStaticText;
@@ -74,6 +78,7 @@ type
     btnStyleObjet7: TStaticText;
     btnStyleObjet9: TStaticText;
     CdrListesPourVisualisateurs1: TCdrListesPourVisualisateurs;
+    chkTopoNavig: TCheckBox;
     chkPOI: TCheckBox;
     chkAltitudes: TCheckBox;
     chkAntennes: TCheckBox;
@@ -89,7 +94,17 @@ type
     chkStations: TCheckBox;
     GHTopoContext2DA1: TGHTopoContext2DA;
     ImageList1: TImageList;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
     lbEtapeProgression: TLabel;
+    lbNbPathStations: TLabel;
+    lbNextWpt: TStaticText;
+    lbNextWptAzimut: TStaticText;
+    lbNextWptDistance: TStaticText;
+    lsbPathRoadMap: TComboBox;
     PairSplitter1: TPairSplitter;
     PairSplitter2: TPairSplitter;
     PairSplitterSide1: TPairSplitterSide;
@@ -102,6 +117,8 @@ type
     Panel3: TPanel;
     Panel4: TPanel;
     Panel5: TPanel;
+    Panel6: TPanel;
+    pnlGrapheReseau: TPanel;
     pnlProgression: TPanel;
     pnlStylesPolylines: TPanel;
     pnlOutilsDessin: TPanel;
@@ -173,6 +190,11 @@ type
     procedure acShowFenetreConsoleExecute(Sender: TObject);
     procedure acShowFenetreListeSimplesExecute(Sender: TObject);
     procedure acShowFenetreSeriesExecute(Sender: TObject);
+    procedure btnExchangeClick(Sender: TObject);
+    procedure btnPickPathStationArrClick(Sender: TObject);
+    procedure btnPickPathStationDepClick(Sender: TObject);
+    procedure btnStationArriveeClick(Sender: TObject);
+    procedure btnStationDepartClick(Sender: TObject);
     procedure btnStyleObjet0Click(Sender: TObject);
     procedure btnStyleObjet10Click(Sender: TObject);
     procedure btnStyleObjet1Click(Sender: TObject);
@@ -184,6 +206,8 @@ type
     procedure btnStyleObjet7Click(Sender: TObject);
     procedure btnStyleObjet8Click(Sender: TObject);
     procedure btnStyleObjet9Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
 
     procedure chkAltitudesChange(Sender: TObject);
     procedure chkAntennesChange(Sender: TObject);
@@ -198,26 +222,36 @@ type
     procedure chkRemplissageChange(Sender: TObject);
     procedure chkSectionsChange(Sender: TObject);
     procedure chkStationsChange(Sender: TObject);
+    procedure chkTopoNavigChange(Sender: TObject);
 
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure FormWindowStateChange(Sender: TObject);
+    procedure lsbPathRoadMapChange(Sender: TObject);
     procedure OngletsVuesChange(Sender: TObject);
+    procedure pnlGrapheReseauClick(Sender: TObject);
+    procedure ToggleBox1Change(Sender: TObject);
     procedure VueClick(Sender: TObject);
   private
     { private declarations }
     FBDDEntites    : TBDDEntites;
     FDocTopo       : TToporobotStructure2012;
     FMaillageMNT   : TMaillage;
+    FGraphe        : TPathFindingGraphe;
+    FShortestPath  : TPathBetweenNodes;
     FCurrentNomFichierXTB: TStringDirectoryFilename;
     FProcRecalculerReseau: TProcOfObjectWithOneBoolParameter;
+    procedure DisplayBearingToNext(const IdxWpt: integer);
+    function  RecalculerShortestPath(const StationDepart, StationArrivee: string): boolean;
     procedure ChangeAttrElementsAffiches(const QIdx: TElementDrawn; const QChecked: boolean);
     procedure DispAttrElementsAffiches(const EA: TSetElementsDrawn);
     procedure PerformActionWithBaseStation(const BP: TBaseStation; const TodoAction: TTodoAction);
     procedure InitCaptions();
     procedure PreparerVues();
     procedure ProcDisplayProgression(const Etape: string; const Done, Starting, Ending, Step: integer);
+    procedure SetModeFonctionnement(const MF: TModeFonctionnementGHTopoContext2D);
+
     procedure SetPanelStyles(const QCurrStyleIdx: integer);
 
   public
@@ -225,9 +259,9 @@ type
     function InitialiserVue2D(const D: TToporobotStructure2012;
                               const C: TCroquisTerrain;
                               const P: TBDDEntites;
-                              //const G: TPathFindingGraphe;
-                              //const CheminMinimal: TPathBetweenNodes;
                               const M: TMaillage;
+                              const G: TPathFindingGraphe;
+                              const CheminMinimal: TPathBetweenNodes;
                               const QFileName: TStringDirectoryFilename;
                               const QProcRecalcul: TProcOfObjectWithOneBoolParameter): boolean;
     procedure Finaliser();
@@ -363,7 +397,12 @@ end;
 
 procedure TfrmVueEnPlan.acF2DCalculerLeReseauExecute(Sender: TObject);
 begin
-  if (Assigned(FProcRecalculerReseau)) then FProcRecalculerReseau(false);
+  if (Assigned(FProcRecalculerReseau)) then
+  begin
+    FProcRecalculerReseau(false);
+    chkTopoNavig.Checked := false;
+  end;
+
 end;
 procedure TfrmVueEnPlan.acF2DLocaliserStationExecute(Sender: TObject);
 begin
@@ -443,6 +482,51 @@ begin
   frmGestionSeries.SetFocus;
 end;
 
+procedure TfrmVueEnPlan.btnExchangeClick(Sender: TObject);
+var
+  EWE: TCaption;
+begin
+  EWE := btnStationDepart.Caption;
+  btnStationDepart.Caption := btnStationArrivee.Caption;
+  btnStationArrivee.Caption := EWE;
+  RecalculerShortestPath(btnStationDepart.Caption, btnStationArrivee.Caption);
+end;
+
+procedure TfrmVueEnPlan.btnPickPathStationArrClick(Sender: TObject);
+begin
+  btnStationArrivee.Caption := GHTopoContext2DA1.GetCurrentStationNearToMousePos().toString();
+  btnStationArriveeClick(self);
+end;
+
+procedure TfrmVueEnPlan.btnPickPathStationDepClick(Sender: TObject);
+begin
+  btnStationDepart.Caption := GHTopoContext2DA1.GetCurrentStationNearToMousePos().toString();
+  btnStationDepartClick(self);
+end;
+
+procedure TfrmVueEnPlan.btnStationArriveeClick(Sender: TObject);
+var
+  EWE: TCaption;
+begin
+  EWE := btnStationArrivee.Caption;
+  if (SaisirIDStation('Arrivée', EWE)) then
+  begin
+    if (RecalculerShortestPath(btnStationDepart.Caption, EWE)) then  btnStationArrivee.Caption := EWE;
+  end;
+end;
+
+procedure TfrmVueEnPlan.btnStationDepartClick(Sender: TObject);
+var
+  EWE: TCaption;
+begin
+  EWE := btnStationDepart.Caption;
+  if (SaisirIDStation('Départ', EWE)) then
+  begin
+    if (RecalculerShortestPath(EWE, btnStationArrivee.Caption)) then  btnStationDepart.Caption := EWE;
+
+  end;
+end;
+
 
 
 
@@ -500,6 +584,23 @@ procedure TfrmVueEnPlan.btnStyleObjet9Click(Sender: TObject);
 begin
   SetPanelStyles(9);
 end;
+
+procedure TfrmVueEnPlan.Button1Click(Sender: TObject);
+var
+  EWE: TBaseStation;
+begin
+
+
+end;
+
+procedure TfrmVueEnPlan.Button2Click(Sender: TObject);
+var
+  EWE: TBaseStation;
+begin
+  EWE := GHTopoContext2DA1.GetCurrentStation();
+  btnStationArrivee.Caption := EWE.toString();
+end;
+
 
 
 
@@ -598,6 +699,12 @@ end;
 procedure TfrmVueEnPlan.chkStationsChange(Sender: TObject);
 begin
   ChangeAttrElementsAffiches(edStations, chkStations.Checked);
+end;
+
+procedure TfrmVueEnPlan.chkTopoNavigChange(Sender: TObject);
+begin
+  if (chkTopoNavig.Checked) then SetModeFonctionnement(mfgcNAVIGATION)
+                            else SetModeFonctionnement(mfgcSURVEYING);
 end;
 
 
@@ -813,6 +920,11 @@ begin
   end;
 end;
 
+procedure TfrmVueEnPlan.lsbPathRoadMapChange(Sender: TObject);
+begin
+  DisplayBearingToNext(lsbPathRoadMap.ItemIndex);
+end;
+
 procedure TfrmVueEnPlan.InitCaptions();
   procedure SetAcHint(const ACDC: TAction; const QCaption: string);
   var
@@ -892,17 +1004,22 @@ end;
 function TfrmVueEnPlan.InitialiserVue2D(const D: TToporobotStructure2012;
                                         const C: TCroquisTerrain;
                                         const P: TBDDEntites;
-                                        //const G: TPathFindingGraphe;
-                                        //const CheminMinimal: TPathBetweenNodes;
+
                                         const M: TMaillage;
+                                        const G: TPathFindingGraphe;
+                                        const CheminMinimal: TPathBetweenNodes;
                                         const QFileName: TStringDirectoryFilename;
                                         const QProcRecalcul: TProcOfObjectWithOneBoolParameter): boolean;
 
 begin
   result := false;
-  FBDDEntites := P;
-  FDocTopo    := D;
-  FMaillageMNT:= M;
+  FBDDEntites   := P;
+  FDocTopo      := D;
+  FMaillageMNT  := M;
+  FGraphe       := G;
+  FShortestPath := CheminMinimal;
+
+
   FCurrentNomFichierXTB := QFileName;
   pnlProgression.Visible:= false;
   {$ifdef GROS_MINET}
@@ -910,13 +1027,14 @@ begin
   {$else}
     pnlOutilsDessin.Visible := (C.IsReady);
   {$endif}
+
   // init cadre vue 2D
   InitCaptions();
   GHTopoContext2DA1.Initialiser(mfgcSURVEYING,
                                 FDocTopo,               // const QDT: TToporobotStructure2012;
                                 FBDDEntites,            // const QBDD: TBDDEntites;
                                 C,                      //  const QCT: TCroquisTerrain;
-                                //G, CheminMinimal,
+                                FGraphe, FShortestPath,
                                 FMaillageMNT,           // const QMaillage: TMaillage;
                                 nil,                    // const QProcUseMetaFiltre: TProcedureOfObject;
                                 nil,                    // const QProcRefresh: TProcOfObjectWithOneBoolParameter;
@@ -931,14 +1049,15 @@ begin
                                                         1,
                                                         false, true);
   FProcRecalculerReseau := QProcRecalcul;
+  // panneau graphe: invisible par défaut
+  SetModeFonctionnement(mfgcSURVEYING);
+  btnStationDepart.Caption  := '1.1';
+  btnStationArrivee.Caption := '1.1';
+  FShortestPath.Initialiser(1, 1,  1, 1, '', clRed);
+  // et on recadre la vue
+  if (GHTopoContext2DA1.CanDraw) then GHTopoContext2DA1.ResetVue();
   result := true;
 end;
-
-
-
-
-
-
 
 procedure TfrmVueEnPlan.OngletsVuesChange(Sender: TObject);
 var
@@ -947,6 +1066,16 @@ begin
   GHTopoContext2DA1.SetCurrentIdxOnglet(OngletsVues.TabIndex);
   MyOnglet := GHTopoContext2DA1.GetCurrentOnglet();
   DispAttrElementsAffiches(MyOnglet.ongElementsDrawn);
+end;
+
+procedure TfrmVueEnPlan.pnlGrapheReseauClick(Sender: TObject);
+begin
+
+end;
+
+procedure TfrmVueEnPlan.ToggleBox1Change(Sender: TObject);
+begin
+
 end;
 
 procedure TfrmVueEnPlan.VueClick(Sender: TObject);
@@ -1021,6 +1150,103 @@ begin
   MiouMiou(btnStyleObjet9, FC.GetStylePolyligne(9), (FC.CurrentIdxStylePolyligne = 9));
   //*)
 end;
+
+// graphe
+procedure TfrmVueEnPlan.SetModeFonctionnement(const MF: TModeFonctionnementGHTopoContext2D);
+var
+  EWE: TBaseStation;
+begin
+  case MF of
+    mfgcSURVEYING :
+    begin
+      pnlGrapheReseau.Visible  := false;
+      // et on centre sur la station courante
+      EWE := GHTopoContext2DA1.GetCurrentStation();
+      GHTopoContext2DA1.CentrerVueSurPointXY(EWE.PosStation.X, EWE.PosStation.Y, True, EWE.ToString());
+    end;
+    mfgcNAVIGATION:
+    begin
+      pnlGrapheReseau.Visible  := true;
+      AfficherMessage('Construction du graphe');
+      FGraphe.ConstruireGraphe();
+      RecalculerShortestPath(btnStationDepart.Caption, btnStationArrivee.Caption);
+    end;
+  end;
+  GHTopoContext2DA1.SetModeFonctionnement(MF);
+end;
+
+
+function TfrmVueEnPlan.RecalculerShortestPath(const StationDepart, StationArrivee: string): boolean;
+var
+  EE1, EE2: TBaseStation;
+  Q1, Q2  , EWE: Boolean;
+  Nb, i   : Integer;
+  MyNode  : TBZClassNode;
+begin
+  result := false;
+  Q1 := FBDDEntites.FindStationByCle(false, Trim(StationDepart) , EE1);
+  Q2 := FBDDEntites.FindStationByCle(false, Trim(StationArrivee), EE2);
+  if (not Q1) then
+  begin
+    ShowMessageFmt(GetResourceString(rsMSG_GRAPHE_POINT_NOT_FOUND), ['début', StationDepart]);
+    Exit;
+  end;
+  if (not Q2) then
+  begin
+    ShowMessageFmt(GetResourceString(rsMSG_GRAPHE_POINT_NOT_FOUND), ['fin', StationArrivee]);
+    Exit;
+  end;
+  FShortestPath.Initialiser(EE1.Entite_Serie, EE1.Entite_Station, EE2.Entite_Serie, EE2.Entite_Station, 'Vers la sortie', clRed);
+  EWE := FGraphe.RechercherPlusCourtChemin(FShortestPath);
+  Nb := FShortestPath.GetNbNoeuds();
+  lbNbPathStations.caption := format('%d stations (%.0f m)', [Nb, FShortestPath.LongueurParcours]);
+  lsbPathRoadMap.Clear;
+  if (Nb > 2) then
+  begin
+    for i := 0 to Nb - 1 do
+    begin
+      MyNode := FGraphe.GetStation(FShortestPath.GetNoeud(i));
+      lsbPathRoadMap.Items.add(MyNode.ToString());
+    end;
+    lsbPathRoadMap.ItemIndex := 0;
+    //DisplayBearingToNext(0);
+    GHTopoContext2DA1.SetShortestPath(FShortestPath);
+    GHTopoContext2DA1.RefreshDessin();
+    result := True;
+  end;
+end;
+procedure TfrmVueEnPlan.DisplayBearingToNext(const IdxWpt: integer);
+var
+  n: Integer;
+  WptCurr, WptNext: TBZClassNode;
+  qdx, qdy, qdz, QDist, QAz, QIncl: Double;
+begin
+  lbNextWpt.Caption       := '---';
+  lbNextWptAzimut.Caption := '---';
+  n := FShortestPath.GetNbNoeuds();
+  if (0 = n) then Exit;
+  if (IdxWpt = (n-1)) then
+  begin
+    lbNextWpt.Caption := 'Finish';
+    Exit;
+  end;
+
+  WptCurr := FGraphe.GetStation(FShortestPath.GetNoeud(IdxWpt));
+  WptNext := FGraphe.GetStation(FShortestPath.GetNoeud(IdxWpt+1));
+  lbNextWpt.Caption := WptNext.ToString();
+  qdx := WptNext.X - WptCurr.X;
+  qdy := WptNext.Y - WptCurr.Y;
+  qdz := WptNext.Z - WptCurr.Z;
+  GetBearingInc(qdx, qdy, qdz, QDist, QAz, QIncl, 360.00, 360.00);
+  lbNextWptAzimut.Caption   := FormatterNombreAvecSepMilliers(QAz  , 3) + ' °';
+  lbNextWptDistance.Caption := FormatterNombreAvecSepMilliers(QDist, 3) + ' m';
+  // et on centre la carte sur le point
+  GHTopoContext2DA1.CentrerVueSurPointXY(WptNext.X, WptNext.Y, True, WptNext.ToString());
+  // sans modifier la station courante
+  //  self.SetCurrentStation(QMyBaseStation, True);
+
+end;
+
 
 end.
 

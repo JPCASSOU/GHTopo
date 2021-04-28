@@ -258,6 +258,8 @@ type
     FCroquisTerrain           : TCroquisTerrain;
     FMonMaillage              : TMaillage;
     FConvertisseurCoordonnees : TConversionSysteme;
+    FGraphe                   : TPathFindingGraphe;
+    FShortestPath             : TPathBetweenNodes;
 
     // Système EPSG courant
     FCurrentSystemeEPSG       : TLabelSystemesCoordsEPSG;
@@ -304,30 +306,21 @@ var
   GHTopoMainMenuBar: TGHTopoMainMenuBar;
 
 implementation
-
 {$R *.lfm}
-
-
-{$DEFINE DISP_FRM_VUEENPLAN}
-{.$UNDEF  DISP_FRM_VUEENPLAN}
-
-
 uses
   unitAnalyseReseau2
-    {$IFDEF MSWINDOWS}
-      {$IFDEF DISP_FRM_JOURNAL},  frmJournal   {$ENDIF}
-    {$ENDIF}         // console de suivi
-    , frmLesListesSimples    // gestion des listes simples
-    , frmFrontalSeries       // frontal liste des séries
-    , frmVuePlan2D           // vue en plan
-    //, frmTestMultithreading      // test de multithreading
-    ;
+  {$IFDEF MSWINDOWS}
+    {$IFDEF DISP_FRM_JOURNAL},  frmJournal   {$ENDIF}
+  {$ENDIF}         // console de suivi
+  , frmLesListesSimples    // gestion des listes simples
+  , frmFrontalSeries       // frontal liste des séries
+  , frmVuePlan2D           // vue en plan
+  //, frmTestMultithreading      // test de multithreading
+  ;
 
 const
   EXT_X3D  = '.x3d';
   EXT_X3DV = EXT_X3D + 'v';
-
-
 
 // fichier contenant les derniers docs utilisés
 CONST LAST_DOCS_OPENDED_FILENAME = '00_GHTopo_Last_Files_Opened.lst';
@@ -350,10 +343,6 @@ function TGHTopoMainMenuBar.GetCurrentStation(): TToporobotIDStation;
 begin
   Result := FCurrentStation;
 end;
-
-
-//*)
-
 procedure TGHTopoMainMenuBar.AfficherProgression(const Etape: string; const Done, Starting, Ending: integer);
 begin
   if (Done mod 200 <> 0) then Exit;
@@ -395,6 +384,7 @@ begin
   FCroquisTerrain            := TCroquisTerrain.Create;
   FBDDEntites                := TBDDEntites.Create;
   FMonMaillage               := TMaillage.Create();
+
   FDocumentToporobot.ReInitialiser(True);
   //TODO: A voir si c'est indispensable
   //FBDDEntites.Initialiser(MakeTPoint3Df(0,0,0), clBlue, clMaroon);
@@ -411,9 +401,14 @@ begin
   afficherMessage(GetResourceString(rsMSGASSIGNCAPTIONS));
   InitLesCaptions();
   ActiverMenus(False);
+  // convertisseur de coordonnées
   FConvertisseurCoordonnees := TConversionSysteme.Create;
   FConvertisseurCoordonnees.Initialiser();
   FCurrentSystemeEPSG := FConvertisseurCoordonnees.GetEPSGSystemeFromCodeEPSG(DEFAULT_SYSTEME_COORDONNEES_CODE_EPSG);
+  // graphe
+  FGraphe             := TPathFindingGraphe.Create;
+  FGraphe.Initialiser(FDocumentToporobot, FBDDEntites);
+  FShortestPath.Initialiser(1,1, 1,1, 'Vers la sortie', clRed);
 end;
 
 procedure TGHTopoMainMenuBar.FormDestroy(Sender: TObject);
@@ -425,7 +420,7 @@ begin
     FMonMaillage.Finaliser();
     FConvertisseurCoordonnees.Finaliser();
     FListeRecentFiles.Clear;
-
+    FGraphe.Finaliser();
   finally
     FreeAndNil(FDocumentToporobot);//FDocumentToporobot.Free;
     FreeAndNil(FBDDEntites);//FBDDEntites.Free;
@@ -433,6 +428,7 @@ begin
     FreeAndNil(FMonMaillage);//FMonMaillage.Free;
     FreeAndNil(FConvertisseurCoordonnees);//FConvertisseurCoordonnees.Free;
     FreeAndNil(FListeRecentFiles);//FListeRecentFiles.Free;
+    FreeAndNil(FGraphe);
   end;
   inherited;
 end;
@@ -459,8 +455,8 @@ begin
   {$ENDIF}
 
   SetCurrentStation(1,0);
-  self.Top:=0;
-  self.left:=0;
+  self.Top     :=0;
+  self.left    :=0;
   self.Width   := Screen.Width - 8;
   self.ClientHeight  := pnlToolBar.Height + 2 + pnlProgression.Height + 2;
   self.Caption := MakeTitleMainWindowGHTopo('Untitled');
@@ -472,8 +468,7 @@ begin
   FCroquisTerrain.Initialiser(FBDDEntites, 'MyCroquis001.xml');
   FMonMaillage.Initialiser(FBDDEntites);
   if (System.Paramcount = 0) then // Lancement de GHTopo de manière classique
-  begin
-    // Nouveau comportement: Affiche le sélecteur de fichiers au démarrage
+  begin // Nouveau comportement: Affiche le sélecteur de fichiers au démarrage
     QFileName := '';
     Application.ProcessMessages;
     if (DoDialogOpenFileGHTopo(True, FListeRecentFiles, QFileName)) then
@@ -484,7 +479,7 @@ begin
       begin
         FListeRecentFiles.Insert(0, QFileName);
         lbOperationEnCours.Caption := 'Ready';
-	  end;
+	    end;
     end
     else  // Force la création d'un nouveau document
     begin
@@ -496,7 +491,6 @@ begin
     // Tentative d'ouverture avec création d'un nouveau doc si échec
     if (not OuvrirLaTopo(QFileName, False)) then OuvrirLaTopo(QFileName, True);
   end;
-
 end;
 
 procedure TGHTopoMainMenuBar.lbCurrentCodeEPSGClick(Sender: TObject);
@@ -531,8 +525,6 @@ begin
   begin
     if (not GHTopoQuestionOuiNon(Format('Echec de connexion: [%d - %s] - Réessayer', [QErrCode, QErrMsg]))) then Exit;
   end;
-
-
   QDirectorySRC := GetGHTopoDirectory() + QDirectoryACreer;
   if (not DirectoryExists(QDirectorySRC)) then ShowMessage(QDirectorySRC);
 
@@ -584,6 +576,7 @@ end;
 
 procedure TGHTopoMainMenuBar.mnuMultiThreadingClick(Sender: TObject);
 begin
+  pass;
 end;
 (*
 var
@@ -600,6 +593,7 @@ begin
     TD.Release;
   end;
 end;
+//*)
 //----------------------------------------------------------------------------*)
 procedure TGHTopoMainMenuBar.mnuExportTopoEnX3DClick(Sender: TObject);
 var
@@ -876,10 +870,8 @@ end;
 
 procedure TGHTopoMainMenuBar.acFenetreVueEnPlanExecute(Sender: TObject);
 begin
-   {$IFDEF DISP_FRM_VUEENPLAN}
-     PositionnerFenetre(frmVueEnPlan, 10, 120, Screen.Width - 20, Screen.Height - 200);
-     frmVueEnPlan.SetFocus;
-   {$ENDIF}
+  PositionnerFenetre(frmVueEnPlan, 10, 120, Screen.Width - 20, Screen.Height - 200);
+  frmVueEnPlan.SetFocus;
 end;
 procedure TGHTopoMainMenuBar.acFermerExecute(Sender: TObject);
 begin
@@ -1538,6 +1530,7 @@ begin
   {$IFDEF MSWINDOWS}
     {$IFDEF DISP_FRM_JOURNAL} dlgProcessing.FormStyle:=fsNormal; {$ENDIF}
   {$ENDIF}
+
   // tout est OK ?
   Result := True;
   FCurrentNomFichierXTB := FC;
@@ -1568,7 +1561,6 @@ end;
 procedure TGHTopoMainMenuBar.PreparerFrontal();
 begin
   Application.ProcessMessages;
-  //showmessage('Egorger 200 curetons');
   AfficherMessage('Préparation du frontal de la base de données');
   AfficherMessage(Format('%d entrees; %d reseaux; %d secteurs; %d codes; %d expes; %d series; %d antennes',
                          [FDocumentToporobot.GetNbEntrances(),
@@ -1581,16 +1573,10 @@ begin
 
   // frontal des séries
   frmGestionSeries.Initialiser(FDocumentToporobot, FBDDEntites);
-  //showmessage('Egorger 200 curetons 2');
-
   frmListesSimples.Initialiser(FDocumentToporobot, FBDDEntites, FMonMaillage,
                               TransmitGotoError,
                               CentrerBasepointSurPlan,
                               CentrerXYSurPlan);
-  //showmessage('Egorger 200 curetons 3');
-
-  // ....
-
   // et on affiche les frontals
   frmGestionSeries.Show;
   frmListesSimples.Show;
@@ -1603,6 +1589,8 @@ begin
                                         FCroquisTerrain,
                                         FBDDEntites,
                                         FMonMaillage,
+                                        FGraphe,
+                                        FShortestPath,
                                         QFileName,
                                         CompilerLeReseauExt)) then
   begin

@@ -1,7 +1,7 @@
 object RPIMainWnd: TRPIMainWnd
-  Left = 302
+  Left = 650
   Height = 584
-  Top = 308
+  Top = 398
   Width = 1150
   Caption = 'RPIMainWnd'
   ClientHeight = 584
@@ -1266,6 +1266,8 @@ object RPIMainWnd: TRPIMainWnd
             end
             inherited pnlTamponMesures: TPanel
               Top = 199
+              ClientHeight = 58
+              ClientWidth = 456
               inherited lbTamponLine0: TLabel
                 Width = 442
               end

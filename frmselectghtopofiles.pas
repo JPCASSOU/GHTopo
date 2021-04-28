@@ -1,4 +1,5 @@
 unit frmSelectGHTopoFiles;
+// 2021-04-28: Simplification du dialogue
 
 {$INCLUDE CompilationParameters.inc}
 interface
@@ -25,8 +26,8 @@ type
     btnDropUserFolder: TButton;
     btnOK: TBitBtn;
     btnOK1: TBitBtn;
-    btnRemoveDocument: TButton;
     btnQuitterGHTopo: TButton;
+    btnRemoveDocument: TButton;
     chkAddFolderOfhisAtUserList: TCheckBox;
     editFileName: TFileNameEdit;
     Label1: TLabel;
@@ -41,13 +42,14 @@ type
     PageControl1: TPageControl;
     Panel1: TPanel;
     Panel2: TPanel;
+    Panel3: TPanel;
+    Panel4: TPanel;
     rbxGHTopoGTX: TCheckBox;
     rbxGHTopoXTB: TCheckBox;
     rbxToporobotTAB: TCheckBox;
     rbxToporobotText: TCheckBox;
     rbxPocketTopoTXT: TCheckBox;
     TabSheet1: TTabSheet;
-    TabSheet2: TTabSheet;
     TabSheet3: TTabSheet;
     procedure btnAddUserFolderClick(Sender: TObject);
     procedure btnDropUserFolderClick(Sender: TObject);
@@ -495,6 +497,7 @@ begin
   ListerLastDocuments();
   PageControl1.ActivePageIndex := 0;
   result := true;
+
 end;
 
 procedure TdlgSelectGHTopoFiles.Finaliser();

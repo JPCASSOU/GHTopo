@@ -1,7 +1,7 @@
 object frmVueEn3DOpenGLExt: TfrmVueEn3DOpenGLExt
-  Left = 287
+  Left = 17
   Height = 736
-  Top = 286
+  Top = 187
   Width = 1354
   Caption = 'frmVueEn3DOpenGLExt'
   ClientHeight = 736

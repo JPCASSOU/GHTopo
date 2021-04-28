@@ -1,11 +1,11 @@
 object dlgSelectGHTopoFiles: TdlgSelectGHTopoFiles
-  Left = 525
-  Height = 559
-  Top = 241
-  Width = 859
+  Left = 813
+  Height = 507
+  Top = 433
+  Width = 909
   Caption = 'dlgSelectGHTopoFiles'
-  ClientHeight = 559
-  ClientWidth = 859
+  ClientHeight = 507
+  ClientWidth = 909
   Font.CharSet = ANSI_CHARSET
   Font.Height = -13
   Font.Name = 'Arial'
@@ -16,9 +16,9 @@ object dlgSelectGHTopoFiles: TdlgSelectGHTopoFiles
   Position = poScreenCenter
   LCLVersion = '2.0.0.4'
   object btnOK: TBitBtn
-    Left = 597
+    Left = 647
     Height = 30
-    Top = 525
+    Top = 473
     Width = 127
     Anchors = [akRight, akBottom]
     Default = True
@@ -29,9 +29,9 @@ object dlgSelectGHTopoFiles: TdlgSelectGHTopoFiles
     TabOrder = 0
   end
   object btnOK1: TBitBtn
-    Left = 729
+    Left = 779
     Height = 30
-    Top = 525
+    Top = 473
     Width = 127
     Anchors = [akRight, akBottom]
     Cancel = True
@@ -42,32 +42,32 @@ object dlgSelectGHTopoFiles: TdlgSelectGHTopoFiles
   end
   object PageControl1: TPageControl
     Left = 4
-    Height = 517
+    Height = 465
     Top = 4
-    Width = 850
+    Width = 900
     ActivePage = TabSheet1
     Anchors = [akTop, akLeft, akRight, akBottom]
     TabIndex = 0
     TabOrder = 2
     object TabSheet1: TTabSheet
       Caption = 'Dossiers utilisateur'
-      ClientHeight = 488
-      ClientWidth = 842
+      ClientHeight = 436
+      ClientWidth = 892
       object Panel1: TPanel
         Left = 4
-        Height = 481
+        Height = 429
         Top = 4
-        Width = 835
+        Width = 885
         Anchors = [akTop, akLeft, akRight, akBottom]
         BevelOuter = bvLowered
-        ClientHeight = 481
-        ClientWidth = 835
+        ClientHeight = 429
+        ClientWidth = 885
         TabOrder = 0
         object lbCurrentFolder: TStaticText
           Left = 4
           Height = 19
-          Top = 457
-          Width = 827
+          Top = 405
+          Width = 877
           Anchors = [akLeft, akRight, akBottom]
           BorderStyle = sbsSunken
           Caption = 'lbCurrentFolder'
@@ -75,24 +75,24 @@ object dlgSelectGHTopoFiles: TdlgSelectGHTopoFiles
         end
         object PairSplitter1: TPairSplitter
           Left = 1
-          Height = 479
+          Height = 427
           Top = 1
-          Width = 833
+          Width = 883
           Align = alClient
-          Position = 304
+          Position = 548
           object PairSplitterSide1: TPairSplitterSide
             Cursor = crArrow
             Left = 0
-            Height = 479
+            Height = 427
             Top = 0
-            Width = 304
-            ClientWidth = 304
-            ClientHeight = 479
+            Width = 548
+            ClientWidth = 548
+            ClientHeight = 427
             object lsbMyDataFolder: TListBox
               Left = 0
-              Height = 326
+              Height = 274
               Top = 0
-              Width = 300
+              Width = 544
               Anchors = [akTop, akLeft, akRight, akBottom]
               ItemHeight = 0
               OnClick = lsbMyDataFolderClick
@@ -103,7 +103,7 @@ object dlgSelectGHTopoFiles: TdlgSelectGHTopoFiles
             object btnAddUserFolder: TButton
               Left = 0
               Height = 25
-              Top = 326
+              Top = 274
               Width = 140
               Anchors = [akLeft, akBottom]
               Caption = 'Ajouter un dossier'
@@ -113,12 +113,12 @@ object dlgSelectGHTopoFiles: TdlgSelectGHTopoFiles
             object Panel2: TPanel
               Left = 0
               Height = 125
-              Top = 352
-              Width = 300
+              Top = 299
+              Width = 544
               Anchors = [akLeft, akRight, akBottom]
               BevelOuter = bvLowered
               ClientHeight = 125
-              ClientWidth = 300
+              ClientWidth = 544
               TabOrder = 2
               object rbxGHTopoXTB: TCheckBox
                 Left = 4
@@ -177,7 +177,7 @@ object dlgSelectGHTopoFiles: TdlgSelectGHTopoFiles
             object btnDropUserFolder: TButton
               Left = 148
               Height = 25
-              Top = 326
+              Top = 274
               Width = 140
               Anchors = [akLeft, akBottom]
               Caption = 'Retirer un dossier'
@@ -187,17 +187,17 @@ object dlgSelectGHTopoFiles: TdlgSelectGHTopoFiles
           end
           object PairSplitterSide2: TPairSplitterSide
             Cursor = crArrow
-            Left = 309
-            Height = 479
+            Left = 553
+            Height = 427
             Top = 0
-            Width = 524
-            ClientWidth = 524
-            ClientHeight = 479
+            Width = 330
+            ClientWidth = 330
+            ClientHeight = 427
             object lsbMesDocuments: TFileListBox
               Left = 0
-              Height = 479
+              Height = 427
               Top = 0
-              Width = 524
+              Width = 330
               Align = alClient
               Directory = 'C:\lazarus'
               ExtendedSelect = False
@@ -210,83 +210,100 @@ object dlgSelectGHTopoFiles: TdlgSelectGHTopoFiles
         end
       end
     end
-    object TabSheet2: TTabSheet
-      Caption = 'Derniers documents'
-      ClientHeight = 488
-      ClientWidth = 842
-      object lsbLastDocuments: TListBox
-        Left = 3
-        Height = 435
-        Top = 20
-        Width = 834
-        Anchors = [akTop, akLeft, akRight, akBottom]
-        ItemHeight = 0
-        ScrollWidth = 1057
-        TabOrder = 0
-      end
-      object Label2: TLabel
-        Left = 4
-        Height = 16
-        Top = 4
-        Width = 176
-        Caption = 'Derniers documents ouverts'
-        ParentColor = False
-      end
-      object btnRemoveDocument: TButton
-        Left = 3
-        Height = 25
-        Top = 460
-        Width = 125
-        Anchors = [akLeft, akBottom]
-        Caption = 'Retirer'
-        OnClick = btnRemoveDocumentClick
-        TabOrder = 1
-      end
-    end
     object TabSheet3: TTabSheet
       Caption = 'Choix d''un fichier'
-      ClientHeight = 488
-      ClientWidth = 842
-      object editFileName: TFileNameEdit
-        Left = 4
-        Height = 24
-        Top = 20
-        Width = 834
-        FilterIndex = 0
-        DefaultExt = '.xtb'
-        HideDirectories = False
-        ButtonWidth = 23
-        NumGlyphs = 1
-        Anchors = [akTop, akLeft, akRight]
-        MaxLength = 0
-        TabOrder = 0
-      end
-      object Label1: TLabel
-        Left = 4
-        Height = 16
+      ClientHeight = 436
+      ClientWidth = 892
+      object Panel3: TPanel
+        Left = 0
+        Height = 88
         Top = 4
-        Width = 108
-        Caption = 'Choisir un fichier'
-        ParentColor = False
+        Width = 887
+        Anchors = [akTop, akLeft, akRight]
+        BevelInner = bvLowered
+        ClientHeight = 88
+        ClientWidth = 887
+        TabOrder = 0
+        object Label1: TLabel
+          Left = 8
+          Height = 16
+          Top = 8
+          Width = 108
+          Caption = 'Choisir un fichier'
+          ParentColor = False
+        end
+        object editFileName: TFileNameEdit
+          Left = 8
+          Height = 24
+          Top = 28
+          Width = 872
+          FilterIndex = 0
+          DefaultExt = '.xtb'
+          HideDirectories = False
+          ButtonWidth = 23
+          NumGlyphs = 1
+          Anchors = [akTop, akLeft, akRight]
+          MaxLength = 0
+          TabOrder = 0
+        end
+        object chkAddFolderOfhisAtUserList: TCheckBox
+          Left = 12
+          Height = 20
+          Top = 60
+          Width = 347
+          Caption = 'Ajouter son dossier à la liste des dossiers utilisateur'
+          Checked = True
+          State = cbChecked
+          TabOrder = 1
+        end
       end
-      object chkAddFolderOfhisAtUserList: TCheckBox
-        Left = 4
-        Height = 20
-        Top = 48
-        Width = 347
-        Caption = 'Ajouter son dossier à la liste des dossiers utilisateur'
-        Checked = True
-        State = cbChecked
+      object Panel4: TPanel
+        Left = 0
+        Height = 332
+        Top = 100
+        Width = 887
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        BevelInner = bvLowered
+        ClientHeight = 332
+        ClientWidth = 887
         TabOrder = 1
+        object Label2: TLabel
+          Left = 8
+          Height = 16
+          Top = 8
+          Width = 176
+          Caption = 'Derniers documents ouverts'
+          ParentColor = False
+        end
+        object lsbLastDocuments: TListBox
+          Left = 8
+          Height = 268
+          Top = 28
+          Width = 872
+          Anchors = [akTop, akLeft, akRight, akBottom]
+          ItemHeight = 0
+          ScrollWidth = 1057
+          TabOrder = 0
+        end
+        object btnRemoveDocument: TButton
+          Left = 8
+          Height = 25
+          Top = 300
+          Width = 125
+          Anchors = [akLeft, akBottom]
+          Caption = 'Retirer'
+          OnClick = btnRemoveDocumentClick
+          TabOrder = 1
+        end
       end
     end
   end
   object btnQuitterGHTopo: TButton
-    Left = 4
-    Height = 29
-    Top = 524
+    Left = 10
+    Height = 30
+    Top = 473
     Width = 127
-    Anchors = [akTop, akLeft, akBottom]
+    Anchors = [akLeft, akBottom]
     Caption = 'btnQuitterGHTopo'
     OnClick = btnQuitterGHTopoClick
     TabOrder = 3

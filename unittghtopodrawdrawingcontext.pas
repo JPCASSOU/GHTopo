@@ -8,7 +8,9 @@ uses
   , ToporobotClasses2012
   , UnitEntitesExtended
   , unitCroquisTerrain
-  , UnitGraphes1
+  //{$IFDEF GHTOPO_SIMPLIFIE}
+  , UnitGraphes1, BZGraphesTypes, BZGraphesClasses
+  //{$ENDIF GHTOPO_SIMPLIFIE}
   , UnitClasseMaillage
   , Common
   , Graphics
@@ -19,10 +21,8 @@ uses
   , BGRABitmap
   , BGRABitmapTypes
   , BGRAGradients
-  , unitUtilsComposants, BZGraphesTypes, BZGraphesClasses
+  //, unitUtilsComposants
   ;
-
-
 type
 
 { TGHTopoDrawingContext }
@@ -119,10 +119,10 @@ type
     procedure DrawCurrentStationTopo(const QCurrentStation: TBaseStation);
     procedure DrawMaillage(const QMaillageDisplayed: boolean; const QIsovaleur: double; const ContourLinesColor: TColor; const ContourLinesOpacity: byte);
 
-    {$IFDEF GHTOPO_SIMPLIFIE}
+    //{$IFDEF GHTOPO_SIMPLIFIE}
     procedure DrawOverlay();
     procedure DrawShortestPath(const FG: TPathFindingGraphe; const FP: TPathBetweenNodes);
-    {$ENDIF GHTOPO_SIMPLIFIE}
+    //{$ENDIF GHTOPO_SIMPLIFIE}
 
 
 
@@ -952,7 +952,7 @@ begin
   //except
   //end;
 end;
-{$IFDEF GHTOPO_SIMPLIFIE}
+{.$IFDEF GHTOPO_SIMPLIFIE}
 procedure TGHTopoDrawingContext.DrawOverlay();
 var
   Q: Integer;
@@ -1001,5 +1001,5 @@ begin
   DrwStations();
   SetLength(PP, 0);
 end;
-{$ENDIF GHTOPO_SIMPLIFIE}
+{.$ENDIF GHTOPO_SIMPLIFIE}
 end.

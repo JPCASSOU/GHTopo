@@ -1085,7 +1085,6 @@ object GHTopoMainMenuBar: TGHTopoMainMenuBar
       end
       object mnuMultiThreading: TMenuItem
         Caption = 'Test de multithreading'
-        Visible = False
         OnClick = mnuMultiThreadingClick
       end
     end

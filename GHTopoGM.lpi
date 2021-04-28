@@ -164,7 +164,7 @@
         <PackageName Value="LCL"/>
       </Item17>
     </RequiredPackages>
-    <Units Count="78">
+    <Units Count="79">
       <Unit0>
         <Filename Value="GHTopoGM.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -620,6 +620,11 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="BZParallelThread"/>
       </Unit77>
+      <Unit78>
+        <Filename Value="unitgraphes2.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="UnitGraphes2"/>
+      </Unit78>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
