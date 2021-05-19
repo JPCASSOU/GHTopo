@@ -706,14 +706,6 @@ begin
   end;
 end;
 
-
-
-
-
-
-
-
-
 procedure TGHTopoMainMenuBar.acCheckBaseExecute(Sender: TObject);
 begin
   {$IFDEF MSWINDOWS}
@@ -1604,7 +1596,7 @@ end;
 
 procedure TGHTopoMainMenuBar.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
-  CanClose := GHTopoQuestionOuiNon(GetResourceString(rsGHTOPO_QUIT));
+  CanClose := GHTopoQuestionOuiNon(rsGHTOPO_QUIT);
 end;
 
 // gestion des préférences

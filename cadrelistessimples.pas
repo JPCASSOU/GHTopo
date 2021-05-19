@@ -195,14 +195,14 @@ var
   EWE: String;
 begin
   case FModeBDD of
-    mbddENTRANCES     : EWE := GetResourceString(rsDLG_BDD_ADD_ENTREE);
-    mbddRESEAUX       : EWE := GetResourceString(rsDLG_BDD_ADD_RESEAU);
-    mbddSECTEURS      : EWE := GetResourceString(rsDLG_BDD_ADD_SECTEUR);
-    mbddCODES         : EWE := GetResourceString(rsDLG_BDD_ADD_CODE);
-    mbddEXPES         : EWE := GetResourceString(rsDLG_BDD_ADD_EXPE);
+    mbddENTRANCES     : EWE := rsDLG_BDD_ADD_ENTREE;
+    mbddRESEAUX       : EWE := rsDLG_BDD_ADD_RESEAU;
+    mbddSECTEURS      : EWE := rsDLG_BDD_ADD_SECTEUR;
+    mbddCODES         : EWE := rsDLG_BDD_ADD_CODE;
+    mbddEXPES         : EWE := rsDLG_BDD_ADD_EXPE;
     mbddPOI           : exit; // les POI sont reconstruits depuis les commentaires des stations
     mbddCHECK_ERRORS  : exit; // cette liste est reconstruite lors du check de la base
-    mbddPROXIMITES    : EWE := GetResourceString(rsDLG_BDD_ADD_BOUCLAGE);
+    mbddPROXIMITES    : EWE := rsDLG_BDD_ADD_BOUCLAGE;
     mbddSERIES_ENCADREES: exit;
   else
     pass;

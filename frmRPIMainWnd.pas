@@ -500,7 +500,7 @@ end;
 
 procedure TRPIMainWnd.acViderCroquisExecute(Sender: TObject);
 begin
-  if (GHTopoQuestionOuiNon(GetResourceString(rsVIDER_CROQUIS))) then
+  if (GHTopoQuestionOuiNon(rsVIDER_CROQUIS)) then
   begin
     FCroquisTerrain.ViderLesListesObjets();
     GHTopoContext2DA1.RefreshDessin();

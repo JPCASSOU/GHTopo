@@ -1,11 +1,11 @@
 object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
-  Left = 482
-  Height = 448
-  Top = 252
+  Left = 83
+  Height = 368
+  Top = 361
   Width = 833
   BorderStyle = bsDialog
   Caption = 'Settings vue 2D'
-  ClientHeight = 448
+  ClientHeight = 368
   ClientWidth = 833
   Font.CharSet = ANSI_CHARSET
   Font.Color = clBlack
@@ -18,12 +18,12 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
   LCLVersion = '2.0.0.4'
   object GroupBox1: TGroupBox
     Left = 436
-    Height = 406
+    Height = 326
     Top = 4
     Width = 395
     Anchors = [akTop, akLeft, akRight, akBottom]
     Caption = 'Couches affichées'
-    ClientHeight = 385
+    ClientHeight = 305
     ClientWidth = 391
     TabOrder = 0
     object chkPolygonales: TCheckBox
@@ -526,7 +526,7 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
   object BitBtn1: TBitBtn
     Left = 599
     Height = 29
-    Top = 416
+    Top = 336
     Width = 114
     Anchors = [akRight, akBottom]
     Default = True
@@ -538,7 +538,7 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
   object BitBtn2: TBitBtn
     Left = 717
     Height = 29
-    Top = 416
+    Top = 336
     Width = 114
     Anchors = [akRight, akBottom]
     Cancel = True
@@ -552,8 +552,8 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
     Height = 248
     Top = 4
     Width = 428
-    ActivePage = tabShtQuadrillage
-    TabIndex = 1
+    ActivePage = tabShtGaleries
+    TabIndex = 2
     TabOrder = 3
     object tabShtGeneral: TTabSheet
       Caption = 'tabShtGeneral'
@@ -932,7 +932,7 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
   object lbX1Y1: TStaticText
     Left = 4
     Height = 17
-    Top = 373
+    Top = 293
     Width = 428
     Anchors = [akLeft, akBottom]
     BorderStyle = sbsSunken
@@ -949,7 +949,7 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
   object lbX2Y2: TStaticText
     Left = 4
     Height = 17
-    Top = 393
+    Top = 313
     Width = 428
     Anchors = [akLeft, akBottom]
     BorderStyle = sbsSunken

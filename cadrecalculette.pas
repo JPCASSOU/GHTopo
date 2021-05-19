@@ -29,6 +29,7 @@ uses
   UnitTSAGeoMag,   // calculateur de déclinaison
   UnitKMLExport,   // export KML
   UnitLeafletExport,
+  UnitExifUtils,
   FastGEO,
   {$IFDEF MSWINDOWS}
   Windows,
@@ -56,7 +57,7 @@ uses
   ubarcodes, Forms, Dialogs,
   Controls, ComCtrls, StdCtrls, Grids, EditBtn, ExtCtrls, PairSplitter, Menus,
   LCLType, Types, Clipbrd,
-  ActnList, Buttons,
+  ActnList, Buttons, ExtDlgs, ValEdit,
   PdfDoc,
   PdfFonts,
   PdfTypes, PReport, uPSComponent_Default
@@ -120,16 +121,19 @@ type
     acPasteLayers: TAction;
     acVisuCoordsSurCarte: TAction;
     ActionList1: TActionList;
+    btnBackGrdInertieFigure: TColorButton;
     btnConvertDMS2DegDec: TButton;
     btnCreateGUID: TButton;
-    Button1: TButton;
-    Button2: TButton;
-    Button3: TButton;
+    btnOpenImage: TButton;
     btnSaveMaillage: TButton;
     btnTrianguler: TButton;
     btnMaillageImporterXYZ: TButton;
+    btnTestInertie: TButton;
+    btnCalculerDepuisGrille: TButton;
+    Button3: TButton;
     Button4: TButton;
-    btnBackGrdInertieFigure: TColorButton;
+    btnCopyExifGrid: TButton;
+    btnAny: TButton;
     CdrDGCDrawingContext1: TCdrDGCDrawingContext;
     CdrDGCDrawingContext2: TCdrDGCDrawingContext;
     CdrPascalScript1: TCdrPascalScript;
@@ -159,11 +163,13 @@ type
     editX_Source1JPC: TCurrencyEdit;
     editY_Cible1JPC: TCurrencyEdit;
     editY_Source1JPC: TCurrencyEdit;
+    ExifGrid: TStringGrid;
     grbxAdditionalLayers: TGroupBox;
     grdCoordonneesSection: TStringGrid;
     grdMaillageCoordsXYZ: TStringGrid;
     grdDonnees: TStringGrid;
     HeaderControl1: THeaderControl;
+    Image: TImage;
     ImageList1: TImageList;
     Label1: TLabel;
     Label10: TLabel;
@@ -198,6 +204,7 @@ type
     lbConversionsUnitaires: TStaticText;
     lbDocumentTitle: TLabel;
     lbHintGrdConversions: TStaticText;
+    lbImageFilename: TStaticText;
     lbInertieI: TStaticText;
     lbInertieII: TStaticText;
     lbIxy: TStaticText;
@@ -223,13 +230,16 @@ type
     lsbAdditionalLayers: TListBox;
     lsbVariables: TListBox;
     editTextToEncodeQR: TMemo;
-    PageControl2: TPageControl;
+    PageCtrlInerties: TPageControl;
     PairSplitter10: TPairSplitter;
     PairSplitter2: TPairSplitter;
     PairSplitter3: TPairSplitter;
+    PairSplitter4: TPairSplitter;
+    PairSplitter5: TPairSplitter;
     PairSplitter7: TPairSplitter;
     PairSplitter8: TPairSplitter;
     PairSplitter9: TPairSplitter;
+    PairSplitterSide10: TPairSplitterSide;
     PairSplitterSide13: TPairSplitterSide;
     PairSplitterSide14: TPairSplitterSide;
     PairSplitterSide15: TPairSplitterSide;
@@ -242,14 +252,17 @@ type
     PairSplitterSide4: TPairSplitterSide;
     PairSplitterSide5: TPairSplitterSide;
     PairSplitterSide6: TPairSplitterSide;
+    PairSplitterSide7: TPairSplitterSide;
+    PairSplitterSide8: TPairSplitterSide;
+    PairSplitterSide9: TPairSplitterSide;
     Panel1: TPanel;
     Panel11: TPanel;
     Panel12: TPanel;
     Panel13: TPanel;
     Panel14: TPanel;
-    Panel2: TPanel;
     Panel6: TPanel;
     Panel7: TPanel;
+    pnlImage: TPanel;
     pnlListeVariables: TPanel;
     pnlProgressionProcess: TPanel;
     ProgressBar1: TProgressBar;
@@ -287,8 +300,10 @@ type
     SpeedButton8: TSpeedButton;
     SpeedButton9: TSpeedButton;
     grdMaillageTriangles: TStringGrid;
-    TabSheet1: TTabSheet;
-    TabSheet2: TTabSheet;
+    lbPhotoInfos: TStaticText;
+    TabSheet3: TTabSheet;
+    TabSheet4: TTabSheet;
+    tabShtImage: TTabSheet;
     tabShtTextures: TTabSheet;
     tabShtPascalScript: TTabSheet;
     tabShtMNT: TTabSheet;
@@ -368,12 +383,15 @@ type
     procedure acReverseSystCoordonneesExecute(Sender: TObject);
     procedure acSavePSScriptExecute(Sender: TObject);
     procedure acVisuCoordsSurCarteExecute(Sender: TObject);
+    procedure btnAnyClick(Sender: TObject);
+    procedure btnCopyExifGridClick(Sender: TObject);
     procedure btnCreateGUIDClick(Sender: TObject);
     procedure btnPasteClick(Sender: TObject);
     procedure btnConvertDMS2DegDecClick(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
-    procedure Button2Click(Sender: TObject);
+    procedure btnTestInertieClick(Sender: TObject);
+    procedure btnCalculerDepuisGrilleClick(Sender: TObject);
     procedure Button3Click(Sender: TObject);
+    procedure btnOpenImageClick(Sender: TObject);
     procedure cmbColAdditionalOSMLayersChange(Sender: TObject);
     procedure cmbColDescriptionChange(Sender: TObject);
     procedure cmbColObservationsChange(Sender: TObject);
@@ -452,13 +470,15 @@ type
 
     // Couches additionnelles
     FOSMAdditionalLayers      : TListeOfGISLayers;
-
+    // Image métadata
+    FImgInfo : TImgInfoWithGPS;
     procedure AjouterDerniereExpressionValable(const Expr: string);
     function CheckExternalPrograms(): boolean;
     function CheckLatLonInMetropole(const QLat, QLon: double): boolean;
     procedure ClearComboColonnes(const cmb: TComboBox; const Idx: integer);
     procedure DessinerCercleDeMohr(const S: TDGCSectionOfBeam);
     procedure DessinerSection(const S: TDGCSectionOfBeam);
+    procedure DisplayMetadata();
 
     procedure ExportListePointsVersCarto(const FormatExportGIS     : TFormatExportGIS;
                                          const QFileName           : string;
@@ -470,6 +490,7 @@ type
     function InitialiseCalculateurDeclimag(): boolean;
     function InitialiseConvertisseur(): boolean;
     procedure ListerCaracteristiquesSections(const S: TDGCSectionOfBeam);
+    function  LoadImage(const QFilename: TStringDirectoryFilename): boolean;
 
     procedure RefactorerTitresDesColonnes();
     procedure RelisterAdditionalLayers();
@@ -524,6 +545,8 @@ uses
 
 const
   TAB_INDEX_QRCODE = 3;
+
+
 //******************************************************************************
 
 function TCdrCalculette.CheckExternalPrograms(): boolean;
@@ -579,6 +602,7 @@ var
 begin
   Result := False;
   StaticVarIdx := 0;
+  btnCopyExifGrid.Caption := GetResourceString(rsBTN_COPIER_TABLEAU);
   //try
     FLigneDep := 1;
     // Programmes externes
@@ -735,6 +759,9 @@ begin
 
     QActiveTabIndex   := 0;
     {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
+    // métadonnées d'une image
+    tabShtImage.Caption := GetResourceString(rsDLG_CALC_TAB_IMAGE_METADATA);
+
     CdrTextures1.Initialiser();
     PageControl1.ActivePageIndex := QActiveTabIndex;
     SetFocusForPageIdx(QActiveTabIndex);
@@ -995,8 +1022,7 @@ const
 var
   Nb: Integer;
 begin
-  // dernier calcul en tête de liste
-  lsbLastCalculs.Items.Insert(0, Expr);
+  lsbLastCalculs.Items.Insert(0, Expr);    // dernier calcul en tête de liste
   Nb := lsbLastCalculs.Count;
   if (Nb > NB_MAX_CALCULS) then lsbLastCalculs.Items.Delete(Nb - 1);
 end;
@@ -1008,21 +1034,17 @@ var
 begin
   Result := 0;
   if (QLibColonne =  '') then Exit(0);
-  // nettoyer la liste et affecte des noms de colonne Colonne0, Colonne1, ...
-  ClearComboColonnes(Cmb, 0);
-  // FLigneDep > 0 = la ligne 0 du tableau contient les titres de colonnes
-  if (FLigneDep > 0) then
+  ClearComboColonnes(Cmb, 0);                          // nettoyer la liste et affecte des noms de colonne Colonne0, Colonne1, ...
+  if (FLigneDep > 0) then                              // FLigneDep > 0 = la ligne 0 du tableau contient les titres de colonnes
   begin
-    // Remplacer les items de combo par les noms de colonne du tableau
-    for qc := 0 to grdDonnees.ColCount - 1 do
+    for qc := 0 to grdDonnees.ColCount - 1 do          // Remplacer les items de combo par les noms de colonne du tableau
     begin
       EWE := Trim(grdDonnees.Cells[qc, 0]);
       if (EWE <> '') then cmb.Items[qc] := EWE;
     end;
-    // rechercher les noms de colonnes contenant QLibColonne
     for qc := 0 to grdDonnees.ColCount - 1 do
     begin
-      EWE := Lowercase(Trim(grdDonnees.Cells[qc, 0]));
+      EWE := Lowercase(Trim(grdDonnees.Cells[qc, 0])); // rechercher les noms de colonnes contenant QLibColonne
       if (Pos(Lowercase(QLibColonne), EWE) > 0) then
       begin
         Result := qc;
@@ -1067,7 +1089,6 @@ begin
   Result := ConvertirEnNombreReel(trim(editExpression.Text), 0.00);
 end;
 
-
 function TCdrCalculette.GetDeclimagA(): double;
 begin
   Result := editDeclinaison.Value;
@@ -1082,8 +1103,6 @@ function TCdrCalculette.GetCurrentCodeEPSGNomSysteme(): TLabelSystemesCoordsEPSG
 begin
   Result := FConversionUtils.GetCodeEPSGNomSysteme(cmbSystCibleJPC.ItemIndex);
 end;
-
-
 
 procedure TCdrCalculette.SetCoordonneesA(const P: TPoint2Df);
 begin
@@ -1123,7 +1142,6 @@ var
         KMLExport.BeginFolder(2, KML_FOLDER_MARKERS);
         ProgressBar1.Min := NoLigneDep;
         ProgressBar1.Max := Nb - 1;
-
         for i := NoLigneDep to Nb - 1 do
         begin
           if ((i mod 10) = 0) then
@@ -1183,7 +1201,6 @@ var
         ProgressBar1.Min := NoLigneDep;
         ProgressBar1.Max := Nb - 1;
         // AddLayer doit être appelé avant WriteHeader
-
         OSMExport.AddLayer(false, True, 'PonctualPlacemarks', 'Entrances or placemarks', '', '', OSM_MARKER_STYLE_CIRCLE, 10.00, clRed, 0.50);
         for i := 0 to FOSMAdditionalLayers.Count - 1 do
         begin
@@ -1284,10 +1301,6 @@ begin
     editExpression.Text := WU;
   end;
 end;
-
-
-
-
 
 procedure TCdrCalculette.PageControl1Change(Sender: TObject);
 begin
@@ -1428,6 +1441,16 @@ begin
   finally
     FreeAndNil(OSMExport);
   end;
+end;
+
+procedure TCdrCalculette.btnAnyClick(Sender: TObject);
+begin
+  pass;
+end;
+
+procedure TCdrCalculette.btnCopyExifGridClick(Sender: TObject);
+begin
+  ExifGrid.CopyToClipboard();
 end;
 
 procedure TCdrCalculette.btnCreateGUIDClick(Sender: TObject);
@@ -2200,7 +2223,7 @@ begin
   if (FFF <> '') then ShowMessage(FFF);
 end;
 
-procedure TCdrCalculette.Button1Click(Sender: TObject);
+procedure TCdrCalculette.btnTestInertieClick(Sender: TObject);
 const
   //TX = -50; TY = -100;
   TX = 0; TY = 0;
@@ -2243,7 +2266,7 @@ begin
   CdrDGCDrawingContext1.SetProcPickCoords(QProcTransmitCoords);
 end;
 
-procedure TCdrCalculette.Button2Click(Sender: TObject);
+procedure TCdrCalculette.btnCalculerDepuisGrilleClick(Sender: TObject);
 var
   MySection: TDGCSectionOfBeam;
   i: Integer;
@@ -2291,6 +2314,118 @@ begin
   end;
 
 end;
+
+function TCdrCalculette.LoadImage(const QFilename: TStringDirectoryFilename): boolean;
+var
+  QLat, QLon: double;
+begin
+  result:= false;
+  if (QFilename = '') then begin
+    ShowMessage('No file selected.');
+    exit;
+  end;
+  if (not FileExists(QFilename)) then begin
+    ShowMessage('File "' + QFilename + '" does not exist.');
+    exit;
+  end;
+  FImgInfo := TImgInfoWithGPS.Create;
+  try
+    FImgInfo.LoadFromFile(QFileName);
+    Image.Picture.LoadFromFile(QFileName);
+    lbImageFilename.Caption := QFilename;
+    result := True;
+  except
+    FreeAndNil(FImgInfo);
+  end;
+end;
+procedure TCdrCalculette.DisplayMetadata();
+var
+  EWE: Boolean;
+  QMsg: string;
+  QLat, QLon: double;
+begin
+  FImgInfo.DisplayMetadataInGrid(ExifGrid);
+  EWE := FImgInfo.ExtractWGSCoordinates(QLat, QLon, QMsg);
+  QMsg := IIF(EWE, Format('%dx%d - Lat: %.8f, Lon: %.8f', [FImgInfo.ImgWidth, FImgInfo.ImgHeight,QLat, QLon]), QMsg);
+  lbPhotoInfos.Caption := QMsg;
+
+  // et on libère le FImgInfo
+  try
+
+  finally
+    FreeAndNil(FImgInfo);
+  end;
+
+
+end;
+
+procedure TCdrCalculette.btnOpenImageClick(Sender: TObject);
+var
+  TD: TOpenPictureDialog;
+  AFileName: String;
+begin
+  TD := TOpenPictureDialog.Create(Application);
+  try
+    if (TD.Execute) then
+    begin
+      self.LoadImage(TD.FileName);
+      self.DisplayMetadata();
+
+    end;
+  finally
+    FreeAndNil(TD);
+  end;
+
+  //Image.Width := FWidth;
+  //Image.Height:= FHeight;
+
+
+  (*
+  Statusbar.Panels[PANEL_ENDIAN].Text := '';
+  Statusbar.Panels[PANEL_OFFSET].Text := '';
+  Statusbar.Panels[PANEL_MSG].Text := '';
+
+
+
+  FFilename := AFilename;
+  FMRUMenuManager.AddToRecent(AFileName);
+  Caption := Format('Exif Spy - "%s"', [FFilename]);
+  AcFileReload.Enabled := true;
+
+  crs := Screen.Cursor;
+  Screen.Cursor := crHourglass;
+  try
+    FBuffer := nil;
+    FHexEditor.LoadFromFile(aFileName);
+    FBuffer := PBytes(TMPHexEditorOpener(FHexEditor).DataStorage.Memory);
+    FBufferSize := FHexEditor.DataSize;
+    FCurrOffset := 0;
+    HexEditorClick(nil);
+
+    if ScanIFDs then
+      UpdateIFDs;
+    UpdateMarkers;
+    ClearAnalysis;
+
+    FreeAndNil(FImgInfo);
+    if FLoadFpExif then begin
+      FImgInfo := TImgInfo.Create;
+      FImgInfo.LoadFromFile(AFileName);
+      Populate_fpExifGrids;
+    end;
+
+    Image.Picture.LoadFromFile(AFileName);
+    Image.Width := FWidth;
+    Image.Height := FHeight;
+    AcImgFitExecute(nil);
+
+  finally
+    Screen.Cursor := crs;
+  end;
+  //*)
+end;
+
+
 
 
 

@@ -268,10 +268,11 @@ begin
                                       editHTMLWidth.AsInteger,
                                       editHTMLHeight.AsInteger,
                                       QMenuWidth);
+  ShowMessage(GetResourceString(rsDONE_ANY_PROCESS));
 
 
   // pour ne pas se farcir la procédure chiante de sortie de GHTopo
-  if (GHTopoQuestionOuiNon('Quitter IMMEDIATEMENT GHTopo ?')) then Application.Terminate;
+  //if (GHTopoQuestionOuiNon('Quitter IMMEDIATEMENT GHTopo ?')) then Application.Terminate;
 end;
 
 procedure TCdrGrapheItineraire.DisplayProgression(const Etape: string; const Done, Starting, Ending, Step: integer);
@@ -294,7 +295,14 @@ var
   QSr: TNumeroSerie;
   QSt: TNumeroStation;
 begin
-  if (not FGraphe.GetItineraire(FCurrentIdxItineraire, MyPath)) then Exit;
+  if (not FGraphe.GetItineraire(FCurrentIdxItineraire, MyPath)) then
+  begin
+    ShowMessage(GetResourceString(rsDLG_GRAPHE_ITINERAIRE_INDEFINI));
+    Exit;
+  end;
+  if (not GHTopoQuestionOuiNon(rsMSG_WARN_LONG_PROCESS)) then Exit;
+
+
   Nb := MyPath.GetNbNoeuds();
   if (0 = Nb) then exit;
   FT := TFichesTopo.Create;
@@ -311,13 +319,13 @@ begin
       end;
       FT.ImprimerLesFiches(editPDFOutputFiches.FileName, True);
       FT.Finaliser();
-
+      ShowMessage(GetResourceString(rsDONE_ANY_PROCESS));
     end;
   finally
     pnlProgression.Visible := false;
     FreeAndNil(FT);
   end;
-  if (GHTopoQuestionOuiNon('Quitter IMMEDIATEMENT GHTopo')) then Application.Terminate;
+  //if (GHTopoQuestionOuiNon('Quitter IMMEDIATEMENT GHTopo')) then Application.Terminate;
 end;
 
 

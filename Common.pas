@@ -2148,8 +2148,11 @@ var
   dd, mn, ss, Signe: double;
   QAT: Boolean;
 begin
+  Result := -361.00;
   try
     WU := Trim(UpperCase(S));
+    // S'il y a des NaN, on sort direct
+    if (Pos('NAN', WU) > 0) then exit;
     // extraction du signe
     QAT := (Pos('-', WU) > 0) or
            (Pos('S', WU) > 0) or

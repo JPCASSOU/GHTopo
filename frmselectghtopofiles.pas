@@ -50,6 +50,7 @@ type
     rbxToporobotText: TCheckBox;
     rbxPocketTopoTXT: TCheckBox;
     TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
     TabSheet3: TTabSheet;
     procedure btnAddUserFolderClick(Sender: TObject);
     procedure btnDropUserFolderClick(Sender: TObject);

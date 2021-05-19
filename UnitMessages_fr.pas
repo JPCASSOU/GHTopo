@@ -790,8 +790,8 @@ resourcestring
   rsTAB_PS_AC_COPY_OUTPUT                    = 'Copier la console de sortie';
   rsTAB_PS_TabShtConsoleOutput_CAPTION       = 'Console de sortie du script';
   rsTAB_PS_TabShtMessagesCompilo_CAPTION     = 'Messages de l''interpréteur';
-
-
+  // onglet Métadonnées d'une image
+  rsDLG_CALC_TAB_IMAGE_METADATA              = 'Métadonnées d''une image';
   //****************************************************************************
 
   rsLB_DOCUMENT_TITLE                        = 'Titre du document';
@@ -857,6 +857,7 @@ resourcestring
   //*)
   // resourcestring du dialogue Graphe du réseau
   rsDLG_GRAPHE_TITLE                         = 'Graphe du réseau';
+  rsDLG_GRAPHE_ITINERAIRE_INDEFINI           = 'Itinéraire non défini';
 
   // messages divers
   rsMSG_HAS_ALREADY_DATA                     = 'Le tableau contient déjà des données. Continuer ?';
@@ -1416,6 +1417,7 @@ resourcestring
   rsDLG_SEARCH_IN_DATABASES_BTN_FINDWHAT     = 'Rechercher';
 
   rsMSG_GRAPHE_POINT_NOT_FOUND               = 'Le point de %s %s est introuvable';
+  rsMSG_WARN_LONG_PROCESS                    = 'Cette opération est assez longue - Continuer';
 //================================================================================
 implementation
 

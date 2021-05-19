@@ -44,9 +44,9 @@ function TdlgQuestionOuiNonWithAction.Initialiser(const Title, Msg1, Msg2: strin
 begin
   result := false;
   try
-    self.Caption          := Title;
-    lbQuestion.Caption    := Msg1;
-    chkDoAction.Caption   := Msg2;
+    self.Caption          := GetResourceString(Title);
+    lbQuestion.Caption    := GetResourceString(Msg1);
+    chkDoAction.Caption   := GetResourceString(Msg2);
     chkDoAction.Checked   := DoAction;
     result := True;
   except

@@ -1,4 +1,5 @@
 unit dlgParametrerOngletVue2D;
+
 // Date: 28/08/2012
 // Dialogue pour paramétrage des onglets de la vue 2D
 // 20/11/2014: Support des largeurs de trait pour les polygonales (lié aux visées en antenne)
@@ -259,10 +260,7 @@ begin
   InitialiserComboBoxQuadrillage(cmbTypeQuadrillage, qtGRID);
   InitialiserComboBoxRepresentationVisees(cmbRepresentationGaleries, rgSEANCES);
   InitialiserComboBoxModeDessinMaillage(cmbModeDessinMaillage, M3D_NONE);
-
-
   SetPanelParamVisible();
-
   tabShtGeneral.Caption      := 'Général';
   tabShtQuadrillage.Caption  := 'Quadrillage';
   tabShtGaleries.Caption     := 'Galeries';

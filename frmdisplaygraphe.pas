@@ -193,6 +193,8 @@ begin
 
 end;
 
+
+
 procedure TdlgDisplayGraphe.btnOuvrirItinerairesClick(Sender: TObject);
 var
   TD: TOpenDialog;

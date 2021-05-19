@@ -264,11 +264,8 @@ begin
 end;
 
 procedure TCdrListeSeries.acCdrSerAddItemExecute(Sender: TObject);
-var
-  EWE: String;
 begin
-  EWE := GetResourceString(rsDLG_BDD_ADD_SERIE);
-  if (not GHTopoQuestionOuiNon(EWE)) then exit;
+  if (not GHTopoQuestionOuiNon(rsDLG_BDD_ADD_SERIE)) then exit;
   if (FDocuTopo.CreateNewSerie(1,0, -1, rs2NDMEMBER)) then
   begin
     Relister(FDocuTopo.GetNbSeries() - 1);

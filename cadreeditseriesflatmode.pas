@@ -691,9 +691,9 @@ begin
         end
         else
         begin
-          if (GHTopoQuestionOuiNon(Format(GetResourceString(rsCDR_SERIES_FLAT_MSG_DO_CREATE_SERIE_NTH), [QNoSer]))) then
+          if (GHTopoQuestionOuiNon(Format(rsCDR_SERIES_FLAT_MSG_DO_CREATE_SERIE_NTH, [QNoSer]))) then
           begin
-
+            pass;
           end;
         end;
       end

@@ -1,7 +1,7 @@
 object dlgLesProfilsTopo: TdlgLesProfilsTopo
-  Left = 158
+  Left = 180
   Height = 638
-  Top = 309
+  Top = 243
   Width = 1186
   Caption = 'dlgLesProfilsTopo'
   ClientHeight = 638
@@ -180,31 +180,19 @@ object dlgLesProfilsTopo: TdlgLesProfilsTopo
             Width = 845
             inherited tabShtProfil: TTabSheet
               ClientHeight = 498
-              ClientWidth = 835
-            end
-            inherited tabShtValeurs: TTabSheet
-              ClientHeight = 498
-              ClientWidth = 835
-            end
-            inherited tabShtConduits: TTabSheet
-              ClientHeight = 498
               ClientWidth = 837
-              inherited Panel1: TPanel
-                Height = 466
-                Width = 828
-                ClientHeight = 466
-                ClientWidth = 828
-                inherited lsbGaleriesRecoupees: TListBox
-                  Height = 434
-                  Width = 820
-                  ScrollWidth = 816
-                end
-                inherited HeaderControl1: THeaderControl
-                  Width = 820
+              inherited pnlProfil: TPanel
+                Height = 469
+                Width = 830
+                ClientHeight = 469
+                ClientWidth = 830
+                inherited Chart1: TChart
+                  Height = 467
+                  Width = 828
                 end
               end
-              inherited btnCopierListeConduitsRecoupes: TButton
-                Left = 662
+              inherited lbCoordsProfil: TStaticText
+                Top = 476
               end
             end
           end

@@ -1,7 +1,7 @@
 object dlgDisplayGraphe: TdlgDisplayGraphe
-  Left = 193
+  Left = 350
   Height = 776
-  Top = 159
+  Top = 305
   Width = 1303
   Align = alClient
   Caption = 'dlgDisplayGraphe'
@@ -255,6 +255,8 @@ object dlgDisplayGraphe: TdlgDisplayGraphe
                 Width = 751
                 ClientHeight = 482
                 ClientWidth = 751
+                DesignLeft = 1140
+                DesignTop = 182
                 inherited pnlVue: TPanel
                   Height = 446
                   Width = 720
@@ -319,6 +321,27 @@ object dlgDisplayGraphe: TdlgDisplayGraphe
                 end
               end
             end
+            inherited tabShtRoadMap: TTabSheet
+              ClientHeight = 566
+              ClientWidth = 797
+              inherited grdRoadmap: TStringGrid
+                Height = 452
+                Width = 793
+              end
+              inherited btnCopierTableau: TButton
+                Left = 601
+              end
+              inherited Label10: TLabel
+                Top = 493
+              end
+              inherited editPDFOutputFiches: TFileNameEdit
+                Top = 513
+                Width = 793
+              end
+              inherited btnGenererFichesPDF: TButton
+                Top = 540
+              end
+            end
             inherited tabExportHTML: TTabSheet
               ClientHeight = 566
               ClientWidth = 797
@@ -335,12 +358,10 @@ object dlgDisplayGraphe: TdlgDisplayGraphe
             Width = 609
           end
           inherited pnlProgression: TPanel
-            Left = 32
-            Top = 444
-            Width = 741
-            ClientWidth = 741
+            Width = 785
+            ClientWidth = 785
             inherited ProgressBar1: TProgressBar
-              Width = 730
+              Width = 774
             end
           end
         end

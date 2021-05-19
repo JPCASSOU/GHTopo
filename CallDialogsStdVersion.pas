@@ -640,13 +640,16 @@ begin
   Result := false;
   TD := TfrmParametrerOngletVue2D.Create(Application);
   try
-    TD.SetModeParametrageDialog(mpdVUE2D);
-    TD.SetValuesOnglet2D(O);
-    TD.ShowModal;
-    if (TD.ModalResult = mrOK) then
+    if (TD.Initialiser()) then
     begin
-      O := TD.GetValuesOnglet2D();
-      result := True;
+      TD.SetModeParametrageDialog(mpdVUE2D);
+      TD.SetValuesOnglet2D(O);
+      TD.ShowModal;
+      if (TD.ModalResult = mrOK) then
+      begin
+        O := TD.GetValuesOnglet2D();
+        result := True;
+      end;
     end;
   finally
     TD.Release;
@@ -1243,7 +1246,7 @@ begin
   L := MyGrid.Selection.Top;
   Nb := MyGrid.Selection.Bottom - L;
   // Demande de confirmation
-  if (not GHTopoQuestionOuiNon(Format(GetResourceString(rsCDR_SERIES_FLAT_MSG_REMOVE_LINE), [Nb + 1, L]))) then Exit;
+  if (not GHTopoQuestionOuiNon(Format(rsCDR_SERIES_FLAT_MSG_REMOVE_LINE, [Nb + 1, L]))) then Exit;
   WU := L + Nb;
   if (WU > (MyGrid.RowCount -1)) then WU := MyGrid.RowCount - 1;
   for i := WU downto L do  MyGrid.DeleteRow(i);

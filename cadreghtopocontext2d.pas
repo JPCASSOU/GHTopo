@@ -1373,7 +1373,7 @@ begin
     if (FDocuTopo.GetSerieByNumeroSerie(n, MySerie, QIdx)) then
     begin
       WU := Format(rsNUM_SERIE_ALREADY_ATTRIBUTED, [n]);
-      if (not GHTopoQuestionOuiNon(GetResourceString(WU + ' - ' + rsALLOW_ATTRIBUTE_NUM_SERIE))) then Exit;
+      if (not GHTopoQuestionOuiNon(WU + ' - ' + rsALLOW_ATTRIBUTE_NUM_SERIE)) then Exit;
       n := -1;
     end;
     QParamOnglet := GetOngletByIndex(FCurrIdxOnglet);    // on récupère les paramètres de vue et d'onglet

@@ -151,6 +151,7 @@ end;
 
 
 
+
 procedure TfrmCalculette.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
   CanClose := false;

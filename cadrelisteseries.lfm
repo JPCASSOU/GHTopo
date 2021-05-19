@@ -12,6 +12,7 @@ object CdrListeSeries: TCdrListeSeries
   Font.Pitch = fpVariable
   Font.Quality = fqDraft
   Font.Style = [fsBold]
+  LCLVersion = '2.0.0.4'
   ParentFont = False
   TabOrder = 0
   DesignLeft = 418
@@ -62,7 +63,7 @@ object CdrListeSeries: TCdrListeSeries
     Action = acCdrSerAddItem
     ShowCaption = False
     ShowHint = True
-    
+    ParentShowHint = False
   end
   object SpeedButton12: TSpeedButton
     Left = 272
@@ -72,7 +73,7 @@ object CdrListeSeries: TCdrListeSeries
     Action = acCdrSerSort
     ShowCaption = False
     ShowHint = True
-    
+    ParentShowHint = False
   end
   object SpeedButton2: TSpeedButton
     Left = 208
@@ -82,7 +83,7 @@ object CdrListeSeries: TCdrListeSeries
     Action = acCdrSerApplyModifs
     ShowCaption = False
     ShowHint = True
-    
+    ParentShowHint = False
   end
   object SpeedButton3: TSpeedButton
     Left = 908
@@ -93,7 +94,7 @@ object CdrListeSeries: TCdrListeSeries
     Anchors = [akTop, akRight]
     ShowCaption = False
     ShowHint = True
-    
+    ParentShowHint = False
   end
   object lbNbreElements: TLabel
     Left = 4
@@ -122,7 +123,7 @@ object CdrListeSeries: TCdrListeSeries
     Anchors = [akTop, akRight]
     ShowCaption = False
     ShowHint = True
-    
+    ParentShowHint = False
   end
   object Label1: TLabel
     Left = 4
@@ -140,7 +141,7 @@ object CdrListeSeries: TCdrListeSeries
     Action = acCdrSerExportListesCSV
     ShowCaption = False
     ShowHint = True
-    
+    ParentShowHint = False
   end
   object SpeedButton5: TSpeedButton
     Left = 340
@@ -150,7 +151,7 @@ object CdrListeSeries: TCdrListeSeries
     Action = acCdrSerDeleteItem
     ShowCaption = False
     ShowHint = True
-    
+    ParentShowHint = False
   end
   object editSelectionMultiple: TEdit
     Left = 140
@@ -177,7 +178,7 @@ object CdrListeSeries: TCdrListeSeries
     Anchors = [akTop, akRight]
     ShowCaption = False
     ShowHint = True
-    
+    ParentShowHint = False
   end
   object SpeedButton7: TSpeedButton
     Left = 830
@@ -188,7 +189,7 @@ object CdrListeSeries: TCdrListeSeries
     Anchors = [akTop, akRight]
     ShowCaption = False
     ShowHint = True
-    
+    ParentShowHint = False
   end
   object SpeedButton9: TSpeedButton
     Left = 856
@@ -199,7 +200,7 @@ object CdrListeSeries: TCdrListeSeries
     Anchors = [akTop, akRight]
     ShowCaption = False
     ShowHint = True
-    
+    ParentShowHint = False
   end
   object SpeedButton10: TSpeedButton
     Left = 883
@@ -210,7 +211,7 @@ object CdrListeSeries: TCdrListeSeries
     Anchors = [akTop, akRight]
     ShowCaption = False
     ShowHint = True
-    
+    ParentShowHint = False
   end
   object SpeedButton11: TSpeedButton
     Left = 910
@@ -220,7 +221,7 @@ object CdrListeSeries: TCdrListeSeries
     Anchors = [akTop, akRight]
     ShowCaption = False
     ShowHint = True
-    
+    ParentShowHint = False
   end
   object lsbListe: TCheckListBox
     Left = 4

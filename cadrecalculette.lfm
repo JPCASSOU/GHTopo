@@ -1,11 +1,11 @@
 object CdrCalculette: TCdrCalculette
   Left = 0
-  Height = 665
+  Height = 717
   Top = 0
-  Width = 1083
+  Width = 1160
   Align = alClient
-  ClientHeight = 665
-  ClientWidth = 1083
+  ClientHeight = 717
+  ClientWidth = 1160
   Font.CharSet = ANSI_CHARSET
   Font.Color = clBlack
   Font.Height = -13
@@ -15,17 +15,17 @@ object CdrCalculette: TCdrCalculette
   Font.Style = [fsBold]
   ParentFont = False
   TabOrder = 0
-  DesignLeft = 233
-  DesignTop = 213
+  DesignLeft = 373
+  DesignTop = 395
   object PageControl1: TPageControl
     Left = 0
-    Height = 665
+    Height = 717
     Top = 0
-    Width = 1083
-    ActivePage = tabShtGenerateurQRCode
+    Width = 1160
+    ActivePage = tabShtInerties
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
-    TabIndex = 2
+    TabIndex = 6
     TabOrder = 0
     OnChange = PageControl1Change
     object tabShtCalculatrice: TTabSheet
@@ -261,13 +261,13 @@ object CdrCalculette: TCdrCalculette
     end
     object tabShtConvertisseur: TTabSheet
       Caption = 'tabShtConvertisseur'
-      ClientHeight = 704
-      ClientWidth = 1222
+      ClientHeight = 744
+      ClientWidth = 1204
       object lbCopyrightNotesConvertisseur: TStaticText
         Left = 2
         Height = 19
-        Top = 686
-        Width = 1340
+        Top = 726
+        Width = 1322
         Anchors = [akLeft, akRight, akBottom]
         BorderStyle = sbsSunken
         Caption = 'lbCopyrightNotesConvertisseur'
@@ -283,19 +283,19 @@ object CdrCalculette: TCdrCalculette
       object PairSplitter2: TPairSplitter
         Cursor = crDefault
         Left = 0
-        Height = 704
+        Height = 744
         Top = 0
-        Width = 1222
+        Width = 1204
         Align = alClient
         Position = 976
         object PairSplitterSide3: TPairSplitterSide
           Cursor = crArrow
           Left = 0
-          Height = 704
+          Height = 744
           Top = 0
           Width = 976
           ClientWidth = 976
-          ClientHeight = 704
+          ClientHeight = 744
           object lbSystemesCoordonnees: TStaticText
             Left = 2
             Height = 22
@@ -600,12 +600,12 @@ object CdrCalculette: TCdrCalculette
           end
           object Panel11: TPanel
             Left = 2
-            Height = 563
+            Height = 603
             Top = 138
             Width = 969
             Anchors = [akTop, akLeft, akRight, akBottom]
             BevelOuter = bvLowered
-            ClientHeight = 563
+            ClientHeight = 603
             ClientWidth = 969
             TabOrder = 6
             object lbDocumentTitle: TLabel
@@ -722,7 +722,7 @@ object CdrCalculette: TCdrCalculette
             end
             object grdDonnees: TStringGrid
               Left = 4
-              Height = 480
+              Height = 520
               Top = 76
               Width = 961
               Anchors = [akTop, akLeft, akRight, akBottom]
@@ -783,21 +783,21 @@ object CdrCalculette: TCdrCalculette
         object PairSplitterSide4: TPairSplitterSide
           Cursor = crArrow
           Left = 981
-          Height = 704
+          Height = 744
           Top = 0
-          Width = 241
-          ClientWidth = 241
-          ClientHeight = 704
+          Width = 223
+          ClientWidth = 223
+          ClientHeight = 744
           object Panel6: TPanel
             Left = 0
-            Height = 704
+            Height = 744
             Top = 0
-            Width = 241
+            Width = 223
             Align = alClient
             Anchors = [akTop, akRight, akBottom]
             BevelOuter = bvLowered
-            ClientHeight = 704
-            ClientWidth = 241
+            ClientHeight = 744
+            ClientWidth = 223
             TabOrder = 0
             OnResize = Panel6Resize
             object Label10: TLabel
@@ -812,7 +812,7 @@ object CdrCalculette: TCdrCalculette
               Left = 88
               Height = 24
               Top = 4
-              Width = 149
+              Width = 131
               Anchors = [akTop, akLeft, akRight]
               ItemHeight = 16
               ItemIndex = 0
@@ -837,7 +837,7 @@ object CdrCalculette: TCdrCalculette
               Left = 88
               Height = 24
               Top = 36
-              Width = 149
+              Width = 131
               Anchors = [akTop, akLeft, akRight]
               ItemHeight = 16
               ItemIndex = 0
@@ -890,7 +890,7 @@ object CdrCalculette: TCdrCalculette
               Left = 98
               Height = 24
               Top = 116
-              Width = 139
+              Width = 121
               Anchors = [akTop, akLeft, akRight]
               ItemHeight = 16
               OnChange = cmbColEtiquettesChange
@@ -901,7 +901,7 @@ object CdrCalculette: TCdrCalculette
               Left = 98
               Height = 24
               Top = 88
-              Width = 139
+              Width = 121
               Anchors = [akTop, akLeft, akRight]
               ItemHeight = 16
               OnChange = cmbColEtiquettesChange
@@ -928,7 +928,7 @@ object CdrCalculette: TCdrCalculette
               Left = 98
               Height = 24
               Top = 172
-              Width = 139
+              Width = 121
               Anchors = [akTop, akLeft, akRight]
               ItemHeight = 16
               OnChange = cmbColObservationsChange
@@ -939,7 +939,7 @@ object CdrCalculette: TCdrCalculette
               Left = 98
               Height = 24
               Top = 144
-              Width = 139
+              Width = 121
               Anchors = [akTop, akLeft, akRight]
               ItemHeight = 16
               OnChange = cmbColDescriptionChange
@@ -1014,7 +1014,7 @@ object CdrCalculette: TCdrCalculette
               Left = 98
               Height = 24
               Top = 256
-              Width = 139
+              Width = 121
               Anchors = [akTop, akLeft, akRight]
               ItemHeight = 16
               OnChange = cmbColYSourceChange
@@ -1025,7 +1025,7 @@ object CdrCalculette: TCdrCalculette
               Left = 98
               Height = 24
               Top = 284
-              Width = 139
+              Width = 121
               Anchors = [akTop, akLeft, akRight]
               ItemHeight = 16
               OnChange = cmbColPhotoChange
@@ -1042,18 +1042,18 @@ object CdrCalculette: TCdrCalculette
             end
             object grbxAdditionalLayers: TGroupBox
               Left = 2
-              Height = 380
+              Height = 420
               Top = 316
-              Width = 239
+              Width = 221
               Anchors = [akTop, akLeft, akRight, akBottom]
               Caption = 'Couches additionnelles'
-              ClientHeight = 359
-              ClientWidth = 235
+              ClientHeight = 399
+              ClientWidth = 217
               TabOrder = 14
               object SpeedButton23: TSpeedButton
                 Left = 40
                 Height = 40
-                Top = 318
+                Top = 358
                 Width = 40
                 Action = acOSMAddLayer
                 Anchors = [akLeft, akBottom]
@@ -1064,7 +1064,7 @@ object CdrCalculette: TCdrCalculette
               object SpeedButton26: TSpeedButton
                 Left = 120
                 Height = 40
-                Top = 318
+                Top = 358
                 Width = 40
                 Action = acOSMDeleteLayer
                 Anchors = [akLeft, akBottom]
@@ -1075,7 +1075,7 @@ object CdrCalculette: TCdrCalculette
               object SpeedButton27: TSpeedButton
                 Left = 159
                 Height = 40
-                Top = 317
+                Top = 357
                 Width = 40
                 Action = acOSMRemoveAllLayers
                 Anchors = [akLeft, akBottom]
@@ -1085,9 +1085,9 @@ object CdrCalculette: TCdrCalculette
               end
               object lsbAdditionalLayers: TListBox
                 Left = 0
-                Height = 261
+                Height = 301
                 Top = 56
-                Width = 232
+                Width = 214
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 ItemHeight = 20
                 OnDblClick = lsbAdditionalLayersDblClick
@@ -1108,7 +1108,7 @@ object CdrCalculette: TCdrCalculette
                 Left = 80
                 Height = 24
                 Top = 4
-                Width = 152
+                Width = 134
                 Anchors = [akTop, akLeft, akRight]
                 ItemHeight = 16
                 OnChange = cmbColAdditionalOSMLayersChange
@@ -1118,7 +1118,7 @@ object CdrCalculette: TCdrCalculette
               object SpeedButton29: TSpeedButton
                 Left = 0
                 Height = 40
-                Top = 318
+                Top = 358
                 Width = 40
                 Action = acOSMExtractLayersFromTableau
                 Anchors = [akLeft, akBottom]
@@ -1129,7 +1129,7 @@ object CdrCalculette: TCdrCalculette
               object SpeedButton30: TSpeedButton
                 Left = 198
                 Height = 40
-                Top = 318
+                Top = 358
                 Width = 40
                 Action = acCopyLayers
                 Anchors = [akLeft, akBottom]
@@ -1140,7 +1140,7 @@ object CdrCalculette: TCdrCalculette
               object SpeedButton31: TSpeedButton
                 Left = 80
                 Height = 40
-                Top = 318
+                Top = 358
                 Width = 40
                 Action = acOSMEditLayer
                 Anchors = [akLeft, akBottom]
@@ -1152,7 +1152,7 @@ object CdrCalculette: TCdrCalculette
                 Left = 2
                 Height = 18
                 Top = 36
-                Width = 230
+                Width = 212
                 DragReorder = False
                 Sections = <                
                   item
@@ -1200,7 +1200,7 @@ object CdrCalculette: TCdrCalculette
               object SpeedButton32: TSpeedButton
                 Left = 237
                 Height = 40
-                Top = 318
+                Top = 358
                 Width = 40
                 Action = acPasteLayers
                 Anchors = [akLeft, akBottom]
@@ -1701,8 +1701,8 @@ object CdrCalculette: TCdrCalculette
     end
     object tabShtDeclimag: TTabSheet
       Caption = 'tabShtDeclimag'
-      ClientHeight = 704
-      ClientWidth = 1222
+      ClientHeight = 746
+      ClientWidth = 1204
       Enabled = False
       object lbDeclimagUnitaire: TStaticText
         Left = 1
@@ -1720,12 +1720,12 @@ object CdrCalculette: TCdrCalculette
         Left = 1
         Height = 64
         Top = 28
-        Width = 1344
+        Width = 1326
         Anchors = [akTop, akLeft, akRight]
         BevelInner = bvRaised
         BevelOuter = bvLowered
         ClientHeight = 64
-        ClientWidth = 1344
+        ClientWidth = 1326
         TabOrder = 1
         object Long: TLabel
           Left = 196
@@ -1890,7 +1890,7 @@ object CdrCalculette: TCdrCalculette
           Value = 0
         end
         object lbDescDeclimagCalculator: TStaticText
-          Left = 1179
+          Left = 1161
           Height = 56
           Top = 4
           Width = 159
@@ -1935,20 +1935,20 @@ object CdrCalculette: TCdrCalculette
       end
       object pnlTableauDeclimag: TPanel
         Left = 1
-        Height = 586
+        Height = 628
         Top = 122
-        Width = 1344
+        Width = 1200
         Anchors = [akTop, akLeft, akRight, akBottom]
         BevelInner = bvRaised
         BevelOuter = bvLowered
-        ClientHeight = 586
-        ClientWidth = 1344
+        ClientHeight = 628
+        ClientWidth = 1200
         TabOrder = 3
         object grdDeclinaisons: TStringGrid
           Left = 5
-          Height = 573
+          Height = 615
           Top = 7
-          Width = 1237
+          Width = 1093
           Anchors = [akTop, akLeft, akRight, akBottom]
           TabOrder = 0
           TitleFont.CharSet = ANSI_CHARSET
@@ -1960,7 +1960,7 @@ object CdrCalculette: TCdrCalculette
           TitleFont.Style = [fsBold]
         end
         object Label2: TLabel
-          Left = 1265
+          Left = 1121
           Height = 16
           Top = 7
           Width = 37
@@ -1969,7 +1969,7 @@ object CdrCalculette: TCdrCalculette
           ParentColor = False
         end
         object editAnneeDepart: TCurrencyEdit
-          Left = 1247
+          Left = 1103
           Height = 24
           Top = 32
           Width = 88
@@ -1983,7 +1983,7 @@ object CdrCalculette: TCdrCalculette
           Value = 1985
         end
         object Label5: TLabel
-          Left = 1256
+          Left = 1112
           Height = 16
           Top = 64
           Width = 20
@@ -1992,7 +1992,7 @@ object CdrCalculette: TCdrCalculette
           ParentColor = False
         end
         object editAnneeArrivee: TCurrencyEdit
-          Left = 1247
+          Left = 1103
           Height = 24
           Top = 88
           Width = 88
@@ -2006,7 +2006,7 @@ object CdrCalculette: TCdrCalculette
           Value = 2015
         end
         object SpeedButton11: TSpeedButton
-          Left = 1267
+          Left = 1123
           Height = 50
           Top = 124
           Width = 50
@@ -2017,7 +2017,7 @@ object CdrCalculette: TCdrCalculette
           ParentShowHint = False
         end
         object SpeedButton12: TSpeedButton
-          Left = 1267
+          Left = 1123
           Height = 50
           Top = 184
           Width = 50
@@ -2199,543 +2199,689 @@ object CdrCalculette: TCdrCalculette
     end
     object tabShtInerties: TTabSheet
       Caption = 'tabShtInerties'
-      ClientHeight = 704
-      ClientWidth = 1222
-      object Panel2: TPanel
-        Left = 356
-        Height = 697
-        Top = 4
-        Width = 1076
-        Anchors = [akTop, akLeft, akRight, akBottom]
-        BevelInner = bvRaised
-        BevelOuter = bvLowered
-        Caption = 'Panel2'
-        ClientHeight = 697
-        ClientWidth = 1076
-        TabOrder = 0
-        object PageControl2: TPageControl
-          Left = 8
-          Height = 686
-          Top = 12
-          Width = 759
-          ActivePage = TabSheet2
-          Anchors = [akTop, akLeft, akRight, akBottom]
-          TabIndex = 1
-          TabOrder = 0
-          object TabSheet1: TTabSheet
-            Caption = 'Section'
-            ClientHeight = 682
-            ClientWidth = 753
-            inline CdrDGCDrawingContext1: TCdrDGCDrawingContext
-              Height = 657
-              Width = 749
-              ClientHeight = 657
-              ClientWidth = 749
-              DesignTop = 201
-              inherited pnlVue: TPanel
-                Height = 621
-                Width = 718
-                ClientHeight = 621
-                ClientWidth = 718
-                inherited Vue: TPaintBox
-                  Height = 619
-                  Width = 716
-                end
-              end
-              inherited lbMousePosition: TStaticText
-                Top = 626
-                Width = 614
-              end
-              inherited SpeedButton12: TSpeedButton
-                Left = 717
-                Flat = False
-              end
-              inherited SpeedButton13: TSpeedButton
-                Left = 717
-                Flat = False
-              end
-              inherited SpeedButton14: TSpeedButton
-                Left = 717
-                Flat = False
-              end
-              inherited SpeedButton15: TSpeedButton
-                Left = 717
-                Flat = False
-              end
-              inherited SpeedButton16: TSpeedButton
-                Left = 717
-                Flat = False
-              end
-              inherited SpeedButton17: TSpeedButton
-                Left = 717
-                Flat = False
-              end
-              inherited SpeedButton18: TSpeedButton
-                Left = 717
-                Top = 591
-                Flat = False
-              end
-              inherited SpeedButton19: TSpeedButton
-                Left = 654
-                Top = 625
-                Flat = False
-              end
-              inherited SpeedButton20: TSpeedButton
-                Left = 686
-                Top = 625
-                Flat = False
-              end
-              inherited SpeedButton21: TSpeedButton
-                Left = 717
-                Top = 625
-              end
-              inherited SpeedButton22: TSpeedButton
-                Left = 622
-                Top = 625
-                Flat = False
-              end
-            end
-          end
-          object TabSheet2: TTabSheet
-            Caption = 'Cercle de MOHR'
-            ClientHeight = 657
-            ClientWidth = 751
-            inline CdrDGCDrawingContext2: TCdrDGCDrawingContext
-              Height = 657
-              Width = 751
-              ClientHeight = 657
-              ClientWidth = 751
-              DesignTop = 201
-              inherited pnlVue: TPanel
-                Height = 621
-                Width = 720
-                ClientHeight = 621
-                ClientWidth = 720
-                inherited Vue: TPaintBox
-                  Height = 619
-                  Width = 718
-                end
-              end
-              inherited lbMousePosition: TStaticText
-                Top = 626
-                Width = 616
-              end
-              inherited SpeedButton12: TSpeedButton
-                Left = 719
-                Flat = False
-              end
-              inherited SpeedButton13: TSpeedButton
-                Left = 719
-                Flat = False
-              end
-              inherited SpeedButton14: TSpeedButton
-                Left = 719
-                Flat = False
-              end
-              inherited SpeedButton15: TSpeedButton
-                Left = 719
-                Flat = False
-              end
-              inherited SpeedButton16: TSpeedButton
-                Left = 719
-                Flat = False
-              end
-              inherited SpeedButton17: TSpeedButton
-                Left = 719
-                Flat = False
-              end
-              inherited SpeedButton18: TSpeedButton
-                Left = 719
-                Top = 591
-                Flat = False
-              end
-              inherited SpeedButton19: TSpeedButton
-                Left = 656
-                Top = 625
-                Flat = False
-              end
-              inherited SpeedButton20: TSpeedButton
-                Left = 688
-                Top = 625
-                Flat = False
-              end
-              inherited SpeedButton21: TSpeedButton
-                Left = 719
-                Top = 625
-              end
-              inherited SpeedButton22: TSpeedButton
-                Left = 624
-                Top = 625
-                Flat = False
-              end
-            end
-          end
-        end
-      end
-      object Panel12: TPanel
-        Left = 4
-        Height = 602
-        Top = 72
-        Width = 348
-        Anchors = [akTop, akLeft, akBottom]
-        BevelInner = bvLowered
-        ClientHeight = 602
-        ClientWidth = 348
-        TabOrder = 1
-        object grdCoordonneesSection: TStringGrid
-          Left = 6
-          Height = 262
-          Top = 4
-          Width = 337
-          Anchors = [akTop, akLeft, akRight, akBottom]
-          ColCount = 3
-          Columns = <          
-            item
-              Title.Alignment = taCenter
-              Title.Caption = 'X'
-              Width = 120
-            end          
-            item
-              Title.Alignment = taCenter
-              Title.Caption = 'Y'
-              Width = 120
-            end>
-          Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goSmoothScroll]
-          RowCount = 500
-          TabOrder = 0
-          TitleFont.CharSet = ANSI_CHARSET
-          TitleFont.Color = clBlack
-          TitleFont.Height = -13
-          TitleFont.Name = 'Arial'
-          TitleFont.Pitch = fpVariable
-          TitleFont.Quality = fqDraft
-          TitleFont.Style = [fsBold]
-        end
-        object Panel14: TPanel
-          Left = 6
-          Height = 328
-          Top = 270
-          Width = 337
-          Anchors = [akLeft, akRight, akBottom]
-          BevelOuter = bvLowered
-          ClientHeight = 328
-          ClientWidth = 337
-          TabOrder = 1
-          object Label38: TLabel
-            Left = 4
-            Height = 16
-            Top = 24
-            Width = 29
-            Caption = 'Xg ='
-            ParentColor = False
-          end
-          object Label39: TLabel
-            Left = 4
-            Height = 16
-            Top = 48
-            Width = 28
-            Caption = 'Yg ='
-            ParentColor = False
-          end
-          object lbCentroidX: TStaticText
-            Left = 100
-            Height = 17
-            Top = 24
-            Width = 204
-            BorderStyle = sbsSunken
-            Caption = '0'
-            TabOrder = 0
-          end
-          object lbCentroidY: TStaticText
-            Left = 100
-            Height = 17
-            Top = 48
-            Width = 204
-            BorderStyle = sbsSunken
-            Caption = '0'
-            TabOrder = 1
-          end
-          object Label40: TLabel
-            Left = 4
-            Height = 16
-            Top = 161
-            Width = 45
-            Caption = 'Ix''Gx ='
-            ParentColor = False
-          end
-          object Label41: TLabel
-            Left = 4
-            Height = 16
-            Top = 184
-            Width = 43
-            Caption = 'Iy''Gy ='
-            ParentColor = False
-          end
-          object Label42: TLabel
-            Left = 4
-            Height = 16
-            Top = 308
-            Width = 56
-            Caption = 'Alpha0 ='
-            ParentColor = False
-          end
-          object lbAnglePrincipal: TStaticText
-            Left = 100
-            Height = 17
-            Top = 308
-            Width = 204
-            BorderStyle = sbsSunken
-            Caption = '0'
-            TabOrder = 2
-          end
-          object lbIyGy: TStaticText
-            Left = 100
-            Height = 17
-            Top = 184
-            Width = 204
-            BorderStyle = sbsSunken
-            Caption = '0'
-            TabOrder = 3
-          end
-          object lbIxGx: TStaticText
-            Left = 100
-            Height = 17
-            Top = 160
-            Width = 204
-            BorderStyle = sbsSunken
-            Caption = '0'
-            TabOrder = 4
-          end
-          object lbAire: TStaticText
-            Left = 100
-            Height = 17
-            Top = 92
-            Width = 204
-            BorderStyle = sbsSunken
-            Caption = '0'
-            TabOrder = 5
-          end
-          object Label43: TLabel
-            Left = 4
-            Height = 16
-            Top = 92
-            Width = 38
-            Caption = 'Aire ='
-            ParentColor = False
-          end
-          object Label44: TLabel
-            Left = 4
-            Height = 16
-            Top = 116
-            Width = 75
-            Caption = 'Périmètre ='
-            ParentColor = False
-          end
-          object lbPerimetre: TStaticText
-            Left = 100
-            Height = 17
-            Top = 116
-            Width = 204
-            BorderStyle = sbsSunken
-            Caption = '0'
-            TabOrder = 6
-          end
-          object Label45: TLabel
-            Left = 4
-            Height = 16
-            Top = 208
-            Width = 19
-            Caption = 'Ixy'
-            ParentColor = False
-          end
-          object lbIxy: TStaticText
-            Left = 100
-            Height = 17
-            Top = 208
-            Width = 204
-            BorderStyle = sbsSunken
-            Caption = '0'
-            TabOrder = 7
-          end
-          object Label46: TLabel
-            Left = 4
-            Height = 16
-            Top = 257
-            Width = 61
-            Caption = 'Inertie I ='
-            ParentColor = False
-          end
-          object lbInertieI: TStaticText
-            Left = 100
-            Height = 17
-            Top = 256
-            Width = 204
-            BorderStyle = sbsSunken
-            Caption = '0'
-            TabOrder = 8
-          end
-          object Label47: TLabel
-            Left = 4
-            Height = 16
-            Top = 281
-            Width = 65
-            Caption = 'Inertie II ='
-            ParentColor = False
-          end
-          object lbInertieII: TStaticText
-            Left = 100
-            Height = 17
-            Top = 280
-            Width = 204
-            BorderStyle = sbsSunken
-            Caption = '0'
-            TabOrder = 9
-          end
-          object Label33: TLabel
-            Left = 4
-            Height = 16
-            Top = 236
-            Width = 216
-            Caption = 'Moments quadratiques principaux'
-            Font.CharSet = ANSI_CHARSET
-            Font.Color = clBlue
-            Font.Height = -13
-            Font.Name = 'Arial'
-            Font.Pitch = fpVariable
-            Font.Quality = fqDraft
-            Font.Style = [fsBold, fsUnderline]
-            ParentColor = False
-            ParentFont = False
-          end
-          object Label34: TLabel
-            Left = 4
-            Height = 16
-            Top = 140
-            Width = 233
-            Caption = 'Moments quadratiques Ixx, Iyy et Ixy'
-            Font.CharSet = ANSI_CHARSET
-            Font.Color = clBlue
-            Font.Height = -13
-            Font.Name = 'Arial'
-            Font.Pitch = fpVariable
-            Font.Quality = fqDraft
-            Font.Style = [fsBold, fsUnderline]
-            ParentColor = False
-            ParentFont = False
-            OnClick = Label34Click
-          end
-          object Label37: TLabel
-            Left = 4
-            Height = 16
-            Top = 72
-            Width = 108
-            Caption = 'Aire et périmètre'
-            Font.CharSet = ANSI_CHARSET
-            Font.Color = clBlue
-            Font.Height = -13
-            Font.Name = 'Arial'
-            Font.Pitch = fpVariable
-            Font.Quality = fqDraft
-            Font.Style = [fsBold, fsUnderline]
-            ParentColor = False
-            ParentFont = False
-          end
-          object Label48: TLabel
-            Left = 4
-            Height = 16
+      ClientHeight = 688
+      ClientWidth = 1152
+      object PairSplitter5: TPairSplitter
+        Left = 0
+        Height = 688
+        Top = 0
+        Width = 1152
+        Align = alClient
+        Position = 460
+        object PairSplitterSide9: TPairSplitterSide
+          Cursor = crArrow
+          Left = 0
+          Height = 688
+          Top = 0
+          Width = 460
+          ClientWidth = 460
+          ClientHeight = 688
+          object Panel13: TPanel
+            Left = 0
+            Height = 32
             Top = 4
-            Width = 183
-            Caption = 'Position du centre de gravité'
-            Font.CharSet = ANSI_CHARSET
-            Font.Color = clBlue
-            Font.Height = -13
-            Font.Name = 'Arial'
-            Font.Pitch = fpVariable
-            Font.Quality = fqDraft
-            Font.Style = [fsBold, fsUnderline]
-            ParentColor = False
-            ParentFont = False
+            Width = 455
+            Anchors = [akTop, akLeft, akRight]
+            BevelInner = bvLowered
+            ClientHeight = 32
+            ClientWidth = 455
+            TabOrder = 0
+            object btnTestInertie: TButton
+              Left = 6
+              Height = 25
+              Top = 4
+              Width = 95
+              Caption = 'Test'
+              OnClick = btnTestInertieClick
+              TabOrder = 0
+            end
+            object btnBackGrdInertieFigure: TColorButton
+              Left = 268
+              Height = 25
+              Top = 4
+              Width = 75
+              BorderWidth = 2
+              ButtonColorSize = 16
+              ButtonColor = 16770250
+            end
+            object Button3: TButton
+              Left = 128
+              Height = 25
+              Top = 4
+              Width = 75
+              Caption = 'Button3'
+              OnClick = Button3Click
+              TabOrder = 1
+            end
+          end
+          object Panel12: TPanel
+            Left = 0
+            Height = 646
+            Top = 40
+            Width = 455
+            Anchors = [akTop, akLeft, akRight, akBottom]
+            BevelInner = bvLowered
+            ClientHeight = 646
+            ClientWidth = 455
+            TabOrder = 1
+            object grdCoordonneesSection: TStringGrid
+              Left = 6
+              Height = 275
+              Top = 4
+              Width = 444
+              Anchors = [akTop, akLeft, akRight, akBottom]
+              ColCount = 3
+              Columns = <              
+                item
+                  Title.Alignment = taCenter
+                  Title.Caption = 'X'
+                  Width = 120
+                end              
+                item
+                  Title.Alignment = taCenter
+                  Title.Caption = 'Y'
+                  Width = 120
+                end>
+              Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goSmoothScroll]
+              RowCount = 500
+              TabOrder = 0
+              TitleFont.CharSet = ANSI_CHARSET
+              TitleFont.Color = clBlack
+              TitleFont.Height = -13
+              TitleFont.Name = 'Arial'
+              TitleFont.Pitch = fpVariable
+              TitleFont.Quality = fqDraft
+              TitleFont.Style = [fsBold]
+            end
+            object Panel14: TPanel
+              Left = 4
+              Height = 328
+              Top = 312
+              Width = 444
+              Anchors = [akLeft, akRight, akBottom]
+              BevelOuter = bvLowered
+              ClientHeight = 328
+              ClientWidth = 444
+              TabOrder = 1
+              object Label38: TLabel
+                Left = 4
+                Height = 16
+                Top = 24
+                Width = 29
+                Caption = 'Xg ='
+                ParentColor = False
+              end
+              object Label39: TLabel
+                Left = 4
+                Height = 16
+                Top = 48
+                Width = 28
+                Caption = 'Yg ='
+                ParentColor = False
+              end
+              object lbCentroidX: TStaticText
+                Left = 100
+                Height = 17
+                Top = 24
+                Width = 311
+                Anchors = [akTop, akLeft, akRight]
+                BorderStyle = sbsSunken
+                Caption = '0'
+                TabOrder = 0
+              end
+              object lbCentroidY: TStaticText
+                Left = 100
+                Height = 17
+                Top = 48
+                Width = 311
+                Anchors = [akTop, akLeft, akRight]
+                BorderStyle = sbsSunken
+                Caption = '0'
+                TabOrder = 1
+              end
+              object Label40: TLabel
+                Left = 4
+                Height = 16
+                Top = 161
+                Width = 45
+                Caption = 'Ix''Gx ='
+                ParentColor = False
+              end
+              object Label41: TLabel
+                Left = 4
+                Height = 16
+                Top = 184
+                Width = 43
+                Caption = 'Iy''Gy ='
+                ParentColor = False
+              end
+              object Label42: TLabel
+                Left = 4
+                Height = 16
+                Top = 306
+                Width = 56
+                Caption = 'Alpha0 ='
+                ParentColor = False
+              end
+              object lbAnglePrincipal: TStaticText
+                Left = 100
+                Height = 17
+                Top = 306
+                Width = 311
+                Anchors = [akTop, akLeft, akRight]
+                BorderStyle = sbsSunken
+                Caption = '0'
+                TabOrder = 2
+              end
+              object lbIyGy: TStaticText
+                Left = 100
+                Height = 17
+                Top = 184
+                Width = 311
+                Anchors = [akTop, akLeft, akRight]
+                BorderStyle = sbsSunken
+                Caption = '0'
+                TabOrder = 3
+              end
+              object lbIxGx: TStaticText
+                Left = 100
+                Height = 17
+                Top = 160
+                Width = 311
+                Anchors = [akTop, akLeft, akRight]
+                BorderStyle = sbsSunken
+                Caption = '0'
+                TabOrder = 4
+              end
+              object lbAire: TStaticText
+                Left = 100
+                Height = 17
+                Top = 92
+                Width = 311
+                Anchors = [akTop, akLeft, akRight]
+                BorderStyle = sbsSunken
+                Caption = '0'
+                TabOrder = 5
+              end
+              object Label43: TLabel
+                Left = 4
+                Height = 16
+                Top = 92
+                Width = 38
+                Caption = 'Aire ='
+                ParentColor = False
+              end
+              object Label44: TLabel
+                Left = 4
+                Height = 16
+                Top = 116
+                Width = 75
+                Caption = 'Périmètre ='
+                ParentColor = False
+              end
+              object lbPerimetre: TStaticText
+                Left = 100
+                Height = 17
+                Top = 116
+                Width = 311
+                Anchors = [akTop, akLeft, akRight]
+                BorderStyle = sbsSunken
+                Caption = '0'
+                TabOrder = 6
+              end
+              object Label45: TLabel
+                Left = 4
+                Height = 16
+                Top = 208
+                Width = 19
+                Caption = 'Ixy'
+                ParentColor = False
+              end
+              object lbIxy: TStaticText
+                Left = 100
+                Height = 17
+                Top = 208
+                Width = 311
+                Anchors = [akTop, akLeft, akRight]
+                BorderStyle = sbsSunken
+                Caption = '0'
+                TabOrder = 7
+              end
+              object Label46: TLabel
+                Left = 4
+                Height = 16
+                Top = 257
+                Width = 61
+                Caption = 'Inertie I ='
+                ParentColor = False
+              end
+              object lbInertieI: TStaticText
+                Left = 100
+                Height = 17
+                Top = 256
+                Width = 311
+                Anchors = [akTop, akLeft, akRight]
+                BorderStyle = sbsSunken
+                Caption = '0'
+                TabOrder = 8
+              end
+              object Label47: TLabel
+                Left = 4
+                Height = 16
+                Top = 281
+                Width = 65
+                Caption = 'Inertie II ='
+                ParentColor = False
+              end
+              object lbInertieII: TStaticText
+                Left = 100
+                Height = 17
+                Top = 280
+                Width = 311
+                Anchors = [akTop, akLeft, akRight]
+                BorderStyle = sbsSunken
+                Caption = '0'
+                TabOrder = 9
+              end
+              object Label33: TLabel
+                Left = 4
+                Height = 16
+                Top = 236
+                Width = 216
+                Caption = 'Moments quadratiques principaux'
+                Font.CharSet = ANSI_CHARSET
+                Font.Color = clBlue
+                Font.Height = -13
+                Font.Name = 'Arial'
+                Font.Pitch = fpVariable
+                Font.Quality = fqDraft
+                Font.Style = [fsBold, fsUnderline]
+                ParentColor = False
+                ParentFont = False
+              end
+              object Label34: TLabel
+                Left = 4
+                Height = 16
+                Top = 140
+                Width = 233
+                Caption = 'Moments quadratiques Ixx, Iyy et Ixy'
+                Font.CharSet = ANSI_CHARSET
+                Font.Color = clBlue
+                Font.Height = -13
+                Font.Name = 'Arial'
+                Font.Pitch = fpVariable
+                Font.Quality = fqDraft
+                Font.Style = [fsBold, fsUnderline]
+                ParentColor = False
+                ParentFont = False
+                OnClick = Label34Click
+              end
+              object Label37: TLabel
+                Left = 4
+                Height = 16
+                Top = 72
+                Width = 108
+                Caption = 'Aire et périmètre'
+                Font.CharSet = ANSI_CHARSET
+                Font.Color = clBlue
+                Font.Height = -13
+                Font.Name = 'Arial'
+                Font.Pitch = fpVariable
+                Font.Quality = fqDraft
+                Font.Style = [fsBold, fsUnderline]
+                ParentColor = False
+                ParentFont = False
+              end
+              object Label48: TLabel
+                Left = 4
+                Height = 16
+                Top = 4
+                Width = 183
+                Caption = 'Position du centre de gravité'
+                Font.CharSet = ANSI_CHARSET
+                Font.Color = clBlue
+                Font.Height = -13
+                Font.Name = 'Arial'
+                Font.Pitch = fpVariable
+                Font.Quality = fqDraft
+                Font.Style = [fsBold, fsUnderline]
+                ParentColor = False
+                ParentFont = False
+              end
+            end
+            object btnCalculerDepuisGrille: TButton
+              Left = 6
+              Height = 25
+              Top = 283
+              Width = 130
+              Anchors = [akLeft, akBottom]
+              Caption = 'Calculer'
+              OnClick = btnCalculerDepuisGrilleClick
+              TabOrder = 2
+            end
           end
         end
-      end
-      object Panel13: TPanel
-        Left = 4
-        Height = 64
-        Top = 4
-        Width = 348
-        BevelInner = bvLowered
-        ClientHeight = 64
-        ClientWidth = 348
-        TabOrder = 2
-        object Button1: TButton
-          Left = 6
-          Height = 25
-          Top = 4
-          Width = 75
-          Caption = 'Button1'
-          OnClick = Button1Click
-          TabOrder = 0
-        end
-        object btnBackGrdInertieFigure: TColorButton
-          Left = 268
-          Height = 25
-          Top = 4
-          Width = 75
-          BorderWidth = 2
-          ButtonColorSize = 16
-          ButtonColor = 16770250
-        end
-        object Button2: TButton
-          Left = 6
-          Height = 25
-          Top = 32
-          Width = 75
-          Caption = 'Button2'
-          OnClick = Button2Click
-          TabOrder = 1
-        end
-        object Button3: TButton
-          Left = 128
-          Height = 25
-          Top = 4
-          Width = 75
-          Caption = 'Button3'
-          OnClick = Button3Click
-          TabOrder = 2
+        object PairSplitterSide10: TPairSplitterSide
+          Cursor = crArrow
+          Left = 465
+          Height = 688
+          Top = 0
+          Width = 687
+          ClientWidth = 687
+          ClientHeight = 688
+          object PageCtrlInerties: TPageControl
+            Left = 0
+            Height = 688
+            Top = 0
+            Width = 687
+            ActivePage = TabSheet3
+            Align = alClient
+            TabIndex = 0
+            TabOrder = 0
+            object TabSheet3: TTabSheet
+              Caption = 'Section'
+              ClientHeight = 659
+              ClientWidth = 679
+              inline CdrDGCDrawingContext1: TCdrDGCDrawingContext
+                Height = 659
+                Width = 679
+                ClientHeight = 659
+                ClientWidth = 679
+                DesignTop = 201
+                inherited pnlVue: TPanel
+                  Height = 623
+                  Width = 648
+                  ClientHeight = 623
+                  ClientWidth = 648
+                  inherited Vue: TPaintBox
+                    Height = 621
+                    Width = 646
+                  end
+                end
+                inherited lbMousePosition: TStaticText
+                  Top = 628
+                  Width = 544
+                end
+                inherited SpeedButton12: TSpeedButton
+                  Left = 647
+                  Flat = False
+                end
+                inherited SpeedButton13: TSpeedButton
+                  Left = 647
+                  Flat = False
+                end
+                inherited SpeedButton14: TSpeedButton
+                  Left = 647
+                  Flat = False
+                end
+                inherited SpeedButton15: TSpeedButton
+                  Left = 647
+                  Flat = False
+                end
+                inherited SpeedButton16: TSpeedButton
+                  Left = 647
+                  Flat = False
+                end
+                inherited SpeedButton17: TSpeedButton
+                  Left = 647
+                  Flat = False
+                end
+                inherited SpeedButton18: TSpeedButton
+                  Left = 647
+                  Top = 593
+                  Flat = False
+                end
+                inherited SpeedButton19: TSpeedButton
+                  Left = 584
+                  Top = 627
+                  Flat = False
+                end
+                inherited SpeedButton20: TSpeedButton
+                  Left = 616
+                  Top = 627
+                  Flat = False
+                end
+                inherited SpeedButton21: TSpeedButton
+                  Left = 647
+                  Top = 627
+                end
+                inherited SpeedButton22: TSpeedButton
+                  Left = 552
+                  Top = 627
+                  Flat = False
+                end
+              end
+            end
+            object TabSheet4: TTabSheet
+              Caption = 'Cercle de MOHR'
+              ClientHeight = 736
+              ClientWidth = 786
+              inline CdrDGCDrawingContext2: TCdrDGCDrawingContext
+                Height = 736
+                Width = 786
+                ClientHeight = 736
+                ClientWidth = 786
+                DesignTop = 201
+                inherited pnlVue: TPanel
+                  Height = 700
+                  Width = 755
+                  ClientHeight = 700
+                  ClientWidth = 755
+                  inherited Vue: TPaintBox
+                    Height = 698
+                    Width = 753
+                  end
+                end
+                inherited lbMousePosition: TStaticText
+                  Top = 705
+                  Width = 651
+                end
+                inherited SpeedButton12: TSpeedButton
+                  Left = 754
+                  Flat = False
+                end
+                inherited SpeedButton13: TSpeedButton
+                  Left = 754
+                  Flat = False
+                end
+                inherited SpeedButton14: TSpeedButton
+                  Left = 754
+                  Flat = False
+                end
+                inherited SpeedButton15: TSpeedButton
+                  Left = 754
+                  Flat = False
+                end
+                inherited SpeedButton16: TSpeedButton
+                  Left = 754
+                  Flat = False
+                end
+                inherited SpeedButton17: TSpeedButton
+                  Left = 754
+                  Flat = False
+                end
+                inherited SpeedButton18: TSpeedButton
+                  Left = 754
+                  Top = 670
+                  Flat = False
+                end
+                inherited SpeedButton19: TSpeedButton
+                  Left = 691
+                  Top = 704
+                  Flat = False
+                end
+                inherited SpeedButton20: TSpeedButton
+                  Left = 723
+                  Top = 704
+                  Flat = False
+                end
+                inherited SpeedButton21: TSpeedButton
+                  Left = 754
+                  Top = 704
+                end
+                inherited SpeedButton22: TSpeedButton
+                  Left = 659
+                  Top = 704
+                  Flat = False
+                end
+              end
+            end
+          end
         end
       end
     end
     object tabShtTextures: TTabSheet
       Caption = 'tabShtTextures'
-      ClientHeight = 703
-      ClientWidth = 1222
+      ClientHeight = 744
+      ClientWidth = 1204
       inline CdrTextures1: TCdrTextures
-        Height = 703
-        Width = 1222
-        ClientHeight = 703
-        ClientWidth = 1222
+        Height = 744
+        Width = 1204
+        ClientHeight = 744
+        ClientWidth = 1204
         inherited Panel2: TPanel
-          Left = 811
+          Left = 793
         end
         inherited Panel3: TPanel
-          Left = 811
+          Left = 793
         end
         inherited Panel4: TPanel
-          Left = 811
+          Left = 793
         end
         inherited Panel1: TPanel
-          Width = 802
-          ClientWidth = 802
+          Width = 784
+          ClientWidth = 784
           inherited PaintBox1: TPaintBox
-            Width = 800
+            Width = 782
           end
         end
         inherited Panel6: TPanel
-          Left = 811
+          Left = 793
         end
         inherited editCodePascalTexture: TSynEdit
-          Height = 531
-          Width = 801
+          Height = 572
+          Width = 783
+        end
+      end
+    end
+    object tabShtImage: TTabSheet
+      Caption = 'tabShtImage'
+      ClientHeight = 743
+      ClientWidth = 1088
+      object PairSplitter4: TPairSplitter
+        Left = 0
+        Height = 743
+        Top = 0
+        Width = 1088
+        Align = alClient
+        Position = 492
+        object PairSplitterSide7: TPairSplitterSide
+          Cursor = crArrow
+          Left = 0
+          Height = 743
+          Top = 0
+          Width = 492
+          ClientWidth = 492
+          ClientHeight = 743
+          object btnOpenImage: TButton
+            Left = 0
+            Height = 25
+            Top = 4
+            Width = 183
+            Caption = 'btnOpenImage'
+            OnClick = btnOpenImageClick
+            TabOrder = 0
+          end
+          object btnCopyExifGrid: TButton
+            Left = 313
+            Height = 25
+            Top = 3
+            Width = 174
+            Anchors = [akTop, akRight]
+            Caption = 'btnCopyExifGrid'
+            OnClick = btnCopyExifGridClick
+            TabOrder = 1
+          end
+          object lbPhotoInfos: TStaticText
+            Left = 0
+            Height = 21
+            Top = 721
+            Width = 409
+            Anchors = [akLeft, akRight, akBottom]
+            BorderStyle = sbsSingle
+            TabOrder = 2
+          end
+          object btnAny: TButton
+            Left = 412
+            Height = 21
+            Top = 721
+            Width = 75
+            Anchors = [akRight, akBottom]
+            Caption = 'Copier'
+            OnClick = btnAnyClick
+            TabOrder = 3
+          end
+          object ExifGrid: TStringGrid
+            Left = 0
+            Height = 685
+            Top = 32
+            Width = 487
+            Anchors = [akTop, akLeft, akRight, akBottom]
+            Font.CharSet = ANSI_CHARSET
+            Font.Color = clBlack
+            Font.Height = -13
+            Font.Name = 'Arial'
+            Font.Pitch = fpVariable
+            Font.Quality = fqDraft
+            Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goSmoothScroll]
+            ParentFont = False
+            TabOrder = 4
+            TitleFont.CharSet = ANSI_CHARSET
+            TitleFont.Color = clBlack
+            TitleFont.Height = -13
+            TitleFont.Name = 'Arial'
+            TitleFont.Pitch = fpVariable
+            TitleFont.Quality = fqDraft
+            TitleFont.Style = [fsBold]
+          end
+        end
+        object PairSplitterSide8: TPairSplitterSide
+          Cursor = crArrow
+          Left = 497
+          Height = 743
+          Top = 0
+          Width = 591
+          ClientWidth = 591
+          ClientHeight = 743
+          object lbImageFilename: TStaticText
+            Left = 4
+            Height = 24
+            Top = 4
+            Width = 583
+            Anchors = [akTop, akLeft, akRight]
+            BorderStyle = sbsSingle
+            Caption = '--'
+            TabOrder = 0
+          end
+          object pnlImage: TPanel
+            Left = 4
+            Height = 710
+            Top = 32
+            Width = 583
+            Anchors = [akTop, akLeft, akRight, akBottom]
+            BorderStyle = bsSingle
+            ClientHeight = 706
+            ClientWidth = 579
+            TabOrder = 1
+            object Image: TImage
+              Left = 1
+              Height = 704
+              Top = 1
+              Width = 577
+              Align = alClient
+              Proportional = True
+            end
+          end
         end
       end
     end

@@ -147,7 +147,7 @@ var
 begin
   acNettoyerAntennes.Enabled := false;
   try
-    if (GHTopoQuestionOuiNon(GetResourceString(rsCDR_ANTENNES_CONFIRM_NETTOYAGE))) then
+    if (GHTopoQuestionOuiNon(rsCDR_ANTENNES_CONFIRM_NETTOYAGE)) then
     begin
       BF := FMyDocToporobot.GetProcDisplayProgression();
       FMyDocToporobot.SetProcDisplayProgression(DisplayProgression);
@@ -172,7 +172,7 @@ begin
     FMyDocToporobot.SetProcDisplayProgression(nil);
     if (FMyDocToporobot.GetSerieByNumeroSerie(editSimplyfySerieNoSerie.AsInteger, MySerie, QIdx)) then
     begin
-      if (GHTopoQuestionOuiNon(GetResourceString(rsCDR_ANTENNES_CONFIRM_SIMPLIFICATION))) then
+      if (GHTopoQuestionOuiNon(rsCDR_ANTENNES_CONFIRM_SIMPLIFICATION)) then
       begin
         FMyDocToporobot.ResetMarkersToDelete();
         FMyDocToporobot.SimplifyAntennesOfSerie(MySerie, editSimplificationTolerance.Value);
@@ -221,7 +221,7 @@ var
 begin
   try
     acSimplifyAntennesOfAll.Enabled := false;
-    if (GHTopoQuestionOuiNon(GetResourceString(rsCDR_ANTENNES_CONFIRM_SIMPLIFICATION))) then
+    if (GHTopoQuestionOuiNon(rsCDR_ANTENNES_CONFIRM_SIMPLIFICATION)) then
     begin
       BF := FMyDocToporobot.GetProcDisplayProgression();
       FMyDocToporobot.SetProcDisplayProgression(DisplayProgression);

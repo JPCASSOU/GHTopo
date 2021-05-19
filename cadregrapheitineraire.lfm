@@ -15,8 +15,8 @@ object CdrGrapheItineraire: TCdrGrapheItineraire
   Font.Style = [fsBold]
   ParentFont = False
   TabOrder = 0
-  DesignLeft = 918
-  DesignTop = 294
+  DesignLeft = 544
+  DesignTop = 136
   object Panel2: TPanel
     Left = 4
     Height = 96
@@ -299,7 +299,7 @@ object CdrGrapheItineraire: TCdrGrapheItineraire
       object btnGenererFichesPDF: TButton
         Left = 0
         Height = 25
-        Top = 457
+        Top = 456
         Width = 239
         Anchors = [akLeft, akBottom]
         Caption = 'Générer les fiches des points'
