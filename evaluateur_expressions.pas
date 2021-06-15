@@ -12,6 +12,7 @@ uses
   , SysUtils
   , Classes
   , IniFiles
+  , Common
 {$IFNDEF EVAL_EXPR_YOUSSEF}
   , fpexprpars
 {$ENDIF}
@@ -32,7 +33,7 @@ type
        FPExpressionParser: TFPExpressionParser;
     {$ENDIF}
     FListeDeVariables : TStringList;
-    function RemplacerVariablesParLeursValeurs(var MyExpression: string; out PosErr: integer): boolean;
+    function  RemplacerVariablesParLeursValeurs(var MyExpression: string; out PosErr: integer): boolean;
   public
     //FFichierIni: string;
     function  Initialiser(): boolean;
@@ -77,7 +78,7 @@ const
 }
 // 21/02/2014: Petite correction: la saisie de '.63' donne '0.63'
 
-const NB_OF_FUNCTIONS = 40;
+const NB_OF_FUNCTIONS = 42;
 
 const
   Identifiers: array [0..NB_OF_FUNCTIONS] of string =
@@ -122,7 +123,9 @@ const
       'tang',        //37
       'asing',       //38
       'acosg',       //39
-      'atang'        //40
+      'atang',       //40
+      'trunc',       //41
+      'round'        //42
      );
 
 
@@ -259,8 +262,6 @@ begin
     end;
     exit(false);   // avant de quitter avec Faux pour empêcher l'évaluation de l'expression
   end;
-
-
   // on recense les variables
   n := FListeDeVariables.Count;
   if (n = 0) then Exit(True); // pas de variables = on quitte direct
@@ -270,10 +271,7 @@ begin
     // on préfixe les noms de variables par le sigill $, comme en PHP
     // et on remplace toutes les occurrences de $var par leur valeur
     V := GetVariable(i);
-    MyExpression := StringReplace(MyExpression,
-                                  '$'+ Trim(V.Nom),
-                                  FloatToStr(V.Valeur),
-                                  [rfReplaceAll, rfIgnoreCase]);
+    MyExpression := StringReplace(MyExpression, '$'+ Trim(V.Nom),  FloatToStr(V.Valeur), [rfReplaceAll, rfIgnoreCase]);
   end;
   Result := True;
 end;
@@ -291,110 +289,98 @@ end;
 
 function TEvaluateurExpressions.Evaluate(const MyExpression: string; var Error: Integer; var Description: string; Identifier: string; Value: Double): Double;
 var
-  Idx, L: Integer;
+  Idx, L, StackLevel: Integer;
   Sign: Integer;
   Expression: string;
 
-  function Current: Char;
+  function Current(): Char;
   begin
-    if Idx <= L then
-      Result := Expression[Idx]
-    else
-      Result := #0;
+    if (Idx <= L) then Result := Expression[Idx]
+                  else Result := #0;
   end;
 
-  procedure Next;
+  procedure Next();
   begin
     inc(Idx);
   end;
 
-  procedure Skip;
+  procedure Skip();
   begin
-    while (Idx <= L) and (Current in [#32, #10, #13]) do
-      Next;
+    while ((Idx <= L) and (Current in [#32, #10, #13])) do Next();
   end;
 
-  procedure SkipReverse;
+  procedure SkipReverse();
   begin
-    while (Idx > 0) and (Current in [#32, #10, #13]) do
-      Dec(Idx);
+    while ((Idx > 0) and (Current in [#32, #10, #13])) do Dec(Idx);
   end;
 
-  function ReadIdentifier: string;
+  function ReadIdentifier(): string;
   begin
     Result := '';
     while (Idx <= L) and (LowCase(Current) in ['a'..'z', '0'..'9', '_']) do
     begin
       Result := Result + LowCase(Current);
-      Next;
+      Next();
     end;
   end;
 
-  function ReadFloat: Double;
+  function ReadFloat(): Double;
   var
     S: string;
+    procedure S666();
+    begin
+      S := S + Current();
+      Next();
+    end;
+    procedure S777(); inline;
+    begin
+      while (Idx <= L) and (Current in ['0'..'9']) do S666();
+    end;
+
   begin
     S := '';
-    while (Idx <= L) and (Current in ['0'..'9']) do
+    S777();
+    if (Current() = DefaultFormatSettings.DecimalSeparator) then
     begin
-      S := S + Current;
-      Next;
+      S666();
+      S777();
     end;
-    if (Current = DefaultFormatSettings.DecimalSeparator) then
+    if (LowCase(Current()) = 'e') then
     begin
-      S := S + Current;
-      Next;
-      while (Idx <= L) and (Current in ['0'..'9']) do
-      begin         
-        S := S + Current;
-        Next;
-      end;                
-    end;
-    if LowCase(Current) = 'e' then
-    begin
-      S := S + Current;
-      Next;
-      if Current in ['+', '-'] then
-      begin
-        S := S + Current;
-        Next;
-      end;
-      while (Idx <= L) and (Current in ['0'..'9']) do
-      begin
-        S := S + Current;
-        Next;
-      end;
+      S666();
+      if (Current() in ['+', '-']) then S666();
+      S777();
     end;
     Result := StrToFloatDef(S, 0.00);
   end;
 
-  function Factor: Double;
+  function Factor(): Double;
   var
     S: string;
     i: integer;
     R: Double;
     Sign: Integer;
   begin
-    Skip;
-    Result := 0;
+    Skip();
+    Result := 0.00;
     Sign := 1;
-    while (Idx <= L) and (Current in ['+', '-']) do
+    while (Idx <= L) and (Current() in ['+', '-']) do
     begin
       if Current = '-' then
       Sign := -1 * Sign;
-      Next;
-      Skip;
+      Next();
+      Skip();
     end;
     if (Idx > L) then
     begin
-      SkipReverse;
+      SkipReverse();
       Error := Idx;      
       Description := Err_Expr;
       Exit;
     end;
-    case LowCase(Current) of
+    case LowCase(Current()) of
       '0'..'9' : begin
-                   Result := Sign * ReadFloat;
+                   Result := Sign * ReadFloat();
                  end;
       ')'      : begin
                    Error := Idx;
@@ -406,43 +392,42 @@ var
                    S := '';
                    while (Idx <= l) and (i > 0) do
                    begin
-                     case Current of
+                     case Current() of
                        ')' : Dec(i);
                        '(' : Inc(i);
                      end;
-                     if (i > 0) then S := S + Current;
-                     Next;
+                     if (i > 0) then S := S + Current();
+                     Next();
                    end;  
                    if i <> 0 then
                    begin
                      Dec(Idx);
-                     SkipReverse;
+                     SkipReverse();
                      Error := Idx + 1;
                      Description := Err_Par;
                      Exit;
                    end;
                    Result := Sign * Evaluate(S, Error, Description, Identifier, Value);
-                   if Error <> 0 then
-                     Error := Idx + Error - Length(S) - 2;
+                   if (Error <> 0) then Error := Idx + Error - Length(S) - 2;
                  end;
       'a'..'z','_'
                : begin
-                   S := ReadIdentifier;
-                   if SameText(Identifier, S) then
+                   S := ReadIdentifier();
+                   if (SameText(Identifier, S)) then
                    begin
                      Result := Sign * Value;
                      Exit;
                    end;
                    for i := 0 to High(Identifiers) do
-                     if Identifiers[i] = S then
+                     if (Identifiers[i] = S) then
                      begin
                        case i of
                          0 : Result := Sign * Exp(1);
                          1 : Result := Sign * Pi;
-                         2 : Result := Sin(Factor);
-                         3 : Result := Cos(Factor);
+                         2 : Result := Sin(Factor());
+                         3 : Result := Cos(Factor());
                          4 : begin
-                               R := Factor;
+                               R := Factor();
                                if ModuloPi2(R) then
                                begin
                                  Error := Idx - 2;
@@ -453,7 +438,7 @@ var
                                Result := Tan(R);
                              end;
                          5 : begin
-                               R := Factor;
+                               R := Factor();
                                if (R > 1) or (R < -1) then
                                begin
                                  Error := Idx - 1;
@@ -463,7 +448,7 @@ var
                                Result := ArcSin(R);
                              end;
                          6 : begin
-                               R := Factor;
+                               R := Factor();
                                if (R > 1) or (R < -1) then
                                begin
                                  Error := Idx - 1;
@@ -472,8 +457,8 @@ var
                                end;
                                Result := ArcCos(R);
                              end;
-                         7 : Result := ArcTan(Factor);
-                         8 : Result := Exp(Factor);
+                         7 : Result := ArcTan(Factor());
+                         8 : Result := Exp(Factor());
                          9 : begin
                                R := Factor;
                                if R <= 0 then
@@ -485,7 +470,7 @@ var
                                Result := Ln(R);
                              end;
                          10: begin
-                               R := Factor;
+                               R := Factor();
                                if R <= 0 then
                                begin
                                  Error := Idx - 1;
@@ -495,7 +480,7 @@ var
                                Result := Log10(R);
                              end;
                          11: begin
-                               R := Factor;
+                               R := Factor();
                                if R < 0 then
                                begin
                                  Error := Idx - 1;
@@ -508,7 +493,7 @@ var
                          13: Result := Sinh(Factor);
                          14: Result := Cosh(Factor);
                          15: begin
-                               R := Factor;
+                               R := Factor();
                                if ModuloPi2(R) then
                                begin
                                  Error := Idx - 2;
@@ -518,44 +503,47 @@ var
                                Result := Tanh(R);
                              end;
                          16: begin
-                               R := Factor;
+                               R := Factor();
                                Result := ArcSinh(R);
                              end;
                          17: begin
-                               R := Factor;
+                               R := Factor();
                                Result := ArcCosh(R);
                              end;
                          18: begin
-                               R := Factor;
+                               R := Factor();
                                Result := ArcTanh(R);
                              end;
-                         19: Result := Frac(Factor);
-                         20: Result := Abs(Factor);
-                         21: Result := floor(Factor);
-                         22: Result := ceil(Factor);
+                         19: Result := Frac(Factor());
+                         20: Result := Abs(Factor());
+                         21: Result := floor(Factor());
+                         22: Result := ceil(Factor());
                          // conversions d'angles
-                         23: Result := degtorad(Factor);
-                         24: Result := radtodeg(Factor);
-                         25: Result := gradtorad(Factor);
-                         26: Result := radtograd(Factor);
-                         27: Result := degtograd(Factor);
-                         28: Result := gradtodeg(Factor);
+                         23: Result := degtorad(Factor());
+                         24: Result := radtodeg(Factor());
+                         25: Result := gradtorad(Factor());
+                         26: Result := radtograd(Factor());
+                         27: Result := degtograd(Factor());
+                         28: Result := gradtodeg(Factor());
                          // trigo en degrés
-                         29: Result := Sin(degtorad(Factor));
-                         30: Result := cos(degtorad(Factor));
-                         31: Result := tan(degtorad(Factor));
+                         29: Result := Sin(degtorad(Factor()));
+                         30: Result := cos(degtorad(Factor()));
+                         31: Result := tan(degtorad(Factor()));
 
-                         32: Result := radtodeg(arcsin(Factor));
-                         33: Result := radtodeg(arccos(Factor));
-                         34: Result := radtodeg(arctan(Factor));
+                         32: Result := radtodeg(arcsin(Factor()));
+                         33: Result := radtodeg(arccos(Factor()));
+                         34: Result := radtodeg(arctan(Factor()));
                          // trigo en grade
-                         35: Result := Sin(gradtorad(Factor));
-                         36: Result := cos(gradtorad(Factor));
-                         37: Result := tan(gradtorad(Factor));
+                         35: Result := Sin(gradtorad(Factor()));
+                         36: Result := cos(gradtorad(Factor()));
+                         37: Result := tan(gradtorad(Factor()));
 
-                         38: Result := radtograd(arcsin(Factor));
-                         39: Result := radtograd(arccos(Factor));
-                         40: Result := radtograd(arctan(Factor));
+                         38: Result := radtograd(arcsin(Factor()));
+                         39: Result := radtograd(arccos(Factor()));
+                         40: Result := radtograd(arctan(Factor()));
+                         // arrondi
+                         41: Result := trunc(Factor());
+                         42: Result := round(Factor());
                        end;
                        Exit;
                      end;
@@ -565,21 +553,21 @@ var
       else
         begin
           Error := Idx;
-          Description := Format(Err_UnknownSym, [Current]);
+          Description := Format(Err_UnknownSym, [Current()]);
         end;
     end;
   end;
 
-  function Expr1st: Double;
+  function Expr1st(): Double;
   begin
-    Skip;
-    Result := Factor;
-    Skip;
-    if Error <> 0 then Exit;
+    Skip();
+    Result := Factor();
+    Skip();
+    if (Error <> 0) then Exit;
     case Current of
       '!' :
         begin
-          if not ((Int(Result) = Result) and (Result >= 0)) then
+          if (not ((Int(Result) = Result) and (Result >= 0))) then
           begin
             Error := Idx - 1;
             Description := Err_Fact;
@@ -596,7 +584,7 @@ var
         end;
       '#' : // symbole provisoire pour le carré
         begin
-          if Result > MAX_SQR then
+          if (Result > MAX_SQR) then
           begin
             Error := Idx;
             Description := Err_OverFlow;
@@ -606,59 +594,57 @@ var
           Next;
         end;
    else
-
+     ;;
    end;  // case Current of
-
   end;
 
-  function Expr2nd: Double;
+  function Expr2nd(): Double;
   var
     R: Double;
   begin
     Skip;
-    Result := Expr1st;
+    Result := Expr1st();
     if Error <> 0 then Exit;
     Skip;
-    case Current of
+    case Current() of
         '^' : begin
                 Next;
                 R := Expr2nd;
-                if Error <> 0 then Exit;
+                if (Error <> 0) then Exit;
                 if (Result <= 0) then
                 begin
-                  if not ((R = 0) xor (Result = 0)) and (R = Int(R)) then
+                  if (not ((R = 0) xor (Result = 0)) and (R = Int(R))) then
                   begin
                     Result := IntPower(Result, Trunc(R));
                     Exit;
                   end;
                   while Current <> '^' do Dec(Idx);
                   Dec(Idx);
-                  SkipReverse;
+                  SkipReverse();
                   Error := Idx;
                   Description := Err_Power;
                   Exit;
                 end;
-                if (Result <> 0) then
-                  Result := Exp(Ln(Result) * R);
+                if (Result <> 0) then Result := Exp(Ln(Result) * R);
               end;
     end;
   end;
 
-  function Expr3rd: Double;
+  function Expr3rd(): Double;
   var
     R: Double;
     Id: string;
   begin
-    Skip;
-    Result := Expr2nd;
+    Skip();
+    Result := Expr2nd();
     if Error <> 0 then Exit;
-    Skip;
-    case LowCase(Current) of
+    Skip();
+    case LowCase(Current()) of
         '%', 'm':
              begin
                 if Current <> '%' then
                   begin
-                    Id := ReadIdentifier;
+                    Id := ReadIdentifier();
                     if Id <> 'mod' then
                     begin
                       Dec(Idx, Length(Id));
@@ -667,9 +653,9 @@ var
                   end
                 else
                   Id := '%';
-                Next;
-                R := Expr3rd;
-                if Error <> 0 then Exit;
+                Next();
+                R := Expr3rd();
+                if (Error <> 0) then Exit;
                 if (R = 0) then
                 begin
                   Error := Idx;
@@ -687,27 +673,27 @@ var
     end;
   end;
 
-  function Expr3rdBis: Double;
+  function Expr3rdBis(): Double;
   var
     R: Double;
     Id: string;
   begin
-    Skip;
-    Result := Expr3rd;
-    if Error <> 0 then Exit;
-    Skip;
-    case LowCase(Current) of
+    Skip();
+    Result := Expr3rd();
+    if (Error <> 0) then Exit;
+    Skip();
+    case LowCase(Current()) of
         'd':
              begin
-                Id := ReadIdentifier;
-                if Id <> 'div' then
+                Id := ReadIdentifier();
+                if (Id <> 'div') then
                 begin
                   Dec(Idx, Length(Id));
                   Exit;
                 end;
                 Next;
-                R := Expr3rdBis;
-                if Error <> 0 then Exit;
+                R := Expr3rdBis();
+                if (Error <> 0) then Exit;
                 if (R = 0) then
                 begin
                   Error := Idx;
@@ -725,20 +711,20 @@ var
     end;
   end;
 
-  function Expr4th: Double;
+  function Expr4th(): Double;
   var
     R: Double;
   begin
-    Skip;
-    Result := Expr3rdBis;
-    if Error <> 0 then Exit;
-    Skip;
-    case Current of
+    Skip();
+    Result := Expr3rdBis();
+    if (Error <> 0) then Exit;
+    Skip();
+    case Current() of
         '/' : begin
-                Next;
-                R := Expr4th;
-                if Error <> 0 then Exit;
-                if R = 0 then
+                Next();
+                R := Expr4th();
+                if (Error <> 0) then Exit;
+                if (R = 0) then
                 begin
                   Error := Idx;
                   Description := Err_ZeroDiv;
@@ -749,27 +735,37 @@ var
     end;
   end;
 
-  function Expr: Double;
+  function Expr(): Double;
   begin
-    Skip;
-    Result := Expr4th;
-    if Error <> 0 then Exit;
-    Skip;
-    case LowCase(Current) of
+    StackLevel += 1;
+    Skip();
+    Result := Expr4th();
+    if (Error <> 0) then Exit;
+    Skip();
+    case LowCase(Current()) of
         '*' : begin
-                Next;
-                Result := Result * Expr;
+                Next();
+                Result := Result * Expr();
               end;
         'a'..'z', '0'..'9', '_', '(' :
               begin
-                Result := Result * Expr;
+                Result := Result * Expr();
               end;
-      end;
+    end;
+    //AfficherMessageErreur(Format('Stack level %d: %s', [StackLevel, Expression]));
+    StackLevel -= 1;
   end;
 begin
   Idx := 1;
+  StackLevel := 0;
+  Expression := Trim(Lowercase(MyExpression));
+  // Habitudes du tableur: si on trouve un égal en tête, on le vire
+  if (Expression[1] = '=') then System.Delete(Expression, 1,1);
+  // Affectation d'une variable du type a=(1+1)
+  //if ((Expression[1] in ['a' .. 'z']) AND (Expression[2] = '=')) then
+  //begin
 
-  Expression := Trim(MyExpression);
+  //end;
   // remplacement des variables par leurs valeurs
   if (not RemplacerVariablesParLeursValeurs(Expression, Error)) then exit(0);
 
@@ -782,25 +778,23 @@ begin
   Sign := 1;
   Result := 0;
   Error := 0;
-  Skip;
-  if Idx > L then
+  Skip();
+  if (Idx > L) then
   begin
     Error := 1;
     Description := Err_Expr;
     Exit;
   end;
-
-  while (Error = 0) and (Idx <= L) do
+  while ((Error = 0) and (Idx <= L)) do
   begin
-    Skip;
-    while (Idx <= L) and (Current in ['+', '-']) do
+    Skip();
+    while ((Idx <= L) and (Current() in ['+', '-'])) do
     begin
-      if Current = '-' then
-        Sign := -Sign;       
-      Next;
-      Skip;
+      if (Current = '-') then Sign := -Sign;
+      Next();
+      Skip();
     end;
-    Result := Result + Sign * Expr;
+    Result := Result + Sign * Expr();
     Sign := 1;
   end;
 end;

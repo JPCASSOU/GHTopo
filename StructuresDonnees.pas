@@ -23,6 +23,7 @@ uses
   , SysUtils
   , Graphics
   , FastGEO
+  , BGRACanvas
   ;
 
 {$IFDEF MULTI_THREADING}
@@ -31,7 +32,9 @@ CONST MULTI_OR_MONO_THREADED = 'Multithreaded';
 CONST MULTI_OR_MONO_THREADED = 'Monothreaded';
 {$ENDIF MULTI_THREADING}
 
-
+DEFAULT_PEN_WIDTH_IN_MM      = 0.025;
+DEFAULT_FONT_HEIGHT_IN_UNITS = 14;
+DEFAULT_FONT_HEIGHT_IN_MM    = 3.0; // mm
 
 CONST FRM_CONSTRAINT_MAX_WIDTH  = 0;
 CONST FRM_CONSTRAINT_MAX_HEIGHT = 0;
@@ -365,6 +368,7 @@ type TPoint3Df = record
   X:  double;
   Y:  double;
   Z:  double;
+
 end;
 type TPoint2Df = record
   X:  double;
@@ -390,6 +394,13 @@ type TPointOfConduitTransected = record
   P:  double;
   Color  : TColor;
   Caption: string;
+end;
+// type rectangle
+type TRect2Df = record
+  X1: double;
+  Y1: double;
+  X2: double;
+  Y2: double;
 end;
 
 type TArrayPoints2Df = array of TPoint2Df;
@@ -521,12 +532,7 @@ type TUneVisee = record
 end;
 // visées en antenne
 // Nota: Les codes et expés d'une visée radiante héritent de ceux de la station d'accrochage
-type
-  pViseeAntenne = ^TViseeAntenne;
-
-  { TViseeAntenne }
-
-  TViseeAntenne = record
+type TViseeAntenne = record
    EntranceRatt        : TNumeroEntrance;
    Reseau              : TNumeroReseau;
    Secteur             : TNumeroSecteur;
@@ -626,7 +632,7 @@ type
    Highlighted          : boolean;
    // champs texte => en fin de ligne
    oCommentaires        : string;
-   function toString(): string;
+   function toString()  : string;
    function toStringWithIDTerrain(): string;
 end;
 //*)
@@ -678,11 +684,6 @@ type TColorRGBA = record
   A: byte;
 end;
 
-type TPoint3DVRML = record
-  X: Int64;
-  Y: Int64;
-  Z: Int64;
-end;
 
 // Couleurs Macintosh
 type TMacintoshColor = record
@@ -703,13 +704,7 @@ type TVentilationSpeleometrie = record
   Speciaux  : double;
 end;
 type TTableauVentilationSpeleometrie = array of TVentilationSpeleometrie;
-// type rectangle
-type TRect2Df = record
-  X1: double;
-  Y1: double;
-  X2: double;
-  Y2: double;
-end;
+
 // spéléométrie simplifiée: Dév, XYZ Maxi et mini, Nb de visées
 type TSpeleometrieReseauOuSecteur = record
   DonneesValides   : boolean;
@@ -721,12 +716,10 @@ type TSpeleometrieReseauOuSecteur = record
   Etendue          : TPoint3Df;
   NbVisees         : integer;
 end;
-
 type TArraySpeleometrieReseauOuSecteur = array of TSpeleometrieReseauOuSecteur;
 
-
 // procédure d'affichage de la progression d'une opération
-type TProcDisplayProgression = procedure (const Etape: string; const Done, Starting, Ending, Step: integer) of object;
+type TProcDisplayProgression              = procedure (const Etape: string; const Done, Starting, Ending, Step: integer) of object;
 //type TProcOfObject = procedure of object;
 type TProcOfObjectWithOneBoolParameter    = procedure(const P: boolean) of object;
 type TProcOfObjectWithOneIntParameter     = procedure(const P: integer) of object;
@@ -742,8 +735,6 @@ type TTodoAction                          = (tdoAcnBASESTATION_DISPLAY, tdoAcnBA
 type TProcOfObjectWithATBaseStation       = procedure (const BP: TBaseStation; const TodoAction: TTodoAction) of object;
 
 
-
-//type TOpenGLColor = array[0..3] of GLFloat;
 type TIsoHypse = record
   Cote: double;
   Color: TColor;
@@ -823,6 +814,8 @@ type TVue2DParams  = record
   ongCouleurViseesNonRetenues: TColor; // couleur des visées non retenues par le MétaFiltre
 end;
 // Maillages
+type TMNTNumeroTriangle     = type Int64;
+type TMNTNumeroVertex       = type Int64;
 type TMNTModeDessinMaillage = (M3D_NONE, M3D_WIRE_FRAME, M3D_MESH);
 type TMNTGridArray          = array of array of Double;
 type TMNTTypeMaillage       = (tmUNKNOWN, tmREGULAR_GRID, tmTRIANGLES);
@@ -831,7 +824,7 @@ type TMNTBoundingBox  = record
   C2: TPoint3Df;
 end;
 type TMNTVertex = record
-  ID         : Int64;
+  ID         : TMNTNumeroVertex;
   X          : double;
   Y          : double;
   Z          : double;
@@ -844,15 +837,29 @@ type TMNTVertex = record
 end;
 
 type TMNTTriangleABC = record
-   Numero     : Int64;
-   PointA     : integer;
-   PointB     : integer;
-   PointC     : integer;
+   Numero     : TMNTNumeroTriangle;
+   PointA     : TMNTNumeroVertex;
+   PointB     : TMNTNumeroVertex;
+   PointC     : TMNTNumeroVertex;
+   VoisinAB   : TMNTNumeroTriangle;
+   VoisinBC   : TMNTNumeroTriangle;
+   VoisinCA   : TMNTNumeroTriangle;
    Displayed  : boolean;
    Couleur    : TColor;
    BoundingBox: TMNTBoundingBox;
 end;
+type
 
+{ TLineAttributes }
+
+ TLineAttributes = record
+  Color   : TColor;
+  Opacity : byte;
+  LineWidthInPixels     : integer;
+  LineWidthInMillimeters: double;
+  procedure SetAttributes(const C: TColor; const O: byte; const WdthPX: integer; const WdthMM: double);
+  procedure SetTBGRAPen(const P: TBGRAPen);
+end;
 type TVue3DParams  = record
   Name                   : string;
   Filtres                : string;
@@ -863,10 +870,15 @@ type TVue3DParams  = record
   FovOrZoom              : double;         // angle de champ (OpenGL) ou Zoom
   CoefMagnification      :  double;
   ColorBackGround        : TColor;
-  ColorCube              : TColor;
-  ColorReferentiel       : TColor;
-  FillOpacity            : byte;
+
+  LineCube               : TLineAttributes;
+  LineReferentiel        : TLineAttributes;
+  LineVisees             : TLineAttributes;
+  LineMaillage           : TLineAttributes;
+  LineProfils            : TLineAttributes;
+
   ModeRepresentation     : TModeRepresentationGaleries;
+  FillOpacity            : byte;
   ColorZMiniReseau       : TColor;
   ColorZMaxiReseau       : TColor;
   ColorZMiniMNT          : TColor;
@@ -874,8 +886,9 @@ type TVue3DParams  = record
   ViseesLargeur          : integer;
 
   MaillageModeDessin     : TMNTModeDessinMaillage;
-  MaillageOpacity        : byte;
   MaillageUseDegrades    : boolean;
+  MaillageProfilsDisplay : boolean;
+  MaillageOpacity        : byte;
 end;
 type TCoupeDeveloppeeParams  = record
   Name : string;
@@ -924,15 +937,6 @@ type TProcActionModuleParentSurAppelant = procedure of object;
 // **********************************************
 //  Types de données pour les outils graphiques
 // **********************************************
-// coordonnées
-
-type TsvgpsPoint2Df = record
-  X : double;
-  Y : double;
-end;
-type TsvgpsArrayPts2Df = array of TsvgpsPoint2Df;
-
-// Fontes pour PostScript
 // Pour les coupes developpees
 type TPointCoupeDeveloppee = record
   P: double;
@@ -975,11 +979,7 @@ const
 
 type TNodeNum = 0 .. maxLongint;
 // Jonctions Toporobot
-type
-
-{ TJonctionXYZ }
-
- TJonctionXYZ = record
+type  TJonctionXYZ = record
    NoNoeud     : TNodeNum;
    NoSer       : TNumeroSerie;
    NoSt        : integer;
@@ -989,10 +989,7 @@ type
    NbRefs      : integer;
    IDJonction  : string;
    function ToString(): string;
-
 end;
-//*)
-
 
 // Table des branches
 type TBrancheXYZ = record
@@ -1180,7 +1177,11 @@ type TMesureViseeDistoX = record
   Pente           : double;
   TimeStamp       : TDateTime; // horodatage de la visée
 end;
-type TVectorDataDistoX = record
+type
+
+{ TVectorDataDistoX }
+
+ TVectorDataDistoX = record
   X : integer;
   Y : integer;
   Z : integer;
@@ -1213,11 +1214,30 @@ type TPaveNumModeSaisie = (pnmINTEGER, pnmREAL, pnmTOPOROBOT_STATION);
 
 implementation
 
+
+
+{ TLineAttributes }
+
+procedure TLineAttributes.SetAttributes(const C: TColor; const O: byte; const WdthPX: integer; const WdthMM: double);
+begin
+  self.Color    := C;
+  self.Opacity  := O;
+  self.LineWidthInPixels := WdthPX;
+  self.LineWidthInMillimeters := WdthMM;
+end;
+
+procedure TLineAttributes.SetTBGRAPen(const P: TBGRAPen);
+begin
+  P.Color   := self.Color;
+  P.Opacity := self.Opacity;
+  P.Width   := self.LineWidthInPixels;;
+end;
+
 { TViseeAntenne }
 
 function TViseeAntenne.toString(): string;
 begin
-  Format(FMTSERST, [self.SerieDepart, self.PtDepart]);
+  result := Format(FMTSERST, [self.SerieDepart, self.PtDepart]);
 end;
 
 { TPointOfInterest }

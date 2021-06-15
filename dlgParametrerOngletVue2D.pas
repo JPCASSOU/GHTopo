@@ -9,8 +9,9 @@ interface
 uses
   {$INCLUDE SelectionLangues.inc} // insère les unités en fonction de la langue
   CallDialogsStdVersion, unitUtilsComposants,
+  StructuresDonnees,
   Common,
-  StructuresDonnees, Classes, SysUtils, FileUtil, curredit, Forms, Controls,
+  Classes, SysUtils, FileUtil, curredit, Forms, Controls,
   Graphics, Dialogs, StdCtrls, Buttons, Spin, ExtCtrls, ColorBox, ComCtrls;
 
 type
@@ -33,6 +34,7 @@ type
     btnDegradeZMiniMNT: TColorButton;
     btnReferentielColor: TColorButton;
     chkDegradeAltitudesMNT: TCheckBox;
+    chkDisplayProfils: TCheckBox;
     chkQuadrillage: TCheckBox;
     chkFastDrawCenterline: TCheckBox;
     chkDoDrawViseesNonRetenues: TCheckBox;
@@ -106,8 +108,10 @@ type
     tabShtGaleries: TTabSheet;
     tabShtMNT: TTabSheet;
     trkbMaillageOpacity: TTrackBar;
+    trkMagnificationZ: TTrackBar;
     procedure chkEntrancesChange(Sender: TObject);
     procedure cmbRepresentationGaleriesChange(Sender: TObject);
+    procedure trkMagnificationZChange(Sender: TObject);
   private
     FC1, FC2: TPoint2Df; // sauvegarde des coordonnées de zone
 
@@ -143,10 +147,6 @@ uses
 
 {$R *.lfm}
 
-
-
-
-
 procedure TfrmParametrerOngletVue2D.chkEntrancesChange(Sender: TObject);
 begin
   chkEntranceNames.Enabled := chkEntrances.Checked;
@@ -157,9 +157,10 @@ begin
 
 end;
 
-
-
-
+procedure TfrmParametrerOngletVue2D.trkMagnificationZChange(Sender: TObject);
+begin
+  editFactZ.Value := trkMagnificationZ.Position / 100.0;
+end;
 
 procedure TfrmParametrerOngletVue2D.SetChksElementsDrawn(const E: TSetElementsDrawn);
 begin
@@ -235,22 +236,6 @@ begin
     mpdVUE3D            : self.Caption := EWE + 'Vue 3D';
     mpdCOUPE_DEVELOPPEE : self.Caption := EWE + 'Coupe developpee';
   end;
-  (*
-  pnlParametresSpecifiques2D.Visible       := false;
-  pnlParametresSpecifiques3D.Visible       := false;
-  pnlParametresSpecifiquesCoupeDev.Visible := false;
-  pnlDegradeAltitudes.Visible              := false;
-  case FModeParametrage of
-    mpdVUE2D            : pnlParametresSpecifiques2D.Visible := true;
-    mpdVUE3D            : pnlParametresSpecifiques3D.Visible := true;
-    mpdCOUPE_DEVELOPPEE : pnlParametresSpecifiquesCoupeDev.Visible := true;
-  end;
-  case FModeParametrage of
-    mpdVUE2D,
-    mpdVUE3D            : pnlDegradeAltitudes.Visible := true;
-    mpdCOUPE_DEVELOPPEE : pnlDegradeAltitudes.Visible := false;
-  end;
-  //*)
 end;
 
 function TfrmParametrerOngletVue2D.Initialiser(): boolean;
@@ -287,19 +272,16 @@ begin
   // doit-on dessiner les volumes
   chkVolumesVisibles.Checked   := (edVolumes in  O.ElementsDrawn);
   // couleurs
-  btnCubeColor.ButtonColor     := O.ColorCube;
+  btnCubeColor.ButtonColor     := O.LineCube.Color;
   btnBGColor.ButtonColor       := O.ColorBackGround;
-  btnReferentielColor.Color    := O.ColorReferentiel;
-
-
-
+  btnReferentielColor.Color    := O.LineReferentiel.Color;
 
   btnDegradeZMiniReseau.ButtonColor  := O.ColorZMiniReseau;
   btnDegradeZMaxiReseau.ButtonColor  := O.ColorZMaxiReseau;
 
   // MNT
   chkDegradeAltitudesMNT.Checked     := O.MaillageUseDegrades;
-  trkbMaillageOpacity.Position       := O.MaillageOpacity;
+  trkbMaillageOpacity.Position       := O.LineMaillage.Opacity;
   cmbModeDessinMaillage.ItemIndex    := Ord(O.MaillageModeDessin);
   btnDegradeZMiniMNT.ButtonColor     := O.ColorZMiniMNT;
   btnDegradeZMaxiMNT.ButtonColor     := O.ColorZMaxiMNT;
@@ -419,23 +401,26 @@ function TfrmParametrerOngletVue2D.GetValuesOnglet3D(): TVue3DParams;
 begin
   // récup des params non modifiés ou masqués
   Result                      := FCurrParams3D;
-  // couleur de fond
+
   Result.ElementsDrawn        := GetChksElementsDrawn();              // éléments à dessiner
-  Result.CoefMagnification    := editFactZ.Value;                 // facteur Z
-  Result.ColorBackGround      := btnBGColor.ButtonColor;
-  Result.ColorReferentiel     := btnReferentielColor.ButtonColor;
-  Result.ColorCube            := btnCubeColor.ButtonColor;            // cube
-  Result.ColorZMiniReseau     := btnDegradeZMiniReseau.ButtonColor;         // dégradés
+  Result.CoefMagnification    := editFactZ.Value;                     // facteur Z
+  Result.ColorBackGround      := btnBGColor.ButtonColor;              // couleur de fond
+  Result.LineReferentiel.SetAttributes(btnReferentielColor.ButtonColor, 255, 1, DEFAULT_PEN_WIDTH_IN_MM);
+  Result.LineCube.SetAttributes(btnCubeColor.ButtonColor, 192, 1, 0.05);
+  Result.ColorZMiniReseau     := btnDegradeZMiniReseau.ButtonColor;    // dégradés
   Result.ColorZMaxiReseau     := btnDegradeZMaxiReseau.ButtonColor;
 
 
-  Result.FillOpacity          := sclFillOpacity.Position;             // opacité des remplissages
-  Result.ViseesLargeur        := editLargeurTraitCenterlineInPX.Value;    // largeur de trait
+  Result.FillOpacity          := sclFillOpacity.Position;              // opacité des remplissages
+  Result.ViseesLargeur        := editLargeurTraitCenterlineInPX.Value; // largeur de trait
   Result.ModeRepresentation   := TModeRepresentationGaleries(cmbRepresentationGaleries.ItemIndex);
 
   Result.MaillageUseDegrades  := chkDegradeAltitudesMNT.Checked;
-  Result.MaillageOpacity      := trkbMaillageOpacity.Position;
+
   Result.MaillageModeDessin   := TMNTModeDessinMaillage(cmbModeDessinMaillage.ItemIndex);
+  Result.LineMaillage.SetAttributes(clGreen, trkbMaillageOpacity.Position, 1, 0.015);
+  Result.MaillageProfilsDisplay      := chkDisplayProfils.Checked;
+  Result.LineProfils.SetAttributes(clMaroon, 192, 1, 0.125);
 
   Result.ColorZMiniMNT        := btnDegradeZMiniMNT.ButtonColor;         // dégradés
   Result.ColorZMaxiMNT        := btnDegradeZMaxiMNT.ButtonColor;

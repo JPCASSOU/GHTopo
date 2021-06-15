@@ -2,6 +2,7 @@ unit frmDisplayMultiThreadProcessings;
 
 {$mode objfpc}{$H+}
 
+{$ERROR: Inutilisé }
 interface
 
 uses
@@ -37,7 +38,7 @@ type
     procedure Finaliser();
     procedure QAfficherMessage(const Msg: string);
     procedure AfficherProgressionOfMonoThread(const Etape: string; const Done, Starting, Ending, Step: integer);
-    procedure DispProgressionOfProcess(const IDThread: integer; const QStart, QEnd, QDone: integer);
+
 
     procedure SaveLog(const F: string);
     procedure AddLibelleEtape(const Msg: string);

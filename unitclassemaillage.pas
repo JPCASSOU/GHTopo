@@ -17,6 +17,7 @@ interface
 uses
   StructuresDonnees,
   UnitListesSimplesWithGeneriques,
+  UnitPolyPolyLine,
   UnitEntitesExtended,
   unitProfilTopo,
   UnitTriangulationDelaunay,
@@ -75,6 +76,8 @@ type
      FProcGCSToSRC : TProcGCSToSRC;
      // liste des extractions de profils de terrain
      FListeProfilsTopo: TListeProfilsTopo;
+
+     procedure RecenserTrianglesVoisins();
      procedure ReinitBoundinxBoxWithoutData();
      // les deux types de maillages sont convertis 'in fine' en maillages 'Triangles'
      function ChargerResultatsDuMailleur(const BaseFileName: TStringDirectoryFilename): boolean;
@@ -189,7 +192,7 @@ type
      function CalcAltitudeMaillageAtPoint(const QX, QY: double; out QZ: double): boolean;
      procedure ExportX3D(const QFichierX3D: TStringDirectoryFilename);
      // extraction d'un profil topographique entre deux points
-     function  ExtractAndAddProfilTopo(const Pt1, Pt2: TPoint2Df; const QProfilColor: TColor = clBlue; const QProfilName: string = ''): boolean;
+     function  ExtractAndAddProfilTopo(const Pt1, Pt2: TPoint2Df; const QProfilLineAttr: TLineAttributes; const QProfilName: string = ''): boolean;
      procedure AddProfilTopo(const P: TProfilTopo); inline;
      function  GetProfilTopo(const Idx: integer): TProfilTopo; inline;
      procedure PutProfilTopo(const Idx: integer; const P: TProfilTopo); inline;
@@ -225,6 +228,9 @@ type
      procedure ResetVisibilityOfObjects(const B: boolean);
      // affecter les couleurs aux objets
      procedure AffecterCouleursAuxObjets(const QDoDegrade: boolean);
+
+     // extraire une isovaleur sous forme d'une polypolyligne
+     function ExtraireIsovaleurAsPolyPolyline(const Altitude: double; out PP: TPolyPolyLigne): boolean;
 
 end;
 
@@ -468,6 +474,184 @@ begin
     PutVertex(i, MyVertex);
 
   end;
+end;
+procedure TMaillage.RecenserTrianglesVoisins();
+var
+  i, j, n: Integer;
+  MyTriangle, QTriVoisin: TMNTTriangleABC;
+  Q1, Q2, Q3: Boolean;
+begin
+  n := GetNbTriangles();
+  AfficherMessageErreur(format('%s.RecenserTrianglesVoisins(%d)', [ClassName, n]));
+  if (0 = n) then exit;
+  for i := 0 to n - 1 do
+  begin
+    MyTriangle := GetTriangle(i);
+    MyTriangle.VoisinAB := -1;
+    MyTriangle.VoisinBC := -1;
+    MyTriangle.VoisinCA := -1;
+    if (i MOD 10000 = 0) then AfficherMessageErreur(Format('Triangle %d', [i]));
+    // recherche des voisins (tous les triangles sont orientés CCW, normale vers le haut)
+    for j := 0 to n - 1 do
+    begin
+      QTriVoisin := GetTriangle(j);
+
+      Q1 := (MyTriangle.PointA = QTriVoisin.PointA) AND (MyTriangle.PointB = QTriVoisin.PointC);
+      Q2 := (MyTriangle.PointA = QTriVoisin.PointB) AND (MyTriangle.PointB = QTriVoisin.PointA);
+      Q3 := (MyTriangle.PointA = QTriVoisin.PointC) AND (MyTriangle.PointB = QTriVoisin.PointB);
+      if (Q1 OR Q2 OR Q3) then MyTriangle.VoisinAB := j;
+
+      Q1 := (MyTriangle.PointB = QTriVoisin.PointA) AND (MyTriangle.PointC = QTriVoisin.PointC);
+      Q2 := (MyTriangle.PointB = QTriVoisin.PointB) AND (MyTriangle.PointC = QTriVoisin.PointA);
+      Q3 := (MyTriangle.PointB = QTriVoisin.PointC) AND (MyTriangle.PointC = QTriVoisin.PointB);
+      if (Q1 OR Q2 OR Q3) then MyTriangle.VoisinBC := j;
+
+      Q1 := (MyTriangle.PointC = QTriVoisin.PointA) AND (MyTriangle.PointA = QTriVoisin.PointC);
+      Q2 := (MyTriangle.PointC = QTriVoisin.PointB) AND (MyTriangle.PointA = QTriVoisin.PointA);
+      Q3 := (MyTriangle.PointC = QTriVoisin.PointC) AND (MyTriangle.PointA = QTriVoisin.PointB);
+
+      if (Q1 OR Q2 OR Q3) then MyTriangle.VoisinCA := j;
+    end;
+    PutTriangle(i, MyTriangle);
+  end;
+  // contrôle
+  AfficherMessageErreur(Format('Liste des %d triangles et leurs voisins', [n]));
+  exit;
+  for i := 0 to 666 - 1 do
+  begin
+    MyTriangle := GetTriangle(i);
+    AfficherMessageErreur(Format('%d, %d, %d, %d', [i, MyTriangle.VoisinAB, MyTriangle.VoisinBC, MyTriangle.VoisinCA]));
+
+  end;
+end;
+
+function TMaillage.ExtraireIsovaleurAsPolyPolyline(const Altitude: double; out PP: TPolyPolyLigne): boolean;
+var
+  n, i, nv, v: Integer;
+  QFirstIdxTriangle: TMNTNumeroTriangle;
+  PL: TListePoints3Df;
+  VX: TPoint3Df;              //   function GetTriangle(const Idx: integer): TMNTTriangleABC; inline;
+  QListeTrianglesVisites: array of boolean;
+  QTriangle: TMNTTriangleABC;
+  function FindFirstIdxTriangleContainsAltitude(): TMNTNumeroTriangle;
+  var
+    QTri: TMNTTriangleABC;
+    t: Integer;
+  begin
+    result := -1;
+    for t := 0 to n - 1 do
+    begin
+      QTri := GetTriangle(t);
+      if (IsInRange(Altitude, QTri.BoundingBox.C1.Z, QTri.BoundingBox.C2.Z)) then Exit(t);
+    end;
+  end;
+begin
+  result := false;
+  ClearConsoleErreur();
+  n := self.GetNbTriangles();
+  AfficherMessageErreur(Format('%s.ExtraireIsovaleurAsPolyPolyline: Alt: %.0f - %d triangles', [classname, Altitude, n]));
+  // liste des triangles visités
+  if (0 = n) then exit;
+  // On recense les triangles voisins
+  self.RecenserTrianglesVoisins();
+  // Le tableau des triangles visités
+  SetLength(QListeTrianglesVisites, n);
+  for i := 0 to n-1 do QListeTrianglesVisites[i] := false;
+  // Recherche du premier triangle contenant cette altitude
+  QFirstIdxTriangle := FindFirstIdxTriangleContainsAltitude();
+  if (QFirstIdxTriangle > 0) then
+  begin
+    QTriangle := GetTriangle(QFirstIdxTriangle);
+    AfficherMessageErreur(Format('Triangle %d : %.2f, %.2f', [QFirstIdxTriangle, QTriangle.BoundingBox.C1.Z, QTriangle.BoundingBox.C2.Z]));
+
+
+  end;
+
+
+
+
+
+
+
+
+
+
+  PP := TPolyPolyLigne.Create;
+  try
+    PP.Initialiser(Format('Isovaleur %f', [Altitude]));
+    n := PP.GetNbPolylines();
+    AfficherMessageErreur(format('Polypolyligne "%s": %d polylignes', [PP.GetName(), n]));
+    PP.BeginPolyline();
+      PP.AddVertex(402938.63, 3090857.00, 833.00);
+      PP.AddVertex(402859.22, 3090864.00, 800.00);
+      PP.AddVertex(402848.38, 3090835.50, 800.00);
+      PP.AddVertex(402839.34, 3090801.50, 800.00);
+      PP.AddVertex(402833.94, 3090778.25, 800.00);
+      PP.AddVertex(402841.16, 3090756.75, 800.00);
+      PP.AddVertex(402857.41, 3090738.75, 800.00);
+      PP.AddVertex(402884.47, 3090729.75, 800.00);
+      PP.AddVertex(402927.81, 3090721.00, 800.00);
+      PP.AddVertex(402949.47, 3090710.25, 800.00);
+      PP.AddVertex(402980.13, 3090712.00, 800.00);
+      PP.AddVertex(402994.59, 3090737.00, 800.00);
+      PP.AddVertex(402987.38, 3090771.00, 800.00);
+      PP.AddVertex(402978.34, 3090806.75, 800.00);
+      PP.AddVertex(402992.78, 3090835.50, 800.00);
+    PP.EndPolyline();
+    n := PP.GetNbPolylines();
+    AfficherMessageErreur(format('Polypolyligne "%s": %d polylignes', [PP.GetName(), n]));
+    PP.BeginPolyline();
+      PP.AddVertex(403003.63, 3090862.25, 800.00);
+      PP.AddVertex(403016.25, 3090885.50, 800.00);
+      PP.AddVertex(403023.47, 3090908.75, 800.00);
+      PP.AddVertex(403027.09, 3090941.00, 800.00);
+      PP.AddVertex(403012.63, 3090946.25, 800.00);
+    PP.EndPolyline();
+    PP.BeginPolyline();
+      PP.AddVertex(402983.75, 3090937.50, 800.00);
+      PP.AddVertex(402958.47, 3090933.75, 800.00);
+      PP.AddVertex(402935.03, 3090924.75, 800.00);
+      PP.AddVertex(402920.59, 3090916.00, 800.00);
+      PP.AddVertex(402902.53, 3090905.25, 800.00);
+      PP.AddVertex(402886.28, 3090891.00, 800.00);
+      PP.AddVertex(402870.03, 3090874.75, 800.00);
+      PP.AddVertex(402879.06, 3090815.75, 810.00);
+      PP.AddVertex(402886.28, 3090794.25, 810.00);
+      PP.AddVertex(402900.72, 3090772.75, 810.00);
+      PP.AddVertex(402920.59, 3090756.75, 810.00);
+      PP.AddVertex(402944.03, 3090744.25, 810.00);
+    PP.EndPolyline();
+
+    // contrôle
+    n := PP.GetNbPolylines();
+    AfficherMessageErreur(format('Polypolyligne "%s": %d polylignes', [PP.GetName(), n]));
+    //PP.RemovePolyline(1);
+    n := PP.GetNbPolylines();
+    AfficherMessageErreur(format('Polypolyligne "%s": %d polylignes', [PP.GetName(), n]));
+
+    for i := 0 to n - 1 do
+    begin
+      PL := PP.GetPolyline(i);
+      nv := PL.GetNbElements();
+      AfficherMessageErreur(Format('Polyligne #%d: %d vertex', [i, nv]));
+      for v := 0 to nv - 1 do
+      begin
+        VX := PL.GetElement(v);
+        AfficherMessageErreur(format('Vertex: %d@%d - %.3f, %.3f, %.3f', [v, i, VX.X, VX.Y, VX.Z]));
+      end;
+
+    end;
+    //AfficherMessageErreur('001');
+    PP.Finaliser();
+    n := PP.GetNbPolylines();
+    AfficherMessageErreur(format('Polypolyligne "%s": %d polylignes', [PP.GetName(), n]));
+
+    //****************
+    SetLength(QListeTrianglesVisites, 0);
+  finally
+    //FreeAndNil(PP);
+  end;
+
 end;
 
 
@@ -1034,7 +1218,9 @@ begin
       for i := 0 to Nb - 1 do
       begin
         MyProfilTopo := GetProfilTopo(i);
-        QDefineCrayon(psSolid, 2, MyProfilTopo.ProfilColor, 255);
+        QDefineCrayon(psSolid, MyProfilTopo.LineAttributes.LineWidthInPixels,
+                               MyProfilTopo.LineAttributes.Color,
+                               MyProfilTopo.LineAttributes.Opacity);
         AfficherMessage(Format('Profil %d - %d points', [i, MyProfilTopo.GetNbPointsProfilTN()]));
         if (MyProfilTopo.GetNbPointsProfilTN() > 0) then
         begin
@@ -1934,9 +2120,7 @@ begin
 end;
 //*)
 
-function TMaillage.ExtractAndAddProfilTopo(const Pt1, Pt2: TPoint2Df;
-                                           const QProfilColor: TColor = clBlue;
-                                           const QProfilName: string = ''): boolean;
+function TMaillage.ExtractAndAddProfilTopo(const Pt1, Pt2: TPoint2Df; const QProfilLineAttr: TLineAttributes; const QProfilName: string = ''): boolean;
 var
   Nb, i, k, NbVisees, v: Integer;
   TR: TMNTTriangleABC;
@@ -1994,7 +2178,7 @@ begin
       MyProfilTopo.ProfilName  := IIF('' = QProfilName,
                                       Format('Profil_%d', [FListeProfilsTopo.GetNbElements() + 1]),
                                       QProfilName);
-      MyProfilTopo.ProfilColor := QProfilColor;
+      MyProfilTopo.LineAttributes := QProfilLineAttr;
       NbVisees := FBDDEntites.GetNbEntitesVisees();
       for v := 0 to NbVisees - 1 do
       begin
@@ -2089,12 +2273,16 @@ var
   EWE: String;
   PP: TProfilTopo;
   PT1, PT2: TPoint2Df;
+  QCol: TColor;
 begin
   AfficherMessageErreur(Format('%s.SaveProfilsToFile(): %s', [ClassName, QFilename]));
   Nb := GetNbProfilsTopo();
   if (Nb = 0) then Exit;
   EWE := FORMAT_NB_INTEGER + TAB +
-         FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB +    // couleur
+         FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB + // couleur
+         FORMAT_NB_INTEGER + TAB + // opacité
+         FORMAT_NB_INTEGER + TAB + // largeur ligne en pixel
+         FORMAT_NB_REAL_2_DEC + TAB + // largeur ligne en mm
          FORMAT_NB_REAL_2_DEC + TAB +
          FORMAT_NB_REAL_2_DEC + TAB +           // extr 1
          FORMAT_NB_REAL_2_DEC + TAB +
@@ -2108,7 +2296,9 @@ begin
       PP := GetProfilTopo(i);
       PT1 := PP.GetExtremite1();
       PT2 := PP.GetExtremite2();
-      writeln(fp, Format(EWE, [i, Red(PP.ProfilColor), Green(PP.ProfilColor), Blue(PP.ProfilColor),
+      QCol:= PP.LineAttributes.Color;
+      writeln(fp, Format(EWE, [i, Red(QCol), Green(QCol), Blue(QCol),PP.LineAttributes.Opacity,
+                               PP.LineAttributes.LineWidthInPixels, PP.LineAttributes.LineWidthInMillimeters,
                                PT1.X, PT1.Y,
                                PT2.X, PT2.Y,
                                PP.ProfilName
@@ -2125,9 +2315,9 @@ var
   WU, QNom: string;
   AR: TGHStringArray;
   PT1, PT2: TPoint2Df;
-  QColor: TColor;
   PP: TProfilTopo;
   n: Integer;
+  QProfilLineAttr: TLineAttributes;
 begin
   result := false;
   AfficherMessageErreur(Format('%s.LoadProfilsFromFile(): %s', [ClassName, QFilename]));
@@ -2138,17 +2328,25 @@ begin
     begin
       ReadLn(fp, WU);
       AR := Split(WU, SEPARATOR_TAB);
-      //0 1 2 3      4          5          6         7            8
-      //0	0	0	255	403080.31	3091003.68	403405.57	3090831.37	Profil_1
-      QColor := RGBToColor(StrToIntDef(AR[1], 0)   and 255,
-                           StrToIntDef(AR[2], 0)   and 255,
-                           StrToIntDef(AR[3], 255) and 255);
-      PT1  := MakeTPoint2Df(ConvertirEnNombreReel(AR[4], 0.00),
-                            ConvertirEnNombreReel(AR[5], 0.00));
-      PT2  := MakeTPoint2Df(ConvertirEnNombreReel(AR[6], 0.00),
-                            ConvertirEnNombreReel(AR[7], 0.00));
-      QNom := Trim(AR[8]);
-      if (ExtractAndAddProfilTopo(PT1, PT2, QColor, QNom)) then
+      //0   1   2    3   4  5   6     7          8            9            10         11
+      //0	0	0	255	255 1 0.015 403080.31	3091003.68	403405.57	3090831.37	Profil_1
+
+      QProfilLineAttr.Color   := RGBToColor(StrToIntDef(AR[1], 0)   and 255,
+                                            StrToIntDef(AR[2], 0)   and 255,
+                                            StrToIntDef(AR[3], 255) and 255);
+      QProfilLineAttr.Opacity                := StrToIntDef(AR[4], 255) and 255;
+      QProfilLineAttr.LineWidthInPixels      := StrToIntDef(AR[5], 0)   and 255;
+      QProfilLineAttr.LineWidthInMillimeters := ConvertirEnNombreReel(AR[6], 0.015);
+
+
+
+
+      PT1  := MakeTPoint2Df(ConvertirEnNombreReel(AR[7] , 0.00),
+                            ConvertirEnNombreReel(AR[8] , 0.00));
+      PT2  := MakeTPoint2Df(ConvertirEnNombreReel(AR[9] , 0.00),
+                            ConvertirEnNombreReel(AR[10], 0.00));
+      QNom := Trim(AR[11]);
+      if (ExtractAndAddProfilTopo(PT1, PT2, QProfilLineAttr, QNom)) then
       begin
         (*
         n := GetNbProfilsTopo() - 1;

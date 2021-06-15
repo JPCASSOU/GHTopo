@@ -134,6 +134,7 @@ uses
   Common,
   UnitListesSimplesWithGeneriques,
   unitobjetserie,
+  UnitClasseMaillage,
   LazFileUtils,
   dateutils,
   UnitClassPalette,
@@ -449,6 +450,7 @@ type
     function  CheckerLesDonneesTopo(): Integer;
     procedure CheckerLesNamespaces();
     procedure CheckerLesEntrees();
+    procedure CheckerAltimetrieEntrancesByMNT(const FM: TMaillage; const DoAdjustAtMNT: boolean; const DeltaZMax: double);
     procedure CheckerLesSeries();
     procedure CheckerLesAntennes();
     procedure CheckerLesCodes();
@@ -504,6 +506,7 @@ type
 
     //*************
     function GetPtrTableViseesAntenne(): TTableViseesAntenne;
+
 end;
 //------------------------------------------------------------------
 function RegenererEbaucheXTB(const NomEbauche: string; const DefaultCodeEPSG: integer): boolean;
@@ -4575,6 +4578,36 @@ begin
    UneEntree := GetEntrance(0);
    self.SetRefSeriePoint(UneEntree.eRefSer, UneEntree.eRefSt);
    self.SetDefaultCoords(UneEntree.eXEntree, UneEntree.eYEntree, UneEntree.eZEntree);
+end;
+
+procedure TToporobotStructure2012.CheckerAltimetrieEntrancesByMNT(const FM: TMaillage; const DoAdjustAtMNT: boolean; const DeltaZMax: double);
+var
+  i, Nb: Integer;
+  AltitudeOfMNT, DeltaZ: double;
+  EWE: String;
+  MyEntrance: TEntrance;
+begin
+  Nb := self.GetNbEntrances();
+  AltitudeOfMNT := -666.00;
+  EWE := format('%s.CheckerAltimetrieEntrancesByMNT: %d entrances, MNT %svalide', [ClassName, Nb, BooltoStr(FM.IsValidMaillage(), '', 'in')]);
+  AfficherMessage(EWE);
+  AfficherMessageErreur(EWE);
+
+  if (not FM.IsValidMaillage()) then exit;
+  AfficherMessageErreur(Format('Liste des %d entrées', [Nb]));
+  for i := 0 to Nb - 1 do
+  begin
+    MyEntrance := self.GetEntrance(i);
+    FM.CalcAltitudeMaillageAtPoint(MyEntrance.eXEntree, MyEntrance.eYEntree, AltitudeOfMNT);
+    DeltaZ        := MyEntrance.eZEntree - AltitudeOfMNT;
+    AfficherMessageErreur(format('%d; %d.%d; %s;  %s; %s; %s;  %s; %s;', [i, MyEntrance.eRefSer, MyEntrance.eRefSt, MyEntrance.eNomEntree,
+                                                                      FormatterNombreOOo(MyEntrance.eXEntree),
+                                                                      FormatterNombreOOo(MyEntrance.eYEntree),
+                                                                      FormatterNombreOOo(MyEntrance.eZEntree),
+                                                                      FormatterNombreOOo(AltitudeOfMNT),
+                                                                      FormatterNombreOOo(DeltaZ)]));
+
+  end;
 end;
 
 (*

@@ -47,7 +47,7 @@ end;
 function TdlgEditCode.PrepareDialog(const FD: TToporobotStructure2012; const QIdx: integer; const QCode: TCode; const QCaption: string): boolean;
 begin
   self.Caption := QCaption;
-  CdrCode1.SetCode(QCode, True);
+  result := CdrCode1.Initialiser(QCode);
 end;
 
 

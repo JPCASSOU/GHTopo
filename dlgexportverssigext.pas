@@ -24,9 +24,9 @@ type
     btnSilhouetteColor: TColorButton;
     btnProcess: TButton;
     btnSelectFilename: TButton;
-    chkUseLeafletLocalLibrary: TCheckBox;
+    chkGrpOutputFormats: TCheckGroup;
     chkgrpCenterlinesSilhouettes: TCheckGroup;
-    cmbFormatExport: TComboBox;
+    chkUseLeafletLocalLibrary: TCheckBox;
     editTitreDocument: TEdit;
     editSilhouetteOpacity: TCurrencyEdit;
     editLeafletCtxtWidthinPercent: TCurrencyEdit;
@@ -34,7 +34,6 @@ type
     editExportFilename: TEdit;
     editCenterlineLinewidth: TCurrencyEdit;
 
-    Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
@@ -57,14 +56,13 @@ type
     rgbxModeExport: TRadioGroup;
     procedure btnProcessClick(Sender: TObject);
     procedure btnSelectFilenameClick(Sender: TObject);
-    procedure cmbFormatExportChange(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
     FDocTopo          : TToporobotStructure2012;
     FBDDEntites       : TBDDEntites;
     FConvertisseurEPSG: TConversionSysteme;  // convertisseur EPSG
     procedure AfficherProgression(const Etape: string; const Done, Starting, Ending, Step: integer);
-    procedure ExporterGIS(const QFilename: TStringDirectoryFilename;
+    procedure ExporterGIS(const QFilenameGIS: TStringDirectoryFilename;
                           const DocumentTitle: string;
                           const OutputFormat: TFormatExportGIS;
                           const UseLocalJSLibraries: boolean);
@@ -107,14 +105,21 @@ begin
     MyEPSG := FConvertisseurEPSG.GetEPSGSystemeFromCodeEPSG(FDocTopo.GetCodeEPSGSystemeCoordonnees().CodeEPSG);
     lbEPSGCavite.Caption := format('EPSG:%d - %s', [MyEPSG.CodeEPSG, MyEPSG.NomEPSG]);
     editExportFilename.Text := GetGHTopoDirectory() + 'Export001.htm';
-    // group box formats
-    cmbFormatExport.Items.Clear;
-    cmbFormatExport.Items.Add(GetResourceString(rsEXPORT_SIG_LEAFLET));
-    cmbFormatExport.Items.Add(GetResourceString(rsEXPORT_SIG_GOOGLE_KML));
-    cmbFormatExport.Items.Add(GetResourceString(rsEXPORT_SIG_GEO_JSON));
-    cmbFormatExport.Items.Add(GetResourceString(rsEXPORT_SIG_AUTOCAD_DXF));
 
-    cmbFormatExport.ItemIndex := 0;
+    chkGrpOutputFormats.Caption  := GetResourceString(rsEXPORT_SIG_OUTPUT_FORMATS);
+    chkGrpOutputFormats.Items.Clear;
+
+    chkGrpOutputFormats.Items.Add(GetResourceString(rsEXPORT_SIG_LEAFLET));
+    chkGrpOutputFormats.Items.Add(GetResourceString(rsEXPORT_SIG_GOOGLE_KML));
+    chkGrpOutputFormats.Items.Add(GetResourceString(rsEXPORT_SIG_GEO_JSON));
+    //chkGrpOutputFormats.Items.Add(GetResourceString(rsEXPORT_SIG_AUTOCAD_DXF));
+
+    chkGrpOutputFormats.Checked[0] := true;
+    chkGrpOutputFormats.Checked[1] := true;
+    chkGrpOutputFormats.Checked[2] := true;
+
+
+
     LbStepProcess.Caption := '';
     chkUseLeafletLocalLibrary.Caption := GetResourceString(rsEXPORT_SIG_USE_LOCAL_LEAFLET);
     chkUseLeafletLocalLibrary.Checked := false;
@@ -161,24 +166,32 @@ end;
 
 procedure TfrmExportVersSIGExt.btnProcessClick(Sender: TObject);
 var
-  EWE: TLabelSystemesCoordsEPSG;
-  QFilename: String;
+  QFilename, QFileNameWithExt: String;
   QDirectory: TStringDirectoryFilename;
+  QTitreDoc: TCaption;
 begin
   Panel1.Enabled := False;
   try
-    QFilename := trim(editExportFilename.Text);
+    QFilename  := ExtractFileNameWithoutExt(trim(editExportFilename.Text));
     QDirectory := ExtractFilePath(trim(editExportFilename.Text));
     if (not DirectoryExists(QDirectory)) then ForceDirectories(QDirectory);
-    if (FileExistsUTF8(qFilename)) then
+    QTitreDoc := Trim(editTitreDocument.Text);
+    // export selon cases à cocher
+    if (chkGrpOutputFormats.Checked[0]) then
     begin
-      if (Not GHTopoQuestionOuiNon(Format('Le fichier %s existe - Ecraser ?', [qFilename]))) then Exit;
+      QFileNameWithExt := QFilename + '.htm';
+      ExporterGIS(QFileNameWithExt, QTitreDoc, gisOSM    , chkUseLeafletLocalLibrary.Checked);
     end;
-    ExporterGIS(QFilename,
-               Trim(editTitreDocument.Text),
-               TFormatExportGIS(cmbFormatExport.ItemIndex),
-               chkUseLeafletLocalLibrary.Checked);
-
+    if (chkGrpOutputFormats.Checked[1]) then
+    begin
+      QFileNameWithExt := QFilename + '.kml';
+      ExporterGIS(QFileNameWithExt, QTitreDoc, gisKML    , chkUseLeafletLocalLibrary.Checked);
+    end;
+    if (chkGrpOutputFormats.Checked[2]) then
+    begin
+      QFileNameWithExt := QFilename + '.json';
+      ExporterGIS(QFileNameWithExt, QTitreDoc, gisGeoJSON, chkUseLeafletLocalLibrary.Checked);
+    end;
   finally
     Panel1.Enabled := true;
   end;
@@ -192,19 +205,12 @@ var
   QDefaultExt, QFileFilter: String;
 begin
   QFilename   := Trim(editExportFilename.Text);
-  QDefaultExt := ChooseString(cmbFormatExport.ItemIndex, ['.htm', '.kml']);
-  QFileFilter := ChooseString(cmbFormatExport.ItemIndex, [rsLEAFLET_FILE_FILTER, rsKML_FILE_FILTER]);
+  QDefaultExt := '.htm'; //ChooseString(cmbFormatExport.ItemIndex, ['.htm', '.kml']);
+  QFileFilter := 'GIS files|*.htm; *.kml; *.json'; //ChooseString(cmbFormatExport.ItemIndex, [rsLEAFLET_FILE_FILTER, rsKML_FILE_FILTER]);
 
   if (DoDialogSaveFile(QFileFilter, QDefaultExt, QFilename, QIdxFilter)) then editExportFilename.Text := QFilename;
 end;
 
-procedure TfrmExportVersSIGExt.cmbFormatExportChange(Sender: TObject);
-var
-  QDefaultExt: String;
-begin
-  QDefaultExt := ChooseString(cmbFormatExport.ItemIndex, ['.htm', '.kml', '.json', '.dxf']);
-  editExportFilename.text := ChangeFileExt(editExportFilename.text, QDefaultExt);
-end;
 
 
 procedure TfrmExportVersSIGExt.AfficherProgression(const Etape: string; const Done, Starting, Ending, Step: integer);
@@ -225,7 +231,7 @@ begin
   end;
 end;
 
-procedure TfrmExportVersSIGExt.ExporterGIS(const QFilename: TStringDirectoryFilename;
+procedure TfrmExportVersSIGExt.ExporterGIS(const QFilenameGIS: TStringDirectoryFilename;
                                            const DocumentTitle: string;
                                            const OutputFormat: TFormatExportGIS;
                                            const UseLocalJSLibraries: boolean);
@@ -261,14 +267,13 @@ begin
                                editSilhouetteOpacity.AsInteger)) then
     begin
       case OutputFormat of
-        gisOSM: QExportGIS.ExporterToOSM(Trim(editExportFilename.Text),
-                                         editLeafletCtxtWidthinPercent.AsInteger,
-                                         editLeafletCtxtHeight.AsInteger,
-                                         UseLocalJSLibraries);
-        gisKML: QExportGIS.ExporterToKML(Trim(editExportFilename.Text));
-        gisGeoJSON : QExportGIS.ExporterToGeoJSON(Trim(editExportFilename.Text));
-        gisDXF: QExportGIS.ExporterToDXF(Trim(editExportFilename.Text));
-
+        gisOSM     : QExportGIS.ExporterToOSM(QFilenameGIS,
+                                              editLeafletCtxtWidthinPercent.AsInteger,
+                                              editLeafletCtxtHeight.AsInteger,
+                                              UseLocalJSLibraries);
+        gisKML     : QExportGIS.ExporterToKML(QFilenameGIS);
+        gisGeoJSON : QExportGIS.ExporterToGeoJSON(QFilenameGIS);
+        gisDXF     : QExportGIS.ExporterToDXF(QFilenameGIS);
       else
         pass;
       end;

@@ -2,6 +2,7 @@ unit unitConteneurCodeCalcul;
 {.$ERROR Vérifier la concordance des unités angulaires pour les entrées}
 // Conteneur commun au code de calcul et à l'analyse de graphe
 // 13/06/2019: Point de contrôle temporel (contrôle de version)
+// 2021-06-14: Suppression du dialogue multithread (inutilisé)
 {$INCLUDE CompilationParameters.inc}
 interface
 
@@ -17,7 +18,6 @@ uses
   UnitClassPalette,
   Common, UnitObjetSerie,
   Classes, SysUtils, math, Graphics,
-  frmDisplayMultiThreadProcessings, // pour le multithread
   Forms; // pour Application  ;
 
 type
@@ -31,12 +31,8 @@ type
     // callback pour suivi de progression
     FTableJonctions     : TTableJonctionsXYZ;
     FTableBranches      : TTableBranchesXYZ;
-
-    procedure AfficherProgressionMonoThread(const Etape: string; const Done, Starting, Ending, Step: integer);
-
   protected // = visible dans les classes héritées
     FProcDispProgressionMonoThread: TProcDisplayProgression;
-    FDlgMultithreadProcessing: TdlgDispMultiThreadProcessing;
     FDocTopo          : TToporobotStructure2012;
     FBDDEntites       : TBDDEntites;
 
@@ -44,7 +40,7 @@ type
     FCouleurZMini     : TColor;
     FCouleurZMaxi     : TColor;
   public
-    function  Initialiser(const FD: TToporobotStructure2012; const BDE: TBDDEntites): boolean;
+    function  Initialiser(const FD: TToporobotStructure2012; const BDE: TBDDEntites; const P: TProcDisplayProgression): boolean;
     procedure Finaliser();
     procedure ViderTableJonctionsBranches();
     // version Noeuds et Branches
@@ -66,17 +62,18 @@ type
 end;
 implementation
 uses
-  DGCDummyUnit,
-  Dialogs;
+  DGCDummyUnit;
 //******************************************************************************
-
+//     procedure DispProgressionOfProcess(const IDThread: integer; const QStart, QEnd, QDone: integer);
 
 function TConteneurCodeCalcul.Initialiser(const FD: TToporobotStructure2012;
-                                          const BDE: TBDDEntites): boolean;
+                                          const BDE: TBDDEntites;
+                                          const P: TProcDisplayProgression): boolean;
 var
   WU, EWE: String;
 begin
   Result := false;
+  FProcDispProgressionMonoThread := P;
   AfficherMessage(Format('%s.Initialiser()', [ClassName]));
   WU := {$I %DATE%} + ' ' + {$I %TIME%};
   EWE := Format('%s Compiler - Version: %s compiled %s', [ExtractFileName(Application.ExeName), GetGHTopoVersion(), WU]);
@@ -92,14 +89,6 @@ begin
   FTableJonctions := TTableJonctionsXYZ.Create;
   FTableBranches  := TTableBranchesXYZ.Create;
   ViderTableJonctionsBranches();
-  // dialogue de progression
-  FDlgMultithreadProcessing := TdlgDispMultiThreadProcessing.Create(Application);
-  if (FDlgMultithreadProcessing.Initialiser(4)) then // nombre de threads: 4
-  begin
-    FProcDispProgressionMonoThread := FDlgMultithreadProcessing.AfficherProgressionOfMonoThread;
-    FDlgMultithreadProcessing.Show;
-    Application.ProcessMessages;
-  end;
   result := True;
 end;
 procedure TConteneurCodeCalcul.Finaliser;
@@ -108,19 +97,11 @@ begin
   try
     ViderTableJonctionsBranches();
     FPalette256.Finaliser();
-    FDlgMultithreadProcessing.Finaliser();
   finally
     FreeAndNil(FPalette256);
     FreeAndNil(FTableJonctions);//FTableJonctions.Free;
     FreeAndNil(FTableBranches);//FTableBranches.Free;
-    FreeAndNil(FDlgMultithreadProcessing);
   end;
-end;
-
-procedure TConteneurCodeCalcul.AfficherProgressionMonoThread(const Etape: string; const Done, Starting, Ending, Step: integer);
-begin
-  if (0 = Done mod Step) then Exit;
-  FDlgMultithreadProcessing.AfficherProgressionOfMonoThread(Etape, Done, Starting, Ending, Step);
 end;
 
 //******************************************************************************

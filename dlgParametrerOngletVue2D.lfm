@@ -1,12 +1,11 @@
 object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
-  Left = 83
-  Height = 368
-  Top = 361
-  Width = 833
-  BorderStyle = bsDialog
+  Left = 798
+  Height = 424
+  Top = 203
+  Width = 820
   Caption = 'Settings vue 2D'
-  ClientHeight = 368
-  ClientWidth = 833
+  ClientHeight = 424
+  ClientWidth = 820
   Font.CharSet = ANSI_CHARSET
   Font.Color = clBlack
   Font.Height = -13
@@ -18,13 +17,13 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
   LCLVersion = '2.0.0.4'
   object GroupBox1: TGroupBox
     Left = 436
-    Height = 326
+    Height = 382
     Top = 4
-    Width = 395
+    Width = 382
     Anchors = [akTop, akLeft, akRight, akBottom]
     Caption = 'Couches affichées'
-    ClientHeight = 305
-    ClientWidth = 391
+    ClientHeight = 361
+    ClientWidth = 378
     TabOrder = 0
     object chkPolygonales: TCheckBox
       Left = 4
@@ -37,7 +36,7 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
     object chkStations: TCheckBox
       Left = 4
       Height = 20
-      Top = 80
+      Top = 72
       Width = 71
       Caption = 'Stations'
       TabOrder = 1
@@ -45,7 +44,7 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
     object chkIDStations: TCheckBox
       Left = 4
       Height = 20
-      Top = 104
+      Top = 96
       Width = 84
       Caption = 'IDStations'
       TabOrder = 2
@@ -53,7 +52,7 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
     object chkCotes: TCheckBox
       Left = 4
       Height = 20
-      Top = 160
+      Top = 149
       Width = 73
       Caption = 'Cotation'
       TabOrder = 3
@@ -61,7 +60,7 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
     object chkParois: TCheckBox
       Left = 4
       Height = 20
-      Top = 56
+      Top = 52
       Width = 60
       Caption = 'Parois'
       TabOrder = 4
@@ -69,7 +68,7 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
     object chkSections: TCheckBox
       Left = 196
       Height = 20
-      Top = 56
+      Top = 52
       Width = 74
       Caption = 'Sections'
       TabOrder = 5
@@ -77,7 +76,7 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
     object chkRemplissage: TCheckBox
       Left = 4
       Height = 20
-      Top = 192
+      Top = 180
       Width = 101
       Caption = 'Remplissage'
       TabOrder = 6
@@ -85,13 +84,13 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
     object chkAltitudes: TCheckBox
       Left = 4
       Height = 20
-      Top = 132
+      Top = 123
       Width = 75
       Caption = 'Altitudes'
       TabOrder = 7
     end
     object editLargeurTraitCenterlineInPX: TSpinEdit
-      Left = 198
+      Left = 185
       Height = 24
       Top = 0
       Width = 56
@@ -103,7 +102,7 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
     object chkEntrances: TCheckBox
       Left = 4
       Height = 20
-      Top = 228
+      Top = 216
       Width = 67
       Caption = 'Entrées'
       OnChange = chkEntrancesChange
@@ -120,7 +119,7 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
     object chkCroquis: TCheckBox
       Left = 196
       Height = 20
-      Top = 80
+      Top = 72
       Width = 68
       Caption = 'Croquis'
       TabOrder = 11
@@ -128,7 +127,7 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
     object chkNoeuds: TCheckBox
       Left = 4
       Height = 20
-      Top = 272
+      Top = 256
       Width = 67
       Caption = 'Noeuds'
       TabOrder = 12
@@ -136,7 +135,7 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
     object chkCubeBounds: TCheckBox
       Left = 4
       Height = 20
-      Top = 332
+      Top = 316
       Width = 179
       Caption = 'Limites (2D) ou Cube (3D)'
       TabOrder = 13
@@ -144,8 +143,8 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
     object sclFillOpacity: TTrackBar
       Left = 117
       Height = 36
-      Top = 188
-      Width = 270
+      Top = 176
+      Width = 257
       Frequency = 16
       Max = 255
       PageSize = 8
@@ -157,24 +156,24 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
     object chkPOI: TCheckBox
       Left = 4
       Height = 20
-      Top = 300
+      Top = 282
       Width = 115
       Caption = 'Points d''intérêt'
       TabOrder = 15
     end
     object Label6: TLabel
-      Left = 146
+      Left = 133
       Height = 16
-      Top = 108
+      Top = 100
       Width = 35
       Anchors = [akTop, akRight]
       Caption = 'Taille'
       ParentColor = False
     end
     object editTailleTexteIDStations: TCurrencyEdit
-      Left = 190
+      Left = 177
       Height = 24
-      Top = 104
+      Top = 96
       Width = 80
       Alignment = taRightJustify
       DisplayFormat = '0.00'
@@ -192,27 +191,27 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
       Value = 0
     end
     object Label8: TLabel
-      Left = 274
+      Left = 261
       Height = 16
-      Top = 108
+      Top = 100
       Width = 24
       Anchors = [akTop, akRight]
       Caption = 'mm'
       ParentColor = False
     end
     object Label9: TLabel
-      Left = 146
+      Left = 133
       Height = 16
-      Top = 137
+      Top = 128
       Width = 35
       Anchors = [akTop, akRight]
       Caption = 'Taille'
       ParentColor = False
     end
     object editTailleTexteAltitudes: TCurrencyEdit
-      Left = 190
+      Left = 177
       Height = 24
-      Top = 131
+      Top = 122
       Width = 80
       Alignment = taRightJustify
       DisplayFormat = '0.00'
@@ -230,36 +229,36 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
       Value = 0
     end
     object Label10: TLabel
-      Left = 274
+      Left = 261
       Height = 16
-      Top = 137
+      Top = 128
       Width = 24
       Anchors = [akTop, akRight]
       Caption = 'mm'
       ParentColor = False
     end
     object Label11: TLabel
-      Left = 146
+      Left = 133
       Height = 16
-      Top = 164
+      Top = 153
       Width = 35
       Anchors = [akTop, akRight]
       Caption = 'Taille'
       ParentColor = False
     end
     object Label12: TLabel
-      Left = 274
+      Left = 261
       Height = 16
-      Top = 164
+      Top = 149
       Width = 24
       Anchors = [akTop, akRight]
       Caption = 'mm'
       ParentColor = False
     end
     object btnCouleurTexteIDStations: TColorButton
-      Left = 310
+      Left = 297
       Height = 25
-      Top = 104
+      Top = 96
       Width = 75
       Anchors = [akTop, akRight]
       BorderWidth = 2
@@ -267,9 +266,9 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
       ButtonColor = clBlack
     end
     object btnCouleurTexteAltitudes: TColorButton
-      Left = 310
+      Left = 297
       Height = 25
-      Top = 132
+      Top = 123
       Width = 75
       Anchors = [akTop, akRight]
       BorderWidth = 2
@@ -277,9 +276,9 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
       ButtonColor = clBlack
     end
     object btnCouleurTexteCotation: TColorButton
-      Left = 310
+      Left = 297
       Height = 25
-      Top = 160
+      Top = 149
       Width = 75
       Anchors = [akTop, akRight]
       BorderWidth = 2
@@ -287,18 +286,18 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
       ButtonColor = clBlack
     end
     object Label14: TLabel
-      Left = 146
+      Left = 133
       Height = 16
-      Top = 233
+      Top = 221
       Width = 35
       Anchors = [akTop, akRight]
       Caption = 'Taille'
       ParentColor = False
     end
     object editTailleTexteEntrees: TCurrencyEdit
-      Left = 190
+      Left = 177
       Height = 24
-      Top = 229
+      Top = 217
       Width = 80
       Alignment = taRightJustify
       DisplayFormat = '0.00'
@@ -316,18 +315,18 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
       Value = 0
     end
     object Label15: TLabel
-      Left = 274
+      Left = 261
       Height = 16
-      Top = 233
+      Top = 221
       Width = 24
       Anchors = [akTop, akRight]
       Caption = 'mm'
       ParentColor = False
     end
     object btnCouleurTexteEntrees: TColorButton
-      Left = 310
+      Left = 297
       Height = 25
-      Top = 228
+      Top = 216
       Width = 75
       Anchors = [akTop, akRight]
       BorderWidth = 2
@@ -335,18 +334,18 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
       ButtonColor = clBlack
     end
     object Label16: TLabel
-      Left = 146
+      Left = 133
       Height = 16
-      Top = 276
+      Top = 260
       Width = 35
       Anchors = [akTop, akRight]
       Caption = 'Taille'
       ParentColor = False
     end
     object editTailleTexteNoeuds: TCurrencyEdit
-      Left = 190
+      Left = 177
       Height = 24
-      Top = 272
+      Top = 256
       Width = 80
       Alignment = taRightJustify
       DisplayFormat = '0.00'
@@ -364,18 +363,18 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
       Value = 0
     end
     object Label17: TLabel
-      Left = 274
+      Left = 261
       Height = 16
-      Top = 276
+      Top = 260
       Width = 24
       Anchors = [akTop, akRight]
       Caption = 'mm'
       ParentColor = False
     end
     object btnCouleurTexteNoeuds: TColorButton
-      Left = 310
+      Left = 297
       Height = 25
-      Top = 272
+      Top = 256
       Width = 75
       Anchors = [akTop, akRight]
       BorderWidth = 2
@@ -383,18 +382,18 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
       ButtonColor = clBlack
     end
     object Label18: TLabel
-      Left = 146
+      Left = 133
       Height = 16
-      Top = 304
+      Top = 286
       Width = 35
       Anchors = [akTop, akRight]
       Caption = 'Taille'
       ParentColor = False
     end
     object editTailleTextePOIs: TCurrencyEdit
-      Left = 190
+      Left = 177
       Height = 24
-      Top = 300
+      Top = 282
       Width = 80
       Alignment = taRightJustify
       DisplayFormat = '0.00'
@@ -412,18 +411,18 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
       Value = 0
     end
     object Label19: TLabel
-      Left = 274
+      Left = 261
       Height = 16
-      Top = 304
+      Top = 286
       Width = 24
       Anchors = [akTop, akRight]
       Caption = 'mm'
       ParentColor = False
     end
     object btnCouleurTextePOIs: TColorButton
-      Left = 310
+      Left = 297
       Height = 25
-      Top = 300
+      Top = 282
       Width = 75
       Anchors = [akTop, akRight]
       BorderWidth = 2
@@ -431,7 +430,7 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
       ButtonColor = clBlack
     end
     object Label20: TLabel
-      Left = 258
+      Left = 245
       Height = 16
       Top = 4
       Width = 24
@@ -440,7 +439,7 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
       ParentColor = False
     end
     object editLargeurTraitCenterlineInMM: TCurrencyEdit
-      Left = 286
+      Left = 273
       Height = 24
       Top = 0
       Width = 61
@@ -460,7 +459,7 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
       Value = 0.25
     end
     object Label21: TLabel
-      Left = 358
+      Left = 345
       Height = 16
       Top = 4
       Width = 24
@@ -469,9 +468,9 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
       ParentColor = False
     end
     object editTailleTexteCotation: TCurrencyEdit
-      Left = 190
+      Left = 177
       Height = 24
-      Top = 159
+      Top = 148
       Width = 80
       Alignment = taRightJustify
       DisplayFormat = '0.00'
@@ -489,9 +488,9 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
       Value = 0
     end
     object chkEntranceNames: TCheckBox
-      Left = 20
+      Left = 16
       Height = 20
-      Top = 248
+      Top = 236
       Width = 89
       Caption = 'Avec noms'
       TabOrder = 23
@@ -499,15 +498,15 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
     object chkDoDrawViseesNonRetenues: TCheckBox
       Left = 4
       Height = 20
-      Top = 358
+      Top = 338
       Width = 257
       Caption = 'Visées non retenues par le MétaFiltre'
       TabOrder = 24
     end
     object btnColorViseesNonRetenues: TColorButton
-      Left = 310
+      Left = 297
       Height = 25
-      Top = 356
+      Top = 336
       Width = 75
       Anchors = [akTop, akRight]
       BorderWidth = 2
@@ -524,9 +523,9 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
     end
   end
   object BitBtn1: TBitBtn
-    Left = 599
+    Left = 586
     Height = 29
-    Top = 336
+    Top = 392
     Width = 114
     Anchors = [akRight, akBottom]
     Default = True
@@ -536,9 +535,9 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
     TabOrder = 1
   end
   object BitBtn2: TBitBtn
-    Left = 717
+    Left = 704
     Height = 29
-    Top = 336
+    Top = 392
     Width = 114
     Anchors = [akRight, akBottom]
     Cancel = True
@@ -549,15 +548,16 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
   end
   object PageControl1: TPageControl
     Left = 4
-    Height = 248
+    Height = 340
     Top = 4
     Width = 428
-    ActivePage = tabShtGaleries
-    TabIndex = 2
+    ActivePage = tabShtGeneral
+    Anchors = [akTop, akLeft, akBottom]
+    TabIndex = 0
     TabOrder = 3
     object tabShtGeneral: TTabSheet
       Caption = 'tabShtGeneral'
-      ClientHeight = 219
+      ClientHeight = 311
       ClientWidth = 420
       object Label1: TLabel
         Left = 4
@@ -637,10 +637,25 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
         TabOrder = 0
         Value = 1
       end
+      object trkMagnificationZ: TTrackBar
+        Left = 148
+        Height = 40
+        Top = 136
+        Width = 268
+        Max = 1000
+        Min = 1
+        OnChange = trkMagnificationZChange
+        PageSize = 100
+        Position = 100
+        TickMarks = tmTopLeft
+        TickStyle = tsManual
+        Anchors = [akTop, akLeft, akRight]
+        TabOrder = 1
+      end
     end
     object tabShtQuadrillage: TTabSheet
       Caption = 'tabShtQuadrillage'
-      ClientHeight = 219
+      ClientHeight = 311
       ClientWidth = 420
       object chkQuadrillage: TCheckBox
         Left = 4
@@ -726,7 +741,7 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
     end
     object tabShtGaleries: TTabSheet
       Caption = 'tabShtGaleries'
-      ClientHeight = 219
+      ClientHeight = 311
       ClientWidth = 420
       object chkVolumesVisibles: TCheckBox
         Left = 4
@@ -816,7 +831,7 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
     end
     object tabShtMNT: TTabSheet
       Caption = 'tabShtMNT'
-      ClientHeight = 219
+      ClientHeight = 311
       ClientWidth = 420
       object lbCoteMini: TLabel
         Left = 4
@@ -927,12 +942,20 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
         Caption = 'Transparence'
         ParentColor = False
       end
+      object chkDisplayProfils: TCheckBox
+        Left = 4
+        Height = 20
+        Top = 160
+        Width = 163
+        Caption = 'Profils topographiques'
+        TabOrder = 3
+      end
     end
   end
   object lbX1Y1: TStaticText
     Left = 4
     Height = 17
-    Top = 293
+    Top = 349
     Width = 428
     Anchors = [akLeft, akBottom]
     BorderStyle = sbsSunken
@@ -949,7 +972,7 @@ object frmParametrerOngletVue2D: TfrmParametrerOngletVue2D
   object lbX2Y2: TStaticText
     Left = 4
     Height = 17
-    Top = 313
+    Top = 369
     Width = 428
     Anchors = [akLeft, akBottom]
     BorderStyle = sbsSunken

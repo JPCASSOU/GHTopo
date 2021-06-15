@@ -910,10 +910,13 @@ object frmVueEnPlan: TfrmVueEnPlan
           object chkTopoNavig: TCheckBox
             Left = 316
             Height = 20
+            Hint = 'Guidage Positionnel Souterrain'
             Top = 108
             Width = 48
             Caption = 'GPS'
             OnChange = chkTopoNavigChange
+            ParentShowHint = False
+            ShowHint = True
             TabOrder = 4
           end
         end
@@ -991,22 +994,21 @@ object frmVueEnPlan: TfrmVueEnPlan
       end
       object pnlGrapheReseau: TPanel
         Left = 8
-        Height = 213
+        Height = 517
         Top = 139
         Width = 364
-        Anchors = [akTop, akLeft, akRight, akBottom]
+        Anchors = [akTop, akLeft, akRight]
         BevelOuter = bvLowered
-        ClientHeight = 213
+        ClientHeight = 517
         ClientWidth = 364
-        Color = 11796479
+        Color = 11468799
         ParentColor = False
         TabOrder = 1
-        OnClick = pnlGrapheReseauClick
         object lsbPathRoadMap: TComboBox
           Left = 60
           Height = 24
           Top = 84
-          Width = 292
+          Width = 228
           Anchors = [akTop, akLeft, akRight]
           ItemHeight = 16
           OnChange = lsbPathRoadMapChange
@@ -1109,13 +1111,13 @@ object frmVueEnPlan: TfrmVueEnPlan
         end
         object Panel6: TPanel
           Left = 5
-          Height = 97
+          Height = 401
           Top = 112
-          Width = 349
+          Width = 353
           Anchors = [akTop, akLeft, akRight, akBottom]
           BevelOuter = bvLowered
-          ClientHeight = 97
-          ClientWidth = 349
+          ClientHeight = 401
+          ClientWidth = 353
           Color = 16777173
           ParentColor = False
           TabOrder = 6
@@ -1123,7 +1125,7 @@ object frmVueEnPlan: TfrmVueEnPlan
             Left = 105
             Height = 24
             Top = 8
-            Width = 235
+            Width = 239
             Alignment = taCenter
             Anchors = [akTop, akLeft, akRight]
             BorderStyle = sbsSingle
@@ -1144,7 +1146,7 @@ object frmVueEnPlan: TfrmVueEnPlan
             Left = 105
             Height = 28
             Top = 36
-            Width = 235
+            Width = 239
             Alignment = taCenter
             Anchors = [akTop, akLeft, akRight]
             BorderStyle = sbsSingle
@@ -1165,7 +1167,7 @@ object frmVueEnPlan: TfrmVueEnPlan
             Left = 105
             Height = 24
             Top = 68
-            Width = 235
+            Width = 239
             Anchors = [akTop, akLeft, akRight]
             BorderStyle = sbsSingle
             Caption = '0'
@@ -1203,6 +1205,60 @@ object frmVueEnPlan: TfrmVueEnPlan
             Caption = 'Distance'
             ParentColor = False
           end
+          object Panel7: TPanel
+            Left = 104
+            Height = 297
+            Top = 97
+            Width = 240
+            Anchors = [akTop, akLeft, akRight, akBottom]
+            ClientHeight = 297
+            ClientWidth = 240
+            TabOrder = 3
+            inline CdrBoussole1: TCdrBoussole
+              Left = 1
+              Height = 295
+              Top = 1
+              Width = 238
+              ClientHeight = 295
+              ClientWidth = 238
+              inherited pnlBoussole: TPanel
+                Height = 267
+                Width = 234
+                ClientHeight = 267
+                ClientWidth = 234
+                inherited Vue: TPaintBox
+                  Height = 267
+                  Width = 234
+                end
+              end
+              inherited lbInclinX: TStaticText
+                Top = 271
+              end
+              inherited lbInclinY: TStaticText
+                Top = 271
+              end
+            end
+          end
+        end
+        object btnPathPrevious: TButton
+          Left = 292
+          Height = 25
+          Top = 84
+          Width = 32
+          Anchors = [akTop]
+          Caption = '<'
+          OnClick = btnPathPreviousClick
+          TabOrder = 7
+        end
+        object btnPathNext: TButton
+          Left = 328
+          Height = 25
+          Top = 84
+          Width = 32
+          Anchors = [akTop]
+          Caption = '>'
+          OnClick = btnPathNextClick
+          TabOrder = 8
         end
       end
     end

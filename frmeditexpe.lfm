@@ -1,7 +1,7 @@
 object dlgEditExpe: TdlgEditExpe
-  Left = 633
+  Left = 508
   Height = 252
-  Top = 294
+  Top = 402
   Width = 592
   Caption = 'dlgEditExpe'
   ClientHeight = 252

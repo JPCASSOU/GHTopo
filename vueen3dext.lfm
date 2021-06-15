@@ -1,12 +1,12 @@
 object frmVue3DExt: TfrmVue3DExt
   Left = 54
-  Height = 770
+  Height = 750
   Top = 150
-  Width = 1086
+  Width = 1079
   Align = alClient
   Caption = 'frmVue3DExt'
-  ClientHeight = 770
-  ClientWidth = 1086
+  ClientHeight = 750
+  ClientWidth = 1079
   Font.CharSet = ANSI_CHARSET
   Font.Color = clBlack
   Font.Height = -13
@@ -20,31 +20,31 @@ object frmVue3DExt: TfrmVue3DExt
   LCLVersion = '2.0.0.4'
   object Panel1: TPanel
     Left = 4
-    Height = 727
+    Height = 707
     Top = 38
-    Width = 905
+    Width = 898
     Anchors = [akTop, akLeft, akRight, akBottom]
-    ClientHeight = 727
-    ClientWidth = 905
+    ClientHeight = 707
+    ClientWidth = 898
     TabOrder = 0
     OnClick = Panel1Click
     inline CdrVue3DExt1: TCdrVue3DExt
       Left = 1
-      Height = 725
+      Height = 705
       Top = 1
-      Width = 903
-      ClientHeight = 725
-      ClientWidth = 903
+      Width = 896
+      ClientHeight = 705
+      ClientWidth = 896
       DesignLeft = 680
       DesignTop = 240
       inherited pnlVue: TPanel
-        Height = 725
-        Width = 903
-        ClientHeight = 725
-        ClientWidth = 903
+        Height = 705
+        Width = 896
+        ClientHeight = 705
+        ClientWidth = 896
         inherited Vue: TPaintBox
-          Height = 723
-          Width = 901
+          Height = 703
+          Width = 894
         end
       end
     end
@@ -53,11 +53,11 @@ object frmVue3DExt: TfrmVue3DExt
     Left = 4
     Height = 31
     Top = 2
-    Width = 911
+    Width = 904
     Anchors = [akTop, akLeft, akRight]
     BevelOuter = bvLowered
     ClientHeight = 31
-    ClientWidth = 911
+    ClientWidth = 904
     TabOrder = 1
     object chkFiltrer: TCheckBox
       Left = 4
@@ -71,13 +71,13 @@ object frmVue3DExt: TfrmVue3DExt
       Left = 100
       Height = 24
       Top = 3
-      Width = 807
+      Width = 800
       Anchors = [akTop, akLeft, akRight]
       TabOrder = 1
     end
   end
   object Panel3: TPanel
-    Left = 913
+    Left = 906
     Height = 316
     Top = 38
     Width = 167
@@ -314,9 +314,9 @@ object frmVue3DExt: TfrmVue3DExt
     end
   end
   object BitBtn1: TBitBtn
-    Left = 917
+    Left = 910
     Height = 36
-    Top = 729
+    Top = 709
     Width = 164
     Anchors = [akRight, akBottom]
     DefaultCaption = True
@@ -325,7 +325,7 @@ object frmVue3DExt: TfrmVue3DExt
     TabOrder = 3
   end
   object btnExportGCP: TButton
-    Left = 914
+    Left = 907
     Height = 32
     Top = 2
     Width = 165
@@ -335,95 +335,19 @@ object frmVue3DExt: TfrmVue3DExt
     TabOrder = 4
   end
   object grbxParamsMaillage: TGroupBox
-    Left = 914
-    Height = 285
+    Left = 907
+    Height = 77
     Top = 360
     Width = 166
-    Anchors = [akTop, akRight, akBottom]
+    Anchors = [akTop, akRight]
     Caption = 'Maillage'
-    ClientHeight = 264
+    ClientHeight = 56
     ClientWidth = 162
     TabOrder = 6
-    object cmbModeDessinMaillage: TComboBox
-      Left = 4
-      Height = 24
-      Top = 4
-      Width = 154
-      Anchors = [akTop, akLeft, akRight]
-      ItemHeight = 16
-      ItemIndex = 0
-      Items.Strings = (
-        'Aucun'
-        'Fil de fer'
-        'Solide'
-        'Transparent'
-      )
-      Style = csDropDownList
-      TabOrder = 0
-      Text = 'Aucun'
-    end
-    object btnColorZMiniMaillage: TColorButton
-      Left = 68
-      Height = 30
-      Top = 132
-      Width = 90
-      Anchors = [akTop, akLeft, akRight]
-      BorderWidth = 2
-      ButtonColorSize = 16
-      ButtonColor = clLime
-    end
-    object btnColorZMaxiMaillage: TColorButton
-      Left = 68
-      Height = 30
-      Top = 100
-      Width = 90
-      Anchors = [akTop, akLeft, akRight]
-      BorderWidth = 2
-      ButtonColorSize = 16
-      ButtonColor = clMaroon
-    end
-    object Label11: TLabel
-      Left = 4
-      Height = 16
-      Top = 136
-      Width = 38
-      Caption = 'Z Mini'
-      ParentColor = False
-    end
-    object Label12: TLabel
-      Left = 4
-      Height = 16
-      Top = 104
-      Width = 42
-      Caption = 'Z Maxi'
-      ParentColor = False
-    end
-    object Button6: TButton
-      Left = 4
-      Height = 25
-      Top = 164
-      Width = 154
-      Anchors = [akTop, akLeft, akRight]
-      Caption = 'Reconstruire'
-      TabOrder = 1
-    end
-    object trkbMaillageOpacity: TTrackBar
-      Left = 4
-      Height = 40
-      Top = 32
-      Width = 154
-      Max = 255
-      PageSize = 10
-      Position = 50
-      TickMarks = tmTopLeft
-      TickStyle = tsManual
-      Anchors = [akTop, akLeft, akRight]
-      TabOrder = 2
-    end
     object lbStatusMaillage: TStaticText
       Left = 4
       Height = 21
-      Top = 241
+      Top = 33
       Width = 154
       Alignment = taCenter
       Anchors = [akLeft, akRight, akBottom]
@@ -431,31 +355,23 @@ object frmVue3DExt: TfrmVue3DExt
       Caption = '---'
       Color = clSilver
       ParentColor = False
-      TabOrder = 3
-    end
-    object chkDegradeAltitudes: TCheckBox
-      Left = 4
-      Height = 20
-      Top = 80
-      Width = 143
-      Caption = 'Dégradé d''altitudes'
-      TabOrder = 4
+      TabOrder = 0
     end
     object btnDetourerMNT: TButton
       Left = 3
       Height = 25
-      Top = 212
+      Top = 4
       Width = 155
       Anchors = [akRight, akBottom]
       Caption = 'btnDetourerMNT'
       OnClick = btnDetourerMNTClick
-      TabOrder = 5
+      TabOrder = 1
     end
   end
   object pnlSetValue: TPanel
-    Left = 930
+    Left = 916
     Height = 238
-    Top = 244
+    Top = 356
     Width = 150
     Anchors = [akTop, akRight]
     BevelInner = bvRaised

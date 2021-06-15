@@ -37,7 +37,11 @@ type TPathBetweenNodes = record
 end;
 //******************************************************************************
 
-type TPathFindingGraphe = class(TBZGraphNode)
+type
+
+{ TPathFindingGraphe }
+
+ TPathFindingGraphe = class(TBZGraphNode)
   strict private
 
     FDocuTopo: TToporobotStructure2012;
@@ -49,6 +53,7 @@ type TPathFindingGraphe = class(TBZGraphNode)
     FListeDesPlusCourtsChemins: TListeSimple<TPathBetweenNodes>;
     FLastError: TGrapheLastError;
     FAfficherGraphe      : TProcOjObject;
+
     function SetLastError(const QErrCode: integer; const QErrMsg: string): boolean;
   private
     function   Reset(): boolean;
@@ -80,6 +85,9 @@ type TPathFindingGraphe = class(TBZGraphNode)
       function   GetNbStations(): integer;
     procedure  EndNodesList();  // clôture cette liste et effectue les traitements préparatoires (tris, ...)
     function   AddArcBetweenStations(const Ser1, St1, Ser2, St2: integer; const Bidirectionnel: boolean = true; const Weight: double = 1.00): boolean;
+    function   RemoveNode(const Ser1, St1: integer): boolean;
+    function RemoveArcBetweenStations(const Ser1, St1, Ser2, St2: integer;  const Bidirectionnel: boolean): boolean;
+
     // spécifique stations topo
     function RechercherPlusCourtChemin(var MyPath: TPathBetweenNodes): boolean;
 
@@ -100,6 +108,7 @@ type TPathFindingGraphe = class(TBZGraphNode)
                                          const QIDStationDepart, QIDStationArrivee: string;
                                          const BackgroundColorCarte, CouleurCenterlines: TColor;
                                          const CanvasWidthInPixels, CanvasHeightInPixels, WidthMenuLateralInPixels: integer);
+
 end;
 
 
@@ -502,6 +511,73 @@ begin
   WU2 := QAddArc(Ser2, St2, Ser1, St1);
   result := (WU1 and WU2);
   if (not Result) then AfficherMessageErreur(Format('*** Arc %d.%d <-> %d.%d non inséré', [Ser1, St1, Ser2, St2]));
+end;
+
+function TPathFindingGraphe.RemoveNode(const Ser1, St1: integer): boolean;
+var
+  Q1: Boolean;
+  FromIdxNode: TNumeroNoeud;
+  BS1: TBZClassNode;
+  i: integer;
+  NbVoisins: Int64;
+begin
+  result := false;
+  AfficherMessageErreur(format('%s.RemoveNode(%d.%d)', [classname, Ser1, St1]));
+  Q1 := FindNoeudByIDStation(MakeTIDBaseStation(Ser1, St1, false), BS1, FromIdxNode);
+  if (Not Q1) then exit(SetLastError(ERR_GRAPHE_ARC_EXTR_DEB_NOT_FOUND, Format('*** Noeud introuvable: %d.%d ***', [Ser1, St1])));
+  AfficherMessageErreur(format('-- Noeud trouvé: %d.%d', [Ser1, St1]));
+  NbVoisins := BS1.NodeLinkList.Count;
+  AfficherMessageErreur(format('-- Parcours du noeud: %d - %d voisins', [BS1.IDStation, NbVoisins]));
+  (*
+  if (NbVoisins > 0) then
+  begin
+    for i := NbVoisins - 1 downto 0 do BS1.NodeLinkList.Delete(i);
+
+  end;
+  //*)
+  BS1.NodeLinkList.ClearListe();
+
+  self.Delete(FromIdxNode);
+end;
+// Fonctionne
+function TPathFindingGraphe.RemoveArcBetweenStations(const Ser1, St1, Ser2, St2: integer; const Bidirectionnel: boolean): boolean;
+var
+  toto: boolean;
+  function QRemoveArc(const QSer1, QSt1, QSer2, QSt2: integer): boolean;
+  var
+    Q1, Q2: Boolean;
+    BS1: TBZClassNode;
+    FromIdxNode, ToIdxNode: integer;
+    i, NbRemoved: integer;
+    NbVoisins: Int64;
+    EWE: TIDBaseStation;
+    BL2: TBZNodeLinkList;
+    BS2: TBZNodeLink;
+  begin
+    result := false;
+    AfficherMessageErreur(format('%s.RemoveArcBetweenStations(%d.%d -> %d.%d)', [classname, QSer1, QSt1, QSer2, QSt2]));
+    Q1 := FindNoeudByIDStation(MakeTIDBaseStation(QSer1, QSt1, false), BS1, FromIdxNode);
+    if (Not Q1) then exit(SetLastError(ERR_GRAPHE_ARC_EXTR_DEB_NOT_FOUND, Format('***Début %d.%d de l''arc non trouvée', [QSer1, QSt1])));
+    AfficherMessageErreur(format('-- Point de départ trouvé: %d.%d', [QSer1, QSt1]));
+    NbVoisins := BS1.NodeLinkList.Count;
+    AfficherMessageErreur(format('-- Parcours du noeud: %d - %d voisins', [BS1.IDStation, NbVoisins]));
+    if (0 = NbVoisins) then exit;
+    NbRemoved := 0;
+    for i := NbVoisins - 1 downto 0 do
+    begin
+      BL2 := BS1.NodeLinkList;
+      BS2 := BS1.NodeLinkList.Items[i];
+      AfficherMessageErreur(Format(' --- %d: Voisin %d: %d - %d.%d', [BS1.IDStation, i, BS2.Node.IDStation, QSer2, QSt2]));
+      EWE := MakeTIDBaseStation(QSer2, QSt2, false);
+      if (EWE = BS2.Node.IDStation) then BS1.NodeLinkList.Delete(i);
+    end;
+    NbVoisins := BS1.NodeLinkList.Count;
+    AfficherMessageErreur(format('-- Parcours du noeud terminé: %d - %d voisins', [BS1.IDStation, NbVoisins]))
+  end;
+
+begin
+  result := QRemoveArc(Ser1, St1, Ser2, St2); // sens aller
+  if (Bidirectionnel) then result := QRemoveArc(Ser2, St2, Ser1, St1);
 end;
 
 

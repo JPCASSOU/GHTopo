@@ -1,7 +1,7 @@
 object dlgEditEntrance: TdlgEditEntrance
-  Left = 593
+  Left = 498
   Height = 215
-  Top = 490
+  Top = 367
   Width = 589
   Caption = 'dlgEditEntrance'
   ClientHeight = 215
@@ -90,6 +90,9 @@ object dlgEditEntrance: TdlgEditEntrance
       end
       inherited btnGetCoordsFromIDTerrain: TButton
         Width = 150
+      end
+      inherited btnExtractFromMNT: TButton
+        Width = 188
       end
     end
   end

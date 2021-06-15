@@ -1490,8 +1490,6 @@ begin
   if (DoRefreshPlan) then RedessinEcran(Vue.Width, Vue.Height, true);
 end;
 
-
-
 function TGHTopoContext2DA.AjouterUneAntenneALaStationCourante(const QLongueur, QAzimut, QPente: double; const DoRefreshPlan: boolean): boolean;
 var
   QX, QY, QZ, QP: double;
@@ -1563,22 +1561,22 @@ end;
 
 procedure TGHTopoContext2DA.acBtnPanEEExecute(Sender: TObject);
 begin
-  QDeplacerVue(-1, 0);
+  QDeplacerVue(-1,  0);
 end;
 
 procedure TGHTopoContext2DA.acBtnPanNNExecute(Sender: TObject);
 begin
-  QDeplacerVue(0, -1);
+  QDeplacerVue( 0, -1);
 end;
 
 procedure TGHTopoContext2DA.acBtnPanSSExecute(Sender: TObject);
 begin
-  QDeplacerVue(0, 1);
+  QDeplacerVue( 0,  1);
 end;
 
 procedure TGHTopoContext2DA.acBtnPanWWExecute(Sender: TObject);
 begin
-  QDeplacerVue(1, 0);
+  QDeplacerVue( 1,  0);
 end;
 
 // behaviour of 'Continue here' of PocketTopo  - Même comportement que le 'Continuer ici' de PocketTopo
@@ -1907,6 +1905,7 @@ var
   QIdx, EWE, QLastIdxPolyline: integer;
   QEntrance1            , QEntrance2: TEntrance;
   QE: TBDDEntitesFindViseeOrEntrance;
+  QAT: TLineAttributes;
   procedure ReinitFZC(const DoFC1, DoFC2: boolean);
   begin
     if (DoFC1) then
@@ -2071,7 +2070,8 @@ begin
         QQ2 := FBDDEntites.GetStationOrEntranceFromXYZ(FZC2.X, FZC2.Y, 0.00, MAX_DISTANCE_CAPTURE, [tpVISEES], false, FCurrentInternalIdxEntite, ST2, QEntrance2, QDistance, QE);
         if (QQ1 and QQ2) then
         begin
-          FMyMaillage.ExtractAndAddProfilTopo(FZC1, FZC2);
+          QAT.SetAttributes(clRed, 192, 1, 0.015);
+          FMyMaillage.ExtractAndAddProfilTopo(FZC1, FZC2, QAT, '');
           self.RefreshDessin();
         end;
       end;

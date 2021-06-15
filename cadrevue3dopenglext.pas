@@ -305,7 +305,7 @@ begin
       Flight_ambient[3]:=1.0;
 
       FVue3DParams.ColorBackGround  := clBlack;
-      FVue3DParams.ColorReferentiel := clBlue;
+      FVue3DParams.LineReferentiel.SetAttributes(clBlue, 255, 0, 0.05);
 
       FVue3DParams.FovOrZoom  := 60.00;
       FVue3DParams.Theta      := 45.00;
@@ -394,12 +394,13 @@ begin
     Q2 := Fcs1.Z + 0.20 * Hypot2D(Fcs2.X - Fcs1.X, Fcs2.Y - Fcs1.Y);
     Fcs2.Z := Max(Q1, Q2);
   t[0] := Fcs1.Z;  t[1] := Q1; //Fcs2.Z;
-  for i:=0 to 1 do begin
+  for i:= 0 to 1 do
+  begin
     glBegin(GL_LINE_LOOP);
-     glVertex3d(Fcs1.X, Fcs1.Y, t[i]);
-     glVertex3d(Fcs2.X, Fcs1.Y, t[i]);
-     glVertex3d(Fcs2.X, Fcs2.Y, t[i]);
-     glVertex3d(Fcs1.X, Fcs2.Y, t[i]);
+      glVertex3d(Fcs1.X, Fcs1.Y, t[i]);
+      glVertex3d(Fcs2.X, Fcs1.Y, t[i]);
+      glVertex3d(Fcs2.X, Fcs2.Y, t[i]);
+      glVertex3d(Fcs1.X, Fcs2.Y, t[i]);
     glEnd();
   end;
   glBegin(GL_LINES);
@@ -697,10 +698,9 @@ var
     glDisable(GL_COLOR_MATERIAL);
     // dessin d'objets volumiques
     glLightfv (GL_LIGHT0, GL_AMBIENT, @Flight_ambient); // lumière ambiante
-    glEnable(GL_LIGHTING);   	                          // Active l'éclairage
+    glEnable(GL_LIGHTING);   	                        // Active l'éclairage
     glEnable(GL_LIGHT0);
     // dessin des volumes cavité
-    //AfficherMessage('-- >Volumes');
     //glEnable(GL_COLOR_MATERIAL);
     if (edVolumes in FVue3DParams.ElementsDrawn) then glCallList(FglListVOLUMES);
     // dessin du maillage
@@ -734,7 +734,7 @@ var
     glDisable(GL_LIGHTING);
     glDisable(GL_LIGHT0);
     // le cube enveloppe
-    cc := PascalToGLColor(FVue3DParams.ColorCube);
+    cc := PascalToGLColor(FVue3DParams.LineCube.Color);
     glColor3d(cc.R, cc.G, cc.B);
     if (edBounds      in FVue3DParams.ElementsDrawn) then glCallList(FglListCUBE);
     if (edPolygonals  in FVue3DParams.ElementsDrawn) then glCallList(FglListPOLYGONALS);

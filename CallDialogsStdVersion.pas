@@ -97,6 +97,12 @@ procedure DisplayVue3DGDIExt(const QBDDEntites: TBDDEntites;
 procedure DisplayVue3DOpenGLExt(const QBDDEntites: TBDDEntites;
                                 const QMaillage: TMaillage;
                                 const QFiltres: string);
+procedure DisplayVue3DOpenGL3(const QBDDEntites: TBDDEntites;
+                                const QMaillage: TMaillage;
+                                const QFiltres: string);
+
+
+
 {$ENDIF}
 
 // affichage d'une station (détails + QR)
@@ -248,6 +254,8 @@ function SaisirIDStation(const Msg: string; var S: string): boolean;
 function DisplayClavierNumerique(const Title: string; const ModeSaisie: TPaveNumModeSaisie; var Value: string): boolean;
 // Recherche dans la base
 function SearchInGHTopoDatabase(const FD: TToporobotStructure2012; const FE: TBDDEntites; const QFindWhat: string; const QPerformAction: TProcedureOfObject): boolean;
+// tests unitaires pour un TCadreBoussole
+procedure DisplayTestUnitaireTCadreBoussole();
 
 implementation
 uses
@@ -271,6 +279,7 @@ uses
 
   {$IFDEF USE_VIEWER_OPENGL}
   , VueEn3DOpenGLExt         // visualisateur 3D OpenGL
+  , frmVisualisateurOpenGL3  // nouveau visualisateur
   {$ENDIF}
   , dlgExportVersSIGExt   // export vers SIG
   , dlgStatistiquesExt    // stats (nouvelle version)
@@ -323,6 +332,7 @@ uses
   , frmEditGISLayer
   , frmRegisterChineseUser
   , frmSearchInDatabase
+  , frmBoussole // tests unitaire pour un cadre Boussole
   ; // et ce point-virgule est indispensable
 //******************************************************************************
 // mini convertisseur
@@ -614,6 +624,26 @@ begin
   end;
   AfficherMemoryUsage();
 end;
+
+procedure DisplayVue3DOpenGL3(const QBDDEntites: TBDDEntites; const QMaillage: TMaillage; const QFiltres: string);
+var
+  TD: TdlgVisualisateurOpenGL3;
+begin
+  AfficherMemoryUsage();
+  TD := TdlgVisualisateurOpenGL3.Create(Application);
+  try
+    if (TD.Initialiser(QBDDEntites, QMaillage, QFiltres)) then
+    begin
+      TD.Caption := GetResourceString(rsRENDU3D);
+      TD.ShowModal;
+    end;
+  finally
+    TD.Release;
+  end;
+  AfficherMemoryUsage();
+
+end;
+
 {$ENDIF}
 
 //******************************************************************************
@@ -1693,6 +1723,18 @@ begin
     FreeAndNil(TD);
   end;
 
+end;
+// tests unitaires pour un TCadreBoussole
+procedure DisplayTestUnitaireTCadreBoussole();
+var
+  TD: TdlgBoussole;
+begin
+  TD := TdlgBoussole.Create(Application);
+  try
+    if (TD.Initialiser()) then TD.ShowModal;
+  finally
+    TD.Release;
+  end;
 end;
 
 end.

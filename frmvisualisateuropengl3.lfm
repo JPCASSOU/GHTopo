@@ -1,0 +1,181 @@
+object dlgVisualisateurOpenGL3: TdlgVisualisateurOpenGL3
+  Left = 274
+  Height = 748
+  Top = 208
+  Width = 1100
+  Caption = 'dlgVisualisateurOpenGL3'
+  ClientHeight = 748
+  ClientWidth = 1100
+  Position = poScreenCenter
+  LCLVersion = '2.0.0.4'
+  object Panel1: TPanel
+    Left = 4
+    Height = 730
+    Top = 4
+    Width = 758
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    ClientHeight = 730
+    ClientWidth = 758
+    TabOrder = 0
+    inline CdrOpenGL3_1: TCdrOpenGL3
+      Left = 2
+      Height = 726
+      Top = 2
+      Width = 754
+      ClientHeight = 726
+      ClientWidth = 754
+      inherited OGLContext: TOpenGLControl
+        Height = 719
+        Width = 745
+      end
+    end
+  end
+  object Button1: TButton
+    Left = 932
+    Height = 25
+    Top = 36
+    Width = 147
+    Anchors = [akTop, akRight]
+    Caption = 'Button1'
+    OnClick = Button1Click
+    TabOrder = 1
+  end
+  object btnBackColor: TColorButton
+    Left = 932
+    Height = 25
+    Top = 4
+    Width = 140
+    Anchors = [akTop, akRight]
+    BorderWidth = 2
+    ButtonColorSize = 16
+    ButtonColor = clBlack
+    OnColorChanged = btnBackColorColorChanged
+  end
+  object Button2: TButton
+    Left = 932
+    Height = 25
+    Top = 68
+    Width = 147
+    Anchors = [akTop, akRight]
+    Caption = 'Petite anim'
+    OnClick = Button2Click
+    TabOrder = 2
+  end
+  object Panel2: TPanel
+    Left = 776
+    Height = 184
+    Top = 116
+    Width = 317
+    Anchors = [akTop, akRight]
+    BevelOuter = bvNone
+    BorderStyle = bsSingle
+    ClientHeight = 180
+    ClientWidth = 313
+    TabOrder = 3
+    object cmbTypePerspective: TComboBox
+      Left = 88
+      Height = 23
+      Top = 4
+      Width = 221
+      ItemHeight = 15
+      ItemIndex = 0
+      Items.Strings = (
+        'Conique'
+        'Orthographique'
+      )
+      OnChange = cmbTypePerspectiveChange
+      Style = csDropDownList
+      TabOrder = 0
+      Text = 'Conique'
+    end
+    object Label1: TLabel
+      Left = 4
+      Height = 15
+      Top = 4
+      Width = 60
+      Caption = 'Perspective'
+      ParentColor = False
+    end
+    object sclTheta: TScrollBar
+      Left = 64
+      Height = 17
+      Top = 48
+      Width = 245
+      Anchors = [akTop, akLeft, akRight]
+      Max = 360
+      PageSize = 0
+      TabOrder = 1
+      OnChange = sclThetaChange
+    end
+    object sclPhi: TScrollBar
+      Left = 64
+      Height = 17
+      Top = 76
+      Width = 245
+      Anchors = [akTop, akLeft, akRight]
+      Max = 90
+      PageSize = 0
+      TabOrder = 2
+      OnChange = sclPhiChange
+    end
+    object Label2: TLabel
+      Left = 4
+      Height = 15
+      Top = 48
+      Width = 29
+      Caption = 'Theta'
+      ParentColor = False
+    end
+    object Label3: TLabel
+      Left = 4
+      Height = 15
+      Top = 76
+      Width = 17
+      Caption = 'Phi'
+      ParentColor = False
+    end
+    object Label4: TLabel
+      Left = 4
+      Height = 15
+      Top = 104
+      Width = 32
+      Caption = 'Zoom'
+      ParentColor = False
+    end
+    object sclZoom: TScrollBar
+      Left = 64
+      Height = 17
+      Top = 104
+      Width = 245
+      Anchors = [akTop, akLeft, akRight]
+      Max = 1000
+      Min = -1000
+      PageSize = 0
+      Position = 100
+      TabOrder = 3
+      OnChange = sclZoomChange
+    end
+    object sclFectMagnificationZ: TScrollBar
+      Left = 64
+      Height = 17
+      Top = 152
+      Width = 245
+      Max = 1000
+      Min = 10
+      PageSize = 0
+      Position = 100
+      TabOrder = 4
+      OnChange = sclFectMagnificationZChange
+    end
+    object Label5: TLabel
+      Left = 4
+      Height = 15
+      Top = 152
+      Width = 32
+      Caption = 'Fact Z'
+      ParentColor = False
+    end
+  end
+end

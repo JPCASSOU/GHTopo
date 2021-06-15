@@ -32,6 +32,9 @@ uses
   uPSRuntime,
   uPSComponent_Default,
   uPSUtils,
+  ubarcodes,
+  BGRABitmap,
+  Clipbrd,
   UnitRemoteFunctions
   ;
 
@@ -132,6 +135,9 @@ type
     function  freadln(const Descr: integer): string;
     procedure fclose(const Descr: integer);
     procedure fcloseall();
+    procedure ForceDirectory(const Dir: string);
+    function  GetPathDelimiter(): string;
+
 
 
     procedure RecenserAdditionalProcs(Sender: TPSScriptDebugger);
@@ -198,6 +204,7 @@ type
     //*)
     function MNT_GenerateSetOfProfils(const X1, Y1, X2, Y2, X3, Y3: double;
                                       const NbX, NbY: integer; const Sens: byte): boolean;
+    procedure MNT_CheckerAltimetrieEntrees(const DoAdjustAtMNT: boolean; const DeltaZMax: double);
     {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
     // display graphisme
     function  PS2D_BeginDrawing(const w, h: integer): boolean;
@@ -228,6 +235,11 @@ type
     function  FTP_SendFile(const QFilename: string): boolean;
     procedure FTP_EndConnexion();
     function  ScriptOnUses(Sender: TPSPascalCompiler; const Name: string): Boolean; register;
+
+
+    // QRCode
+    procedure QRCode_Generate(const ImgWidth: integer; const QFilenamePNG: string; const QTextToEncode: string);
+
   private
     FPSDrawing2D: TdlgDispGraphisme2D;
     {$ifdef CALCULETTE_EMBEDDED_IN_GHTOPO}
@@ -235,9 +247,6 @@ type
     FBDDEntites: TBDDEntites;
     FMyMaillage: TMaillage;
     FLesFichesTopo: TFichesTopo;
-
-
-
     {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
     FTransfertFTP: TRemoteServicesFTP;
     procedure ListerPSFunctions();
@@ -296,6 +305,69 @@ begin
     Result := False;
 end;
 
+procedure TCdrPascalScript.QRCode_Generate(const ImgWidth: integer; const QFilenamePNG: string; const QTextToEncode: string);
+const MARGE_PERIMETRIQUE = 2;
+var
+  QR: TBarcodeQR;
+  M: TMatriceResultat;
+  i, j, n: Integer;
+  TailleCarre: double;
+  BMP: TBGRABitmap;
+  procedure QDrawCarre(const u, v: integer);
+  var
+    TC: double;
+  begin
+    BMP.CanvasBGRA.Brush.Color := IIF(M[u, v] = 0, clWhite, clBlack);
+    BMP.CanvasBGRA.Pen.Color   := BMP.CanvasBGRA.Brush.Color;
+    TC := MARGE_PERIMETRIQUE * TailleCarre;
+    BMP.CanvasBGRA.Rectangle(round(  u   * TailleCarre + TC), round(  v   * TailleCarre + TC),
+                         round((u+1) * TailleCarre + TC), round((v+1) * TailleCarre + TC));
+
+  end;
+begin
+  DispPSOutput(Format('MakeQRCode(%d, %s, %s)', [ImgWidth, QFilenamePNG, QTextToEncode]));
+  if ('' = trim(QTextToEncode)) then exit;
+  QR := TBarcodeQR.Create(nil);
+  try
+    QR.ECCLevel := eBarcodeQR_ECCLevel_H;
+    QR.Text     := mysqli_real_escape_string(QTextToEncode);
+    QR.Generate;
+    QR.MakeMatriceResultat;
+    M := QR.GetMatrixQRResultat;
+    n := QR.GetNbQRTaille;
+    TailleCarre := ImgWidth / (MARGE_PERIMETRIQUE + n + MARGE_PERIMETRIQUE);
+    DispPSOutput(inttostr(n));
+    BMP := TBGRABitmap.Create(ImgWidth + 2, ImgWidth + 2);
+    try
+      BMP.CanvasBGRA.Pen.Color  := clBlack;
+      BMP.CanvasBGRA.Pen.Width  := 0;
+      BMP.CanvasBGRA.Pen.Style  := psSolid;
+
+      BMP.CanvasBGRA.Brush.Color  := clWhite;
+      BMP.CanvasBGRA.Brush.Style  := bsSolid;
+      BMP.CanvasBGRA.Brush.Opacity := 255;
+      BMP.CanvasBGRA.FillRect(0, 0, BMP.Width, BMP.Height);
+      //BMP.SaveToClipboardFormat(ctImage);
+
+
+      for i := 0 to n - 1 do
+        for j := 0 to n - 1 do
+          QDrawCarre(i, j);
+
+      //Clipboard.Assign(BMP);
+      BMP.SaveToFile(QFilenamePNG);
+      //BMP.SaveToFile(QFilenamePNG);
+
+    finally
+      FreeAndNil(BMP);
+    end;
+
+
+  finally
+    FreeAndNil(QR);
+  end;
+end;
+
 // wrappers pour fonctions standard
 // f en préfixe des fonctions, convention C aka fabs(x)
 function fabs(const X: Double): Double; inline;
@@ -323,6 +395,7 @@ function flog(X: Double): Double; inline;
 begin
   result := log10(X);
 end;
+
 ////////////////////////////////////////////////////////////////////////////////
 
 { TCdrPascalScript }
@@ -442,6 +515,7 @@ begin
   sender.AddFunction(@GetAzimut                   , 'function GetAzimut(const dx, dy: double; const Unite: double): double;');
   sender.AddFunction(@ConvertirEnFiltreSeries     , 'function ConvertirEnFiltreSeries(const S: string): string;');
 
+
   sender.AddFunction(@CalcDistanceJaroWinkler     , 'function CalcDistanceJaroWinkler(const S1, S2: string): double;');
   sender.AddFunction(@CalcDistanceDamerauLevenshtein, 'function CalcDistanceDamerauLevenshtein(const S1, S2: string): integer;');
   // infos système (mémoire, proc, HDD, etc ...);
@@ -460,6 +534,10 @@ begin
   sender.AddMethod(self, @TCdrPascalScript.fcloseall   , 'procedure fcloseall()');
   sender.AddMethod(self, @TCdrPascalScript.cls         , 'procedure cls()');
   sender.AddMethod(self, @TCdrPascalScript.cls         , 'procedure ClrScr()');
+  sender.AddMethod(self, @TCdrPascalScript.ForceDirectory, 'procedure ForceDirectory(const Dir: string);');
+  sender.AddMethod(self, @TCdrPascalScript.GetPathDelimiter, 'function  GetPathDelimiter(): string;');
+  sender.AddMethod(self, @TCdrPascalScript.GetPathDelimiter, 'function  PathDelim(): string;');
+
   {$ifdef CALCULETTE_EMBEDDED_IN_GHTOPO}
     sender.AddMethod(FDocuTopo, @TToporobotStructure2012.GetNomEtude                 , 'function  GetNomEtude(): string;');
     sender.AddMethod(FDocuTopo, @TToporobotStructure2012.GetNbNameSpaces             , 'function  GetNbNameSpaces(): integer;');
@@ -471,6 +549,9 @@ begin
     sender.AddMethod(FDocuTopo, @TToporobotStructure2012.GetNbSecteurs               , 'function  GetNbSecteurs(): integer;');
     sender.AddMethod(FDocuTopo, @TToporobotStructure2012.GetNbAntennes               , 'function  GetNbAntennes(): integer;');
     sender.AddMethod(FDocuTopo, @TToporobotStructure2012.CheckerLesDonneesTopo       , 'procedure CheckerLesDonneesTopo();');
+
+
+
     sender.AddMethod(self     , @TCdrPascalScript.DT_GetNbreStationsOfSerieByIdx     , 'function  GetNbStationsOfSerieByIdx(const Idx: integer): integer;');
     sender.AddMethod(self     , @TCdrPascalScript.DT_GetNbreStationsOfSerieByNoSerie , 'function  GetNbStationsOfSerieByNoSerie(const NumeroSerie: integer): integer;');
     sender.AddMethod(self     , @TCdrPascalScript.DT_GetNumeroEtNomDeSerieByIdx      , 'function DT_GetNumeroEtNomDeSerieByIdx(const Idx: integer; out QNumSerie: integer; out QNomSerie: string; out QNbVisees: integer): boolean;');
@@ -513,7 +594,10 @@ begin
     sender.AddMethod(self     , @TCdrPascalScript.MNT_ExtractBounds                  , 'function  MNT_ExtractBounds(out QX1, QY1, QZ1, QX2, QY2, QZ2: double): boolean;');
     sender.AddMethod(self     , @TCdrPascalScript.MNT_ExtractAltitudeFromXY          , 'function  MNT_ExtractAltitudeFromXY(const QX, QY: double; out QZ: double): boolean');
     sender.AddMethod(self     , @TCdrPascalScript.MNT_GenerateSetOfProfils           , 'function  MNT_GenerateSetOfProfils(const X1, Y1, X2, Y2, X3, Y3: double; const NbX, NbY: integer; const Sens: byte): boolean;');
+    sender.AddMethod(self     , @TCdrPascalScript.MNT_CheckerAltimetrieEntrees       , 'procedure MNT_CheckerAltimetrieEntrees(const DoAdjustAtMNT: boolean; const DeltaZMax: double);');
   {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
+  // QRCode
+  sender.AddMethod(self       , @TCdrPascalScript.QRCode_Generate                    , 'procedure QRCode_Generate(const ImgWidth: integer; const QFilenamePNG: string; const QTextToEncode: string);');
   // display graphisme
   sender.AddMethod(self     , @TCdrPascalScript.PS2D_BeginDrawing                  , 'function  PS2D_BeginDrawing(const w, h: integer): boolean;');
   sender.AddMethod(self     , @TCdrPascalScript.PS2D_EndAndDisplayDrawing          , 'procedure PS2D_EndAndDisplayDrawing();');
@@ -823,20 +907,23 @@ end;
 
 procedure TCdrPascalScript.NewScript(const ScriptName: string = 'NewScript01');
 const
+  QNameMainProc = 'Main';
   QName_MAX_SIZE_PARAM_ARRAY = 'MAX_SIZE_PARAM_ARRAY';
   QNameTGHStringArray        = 'TGHStringArray';
   QGlobalVarSR               = 'SR';
 begin
   editPascalScript.Lines.Clear;
   editPascalScript.Lines.Add(format('program %s;', [ScriptName]));
-  //editPascalScript.Lines.Add(format('const %s = %d;', [QName_MAX_SIZE_PARAM_ARRAY, 63]));
-  //editPascalScript.Lines.Add(format('type %s = array[%d .. %s] of string;', [QNameTGHStringArray, 0, QName_MAX_SIZE_PARAM_ARRAY]));
+  editPascalScript.Lines.Add(format('procedure %s();', [QNameMainProc]));
   editPascalScript.Lines.Add('var');
-  //editPascalScript.Lines.Add(Format('  %s   : %s;', [QGlobalVarSR, QNameTGHStringArray]));
   editPascalScript.Lines.Add('  i, Nb: integer;');
   editPascalScript.Lines.Add('begin');
-  editPascalScript.Lines.Add('  // Votre code ici');
-
+  editPascalScript.Lines.Add('  (* Your code here *)');
+  editPascalScript.Lines.Add('end;');
+  editPascalScript.Lines.Add('(* *************************************** *)');
+  editPascalScript.Lines.Add('(* Don''t edit after this                  *)');
+  editPascalScript.Lines.Add('begin');
+  editPascalScript.Lines.Add(format('  %s();', [QNameMainProc]));
   editPascalScript.Lines.Add('end.');
 end;
 
@@ -896,11 +983,8 @@ end;
 
 
 procedure TCdrPascalScript.fprintf(const Descr: integer; const FMT: string; const Argv: array of const);
-var
-  WU: String;
 begin
-  WU := Format(FMT, Argv);
-  WriteLn(FpTextFiles[Descr], WU);
+  WriteLn(FpTextFiles[Descr], Format(FMT, Argv));
 end;
 
 
@@ -946,6 +1030,16 @@ var
   i: Integer;
 begin
   for i := 0 to high(FpTextFiles) do self.fclose(i);
+end;
+
+procedure TCdrPascalScript.ForceDirectory(const Dir: string);
+begin
+  ForceDirectories(Dir);
+end;
+
+function TCdrPascalScript.GetPathDelimiter(): string;
+begin
+  Result := PathDelim;
 end;
 
 
@@ -1290,9 +1384,9 @@ end;
 function TCdrPascalScript.MNT_LoadMaillage(const QFilenameMAI: string): integer;
 begin
   result := -1;
-  if (Not Assigned(FMyMaillage))     then exit(-64);
+  if (Not Assigned(FMyMaillage))         then exit(-64);
   if (not FileExistsUTF8(QFilenameMAI))  then exit(-2);
-  if (FMyMaillage.IsValidMaillage()) then exit(1); // LoadMaillage(GetGHTopoDirectory() + 'castet_miu.mai');
+  if (FMyMaillage.IsValidMaillage())     then exit(1); // LoadMaillage(GetGHTopoDirectory() + 'castet_miu.mai');
   Result := IIF(FMyMaillage.LoadMaillage(QFilenameMAI), 0, -1);
 end;
 
@@ -1313,10 +1407,13 @@ begin
 end;
 
 procedure TCdrPascalScript.MNT_AddProfil(const ProfilName: string; const X1, Y1, X2, Y2: double);
+var
+  WU: TLineAttributes;
 begin
   if (FMyMaillage.IsValidMaillage()) then
   begin
-    FMyMaillage.ExtractAndAddProfilTopo(MakeTPoint2Df(X1, Y1), MakeTPoint2Df(X2, Y2), clRed, ProfilName);
+    WU.SetAttributes(clRed, 255, 1, 0.015);
+    FMyMaillage.ExtractAndAddProfilTopo(MakeTPoint2Df(X1, Y1), MakeTPoint2Df(X2, Y2), WU, ProfilName);
   end;
 end;
 
@@ -1434,6 +1531,18 @@ begin
        end;
   end;
 end;
+
+procedure TCdrPascalScript.MNT_CheckerAltimetrieEntrees(const DoAdjustAtMNT: boolean; const DeltaZMax: double);
+begin
+  if (FMyMaillage.IsValidMaillage()) then
+  begin
+    FDocuTopo.CheckerAltimetrieEntrancesByMNT(FMyMaillage, DoAdjustAtMNT, DeltaZMax);
+    DispPSOutput(Format('MNT_CheckerAltimetrieEntrees(): %.2f', [DeltaZMax]));
+  end
+  else
+    DispPSOutput('*** Maillage invalide ou non chargé ***');
+end;
+
 {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
 // Graphisme 2D
 function TCdrPascalScript.PS2D_BeginDrawing(const w, h: integer): boolean;

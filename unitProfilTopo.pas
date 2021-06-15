@@ -18,7 +18,7 @@ type
  TProfilTopo = class
   private
     FProfilName   : string;
-    FProfilColor  : TColor;
+    FLineAttributes: TLineAttributes;
     FExtremite1   : TPoint2Df;
     FExtremite2   : TPoint2Df;
     FListePointsProfil: TListePointsProfil;
@@ -33,7 +33,7 @@ type
     procedure AddPointProfilTN(const P: TPoint3DfOrderedByP);
 
     property  ProfilName  : string read FProfilName  write FProfilName;
-    property  ProfilColor : TColor read FProfilColor write FProfilColor;
+    property  LineAttributes : TLineAttributes read FLineAttributes write FLineAttributes;
     function  GetExtremite1(): TPoint2Df; inline;
     function  GetExtremite2(): TPoint2Df; inline;
     procedure SetExtremite1(const P: TPoint2Df); inline;

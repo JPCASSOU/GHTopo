@@ -22,7 +22,8 @@ uses
   StructuresDonnees,
   Common,
   Graphics, math,
-  Classes, SysUtils;
+  Classes, SysUtils
+  ;
 // liste générique (fonctionne très bien)
 type
 
@@ -205,7 +206,7 @@ type TListeMesuresTopoDistoX = class(TListeSimple<TMesureViseeDistoX>)
   public
 end;
 
-type TListePoints3Df = class(TListeSimple<TVectorDataDistoX>)
+type TListeVectorsDataDistoX = class(TListeSimple<TVectorDataDistoX>)
   private
   public
 end;
@@ -214,11 +215,15 @@ type TListeTPoint2DfTagged = class(TListeSimple<TPoint2DfTagged>)
   public
 end;
 
+
 type TListePoints2Df = class(TListeSimple<TPoint2Df>)
   private
   public
 end;
-
+type TListePoints3Df = class(TListeSimple<TPoint3Df>)
+  private
+  public
+end;
 //******************************************************************************
 // classes enrichies
 type TTableCodes = class(TListeSimple<TCode>)

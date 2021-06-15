@@ -49,7 +49,7 @@ uses
   CadreDGCDrawingContext,
   DGCClassSectionOfBeam,
   //DGCClassTriangleQuelconque,
-  CadrePascalScript, CadreTextures,
+  CadrePascalScript, CadreTextures, UnitPolyPolyLine,
   Classes, SysUtils, FileUtil,
   curredit,
   SynEdit,
@@ -168,26 +168,23 @@ type
     grdCoordonneesSection: TStringGrid;
     grdMaillageCoordsXYZ: TStringGrid;
     grdDonnees: TStringGrid;
-    HeaderControl1: THeaderControl;
+    HeadCtrlLayers: THeaderControl;
     Image: TImage;
     ImageList1: TImageList;
-    Label1: TLabel;
-    Label10: TLabel;
-    Label11: TLabel;
-    Label12: TLabel;
-    Label13: TLabel;
-    Label14: TLabel;
-    Label15: TLabel;
+    lbConvSeparateur: TLabel;
+    lbConvFormat: TLabel;
+    lbConvEtiquettes: TLabel;
+    lbConvZSource: TLabel;
+    lbConvColLayers: TLabel;
+    lbConvNoms: TLabel;
+    lbConvPhoto: TLabel;
     Label3: TLabel;
-    Label31: TLabel;
     Label33: TLabel;
     Label34: TLabel;
-    Label35: TLabel;
-    Label36: TLabel;
     Label37: TLabel;
     Label38: TLabel;
     Label39: TLabel;
-    Label4: TLabel;
+    lbConvDesciption: TLabel;
     Label40: TLabel;
     Label41: TLabel;
     Label42: TLabel;
@@ -197,9 +194,9 @@ type
     Label46: TLabel;
     Label47: TLabel;
     Label48: TLabel;
-    Label6: TLabel;
-    Label7: TLabel;
-    Label8: TLabel;
+    lbConvCoordsSource: TLabel;
+    lbConvObserv: TLabel;
+    lbConvCoordsCible: TLabel;
     lbConversionsTableau: TStaticText;
     lbConversionsUnitaires: TStaticText;
     lbDocumentTitle: TLabel;
@@ -344,9 +341,9 @@ type
     Panel10: TPanel;
     Panel3: TPanel;
     pnlQRCode: TPanel;
-    Panel9: TPanel;
+    pnlListesVariablesCalculs: TPanel;
     pnlTableauDeclimag: TPanel;
-    Panel8: TPanel;
+    pnlExpression: TPanel;
     lbDescDeclimagCalculator: TStaticText;
     lbErreurCalcul: TStaticText;
     PopupMenu1: TPopupMenu;
@@ -405,7 +402,7 @@ type
     procedure editTextToEncodeQRKeyPress(Sender: TObject; var Key: char);
 
     procedure grdDonneesHeaderClick(Sender: TObject; IsColumn: Boolean;  Index: Integer);
-    procedure HeaderControl1SectionResize(HeaderControl: TCustomHeaderControl; Section: THeaderSection);
+    procedure HeadCtrlLayersSectionResize(HeaderControl: TCustomHeaderControl; Section: THeaderSection);
     procedure Label26Click(Sender: TObject);
     procedure Label34Click(Sender: TObject);
     procedure lsbAdditionalLayersDblClick(Sender: TObject);
@@ -887,7 +884,7 @@ begin
   showmessage(Format('%s: %d', [BoolToStr(IsColumn, 'Colonne', 'OVNI'), Index]));
 end;
 
-procedure TCdrCalculette.HeaderControl1SectionResize(HeaderControl: TCustomHeaderControl; Section: THeaderSection);
+procedure TCdrCalculette.HeadCtrlLayersSectionResize(HeaderControl: TCustomHeaderControl; Section: THeaderSection);
 begin
   lsbAdditionalLayers.Invalidate;;
 end;
@@ -914,12 +911,12 @@ var
   procedure DessineItem(const bg,tc: TColor);
   begin
     ResetColorRow(lsbAdditionalLayers, ARect, bg, tc);
-    DrawColTexte(lsbAdditionalLayers, ARect, HeaderControl1.Sections.Items[0], False, Format(FORMAT_NB_INTEGER,[QLayer.SymboleStyle]));
-    DrawColTexte(lsbAdditionalLayers, ARect, HeaderControl1.Sections.Items[1], True , Format(FORMAT_NB_REAL_2_DEC,[QLayer.SymbolSize]));
-    DrawColRectColoreWithTexte(lsbAdditionalLayers, ARect, HeaderControl1.Sections.Items[2], True, bg, QLayer.SymbolColor, '');
-    DrawColTexte(lsbAdditionalLayers, ARect, HeaderControl1.Sections.Items[3], True, QLayer.LayerTitle);
-    DrawColTexte(lsbAdditionalLayers, ARect, HeaderControl1.Sections.Items[4], True, QLayer.LayerVarName);
-    DrawColTexte(lsbAdditionalLayers, ARect, HeaderControl1.Sections.Items[5], True, QLayer.LayerDescription);
+    DrawColTexte(lsbAdditionalLayers, ARect, HeadCtrlLayers.Sections.Items[0], False, Format(FORMAT_NB_INTEGER,[QLayer.SymboleStyle]));
+    DrawColTexte(lsbAdditionalLayers, ARect, HeadCtrlLayers.Sections.Items[1], True , Format(FORMAT_NB_REAL_2_DEC,[QLayer.SymbolSize]));
+    DrawColRectColoreWithTexte(lsbAdditionalLayers, ARect, HeadCtrlLayers.Sections.Items[2], True, bg, QLayer.SymbolColor, '');
+    DrawColTexte(lsbAdditionalLayers, ARect, HeadCtrlLayers.Sections.Items[3], True, QLayer.LayerTitle);
+    DrawColTexte(lsbAdditionalLayers, ARect, HeadCtrlLayers.Sections.Items[4], True, QLayer.LayerVarName);
+    DrawColTexte(lsbAdditionalLayers, ARect, HeadCtrlLayers.Sections.Items[5], True, QLayer.LayerDescription);
   end;
 begin
   QLayer := FOSMAdditionalLayers.GetElement(Index);
@@ -1465,9 +1462,6 @@ begin
 end;
 
 
-
-
-
 procedure TCdrCalculette.acGrdDonneesRemoveColonneExecute(Sender: TObject);
 begin
  if (GHTopoQuestionOuiNon('Supprimer cette colonne')) then grdDonnees.DeleteCol(grdDonnees.Col);
@@ -1527,9 +1521,8 @@ begin
     end;
 
   except
-
+    pass;
   end;
-  //*)
 end;
 
 procedure TCdrCalculette.acCollerExecute(Sender: TObject);
@@ -1853,7 +1846,6 @@ var
   QFilterIndex: integer;
 begin
   if (Not DoDialogSaveFile('Fichiers SVG |*.svg', '.svg', QFileName, QFilterIndex)) then Exit;
-  VueQRCode.DoMonochrome := FALSE;  // ne pas utiliser le mode monochrome
   VueQRCode.Text := editTextToEncodeQR.Text;
   VueQRCode.Generate;
   SVGCanvas := TSVGCanvas.Create;
@@ -2587,9 +2579,13 @@ begin
 end;
 
 procedure TCdrCalculette.Button4Click(Sender: TObject);
+var
+  PP: TPolyPolyLigne;
 begin
   {$IFDEF CALCULETTE_EMBEDDED_IN_GHTOPO}
-  ListerMaillage();
+  //ListerMaillage();
+  FMyMaillage.ExtraireIsovaleurAsPolyPolyline(666, PP);
+
   {$ENDIF CALCULETTE_EMBEDDED_IN_GHTOPO}
 end;
 

@@ -38,19 +38,13 @@ implementation
 
 function TdlgEditReseau.PrepareDialog(const FD: TToporobotStructure2012; const QIdx: integer; const QReseau: TReseau; const QCaption: string): boolean;
 begin
-  Result := false;
   self.Caption := QCaption;
-  try
-    CdrReseaux1.SetReseau(QReseau, QIdx, True);
-    Result := True;
-  except
-    ;
-  end;
+  Result := CdrReseaux1.Initialiser(QReseau, QIdx);
 end;
 
 function TdlgEditReseau.GetAReseau: TReseau;
 begin
-  Result := CdrReseaux1.GetReseauFromForm;
+  Result := CdrReseaux1.GetReseauFromForm();
 end;
 
 end.

@@ -24,7 +24,7 @@ uses
   unitUtilsComposants,
   CadreListesPourVueGraphique,
   UnitGraphes1, BZGraphesTypes, BZGraphesClasses,
-  UnitObjetSerie,
+  UnitObjetSerie, CadreBoussole,
   FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls, ComCtrls, Buttons, ActnList, PairSplitter, StdCtrls, ExtDlgs;
 
 type
@@ -64,6 +64,7 @@ type
     acExportPlanEnPNG: TAction;
     ActionList1: TActionList;
     btnExchange: TButton;
+    btnPathNext: TButton;
     btnPickPathStationArr: TButton;
     btnPickPathStationDep: TButton;
     btnStationArrivee: TButton;
@@ -77,6 +78,8 @@ type
     btnStyleObjet6: TStaticText;
     btnStyleObjet7: TStaticText;
     btnStyleObjet9: TStaticText;
+    btnPathPrevious: TButton;
+    CdrBoussole1: TCdrBoussole;
     CdrListesPourVisualisateurs1: TCdrListesPourVisualisateurs;
     chkTopoNavig: TCheckBox;
     chkPOI: TCheckBox;
@@ -118,6 +121,7 @@ type
     Panel4: TPanel;
     Panel5: TPanel;
     Panel6: TPanel;
+    Panel7: TPanel;
     pnlGrapheReseau: TPanel;
     pnlProgression: TPanel;
     pnlStylesPolylines: TPanel;
@@ -191,6 +195,8 @@ type
     procedure acShowFenetreListeSimplesExecute(Sender: TObject);
     procedure acShowFenetreSeriesExecute(Sender: TObject);
     procedure btnExchangeClick(Sender: TObject);
+    procedure btnPathNextClick(Sender: TObject);
+    procedure btnPathPreviousClick(Sender: TObject);
     procedure btnPickPathStationArrClick(Sender: TObject);
     procedure btnPickPathStationDepClick(Sender: TObject);
     procedure btnStationArriveeClick(Sender: TObject);
@@ -230,9 +236,6 @@ type
     procedure FormWindowStateChange(Sender: TObject);
     procedure lsbPathRoadMapChange(Sender: TObject);
     procedure OngletsVuesChange(Sender: TObject);
-    procedure pnlGrapheReseauClick(Sender: TObject);
-    procedure ToggleBox1Change(Sender: TObject);
-    procedure VueClick(Sender: TObject);
   private
     { private declarations }
     FBDDEntites    : TBDDEntites;
@@ -490,6 +493,21 @@ begin
   btnStationDepart.Caption := btnStationArrivee.Caption;
   btnStationArrivee.Caption := EWE;
   RecalculerShortestPath(btnStationDepart.Caption, btnStationArrivee.Caption);
+end;
+
+
+
+procedure TfrmVueEnPlan.btnPathPreviousClick(Sender: TObject);
+begin
+  lsbPathRoadMap.ItemIndex := lsbPathRoadMap.ItemIndex - 1;
+  if (lsbPathRoadMap.ItemIndex >= 0) then lsbPathRoadMapChange(self)
+                                     else lsbPathRoadMap.ItemIndex := 0;
+end;
+procedure TfrmVueEnPlan.btnPathNextClick(Sender: TObject);
+begin
+  lsbPathRoadMap.ItemIndex := lsbPathRoadMap.ItemIndex + 1;
+  if (lsbPathRoadMap.ItemIndex < lsbPathRoadMap.Items.Count) then lsbPathRoadMapChange(self)
+                                                             else lsbPathRoadMap.ItemIndex := lsbPathRoadMap.Items.Count - 1;
 end;
 
 procedure TfrmVueEnPlan.btnPickPathStationArrClick(Sender: TObject);
@@ -1068,20 +1086,7 @@ begin
   DispAttrElementsAffiches(MyOnglet.ongElementsDrawn);
 end;
 
-procedure TfrmVueEnPlan.pnlGrapheReseauClick(Sender: TObject);
-begin
 
-end;
-
-procedure TfrmVueEnPlan.ToggleBox1Change(Sender: TObject);
-begin
-
-end;
-
-procedure TfrmVueEnPlan.VueClick(Sender: TObject);
-begin
-
-end;
 
 
 procedure TfrmVueEnPlan.PreparerVues();
@@ -1163,6 +1168,7 @@ begin
       // et on centre sur la station courante
       EWE := GHTopoContext2DA1.GetCurrentStation();
       GHTopoContext2DA1.CentrerVueSurPointXY(EWE.PosStation.X, EWE.PosStation.Y, True, EWE.ToString());
+      CdrBoussole1.Initialiser(360.00, 360.00, clSilver, $0082FFFF, clRed);
     end;
     mfgcNAVIGATION:
     begin
@@ -1244,6 +1250,7 @@ begin
   GHTopoContext2DA1.CentrerVueSurPointXY(WptNext.X, WptNext.Y, True, WptNext.ToString());
   // sans modifier la station courante
   //  self.SetCurrentStation(QMyBaseStation, True);
+  CdrBoussole1.SetAzimut(QAz);
 
 end;
 

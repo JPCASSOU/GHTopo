@@ -167,7 +167,7 @@
         <PackageName Value="LCL"/>
       </Item18>
     </RequiredPackages>
-    <Units Count="82">
+    <Units Count="86">
       <Unit0>
         <Filename Value="GHTopoGM.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -239,414 +239,441 @@
         <UnitName Value="frmFusionnerTopos"/>
       </Unit9>
       <Unit10>
-        <Filename Value="dlgsplashscreen.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="frmSplashScreen"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="dlgSplashScreen"/>
-      </Unit10>
-      <Unit11>
         <Filename Value="MetaFiltre.inc"/>
         <IsPartOfProject Value="True"/>
-      </Unit11>
-      <Unit12>
+      </Unit10>
+      <Unit11>
         <Filename Value="dlgFusionnerFichiersXTB.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgFusionFichiers"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit12>
-      <Unit13>
+      </Unit11>
+      <Unit12>
         <Filename Value="unitutilscpu.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="unitUtilsCPU"/>
-      </Unit13>
-      <Unit14>
+      </Unit12>
+      <Unit13>
         <Filename Value="unitmatricescreuses_coo.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="unitMatricesCreuses_COO"/>
-      </Unit14>
-      <Unit15>
+      </Unit13>
+      <Unit14>
         <Filename Value="unitmatricescreuses_btree.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit15>
-      <Unit16>
+      </Unit14>
+      <Unit15>
         <Filename Value="unitmatricescreuses_tot.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="unitMatricesCreuses_TOT"/>
-      </Unit16>
-      <Unit17>
+      </Unit15>
+      <Unit16>
         <Filename Value="frmselectsecteurcodeexpe.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgSelectSecteurCodeExpe"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frmSelectSecteurCodeExpe"/>
-      </Unit17>
-      <Unit18>
+      </Unit16>
+      <Unit17>
         <Filename Value="frmDependancesDeUneSerie.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgDependancesSerie"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit18>
-      <Unit19>
+      </Unit17>
+      <Unit18>
         <Filename Value="UnitFusionTopos.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit19>
-      <Unit20>
+      </Unit18>
+      <Unit19>
         <Filename Value="frmMaintenanceDocument.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgMaintenanceDocTopo"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit20>
-      <Unit21>
+      </Unit19>
+      <Unit20>
         <Filename Value="frmselectghtopofiles.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgSelectGHTopoFiles"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frmSelectGHTopoFiles"/>
-      </Unit21>
-      <Unit22>
+      </Unit20>
+      <Unit21>
         <Filename Value="frmDistanceEntreDeuxPoints.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgDistanceBetweenTwoStations"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit22>
-      <Unit23>
+      </Unit21>
+      <Unit22>
         <Filename Value="cadrelistenearstations.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="CdrListeNearestStations"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="CadreListeNearStations"/>
+      </Unit22>
+      <Unit23>
+        <Filename Value="unitMatricesCreuses_Tree.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit23>
       <Unit24>
-        <Filename Value="unitMatricesCreuses_Tree.pas"/>
+        <Filename Value="DXFCanvasUnit.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit24>
       <Unit25>
-        <Filename Value="DXFCanvasUnit.pas"/>
+        <Filename Value="unitX3D.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit25>
       <Unit26>
-        <Filename Value="unitX3D.pas"/>
+        <Filename Value="unitmatricescreuses_CSR.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit26>
       <Unit27>
-        <Filename Value="unitmatricescreuses_CSR.pas"/>
+        <Filename Value="SparSolver.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit27>
       <Unit28>
-        <Filename Value="SparSolver.pas"/>
+        <Filename Value="SolverHugeSystem.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit28>
       <Unit29>
-        <Filename Value="SolverHugeSystem.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit29>
-      <Unit30>
         <Filename Value="unitmatricescreuses_lot.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="unitMatricesCreuses_LOT"/>
+      </Unit29>
+      <Unit30>
+        <Filename Value="unitMatricesCreusesArray2D.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit30>
       <Unit31>
-        <Filename Value="unitMatricesCreusesArray2D.pas"/>
+        <Filename Value="unitMatricesCreuses_HASH_TABLE.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit31>
       <Unit32>
-        <Filename Value="unitMatricesCreuses_HASH_TABLE.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit32>
-      <Unit33>
         <Filename Value="frmProfilTopo.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgProfilTopo"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit33>
-      <Unit34>
+      </Unit32>
+      <Unit33>
         <Filename Value="frmEditFiltres.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgEditFiltres"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit34>
-      <Unit35>
+      </Unit33>
+      <Unit34>
         <Filename Value="CadreProfilsTopo.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="CdrProfilTopo"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit35>
-      <Unit36>
+      </Unit34>
+      <Unit35>
         <Filename Value="frmSelectionDeSerie.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgSelectSerie"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit36>
-      <Unit37>
+      </Unit35>
+      <Unit36>
         <Filename Value="frmListeProfilsTopo.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgLesProfilsTopo"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit37>
-      <Unit38>
+      </Unit36>
+      <Unit37>
         <Filename Value="unitProfilTopo.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit38>
-      <Unit39>
+      </Unit37>
+      <Unit38>
         <Filename Value="frmAjouterSeriesDepuisAutreDoc.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgAddSeriesFromOtherDoc"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit39>
-      <Unit40>
+      </Unit38>
+      <Unit39>
         <Filename Value="CadreListeOfPOI.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="CdrListeOfPOI"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit40>
-      <Unit41>
+      </Unit39>
+      <Unit40>
         <Filename Value="unitCroquisTerrain.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit41>
-      <Unit42>
+      </Unit40>
+      <Unit41>
         <Filename Value="frmSelectCoordsSystem.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgSelectionCoordsSystem"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+      </Unit41>
+      <Unit42>
+        <Filename Value="UnitTriangulationDelaunay.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit42>
       <Unit43>
-        <Filename Value="UnitTriangulationDelaunay.pas"/>
+        <Filename Value="UnitTriangulationDelaunay2.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit43>
       <Unit44>
-        <Filename Value="UnitTriangulationDelaunay2.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit44>
-      <Unit45>
         <Filename Value="frmminiconvertisseur.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgMiniConvertisseur"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frmMiniConvertisseur"/>
-      </Unit45>
-      <Unit46>
+      </Unit44>
+      <Unit45>
         <Filename Value="exportationsql.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ExportationSQL"/>
-      </Unit46>
-      <Unit47>
+      </Unit45>
+      <Unit46>
         <Filename Value="frmquestionouinonwithaction.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgQuestionOuiNonWithAction"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frmQuestionOuiNonWithAction"/>
-      </Unit47>
-      <Unit48>
+      </Unit46>
+      <Unit47>
         <Filename Value="unittghtopodrawdrawingcontext.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UnitTGHTopoDrawDrawingContext"/>
-      </Unit48>
-      <Unit49>
+      </Unit47>
+      <Unit48>
         <Filename Value="SubsOfPRNPrintAPage.inc"/>
         <IsPartOfProject Value="True"/>
-      </Unit49>
-      <Unit50>
+      </Unit48>
+      <Unit49>
         <Filename Value="unitexportcenterlinessilhouettestogis.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="unitExportCenterlinesSilhouettesToGIS"/>
-      </Unit50>
-      <Unit51>
+      </Unit49>
+      <Unit50>
         <Filename Value="unitleafletexport.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UnitLeafletExport"/>
-      </Unit51>
-      <Unit52>
+      </Unit50>
+      <Unit51>
         <Filename Value="frmeditgislayer.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgEditGisLayer"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frmEditGISLayer"/>
-      </Unit52>
-      <Unit53>
+      </Unit51>
+      <Unit52>
         <Filename Value="cadrecoupedeveloppeeext.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="Frame1"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="CadreCoupeDeveloppeeExt"/>
-      </Unit53>
-      <Unit54>
+      </Unit52>
+      <Unit53>
         <Filename Value="unitresolutiontriangles.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="unitResolutionTriangles"/>
-      </Unit54>
-      <Unit55>
+      </Unit53>
+      <Unit54>
         <Filename Value="unitdxfexport.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="unitDXFExport"/>
-      </Unit55>
-      <Unit56>
+      </Unit54>
+      <Unit55>
         <Filename Value="ghtopomultithreading.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="GHTopoMultiThreading"/>
-      </Unit56>
-      <Unit57>
+      </Unit55>
+      <Unit56>
         <Filename Value="dgcclasstrianglequelconque.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="DGCClassTriangleQuelconque"/>
-      </Unit57>
-      <Unit58>
+      </Unit56>
+      <Unit57>
         <Filename Value="dlgediterpoi.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmEditerPOI"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="dlgEditerPOI"/>
-      </Unit58>
-      <Unit59>
+      </Unit57>
+      <Unit58>
         <Filename Value="unititineraires.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="unitItineraires"/>
-      </Unit59>
-      <Unit60>
+      </Unit58>
+      <Unit59>
         <Filename Value="frmdisplaygraphe.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgDisplayGraphe"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frmDisplayGraphe"/>
-      </Unit60>
-      <Unit61>
+      </Unit59>
+      <Unit60>
         <Filename Value="cadregrapheitineraire.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="CdrGrapheItineraire"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="CadreGrapheItineraire"/>
-      </Unit61>
-      <Unit62>
+      </Unit60>
+      <Unit61>
         <Filename Value="unitfichestopo.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UnitFichesTopo"/>
-      </Unit62>
-      <Unit63>
+      </Unit61>
+      <Unit62>
         <Filename Value="frmsearchindatabase.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgSearchInDatabase"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frmSearchInDatabase"/>
-      </Unit63>
-      <Unit64>
+      </Unit62>
+      <Unit63>
         <Filename Value="JSExportGrapheNestedFunc.inc"/>
         <IsPartOfProject Value="True"/>
-      </Unit64>
-      <Unit65>
+      </Unit63>
+      <Unit64>
         <Filename Value="cadrepascalscript.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="CdrPascalScript"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="CadrePascalScript"/>
-      </Unit65>
-      <Unit66>
+      </Unit64>
+      <Unit65>
         <Filename Value="frmpsdrawing2d.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgDispGraphisme2D"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frmPSDrawing2D"/>
-      </Unit66>
-      <Unit67>
+      </Unit65>
+      <Unit66>
         <Filename Value="unitremotefunctions.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UnitRemoteFunctions"/>
+      </Unit66>
+      <Unit67>
+        <Filename Value="FuncImportPocketTopoTxt.inc"/>
+        <IsPartOfProject Value="True"/>
       </Unit67>
       <Unit68>
-        <Filename Value="FuncImportPocketTopoTxt.inc"/>
+        <Filename Value="FuncLoadSaveFichierTEXT.inc"/>
         <IsPartOfProject Value="True"/>
       </Unit68>
       <Unit69>
-        <Filename Value="FuncLoadSaveFichierTEXT.inc"/>
+        <Filename Value="FuncLoadSaveFichierTab.inc"/>
         <IsPartOfProject Value="True"/>
       </Unit69>
       <Unit70>
-        <Filename Value="FuncLoadSaveFichierTab.inc"/>
+        <Filename Value="FuncLoadSaveFichierXML.inc"/>
         <IsPartOfProject Value="True"/>
       </Unit70>
       <Unit71>
-        <Filename Value="FuncLoadSaveFichierXML.inc"/>
+        <Filename Value="FuncLoadSaveFichierJSON.inc"/>
         <IsPartOfProject Value="True"/>
       </Unit71>
       <Unit72>
-        <Filename Value="FuncLoadSaveFichierJSON.inc"/>
-        <IsPartOfProject Value="True"/>
-      </Unit72>
-      <Unit73>
         <Filename Value="ghtopomultithreading2.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="GHTopoMultiThreading2"/>
-      </Unit73>
-      <Unit74>
+      </Unit72>
+      <Unit73>
         <Filename Value="frmtestmultithreading.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgMultiThreading"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frmTestMultithreading"/>
-      </Unit74>
-      <Unit75>
+      </Unit73>
+      <Unit74>
         <Filename Value="codecalcultopo_backup_20210420.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="CodeCalculTopo_Backup_20210420"/>
-      </Unit75>
-      <Unit76>
+      </Unit74>
+      <Unit75>
         <Filename Value="ghtopomultithreading3.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="GHTopoMultiThreading3"/>
-      </Unit76>
-      <Unit77>
+      </Unit75>
+      <Unit76>
         <Filename Value="bzparallelthread.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="BZParallelThread"/>
-      </Unit77>
-      <Unit78>
+      </Unit76>
+      <Unit77>
         <Filename Value="unitgraphes2.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UnitGraphes2"/>
-      </Unit78>
-      <Unit79>
+      </Unit77>
+      <Unit78>
         <Filename Value="dlgCalculette.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmCalculette"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit79>
-      <Unit80>
-        <Filename Value="dlgcalculette2.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="Form1"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="dlgCalculette"/>
-      </Unit80>
-      <Unit81>
+      </Unit78>
+      <Unit79>
         <Filename Value="unitexifutils.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UnitExifUtils"/>
+      </Unit79>
+      <Unit80>
+        <Filename Value="unitdistancebetween2pointslatlon.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="UnitDistanceBetween2PointsLatLon"/>
+      </Unit80>
+      <Unit81>
+        <Filename Value="frmboussole.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="dlgBoussole"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="frmBoussole"/>
       </Unit81>
+      <Unit82>
+        <Filename Value="cadreboussole.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="CdrBoussole"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="CadreBoussole"/>
+      </Unit82>
+      <Unit83>
+        <Filename Value="cadreopengl3.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="CdrOpenGL3"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="CadreOpenGL3"/>
+      </Unit83>
+      <Unit84>
+        <Filename Value="frmvisualisateuropengl3.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="dlgVisualisateurOpenGL3"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="frmVisualisateurOpenGL3"/>
+      </Unit84>
+      <Unit85>
+        <Filename Value="unitpolypolyline.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="UnitPolyPolyLine"/>
+      </Unit85>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

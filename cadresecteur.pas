@@ -7,6 +7,9 @@ uses
   StructuresDonnees, Common,
   Classes, SysUtils, FileUtil, curredit, Forms, Controls, StdCtrls, Dialogs;
 type
+
+  { TCdrSecteur }
+
   TCdrSecteur = class(TFrame)
     btnColor: TColorButton;
     editIdxSecteur: TCurrencyEdit;
@@ -15,18 +18,24 @@ type
     lbNomSecteur: TLabel;
     lbIDSecteur: TLabel;
   private
-   FIdx: integer;
-   FSecteur : TSecteur;
-   procedure InitCaptions;
-   procedure PutSecteurInForm;
+   procedure InitCaptions();
   public
-    procedure SetSecteur(const S: TSecteur; const QIdx: integer; const DoInitCaptions: boolean);
+    function Initialiser(const MySecteur: TSecteur; const QIdx: integer): boolean;
     function  GetSecteurFromForm(): TSecteur;
   end;
 
 implementation
 
 {$R *.lfm}
+function TCdrSecteur.Initialiser(const MySecteur: TSecteur; const QIdx: integer): boolean;
+begin
+  result := false;
+  InitCaptions();
+  editIdxSecteur.AsInteger := QIdx;
+  editNomSecteur.Text      := _AnsiToLCLStr(MySecteur.NomSecteur);
+  btnColor.ButtonColor     := MySecteur.CouleurSecteur;
+  result := true;
+end;
 procedure TCdrSecteur.InitCaptions;
 begin
   lbIDSecteur.Caption   := GetResourceString(rsCDR_SECTEUR_LBIDX);
@@ -34,22 +43,10 @@ begin
   lbCouleur.Caption     := GetResourceString(rsCDR_SECTEUR_COLOUR);
 end;
 
-procedure TCdrSecteur.PutSecteurInForm;
-begin
-  editIdxSecteur.AsInteger := FIdx;
-  editNomSecteur.Text      := _AnsiToLCLStr(FSecteur.NomSecteur);
-  btnColor.ButtonColor     := FSecteur.CouleurSecteur;
-end;
 
-procedure TCdrSecteur.SetSecteur(const S: TSecteur; const QIdx: integer; const DoInitCaptions: boolean);
-begin
-  FIdx := QIdx;
-  FSecteur := S;
-  if (DoInitCaptions) then InitCaptions;
-  PutSecteurInForm;
-end;
 
-function TCdrSecteur.GetSecteurFromForm: TSecteur;
+
+function TCdrSecteur.GetSecteurFromForm(): TSecteur;
 begin
   Result.NomSecteur     := _LCLStrToAnsi(Trim(editNomSecteur.Text));
   Result.CouleurSecteur := btnColor.ButtonColor;

@@ -3,6 +3,7 @@ object GHTopoMainMenuBar: TGHTopoMainMenuBar
   Height = 89
   Top = 364
   Width = 1274
+  AllowDropFiles = True
   Caption = 'GHTopoMainMenuBar'
   ClientHeight = 69
   ClientWidth = 1274
@@ -423,6 +424,7 @@ object GHTopoMainMenuBar: TGHTopoMainMenuBar
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnDropFiles = FormDropFiles
   OnResize = FormResize
   OnShow = FormShow
   LCLVersion = '2.0.0.4'
@@ -1086,6 +1088,17 @@ object GHTopoMainMenuBar: TGHTopoMainMenuBar
       object mnuMultiThreading: TMenuItem
         Caption = 'Test de multithreading'
         OnClick = mnuMultiThreadingClick
+      end
+      object MenuItem61: TMenuItem
+        Caption = '-'
+      end
+      object mnuTUBoussole: TMenuItem
+        Caption = 'Test de TCadreBoussole'
+        OnClick = mnuTUBoussoleClick
+      end
+      object mnuTUOpenGL3: TMenuItem
+        Caption = 'Nouveau viewer OpenGL'
+        OnClick = mnuTUOpenGL3Click
       end
     end
   end

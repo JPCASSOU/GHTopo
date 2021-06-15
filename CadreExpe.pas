@@ -57,18 +57,13 @@ type
     procedure cmbModeDeclChange(Sender: TObject);
     procedure cmbUnitDeclimagChange(Sender: TObject);
     procedure editCouleurKeyPress(Sender: TObject; var Key: char);
-    procedure editDateSeanceChange(Sender: TObject);
     procedure lbColorSeanceClick(Sender: TObject);
   private
     FMyDocTopo: TToporobotStructure2012;
-    FExpe   : TExpe;
-    procedure InitCaptions;
-    procedure PutExpeInForm;
+    procedure InitCaptions();
     procedure SetLbColor(const IdxColor: integer);
-
   public
-    procedure SetDocTopo(const D: TToporobotStructure2012);
-    procedure SetExpe(const E: TExpe; const DoInitCaptions: boolean);
+    function  Initialiser(const D: TToporobotStructure2012; const MyExpe: TExpe): boolean;
     function  GetExpeFromForm(): TExpe;
   end;
   // TODO: Afficher dans editDeclimag la valeur de la déclinaison
@@ -83,11 +78,24 @@ uses
 {$R *.lfm}
 // appelée une seule fois dans leurs feuilles respectives
 // --> initialisation du cadre effectuée en même temps
-procedure TCdrExpe.SetExpe(const E: TExpe; const DoInitCaptions: boolean);
+function TCdrExpe.Initialiser(const D: TToporobotStructure2012; const MyExpe: TExpe): boolean;
+var
+  WU: TDateTime;
 begin
-  FExpe := E;
-  if (DoInitCaptions) then InitCaptions;
-  PutExpeInForm;
+  result := false;
+  FMyDocTopo := D;
+  InitCaptions();
+  editNoExpe.AsInteger    := MyExpe.IDExpe;
+  WU := GetSecuredDate(MyExpe.AnneeExpe, MyExpe.MoisExpe, MyExpe.JourExpe);
+  editDateSeance.Text     := DateToStr(WU, DefaultFormatSettings);
+  editSpeleometre.Text    := GetResourceString(MyExpe.Operateur);
+  editSpeleographe.Text   := GetResourceString(MyExpe.ClubSpeleo);
+  editDeclimag.Value      := MyExpe.DeclinaisonInDegrees;
+  //editInclinaison.Value   := MyExpe.Inclinaison;
+  SetLbColor(MyExpe.IdxCouleur);
+  cmbModeDecl.ItemIndex   := Ord(MyExpe.ModeDecl);
+  editComment.Text        := _AnsiToLCLStr(Trim(MyExpe.Commentaire));
+  result := true;
 end;
 
 procedure TCdrExpe.lbColorSeanceClick(Sender: TObject);
@@ -103,10 +111,7 @@ begin
   if (Key = #13) then SetLbColor(editCouleur.AsInteger);
 end;
 
-procedure TCdrExpe.editDateSeanceChange(Sender: TObject);
-begin
 
-end;
 
 procedure TCdrExpe.btnCalcDeclimagClick(Sender: TObject);
 var
@@ -115,9 +120,9 @@ var
   EWE: String;
   MyCentroide: TPoint3Df;
 begin
-  QDeclimag := 0.00;
+  QDeclimag   := 0.00;
   MyCentroide := FMyDocTopo.CalcCentroideEntrees();
-  DescEPSG := FMyDocTopo.GetCodeEPSGSystemeCoordonnees();
+  DescEPSG    := FMyDocTopo.GetCodeEPSGSystemeCoordonnees();
   if (ConversionCoordonneesIsoleesEPSG(DescEPSG.CodeEPSG, 4326, MyCentroide.X, MyCentroide.Y, QLat, QLon)) then
   begin
     EWE := format('%.2f, %.2f, %.2f - Lat = %.6f, Lon = %.6f - EPSG:%d',
@@ -167,7 +172,7 @@ begin
 
 end;
 
-procedure TCdrExpe.InitCaptions;
+procedure TCdrExpe.InitCaptions();
 begin
  lblSeance.Caption       := GetResourceString(rsCDR_EXPE_SEANCE);
  lblDate.Caption         := GetResourceString(rsCDR_EXPE_DATE);
@@ -186,24 +191,7 @@ begin
  cmbUnitDeclimag.ItemIndex := 0;
 end;
 
-procedure TCdrExpe.PutExpeInForm;
-var
-  WU: TDateTime;
-begin
-  AfficherMessage('PutExpeInForm: 001');
-  editNoExpe.AsInteger    := FExpe.IDExpe;
-  AfficherMessage('PutExpeInForm: 002');
-  WU := GetSecuredDate(FExpe.AnneeExpe, FExpe.MoisExpe, FExpe.JourExpe);
-  AfficherMessage('PutExpeInForm: 003');
-  editDateSeance.Text     := DateToStr(WU, DefaultFormatSettings);
-  editSpeleometre.Text    := GetResourceString(FExpe.Operateur);
-  editSpeleographe.Text   := GetResourceString(FExpe.ClubSpeleo);
-  editDeclimag.Value      := FExpe.DeclinaisonInDegrees;
-  //editInclinaison.Value   := FExpe.Inclinaison;
-  SetLbColor(FExpe.IdxCouleur);
-  cmbModeDecl.ItemIndex   := Ord(FExpe.ModeDecl);
-  editComment.Text        := _AnsiToLCLStr(Trim(FExpe.Commentaire));
-end;
+
 function TCdrExpe.GetExpeFromForm(): TExpe;
 var
   E: TExpe;
@@ -228,7 +216,7 @@ begin
     DeclinaisonInDegrees := editDeclimag.Value;
     Commentaire := _LCLStrToAnsi(editComment.Text);
   end;
-  Result:=E;
+  Result := E;
 end;
 procedure TCdrExpe.SetLbColor(const IdxColor: integer);
 var
@@ -245,11 +233,5 @@ begin
     FreeAndNil(P); //P.Free;
   end;
 end;
-
-procedure TCdrExpe.SetDocTopo(const D: TToporobotStructure2012);
-begin
-  FMyDocTopo := D;
-end;
-
 end.
 

@@ -114,6 +114,7 @@ type
     procedure SetProcOfObjectWithBaseStation(const P: TProcOfObjectWithBaseStation);
     procedure SetProcOfObjectWithXY(const P: TProcOfObjectWithXY);
     procedure ListerListesSimples(const QModeBDD: TModeBDD = mbddCHECK_ERRORS);
+    procedure CheckerAltimetrieEntrancesByMNT();
   end;
 
 implementation
@@ -527,7 +528,15 @@ end;
 
 procedure TCdrListesSimples.acHelpListesSimplesExecute(Sender: TObject);
 begin
-  DisplayHelpSystem('LISTES_SIMPLES');
+  //;
+  case FModeBDD of
+    mbddENTRANCES:
+      begin
+        CheckerAltimetrieEntrancesByMNT();
+      end;
+  else
+    DisplayHelpSystem('LISTES_SIMPLES');
+  end;
 end;
 
 procedure TCdrListesSimples.acSortExecute(Sender: TObject);
@@ -744,6 +753,17 @@ begin
   end;
   // DONE: bouton de tri actif uniquement pour codes, expés et bouclages
   acSort.Enabled := (QModeBDD in [mbddCODES, mbddEXPES, mbddCHECK_ERRORS, mbddPROXIMITES]);
+end;
+
+procedure TCdrListesSimples.CheckerAltimetrieEntrancesByMNT();
+var
+  i, n: Integer;
+  EWE: String;
+  MyEntrance: TEntrance;
+  DeltaZ, AltitudeOfMNT: Double;
+begin
+  if (FMaillage.IsValidMaillage()) then FDocumentToporobot.CheckerAltimetrieEntrancesByMNT(FMaillage, false, 10.00)
+                                   else ShowMessage('Maillage invalide');
 end;
 
 procedure TCdrListesSimples.lsbListeDblClick(Sender: TObject);

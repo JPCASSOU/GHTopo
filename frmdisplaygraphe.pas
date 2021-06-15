@@ -23,10 +23,15 @@ type
     btnAddItineraire: TButton;
     btnOuvrirItineraires: TButton;
     btnSaveItineraires: TButton;
+    btnRemoveArc: TButton;
+    btnRemoveNode: TButton;
     Button2: TButton;
     btnCopierDistancier: TButton;
     Button3: TButton;
     CdrGrapheItineraire1: TCdrGrapheItineraire;
+    chkRmArcBidirectionnel: TCheckBox;
+    editRemoveArcStDep: TEdit;
+    editRemoveArcStArr: TEdit;
     HeaderControl1: THeaderControl;
     lbNbItineraires: TLabel;
     lsbItineraires: TListBox;
@@ -45,15 +50,19 @@ type
     procedure btnAddItineraireClick(Sender: TObject);
     procedure btnExportHTMLClick(Sender: TObject);
     procedure btnOuvrirItinerairesClick(Sender: TObject);
+    procedure btnRemoveArcClick(Sender: TObject);
+    procedure btnRemoveNodeClick(Sender: TObject);
     procedure btnSaveItinerairesClick(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
+
 
     procedure FormShow(Sender: TObject);
     procedure grdDistancierClick(Sender: TObject);
     procedure grdDistancierDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect; aState: TGridDrawState);
     procedure grdDistancierSelectCell(Sender: TObject; aCol, aRow: Integer; var CanSelect: Boolean);
     procedure grdDistancierSelection(Sender: TObject; aCol, aRow: Integer);
+    procedure lsbItinerairesClick(Sender: TObject);
     procedure lsbItinerairesDrawItem(Control: TWinControl; Index: Integer; ARect: TRect; State: TOwnerDrawState);
     procedure lsbItinerairesSelectionChange(Sender: TObject; User: boolean);
   private
@@ -138,6 +147,11 @@ begin
   end;
 end;
 
+procedure TdlgDisplayGraphe.lsbItinerairesClick(Sender: TObject);
+begin
+
+end;
+
 
 procedure TdlgDisplayGraphe.lsbItinerairesDrawItem(Control: TWinControl; Index: Integer; ARect: TRect; State: TOwnerDrawState);
 var
@@ -159,7 +173,7 @@ end;
 
 procedure TdlgDisplayGraphe.lsbItinerairesSelectionChange(Sender: TObject; User: boolean);
 begin
-   CdrGrapheItineraire1.CalculerItineraireByIndex(lsbItineraires.ItemIndex);
+  CdrGrapheItineraire1.CalculerItineraireByIndex(lsbItineraires.ItemIndex);
 end;
 
 procedure TdlgDisplayGraphe.ListerLesItineraires(const Idx: integer);
@@ -214,6 +228,34 @@ begin
   finally
     FreeAndNil(TD);
   end;
+end;
+
+procedure TdlgDisplayGraphe.btnRemoveArcClick(Sender: TObject);
+var
+  G: TPathFindingGraphe;
+  PT1, PT2: TToporobotIDStation;
+  ITI: TPathBetweenNodes;
+begin
+  G := CdrGrapheItineraire1.GetGraphe();
+  PT1 := DecomposeStationToporobot(editRemoveArcStDep.Text);
+  PT2 := DecomposeStationToporobot(editRemoveArcStArr.Text);
+
+
+
+  G.RemoveArcBetweenStations(PT1.aSerie, PT1.aStation, PT2.aSerie, PT2.aStation, chkRmArcBidirectionnel.Checked);
+  CdrGrapheItineraire1.CalculerItineraireByIndex(lsbItineraires.ItemIndex);
+  //G.GetItineraire(0, ITI);
+  //G.RechercherPlusCourtChemin(ITI);
+end;
+
+procedure TdlgDisplayGraphe.btnRemoveNodeClick(Sender: TObject);
+var
+  G: TPathFindingGraphe;
+  PT1: TToporobotIDStation;
+begin
+  G := CdrGrapheItineraire1.GetGraphe();
+  PT1 := DecomposeStationToporobot(editRemoveArcStDep.Text);
+  G.RemoveNode(PT1.aSerie, PT1.aStation);
 end;
 
 procedure TdlgDisplayGraphe.btnSaveItinerairesClick(Sender: TObject);

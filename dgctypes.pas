@@ -6,6 +6,7 @@ interface
 
 uses
   Classes, SysUtils, math, graphics;
+const DGC_DEFAULT_PEN_WIDTH_IN_MM = 0.025;
 const DIEU_AU_CARRE = -1; // dieu étant imaginaire pur, son carré vaut -1 ;-))))
 const DGC_DEFAULT_FONT_NAME = 'Arial';
 

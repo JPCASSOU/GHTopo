@@ -101,6 +101,9 @@ type
     MenuItem58: TMenuItem;
     MenuItem59: TMenuItem;
     MenuItem60: TMenuItem;
+    MenuItem61: TMenuItem;
+    mnuTUOpenGL3: TMenuItem;
+    mnuTUBoussole: TMenuItem;
     mnuMultiThreading: TMenuItem;
     mnuExportTopoEnX3D: TMenuItem;
     mnuOutils: TMenuItem;
@@ -242,14 +245,17 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure FormDropFiles(Sender: TObject; const FileNames: array of String);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure lbCurrentCodeEPSGClick(Sender: TObject);
     procedure MenuItem45Click(Sender: TObject);
     procedure MenuItem60Click(Sender: TObject);
+    procedure mnuTUBoussoleClick(Sender: TObject);
     procedure mnuMultiThreadingClick(Sender: TObject);
 
     procedure mnuExportTopoEnX3DClick(Sender: TObject);
+    procedure mnuTUOpenGL3Click(Sender: TObject);
     procedure RecalculerEtActualiser(const P: boolean);
   private
     // BDD mémoire localisées
@@ -272,13 +278,11 @@ type
     // paramètres FTP
     FFTPParameters            : TFTPParameters;
     procedure ActiverMenus(const R90Mode: boolean);
-    procedure AfficherProgression(const Etape: string; const Done, Starting, Ending: integer);
+    procedure AfficherProgression(const Etape: string; const Done, Starting, Ending, Step: integer);
     function  CalculerLeReseauExt(): boolean;
     function  ChargerLaTopoExt(const FC: TStringDirectoryFileName; const DoCalc: boolean): boolean;
     procedure CloseAllDocuments();
     procedure CompilerLeReseauExt(const BoolDummy: boolean);
-
-
     procedure InitLesCaptions();
     procedure InitNewDocument(const DoConfirmation: boolean);
     procedure PreparerFrontal();
@@ -293,7 +297,6 @@ type
 
     procedure SetCurrentEPSGByCode(const C: integer);
     procedure SetCurrentEPSG(const C: TLabelSystemesCoordsEPSG);
-    // export en X3D
     procedure ExporterCaviteMaillage(const QBDD: TBDDEntites; const QMaillage: TMaillage; const OutputFilename: TStringDirectoryFilename);
     procedure TransmitGotoError(const Ser: TNumeroSerie; const St: TNumeroStation);
     procedure CentrerBasepointSurPlan(const BP: TToporobotIDStation);
@@ -343,7 +346,8 @@ function TGHTopoMainMenuBar.GetCurrentStation(): TToporobotIDStation;
 begin
   Result := FCurrentStation;
 end;
-procedure TGHTopoMainMenuBar.AfficherProgression(const Etape: string; const Done, Starting, Ending: integer);
+                                   // procedure (const Etape: string; const Done, Starting, Ending, Step: integer) of
+procedure TGHTopoMainMenuBar.AfficherProgression(const Etape: string; const Done, Starting, Ending, Step: integer);
 begin
   if (Done mod 200 <> 0) then Exit;
   lbOperationEnCours.Caption := Etape;
@@ -431,6 +435,34 @@ begin
     FreeAndNil(FGraphe);
   end;
   inherited;
+end;
+
+procedure TGHTopoMainMenuBar.FormDropFiles(Sender: TObject; const FileNames: array of String);
+var
+  QFileName, EWE: String;
+  P: Boolean;
+begin
+  if (0 = length(FileNames)) then exit;
+  if (FDocTopoOpenedAndReady AND (not GHTopoQuestionOuiNon(rsWARN_FILE_ALREADY_OPEN))) then Exit;
+  QFileName := FileNames[0];
+  EWE := LowerCase(QFileName);
+  P := (Pos('.xtb', EWE) > 0) OR
+       (Pos('.gtx', EWE) > 0) OR
+       (Pos('.tab', EWE) > 0) OR
+       (Pos('.txt', EWE) > 0) OR
+       (Pos('.text', EWE) > 0);
+  if (not P) then
+  begin
+    ShowMessage('Invalid format: ' + QFileName);
+    exit;
+  end;
+  lbOperationEnCours.Caption := 'Chargement de ' + QFileName;
+  Application.ProcessMessages;
+  if (OuvrirLaTopo(QFileName, false)) then
+  begin
+    FListeRecentFiles.Insert(0, QFileName);
+    lbOperationEnCours.Caption := 'Ready';
+	end;
 end;
 
 
@@ -574,6 +606,11 @@ begin
 
 end;
 
+procedure TGHTopoMainMenuBar.mnuTUBoussoleClick(Sender: TObject);
+begin
+  DisplayTestUnitaireTCadreBoussole();
+end;
+
 procedure TGHTopoMainMenuBar.mnuMultiThreadingClick(Sender: TObject);
 begin
   pass;
@@ -605,6 +642,11 @@ begin
   begin
     ExporterCaviteMaillage(FBDDEntites, FMonMaillage, QFileName);
   end;
+end;
+
+procedure TGHTopoMainMenuBar.mnuTUOpenGL3Click(Sender: TObject);
+begin
+  DisplayVue3DOpenGL3(FBDDEntites, FMonMaillage, '');
 end;
 
 
@@ -1384,29 +1426,15 @@ begin
   CodeCalcul := TCodeDeCalcul.Create;
   T0 := Now();
   try
-    //ShowMessage('555');
     AfficherMessageErreur('-- Calcul non parallélisé');
     AfficherMessageErreur('');
 
-    CodeCalcul.Initialiser(FDocumentToporobot, FBDDEntites);
-    //ShowMessage('556');
-
-
-    //ShowMessage('557');
-
-    //CodeCalcul.SetProcDisplayProgression(self.AfficherProgression);
+    CodeCalcul.Initialiser(FDocumentToporobot, FBDDEntites, self.AfficherProgression);
     Result    := CodeCalcul.CalculComplet(False);
-    //ShowMessage('665');
-
-
     AfficherMessageErreur(Format('%s.CalculerLeReseauExt: %s', [Classname, IIF(Result, 'OK', 'KO')]));
-
-    //ShowMessage('666');
-
     CodeCalcul.Finaliser();
     Application.ProcessMessages;
     Result := True;
-    ///ShowMessage('777');
   finally
 
     lbOperationEnCours.Caption := GetResourceString(rsDONE_CALCUL);
@@ -1440,13 +1468,9 @@ end;
 
 procedure TGHTopoMainMenuBar.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
-
-    frmVueEnPlan.GHTopoContext2DA1.CanDraw := false;
-    FDocTopoOpenedAndReady := false;
-    SaveSettings();
-
-
-
+  frmVueEnPlan.GHTopoContext2DA1.CanDraw := false;
+  FDocTopoOpenedAndReady := false;
+  SaveSettings();
 end;
 
 

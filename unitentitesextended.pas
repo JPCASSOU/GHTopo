@@ -2452,7 +2452,7 @@ begin
 
       // entrées
       FSVGCanvas.WriteStyleLinePolygoneTexte(NOM_STYLE_ENTRANCE,
-                                             clBlue, 255, 0.025, psSolid,
+                                             clBlue, 255, DEFAULT_PEN_WIDTH_IN_MM, psSolid,
                                              clBlue, 128, bsSolid,
                                              DEFAULT_FONT_NAME,
                                              Param2D.ongTailleTexteEntrances, Param2D.ongCouleurEntrances,

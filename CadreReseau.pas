@@ -12,6 +12,9 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, curredit;
 
 type
+
+  { TCdrReseaux }
+
   TCdrReseaux = class(TFrame)
     cmbTypeReseau: TComboBox;
     editNomReseau: TEdit;
@@ -27,26 +30,26 @@ type
   private
     { private declarations }
     { Déclarations privées }
-    FIdx   : integer;
-    FReseau: TReseau;
     procedure InitCaptions();
-    procedure PutReseauInForm();
-
   public
     { public declarations }
-    procedure SetReseau(const R: TReseau; const QIdx: integer; const DoInitCaptions: boolean); overload;
+    function  Initialiser(const MyReseau: TReseau; const QIdx: integer): boolean;
     function  GetReseauFromForm(): TReseau;
   end;
 
 implementation
 
 {$R *.lfm}
-procedure TCdrReseaux.SetReseau(const R: TReseau; const QIdx: integer; const DoInitCaptions: boolean);
+function TCdrReseaux.Initialiser(const MyReseau: TReseau; const QIdx: integer): boolean;
 begin
-  FIdx := QIdx;
-  FReseau := R;
-  if (DoInitCaptions) then InitCaptions;
-  PutReseauInForm;
+  result := false;
+  InitCaptions();
+  editIdxReseau.AsInteger := QIdx;
+  btnColorReseau.Color    := MyReseau.ColorReseau;
+  editNomReseau.Text      := _AnsiToLCLStr(MyReseau.NomReseau);
+  editObsReseau.Text      := _AnsiToLCLStr(MyReseau.ObsReseau);
+  cmbTypeReseau.ItemIndex := MyReseau.TypeReseau;
+  result := true;
 end;
 
 procedure TCdrReseaux.InitCaptions();
@@ -56,7 +59,8 @@ begin
   lbObsReseau.Caption    := GetResourceString(rsSELECT_LISTE_OBSERV);
   lbColorReseau.Caption  := GetResourceString(rsCOLOR);
   lbTypeReseau.Caption   := GetResourceString(rsCDR_RESEAU_TYPE);
-  with cmbTypeReseau do begin
+  with cmbTypeReseau do
+  begin
     Clear;
     Items.Add(GetResourceString(rsCDR_RESEAU_CB0));
     Items.Add(GetResourceString(rsCDR_RESEAU_CB1));
@@ -68,14 +72,6 @@ begin
     ItemIndex := 0;
   end;
 end;
-procedure TCdrReseaux.PutReseauInForm();
-begin
-  editIdxReseau.AsInteger:= FIdx;
-  btnColorReseau.Color   := FReseau.ColorReseau;
-  editNomReseau.Text     := _AnsiToLCLStr(FReseau.NomReseau);
-  editObsReseau.Text     := _AnsiToLCLStr(FReseau.ObsReseau);
-  cmbTypeReseau.ItemIndex := FReseau.TypeReseau;
-end;
 
 procedure TCdrReseaux.btnColorReseauClick(Sender: TObject);
 begin
@@ -84,13 +80,10 @@ end;
 
 function  TCdrReseaux.GetReseauFromForm(): TReseau;
 begin
-  with Result do begin
-    //IdxReseau     := editIdxReseau.AsInteger;
-    ColorReseau   := btnColorReseau.Color;
-    NomReseau     := _LCLStrToAnsi(Trim(editNomReseau.Text));
-    ObsReseau     := _LCLStrToAnsi(Trim(editObsReseau.Text));
-    TypeReseau    := cmbTypeReseau.ItemIndex;
-  end;
-  FReseau := Result;
+  //IdxReseau     := editIdxReseau.AsInteger;
+  Result.ColorReseau   := btnColorReseau.Color;
+  Result.NomReseau     := _LCLStrToAnsi(Trim(editNomReseau.Text));
+  Result.ObsReseau     := _LCLStrToAnsi(Trim(editObsReseau.Text));
+  Result.TypeReseau    := cmbTypeReseau.ItemIndex;
 end;
 end.

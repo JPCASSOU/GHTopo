@@ -52,8 +52,6 @@ begin
   except
     pass;
   end;
-
-
 end;
 
 function TdlgQuestionOuiNonWithAction.GetChecked(): boolean;

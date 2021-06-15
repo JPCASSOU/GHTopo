@@ -37,8 +37,6 @@ type
     acExportNuageDePoints: TAction;
     ActionList2: TActionList;
     BitBtn1: TBitBtn;
-    btnColorZMaxiMaillage: TColorButton;
-    btnColorZMiniMaillage: TColorButton;
     btnDetourerMNT: TButton;
     btnExportGCP: TButton;
     Button2: TButton;
@@ -49,11 +47,8 @@ type
     btnSetMagnZ: TButton;
     Button4: TButton;
     Button5: TButton;
-    Button6: TButton;
     CdrVue3DExt1: TCdrVue3DExt;
-    chkDegradeAltitudes: TCheckBox;
     chkFiltrer: TCheckBox;
-    cmbModeDessinMaillage: TComboBox;
     editValue: TCurrencyEdit;
     editZoom: TCurrencyEdit;
     editTheta: TCurrencyEdit;
@@ -63,8 +58,6 @@ type
     grbxParamsMaillage: TGroupBox;
     ImageList2: TImageList;
     Label1: TLabel;
-    Label11: TLabel;
-    Label12: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
@@ -86,7 +79,6 @@ type
     SpeedButton21: TSpeedButton;
     SpeedButton22: TSpeedButton;
     lbValueMax: TStaticText;
-    trkbMaillageOpacity: TTrackBar;
     procedure acExporterSVGExecute(Sender: TObject);
     procedure acExportNuageDePointsExecute(Sender: TObject);
     procedure acParamVue3DExecute(Sender: TObject);
@@ -95,6 +87,7 @@ type
     procedure acProjXZExecute(Sender: TObject);
     procedure acProjYZExecute(Sender: TObject);
     procedure acRedessinerExecute(Sender: TObject);
+    procedure btnColorZMiniMaillageClick(Sender: TObject);
     procedure btnDetourerMNTClick(Sender: TObject);
     procedure btnExportGCPClick(Sender: TObject);
     procedure btnSetThetaClick(Sender: TObject);
@@ -195,11 +188,9 @@ begin
   FVue3DParams.FovOrZoom           :=  1.00;
   FVue3DParams.CoefMagnification   :=  1.00;
   FVue3DParams.ColorBackGround     := clWhite;
-  FVue3DParams.ColorReferentiel    := clRed;
+  FVue3DParams.LineCube.SetAttributes(clBlue, 192, 1, 0.05);
   FVue3DParams.FillOpacity         := QVue2DParams.ongFillOpacite;
   FVue3DParams.ViseesLargeur       := QVue2DParams.ongViseesLargeurInPX;
-
-  FVue3DParams.ColorCube           := clBlue;
   FVue3DParams.ColorZMiniReseau    := QVue2DParams.ongDegradeAltMiniReseau;
   FVue3DParams.ColorZMaxiReseau    := QVue2DParams.ongDegradeAltMaxiReseau;
 
@@ -336,6 +327,11 @@ begin
   Redessiner();
 end;
 
+procedure TfrmVue3DExt.btnColorZMiniMaillageClick(Sender: TObject);
+begin
+
+end;
+
 procedure TfrmVue3DExt.btnDetourerMNTClick(Sender: TObject);
 var
   BB: TMNTBoundingBox;
@@ -354,11 +350,20 @@ procedure TfrmVue3DExt.acExporterSVGExecute(Sender: TObject);
 var
   EWE: TStringDirectoryFilename;
   beuh: String;
-  DoXHTML: Boolean;
+  DoXHTML, QDoExportMNT: Boolean;
   QFilterIndex: integer;
   QParam3D: TVue3DParams;
 begin
   QParam3D := CdrVue3DExt1.GetParamsVue3D();
+  QDoExportMNT := FMyMaillage.IsValidMaillage();
+  if (QDoExportMNT) then
+  begin
+    case MessageDlg('Le maillage 3D sera exporté', mtConfirmation, [mbYes, mbNo, mbCancel], 0) of
+      mrYes: QDoExportMNT := true;
+      mrNo : QDoExportMNT := false;
+      mrCancel: exit;
+    end;
+  end;
   EWE := 'SVG_3D_001.svg';
   if (DoDialogSaveFile('Scalable Vector Graphics (*.svg)|*.svg|' +
                        'XHTML document (*.xhtml)|*.xhtml',
@@ -366,7 +371,7 @@ begin
   begin
     beuh := ExtractFileExt(EWE);
     DoXHTML := (Pos(beuh, 'xht') > 0);
-    CdrVue3DExt1.ExporterVue3DEnSVG_TSVGCanvas(EWE, DoXHTML, QParam3D);
+    CdrVue3DExt1.ExporterVue3DEnSVG_TSVGCanvas(EWE, DoXHTML, QParam3D, QDoExportMNT, True); // TODO: En attente pour les profils
   end;
 end;
 
@@ -418,12 +423,6 @@ procedure TfrmVue3DExt.acProjYZExecute(Sender: TObject);
 begin
   SetThetaPhi(0.0, 0.0);
 end;
-
-
-
-
-
-
 
 procedure TfrmVue3DExt.Finaliser();
 begin

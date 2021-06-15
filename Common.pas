@@ -157,6 +157,9 @@ function MakeTToporobotIDStation(const QNameSpace: Integer; const QSerie: TNumer
 procedure Swap(var V1, V2: integer); overload;
 procedure Swap(var V1, V2: Double); overload;
 procedure Swap(var V1, V2: string); overload;
+procedure Swap(var V1, V2: TMNTNumeroTriangle); overload;
+procedure Swap(var V1, V2: TMNTNumeroVertex); overload;
+
 // If immédiats
 function IIF(const Condition: boolean; const V1, V2: boolean): boolean; inline; overload;
 function IIF(const Condition: boolean; const V1, V2: integer): integer; inline; overload;
@@ -1175,6 +1178,21 @@ begin
   V1   := V2;
   V2   := Tmp;
 end;
+procedure Swap(var V1, V2: TMNTNumeroTriangle); overload;
+var Tmp: TMNTNumeroTriangle;
+begin
+  Tmp  := V1;
+  V1   := V2;
+  V2   := Tmp;
+end;
+procedure Swap(var V1, V2: TMNTNumeroVertex); overload;
+var Tmp: TMNTNumeroVertex;
+begin
+  Tmp  := V1;
+  V1   := V2;
+  V2   := Tmp;
+end;
+
 // IF immédiats
 function IIF(const Condition: boolean; const V1, V2: integer): integer; overload;
 begin
@@ -3539,6 +3557,7 @@ begin
   end;
 end;
 //*)
+
 
 
 

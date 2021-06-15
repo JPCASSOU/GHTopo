@@ -15,23 +15,23 @@ object CdrCalculette: TCdrCalculette
   Font.Style = [fsBold]
   ParentFont = False
   TabOrder = 0
-  DesignLeft = 373
-  DesignTop = 395
+  DesignLeft = 678
+  DesignTop = 281
   object PageControl1: TPageControl
     Left = 0
     Height = 717
     Top = 0
     Width = 1160
-    ActivePage = tabShtInerties
+    ActivePage = tabShtMNT
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
-    TabIndex = 6
+    TabIndex = 5
     TabOrder = 0
     OnChange = PageControl1Change
     object tabShtCalculatrice: TTabSheet
       Caption = 'tabShtCalculatrice'
-      ClientHeight = 704
-      ClientWidth = 1222
+      ClientHeight = 688
+      ClientWidth = 1152
       object lbExpression: TStaticText
         Left = 0
         Height = 24
@@ -44,22 +44,22 @@ object CdrCalculette: TCdrCalculette
         TabOrder = 0
         Transparent = False
       end
-      object Panel8: TPanel
+      object pnlExpression: TPanel
         Left = 0
         Height = 60
         Top = 28
-        Width = 1343
+        Width = 1148
         Anchors = [akTop, akLeft, akRight]
         BevelInner = bvRaised
         BevelOuter = bvLowered
         ClientHeight = 60
-        ClientWidth = 1343
+        ClientWidth = 1148
         TabOrder = 1
         object editExpression: TEdit
           Left = 246
           Height = 24
           Top = 6
-          Width = 1041
+          Width = 846
           Anchors = [akTop, akLeft, akRight]
           AutoSelect = False
           OnEnter = editExpressionEnter
@@ -79,7 +79,7 @@ object CdrCalculette: TCdrCalculette
           Left = 246
           Height = 21
           Top = 33
-          Width = 1041
+          Width = 846
           Anchors = [akTop, akLeft, akRight]
           BorderStyle = sbsSingle
           Caption = 'OK'
@@ -97,7 +97,7 @@ object CdrCalculette: TCdrCalculette
           Transparent = False
         end
         object SpeedButton1: TSpeedButton
-          Left = 1291
+          Left = 1096
           Height = 48
           Top = 6
           Width = 48
@@ -108,33 +108,33 @@ object CdrCalculette: TCdrCalculette
           ParentShowHint = False
         end
       end
-      object Panel9: TPanel
+      object pnlListesVariablesCalculs: TPanel
         Left = 0
-        Height = 620
+        Height = 604
         Top = 92
-        Width = 1343
+        Width = 1148
         Anchors = [akTop, akLeft, akRight, akBottom]
         BevelInner = bvRaised
         BevelOuter = bvLowered
-        ClientHeight = 620
-        ClientWidth = 1343
+        ClientHeight = 604
+        ClientWidth = 1148
         TabOrder = 2
         object PairSplitter1: TPairSplitter
           Cursor = crDefault
           Left = 2
-          Height = 616
+          Height = 600
           Top = 2
-          Width = 1339
+          Width = 1144
           Align = alClient
           Position = 328
           object PairSplitterSide1: TPairSplitterSide
             Cursor = crArrow
             Left = 0
-            Height = 616
+            Height = 600
             Top = 0
             Width = 328
             ClientWidth = 328
-            ClientHeight = 616
+            ClientHeight = 600
             object lbListeDesFonctions: TStaticText
               Left = 4
               Height = 24
@@ -150,7 +150,7 @@ object CdrCalculette: TCdrCalculette
             end
             object lsbFonctions: TListBox
               Left = 4
-              Height = 580
+              Height = 564
               Top = 28
               Width = 316
               Anchors = [akTop, akLeft, akRight, akBottom]
@@ -164,17 +164,17 @@ object CdrCalculette: TCdrCalculette
           object PairSplitterSide2: TPairSplitterSide
             Cursor = crArrow
             Left = 333
-            Height = 616
+            Height = 600
             Top = 0
-            Width = 1006
-            ClientWidth = 1006
-            ClientHeight = 616
+            Width = 811
+            ClientWidth = 811
+            ClientHeight = 600
             object PairSplitter3: TPairSplitter
               Cursor = crDefault
               Left = 0
-              Height = 616
+              Height = 600
               Top = 0
-              Width = 1006
+              Width = 811
               Align = alClient
               Position = 316
               SplitterType = pstVertical
@@ -183,14 +183,14 @@ object CdrCalculette: TCdrCalculette
                 Left = 0
                 Height = 316
                 Top = 0
-                Width = 1006
-                ClientWidth = 1006
+                Width = 811
+                ClientWidth = 811
                 ClientHeight = 316
                 object lsbLastCalculs: TListBox
                   Left = 4
                   Height = 284
                   Top = 28
-                  Width = 996
+                  Width = 801
                   Anchors = [akTop, akLeft, akRight, akBottom]
                   ItemHeight = 0
                   OnDblClick = lsbLastCalculsDblClick
@@ -201,7 +201,7 @@ object CdrCalculette: TCdrCalculette
                   Left = 4
                   Height = 24
                   Top = 4
-                  Width = 997
+                  Width = 802
                   Anchors = [akTop, akLeft, akRight]
                   BorderStyle = sbsSingle
                   Caption = 'lbListeCalculs'
@@ -214,26 +214,26 @@ object CdrCalculette: TCdrCalculette
               object PairSplitterSide6: TPairSplitterSide
                 Cursor = crArrow
                 Left = 0
-                Height = 295
+                Height = 279
                 Top = 321
-                Width = 1006
-                ClientWidth = 1006
-                ClientHeight = 295
+                Width = 811
+                ClientWidth = 811
+                ClientHeight = 279
                 object pnlListeVariables: TPanel
                   Left = 0
-                  Height = 295
+                  Height = 279
                   Top = 0
-                  Width = 1006
+                  Width = 811
                   Align = alClient
                   BevelOuter = bvLowered
-                  ClientHeight = 295
-                  ClientWidth = 1006
+                  ClientHeight = 279
+                  ClientWidth = 811
                   TabOrder = 0
                   object lbListeVariables: TStaticText
                     Left = 4
                     Height = 24
                     Top = 4
-                    Width = 997
+                    Width = 802
                     Anchors = [akTop, akLeft, akRight]
                     BorderStyle = sbsSingle
                     Caption = 'lbListeVariables'
@@ -244,9 +244,9 @@ object CdrCalculette: TCdrCalculette
                   end
                   object lsbVariables: TListBox
                     Left = 5
-                    Height = 259
+                    Height = 243
                     Top = 31
-                    Width = 996
+                    Width = 801
                     Anchors = [akTop, akLeft, akRight, akBottom]
                     ItemHeight = 0
                     ScrollWidth = 992
@@ -261,13 +261,13 @@ object CdrCalculette: TCdrCalculette
     end
     object tabShtConvertisseur: TTabSheet
       Caption = 'tabShtConvertisseur'
-      ClientHeight = 744
-      ClientWidth = 1204
+      ClientHeight = 688
+      ClientWidth = 1152
       object lbCopyrightNotesConvertisseur: TStaticText
         Left = 2
         Height = 19
-        Top = 726
-        Width = 1322
+        Top = 670
+        Width = 1270
         Anchors = [akLeft, akRight, akBottom]
         BorderStyle = sbsSunken
         Caption = 'lbCopyrightNotesConvertisseur'
@@ -283,24 +283,24 @@ object CdrCalculette: TCdrCalculette
       object PairSplitter2: TPairSplitter
         Cursor = crDefault
         Left = 0
-        Height = 744
+        Height = 688
         Top = 0
-        Width = 1204
+        Width = 1152
         Align = alClient
-        Position = 976
+        Position = 940
         object PairSplitterSide3: TPairSplitterSide
           Cursor = crArrow
           Left = 0
-          Height = 744
+          Height = 688
           Top = 0
-          Width = 976
-          ClientWidth = 976
-          ClientHeight = 744
+          Width = 940
+          ClientWidth = 940
+          ClientHeight = 688
           object lbSystemesCoordonnees: TStaticText
             Left = 2
             Height = 22
             Top = 3
-            Width = 332
+            Width = 326
             BorderStyle = sbsSingle
             Caption = 'lbSystemesCoordonnees'
             Color = clYellow
@@ -312,11 +312,11 @@ object CdrCalculette: TCdrCalculette
             Left = 2
             Height = 63
             Top = 25
-            Width = 330
+            Width = 326
             BevelInner = bvRaised
             BevelOuter = bvLowered
             ClientHeight = 63
-            ClientWidth = 330
+            ClientWidth = 326
             TabOrder = 1
             object lbSystSource: TLabel
               Left = 4
@@ -330,7 +330,7 @@ object CdrCalculette: TCdrCalculette
               Left = 120
               Height = 24
               Top = 4
-              Width = 147
+              Width = 143
               Anchors = [akTop, akLeft, akRight]
               ItemHeight = 16
               OnChange = cmbSystSourceJPCChange
@@ -349,14 +349,14 @@ object CdrCalculette: TCdrCalculette
               Left = 120
               Height = 24
               Top = 32
-              Width = 147
+              Width = 143
               Anchors = [akTop, akLeft, akRight]
               ItemHeight = 16
               Style = csDropDownList
               TabOrder = 1
             end
             object SpeedButton2: TSpeedButton
-              Left = 271
+              Left = 267
               Height = 52
               Top = 5
               Width = 52
@@ -368,7 +368,7 @@ object CdrCalculette: TCdrCalculette
             end
           end
           object lbConversionsUnitaires: TStaticText
-            Left = 343
+            Left = 332
             Height = 22
             Top = 4
             Width = 360
@@ -380,15 +380,15 @@ object CdrCalculette: TCdrCalculette
             Transparent = False
           end
           object Panel1: TPanel
-            Left = 343
+            Left = 332
             Height = 108
             Top = 25
-            Width = 629
+            Width = 603
             Anchors = [akTop, akLeft, akRight]
             BevelInner = bvRaised
             BevelOuter = bvLowered
             ClientHeight = 108
-            ClientWidth = 629
+            ClientWidth = 603
             TabOrder = 3
             object lbValeursEntree: TLabel
               Left = 5
@@ -493,45 +493,41 @@ object CdrCalculette: TCdrCalculette
               ParentFont = False
             end
             object SpeedButton3: TSpeedButton
-              Left = 451
+              Left = 436
               Height = 40
               Top = 51
               Width = 40
               Action = acConvertir
-              Anchors = [akTop, akRight]
               ShowCaption = False
               ShowHint = True
               ParentShowHint = False
             end
             object SpeedButton4: TSpeedButton
-              Left = 408
+              Left = 396
               Height = 40
               Top = 51
               Width = 40
               Action = acEchangerValeurs
-              Anchors = [akTop, akRight]
               ShowCaption = False
               ShowHint = True
               ParentShowHint = False
             end
             object SpeedButton17: TSpeedButton
-              Left = 539
+              Left = 516
               Height = 40
               Top = 51
               Width = 40
               Action = acQRCodeCoordPoint
-              Anchors = [akTop, akRight]
               ShowCaption = False
               ShowHint = True
               ParentShowHint = False
             end
             object SpeedButton9: TSpeedButton
-              Left = 495
+              Left = 476
               Height = 40
               Top = 51
               Width = 40
               Action = acCopyCoordinates
-              Anchors = [akTop, akRight]
               ShowCaption = False
               ShowHint = True
               ParentShowHint = False
@@ -548,7 +544,7 @@ object CdrCalculette: TCdrCalculette
               Left = 396
               Height = 24
               Top = 24
-              Width = 179
+              Width = 200
               Caption = 'dd°mm''ss.s" > dd,dddddd'
               OnClick = btnConvertDMS2DegDecClick
               TabOrder = 5
@@ -562,19 +558,18 @@ object CdrCalculette: TCdrCalculette
               Text = '000°10''15,8"'
             end
             object SpeedButton33: TSpeedButton
-              Left = 583
+              Left = 556
               Height = 40
               Top = 51
               Width = 40
               Action = acVisuCoordsSurCarte
-              Anchors = [akTop, akRight]
               ShowCaption = False
               ShowHint = True
               ParentShowHint = False
             end
           end
           object lbStatutConvertisseur: TStaticText
-            Left = 840
+            Left = 804
             Height = 22
             Top = 3
             Width = 131
@@ -590,7 +585,7 @@ object CdrCalculette: TCdrCalculette
             Left = 4
             Height = 22
             Top = 116
-            Width = 332
+            Width = 324
             BorderStyle = sbsSingle
             Caption = 'lbConversionsTableau'
             Color = clYellow
@@ -600,13 +595,13 @@ object CdrCalculette: TCdrCalculette
           end
           object Panel11: TPanel
             Left = 2
-            Height = 603
+            Height = 547
             Top = 138
-            Width = 969
+            Width = 933
             Anchors = [akTop, akLeft, akRight, akBottom]
             BevelOuter = bvLowered
-            ClientHeight = 603
-            ClientWidth = 969
+            ClientHeight = 547
+            ClientWidth = 933
             TabOrder = 6
             object lbDocumentTitle: TLabel
               Left = 4
@@ -620,7 +615,7 @@ object CdrCalculette: TCdrCalculette
               Left = 140
               Height = 24
               Top = 4
-              Width = 825
+              Width = 789
               Anchors = [akTop, akLeft, akRight]
               TabOrder = 0
               Text = 'Report sur carte'
@@ -722,9 +717,9 @@ object CdrCalculette: TCdrCalculette
             end
             object grdDonnees: TStringGrid
               Left = 4
-              Height = 520
+              Height = 464
               Top = 76
-              Width = 961
+              Width = 925
               Anchors = [akTop, akLeft, akRight, akBottom]
               DefaultRowHeight = 22
               Font.CharSet = ANSI_CHARSET
@@ -751,12 +746,12 @@ object CdrCalculette: TCdrCalculette
               Left = 28
               Height = 56
               Top = 356
-              Width = 905
+              Width = 869
               Anchors = [akTop, akLeft, akRight]
               BevelInner = bvRaised
               BevelOuter = bvLowered
               ClientHeight = 56
-              ClientWidth = 905
+              ClientWidth = 869
               TabOrder = 3
               Visible = False
               object lbProcessEnCours: TLabel
@@ -772,7 +767,7 @@ object CdrCalculette: TCdrCalculette
                 Left = 4
                 Height = 20
                 Top = 28
-                Width = 893
+                Width = 857
                 Anchors = [akLeft, akRight, akBottom]
                 Smooth = True
                 TabOrder = 0
@@ -782,25 +777,25 @@ object CdrCalculette: TCdrCalculette
         end
         object PairSplitterSide4: TPairSplitterSide
           Cursor = crArrow
-          Left = 981
-          Height = 744
+          Left = 945
+          Height = 688
           Top = 0
-          Width = 223
-          ClientWidth = 223
-          ClientHeight = 744
+          Width = 207
+          ClientWidth = 207
+          ClientHeight = 688
           object Panel6: TPanel
             Left = 0
-            Height = 744
+            Height = 688
             Top = 0
-            Width = 223
+            Width = 207
             Align = alClient
             Anchors = [akTop, akRight, akBottom]
             BevelOuter = bvLowered
-            ClientHeight = 744
-            ClientWidth = 223
+            ClientHeight = 688
+            ClientWidth = 207
             TabOrder = 0
             OnResize = Panel6Resize
-            object Label10: TLabel
+            object lbConvFormat: TLabel
               Left = 4
               Height = 16
               Top = 4
@@ -812,7 +807,7 @@ object CdrCalculette: TCdrCalculette
               Left = 88
               Height = 24
               Top = 4
-              Width = 131
+              Width = 115
               Anchors = [akTop, akLeft, akRight]
               ItemHeight = 16
               ItemIndex = 0
@@ -825,7 +820,7 @@ object CdrCalculette: TCdrCalculette
               TabOrder = 0
               Text = 'OpenStreetMap HTML'
             end
-            object Label1: TLabel
+            object lbConvSeparateur: TLabel
               Left = 4
               Height = 16
               Top = 36
@@ -837,7 +832,7 @@ object CdrCalculette: TCdrCalculette
               Left = 88
               Height = 24
               Top = 36
-              Width = 131
+              Width = 115
               Anchors = [akTop, akLeft, akRight]
               ItemHeight = 16
               ItemIndex = 0
@@ -870,7 +865,7 @@ object CdrCalculette: TCdrCalculette
               Caption = 'Labels autoincrémentés'
               TabOrder = 3
             end
-            object Label11: TLabel
+            object lbConvEtiquettes: TLabel
               Left = 4
               Height = 16
               Top = 88
@@ -878,7 +873,7 @@ object CdrCalculette: TCdrCalculette
               Caption = 'Etiquettes'
               ParentColor = False
             end
-            object Label14: TLabel
+            object lbConvNoms: TLabel
               Left = 4
               Height = 16
               Top = 116
@@ -890,7 +885,7 @@ object CdrCalculette: TCdrCalculette
               Left = 98
               Height = 24
               Top = 116
-              Width = 121
+              Width = 105
               Anchors = [akTop, akLeft, akRight]
               ItemHeight = 16
               OnChange = cmbColEtiquettesChange
@@ -901,14 +896,14 @@ object CdrCalculette: TCdrCalculette
               Left = 98
               Height = 24
               Top = 88
-              Width = 121
+              Width = 105
               Anchors = [akTop, akLeft, akRight]
               ItemHeight = 16
               OnChange = cmbColEtiquettesChange
               Style = csDropDownList
               TabOrder = 5
             end
-            object Label4: TLabel
+            object lbConvDesciption: TLabel
               Left = 4
               Height = 16
               Top = 144
@@ -916,7 +911,7 @@ object CdrCalculette: TCdrCalculette
               Caption = 'Description'
               ParentColor = False
             end
-            object Label7: TLabel
+            object lbConvObserv: TLabel
               Left = 4
               Height = 16
               Top = 172
@@ -928,7 +923,7 @@ object CdrCalculette: TCdrCalculette
               Left = 98
               Height = 24
               Top = 172
-              Width = 121
+              Width = 105
               Anchors = [akTop, akLeft, akRight]
               ItemHeight = 16
               OnChange = cmbColObservationsChange
@@ -939,14 +934,14 @@ object CdrCalculette: TCdrCalculette
               Left = 98
               Height = 24
               Top = 144
-              Width = 121
+              Width = 105
               Anchors = [akTop, akLeft, akRight]
               ItemHeight = 16
               OnChange = cmbColDescriptionChange
               Style = csDropDownList
               TabOrder = 7
             end
-            object Label6: TLabel
+            object lbConvCoordsSource: TLabel
               Left = 4
               Height = 16
               Top = 200
@@ -954,7 +949,7 @@ object CdrCalculette: TCdrCalculette
               Caption = 'Coords Source'
               ParentColor = False
             end
-            object Label8: TLabel
+            object lbConvCoordsCible: TLabel
               Left = 4
               Height = 16
               Top = 228
@@ -1002,7 +997,7 @@ object CdrCalculette: TCdrCalculette
               Style = csDropDownList
               TabOrder = 11
             end
-            object Label12: TLabel
+            object lbConvZSource: TLabel
               Left = 4
               Height = 16
               Top = 256
@@ -1014,7 +1009,7 @@ object CdrCalculette: TCdrCalculette
               Left = 98
               Height = 24
               Top = 256
-              Width = 121
+              Width = 105
               Anchors = [akTop, akLeft, akRight]
               ItemHeight = 16
               OnChange = cmbColYSourceChange
@@ -1025,14 +1020,14 @@ object CdrCalculette: TCdrCalculette
               Left = 98
               Height = 24
               Top = 284
-              Width = 121
+              Width = 105
               Anchors = [akTop, akLeft, akRight]
               ItemHeight = 16
               OnChange = cmbColPhotoChange
               Style = csDropDownList
               TabOrder = 13
             end
-            object Label15: TLabel
+            object lbConvPhoto: TLabel
               Left = 4
               Height = 16
               Top = 284
@@ -1042,18 +1037,18 @@ object CdrCalculette: TCdrCalculette
             end
             object grbxAdditionalLayers: TGroupBox
               Left = 2
-              Height = 420
+              Height = 364
               Top = 316
-              Width = 221
+              Width = 205
               Anchors = [akTop, akLeft, akRight, akBottom]
               Caption = 'Couches additionnelles'
-              ClientHeight = 399
-              ClientWidth = 217
+              ClientHeight = 343
+              ClientWidth = 201
               TabOrder = 14
               object SpeedButton23: TSpeedButton
                 Left = 40
                 Height = 40
-                Top = 358
+                Top = 302
                 Width = 40
                 Action = acOSMAddLayer
                 Anchors = [akLeft, akBottom]
@@ -1064,7 +1059,7 @@ object CdrCalculette: TCdrCalculette
               object SpeedButton26: TSpeedButton
                 Left = 120
                 Height = 40
-                Top = 358
+                Top = 302
                 Width = 40
                 Action = acOSMDeleteLayer
                 Anchors = [akLeft, akBottom]
@@ -1075,7 +1070,7 @@ object CdrCalculette: TCdrCalculette
               object SpeedButton27: TSpeedButton
                 Left = 159
                 Height = 40
-                Top = 357
+                Top = 301
                 Width = 40
                 Action = acOSMRemoveAllLayers
                 Anchors = [akLeft, akBottom]
@@ -1085,9 +1080,9 @@ object CdrCalculette: TCdrCalculette
               end
               object lsbAdditionalLayers: TListBox
                 Left = 0
-                Height = 301
+                Height = 245
                 Top = 56
-                Width = 214
+                Width = 198
                 Anchors = [akTop, akLeft, akRight, akBottom]
                 ItemHeight = 20
                 OnDblClick = lsbAdditionalLayersDblClick
@@ -1096,7 +1091,7 @@ object CdrCalculette: TCdrCalculette
                 Style = lbOwnerDrawFixed
                 TabOrder = 0
               end
-              object Label13: TLabel
+              object lbConvColLayers: TLabel
                 Left = 1
                 Height = 16
                 Top = 4
@@ -1108,7 +1103,7 @@ object CdrCalculette: TCdrCalculette
                 Left = 80
                 Height = 24
                 Top = 4
-                Width = 134
+                Width = 118
                 Anchors = [akTop, akLeft, akRight]
                 ItemHeight = 16
                 OnChange = cmbColAdditionalOSMLayersChange
@@ -1118,7 +1113,7 @@ object CdrCalculette: TCdrCalculette
               object SpeedButton29: TSpeedButton
                 Left = 0
                 Height = 40
-                Top = 358
+                Top = 302
                 Width = 40
                 Action = acOSMExtractLayersFromTableau
                 Anchors = [akLeft, akBottom]
@@ -1129,7 +1124,7 @@ object CdrCalculette: TCdrCalculette
               object SpeedButton30: TSpeedButton
                 Left = 198
                 Height = 40
-                Top = 358
+                Top = 302
                 Width = 40
                 Action = acCopyLayers
                 Anchors = [akLeft, akBottom]
@@ -1140,7 +1135,7 @@ object CdrCalculette: TCdrCalculette
               object SpeedButton31: TSpeedButton
                 Left = 80
                 Height = 40
-                Top = 358
+                Top = 302
                 Width = 40
                 Action = acOSMEditLayer
                 Anchors = [akLeft, akBottom]
@@ -1148,11 +1143,11 @@ object CdrCalculette: TCdrCalculette
                 ShowHint = True
                 ParentShowHint = False
               end
-              object HeaderControl1: THeaderControl
+              object HeadCtrlLayers: THeaderControl
                 Left = 2
                 Height = 18
                 Top = 36
-                Width = 212
+                Width = 196
                 DragReorder = False
                 Sections = <                
                   item
@@ -1194,13 +1189,13 @@ object CdrCalculette: TCdrCalculette
                     Width = 666
                     Visible = True
                   end>
-                OnSectionResize = HeaderControl1SectionResize
+                OnSectionResize = HeadCtrlLayersSectionResize
                 Anchors = [akTop, akLeft, akRight]
               end
               object SpeedButton32: TSpeedButton
                 Left = 237
                 Height = 40
-                Top = 358
+                Top = 302
                 Width = 40
                 Action = acPasteLayers
                 Anchors = [akLeft, akBottom]
@@ -1215,8 +1210,8 @@ object CdrCalculette: TCdrCalculette
     end
     object tabShtGenerateurQRCode: TTabSheet
       Caption = 'tabShtGenerateurQRCode'
-      ClientHeight = 636
-      ClientWidth = 1075
+      ClientHeight = 688
+      ClientWidth = 1152
       object lbQRCodeGenerator: TStaticText
         Left = 2
         Height = 24
@@ -1231,31 +1226,31 @@ object CdrCalculette: TCdrCalculette
       end
       object Panel10: TPanel
         Left = 2
-        Height = 609
+        Height = 661
         Top = 28
-        Width = 1193
+        Width = 1270
         Anchors = [akTop, akLeft, akRight, akBottom]
         BevelInner = bvRaised
         BevelOuter = bvLowered
-        ClientHeight = 609
-        ClientWidth = 1193
+        ClientHeight = 661
+        ClientWidth = 1270
         TabOrder = 1
         object PairSplitter7: TPairSplitter
           Cursor = crDefault
           Left = 2
-          Height = 605
+          Height = 657
           Top = 2
-          Width = 1189
+          Width = 1266
           Align = alClient
           Position = 416
           object PairSplitterSide13: TPairSplitterSide
             Cursor = crArrow
             Left = 0
-            Height = 605
+            Height = 657
             Top = 0
             Width = 416
             ClientWidth = 416
-            ClientHeight = 605
+            ClientHeight = 657
             object SpeedButton15: TSpeedButton
               Left = 144
               Height = 42
@@ -1287,7 +1282,7 @@ object CdrCalculette: TCdrCalculette
             object btnCreateGUID: TButton
               Left = 4
               Height = 25
-              Top = 481
+              Top = 533
               Width = 106
               Anchors = [akLeft, akBottom]
               Caption = 'GUID'
@@ -1297,7 +1292,7 @@ object CdrCalculette: TCdrCalculette
             object editGUID: TEdit
               Left = 112
               Height = 24
-              Top = 481
+              Top = 533
               Width = 296
               Anchors = [akLeft, akRight, akBottom]
               TabOrder = 1
@@ -1305,7 +1300,7 @@ object CdrCalculette: TCdrCalculette
             object lbPosCursorSynEdit: TStaticText
               Left = 252
               Height = 20
-              Top = 444
+              Top = 496
               Width = 156
               Anchors = [akRight, akBottom]
               BorderStyle = sbsSunken
@@ -1568,7 +1563,7 @@ object CdrCalculette: TCdrCalculette
             end
             object editTextToEncodeQR: TMemo
               Left = 4
-              Height = 373
+              Height = 425
               Top = 68
               Width = 406
               Anchors = [akTop, akLeft, akRight, akBottom]
@@ -1586,11 +1581,11 @@ object CdrCalculette: TCdrCalculette
           object PairSplitterSide14: TPairSplitterSide
             Cursor = crArrow
             Left = 421
-            Height = 605
+            Height = 657
             Top = 0
-            Width = 768
-            ClientWidth = 768
-            ClientHeight = 605
+            Width = 845
+            ClientWidth = 845
+            ClientHeight = 657
             object pnlQRCode: TPanel
               Left = 0
               Height = 605
@@ -1620,54 +1615,54 @@ object CdrCalculette: TCdrCalculette
     end
     object tabShtPascalScript: TTabSheet
       Caption = 'tabShtPascalScript'
-      ClientHeight = 636
-      ClientWidth = 1075
+      ClientHeight = 688
+      ClientWidth = 1152
       inline CdrPascalScript1: TCdrPascalScript
-        Height = 636
-        Width = 1075
-        ClientHeight = 636
-        ClientWidth = 1075
+        Height = 688
+        Width = 1152
+        ClientHeight = 688
+        ClientWidth = 1152
         inherited pnlEditor: TPanel
-          Height = 580
-          Width = 1067
-          ClientHeight = 580
-          ClientWidth = 1067
+          Height = 632
+          Width = 1144
+          ClientHeight = 632
+          ClientWidth = 1144
           inherited PairSplitter4: TPairSplitter
-            Height = 578
-            Width = 1065
+            Height = 630
+            Width = 1142
             inherited PairSplitterSide7: TPairSplitterSide
-              Width = 1065
-              ClientWidth = 1065
+              Width = 1142
+              ClientWidth = 1142
               inherited PairSplitter6: TPairSplitter
-                Width = 1065
+                Width = 1142
                 inherited PairSplitterSide12: TPairSplitterSide
-                  Width = 772
-                  ClientWidth = 772
+                  Width = 849
+                  ClientWidth = 849
                   inherited editPascalScript: TSynEdit
-                    Width = 772
+                    Width = 849
                   end
                 end
               end
             end
             inherited PairSplitterSide8: TPairSplitterSide
-              Height = 268
-              Width = 1065
-              ClientWidth = 1065
-              ClientHeight = 268
+              Height = 320
+              Width = 1142
+              ClientWidth = 1142
+              ClientHeight = 320
               inherited PageControlMsgsOutputs: TPageControl
-                Height = 268
-                Width = 1065
+                Height = 320
+                Width = 1142
                 inherited tabShtConsoleOutput: TTabSheet
-                  ClientHeight = 239
-                  ClientWidth = 1057
+                  ClientHeight = 291
+                  ClientWidth = 1134
                   inherited editPSOutPut: TSynEdit
-                    Height = 239
-                    Width = 1011
+                    Height = 291
+                    Width = 1088
                   end
                   inherited Panel2: TPanel
-                    Left = 1011
-                    Height = 239
-                    ClientHeight = 239
+                    Left = 1088
+                    Height = 291
+                    ClientHeight = 291
                     inherited SpeedButton11: TSpeedButton
                       Flat = False
                     end
@@ -1695,14 +1690,14 @@ object CdrCalculette: TCdrCalculette
           end
         end
         inherited lbStatusPSScript: TStaticText
-          Left = 935
+          Left = 1012
         end
       end
     end
     object tabShtDeclimag: TTabSheet
       Caption = 'tabShtDeclimag'
-      ClientHeight = 746
-      ClientWidth = 1204
+      ClientHeight = 688
+      ClientWidth = 1152
       Enabled = False
       object lbDeclimagUnitaire: TStaticText
         Left = 1
@@ -1720,12 +1715,12 @@ object CdrCalculette: TCdrCalculette
         Left = 1
         Height = 64
         Top = 28
-        Width = 1326
+        Width = 1274
         Anchors = [akTop, akLeft, akRight]
         BevelInner = bvRaised
         BevelOuter = bvLowered
         ClientHeight = 64
-        ClientWidth = 1326
+        ClientWidth = 1274
         TabOrder = 1
         object Long: TLabel
           Left = 196
@@ -1890,7 +1885,7 @@ object CdrCalculette: TCdrCalculette
           Value = 0
         end
         object lbDescDeclimagCalculator: TStaticText
-          Left = 1161
+          Left = 1109
           Height = 56
           Top = 4
           Width = 159
@@ -1935,20 +1930,20 @@ object CdrCalculette: TCdrCalculette
       end
       object pnlTableauDeclimag: TPanel
         Left = 1
-        Height = 628
+        Height = 570
         Top = 122
-        Width = 1200
+        Width = 1148
         Anchors = [akTop, akLeft, akRight, akBottom]
         BevelInner = bvRaised
         BevelOuter = bvLowered
-        ClientHeight = 628
-        ClientWidth = 1200
+        ClientHeight = 570
+        ClientWidth = 1148
         TabOrder = 3
         object grdDeclinaisons: TStringGrid
           Left = 5
-          Height = 615
+          Height = 557
           Top = 7
-          Width = 1093
+          Width = 1041
           Anchors = [akTop, akLeft, akRight, akBottom]
           TabOrder = 0
           TitleFont.CharSet = ANSI_CHARSET
@@ -1960,7 +1955,7 @@ object CdrCalculette: TCdrCalculette
           TitleFont.Style = [fsBold]
         end
         object Label2: TLabel
-          Left = 1121
+          Left = 1069
           Height = 16
           Top = 7
           Width = 37
@@ -1969,7 +1964,7 @@ object CdrCalculette: TCdrCalculette
           ParentColor = False
         end
         object editAnneeDepart: TCurrencyEdit
-          Left = 1103
+          Left = 1051
           Height = 24
           Top = 32
           Width = 88
@@ -1983,7 +1978,7 @@ object CdrCalculette: TCdrCalculette
           Value = 1985
         end
         object Label5: TLabel
-          Left = 1112
+          Left = 1060
           Height = 16
           Top = 64
           Width = 20
@@ -1992,7 +1987,7 @@ object CdrCalculette: TCdrCalculette
           ParentColor = False
         end
         object editAnneeArrivee: TCurrencyEdit
-          Left = 1103
+          Left = 1051
           Height = 24
           Top = 88
           Width = 88
@@ -2006,7 +2001,7 @@ object CdrCalculette: TCdrCalculette
           Value = 2015
         end
         object SpeedButton11: TSpeedButton
-          Left = 1123
+          Left = 1071
           Height = 50
           Top = 124
           Width = 50
@@ -2017,7 +2012,7 @@ object CdrCalculette: TCdrCalculette
           ParentShowHint = False
         end
         object SpeedButton12: TSpeedButton
-          Left = 1123
+          Left = 1071
           Height = 50
           Top = 184
           Width = 50
@@ -2031,14 +2026,14 @@ object CdrCalculette: TCdrCalculette
     end
     object tabShtMNT: TTabSheet
       Caption = 'tabShtMNT'
-      ClientHeight = 704
-      ClientWidth = 1222
+      ClientHeight = 688
+      ClientWidth = 1152
       object PairSplitter8: TPairSplitter
         Cursor = crDefault
         Left = 0
-        Height = 704
+        Height = 688
         Top = 0
-        Width = 1222
+        Width = 1152
         Align = alClient
         Position = 85
         SplitterType = pstVertical
@@ -2047,8 +2042,8 @@ object CdrCalculette: TCdrCalculette
           Left = 0
           Height = 85
           Top = 0
-          Width = 1222
-          ClientWidth = 1222
+          Width = 1152
+          ClientWidth = 1152
           ClientHeight = 85
           object btnSaveMaillage: TButton
             Left = 160
@@ -2090,31 +2085,31 @@ object CdrCalculette: TCdrCalculette
         object PairSplitterSide16: TPairSplitterSide
           Cursor = crArrow
           Left = 0
-          Height = 614
+          Height = 598
           Top = 90
-          Width = 1222
-          ClientWidth = 1222
-          ClientHeight = 614
+          Width = 1152
+          ClientWidth = 1152
+          ClientHeight = 598
           object PairSplitter9: TPairSplitter
             Cursor = crDefault
             Left = 0
-            Height = 614
+            Height = 598
             Top = 0
-            Width = 1222
+            Width = 1152
             Align = alClient
             Position = 396
             object PairSplitterSide17: TPairSplitterSide
               Cursor = crArrow
               Left = 0
-              Height = 614
+              Height = 598
               Top = 0
               Width = 396
               ClientWidth = 396
-              ClientHeight = 614
+              ClientHeight = 598
               object PairSplitter10: TPairSplitter
                 Cursor = crDefault
                 Left = 0
-                Height = 614
+                Height = 598
                 Top = 0
                 Width = 396
                 Align = alClient
@@ -2155,11 +2150,11 @@ object CdrCalculette: TCdrCalculette
                 object PairSplitterSide20: TPairSplitterSide
                   Cursor = crArrow
                   Left = 0
-                  Height = 252
+                  Height = 236
                   Top = 362
                   Width = 396
                   ClientWidth = 396
-                  ClientHeight = 252
+                  ClientHeight = 236
                   object lbMaillageNbTriangles: TLabel
                     Left = 4
                     Height = 16
@@ -2170,7 +2165,7 @@ object CdrCalculette: TCdrCalculette
                   end
                   object grdMaillageTriangles: TStringGrid
                     Left = 4
-                    Height = 224
+                    Height = 208
                     Top = 24
                     Width = 384
                     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -2189,9 +2184,9 @@ object CdrCalculette: TCdrCalculette
             object PairSplitterSide18: TPairSplitterSide
               Cursor = crArrow
               Left = 401
-              Height = 614
+              Height = 598
               Top = 0
-              Width = 821
+              Width = 751
             end
           end
         end
@@ -2885,30 +2880,6 @@ object CdrCalculette: TCdrCalculette
         end
       end
     end
-  end
-  object Label31: TLabel
-    Left = 64
-    Height = 16
-    Top = 168
-    Width = 26
-    Caption = 'Aire'
-    ParentColor = False
-  end
-  object Label36: TLabel
-    Left = 8
-    Height = 16
-    Top = 376
-    Width = 16
-    Caption = 'Yg'
-    ParentColor = False
-  end
-  object Label35: TLabel
-    Left = 8
-    Height = 16
-    Top = 352
-    Width = 17
-    Caption = 'Xg'
-    ParentColor = False
   end
   object PopupMenu1: TPopupMenu
     left = 924

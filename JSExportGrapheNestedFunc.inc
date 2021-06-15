@@ -321,8 +321,12 @@ begin
   WrtLinFmt('  var %s = %d; // %s', [QVarName, QValue, QComment]);
 end;
 procedure jsSetLocalVar(const QVarName: string; const QValue: double; const QComment: string = ''); overload;
+var
+  qat: String;
 begin
-  WrtLinFmt('  var %s = %.10f; // %s', [QVarName, QValue, QComment]);
+  qat := Format('  var %s = %.10f; // %s', [QVarName, QValue, QComment]);
+  qat := StringReplace(qat, ',', '.', [rfReplaceAll]);
+  WriteLine(qat);
 end;
 // définitions de fonctions JS
 procedure BeginJSFunction(const QProcName: string; const QParams: string = '');

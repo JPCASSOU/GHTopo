@@ -147,7 +147,9 @@ type
     //procedure ExporterVue3DEnSVG(const FileName: string; const FM: TModeRepresentationGaleries);
     procedure ExporterVue3DEnSVG_TSVGCanvas(const FileName: string;
                                             const DoMakeXHTML: boolean;
-                                            const QParams3D: TVue3DParams);
+                                            const QParams3D: TVue3DParams;
+                                            const QDoExportMNT: boolean;
+                                            const QDoExportProfils: boolean);
     procedure ExportGCP(const QFileName: TStringDirectoryFilename);
 
   end;
@@ -843,11 +845,10 @@ begin
 end;
 //******************************************************************************
 procedure TCdrVue3DExt.DrawCube(const QBmp: TBGRABitmap);
-var i: integer;
-
+var
+  i: integer;
 begin
-  QBmp.CanvasBGRA.Pen.Width := 0;
-  QBmp.CanvasBGRA.Pen.Color:= FVue3DParams.ColorCube;
+  FVue3DParams.LineCube.SetTBGRAPen(QBmp.CanvasBGRA.Pen);
   for i := 2 to 4 do
   begin
     QBmp.CanvasBGRA.MoveTo(FCubeEnglobant[i]);
@@ -1183,12 +1184,16 @@ end;
 // Gris     : OK (feuilles de styles)
 procedure TCdrVue3DExt.ExporterVue3DEnSVG_TSVGCanvas(const FileName: string;
                                                      const DoMakeXHTML: boolean;
-                                                     const QParams3D: TVue3DParams);
+                                                     const QParams3D: TVue3DParams;
+                                                     const QDoExportMNT: boolean;
+                                                     const QDoExportProfils: boolean);
 const
   NOM_GROUPE_CUBE_ENGLOBANT     = 'CubeEnglobant';
   NOM_GROUPE_MAILLAGE           = 'Maillage';
   NOM_GROUPE_CAVITE             = 'Cavite001';
   NOM_GROUPE_SERIE              = 'Serie%d';
+  NOM_GROUPE_PROFILS            = 'ListeProfils';
+  NOM_STYLE_PROFIL_DEFAUT       = 'ProfilDefaut';
 
   NOM_STYLE_SILHOUETTE_DEFAUT   = 'SilhouetteDefaut';
   NOM_STYLE_FOND_CUBE_ENGLOBANT = 'FondCubeEnglobant';
@@ -1198,6 +1203,7 @@ const
   FMT_STYLE_RESEAU              = 'Reseau%d';
   FMT_STYLE_SECTEUR             = 'Secteur%d';
   FMT_STYLE_SEANCE              = 'Seance%d';
+
 var
   QViewBoxXMini: integer;
   QViewBoxYMini: integer;
@@ -1422,7 +1428,56 @@ var
       end;
     end;
     FSVGCanvas.EndGroupe(NOM_GROUPE_MAILLAGE);
-      //*)
+
+  end;
+  procedure DrawProfils();
+  var
+    i, NbProfils: Integer;
+    MyProfilTopo: TProfilTopo;
+    procedure QTracerProfil(const QProfil: TProfilTopo);
+    var
+      NbP, p: Integer;
+      MyPointProfil: TPoint3DfOrderedByP;
+      PP: TPoint2DDepth;
+      PPA: TPoint;
+    begin
+      NbP := QProfil.GetNbPointsProfilTN();
+
+      FSVGCanvas.BeginListeVertex();
+        MyPointProfil := QProfil.GetPointProfilTN(0);
+        PP := Get2DDepthCoordinates(MyPointProfil.X, MyPointProfil.Y, MyPointProfil.Z);
+        PPA := GetScreenCoordinates(PP.X, PP.Y, false);
+        FSVGCanvas.AddVertex(PPA.X, PPA.Y);
+        for p := 1 to NbP - 1 do
+        begin
+          MyPointProfil := QProfil.GetPointProfilTN(p);
+          PP := Get2DDepthCoordinates(MyPointProfil.X, MyPointProfil.Y, MyPointProfil.Z);
+          PPA := GetScreenCoordinates(PP.X, PP.Y, false);
+          FSVGCanvas.AddVertex(PPA.X, PPA.Y);
+        end;
+      FSVGCanvas.EndListeVertex();
+      FSVGCanvas.DrawPolylign(NOM_STYLE_PROFIL_DEFAUT, false);
+    end;
+  begin
+    NbProfils := FMyMaillage.GetNbProfilsTopo();
+    AfficherMessage(Format('DrawProfils(): %d Profils %s', [NbProfils, BoolToStr(FMyMaillage.IsValidMaillage(), 'OK', 'KO')]));
+    if (0 = NbProfils) then exit;
+    if (not FMyMaillage.IsValidMaillage()) then Exit;
+
+    FSVGCanvas.BeginGroupe(NOM_GROUPE_PROFILS);
+
+        FSVGCanvas.AddVertex(FCubeEnglobant[1].X, FCubeEnglobant[1].Y);
+        FSVGCanvas.AddVertex(FCubeEnglobant[2].X, FCubeEnglobant[2].Y);
+        FSVGCanvas.AddVertex(FCubeEnglobant[3].X, FCubeEnglobant[3].Y);
+        FSVGCanvas.AddVertex(FCubeEnglobant[4].X, FCubeEnglobant[4].Y);
+
+      for i := 0 to NbProfils - 1 do
+      begin;
+        MyProfilTopo := FMyMaillage.GetProfilTopo(i);
+        QTracerProfil(MyProfilTopo);
+      end;
+
+    FSVGCanvas.EndGroupe(NOM_GROUPE_PROFILS);
   end;
 
 begin
@@ -1446,26 +1501,34 @@ begin
       FSVGCanvas.EndPatternsSection;                                                                // les patterns ici
       FSVGCanvas.BeginStylesSection;                                                                 // section de styles
         FSVGCanvas.WriteStyleLinePolygoneTexte(NOM_STYLE_CUBE_ENGLOBANT,
-                                               clRed, 255, 0.1, psSolid,
+                                               QParams3D.LineCube.Color, QParams3D.LineCube.Opacity, QParams3D.LineCube.LineWidthInMillimeters, psSolid,
                                                clWhite, 128, bsClear,
-                                               DEFAULT_FONT_NAME, 3.0,
-                                               QParams3D.ColorCube, 255, [], 'bounding box cube');   // styles de cube englobant
+                                               DEFAULT_FONT_NAME, DEFAULT_FONT_HEIGHT_IN_MM ,
+                                               clBlack, 255, [],
+                                               'bounding box cube');   // styles de cube englobant
 
         FSVGCanvas.WriteStyleLinePolygoneTexte(NOM_STYLE_SILHOUETTE_DEFAUT,
                                                clBlack, 255, 0.1, psSolid,
                                                clGray, QParams3D.FillOpacity, bsSolid,
-                                               DEFAULT_FONT_NAME, 3.0, clBlack, 255, [], 'Default silhouettes');
+                                               DEFAULT_FONT_NAME, DEFAULT_FONT_HEIGHT_IN_MM, clBlack, 255, [], 'Default silhouettes');
 
         FSVGCanvas.WriteStyleLinePolygoneTexte(NOM_STYLE_FOND_CUBE_ENGLOBANT,
                                                clBlack, 255, 0.1, psSolid,
                                                clSilver, 128, bsSolid,
-                                               DEFAULT_FONT_NAME, 3.0, clBlack, 255, [], 'Background');
-
+                                               DEFAULT_FONT_NAME, DEFAULT_FONT_HEIGHT_IN_MM, clBlack, 255, [], 'Background');
 
         FSVGCanvas.WriteStyleLinePolygoneTexte(NOM_STYLE_MAILLAGE,
-                                               clBlack, 255, 0.1, psSolid,
+                                               QParams3D.LineMaillage.Color, QParams3D.LineMaillage.Opacity, QParams3D.LineMaillage.LineWidthInMillimeters, psSolid,
                                                clOlive, 64, bsSolid,
-                                               DEFAULT_FONT_NAME, 3.0, clBlack, 255, [], 'Maillage');
+                                               DEFAULT_FONT_NAME, DEFAULT_FONT_HEIGHT_IN_MM, clBlack, 255, [], 'Maillage');
+        FSVGCanvas.WriteStyleLinePolygoneTexte(NOM_STYLE_PROFIL_DEFAUT,
+                                               clGreen, 192, DEFAULT_PEN_WIDTH_IN_MM, psSolid,
+                                               clGreen, 255, bsClear,
+                                               DEFAULT_FONT_NAME, DEFAULT_FONT_HEIGHT_IN_MM, clBlack, 255, [], 'Profils');
+
+
+
+
 
         case QParams3D.ModeRepresentation of          // les styles de galeries ici
           rgENTRANCES: ListerStylesEntrances();
@@ -1477,7 +1540,8 @@ begin
       FSVGCanvas.BeginDrawingSection();
         DrawCube();                 // cube
         DrawCavite();               // dessin proprement dit
-        DrawMaillage(); // Maillage
+        if (QDoExportMNT)     then DrawMaillage(); // Maillage
+        if (QDoExportProfils) then DrawProfils();
       FSVGCanvas.EndDrawingSection();
       FSVGCanvas.FinalizeDocument();         // cloture
     MiouMiou(True);               // restitution du contexte
@@ -1554,8 +1618,7 @@ var
     PC: TPoint;
   begin
     NbP := QProfil.GetNbPointsProfilTN();
-    TmpBuffer.CanvasBGRA.Pen.Color := QProfil.ProfilColor;
-    TmpBuffer.CanvasBGRA.Pen.Width := 2;
+    QProfil.LineAttributes.SetTBGRAPen(TmpBuffer.CanvasBGRA.Pen);
     MyPointProfil := QProfil.GetPointProfilTN(0);
     PP := Get2DDepthCoordinates(MyPointProfil.X, MyPointProfil.Y, MyPointProfil.Z);
     PC := GetScreenCoordinates(PP.X, PP.Y, True);

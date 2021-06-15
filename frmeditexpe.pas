@@ -47,15 +47,12 @@ end;
 function TdlgEditExpe.PrepareDialog(const FD: TToporobotStructure2012; const QIdx: integer; const QExpe: TExpe; const QCaption: string): boolean;
 begin
   Self.Caption := QCaption;
-  CdrExpe1.SetDocTopo(FD);
-  CdrExpe1.SetExpe(QExpe, true);
-
+  result := CdrExpe1.Initialiser(FD, QExpe);
 end;
 
 function TdlgEditExpe.GetAExpe(): TExpe;
 begin
   Result := CdrExpe1.GetExpeFromForm();
 end;
-
 end.
 

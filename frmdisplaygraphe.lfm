@@ -1,7 +1,7 @@
 object dlgDisplayGraphe: TdlgDisplayGraphe
-  Left = 350
+  Left = 106
   Height = 776
-  Top = 305
+  Top = 102
   Width = 1303
   Align = alClient
   Caption = 'dlgDisplayGraphe'
@@ -124,6 +124,7 @@ object dlgDisplayGraphe: TdlgDisplayGraphe
               Width = 473
               Anchors = [akTop, akLeft, akRight, akBottom]
               ItemHeight = 0
+              OnClick = lsbItinerairesClick
               OnDrawItem = lsbItinerairesDrawItem
               OnSelectionChange = lsbItinerairesSelectionChange
               ScrollWidth = 471
@@ -250,73 +251,75 @@ object dlgDisplayGraphe: TdlgDisplayGraphe
             Height = 595
             Width = 805
             inherited tabShtPlan: TTabSheet
+              ClientHeight = 566
+              ClientWidth = 797
               inherited CdrDGCDrawingContext1: TCdrDGCDrawingContext
-                Height = 482
-                Width = 751
-                ClientHeight = 482
-                ClientWidth = 751
+                Height = 566
+                Width = 797
+                ClientHeight = 566
+                ClientWidth = 797
                 DesignLeft = 1140
                 DesignTop = 182
                 inherited pnlVue: TPanel
-                  Height = 446
-                  Width = 720
-                  ClientHeight = 446
-                  ClientWidth = 720
+                  Height = 530
+                  Width = 766
+                  ClientHeight = 530
+                  ClientWidth = 766
                   inherited Vue: TPaintBox
-                    Height = 444
-                    Width = 718
+                    Height = 528
+                    Width = 764
                   end
                 end
                 inherited lbMousePosition: TStaticText
-                  Top = 451
-                  Width = 616
+                  Top = 535
+                  Width = 662
                 end
                 inherited SpeedButton12: TSpeedButton
-                  Left = 719
+                  Left = 765
                   Flat = False
                 end
                 inherited SpeedButton13: TSpeedButton
-                  Left = 719
+                  Left = 765
                   Flat = False
                 end
                 inherited SpeedButton14: TSpeedButton
-                  Left = 719
+                  Left = 765
                   Flat = False
                 end
                 inherited SpeedButton15: TSpeedButton
-                  Left = 719
+                  Left = 765
                   Flat = False
                 end
                 inherited SpeedButton16: TSpeedButton
-                  Left = 719
+                  Left = 765
                   Flat = False
                 end
                 inherited SpeedButton17: TSpeedButton
-                  Left = 719
+                  Left = 765
                   Flat = False
                 end
                 inherited SpeedButton18: TSpeedButton
-                  Left = 719
-                  Top = 416
+                  Left = 765
+                  Top = 500
                   Flat = False
                 end
                 inherited SpeedButton19: TSpeedButton
-                  Left = 656
-                  Top = 450
+                  Left = 702
+                  Top = 534
                   Flat = False
                 end
                 inherited SpeedButton20: TSpeedButton
-                  Left = 688
-                  Top = 450
+                  Left = 734
+                  Top = 534
                   Flat = False
                 end
                 inherited SpeedButton21: TSpeedButton
-                  Left = 719
-                  Top = 450
+                  Left = 765
+                  Top = 534
                 end
                 inherited SpeedButton22: TSpeedButton
-                  Left = 624
-                  Top = 450
+                  Left = 670
+                  Top = 534
                   Flat = False
                 end
               end
@@ -387,5 +390,53 @@ object dlgDisplayGraphe: TdlgDisplayGraphe
       Smooth = True
       TabOrder = 0
     end
+  end
+  object btnRemoveArc: TButton
+    Left = 792
+    Height = 25
+    Top = 744
+    Width = 124
+    Anchors = [akLeft, akBottom]
+    Caption = 'btnRemoveArc'
+    OnClick = btnRemoveArcClick
+    TabOrder = 3
+  end
+  object editRemoveArcStDep: TEdit
+    Left = 644
+    Height = 24
+    Top = 744
+    Width = 70
+    Anchors = [akLeft, akBottom]
+    TabOrder = 4
+    Text = '1.25'
+  end
+  object editRemoveArcStArr: TEdit
+    Left = 718
+    Height = 24
+    Top = 744
+    Width = 70
+    Anchors = [akLeft, akBottom]
+    TabOrder = 5
+    Text = '1.26'
+  end
+  object btnRemoveNode: TButton
+    Left = 1024
+    Height = 25
+    Top = 743
+    Width = 132
+    Anchors = [akLeft, akBottom]
+    Caption = 'btnRemoveNode'
+    OnClick = btnRemoveNodeClick
+    TabOrder = 6
+  end
+  object chkRmArcBidirectionnel: TCheckBox
+    Left = 924
+    Height = 20
+    Top = 744
+    Width = 75
+    Caption = 'Bisexuel'
+    Checked = True
+    State = cbChecked
+    TabOrder = 7
   end
 end

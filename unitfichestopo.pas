@@ -223,7 +223,6 @@ begin
   QBarCode := TBarcodeQR.Create(nil);
   try
     try
-      QBarCode.DoMonochrome := True;
       QBarCode.ECCLevel     := eBarcodeQR_ECCLevel_H;  // ne pas oublier: Haute classe de qualité
       QBarCode.Text         := EWE;
       QBarCode.Generate;

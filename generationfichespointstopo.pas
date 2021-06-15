@@ -109,7 +109,6 @@ begin
     AfficherMessage(Format('%s.Initialise', [ClassName]));
     // démarrage du TBarcodeQR
     FBarCode := TBarcodeQR.Create(Nil);
-    FBarCode.DoMonochrome := false;
     Result := True;
   except
   end;
@@ -143,7 +142,6 @@ begin
   try
     QPDF.AddPage;  // nouvelle page
     // notre fameux QRCode ici
-    FBarCode.DoMonochrome := true;
     FBarCode.ECCLevel     := eBarcodeQR_ECCLevel_H;  // ne pas oublier: Haute classe de qualité
     FBarCode.Text := Trim(S);
     FBarCode.Generate;

@@ -89,9 +89,9 @@ begin
   QPV.Theta               := 45.00;
   QPV.Phi                 := 32.00;
   QPV.FovOrZoom           := 60.00;
-  QPV.ColorCube           := clRed;
+  QPV.LineCube.SetAttributes(clBlue, 255, 0, 0.05);
+  QPV.LineReferentiel.SetAttributes(clMaroon, 255, 1, 0.01);
   QPV.ColorBackGround     := clBlack;
-  QPV.ColorReferentiel    := clMaroon;
 
   QPV.CoefMagnification   := 1.00;
   QPV.ModeRepresentation  := rgSEANCES;            // mode de dessin par défaut = séances

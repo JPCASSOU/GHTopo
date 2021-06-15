@@ -101,26 +101,27 @@ type
     procedure cmbUCChange(Sender: TObject);
     procedure editAzCoChange(Sender: TObject);
   private
-    FCode: TCode;
 
-    procedure InitCaptions;
-    procedure PutCodeInForm;
+    procedure InitCaptions();
+    procedure PutCodeInForm(const MyCode: TCode);
 
     { private declarations }
   public
     { public declarations }
-    procedure SetCode(const C: TCode; const DoInitCaptions: boolean);
+    function  Initialiser(const C: TCode): boolean;
     function  GetCodeFromForm(): TCode;
   end; 
 
 implementation
 
 {$R *.lfm}
-procedure TCdrCode.SetCode(const C: TCode; const DoInitCaptions: boolean);
+
+function TCdrCode.Initialiser(const C: TCode): boolean;
 begin
-  FCode := C;
-  if (DoInitCaptions) then InitCaptions;
-  PutCodeInForm;
+  result := false;
+  InitCaptions();
+  PutCodeInForm(C);
+  result := true;
 end;
 
 
@@ -312,7 +313,7 @@ begin
 end;
 
 
-procedure TCdrCode.PutCodeInForm();
+procedure TCdrCode.PutCodeInForm(const MyCode: TCode);
 var
   ucc: integer;
   procedure S666(const QCmb: TComboBox;
@@ -336,16 +337,16 @@ var
   end;
 begin;
   // valeurs internes
-  lbCodeComp.Caption := Format(FORMAT_NB_INTEGER,[Round(FCode.GradAz)]);
-  lbCodeIncl.Caption := Format(FORMAT_NB_INTEGER,[Round(FCode.GradInc)]);
+  lbCodeComp.Caption := Format(FORMAT_NB_INTEGER,[Round(MyCode.GradAz)]);
+  lbCodeIncl.Caption := Format(FORMAT_NB_INTEGER,[Round(MyCode.GradInc)]);
 
   // visées directes par défaut
   cmbAzimutDirecte.ItemIndex := 0;
   cmbPenteDirecte.ItemIndex  := 0;
   //---------------------------------
-  editNoCode.AsInteger:=FCode.IDCode;
+  editNoCode.AsInteger:=MyCode.IDCode;
   // Graduation du compas
-  ucc:=Round(FCode.GradAz);
+  ucc:=Round(MyCode.GradAz);
   case ucc of
     389, 399, 400: S666(cmbUB, 0, lbErrAz, 'Az (gr)');
     349, 359, 360: S666(cmbUB, 1, lbErrAz, 'Az (°)');
@@ -357,7 +358,7 @@ begin;
     cmbUB.ItemIndex:=0;
   end;
   // Graduation du clinomètre
-  ucc:=Round(FCode.GradInc);
+  ucc:=Round(MyCode.GradInc);
   // DONE: Cas oubliés dans les unités de clino
   case ucc of
     399, 400, 401: S666(cmbUC, 0, lbErrInc, 'Inc (gr)');
@@ -383,29 +384,31 @@ begin;
     cmbPosZero.ItemIndex := 1;
   end;
   // Facteur de correction des longueurs
-  editFactLong.Value := 1.00; //FCode.FactLong;
+  editFactLong.Value := 1.00; //MyCode.FactLong;
   // modifié 26.08.04
   // Angle Limite
-  editAngleLimite.Value := FCode.AngLimite;
+  editAngleLimite.Value := MyCode.AngLimite;
   // Précision des instruments
-  editPsiL.Value  :=FCode.PsiL;
-  editPsiAZ.Value :=FCode.PsiAZ;
-  editPsiP.Value  :=FCode.PsiP;
+  editPsiL.Value  :=MyCode.PsiL;
+  editPsiAZ.Value :=MyCode.PsiAZ;
+  editPsiP.Value  :=MyCode.PsiP;
   // Erreur de tourillon
-  editErreurTourillon.Value := FCode.ErreurTourillon;
+  editErreurTourillon.Value := MyCode.ErreurTourillon;
   // Boules-cibles
-  editDiamBoule1.Value := FCode.DiametreBoule1 * 1000.0;
-  editDiamBoule2.Value := FCode.DiametreBoule2 * 1000.0;
+  editDiamBoule1.Value := MyCode.DiametreBoule1 * 1000.0;
+  editDiamBoule2.Value := MyCode.DiametreBoule2 * 1000.0;
   // Commentaires
-  editCommentaires.Text  :=_AnsiToLCLStr(FCode.Commentaire);
+  editCommentaires.Text  :=_AnsiToLCLStr(MyCode.Commentaire);
   // Fonctions de correction
-  editAzCo.Value         := FCode.ParamsFuncCorrAz.Co;
-  editAzErrMax.Value     := FCode.ParamsFuncCorrAz.ErreurMax;
-  editAzErrMaxAz.Value   := FCode.ParamsFuncCorrAz.PosErrMax;
-  editIncCo.Value        := FCode.ParamsFuncCorrInc.Co;
-  editIncErrMax.Value    := FCode.ParamsFuncCorrInc.ErreurMax;
-  editIncErrMaxInc.Value := FCode.ParamsFuncCorrInc.PosErrMax;
+  editAzCo.Value         := MyCode.ParamsFuncCorrAz.Co;
+  editAzErrMax.Value     := MyCode.ParamsFuncCorrAz.ErreurMax;
+  editAzErrMaxAz.Value   := MyCode.ParamsFuncCorrAz.PosErrMax;
+  editIncCo.Value        := MyCode.ParamsFuncCorrInc.Co;
+  editIncErrMax.Value    := MyCode.ParamsFuncCorrInc.ErreurMax;
+  editIncErrMaxInc.Value := MyCode.ParamsFuncCorrInc.PosErrMax;
 end;
+
+
 
 end.
 

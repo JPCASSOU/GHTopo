@@ -1,0 +1,54 @@
+object CdrBoussole: TCdrBoussole
+  Left = 0
+  Height = 312
+  Top = 0
+  Width = 316
+  Align = alClient
+  ClientHeight = 312
+  ClientWidth = 316
+  OnResize = FrameResize
+  TabOrder = 0
+  DesignLeft = 960
+  DesignTop = 188
+  object pnlBoussole: TPanel
+    Left = 0
+    Height = 284
+    Top = 0
+    Width = 312
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BevelOuter = bvNone
+    ClientHeight = 284
+    ClientWidth = 312
+    TabOrder = 0
+    object Vue: TPaintBox
+      Left = 0
+      Height = 284
+      Top = 0
+      Width = 312
+      Align = alClient
+      OnPaint = VuePaint
+    end
+  end
+  object lbInclinX: TStaticText
+    Left = 0
+    Height = 20
+    Top = 288
+    Width = 75
+    Alignment = taCenter
+    Anchors = [akLeft, akBottom]
+    BorderStyle = sbsSingle
+    Caption = '0'
+    TabOrder = 1
+  end
+  object lbInclinY: TStaticText
+    Left = 89
+    Height = 20
+    Top = 288
+    Width = 75
+    Alignment = taCenter
+    Anchors = [akLeft, akBottom]
+    BorderStyle = sbsSingle
+    Caption = '0'
+    TabOrder = 2
+  end
+end

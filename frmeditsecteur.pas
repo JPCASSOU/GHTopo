@@ -38,19 +38,13 @@ implementation
 
 function TdlgEditSecteur.PrepareDialog(const FD: TToporobotStructure2012; const QIdx: integer; const QSecteur: TSecteur; const QCaption: string): boolean;
 begin
-  Result := false;
   self.Caption := QCaption;
-  try
-    CdrSecteur1.SetSecteur(QSecteur, QIdx, True);
-    Result := True;
-  except
-    ;
-  end;
+  Result := CdrSecteur1.Initialiser(QSecteur, QIdx);
 end;
 
 function TdlgEditSecteur.GetASecteur: TSecteur;
 begin
-  Result := CdrSecteur1.GetSecteurFromForm;
+  Result := CdrSecteur1.GetSecteurFromForm();
 end;
 
 end.

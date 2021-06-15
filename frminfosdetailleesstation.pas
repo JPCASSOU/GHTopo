@@ -114,7 +114,6 @@ var
   i, j, L, C: Integer;
 begin
   QRCode.Text := Txt;
-  QRCode.DoMonochrome := True; //chkDoMonochrome.Checked;
   QRCode.Generate;
   EWE := QRCode.GetMatrixQRResultat;
   L := QRCode.GetNbQRTaille;

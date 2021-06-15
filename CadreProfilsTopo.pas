@@ -21,14 +21,20 @@ uses
   TAChartUtils,
   Clipbrd,
   Graphics,
-  curredit, Forms, Controls, ComCtrls, ExtCtrls, StdCtrls, Grids, Dialogs, Types, LCLType;
+  curredit, Forms, Controls, ComCtrls, ExtCtrls, StdCtrls, Grids, Dialogs, Types, LCLType, Spin;
 
-type TCdrProfilTopo = class(TFrame)
+type
+
+{ TCdrProfilTopo }
+
+ TCdrProfilTopo = class(TFrame)
     btnCopierTableau: TButton;
     btnProfilColor: TColorButton;
     btnCopierListeConduitsRecoupes: TButton;
     Chart1: TChart;
     editNomProfil: TEdit;
+    editProfilsLargeurTraitInMM: TCurrencyEdit;
+    editProfilsLargeurTraitInPixels: TSpinEdit;
     editX1: TCurrencyEdit;
     editX2: TCurrencyEdit;
     editY1: TCurrencyEdit;
@@ -37,17 +43,22 @@ type TCdrProfilTopo = class(TFrame)
     HeaderControl1: THeaderControl;
     Label1: TLabel;
     Label2: TLabel;
+    Label24: TLabel;
+    Label25: TLabel;
     Label3: TLabel;
     Label4: TLabel;
+    Label5: TLabel;
     lbCoordsProfil: TStaticText;
     lbNbConduitsRecoupes: TLabel;
     lbNbPointsProfil: TLabel;
+    lbProfilLineWidth: TLabel;
     lsbGaleriesRecoupees: TListBox;
     PageControl1: TPageControl;
     Panel1: TPanel;
     pnlProfil: TPanel;
     pnlProfil1: TPanel;
     lbOrientationProfil: TStaticText;
+    sclProfilsLineOpacity: TScrollBar;
     tabShtConduits: TTabSheet;
     tabShtProfil: TTabSheet;
     tabShtValeurs: TTabSheet;
@@ -261,7 +272,12 @@ begin
   Chart1.ClearSeries;
   FProfilReady := false;
   self.Caption := FProfilTopo.ProfilName;
-  btnProfilColor.ButtonColor := FProfilTopo.ProfilColor;
+
+  btnProfilColor.ButtonColor              := FProfilTopo.LineAttributes.Color;
+  sclProfilsLineOpacity.Position          := FProfilTopo.LineAttributes.Opacity;
+  editProfilsLargeurTraitInPixels.Value   := FProfilTopo.LineAttributes.LineWidthInPixels;
+  editProfilsLargeurTraitInMM.Value       := FProfilTopo.LineAttributes.LineWidthInMillimeters;
+
   editNomProfil.Text         := FProfilTopo.ProfilName;
   PT0 := FProfilTopo.GetExtremite1();
   PT1 := FProfilTopo.GetExtremite2();
@@ -279,13 +295,13 @@ begin
     FCourbeProfil := TLineSeries.Create(Chart1);
     FCourbeProfil.Clear;
     FCourbeProfil.ShowPoints     := false;
-    FCourbeProfil.LinePen.Color  := FProfilTopo.ProfilColor;
+    FCourbeProfil.LinePen.Color  := FProfilTopo.LineAttributes.Color;
     FCourbeProfil.LinePen.Width  := 3;
 
     for i := 0 to Nb - 1 do
     begin
       Pt := FProfilTopo.GetPointProfilTN(i);
-      FCourbeProfil.AddXY(Pt.P, Pt.Z, '', FProfilTopo.ProfilColor);
+      FCourbeProfil.AddXY(Pt.P, Pt.Z, '', FProfilTopo.LineAttributes.Color);
     end;
     Chart1.AddSeries(FCourbeProfil);
     FProfilReady  := True;
@@ -329,7 +345,11 @@ end;
 
 function TCdrProfilTopo.GetProfilTopo(): TProfilTopo;
 begin
-  FProfilTopo.ProfilColor      := btnProfilColor.ButtonColor;
+  FProfilTopo.LineAttributes.SetAttributes(btnProfilColor.ButtonColor,
+                                           sclProfilsLineOpacity.Position,
+                                           editProfilsLargeurTraitInPixels.Value,
+                                           editProfilsLargeurTraitInMM.Value
+                                           );
   FProfilTopo.ProfilName       := Trim(editNomProfil.Text);
   Result                       := FProfilTopo;
 end;

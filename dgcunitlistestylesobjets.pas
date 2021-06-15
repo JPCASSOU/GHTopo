@@ -53,7 +53,7 @@ begin
       PenOpacity     := 255;
       PenStyle       := psSolid;
       PenWidthInPX   := 0;
-      PenWidthInMM   := 0.025;
+      PenWidthInMM   := DGC_DEFAULT_PEN_WIDTH_IN_MM;
 
 
       BrushColor     := clWhite;

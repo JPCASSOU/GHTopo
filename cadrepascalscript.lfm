@@ -720,7 +720,7 @@ object CdrPascalScript: TCdrPascalScript
             ClientHeight = 330
             ClientWidth = 1078
             inline editPSOutPut: TSynEdit
-              Left = 0
+              Left = -2
               Height = 330
               Top = 0
               Width = 1032

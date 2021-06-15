@@ -6,7 +6,6 @@ object CdrVue3DExt: TCdrVue3DExt
   Align = alClient
   ClientHeight = 499
   ClientWidth = 675
-  LCLVersion = '2.0.0.4'
   TabOrder = 0
   DesignLeft = 202
   DesignTop = 374

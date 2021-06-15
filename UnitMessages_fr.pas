@@ -1106,6 +1106,7 @@ resourcestring
 
   // -------------------------------------------------
   // resourcestrings de dlgExportVersSIGExt
+  rsEXPORT_SIG_OUTPUT_FORMATS                = 'Formats d''export';
   rsEXPORT_SIG_TITRE                         = 'Export vers SIG';
   rsEXPORT_SIG_LEAFLET                       = 'Leaflet OpenStreetMap (.htm)';
   rsEXPORT_SIG_GOOGLE_KML                    = 'Google KML (.kml)';

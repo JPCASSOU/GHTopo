@@ -31,25 +31,8 @@ const
 type TProcAfficherMessage = procedure(const Msg: string; const DoClear: boolean = false) of object;
 type TProcOjObject        = procedure of object;
 type TNumeroNoeud = type Integer;
+type TIDStation   = type Int64;
 
-
-type TNumeroArc   = type Integer;
-type TIDStation = type Int64;
-type TGrapheNoeud = record
-  IDStation: TIDStation;
-  X  : double;
-  Y  : double;
-  Z  : double;
-  ListeArcsSortants    : array of TNumeroArc;
-  ListeArcsEntrants    : array of TNumeroArc;
-end;
-type TGrapheArc = record
-  IdxNoeudDepart  : TNumeroNoeud;
-  IdxNoeudArrivee : TNumeroNoeud;
-  Longueur        : double;   // le poids, ici la longueur de l'arc
-  Azimut          : double;   // pour la détermination du cap de la visée suivante
-  Pente           : double;
-end;
 type TGrapheLastError = record
   ErrCode: integer;
   ErrMsg : string;
@@ -59,14 +42,7 @@ type TNodeDistances = record
   IdxNode   : TNumeroNoeud;
   Distance  : double;
 end;
-
-
-
-
-// Trier les GrapheStations par ZOrder
-function SortGrapheNoeudsByIDStation(Item1, Item2: Pointer): Integer;
-
-function GetAzimut(const dx, dy: Double; const Unite: double): double;
+function  GetAzimut(const dx, dy: Double; const Unite: double): double;
 procedure GetBearingInc(const dx, dy, dz: double;
                         var Dist, Az, Inc: double;
                         const fUB, fUC: Double);
@@ -74,22 +50,6 @@ procedure GetBearingInc(const dx, dy, dz: double;
 implementation
 uses
   DGCDummyUnit; // pour contrer l'erreur 'Fin du source non trouvée'
-
-
-
-
-
-// Trier les GrapheStations par ZOrder
-function SortGrapheNoeudsByIDStation(Item1, Item2: Pointer): Integer;
-var
-  E1, E2: ^TGrapheNoeud;
-begin
-  E1 := Item1;
-  E2 := Item2;
-  if      (E1^.IDStation < E2^.IDStation) then Result := -1
-  else if (E1^.IDStation = E2^.IDStation) then Result :=  0
-  else                                         Result :=  1;
-end;
 
 function GetAzimut(const dx, dy: Double; const Unite: double): double;
 const TWO_PI = 2 * PI;
