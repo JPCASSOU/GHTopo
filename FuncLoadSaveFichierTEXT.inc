@@ -434,9 +434,8 @@ begin
                            ErreurTourillon  := 0.00;
                            DiametreBoule1   := 0.00;
                            DiametreBoule2   := 0.00;
-                           ParamsFuncCorrAz := MakeTParamFoncCorrectionAngulaire(0.00, 0.00, 0.00);   // non supporté par LimeLight
-                           ParamsFuncCorrAz := MakeTParamFoncCorrectionAngulaire(0.00, 0.00, 0.00);
-
+                           ParamsFuncCorrAz.Empty();// non supporté par LimeLight
+                           ParamsFuncCorrInc.Empty();
                            Commentaire:= ''; //PrmsLn[9];              // commentaire
                          end; // with UnCode
                          AfficherMessage(Format('%s: %s', [{$I %FILE%}, {$I %LINE%}]));

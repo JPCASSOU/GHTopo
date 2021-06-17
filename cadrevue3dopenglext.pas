@@ -545,7 +545,7 @@ var
     with EE do
     begin
       if (Not Enabled) then Exit;
-      if (Not IsViseetInCaveOrTunnel(EE)) then Exit;
+      if (Not EE.IsInCaveOrTunnel()) then Exit;
 
       z1 := 0.50 * (PosOPG.Z + PosExtr0.Z);
       z2 := 0.50 * (PosOPD.Z + PosExtr0.Z);

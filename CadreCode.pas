@@ -132,7 +132,7 @@ var
   EWE: TParamFoncCorrectionAngulaire;
   WU: Double;
 begin
-  EWE := MakeTParamFoncCorrectionAngulaire(editAzCo.Value, editAzErrMax.Value, editAzErrMaxAz.Value);
+  EWE.setFrom(editAzCo.Value, editAzErrMax.Value, editAzErrMaxAz.Value);
   WU  := CalcAzimutCorrige(editAzTest.Value, UNITE_ANGULAIRE_DU_CODE_ZERO, EWE);
   lbAzCorrige.Caption := Format('%.4f', [WU]);
 end;
@@ -157,7 +157,7 @@ var
   EWE: TParamFoncCorrectionAngulaire;
   WU: Double;
 begin
-  EWE := MakeTParamFoncCorrectionAngulaire(editIncCo.Value, editIncErrMax.Value, editIncErrMaxInc.Value);
+  EWE.setFrom(editIncCo.Value, editIncErrMax.Value, editIncErrMaxInc.Value);
   WU  := CalcPenteCorrigee(editIncTest.Value, UNITE_ANGULAIRE_PAR_DEFAUT, EWE);
   lbPenteCorrigee.Caption := Format('%.4f', [WU]);
 end;
@@ -307,8 +307,8 @@ begin
   C.DiametreBoule2    := editDiamBoule2.Value / 1000.0;
 
   // fonctions de correction
-  C.ParamsFuncCorrAz  := MakeTParamFoncCorrectionAngulaire(editAzCo.Value, editAzErrMax.Value, editAzErrMaxAz.Value);
-  C.ParamsFuncCorrInc := MakeTParamFoncCorrectionAngulaire(editIncCo.Value, editIncErrMax.Value, editIncErrMaxInc.Value);
+  C.ParamsFuncCorrAz.setFrom(editAzCo.Value, editAzErrMax.Value, editAzErrMaxAz.Value);
+  C.ParamsFuncCorrInc.setFrom(editIncCo.Value, editIncErrMax.Value, editIncErrMaxInc.Value);
   Result := C;
 end;
 

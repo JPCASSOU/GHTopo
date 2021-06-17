@@ -1502,10 +1502,10 @@ begin
   Result := false;
   CC := FDocuTopo.GetCodeByNumero(FCurrentDistoXNumeroCode);
   EE := FDocuTopo.GetExpeByNumero(FCurrentDistoXNumeroExpe);
-  VA := MakeTViseeAntenne(FCurrentStation.eEntrance, FCurrentStation.eReseau,
-                          FCurrentDistoXNumeroSecteur,
-                          FCurrentDistoXNumeroSerie, FCurrentDistoXNumeroStation,
-                          QLongueur, QAzimut, QPente);
+  VA.setFrom(FCurrentStation.eEntrance, FCurrentStation.eReseau,
+             FCurrentDistoXNumeroSecteur,
+             FCurrentDistoXNumeroSerie, FCurrentDistoXNumeroStation,
+             QLongueur, QAzimut, QPente);
   FDocuTopo.AddViseeAntenne(VA);
   QX := 0.00; QY := 0.00; QZ := 0.00; QP := 0.00;
   VS.setFrom(0, tgVISEE_RADIANTE,
@@ -1834,11 +1834,11 @@ begin
     lbColorSeance.Color     := FBDDEntites.GetCouleurEntiteRGBByExpe(S);
     lbColorSeance.Caption   := Format(FORMAT_NB_INTEGER,[S.eExpe]);
     // infos sur le code
-    lbCode.Caption          := MakeLibelleCode(CDS);//Format('%d - %.0f; %.0f', [CDS.IDCode, CDS.GradAz, CDS.GradInc]);
+    lbCode.Caption          := CDS.getLibelle();
     // infos sur l'expé
     {$WARNING: TEXpe.DateExpe à implementer}
-    WU := DateToStr(GetSecuredDate(EWE.AnneeExpe, EWE.MoisExpe, EWE.JourExpe));
-    lbInfosExpe.Caption     := MakeLibelleExpe(EWE); //Format('Expe %d: %s (%s, %s)', [EWE.IDExpe, WU, EWE.Operateur, EWE.ClubSpeleo]);
+    WU                      := EWE.getDateStr();
+    lbInfosExpe.Caption     := EWE.getLibelle();
     lbMesures.Caption       := Format(rsVUE2D_FMT_INFOS_MESURES, [L, A, P, G,D,H,B]);
     // infos sur la série
     if (S.Type_Entite = tgVISEE_RADIANTE) then

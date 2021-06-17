@@ -574,7 +574,7 @@ begin
     WriteLigne('-5'  + #9 + '1' + #9 + '0.00' + #9 + '0.00' + #9 + '0.00' + #9 + '1' + #9 + '0');
     MyExpe.setFrom(1, YearOf(Now), MonthOf(Now), DayOf(Now), 39, cdmAUTOMATIQUE, 0.00, 'Team1', 'Team1', 'Expe01');
     WriteLigne(MakeToporobotTabLineOfExpe(-2, MyExpe));
-    MyCode := MakeUsualTCode(1, UNITE_ANGULAIRE_DU_CODE_ZERO, UNITE_ANGULAIRE_DU_CODE_ZERO, 1.00, 0.01, 1.00, 1.00, 0.00, 0.00, 0.00, 'Code01');
+    MyCode.setUsualParameters(1, UNITE_ANGULAIRE_DU_CODE_ZERO, UNITE_ANGULAIRE_DU_CODE_ZERO, 1.00, 0.01, 1.00, 1.00, 0.00, 0.00, 0.00, 'Code01');
     WriteLigne(MakeToporobotTabLineOfCode(-1, mtabEXTENDEDTAB, MyCode));
     //WriteLigne('-2'  + #9 + '1' + #9 + '12' + #9 + '11' + #9 + '2014' + #9 + 'Equipe1' + #9 + 'Equipe1' + #9 + '0' + #9 + '0.00' + #9 + '0' + #9 + '39');
     //WriteLigne('-1'  + #9 + '1' + #9 + QDefaultAnglesUnitsStr + #9 + QDefaultAnglesUnitsStr + #9 + '0.01' + #9 + '1.00' + #9 + '1.00' + #9 + '0.00' + #9 + '0.00' + #9 + 'Code01' + #9 + '0');
@@ -1774,8 +1774,8 @@ begin
    DiametreBoule1  := 0.00;
    DiametreBoule2  := 0.00;
    Commentaire     := C;
-   ParamsFuncCorrAz  := MakeTParamFoncCorrectionAngulaire(0.00, 0.00, 0.00);
-   ParamsFuncCorrInc := MakeTParamFoncCorrectionAngulaire(0.00, 0.00, 0.00);
+   ParamsFuncCorrAz.Empty();
+   ParamsFuncCorrInc.Empty();
   end;
 end;
 
@@ -3896,7 +3896,7 @@ begin
       begin
         EWE := MySerie.GetVisee(j);
         WU  := Trim(UpperCase(EWE.IDTerrainStation));
-        MyLabelTerrain := MakeTToporobotIDStation(0, MySerie.GetNumeroDeSerie(), j , WU);
+        MyLabelTerrain.setFrom(0, MySerie.GetNumeroDeSerie(), j , WU);
         if (WU <> '') then AddLabelTerrain(MyLabelTerrain);
       end;
     end;

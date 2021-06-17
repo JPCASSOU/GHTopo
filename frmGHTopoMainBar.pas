@@ -338,7 +338,7 @@ end;
 
 procedure TGHTopoMainMenuBar.SetCurrentStation(const S: TNumeroSerie; const P: integer; const L: string = '');
 begin
-  FCurrentStation := MakeTToporobotIDStation(0, S, P, L);
+  FCurrentStation.setFrom(0, S, P, L);
   lbCurrentStation.Caption := FCurrentStation.ToString();
 end;
 
@@ -368,7 +368,7 @@ begin
   
   FCurrentNomFichierXTB  := '';
   FLastFichierTopoOpened := '';
-  FCurrentStation := MakeTToporobotIDStation(0, 1, 0, '');
+  FCurrentStation.setFrom(0, 1, 0, '');
 
   // paramètres FTP
   FFTPParameters.HostName    := '';

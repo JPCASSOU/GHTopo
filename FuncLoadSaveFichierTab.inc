@@ -292,12 +292,12 @@ var
                      UnCode.AngLimite  := ConvertirEnNombreReel(PrmsLn[8], 0.00);  // angle limite
                      UnCode.Commentaire := PrmsLn[9];              // commentaire
                      //ReservedInt := StrToIntDef(PrmsLn[10],0);
-                     UnCode.ParamsFuncCorrAz  := MakeTParamFoncCorrectionAngulaire(ConvertirEnNombreReel(PrmsLn[11], 0.00),
-                                                                                   ConvertirEnNombreReel(PrmsLn[12], 0.00),
-                                                                                   ConvertirEnNombreReel(PrmsLn[13], 0.00));
-                     UnCode.ParamsFuncCorrInc := MakeTParamFoncCorrectionAngulaire(ConvertirEnNombreReel(PrmsLn[14], 0.00),
-                                                                                   ConvertirEnNombreReel(PrmsLn[15], 0.00),
-                                                                                   ConvertirEnNombreReel(PrmsLn[16], 0.00));
+                     UnCode.ParamsFuncCorrAz.setFrom(ConvertirEnNombreReel(PrmsLn[11], 0.00),
+                                                     ConvertirEnNombreReel(PrmsLn[12], 0.00),
+                                                     ConvertirEnNombreReel(PrmsLn[13], 0.00));
+                     UnCode.ParamsFuncCorrInc.setFrom(ConvertirEnNombreReel(PrmsLn[14], 0.00),
+                                                      ConvertirEnNombreReel(PrmsLn[15], 0.00),
+                                                      ConvertirEnNombreReel(PrmsLn[16], 0.00));
                      UnCode.ErreurTourillon   := ConvertirEnNombreReel(PrmsLn[17], 0.00);
                      // provisoire: Diamètre des boules-cibles
                      UnCode.DiametreBoule1 := 0.00;

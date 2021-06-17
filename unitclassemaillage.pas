@@ -1111,7 +1111,7 @@ begin
       for i := 0 to GetNbVertex - 1 do
       begin
         VX1 := GetVertex(i);
-        if (PointInRectangle(VX1.Position.X, VX1.Position.Y, viewBox)) then
+        if (viewBox.ContainsPoint(VX1.Position)) then
         begin
           PP1 := GetCoordosVertexToPlan(VX1);
           bmp.CanvasBGRA.EllipseC(PP1.X, PP1.Y, 2, 2);
@@ -1131,9 +1131,9 @@ begin
         VX1 := GetVertex(TR.PointA);
         VX2 := GetVertex(TR.PointB);
         VX3 := GetVertex(TR.PointC);
-        if (PointInRectangle(VX1.Position.X, VX1.Position.Y, viewBox) OR
-            PointInRectangle(VX2.Position.X, VX2.Position.Y, viewBox) OR
-            PointInRectangle(VX3.Position.X, VX3.Position.Y, viewBox)) then
+        if (viewBox.ContainsPoint(VX1.Position) OR
+            viewBox.ContainsPoint(VX2.Position) OR
+            viewBox.ContainsPoint(VX3.Position)) then
         begin
           PP1 := GetCoordosVertexToPlan(VX1);
           PP2 := GetCoordosVertexToPlan(VX2);
@@ -1156,9 +1156,9 @@ begin
       VX2 := GetVertex(TR.PointB);
       VX3 := GetVertex(TR.PointC);
 
-      if (PointInRectangle(VX1.Position.X, VX1.Position.Y, viewBox) OR
-          PointInRectangle(VX2.Position.X, VX2.Position.Y, viewBox) OR
-          PointInRectangle(VX3.Position.X, VX3.Position.Y, viewBox)) then
+      if (viewBox.ContainsPoint(VX1.Position) OR
+          viewBox.ContainsPoint(VX2.Position) OR
+          viewBox.ContainsPoint(VX3.Position)) then
       begin
         QT := GetGeoTriangle3D(TR);
         QZ := 10*Trunc(TR.BoundingBox.C1.Z / 10) + 0.01 - 10.00;

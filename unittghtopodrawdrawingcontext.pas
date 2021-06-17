@@ -182,7 +182,6 @@ var
   RappHLVue: Extended;
   dx: Extended;
 begin
-
   FRegionDeDessin.setfrom(QX1, QY1, QX2, QY2);
   dx := FRegionDeDessin.X2 - FRegionDeDessin.X1;
   // calcul du rapport Hauteur/largeur de vue
@@ -268,7 +267,7 @@ end;
 
 procedure TGHTopoDrawingContext.DrawSegment(const X1, Y1, X2, Y2: Double);
 begin
-  if (SegmentInRectangle(X1, Y1, X2, Y2, FRegionDeDessin, True)) then
+  if (FRegionDeDessin.ContainsSegment(X1, Y1, X2, Y2, True)) then
   begin
     TraceVers(X1, Y1, false);
     TraceVers(X2, Y2, True);
@@ -283,7 +282,7 @@ var
   PM : TPoint2Df;
 begin
   PM.setFrom(X, Y);
-  if (not PointInRectangle(PM, FRegionDeDessin)) then exit;
+  if (not FRegionDeDessin.ContainsPoint(PM)) then exit;
   PP := QGetCoordsPlan(PM);
   ExTxt :=  self.CanvasBGRA.TextExtent(T);
   // 7 8 9
@@ -321,7 +320,7 @@ var
   dl: Integer;
   dh: Integer;
 begin
-  if (PointInRectangle(x, y, FRegionDeDessin)) then
+  if (FRegionDeDessin.ContainsPoint(x, y)) then
   begin
     PP := QGetCoordsPlan(X, Y);
     dl := L shr 1;
@@ -337,10 +336,10 @@ procedure TGHTopoDrawingContext.DrawQuad(const P1, P2, P3, P4: TPoint2Df);
 var
   PP: array[0..3] of TPoint;
 begin
-  if (PointInRectangle(P1, FRegionDeDessin) OR
-      PointInRectangle(P2, FRegionDeDessin) OR
-      PointInRectangle(P3, FRegionDeDessin) OR
-      PointInRectangle(P4, FRegionDeDessin)) then
+  if (FRegionDeDessin.ContainsPoint(P1) OR
+      FRegionDeDessin.ContainsPoint(P2) OR
+      FRegionDeDessin.ContainsPoint(P3) OR
+      FRegionDeDessin.ContainsPoint(P4)) then
   begin
     PP[0] := QGetCoordsPlan(P1);
     PP[1] := QGetCoordsPlan(P2);
@@ -850,7 +849,7 @@ var
 
       if (FBDDEntites.CalcCoordinatesFromBasePtAndOffset(MyAnnotation.Position.IDBaseStation, MyAnnotation.Position.Offset, PM)) then
       begin
-        if (not PointInRectangle(PM.X, PM.Y, FRegionDeDessin)) then Exit;
+        if (not FRegionDeDessin.ContainsPoint(PM)) then Exit;
         QStyleAnn := FKrobard.GetStyleAnnotation(MyAnnotation.IDStyle);
         DrawTexteCroquis(PM.X, PM.Y, QStyleAnn, InterpreterAnnotation());
       end;
@@ -930,12 +929,12 @@ var
 begin
   try
     PM.setFrom(QCurrentStation.PosStation.X, QCurrentStation.PosStation.Y);
-    if (PointInRectangle(PM, FRegionDeDessin)) then
+    if (FRegionDeDessin.ContainsPoint(PM)) then
     begin
       DefineBrosseEtCrayon(bsSolid, clYellow, 128, psSolid, 0, clAqua, 255);
        DefineFonte(DEFAULT_FONT_NAME, clBlue, [fsBold, fsUnderline], FONT_HEIGHT_ENTRANCES);
         DrawShape(PM.X, PM.Y, 1, DEMI_COTE, DEMI_COTE);
-        QTxt  := MakeLibelleStationTopo(QCurrentStation);// Format('%d.%d - %s', [FCurrentEntite.Entite_Serie, FCurrentEntite.Entite_Station, FCurrentEntite.oIDLitteral]);
+        QTxt  := QCurrentStation.getLibelleStationTopo();
         DrawTexte(PM.X + DECALAGE_TEXTE_IN_M, PM.Y - DECALAGE_TEXTE_IN_M, 7, QTxt);
        RestoreFonte();
       RestoreBrosseEtCrayon();

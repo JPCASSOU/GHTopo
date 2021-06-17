@@ -1036,9 +1036,9 @@ var
           ResetColorRow(lsbListe, ARect, bg, tc);
           //DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[0], false, MyNamespace.Nom);
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[0], true , Format(FORMAT_NB_INTEGER, [QNoCode]));
-          DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[1], true , ExplainCodeAzimut(cs));
+          DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[1], true , cs.ExplainCodeAzimut());
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[2], true , Format(FORMAT_NB_REAL_3_DEC, [cs.ParamsFuncCorrAz.Co]));
-          DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[3], true , ExplainCodePente(cs)); //Format(FORMAT_NB_REAL_0_DEC, [cs.Gradinc]));
+          DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[3], true , cs.ExplainCodePente()); //Format(FORMAT_NB_REAL_0_DEC, [cs.Gradinc]));
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[4], true , Format(FORMAT_NB_REAL_3_DEC, [cs.ParamsFuncCorrInc.Co]));
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[5], true , cs.Commentaire);
         end;

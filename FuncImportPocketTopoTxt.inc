@@ -56,7 +56,7 @@ begin
   MyEntrance.eObserv    := '';
   AddEntrance(MyEntrance);
 
-  MyCode := MakeUsualTCode(1, 360.00, 360.00, 1.00, 0.01, 1.00, 1.00, 0.00, 0.00, 0.00, 'Topo du ' + DatePascalToDateSQL(QDateSeanceTopo));
+  MyCode.setUsualParameters(1, 360.00, 360.00, 1.00, 0.01, 1.00, 1.00, 0.00, 0.00, 0.00, 'Topo du ' + DatePascalToDateSQL(QDateSeanceTopo));
   self.AddCode(MyCode);
   MyExpe.setFrom(1, YearOf(QDateSeanceTopo), MonthOf(QDateSeanceTopo), DayOf(QDateSeanceTopo), 6, cdmAUTOMATIQUE, 0.00, 'Speleometre', 'Speleographe', 'Expe01');
   self.AddExpe(MyExpe);

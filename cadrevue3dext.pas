@@ -586,7 +586,8 @@ begin
       EWE := FBDDEntites.GetEntiteVisee(i);
       // NOTA: Les visées en antennes ne sont pas prises en compte par
       //       les fonctions de recherche et d'indexation de GHCaveDraw
-      QID := MakeGHCaveDrawIDPtCenterline(EWE);
+
+      QID := EWE.getGHCaveDrawIDPtCenterline();
       PtOutExtr1 :=  Get2DDepthCoordinatesFromP3D(EWE.PosExtr0);
       PtOutExtr2 :=  Get2DDepthCoordinatesFromP3D(EWE.PosStation);
       WrtLn(Format(FMT_BASEPOINTS,
@@ -609,7 +610,7 @@ begin
         EWE := FBDDEntites.GetEntiteAntenne(i);
         // NOTA: Les visées en antennes ne sont pas prises en compte par
         //       les fonctions de recherche et d'indexation de GHCaveDraw
-        QID := MakeGHCaveDrawIDPtAntenne(EWE, i);
+        QID := EWE.getGHCaveDrawIDPtAntenne(i);
         PtOutExtr1 :=  Get2DDepthCoordinatesFromP3D(EWE.PosExtr0);
         PtOutExtr2 :=  Get2DDepthCoordinatesFromP3D(EWE.PosStation);
         WrtLn(Format(FMT_BASEPOINTS,

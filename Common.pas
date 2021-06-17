@@ -107,24 +107,9 @@ function MakeTPointCoupeDeveloppee(const QP, QZ: double): TPointCoupeDeveloppee;
 function MakeTMarker(const D: boolean; const QX, QY: double; const C: TColor; const S: string): TMarker;
 function MakeTIDBaseStation(const S: TNumeroSerie; const P: integer; const IsAntenne: boolean): TIDBaseStation;
 
-function MakeTParamFoncCorrectionAngulaire(const QCo, QErreurMax, QPosErrMax: double): TParamFoncCorrectionAngulaire; // correction angulaire
-function MakeUsualTCode(const NumeroCode: TNumeroCode;
-                        const GradAz, GradInc, FactLongueur: double;
-                        const PsiL, PsiAz, PsiP: double;
-                        const DiametreBoule1, DiametreBoule2, ErreurTourillon: double;
-                        const Commentaires: string): TCode;
 
 function MakeTStationMatchFound(const S, P: integer; const M: string): TStationMatchFound;
-function MakeTViseeAntenne(const QEntranceRatt            : TNumeroEntrance;
-                           const QReseau                  : TNumeroReseau;
-                           const QSecteur                 : TNumeroSecteur;
-                           const QSerieDepart             : TNumeroSerie;
-                           const QPtDepart                : integer;
-                           const QL, QAz, QP              : double;
-                           const Marked                   : boolean = false): TViseeAntenne;
 
-function MakeEmptyEntiteEtendue(): TBaseStation;
-function MakeTToporobotIDStation(const QNameSpace: Integer; const QSerie: TNumeroSerie; const QStation: integer; const QIDTerrain: string = ''): TToporobotIDStation;
 
 // fonctions communes:
 //--------------------
@@ -147,14 +132,6 @@ function IsInRange(const Value, MinValue, MaxValue: double): Boolean; inline; ov
 function IsInRange(const Value, MinValue, MaxValue: integer): Boolean; inline; overload;
 // fonctions graphiques
 function IntersectRectangles(const R1, R2: TRect2Df): boolean;
-function PointInRectangle(const P: TPoint2Df; const R: TRect2Df): boolean; overload; inline;
-function PointInRectangle(const QX, QY: double; const R: TRect2Df): boolean; overload; inline;
-
-function PointInRectangle(const P: TPoint3Df; const R: TRect2Df): boolean; overload; inline;
-function SegmentInRectangle(const P1, P2: TPoint2Df; const R: TRect2Df; const PartiallyInRectangle: boolean = true): boolean; overload;
-function SegmentInRectangle(const X1, Y1, X2, Y2: double; const R: TRect2Df; const PartiallyInRectangle: boolean = true): boolean; overload;
-function QuadInRectangle(const P1, P2, P3, P4: TPoint2Df; const R: TRect2Df): boolean; inline;
-
 // Fonctions de split et de choix dans des arrays
 //**********************
 function EmptyTGHStringArray(): TGHStringArray; inline;
@@ -271,9 +248,6 @@ procedure CalculerVisee(var MaVisee: TUneVisee;       // calcul d'une visée
 
 function GetTypeDeVisee(const T: integer): TTypeDeVisee;          // retourne le type de visé
 function GetDescTypeVisee(const T: TTypeDeVisee): string;         // et sa description
-function IsViseetInNaturalCave(const E: TBaseStation): boolean;   // La visée est naturelle ?
-function IsViseetInCaveOrTunnel(const E: TBaseStation): boolean;  // La visée passe dans un vide souterrain ?
-function IsViseeInSerie(const E: TBaseStation): boolean;          // La visée appartien à une série ?
 // extraire le libellé d'une étiquette de terrain depuis un commentaire  - L'étiquette commence par un '@' et ne comporte pas d'espace
 function ExtractIDTerrainFromComment(const S: string): string;
 
@@ -299,19 +273,13 @@ function  GetNamespaceOfExpe(const N: TNumeroExpe): integer; inline;
 function  GetNamespaceOfEntrance(const N: TNumeroEntrance): integer; inline;
 function  GetNamespaceOfReseau(const N: TNumeroReseau): integer; inline;
 function  GetNamespaceOfSecteur(const N: TNumeroSecteur): integer; inline;
-
-function  MakeGHCaveDrawIDPtCenterline(const E: TBaseStation): int64;
-function  MakeGHCaveDrawIDPtAntenne(const E: TBaseStation; const NbViseesEnAntenne: integer): int64;
-
 function  MakeLabelNoeud(const ND: TJonctionXYZ): String;
-function  MakeLibelleStationTopo(const E: TBaseStation): string;
-function  MakeLibelleCode(const E: TCode): string;
-function  MakeLibelleExpe(const E: TExpe): string;
+
+
+
 function  ExtractSerStFromTIDStation(const QIDBaseStation: TIDBaseStation; out QSR: TNumeroSerie; out QST: TNumeroStation): boolean;
 function  ChooseColorByTypeEntite(const TE: TTypeDeVisee): TColor;
 function  FormatterIDTerrainStation(const S: string): string;
-function  ExplainCodeAzimut(const CC: TCode): string;
-function  ExplainCodePente(const CC: TCode): string;
 
 // fonctions de calcul de coordonnées et déclinaison magnétique (calcul ponctuel sur couple de valeur ou procédural sur tableaux)
 function  ConversionCoupleCoordonneesIsoleesEPSG(const Src, Tgt: integer; const PointIn: TPoint2Df; out PointOut: TPoint2Df): boolean;
@@ -916,43 +884,9 @@ begin
 end;
 
 
-
-
-
-function MakeTParamFoncCorrectionAngulaire(const QCo, QErreurMax, QPosErrMax: double): TParamFoncCorrectionAngulaire;
-begin
-  Result.Co        := QCo;
-  Result.ErreurMax := QErreurMax;
-  Result.PosErrMax := QPosErrMax;
-end;
-
 {$WARNING: TEXpe.DateExpe à implementer}
 
-function MakeUsualTCode(const NumeroCode: TNumeroCode;
-                        const GradAz, GradInc, FactLongueur: double;
-                        const PsiL, PsiAz, PsiP: double;
-                        const DiametreBoule1, DiametreBoule2, ErreurTourillon: double;
-                        const Commentaires: string): TCode;
-begin
-  Result.IDCode               := NumeroCode;
-  Result.Commentaire          := Commentaires;
-  Result.GradAz               := GradAz;
-  Result.GradInc              := GradInc;
-  Result.FactLong             := FactLongueur;
-  Result.PsiL                 := PsiL;
-  Result.PsiAz                := PsiAz;
-  Result.PsiP                 := PsiP;
-  Result.AngLimite            := 0.00;
-  Result.DiametreBoule1       := DiametreBoule1;
-  Result.DiametreBoule2       := DiametreBoule2;
-  Result.ErreurTourillon      := ErreurTourillon;
-  Result.ParamsFuncCorrAz.Co             := 0.00;
-  Result.ParamsFuncCorrAz.ErreurMax      := 0.00;
-  Result.ParamsFuncCorrAz.PosErrMax      := 0.00;
-  Result.ParamsFuncCorrInc.Co            := 0.00;
-  Result.ParamsFuncCorrInc.ErreurMax     := 0.00;
-  Result.ParamsFuncCorrInc.PosErrMax     := 0.00;
-end;
+
 
 function MakeTStationMatchFound(const S, P: integer; const M: string): TStationMatchFound;
 begin
@@ -961,74 +895,8 @@ begin
   Result.Match   := M;
 end;
 
-function MakeTViseeAntenne(const QEntranceRatt            : TNumeroEntrance;
-                           const QReseau                  : TNumeroReseau;
-                           const QSecteur                 : TNumeroSecteur;
-                           const QSerieDepart             : TNumeroSerie;
-                           const QPtDepart                : integer;
-                           const QL, QAz, QP              : double;
-                           const Marked                   : boolean = false): TViseeAntenne;
-begin
-  Result.EntranceRatt     := QEntranceRatt;
-  Result.Reseau           := QReseau;
-  Result.Secteur          := QSecteur;
-  Result.SerieDepart      := QSerieDepart;
-  Result.PtDepart         := QPtDepart;
-  Result.Longueur         := QL;
-  Result.Azimut           := QAz;
-  Result.Pente            := QP;
-  Result.MarkedForDelete   := Marked;
-end;
 
 
-
-function MakeEmptyEntiteEtendue(): TBaseStation;
-begin
-  with Result do
-  begin
-    eCode       := 0;
-    eExpe       := 0;
-    eSecteur    := 0;
-    eReseau     := 0;
-    eEntrance   := 0;
-    Type_Entite := tgSURFACE; //2
-    DateLeve    := Now();
-    Entite_Serie    := 0;
-    Entite_Station  := 0;
-    // drapeau
-    Enabled         := false;
-    // données originales
-    oLongueur       := 0.00;
-    oAzimut         := 0.00;
-    oPente          := 0.00;
-    oLG             := 0.00;
-    oLD             := 0.00;
-    oHZ             := 0.00;
-    oHN             := 0.00;
-    // centerline
-    PosExtr0.Empty();
-    PosStation.Empty();
-    // habillage
-    PosOPD.Empty();
-    PosOPG.Empty();
-    PosPD.Empty();
-    PosPG.Empty();
-    CouleurStd      := clBlue;
-    CouleurDegrade  := clWhite;
-    IsPOI           := false;
-    // commentaires
-    IDTerrain       := '';
-    oCommentaires   := '';
-  end;
-end;
-
-function MakeTToporobotIDStation(const QNameSpace: Integer; const QSerie: TNumeroSerie; const QStation: integer; const QIDTerrain: string = ''): TToporobotIDStation;
-begin
-  Result.eIdxNameSpace:= QNameSpace;
-  Result.aSerie       := QSerie;
-  Result.aStation     := QStation;
-  Result.aIDTerrain   := QIDTerrain;
-end;
 
 //******************************************************************************
 // fonctions communes:
@@ -1128,40 +996,9 @@ begin
   Result:= (LM > LB) and (HM > HB);
 end;
 
-function PointInRectangle(const P: TPoint2Df; const R: TRect2Df): boolean;
-begin
-  Result := IsInRange(P.X, R.X1, R.X2) AND IsInRange(P.Y, R.Y1, R.Y2);
-end;
 
-function PointInRectangle(const QX, QY: double; const R: TRect2Df): boolean;
-begin
-  Result := IsInRange(QX, R.X1, R.X2) AND IsInRange(QY, R.Y1, R.Y2);
-end;
 
-function PointInRectangle(const P: TPoint3Df; const R: TRect2Df): boolean;
-begin
-  Result := IsInRange(P.X, R.X1, R.X2) AND IsInRange(P.Y, R.Y1, R.Y2);
-end;
 
-function SegmentInRectangle(const P1, P2: TPoint2Df; const R: TRect2Df; const PartiallyInRectangle: boolean = true): boolean;
-begin
-  if (PartiallyInRectangle) then Result := PointInRectangle(P1, R) or  PointInRectangle(P2, R)
-                            else Result := PointInRectangle(P1, R) and PointInRectangle(P2, R);
-end;
-
-function SegmentInRectangle(const X1, Y1, X2, Y2: double; const R: TRect2Df; const PartiallyInRectangle: boolean): boolean;
-var
-  P1, P2: TPoint2Df;
-begin
-  P1.setFrom(X1, Y1);
-  P2.setFrom(X2, Y2);
-  Result := SegmentInRectangle(P1, P2, R, PartiallyInRectangle);
-end;
-
-function QuadInRectangle(const P1, P2, P3, P4: TPoint2Df; const R: TRect2Df): boolean;
-begin
-  Result := PointInRectangle(P1, R) or PointInRectangle(P2, R) or PointInRectangle(P3, R) or PointInRectangle(P4, R);
-end;
 
 //******************************************************************************
 // Fonctions de split et de choix dans des arrays
@@ -2319,20 +2156,7 @@ begin
 end;
 
 
-function IsViseetInNaturalCave(const E: TBaseStation): boolean;
-begin
-  Result := (E.Type_Entite in [tgDEFAULT, tgFOSSILE, tgVADOSE, tgENNOYABLE, tgSIPHON]);
-end;
-function IsViseetInCaveOrTunnel(const E: TBaseStation): boolean;
-begin
-  Result := (E.Type_Entite in [tgDEFAULT, tgFOSSILE, tgVADOSE, tgENNOYABLE, tgSIPHON, tgTUNNEL, tgMINE]);
-end;
 
-function IsViseeInSerie(const E: TBaseStation): boolean;
-begin
-  Result := (E.Type_Entite in [tgDEFAULT, tgFOSSILE, tgVADOSE, tgENNOYABLE, tgSIPHON, tgTUNNEL, tgMINE, tgSURFACE]);
-  Result := Result AND (E.Entite_Serie > 0);
-end;
 // extraire le libellé d'une étiquette de terrain depuis un commentaire
 // l'étiquette commence par un '@' et ne comporte pas d'espace
 // L'étiquette est passée en majuscules
@@ -2481,19 +2305,6 @@ begin
   Result := N div NB_MAXI_SERIES_PAR_CAVITE;
 end;
 
-function MakeGHCaveDrawIDPtCenterline(const E: TBaseStation): int64;
-begin
-  Result := NB_MAXI_SERIES_PAR_CAVITE * E.Entite_Serie + MULTIPLICATEUR_STATION * E.Entite_Station;
-end;
-
-function MakeGHCaveDrawIDPtAntenne(const E: TBaseStation; const NbViseesEnAntenne: integer): int64;
-begin
-  if (E.Type_Entite = tgVISEE_RADIANTE) then  // une protection supplémentaire
-  begin
-    Result := NB_MAXI_SERIES_PAR_CAVITE * Abs(E.Entite_Serie) + MULTIPLICATEUR_STATION * Abs(E.Entite_Station);
-    Result := 0 - Result;
-  end
-end;
 function MakeLabelNoeud(const ND: TJonctionXYZ): String;
 var
   QIdxNameSpace, QNoSerie: TNumeroSerie;
@@ -2505,39 +2316,7 @@ begin
   //Result := Format('%d.%d%s%s', [QNoSerie, ND.oNoSt, WU, EWE]);
   Result := Format('%d.%d%s', [QNoSerie, ND.NoSt, WU]);
 end;
-function MakeLibelleStationTopo(const E: TBaseStation): string;
-var
-  QIdxNameSpace, QNoSerie: TNumeroSerie;
-  WU, EWE: String;
-begin
-  if (E.Type_Entite = tgVISEE_RADIANTE) then Exit('');
-  DecomposeNumeroSerie(E.Entite_Serie, QIdxNameSpace, QNoSerie);
 
-  WU := IIF(QIdxNameSpace = 0, '', Format('@%d', [QIdxNameSpace]));
-  EWE := IIF(E.IDTerrain ='', '', ' - ' + E.IDTerrain);
-  Result := Format('%d.%d%s%s', [QNoSerie, E.Entite_Station, WU, EWE]);
-end;
-
-function MakeLibelleExpe(const E: TExpe): string;
-var
-  QIdxNameSpace, QNoExpe: TNumeroExpe;
-  WU: String;
-begin
-  DecomposeNumeroExpe(E.IDExpe, QIdxNameSpace, QNoExpe);
-
-  WU := IIF(QIdxNameSpace = 0, '', Format('@%d', [QIdxNameSpace]));
-  Result := Format('%d%s - %s', [QNoExpe, WU, '']);
-end;
-
-function MakeLibelleCode(const E: TCode): string;
-var
-  QIdxNameSpace, QNoCode: TNumeroCode;
-  WU: String;
-begin
-  DecomposeNumeroCode(E.IDCode, QIdxNameSpace, QNoCode);
-  WU := IIF(QIdxNameSpace = 0, '', Format('@%d', [QIdxNameSpace]));
-  Result := Format('%d%s - %s', [QNoCode, WU, '']);
-end;
 function ExtractSerStFromTIDStation(const QIDBaseStation: TIDBaseStation; out QSR: TNumeroSerie; out QST: TNumeroStation): boolean;
 var
   QRT: LongInt;
@@ -2572,131 +2351,9 @@ begin
   Result := GetResourceString(Trim(S));
 end;
 
-function ExplainCodeAzimut(const CC: TCode): string;
-var
-  ubb: Int64;
-  DescUBB, SensVisee: String;
-begin
-  ubb := Round(CC.GradAz);
-  Result := Format('%d: ', [ubb]);
-  case ubb of
-    359, 360: begin // visées directes en degrés
-       DescUBB   := GetResourceString(rsDESC_UNITE_ANGULAIRE_DEGRES);
-       SensVisee := GetResourceString(rsDESC_VISEE_DIRECTE);
 
-    end;
-    399, 400: begin // visées directes en grades
-       DescUBB   := GetResourceString(rsDESC_UNITE_ANGULAIRE_GRADES);
-       SensVisee := GetResourceString(rsDESC_VISEE_DIRECTE);
-    end;
-    349, 350: begin  // visées inverses en degrés
-       DescUBB   := GetResourceString(rsDESC_UNITE_ANGULAIRE_DEGRES);
-       SensVisee := GetResourceString(rsDESC_VISEE_INVERSE);
-    end;
-    389, 390: begin // visées inverses en grades
-       DescUBB   := GetResourceString(rsDESC_UNITE_ANGULAIRE_GRADES);
-       SensVisee := GetResourceString(rsDESC_VISEE_INVERSE);
-    end;
-  else
-    begin
-      DescUBB   := Format(FORMAT_NB_REAL_3_DEC, [CC.GradAz]);
-      SensVisee := GetResourceString('??');
-    end;
-  end;
-  result += DescUBB + ', ' + SensVisee;
-end;
 
-function ExplainCodePente(const CC: TCode): string;
-var
-  ucc: Int64;
-  DescUCC, PosZero, SensVisee: String;
-begin
-  result := '';
-  ucc := Trunc(CC.GradInc);
-  Result := Format('%d: ', [ucc]);
-  case ucc of
-    360:
-      begin
-        DescUCC   := GetResourceString(rsDESC_UNITE_ANGULAIRE_DEGRES);
-        PosZero   := GetResourceString(rsDESC_POS_ZERO_HZ);
-        SensVisee := GetResourceString(rsDESC_VISEE_DIRECTE);
-      end;
 
-    350:
-      begin
-        DescUCC   := GetResourceString(rsDESC_UNITE_ANGULAIRE_DEGRES);
-        PosZero   := GetResourceString(rsDESC_POS_ZERO_HZ);
-        SensVisee := GetResourceString(rsDESC_VISEE_INVERSE);
-      end;
-    370:
-      begin
-        DescUCC   := GetResourceString(rsDESC_UNITE_PENTES_PERCENT);
-        PosZero   := GetResourceString(rsDESC_POS_ZERO_HZ);
-        SensVisee := GetResourceString(rsDESC_VISEE_DIRECTE);
-      end;
-    380: // mode plongée: Longueur, Dénivelé
-      begin
-        DescUCC   := GetResourceString(rsDESC_UNITE_PENTE_DENIVELE);
-        PosZero   := GetResourceString(rsDESC_POS_ZERO_HZ);
-        SensVisee := GetResourceString(rsDESC_VISEE_DIRECTE);
-      end;
-    390:
-      begin
-        DescUCC   := GetResourceString(rsDESC_UNITE_ANGULAIRE_GRADES);
-        PosZero   := GetResourceString(rsDESC_POS_ZERO_HZ);
-        SensVisee := GetResourceString(rsDESC_VISEE_INVERSE);
-      end;
-    400:
-      begin
-        DescUCC   := GetResourceString(rsDESC_UNITE_ANGULAIRE_GRADES);
-        PosZero   := GetResourceString(rsDESC_POS_ZERO_HZ);
-        SensVisee := GetResourceString(rsDESC_VISEE_DIRECTE);
-      end;
-    359:
-      begin
-        DescUCC   := GetResourceString(rsDESC_UNITE_ANGULAIRE_DEGRES);
-        PosZero   := GetResourceString(rsDESC_POS_ZERO_NADIRAL);
-        SensVisee := GetResourceString(rsDESC_VISEE_DIRECTE);
-      end;
-    399:
-      begin
-        DescUCC   := GetResourceString(rsDESC_UNITE_ANGULAIRE_GRADES);
-        PosZero   := GetResourceString(rsDESC_POS_ZERO_NADIRAL);
-        SensVisee := GetResourceString(rsDESC_VISEE_DIRECTE);
-      end;
-    361:
-      begin
-        DescUCC   := GetResourceString(rsDESC_UNITE_ANGULAIRE_DEGRES);
-        PosZero   := GetResourceString(rsDESC_POS_ZERO_ZENITHAL);
-        SensVisee := GetResourceString(rsDESC_VISEE_DIRECTE);
-      end;
-    401:
-      begin
-        DescUCC   := GetResourceString(rsDESC_UNITE_ANGULAIRE_GRADES);
-        PosZero   := GetResourceString(rsDESC_POS_ZERO_ZENITHAL);
-        SensVisee := GetResourceString(rsDESC_VISEE_DIRECTE);
-      end;
-    UNITE_CLINO_LASERMETRE_STANLEY_TLM330_DIR:
-      begin
-        DescUCC   := GetResourceString(rsDESC_DEVICE_TLM330);
-        PosZero   := GetResourceString(rsDESC_POS_ZERO_HZ);
-        SensVisee := GetResourceString(rsDESC_VISEE_DIRECTE);
-      end;
-    UNITE_CLINO_LASERMETRE_STANLEY_TLM330_INV:
-      begin
-        DescUCC   := GetResourceString(rsDESC_DEVICE_TLM330);
-        PosZero   := GetResourceString(rsDESC_POS_ZERO_HZ);
-        SensVisee := GetResourceString(rsDESC_VISEE_INVERSE);
-      end;
-    else
-      begin
-        DescUCC   := Format(FORMAT_NB_REAL_3_DEC, [CC.GradAz]);
-        PosZero   := '??';
-        SensVisee := '??';
-      end;
-  end;
-  result += DescUCC + ', ' + SensVisee + ', ' + PosZero;
-end;
 //******************************************************************************
 // fonctions de calcul de coordonnées et déclinaison magnétique
 // (calcul ponctuel sur couple de valeur ou procédural sur tableaux)

@@ -1768,7 +1768,7 @@ begin
     for i := LOW_INDEX to NbVisees - 1 do
     begin
       E  := GetEntiteVisee(i);
-      QID := MakeGHCaveDrawIDPtCenterline(E);
+      QID := E.getGHCaveDrawIDPtCenterline();
       WrtLn(Format(FMT_BASEPOINTS,
                   [QID  ,
                    E.IDTerrain,
@@ -1789,7 +1789,7 @@ begin
         E  := GetEntiteAntenne(i);
         // NOTA: Les visées en antennes ne sont pas prises en compte par
         //       les fonctions de recherche et d'indexation de GHCaveDraw
-        QID := MakeGHCaveDrawIDPtAntenne(E, i);
+        QID := E.getGHCaveDrawIDPtAntenne(i);
         WrtLn(Format(FMT_BASEPOINTS,
                     [QID  ,
                      E.IDTerrain,
@@ -1939,8 +1939,8 @@ begin
       MyEntite := GetEntiteVisee(i);
 
       if (not MyEntite.Enabled) then Continue; // visées non dessinées
-      // /!\ Utiliser IsViseetInNaturalCave et non IsViseetInCaveOrTunnel
-      if (not IsViseetInNaturalCave(MyEntite)) then Continue; // galeries non naturelles
+      // /!\ Utiliser IsInNaturalCave et non IsInCaveOrTunnel
+      if (not MyEntite.IsInNaturalCave()) then Continue; // galeries non naturelles
       dx := MyEntite.PosStation.X - MyEntite.PosExtr0.X;
       dy := MyEntite.PosStation.Y - MyEntite.PosExtr0.Y;
       dz := MyEntite.PosStation.Z - MyEntite.PosExtr0.Z;
@@ -2009,7 +2009,7 @@ begin
       if (MyEntite.Type_Entite = tgENTRANCE) then Continue;
       //if (Type_Entite = tgTYPE_ENTITES_VISEES_ANTENNE) then Continue;
       // /!\ Utiliser IsViseetInNaturalCave et non IsViseetInCaveOrTunnel
-      if (not IsViseetInNaturalCave(MyEntite)) then Continue;
+      if (not MyEntite.IsInNaturalCave()) then Continue;
       dx := MyEntite.PosStation.X - MyEntite.PosExtr0.X;
       dy := MyEntite.PosStation.Y - MyEntite.PosExtr0.Y;
       //dz := MyEntite.PosStation.Z - MyEntite.PosExtr0.Z;

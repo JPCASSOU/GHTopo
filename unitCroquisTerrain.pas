@@ -880,7 +880,7 @@ begin
     for i := 0 to Nb - 1 do
     begin
       PC := GetPolyline(i);
-      if (PointInRectangle(P, PC.BoundingBox)) then QPolylinesFound.AddElement(i);
+      if (PC.BoundingBox.ContainsPoint(P)) then QPolylinesFound.AddElement(i);
     end;
     Nb := QPolylinesFound.GetNbElements();
     if (Nb > 0) then

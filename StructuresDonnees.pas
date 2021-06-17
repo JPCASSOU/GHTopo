@@ -42,7 +42,7 @@ CONST FRM_CONSTRAINT_MAX_HEIGHT = 0;
 
 CONST
   CRIMINELS_CONTRE_L_HUMANITE = True;
-  HITLER     = CRIMINELS_CONTRE_L_HUMANITE;
+  HITLER     = CRIMINELS_CONTRE_L_HUMANITE;  // sans commentaires
   JESUS      = HITLER;
   MAHOMET    = JESUS;
 // formats de nombres
@@ -418,6 +418,12 @@ type
   procedure UpdateBoundingBox(const QX, QY: double); overload;
   procedure UpdateBoundingBox(const PT: TPoint2Df); overload;
   procedure UpdateBoundingBox(const PT: TPoint3Df); overload;
+  function  ContainsPoint(const QX, QY: double): boolean; overload;
+  function  ContainsPoint(const P: TPoint2Df): boolean; overload;
+  function  ContainsPoint(const P: TPoint3Df): boolean; overload;
+  function  ContainsSegment(const P1, P2: TPoint2Df; const PartiallyInRectangle: boolean = true): boolean; overload;
+  function  ContainsSegment(const X1, Y1, X2, Y2: double; const PartiallyInRectangle: boolean): boolean; overload;
+  function  ContainsQuad(const P1, P2, P3, P4: TPoint2Df): boolean;
 end;
 
 type TArrayPoints2Df = array of TPoint2Df;
@@ -515,17 +521,28 @@ type
                     const QDeclinaisonInDegrees: double;
                     const QSpeleometre, QSpeleographe: string;
                     const QCommentaires: string);
-
+  function getLibelle(): string;
+  function getDateStr(): string;
 end;
 // fonctions trigonométriques de correction angulaire
-type TParamFoncCorrectionAngulaire = record
+type
+
+{ TParamFoncCorrectionAngulaire }
+
+ TParamFoncCorrectionAngulaire = record
   Co        : double; // constante d'erreur systématique (e.g: cercle d'un compas bien centré mais avec le zéro non positionné sur le barreau aimanté)
   ErreurMax : double; // erreur maximale
   PosErrMax : double; // Angle (azimut ou pente) correspondant à l'erreur maximale
+  procedure Empty();
+  procedure setFrom(const QCo, QErrMax, QPosErrMax: double);
 end;
 
 // codes
-type TCode = record
+type
+
+{ TCode }
+
+ TCode = record
     IDCode           : TNumeroCode;
     GradAz           : double;
     GradInc          : double;
@@ -541,6 +558,15 @@ type TCode = record
     // Fonctions de correction
     ParamsFuncCorrAz : TParamFoncCorrectionAngulaire;
     ParamsFuncCorrInc: TParamFoncCorrectionAngulaire;
+    function  getLibelle(): string;
+    procedure setUsualParameters(const NumeroCode: TNumeroCode;
+                                 const GradAz, GradInc, FactLongueur: double;
+                                 const PsiL, PsiAz, PsiP: double;
+                                 const DiametreBoule1, DiametreBoule2, ErreurTourillon: double;
+                                 const Commentaires: string);
+    function ExplainCodeAzimut(): string;
+    function ExplainCodePente(): string;
+
 end;
 // sens de dessin des séries en coupe développée
 type TSensTraceCoupeDev = (stcdVERS_DROITE, stcdVERS_GAUCHE);
@@ -577,7 +603,11 @@ type TUneVisee = record
 end;
 // visées en antenne
 // Nota: Les codes et expés d'une visée radiante héritent de ceux de la station d'accrochage
-type TViseeAntenne = record
+type
+
+{ TViseeAntenne }
+
+ TViseeAntenne = record
    EntranceRatt        : TNumeroEntrance;
    Reseau              : TNumeroReseau;
    Secteur             : TNumeroSecteur;
@@ -589,6 +619,14 @@ type TViseeAntenne = record
    Pente               : double;      //         'Pente
    MarkedForDelete     : boolean;
    //Commentaires        : string;
+   procedure setFrom(const QEntranceRatt    : TNumeroEntrance;
+                     const QReseau          : TNumeroReseau;
+                     const QSecteur         : TNumeroSecteur;
+                     const QSerieDepart     : TNumeroSerie;
+                     const QPtDepart        : integer;
+                     const QL, QAz, QP      : double;
+                     const Marked           : boolean = false);
+
    function toString(): string;
 end;
 type TViseeAntenneFound = record
@@ -605,11 +643,16 @@ type TArrayOfTViseeAntenne = array of TViseeAntenneFound;
 
 
 // couple série station au format TOPOROBOT + ID de terrain
-type  TToporobotIDStation = record
+type
+
+{ TToporobotIDStation }
+
+  TToporobotIDStation = record
   eIdxNameSpace: integer;
   aSerie: TNumeroSerie;
   aStation: integer;
   aIDTerrain: string;
+  procedure setFrom(const QNameSpace: Integer; const QSerie: TNumeroSerie; const QStation: integer; const QIDTerrain: string = '');
   function ToString(): string;
 end;
 type TArrayOfTToporobotIDStation = array of TToporobotIDStation;
@@ -676,8 +719,16 @@ type
    Highlighted          : boolean;
    // champs texte => en fin de ligne
    oCommentaires        : string;
+   procedure Empty();
    function toString()  : string;
    function toStringWithIDTerrain(): string;
+
+   function IsInNaturalCave(): boolean;
+   function IsInCaveOrTunnel(): boolean;
+   function IsInSerie(): boolean;
+   function getGHCaveDrawIDPtCenterline(): int64;
+   function getGHCaveDrawIDPtAntenne(const NbViseesEnAntenne: integer): int64;
+   function getLibelleStationTopo(): string;
 end;
 //*)
 
@@ -1225,6 +1276,180 @@ type TFTPParameters = record
 end;
 
 implementation
+uses
+  {$INCLUDE SelectionLangues.inc} // insère les unités en fonction de la langue
+  Common;
+
+{ TParamFoncCorrectionAngulaire }
+
+procedure TParamFoncCorrectionAngulaire.Empty();
+begin
+  self.setFrom(0.00, 0.00, 0.00);
+end;
+
+procedure TParamFoncCorrectionAngulaire.setFrom(const QCo, QErrMax, QPosErrMax: double);
+begin
+  self.Co        := QCo;
+  self.ErreurMax := QErrMax;
+  self.PosErrMax := QPosErrMax;
+end;
+
+{ TCode }
+
+function TCode.getLibelle(): string;
+var
+  QIdxNameSpace, QNoCode: integer;
+  WU: String;
+begin
+  DecomposeNumeroCode(self.IDCode, QIdxNameSpace, QNoCode);
+  WU := IIF(QIdxNameSpace = 0, '', Format('@%d', [QIdxNameSpace]));
+  Result := Format('%d%s - %s', [QNoCode, WU, '']);
+end;
+
+procedure TCode.setUsualParameters(const NumeroCode: TNumeroCode; const GradAz, GradInc, FactLongueur: double; const PsiL, PsiAz, PsiP: double; const DiametreBoule1, DiametreBoule2, ErreurTourillon: double; const Commentaires: string);
+begin
+  self.IDCode               := NumeroCode;
+  self.Commentaire          := Commentaires;
+  self.GradAz               := GradAz;
+  self.GradInc              := GradInc;
+  self.FactLong             := FactLongueur;
+  self.PsiL                 := PsiL;
+  self.PsiAz                := PsiAz;
+  self.PsiP                 := PsiP;
+  self.AngLimite            := 0.00;
+  self.DiametreBoule1       := DiametreBoule1;
+  self.DiametreBoule2       := DiametreBoule2;
+  self.ErreurTourillon      := ErreurTourillon;
+  self.ParamsFuncCorrAz.Empty();
+  self.ParamsFuncCorrInc.Empty();
+end;
+
+function TCode.ExplainCodeAzimut(): string;
+var
+  ubb: Int64;
+  DescUBB, SensVisee: String;
+begin
+  ubb := Round(self.GradAz);
+  Result := Format('%d: ', [ubb]);
+  case ubb of
+    359, 360: begin // visées directes en degrés
+       DescUBB   := GetResourceString(rsDESC_UNITE_ANGULAIRE_DEGRES);
+       SensVisee := GetResourceString(rsDESC_VISEE_DIRECTE);
+
+    end;
+    399, 400: begin // visées directes en grades
+       DescUBB   := GetResourceString(rsDESC_UNITE_ANGULAIRE_GRADES);
+       SensVisee := GetResourceString(rsDESC_VISEE_DIRECTE);
+    end;
+    349, 350: begin  // visées inverses en degrés
+       DescUBB   := GetResourceString(rsDESC_UNITE_ANGULAIRE_DEGRES);
+       SensVisee := GetResourceString(rsDESC_VISEE_INVERSE);
+    end;
+    389, 390: begin // visées inverses en grades
+       DescUBB   := GetResourceString(rsDESC_UNITE_ANGULAIRE_GRADES);
+       SensVisee := GetResourceString(rsDESC_VISEE_INVERSE);
+    end;
+  else
+    begin
+      DescUBB   := Format(FORMAT_NB_REAL_3_DEC, [self.GradAz]);
+      SensVisee := GetResourceString('??');
+    end;
+  end;
+  result += DescUBB + ', ' + SensVisee;
+end;
+
+function TCode.ExplainCodePente(): string;
+var
+  ucc: Int64;
+  DescUCC, PosZero, SensVisee: String;
+begin
+  result := '';
+  ucc := Trunc(self.GradInc);
+  Result := Format('%d: ', [ucc]);
+  case ucc of
+    360:
+      begin
+        DescUCC   := GetResourceString(rsDESC_UNITE_ANGULAIRE_DEGRES);
+        PosZero   := GetResourceString(rsDESC_POS_ZERO_HZ);
+        SensVisee := GetResourceString(rsDESC_VISEE_DIRECTE);
+      end;
+
+    350:
+      begin
+        DescUCC   := GetResourceString(rsDESC_UNITE_ANGULAIRE_DEGRES);
+        PosZero   := GetResourceString(rsDESC_POS_ZERO_HZ);
+        SensVisee := GetResourceString(rsDESC_VISEE_INVERSE);
+      end;
+    370:
+      begin
+        DescUCC   := GetResourceString(rsDESC_UNITE_PENTES_PERCENT);
+        PosZero   := GetResourceString(rsDESC_POS_ZERO_HZ);
+        SensVisee := GetResourceString(rsDESC_VISEE_DIRECTE);
+      end;
+    380: // mode plongée: Longueur, Dénivelé
+      begin
+        DescUCC   := GetResourceString(rsDESC_UNITE_PENTE_DENIVELE);
+        PosZero   := GetResourceString(rsDESC_POS_ZERO_HZ);
+        SensVisee := GetResourceString(rsDESC_VISEE_DIRECTE);
+      end;
+    390:
+      begin
+        DescUCC   := GetResourceString(rsDESC_UNITE_ANGULAIRE_GRADES);
+        PosZero   := GetResourceString(rsDESC_POS_ZERO_HZ);
+        SensVisee := GetResourceString(rsDESC_VISEE_INVERSE);
+      end;
+    400:
+      begin
+        DescUCC   := GetResourceString(rsDESC_UNITE_ANGULAIRE_GRADES);
+        PosZero   := GetResourceString(rsDESC_POS_ZERO_HZ);
+        SensVisee := GetResourceString(rsDESC_VISEE_DIRECTE);
+      end;
+    359:
+      begin
+        DescUCC   := GetResourceString(rsDESC_UNITE_ANGULAIRE_DEGRES);
+        PosZero   := GetResourceString(rsDESC_POS_ZERO_NADIRAL);
+        SensVisee := GetResourceString(rsDESC_VISEE_DIRECTE);
+      end;
+    399:
+      begin
+        DescUCC   := GetResourceString(rsDESC_UNITE_ANGULAIRE_GRADES);
+        PosZero   := GetResourceString(rsDESC_POS_ZERO_NADIRAL);
+        SensVisee := GetResourceString(rsDESC_VISEE_DIRECTE);
+      end;
+    361:
+      begin
+        DescUCC   := GetResourceString(rsDESC_UNITE_ANGULAIRE_DEGRES);
+        PosZero   := GetResourceString(rsDESC_POS_ZERO_ZENITHAL);
+        SensVisee := GetResourceString(rsDESC_VISEE_DIRECTE);
+      end;
+    401:
+      begin
+        DescUCC   := GetResourceString(rsDESC_UNITE_ANGULAIRE_GRADES);
+        PosZero   := GetResourceString(rsDESC_POS_ZERO_ZENITHAL);
+        SensVisee := GetResourceString(rsDESC_VISEE_DIRECTE);
+      end;
+    UNITE_CLINO_LASERMETRE_STANLEY_TLM330_DIR:
+      begin
+        DescUCC   := GetResourceString(rsDESC_DEVICE_TLM330);
+        PosZero   := GetResourceString(rsDESC_POS_ZERO_HZ);
+        SensVisee := GetResourceString(rsDESC_VISEE_DIRECTE);
+      end;
+    UNITE_CLINO_LASERMETRE_STANLEY_TLM330_INV:
+      begin
+        DescUCC   := GetResourceString(rsDESC_DEVICE_TLM330);
+        PosZero   := GetResourceString(rsDESC_POS_ZERO_HZ);
+        SensVisee := GetResourceString(rsDESC_VISEE_INVERSE);
+      end;
+    else
+      begin
+        DescUCC   := Format(FORMAT_NB_REAL_3_DEC, [self.GradAz]);
+        PosZero   := '??';
+        SensVisee := '??';
+      end;
+  end;
+  result += DescUCC + ', ' + SensVisee + ', ' + PosZero;
+end;
+
 
 { TRect2Df }
 
@@ -1258,6 +1483,42 @@ procedure TRect2Df.UpdateBoundingBox(const PT: TPoint3Df);
 begin
   self.UpdateBoundingBox(PT.X, PT.Y);
 end;
+
+function TRect2Df.ContainsPoint(const QX, QY: double): boolean;
+begin
+  result := InRange(QX, self.X1, self.X2) AND
+            InRange(QY, self.Y1, self.Y2);
+end;
+
+function TRect2Df.ContainsPoint(const P: TPoint2Df): boolean;
+begin
+  Result := self.ContainsPoint(P.X, P.Y);
+end;
+
+function TRect2Df.ContainsPoint(const P: TPoint3Df): boolean;
+begin
+  Result := self.ContainsPoint(P.X, P.Y);
+end;
+function TRect2Df.ContainsSegment(const P1, P2: TPoint2Df; const PartiallyInRectangle: boolean = true): boolean;
+begin
+  if (PartiallyInRectangle) then Result := self.ContainsPoint(P1) or  self.ContainsPoint(P2)
+                            else Result := self.ContainsPoint(P1) and self.ContainsPoint(P2);
+end;
+
+function TRect2Df.ContainsSegment(const X1, Y1, X2, Y2: double; const PartiallyInRectangle: boolean): boolean;
+begin
+  if (PartiallyInRectangle) then Result := self.ContainsPoint(X1, Y1) or  self.ContainsPoint(X2, Y2)
+                            else Result := self.ContainsPoint(X1, Y1) and self.ContainsPoint(X2, Y2);
+end;
+
+function TRect2Df.ContainsQuad(const P1, P2, P3, P4: TPoint2Df): boolean;
+begin
+  Result := self.ContainsPoint(P1) OR
+            self.ContainsPoint(P2) OR
+            self.ContainsPoint(P3) OR
+            self.ContainsPoint(P4);
+end;
+
 
 { TFTPParameters }
 
@@ -1324,6 +1585,21 @@ begin
   self.Operateur  := QSpeleometre;
   self.ClubSpeleo := QSpeleographe;
   self.Commentaire:= QCommentaires;
+end;
+
+function TExpe.getLibelle(): string;
+var
+  QIdxNameSpace, QNoExpe: TNumeroExpe;
+  WU: String;
+begin
+  DecomposeNumeroExpe(Self.IDExpe, QIdxNameSpace, QNoExpe);
+  WU := IIF(QIdxNameSpace = 0, '', Format('@%d', [QIdxNameSpace]));
+  Result := Format('%d%s - %s', [QNoExpe, WU, '']);
+end;
+
+function TExpe.getDateStr(): string;
+begin
+  result := DateToStr(GetSecuredDate(self.AnneeExpe, self.MoisExpe, self.JourExpe));
 end;
 
 
@@ -1472,6 +1748,25 @@ end;
 
 { TViseeAntenne }
 
+procedure TViseeAntenne.setFrom(const QEntranceRatt: TNumeroEntrance;
+                                const QReseau: TNumeroReseau;
+                                const QSecteur: TNumeroSecteur;
+                                const QSerieDepart: TNumeroSerie;
+                                const QPtDepart: integer;
+                                const QL, QAz, QP: double;
+                                const Marked: boolean);
+begin
+  Self.EntranceRatt     := QEntranceRatt;
+  Self.Reseau           := QReseau;
+  Self.Secteur          := QSecteur;
+  Self.SerieDepart      := QSerieDepart;
+  Self.PtDepart         := QPtDepart;
+  Self.Longueur         := QL;
+  Self.Azimut           := QAz;
+  Self.Pente            := QP;
+  Self.MarkedForDelete  := Marked;
+end;
+
 function TViseeAntenne.toString(): string;
 begin
   result := Format(FMTSERST, [self.SerieDepart, self.PtDepart]);
@@ -1486,6 +1781,46 @@ end;
 
 { TBaseStation }
 
+procedure TBaseStation.Empty();
+begin
+  with self do
+  begin
+    eCode       := 0;
+    eExpe       := 0;
+    eSecteur    := 0;
+    eReseau     := 0;
+    eEntrance   := 0;
+    Type_Entite := tgSURFACE; //2
+    DateLeve    := Now();
+    Entite_Serie    := 0;
+    Entite_Station  := 0;
+    // drapeau
+    Enabled         := false;
+    // données originales
+    oLongueur       := 0.00;
+    oAzimut         := 0.00;
+    oPente          := 0.00;
+    oLG             := 0.00;
+    oLD             := 0.00;
+    oHZ             := 0.00;
+    oHN             := 0.00;
+    // centerline
+    PosExtr0.Empty();
+    PosStation.Empty();
+    // habillage
+    PosOPD.Empty();
+    PosOPG.Empty();
+    PosPD.Empty();
+    PosPG.Empty();
+    CouleurStd      := clBlue;
+    CouleurDegrade  := clWhite;
+    IsPOI           := false;
+    // commentaires
+    IDTerrain       := '';
+    oCommentaires   := '';
+  end;
+end;
+
 function TBaseStation.toString(): string;
 begin
   Result := Format(FMTSERST, [self.Entite_Serie, self.Entite_Station]);
@@ -1496,6 +1831,50 @@ begin
   Result := Format(FMTSERSTID, [Self.Entite_Serie, Self.Entite_Station, Self.IDTerrain]);
 end;
 
+function TBaseStation.IsInNaturalCave(): boolean;
+begin
+  Result := (Self.Type_Entite in [tgDEFAULT, tgFOSSILE, tgVADOSE, tgENNOYABLE, tgSIPHON]);
+end;
+
+function TBaseStation.IsInCaveOrTunnel(): boolean;
+begin
+  Result := (Self.Type_Entite in [tgDEFAULT, tgFOSSILE, tgVADOSE, tgENNOYABLE, tgSIPHON, tgTUNNEL, tgMINE]);
+end;
+
+function TBaseStation.IsInSerie(): boolean;
+begin
+  Result := (Self.Type_Entite in [tgDEFAULT, tgFOSSILE, tgVADOSE, tgENNOYABLE, tgSIPHON, tgTUNNEL, tgMINE, tgSURFACE]) AND
+            (Self.Entite_Serie > 0);
+end;
+
+function TBaseStation.getGHCaveDrawIDPtCenterline(): int64;
+begin
+  Result := NB_MAXI_SERIES_PAR_CAVITE * Self.Entite_Serie + MULTIPLICATEUR_STATION * Self.Entite_Station;
+end;
+
+function TBaseStation.getGHCaveDrawIDPtAntenne(const NbViseesEnAntenne: integer): int64;
+begin
+  if (self.Type_Entite = tgVISEE_RADIANTE) then  // une protection supplémentaire
+  begin
+    Result := NB_MAXI_SERIES_PAR_CAVITE * Abs(Self.Entite_Serie) + MULTIPLICATEUR_STATION * Abs(Self.Entite_Station);
+    Result := 0 - Result;
+  end;
+end;
+
+function TBaseStation.getLibelleStationTopo(): string;
+var
+  QIdxNameSpace, QNoSerie: TNumeroSerie;
+  WU, EWE: String;
+begin
+  result := '';
+  if (self.Type_Entite = tgVISEE_RADIANTE) then Exit;
+  DecomposeNumeroSerie(self.Entite_Serie, QIdxNameSpace, QNoSerie);
+
+  WU := IIF(QIdxNameSpace = 0, '', Format('@%d', [QIdxNameSpace]));
+  EWE := IIF(self.IDTerrain ='', '', ' - ' + self.IDTerrain);
+  Result := Format('%d.%d%s%s', [QNoSerie, self.Entite_Station, WU, EWE]);
+end;
+
 { TJonctionXYZ }
 
 function TJonctionXYZ.ToString(): string;
@@ -1504,6 +1883,15 @@ begin
 end;
 
 { TToporobotIDStation }
+
+procedure TToporobotIDStation.setFrom(const QNameSpace: Integer; const QSerie: TNumeroSerie; const QStation: integer; const QIDTerrain: string);
+begin
+  self.eIdxNameSpace:= QNameSpace;
+  self.aSerie       := QSerie;
+  self.aStation     := QStation;
+  self.aIDTerrain   := QIDTerrain;
+end;
+
 
 function TToporobotIDStation.ToString(): string;
 begin

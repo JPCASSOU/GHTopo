@@ -822,7 +822,7 @@ var
     DrawColTexte(lsbVisees, ARect, HeaderControl1.Sections.Items[0], false, EWE.toString());
     DrawColTexte(lsbVisees, ARect, HeaderControl1.Sections.Items[1], True , EWE.IDTerrain);
     DrawColTexte(lsbVisees, ARect, HeaderControl1.Sections.Items[2], True , GetDescTypeVisee(EWE.Type_Entite));
-    if (IsViseeInSerie(EWE)) then
+    if (EWE.IsInSerie()) then
     begin
       DrawColTexte(lsbVisees, ARect, HeaderControl1.Sections.Items[3], True, FormatterNombreOOo(EWE.oLongueur, 3, False));
       DrawColTexte(lsbVisees, ARect, HeaderControl1.Sections.Items[4], True, FormatterNombreOOo(EWE.oAzimut  , 3, False));

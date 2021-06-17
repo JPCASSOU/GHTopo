@@ -528,12 +528,9 @@ begin
   begin
     for j:=0 to FNbPagesY-1 do
     begin
-      R666.X1 := FRXMini + i * L1;
-      R666.Y1 := FRYMini + j * H1;
-      R666.X2 := FRXMini + (1+i) * L1;
-      R666.Y2 := FRYMini + (1+j) * H1;
-      if IsInRange(Pt.X, R666.X1, R666.X2) and
-         IsInRange(Pt.Y, R666.Y1, R666.Y2) then
+      R666.setFrom(FRXMini + i * L1     , FRYMini + j * H1,
+                   FRXMini + (1+i) * L1 , FRYMini + (1+j) * H1);
+      if (R666.ContainsPoint(PT)) then
       begin
         IdxX:=i; IdxY:=j;
         AfficherMessage(Format('Page %d, %d sélectionnée',[i,j]));
