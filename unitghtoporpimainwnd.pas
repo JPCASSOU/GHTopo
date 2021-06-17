@@ -22,7 +22,7 @@ uses
   CadreParamsOngletsVue2D,
   CadreViseesAntenne,
   CadreLesSeriesRPI,
-  cadreDistoX,
+  //cadreDistoX,
   //CadreEditSeriesFlatMode,
   math,
   Classes, SysUtils, FileUtil, curredit, Forms, Controls, Graphics, Dialogs, ActnList, ComCtrls, ExtCtrls, Buttons, StdCtrls, PairSplitter, Grids, Types;
@@ -96,7 +96,7 @@ type
     Button8: TButton;
     Button9: TButton;
     CdrAntennes1: TCdrAntennes;
-    CdrDistoX1: TCdrDistoX;
+    //CdrDistoX1: TCdrDistoX;
     CdrListesSimples1: TCdrListesSimples;
     cdrParamsOngletVue2D1: TcdrParamsOngletVue2D;
     CdrSeriesRPI1: TCdrSeriesRPI;

@@ -194,17 +194,17 @@ begin
         if (FDoReprojectEntrancesCoordinates) then
         begin
 
-          GPTIn.U := MyEntrance.eXEntree;
-          GPTIn.V := MyEntrance.eYEntree;
+          GPTIn.U := MyEntrance.ePosition.X;
+          GPTIn.V := MyEntrance.ePosition.Y;
 
           GPTOut  := FPtrConvertisseur.ConversionSyst1ToSyst2EPSG(SystProjOfDocTopoAFusionner.CodeEPSG, FSystemEPSG.CodeEPSG, GPTIn);
-          MyEntrance.eXEntree  := GPTOut.U;
-          MyEntrance.eYEntree  := GPTOut.V;
+          MyEntrance.ePosition.X := GPTOut.U;
+          MyEntrance.ePosition.Y := GPTOut.V;
 
           AfficherMessageErreur(Format('Entrance %d: %s - EPSG:%d = %.2f, %.2f, %.2f -> EPSG:%d = %.2f, %.2f',
                                        [nth, MyEntrance.eNomEntree,
-                                        SystProjOfDocTopoAFusionner.CodeEPSG, GPTIn.U, GPTIn.V,  MyEntrance.eZEntree,
-                                        FSystemEPSG.CodeEPSG,  MyEntrance.eXEntree, MyEntrance.eYEntree
+                                        SystProjOfDocTopoAFusionner.CodeEPSG, GPTIn.U, GPTIn.V,  MyEntrance.ePosition.Z,
+                                        FSystemEPSG.CodeEPSG,  MyEntrance.ePosition.X, MyEntrance.ePosition.Y
                                        ]));
 
         end;

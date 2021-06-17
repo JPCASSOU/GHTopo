@@ -191,6 +191,8 @@ end;
 procedure TdlgMaintenanceDocTopo.GenererSubsetXTB(const QFilename: TStringDirectoryFilename);
 var
   MySubsetXTB: TToporobotStructure2012;
+  P1: TPoint3Df;
+  EEE: TEntrance;
   WU: String;
   Nb, i, NbSeriesSelectionnees: Integer;
   MySerieCible , MySerieSource: TObjSerie;
@@ -203,7 +205,8 @@ begin
     MySubsetXTB.SetDatabaseName(QFilename);
     MySubsetXTB.SetCodeEPSGSystemeCoordonnees(FDocTopo.GetCodeEPSGSystemeCoordonnees());
     MySubsetXTB.SetNomEtude('Sous-ensemble de ' + FDocTopo.GetNomEtude());
-    MySubsetXTB.SetDefaultCoords(MakeTPoint3Df(0.00, 0.00, 0.00));
+    P1.Empty();
+    MySubsetXTB.SetDefaultCoords(P1);
     WU := ''; // mettre ici les numéros de séries extraites;
     MySubsetXTB.SetCommentairesEtude(WU);
     MySubsetXTB.ClearListeSeries();
@@ -212,7 +215,8 @@ begin
 
 
     // création de l'entrée 1.0
-    MySubsetXTB.AddEntrance(MakeTEntrance('Point_0', '1.0', 0.00, 0.00, 0.00, 1, 0, 'Point de rattachement'));
+    EEE.setFrom('Point_0', '1.0', 0.00, 0.00, 0.00, 1, 0, clRed,'Point de rattachement');
+    MySubsetXTB.AddEntrance(EEE);
     Nb := FDocTopo.GetNbReseaux();  // les réseaux
     for i := 0 to Nb - 1 do MySubsetXTB.AddReseau(FDocTopo.GetReseau(i));
     Nb := FDocTopo.GetNbSecteurs();// les secteurs
@@ -515,18 +519,18 @@ begin
   for i := 0 to Nb - 1 do
   begin
     MyEntrance := FDocTopo.GetEntrance(i);
-    SrcPoint.U := MyEntrance.eXEntree;
-    SrcPoint.V := MyEntrance.eYEntree;
+    SrcPoint.U := MyEntrance.ePosition.X;
+    SrcPoint.V := MyEntrance.ePosition.Y;
 
     DestPoint := FConvertisseurCoords.ConversionSyst1ToSyst2EPSG(OldEPSG.CodeEPSG, NewEPSG.CodeEPSG, SrcPoint);
-    MyEntrance.eXEntree := DestPoint.U;
-    MyEntrance.eYEntree := DestPoint.V;
+    MyEntrance.ePosition.X := DestPoint.U;
+    MyEntrance.ePosition.Y := DestPoint.V;
     FDocTopo.PutEntrance(i, MyEntrance);
   end;
   // et on redéfinit le point zéro
   MyEntrance := FDocTopo.GetEntrance(0);
   FDocTopo.SetRefSeriePoint(MyEntrance.eRefSer, MyEntrance.eRefSt);
-  FDocTopo.SetDefaultCoords(MyEntrance.eXEntree, MyEntrance.eYEntree, MyEntrance.eZEntree);
+  FDocTopo.SetDefaultCoords(MyEntrance.ePosition.X, MyEntrance.ePosition.Y, MyEntrance.ePosition.Z);
 
 end;
 

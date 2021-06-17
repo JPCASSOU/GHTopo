@@ -349,22 +349,18 @@ begin
   for i:=0 to FNbPagesX-1 do
     for j:=0 to FNbPagesY-1 do
     begin
-      R666.X1 := FRXMini + i * L1;
-      R666.Y1 := FRYMini + j * H1;
+      R666.setfrom(FRXMini + i * L1    , FRYMini + j * H1,
+                   FRXMini + (1+i) * L1, FRYMini + (1+j) * H1);
 
-      R666.X2 := FRXMini + (1+i) * L1;
-      R666.Y2 := FRYMini + (1+j) * H1;
-      // supprimer les pages vides
-      Grayed:=false;
+      Grayed:=false;   // supprimer les pages vides
       for v:=1 to FBDDEntites.GetNbEntitesVisees() - 1 do
       begin
         E1 := FBDDEntites.GetEntiteVisee(v);
         if (E1.Type_Entite = tgEntrance) then Continue;
-        RVS.X1 := Min(E1.PosExtr0.X, E1.PosStation.X);
-        RVS.Y1 := Min(E1.PosExtr0.Y, E1.PosStation.Y);
-
-        RVS.X2 := Max(E1.PosExtr0.X, E1.PosStation.X);
-        RVS.Y2 := Max(E1.PosExtr0.Y, E1.PosStation.Y);
+        RVS.setfrom(Min(E1.PosExtr0.X, E1.PosStation.X),
+                    Min(E1.PosExtr0.Y, E1.PosStation.Y),
+                    Max(E1.PosExtr0.X, E1.PosStation.X),
+                    Max(E1.PosExtr0.Y, E1.PosStation.Y));
         Grayed := Grayed or IntersectRectangles(R666, RVS);
       end;
       FTableauPagesDrawn[i,j]:=Grayed;
@@ -402,8 +398,8 @@ var
         for j:=0 to FNbPagesY-1 do
         begin
           //ShowMessageFmt('Page L%dC%d %s', [j, i, IIF(FTableauPagesDrawn[i,j], 'printed', 'ignored')]);
-          QC1 := MakeTPoint2Df(FRXMini + i * L1, FRYMini + j * H1);
-          QC2 := MakeTPoint2Df(FRXMini + (1+i) * L1, FRYMini + (1+j) * H1);
+          QC1.setFrom(FRXMini + i * L1, FRYMini + j * H1);
+          QC2.setFrom(FRXMini + (1+i) * L1, FRYMini + (1+j) * H1);
           DC.CanvasBGRA.Brush.Color := IIF(FTableauPagesDrawn[i,j], clWhite, clGray);
           DC.DrawRectangle(QC1, QC2, True);
         end;
@@ -413,11 +409,14 @@ var
   procedure DrawBoundingBox();
   var
     QC1, QC2: TPoint3Df;
+    P1, P2: TPoint2Df;
   begin
     DC.DefineBrosseEtCrayon(bsClear, clBlack, 255, psSolid, 0, clSilver, 192);
     QC1 := FBDDEntites.GetCoinBasGauche();
     QC2 := FBDDEntites.GetCoinHautDroit();
-    DC.DrawRectangle(MakeTPoint2Df(QC1.X, QC1.Y), MakeTPoint2Df(QC2.X, QC2.Y), false);
+    P1.setFrom(QC1.X, QC1.Y);
+    P2.setFrom(QC2.X, QC2.Y);
+    DC.DrawRectangle(P1, P2, false);
     DC.RestoreBrosseEtCrayon();
   end;
   procedure DrawRegle(const TailleRegle: double);
@@ -438,21 +437,21 @@ var
     AfficherMessage(Format(' --> DrawRegle: L = %.0f m at (%.0f, %.0f)', [TailleRegle, FRXMini + Mg, FRYMini + Mg]));
     // cadre périmétrique
     DC.DefineBrosseEtCrayon(bsSolid, clWhite, 128, pssolid, 0, clBlack, 255);
-    QQR1 := MakeTPoint2Df(QXo, QYo);
-    QQR2 := MakeTPoint2Df(QQR1.X + TailleRegle, QQR1.Y + 2 * HauteurCarreau);
+    QQR1.setFrom(QXo, QYo);
+    QQR2.setFrom(QQR1.X + TailleRegle, QQR1.Y + 2 * HauteurCarreau);
     DC.DrawRectangle(QQR1, QQR2, True);
     // carreaux alternés
     for i := 0 to NB_CARREAUX_X - 1 do
     begin
       if (Odd(i)) then QY1 := QYo + HauteurCarreau else QY1 := QYo;
       DC.DefineBrosse(bsSolid, clGray, 192);
-      QQR1 := MakeTPoint2Df(QXo + (i * LargeurCarreau), QY1);
-      QQR2 := MakeTPoint2Df(QQR1.X + LargeurCarreau, QQR1.Y + HauteurCarreau);
+      QQR1.setFrom(QXo + (i * LargeurCarreau), QY1);
+      QQR2.setFrom(QQR1.X + LargeurCarreau, QQR1.Y + HauteurCarreau);
       DC.DrawRectangle(QQR1, QQR2, True);
     end;
     // légende
-    QQR1 := MakeTPoint2Df(QXo, QYo);
-    QQR2 := MakeTPoint2Df(QQR1.X + TailleRegle, QQR1.Y + 2 * HauteurCarreau);
+    QQR1.setFrom(QXo, QYo);
+    QQR2.setFrom(QQR1.X + TailleRegle, QQR1.Y + 2 * HauteurCarreau);
     DC.DefineFonte(DEFAULT_FONT_NAME, clBlue, [fsBold], 14);
     DC.DrawTexte(QQR1.X, QQR2.Y + 1.0, 2, '0');
     DC.DrawTexte(QQR2.X, QQR2.Y + 1.0, 2, Format('%.0f m',[TailleRegle]));

@@ -9,22 +9,18 @@ uses
   DGCTypes,
   Classes, SysUtils, Graphics, Math;
 procedure nop; inline; // analogue à l'instruction 'pass' du Python
-function DGCMakeCSSStyle(const S: TDGCStyleSheet): string;
+function   DGCMakeCSSStyle(const S: TDGCStyleSheet): string;
 
 // fonctions utilitaires
-function   MakeTDGCPoint2D(const QX, QY: double): TDGCPoint2D;
-function   MakeTDGCPoint2Dh(const QX, QY: double): TDGCPoint2Dh;
 procedure  UpdateBoundingBox(var MyBB: TDGCBoundingBox; const PP: TDGCPoint2D; const DoReset: boolean);
-
-
 // calcul de l'angle moyen de deux segments, avec la bonne orientation
-function DGCGetAngleBissecteur(const X1, Y1, X2, Y2: double): double;
+function   DGCGetAngleBissecteur(const X1, Y1, X2, Y2: double): double;
 // produit vectoriel éventuellement normalisé
-function DGCProduitVectoriel(const Vect1, Vect2: TDGCPoint2Dh; const Normalized: Boolean):TDGCPoint2Dh;
+function   DGCProduitVectoriel(const Vect1, Vect2: TDGCPoint2Dh; const Normalized: Boolean):TDGCPoint2Dh;
 // calcul d'une courbe de Bézier - Retourne un tableau de points
-function DGCCalcBezierCurve(const P0, P1, P2, P3: TDGCPoint2D; const NbSubdivs: integer; out AP: TDGCArrayPoints2D): boolean;
+function   DGCCalcBezierCurve(const P0, P1, P2, P3: TDGCPoint2D; const NbSubdivs: integer; out AP: TDGCArrayPoints2D): boolean;
 // pour se rendre indépendant de GHTopo
-function DGCMakeTPoint(const QX, QY: integer): TPoint;
+function   DGCMakeTPoint(const QX, QY: integer): TPoint;
 
 implementation
 uses
@@ -33,7 +29,7 @@ uses
 
 procedure nop; inline; // analogue à l'instruction 'pass' du Python
 begin
-  ; // ne fait rien
+  ;; // ne fait rien
 end;
 function DGCMakeCSSStyle(const S: TDGCStyleSheet): string;
 begin
@@ -62,20 +58,7 @@ begin
   B := 100.0 * DGCGetFloatBValue(C);
   //Result:=Format('#%X%X%X',[R,G,B]);
   Result := Format(' rgb(%.2f%%, %.2f%%, %.2f%%)', [R,G,B]);
-end;
-
-
-function MakeTDGCPoint2D(const QX, QY: double): TDGCPoint2D;
-begin
-  Result.X := QX;
-  Result.Y := QY;
-end;
-
-function MakeTDGCPoint2Dh(const QX, QY: double): TDGCPoint2Dh;
-begin
-  Result.X := QX;
-  Result.Y := QY;
-  Result.H := 1.00;
+  result := StringReplace(result, DefaultFormatSettings.DecimalSeparator, '.', [rfReplaceAll]);
 end;
 
 procedure UpdateBoundingBox(var MyBB: TDGCBoundingBox; const PP: TDGCPoint2D; const DoReset: boolean);
@@ -98,17 +81,14 @@ function DGCGetAngleBissecteur(const X1, Y1, X2, Y2: double): double;
 var
   V1, V2, W: TDGCPoint2Dh;
 begin
-  // vecteur V1           vecteur V2        vecteur w
-  V1.X := X1;               V2.X := X2;         W.X := 0;
-  V1.Y := Y1;               V2.Y := Y2;         W.Y := 0;
-  V1.H := 0;                V2.H := 0;          W.H := 1;
+  V1.setFrom(X1, Y1, 0.00);
+  V2.setFrom(X2, Y2, 0.00);
+  W.setFrom(0.00, 0.00, 1.00);
   // produits vectoriels
   v1 := DGCProduitVectoriel(v1,w,True);
   v2 := DGCProduitVectoriel(v2,w,True);
   //composition vectorielle
-  w.x:=v1.x+v2.X;
-  w.y:=v1.y+v2.Y;
-  w.H:=v1.H+v2.H;
+  W.setFrom(v1.x + v2.X, v1.y + v2.Y, v1.H + v2.H);
   // angles
   Result := ArcTan2(w.y+1e-12, w.x+1e-12);
 end;
@@ -166,7 +146,6 @@ function DGCMakeTPoint(const QX, QY: integer): TPoint;
 begin
   Result.X := QX;
   Result.y := QY;
-
 end;
 
 

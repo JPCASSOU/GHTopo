@@ -1282,7 +1282,7 @@ var
   QCoords: TPoint2Df;
   QResultatCalcul, QDeclimag: double;
 begin
-  QCoords         := MakeTPoint2Df(0.00, 0.00);
+  QCoords.Empty();
   QResultatCalcul := 0.00;
   QDeclimag       := 0.00;
   DisplayCalculette(FDocumentToporobot, FBDDEntites, FMonMaillage, frmVueEnPlan.GetLassoDeSelection(), '', 0, QCoords, QResultatCalcul, QDeclimag);

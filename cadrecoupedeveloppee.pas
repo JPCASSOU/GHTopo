@@ -402,8 +402,10 @@ var
           for v := 0 to NbV - 1 do
           begin
             myVisee := myBranche.ArrVisees[v]; //myVisee := myBranche.GetVisee(v);
-            uP += myVisee.DeltaP * IIF((myBranche.SensTraceCoupe = stcdVERS_DROITE), 1.00, -1.00);
-            uZ += myVisee.DeltaZ;
+            //uP += myVisee.DeltaP * IIF((myBranche.SensTraceCoupe = stcdVERS_DROITE), 1.00, -1.00);
+            //uZ += myVisee.DeltaZ;
+            uP += myVisee.AccroissP * IIF((myBranche.SensTraceCoupe = stcdVERS_DROITE), 1.00, -1.00);
+            uZ += myVisee.AccroissXYZ.Z;
 
             PM := MakeTPointCoupeDeveloppee(JC1.Abscisse + uP, JC1.Cote + uZ);
             PP := GetCoordsPlan(PM);
@@ -439,8 +441,12 @@ var
           for v := 0 to NbV - 1 do
           begin
             myVisee := myBranche.ArrVisees[v]; //myVisee := myBranche.GetVisee(v);
-            uP += myVisee.DeltaP * IIF((myBranche.SensTraceCoupe = stcdVERS_DROITE), 1.00, -1.00);
-            uZ += myVisee.DeltaZ;
+            //uP += myVisee.DeltaP * IIF((myBranche.SensTraceCoupe = stcdVERS_DROITE), 1.00, -1.00);
+            //uZ += myVisee.DeltaZ;
+
+            uP += myVisee.AccroissP * IIF((myBranche.SensTraceCoupe = stcdVERS_DROITE), 1.00, -1.00);
+            uZ += myVisee.AccroissXYZ.Z;
+
             uH := IIF(IsFloor, uZ - myVisee.HN, uZ + myVisee.HZ);
 
             PM := MakeTPointCoupeDeveloppee(JC1.Abscisse + uP, JC1.Cote + uH);
@@ -474,8 +480,11 @@ var
           for v := 0 to NbV - 1 do
           begin
             myVisee := myBranche.ArrVisees[v]; //myVisee := myBranche.GetVisee(v);              myVisee := myBranche.GetVisee(v);
-            uP += myVisee.DeltaP * IIF((myBranche.SensTraceCoupe = stcdVERS_DROITE), 1.00, -1.00);
-            uZ += myVisee.DeltaZ;
+            //uP += myVisee.DeltaP * IIF((myBranche.SensTraceCoupe = stcdVERS_DROITE), 1.00, -1.00);
+            //uZ += myVisee.DeltaZ;
+            uP += myVisee.AccroissP * IIF((myBranche.SensTraceCoupe = stcdVERS_DROITE), 1.00, -1.00);
+            uZ += myVisee.AccroissXYZ.Z;
+
             uH := uZ + myVisee.HZ;
             uN := uZ - myVisee.HN;
             PM := MakeTPointCoupeDeveloppee(JC1.Abscisse + uP, JC1.Cote + uH);
@@ -552,8 +561,11 @@ var
             for v := 0 to NbV - 1 do
             begin
               myVisee := myBranche.ArrVisees[v]; //myVisee := myBranche.GetVisee(v);              myVisee := myBranche.GetVisee(v);
-              uP += myVisee.DeltaP * IIF((Brch.SensTraceCoupe = stcdVERS_DROITE), 1.00, -1.00);
-              uZ += myVisee.DeltaZ;
+              //uP += myVisee.DeltaP * IIF((Brch.SensTraceCoupe = stcdVERS_DROITE), 1.00, -1.00);
+              //uZ += myVisee.DeltaZ;
+              uP += myVisee.AccroissP * IIF((Brch.SensTraceCoupe = stcdVERS_DROITE), 1.00, -1.00);
+              uZ += myVisee.AccroissXYZ.Z;
+
               case M of
                 0: WU := Format(FMTSERST, [Brch.NumeroSerie, v]);
                 1: WU := Format(FORMAT_NB_REAL_0_DEC, [JC1.Cote]);

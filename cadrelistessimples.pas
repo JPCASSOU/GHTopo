@@ -214,8 +214,7 @@ begin
     mbddENTRANCES: // entrées
       begin
         if (not GHTopoQuestionOuiNon(EWE)) then Exit;
-        EE := MakeTEntrance('Nouvelle entrée', '', 0.00, 0.00, 0.00, 0, 0, '');
-        //ShowMessage(BoolToStr(assigned(FBDDEntites), 'FBDDEntites transmis', 'FBDDEntites KO'));
+        EE.setFrom('Nouvelle entrée', '', 0.00, 0.00, 0.00, 0, 0, clRed, '');
         if (EditerEntrance(FDocumentToporobot, n, FBDDEntites, FMaillage, EE)) then
         begin
           FDocumentToporobot.AddEntrance(EE);
@@ -226,7 +225,7 @@ begin
     mbddRESEAUX  : // réseaux
       begin
         if (not GHTopoQuestionOuiNon(EWE)) then Exit;
-        RS := MakeTReseau(clBlue, 0, 'Nouveau réseau', '');
+        RS.setFrom(clBlue, 0, 'Nouveau réseau', '');
         if (EditerReseau(FDocumentToporobot, n, RS)) then
         begin
           FDocumentToporobot.AddReseau(RS);
@@ -237,7 +236,7 @@ begin
     mbddSECTEURS : // secteurs;
       begin
         if (not GHTopoQuestionOuiNon(EWE)) then Exit;
-        SS := MakeTSecteur(clRed, 'Nouveau secteur');
+        SS.setFrom(clRed, 'Nouveau secteur');
         if (EditerSecteur(FDocumentToporobot, n, SS)) then
         begin
           FDocumentToporobot.AddSecteur(SS);
@@ -1010,9 +1009,9 @@ var
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[2], true, es.eNomEntree);
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[3], true, Format(FMTSERST,[es.eRefSer, es.eRefSt]));
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[4], true, es.eIDTerrain);
-          DrawColCoordsXYZ(lsbListe, ARect, hcColsTitres.Sections.Items[5], bg, clRed, es.eXEntree);
-          DrawColCoordsXYZ(lsbListe, ARect, hcColsTitres.Sections.Items[6], bg, clRed, es.eYEntree);
-          DrawColCoordsXYZ(lsbListe, ARect, hcColsTitres.Sections.Items[7], bg, clRed, es.eZEntree);
+          DrawColCoordsXYZ(lsbListe, ARect, hcColsTitres.Sections.Items[5], bg, clRed, es.ePosition.X);
+          DrawColCoordsXYZ(lsbListe, ARect, hcColsTitres.Sections.Items[6], bg, clRed, es.ePosition.Y);
+          DrawColCoordsXYZ(lsbListe, ARect, hcColsTitres.Sections.Items[7], bg, clRed, es.ePosition.Z);
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[8], true, es.eObserv);
         end;
       mbddRESEAUX:
@@ -1094,9 +1093,9 @@ var
           ResetColorRow(lsbListe, ARect, bg, tc);
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[0], false, Format(FORMAT_NB_INTEGER, [nd.NoNoeud]));
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[1], true , Format(FMTSERST, [QNoSerie, nd.NoSt]));
-          DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[2], true , Format(FORMAT_NB_REAL_3_DEC, [nd.X]));
-          DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[3], true , Format(FORMAT_NB_REAL_3_DEC, [nd.Y]));
-          DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[4], true , Format(FORMAT_NB_REAL_3_DEC, [nd.Z]));
+          DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[2], true , Format(FORMAT_NB_REAL_3_DEC, [nd.Position.X]));
+          DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[3], true , Format(FORMAT_NB_REAL_3_DEC, [nd.Position.Y]));
+          DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[4], true , Format(FORMAT_NB_REAL_3_DEC, [nd.Position.Z]));
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[5], true , Format(FORMAT_STRING, [nd.IDJonction]));
         end;
        mbddPROXIMITES:
@@ -1159,7 +1158,7 @@ begin
          if (assigned(FProcOfObjectWithXY)) then
          begin
            MyEntrance := FDocumentToporobot.GetEntrance(lsbListe.ItemIndex);
-           FProcOfObjectWithXY(MyEntrance.eXEntree, MyEntrance.eYEntree, MyEntrance.eNomEntree);
+           FProcOfObjectWithXY(MyEntrance.ePosition.X, MyEntrance.ePosition.Y, MyEntrance.eNomEntree);
          end;
        end;
     mbddNOEUDS:
@@ -1167,7 +1166,7 @@ begin
          if (assigned(FProcOfObjectWithXY)) then
          begin
            MyNode := FBDDEntites.GetJonction(lsbListe.ItemIndex);
-           FProcOfObjectWithXY(MyNode.X, MyNode.Y, MyNode.ToString());
+           FProcOfObjectWithXY(MyNode.Position.X, MyNode.Position.Y, MyNode.ToString());
          end;
        end;
     mbddPOI:

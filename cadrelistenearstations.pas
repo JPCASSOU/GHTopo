@@ -56,6 +56,8 @@ function TCdrListeNearestStations.Initialiser(const TD: TToporobotStructure2012;
                                               const QE: TBaseStation;
                                               const QDoMatchExact: boolean;
                                               const QRayonCapture: double): boolean;
+var
+  P1: TPoint3Df;
 begin
   AfficherMessage(Format('%s.Initialiser', [ClassName]));
   Result := False;
@@ -64,7 +66,8 @@ begin
   SetCurrBaseStation(QE);
   FTempBDDEntites := TBDDEntites.Create;
   try
-    FTempBDDEntites.Initialiser(MakeTPoint3Df(0.0, 0.0, 0.0), clAqua, clMaroon);
+    P1.Empty();
+    FTempBDDEntites.Initialiser(P1, clAqua, clMaroon);
     FTempBDDEntites.ResetTables();
     Relister(QDoMatchExact, QRayonCapture);
     result := True;

@@ -31,9 +31,7 @@ type
     FNodeIndex    : Integer;
     // data
     FIDStation    : TIDStation;
-    FCoordNoeudX  : double;
-    FCoordNoeudY  : double;
-    FCoordNoeudZ  : double;
+    FPosition     : TPoint3Df;
     // metadata
     FMetaData     : string;
 
@@ -42,7 +40,7 @@ type
 
     procedure SetNodeLink(Index : Integer; const AValue: TBZNodeLink);
   public
-    constructor Create(AOwner : TBZGraphNode; const QIDStation: TIDStation; const X, Y, Z: double; const MetaData: string);
+    constructor Create(AOwner : TBZGraphNode; const QIDStation: TIDStation; const QPosition: TPoint3Df; const QMetaData: string);
     destructor  Destroy; override;
 
     function AddNodeLink(anIndex : Integer; const Weight: double) : TBZNodeLink; overload;
@@ -50,10 +48,7 @@ type
     property Owner : TBZGraphNode read FOwner write SetOwner;
 
     property IDStation     : TIDStation read FIDStation write FIDStation;
-    property X  : double read FCoordNoeudX write FCoordNoeudX;
-    property Y  : double read FCoordNoeudY write FCoordNoeudY;
-    property Z  : double read FCoordNoeudZ write FCoordNoeudZ;
-
+    property Position: TPoint3Df read FPosition write FPosition;
     property NodeIndex : Integer read FNodeIndex write FNodeIndex;
     property LinkNode[Index : Integer] : TBZNodeLink read GetNodeLink write SetNodeLink;
     property NodeLinkList : TBZNodeLinkList read FNodeLinkList;
@@ -112,7 +107,7 @@ type
     constructor Create;
     destructor Destroy; override;
     function AddNode(ANode : TBZClassNode) : Integer; overload;
-    function AddNode(const QIDStation: TIDStation; const QX, QY, QZ: double; const QMetaData: string) : TBZClassNode; overload;
+    function AddNode(const QIDStation: TIDStation; const QPosition: TPoint3Df; const QMetaData: string) : TBZClassNode; overload;
 
     function Dijkstra(FromIndex, ToIndex : Integer; out ShortestPath : TListOfIntegers) : double;
 
@@ -332,17 +327,14 @@ end;
 
 {%region=====[ TNode ]==========================================================}
 
-constructor TBZClassNode.Create(AOwner: TBZGraphNode; const QIDStation: TIDStation; const X, Y, Z: double; const MetaData: string);
+constructor TBZClassNode.Create(AOwner: TBZGraphNode; const QIDStation: TIDStation; const QPosition: TPoint3Df; const QMetaData: string);
 begin
   FOwner := AOwner;
   FIDStation   := QIDStation;
-  FCoordNoeudX := X;
-  FCoordNoeudY := Y;
-  FCoordNoeudZ := Z;
-
+  FPosition    := Position;
   FNodeLinkList := TBZNodeLinkList.Create(Self);
   FNodeIndex := -1;
-  FMetaData  := MetaData;
+  FMetaData  := QMetaData;
   //if Assigned(FOwner) or (FOwner <> nil) then
   //begin
   //  Idx := FOwner.AddNode(Self);
@@ -421,9 +413,9 @@ var
 begin
   QParentNode := getParentNode();
   QCurrNode   := getNode();
-  Result := sqrt((QCurrNode.X - QParentNode.X) ** 2 +
-                 (QCurrNode.Y - QParentNode.Y) ** 2 +
-                 (QCurrNode.Z - QParentNode.Z) ** 2);
+  Result := sqrt((QCurrNode.Position.X - QParentNode.Position.X) ** 2 +
+                 (QCurrNode.Position.Y - QParentNode.Position.Y) ** 2 +
+                 (QCurrNode.Position.Z - QParentNode.Position.Z) ** 2);
   //GetBearingInc();
 
 end;
@@ -530,16 +522,16 @@ begin
   if Assigned(FOnGraphNodeVerboseCall) then FOnGraphNodeVerboseCall(Self, s);
 end;
 
-function TBZGraphNode.AddNode(const QIDStation: TIDStation; const QX, QY, QZ: double; const QMetaData: string): TBZClassNode;
+function TBZGraphNode.AddNode(const QIDStation: TIDStation; const QPosition: TPoint3Df; const QMetaData: string): TBZClassNode;
 Var
   aNode : TBZClassNode;
   Idx : Integer;
 begin
-  aNode := TBZClassNode.Create(Self, QIDStation, QX, QY, QZ, QMetaData);
+  aNode := TBZClassNode.Create(Self, QIDStation, QPosition, QMetaData);
   aNode.IDStation := QIDStation;
-  aNode.X := QX;
-  aNode.Y := QY;
-  aNode.Z := QZ;
+  //aNode.X := QX;
+  //aNode.Y := QY;
+  //aNode.Z := QZ;
 
   Idx := Self.AddNode(aNode);
   aNode.NodeIndex := Idx;

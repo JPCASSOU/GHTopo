@@ -221,6 +221,11 @@ procedure BeginForm(const QName: string; const QIndent: integer = 4);
 begin
   WrtLinFmt('%s<form name="%s">', [StringOfChar(' ', QIndent), QName]);
 end;
+procedure AddFormLabel(const QID, QCaption: string);
+begin
+  WrtLinFmt('    <LABEL id="%s" value="">%s</LABEL><BR>'    , [QID  , QCaption]);
+end;
+
 procedure EndForm(const QIndent: integer = 4);
 begin
   WrtLinFmt('%s</form>', [StringOfChar(' ', QIndent)]);

@@ -763,7 +763,7 @@ procedure TGHTopoContext2DA.AddNewPointClicked(const X, Y: double);
 var
   PP: TPoint2Df;
 begin
-  PP := MakeTPoint2Df(X, Y);
+  PP.setFrom(X, Y);
   FListeLastPointsClicked.AddElement(PP);
   if (FListeLastPointsClicked.GetNbElements() > NB_MAX_PTS_CLICKED) then FListeLastPointsClicked.RemoveElement(0);
 end;
@@ -1411,7 +1411,7 @@ function TGHTopoContext2DA.UpdateBaseStationWithOffset(const QE: TBaseStation; c
 begin
   Result            := QE;
   Result.PosExtr0   := QE.PosStation;
-  Result.PosStation := MakeTPoint3Df(Result.PosExtr0.X + QQX, Result.PosExtr0.Y + QQY, Result.PosExtr0.Z + QQZ);
+  Result.PosStation.setFrom(Result.PosExtr0.X + QQX, Result.PosExtr0.Y + QQY, Result.PosExtr0.Z + QQZ);
   Result.PosOPG     := Result.PosExtr0;
   Result.PosOPD     := Result.PosExtr0;
   Result.PosPD      := Result.PosStation;
@@ -1466,7 +1466,7 @@ begin
     MySerie.SetSeriePtArr(MySerie.GetNumeroDeSerie(), MySerie.GetNbVisees() - 1); // et on met à jour l'objet MySerie:
     // Pour éviter de devoir recalculer tout le réseau, on crée une nouvelle entité dans FBDDEntites;
     QX := 0.00; QY := 0.00; QZ := 0.00; QP := 0.00;
-    CalculerVisee(VS, CC, EE, QX, QY, 1.00, QZ, QP);
+    CalculerVisee(VS, CC, EE, QX, QY, QZ, QP);
     MyBaseStation := UpdateBaseStationWithOffset(MyBaseStation, QX, QY, QZ);
     MyBaseStation.Entite_Serie   := MySerie.GetNumeroDeSerie();
     MyBaseStation.Entite_Station := MySerie.GetNbVisees() - 1;
@@ -1508,13 +1508,12 @@ begin
                           QLongueur, QAzimut, QPente);
   FDocuTopo.AddViseeAntenne(VA);
   QX := 0.00; QY := 0.00; QZ := 0.00; QP := 0.00;
-  VS := MakeTUneVisee(0,
-                      tgVISEE_RADIANTE,
-                      FCurrentDistoXNumeroSecteur,
-                      FCurrentDistoXNumeroCode,
-                      FCurrentDistoXNumeroExpe,
-                      QLongueur, QAzimut, QPente, 0.0, 0.0, 0.0, 0.0);
-  CalculerVisee(VS, CC, EE, QX, QY, 1.0, QZ, QP);
+  VS.setFrom(0, tgVISEE_RADIANTE,
+             FCurrentDistoXNumeroSecteur,
+             FCurrentDistoXNumeroCode, FCurrentDistoXNumeroExpe,
+             QLongueur, QAzimut, QPente,
+             0.0, 0.0, 0.0, 0.0, '', '');
+  CalculerVisee(VS, CC, EE, QX, QY, QZ, QP);
   QNouvelleEntite := UpdateBaseStationWithOffset(FCurrentStation, QX, QY, QZ);
   QNouvelleEntite.Type_Entite    := tgVISEE_RADIANTE;
   QNouvelleEntite.Entite_Serie   := FCurrentDistoXNumeroSerie;
@@ -1594,11 +1593,11 @@ var
   n: Integer;
 begin
   WU := FStationNearToMouse.toString();
-  EE := MakeTEntrance('Entrance ' + WU,
-                      WU,
-                      FStationNearToMouse.PosStation.X, FStationNearToMouse.PosStation.Y, FStationNearToMouse.PosStation.Z,
-                      FStationNearToMouse.Entite_Serie, FStationNearToMouse.Entite_Station,
-                      '');
+  EE.setFrom('Entrance ' + WU, WU,
+             FStationNearToMouse.PosStation.X, FStationNearToMouse.PosStation.Y, FStationNearToMouse.PosStation.Z,
+             FStationNearToMouse.Entite_Serie, FStationNearToMouse.Entite_Station,
+             clRed,
+             '');
   n := FDocuTopo.GetNbEntrances();
   if (EditerEntrance(FDocuTopo, n, FBDDEntites, nil, EE)) then
   begin
@@ -1898,6 +1897,7 @@ var
   QDist, QDistance      : double;
   QQ1, QQ2              , QIsStation: Boolean;
   QOffset, qC1, qC2, qD : TPoint2Df;
+  QPP1                  : TPoint3DF;
   ST1, ST2              : TBaseStation;
   MyAnnotation          : TKrobardAnnotation;
   DbgTag, WU            : String;
@@ -1950,7 +1950,7 @@ begin
     mtPAN_SECOND_POINT:
       begin
         ReinitFZC(False, True);
-        QOffset := MakeTPoint2Df(FZC2.X - FZC1.X, FZC2.Y - FZC1.Y);
+        QOffset.setFrom(FZC2.X - FZC1.X, FZC2.Y - FZC1.Y);
         DeplacerVue(QOffset.X, QOffset.Y);
         self.RefreshDessin();
         SetModeTravail(mtREADY);
@@ -1964,7 +1964,7 @@ begin
       begin
         ReinitFZC(False, True);
         DbgTag := Format('%s: %s', [{$I %FILE%}, {$I %LINE%}]);
-        SetViewLimits(FZC1.X, FZC1.Y, FZC2.X, FZC2.Y, DbgTag);
+        SetViewLimits(FZC1.X, FZC1.Y, FZC2.X, FZC2.Y, DbgTag);                             // chrétien égorgé par les SS
         self.RefreshDessin();
         SetModeTravail(mtREADY);
       end;
@@ -1976,9 +1976,9 @@ begin
     mtMETAFILTRE_ZONE_SECOND_COIN:
       begin
         ReinitFZC(False, True);
-        qC1 := MakeTPoint2Df(FZC1.X, FZC1.Y);
-        qC2 := MakeTPoint2Df(FZC2.X, FZC2.Y);
-        qD  := MakeTPoint2Df(qC2.X - qC1.X, qc2.Y - qC1.Y);
+        qC1.setFrom(FZC1.X, FZC1.Y);
+        qC2.setFrom(FZC2.X, FZC2.Y);
+        qD.setFrom(qC2.X - qC1.X, qc2.Y - qC1.Y);
         // si zone trop étroite, abandonner
         if (Abs(qD.X) < 1.00) or (Abs(qD.Y) < 1.00) then Exit;
         // échanger de manière à rendre indifférent le sens du rectangle de sélection
@@ -2081,7 +2081,7 @@ begin
         QQ1 := FBDDEntites.GetStationOrEntranceFromXYZ(FMyPos.X, FMyPos.Y, 0.00, MAX_DISTANCE_CAPTURE, [tpVISEES], false, FCurrentInternalIdxEntite, ST1, QEntrance1, QDistance, QE);
         MyAnnotation.IDStyle := FCroquisTerrain.CurrentIdxStyleAnnotation;
         MyAnnotation.Position.IDBaseStation := MakeTIDBaseStation(ST1.Entite_Serie, ST1.Entite_Station, false);
-        MyAnnotation.Position.Offset := MakeTPoint3Df(FMyPos.X - ST1.PosStation.X, FMyPos.Y - ST1.PosStation.Y, ST1.PosStation.Z);
+        MyAnnotation.Position.Offset.setFrom(FMyPos.X - ST1.PosStation.X, FMyPos.Y - ST1.PosStation.Y, ST1.PosStation.Z);
         MyAnnotation.Texte  := '';
         if (EditerAnnotation(FCroquisTerrain, 0, MyAnnotation)) then
         begin
@@ -2095,7 +2095,8 @@ begin
       begin
         if (not FCroquisTerrain.IsReady) then exit;
         QLastIdxPolyline := FCroquisTerrain.FindIdxPolylineWithExtr2NearToXY(FMyPos.X, FMyPos.Y, 0.50);
-        FCroquisTerrain.BeginPolyline(MakeTPoint3Df(FMyPos.X, FMyPos.Y, 0.00), QLastIdxPolyline);
+        QPP1.setFrom(FMyPos.X, FMyPos.Y, 0.00);
+        FCroquisTerrain.BeginPolyline(QPP1, QLastIdxPolyline);
       end;
     mtDELETE_ANNOTATION:
       begin
@@ -2766,8 +2767,8 @@ begin
   // échanger de manière à rendre indifférent le sens du rectangle de sélection
   if (qX2 < qX1) then Swap(qX1, qX2);
   if (qY2 < qY1) then Swap(qY1, qY2);
-  FRegionCMini := MakeTPoint2Df(qX1, qY1);
-  FRegionCMaxi := MakeTPoint2Df(qX2, qY2);
+  FRegionCMini.setFrom(qX1, qY1);
+  FRegionCMaxi.setFrom(qX2, qY2);
   // Redéfinition de la hauteur maxi
   FRegionCMaxi.Y := GetRYMaxi();
   // on met tout çà dans l'onglet
@@ -2870,8 +2871,8 @@ var
   DbgTag: String;
 begin
   try
-    C0 := MakeTPoint2Df(0.5 * (FRegionCMini.X + FRegionCMaxi.X),
-                        0.5 * (FRegionCMini.Y + FRegionCMaxi.Y));
+    C0.setFrom(0.5 * (FRegionCMini.X + FRegionCMaxi.X),
+               0.5 * (FRegionCMini.Y + FRegionCMaxi.Y));
     Offset.X := QX - C0.X;
     Offset.Y := QY - C0.Y;
     DbgTag := Format('%s: %s', [{$I %FILE%}, {$I %LINE%}]);
@@ -2930,8 +2931,8 @@ var
   DbgTag: String;
 begin
   // point central
-  ZoomCentre := MakeTPoint2Df(0.50 * (FRegionCMaxi.X + FRegionCMini.X),
-                              0.50 * (FRegionCMaxi.Y + FRegionCMini.Y));
+  ZoomCentre.setFrom(0.50 * (FRegionCMaxi.X + FRegionCMini.X),
+                     0.50 * (FRegionCMaxi.Y + FRegionCMini.Y));
   // demi-rayon
   RX := 0.50 * (FRegionCMaxi.X - FRegionCMini.X) / Fact;
   RY := 0.50 * (FRegionCMaxi.Y - FRegionCMini.Y) / Fact;

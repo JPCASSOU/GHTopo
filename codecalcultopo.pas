@@ -58,7 +58,8 @@ unit CodeCalculTopo;
 // 02/09/2018 : Support de l'erreur de tourillon (composante verticale de l'erreur de centrage)
 // 29/11/2018 : Réusinage du code, adaptation aux tables distinctes centerlines / radiantes
 //-----------------------------------------------------
-// 04/12/2019: Point de contrôle temporel (contrôle de version)
+// 04/12/2019 : Point de contrôle temporel (contrôle de version)
+// 17/05/2021 : Adaptation aux nouveaux types de données XYZ
 
 (*
             /´¯/)          (\¯`\
@@ -105,9 +106,7 @@ uses
 // Noeuds
 type TNoeud = record
   IDNoeud : integer;
-  XN      : double;
-  YN      : double;
-  ZN      : double;
+  Position: TPoint3Df;
 end;
 
 // LISTE DES BRANCHES
@@ -145,9 +144,9 @@ type
 
 
     procedure SolveAxis(const Axe: TAxeCoordonnees);
-    procedure SolveAxisX();
-    procedure SolveAxisY();
-    procedure SolveAxisZ();
+    //procedure SolveAxisX();
+    //procedure SolveAxisY();
+    //procedure SolveAxisZ();
     function  ExtractValueFromTPoint3Df(const Axe: TAxeCoordonnees; const P: TPoint3Df): double; inline;
 
     function  TraiterViseesEnAntenne(): boolean;
@@ -455,7 +454,7 @@ begin
    AfficherMessageErreur('RemonterSysteme: ');
    QNbNodes    := GetMaxNode();
    QNbBranches := GetNbBranches();
-   QPosPtZero  := MakeTPoint3Df(0.00, 0.00, 0.00);
+   QPosPtZero.Empty();
    try
      for i :=  1 to QNbNodes  do
      begin
@@ -506,12 +505,14 @@ begin
        FTableNoeuds[i].IDNoeud := i;
        if (i mod 200 = 0) then AfficherMessage(Format(GetResourceString(rsLINEOFNB),[i, QNbNodes]), False);
        case Axe of
-         axisX: FTableNoeuds[i].XN := (XX[i].X - XX[0].X) + QPosPtZero.X;
-         axisY: FTableNoeuds[i].YN := (XX[i].Y - XX[0].Y) + QPosPtZero.Y;
-         axisZ: FTableNoeuds[i].ZN := (XX[i].Z - XX[0].Z) + QPosPtZero.Z;
+         axisX: FTableNoeuds[i].Position.X := (XX[i].X - XX[0].X) + QPosPtZero.X;
+         axisY: FTableNoeuds[i].Position.Y := (XX[i].Y - XX[0].Y) + QPosPtZero.Y;
+         axisZ: FTableNoeuds[i].Position.Z := (XX[i].Z - XX[0].Z) + QPosPtZero.Z;
        end;
      end;
      // Passage par cette ligne = c'est OK
+
+
      AfficherMessage(Format(GetResourceString(rsCOORDONNEES_OK),[QNbNodes]));
    finally
      AfficherMessage(GetResourceString(rsDEL_TEMP_MATRIX));
@@ -533,7 +534,7 @@ begin
   // Purger la table des branches
   try
     // Branche0
-    UneVisee := EmptyVisee('');
+    UneVisee.Empty('');
     SetLength(Branche.PointsTopo, 0);              // N
     addViseeAtBranche(Branche, UneVisee);          // N
     Branche.NoBranche    := 0;
@@ -632,21 +633,22 @@ begin
   SolveAxis(axisX);
   SolveAxis(axisY);
   SolveAxis(axisZ);
-
+  // contrôle coordonnées noeuds
+  (*
+  Nb := High(FTableNoeuds);
+  AfficherMessageErreur(Format('Coordonnées des %d noeuds', [Nb]));
+  for i := 1 to Nb do
+  begin
+    AfficherMessageErreur(Format('%d: %.3f, %.3f, %.3f', [i, FTableNoeuds[i].Position.X, FTableNoeuds[i].Position.Y, FTableNoeuds[i].Position.Z]));
+  end;
+  //*)
   tm := Now() - tm;
   // assignation des écarts
   for t:=1 to QNbBranches - 1 do //GetNbBranches() - 1 do
   begin
     Branche := GetBranche(t);
-    with Branche do
-    begin
-      XDepart  := FTableNoeuds[NoeudDepart].XN;
-      YDepart  := FTableNoeuds[NoeudDepart].YN;
-      ZDepart  := FTableNoeuds[NoeudDepart].ZN;
-      XArrivee := FTableNoeuds[NoeudArrivee].XN;
-      YArrivee := FTableNoeuds[NoeudArrivee].YN;
-      ZArrivee := FTableNoeuds[NoeudArrivee].ZN;
-    end;
+    Branche.CoordsDepart  := FTableNoeuds[Branche.NoeudDepart].Position;
+    Branche.CoordsArrivee := FTableNoeuds[Branche.NoeudArrivee].Position;
     PutBranche(t,Branche);
   end;
   AfficherMessage('');
@@ -661,24 +663,34 @@ end;
 // répartition des écarts de fermeture entre les noeuds
 procedure TCodeDeCalcul.ProcessRepartitionEcartsOfBranche(const NoThread, Idx: integer);
 var
-  Branche: TBrancheXYZ;
-  EcartX, EcartY, EcartZ, R, DevelBranche: Double;
-  EpsX, EpsY, EpsZ: double;
-  XXo, YYo, ZZo: double;
+  Branche : TBrancheXYZ;
+  EcartXYZ: TPoint3Df;
+  EpsXYZ  : TPoint3Df;
+  QCoord0 : TPoint3Df;
+
+  //EcartX, EcartY, EcartZ,
+  R, DevelBranche: Double;
+  //EpsX, EpsY, EpsZ: double;
+
+  //XXo, YYo, ZZo: double;
   s: Integer;
   V1, V2, V: TUneVisee;
 begin
   Branche := GetBranche(Idx);
+  EcartXYZ.setFrom((Branche.CoordsArrivee.X - Branche.CoordsDepart.X) - Branche.Accroissement.X,
+                   (Branche.CoordsArrivee.Y - Branche.CoordsDepart.Y) - Branche.Accroissement.Y,
+                   (Branche.CoordsArrivee.Z - Branche.CoordsDepart.Z) - Branche.Accroissement.Z);
 
-  EcartX := (Branche.XArrivee - Branche.XDepart) - Branche.DeltaX;
-  EcartY := (Branche.YArrivee - Branche.YDepart) - Branche.DeltaY;
-  EcartZ := (Branche.ZArrivee - Branche.ZDepart) - Branche.DeltaZ;
+  //EcartX := (Branche.XArrivee - Branche.XDepart) - Branche.DeltaX;
+  //EcartY := (Branche.YArrivee - Branche.YDepart) - Branche.DeltaY;
+  //EcartZ := (Branche.ZArrivee - Branche.ZDepart) - Branche.DeltaZ;
   // calcul de R
   R := 1e-10;
   for s := 0 to High(Branche.PointsTopo) do  //Branche.PointsTopo.GetNbElements() - 1do
   begin
     V := Branche.PointsTopo[s];
-    R += Hypot3D(V.DeltaX, V.DeltaY, V.DeltaZ);
+    //R += Hypot3D(V.DeltaX, V.DeltaY, V.DeltaZ);
+    R += V.AccroissXYZ.getNorme();
   end;
   DevelBranche := R;
   // mettre l'azimut de V[1] dans V[0]
@@ -690,26 +702,41 @@ begin
     Branche.PointsTopo[0] := V1;   // PutBrStation(i, 0, V1);
   end;
   // calcul de répartition
-  EpsX := EcartX / DevelBranche;
-  EpsY := EcartY / DevelBranche;
-  EpsZ := EcartZ / DevelBranche;
+  EpsXYZ.setFrom(EcartXYZ.X / DevelBranche, EcartXYZ.Y / DevelBranche, EcartXYZ.Z / DevelBranche);
+  //EpsX := EcartX / DevelBranche;
+  //EpsY := EcartY / DevelBranche;
+  //EpsZ := EcartZ / DevelBranche;
 
   R    := 1e-10;
-  XXo  := Branche.XDepart;
-  YYo  := Branche.YDepart;
-  ZZo  := Branche.ZDepart;
+  QCoord0 := Branche.CoordsDepart;
+  //XXo  := Branche.XDepart;
+  //YYo  := Branche.YDepart;
+  //ZZo  := Branche.ZDepart;
   for s := 0 to High(Branche.PointsTopo) do //for s := 0 to Branche.PointsTopo.GetNbElements() - 1 do
   begin
     V := Branche.PointsTopo[s]; //V :=GetBrStation(i, s);
-    R += Hypot3D(V.DeltaX, V.DeltaY, V.DeltaZ);
+    //R += Hypot3D(V.DeltaX, V.DeltaY, V.DeltaZ);
+    R += V.AccroissXYZ.getNorme();
+    QCoord0.X += V.AccroissXYZ.X;//V.DeltaX;
+    QCoord0.Y += V.AccroissXYZ.Y;//V.DeltaY;
+    QCoord0.Z += V.AccroissXYZ.Z;//V.DeltaZ;
 
-    XXo += V.DeltaX;       //   XXo := XXo + V.DeltaX;
-    YYo += V.DeltaY;       //   YYo := YYo + V.DeltaY;
-    ZZo += V.DeltaZ;       //   ZZo := ZZo + V.DeltaZ;
 
-    V.DeltaX := XXo + R * EpsX;
-    V.DeltaY := YYo + R * EpsY;
-    V.DeltaZ := ZZo + R * EpsZ;
+    //XXo += V.DeltaX;       //   XXo := XXo + V.DeltaX;
+    //YYo += V.DeltaY;       //   YYo := YYo + V.DeltaY;
+    //ZZo += V.DeltaZ;       //   ZZo := ZZo + V.DeltaZ;
+
+    V.AccroissXYZ.X := QCoord0.X + R * EpsXYZ.X;  // V.DeltaX := QCoord0.X + R * EpsXYZ.X;
+    V.AccroissXYZ.Y := QCoord0.Y + R * EpsXYZ.Y;  // V.DeltaY := QCoord0.Y + R * EpsXYZ.Y;
+    V.AccroissXYZ.Z := QCoord0.Z + R * EpsXYZ.Z;  // V.DeltaZ := QCoord0.Z + R * EpsXYZ.Z;
+
+
+
+
+
+    //V.DeltaX :=  XXo + R * EpsX;
+    //V.DeltaY := YYo + R * EpsY;
+    //V.DeltaZ := ZZo + R * EpsZ;
 
     Branche.PointsTopo[s] := V; //PutBrStation(i, s, V);
   end;
@@ -766,18 +793,16 @@ begin;
       EWE := R_Matrix.GetValeur(k,i) *  W_mtx[k];
       if (k = 1) then  // sécurisation branche 1
       begin
-        MyBranche.DeltaX := 0.01;
-        MyBranche.DeltaY := 0.01;
-        MyBranche.DeltaZ := 0.01;
+        MyBranche.Accroissement.setFrom(0.01, 0.01, 0.01);
       end;
       MyBranche := GetBranche(k);
-      wwx += EWE * MyBranche.DeltaX; //A[k].X;
-      wwy += EWE * MyBranche.DeltaY; //A[k].Y;
-      wwz += EWE * MyBranche.DeltaZ; //A[k].Z;
+      wwx += EWE * MyBranche.Accroissement.X; //A[k].X;
+      wwy += EWE * MyBranche.Accroissement.Y; //A[k].Y;
+      wwz += EWE * MyBranche.Accroissement.Z; //A[k].Z;
     end;
-    VecteurSecondMembre[i].X := wwx;
-    VecteurSecondMembre[i].Y := wwy;
-    VecteurSecondMembre[i].Z := wwz;
+
+    VecteurSecondMembre[i].setFrom(wwx, wwy, wwz);
+    //VecteurSecondMembre[i].Z := wwz;
   end;
   // on peut jeter la matrice R
   try
@@ -789,7 +814,7 @@ end;
 
 procedure TCodeDeCalcul.SolveAxis(const Axe: TAxeCoordonnees);
 var
-  i: Integer;
+  i, Nb: Integer;
   QFileName: TStringDirectoryFilename;
 begin
   AfficherMessage(GetResourceString(rsAXIS) + Chr(88 + Ord(Axe)));
@@ -797,10 +822,12 @@ begin
   AfficherMessageErreur(GetResourceString(rs2NDMEMBER));
   AfficherMessageErreur(GetResourceString(rsNODECOORDINATES));
   RemonterSysteme(L_Matrix, Axe);
+
+
 end;
 
 
-
+(*
 
 procedure TCodeDeCalcul.SolveAxisX();
 begin
@@ -819,7 +846,7 @@ begin
   AfficherMessageErreur('SolveAxis Z');
   SolveAxis(axisZ);
 end;
-
+//*)
 function TCodeDeCalcul.ExtractValueFromTPoint3Df(const Axe: TAxeCoordonnees; const P: TPoint3Df): double;
 begin
   case Axe of
@@ -869,8 +896,11 @@ var
       else
       begin
         TabVisee[NbViseesInBrche]        := TabVisee[NbViseesInBrche - 1];
-        TabVisee[NbViseesInBrche].DeltaX := TabVisee[NbViseesInBrche - 1].DeltaX + (TabVisee[NbViseesInBrche - 1].DeltaX - TabVisee[NbViseesInBrche - 2].DeltaX);
-        TabVisee[NbViseesInBrche].DeltaY := TabVisee[NbViseesInBrche - 1].DeltaY + (TabVisee[NbViseesInBrche - 1].DeltaY - TabVisee[NbViseesInBrche - 2].DeltaY);
+        //TabVisee[NbViseesInBrche].DeltaX := TabVisee[NbViseesInBrche - 1].DeltaX + (TabVisee[NbViseesInBrche - 1].DeltaX - TabVisee[NbViseesInBrche - 2].DeltaX);
+        //TabVisee[NbViseesInBrche].DeltaY := TabVisee[NbViseesInBrche - 1].DeltaY + (TabVisee[NbViseesInBrche - 1].DeltaY - TabVisee[NbViseesInBrche - 2].DeltaY);
+        TabVisee[NbViseesInBrche].AccroissXYZ.X := TabVisee[NbViseesInBrche - 1].AccroissXYZ.X + (TabVisee[NbViseesInBrche - 1].AccroissXYZ.X - TabVisee[NbViseesInBrche - 2].AccroissXYZ.X);
+        TabVisee[NbViseesInBrche].AccroissXYZ.Y := TabVisee[NbViseesInBrche - 1].AccroissXYZ.Y + (TabVisee[NbViseesInBrche - 1].AccroissXYZ.Y - TabVisee[NbViseesInBrche - 2].AccroissXYZ.Y);
+
       end;
       // calcul contours
       QNbExpes := FDocTopo.GetNbExpes();
@@ -879,10 +909,10 @@ var
         try
           if (St = 1) then
           begin
-            AlphaD := CalculerAngleBissecteur(TabVisee[St].DeltaX - TabVisee[St-1].DeltaX,
-                                              TabVisee[St].DeltaY - TabVisee[St-1].DeltaY,
-                                              TabVisee[St].DeltaX - TabVisee[St-1].DeltaX,
-                                              TabVisee[St].DeltaY - TabVisee[St-1].DeltaY);
+            AlphaD := CalculerAngleBissecteur(TabVisee[St].AccroissXYZ.X - TabVisee[St-1].AccroissXYZ.X,
+                                              TabVisee[St].AccroissXYZ.Y - TabVisee[St-1].AccroissXYZ.Y,
+                                              TabVisee[St].AccroissXYZ.X - TabVisee[St-1].AccroissXYZ.X,
+                                              TabVisee[St].AccroissXYZ.Y - TabVisee[St-1].AccroissXYZ.Y);
           end;
             sincos(AlphaD, qSinAlphaD, qCosAlphaD);
             if (FDocTopo.GetIdxCodeByNumero(TabVisee[St].Code) = -1) then
@@ -919,8 +949,8 @@ var
             QEntite.oHZ             := TabVisee[St].HZ;
             QEntite.oHN             := TabVisee[St].HN;
             // centerline
-            QEntite.PosExtr0   := MakeTPoint3Df(TabVisee[St-1].DeltaX, TabVisee[St-1].DeltaY, TabVisee[St-1].DeltaZ);
-            QEntite.PosStation := MakeTPoint3Df(TabVisee[St].DeltaX, TabVisee[St].DeltaY, TabVisee[St].DeltaZ);
+            QEntite.PosExtr0.setFrom(TabVisee[St-1].AccroissXYZ.X, TabVisee[St-1].AccroissXYZ.Y, TabVisee[St-1].AccroissXYZ.Z);
+            QEntite.PosStation.setFrom(TabVisee[St].AccroissXYZ.X, TabVisee[St].AccroissXYZ.Y, TabVisee[St].AccroissXYZ.Z);
             // habillage
             QEntite.PosOPG.X := QEntite.PosExtr0.X - TabVisee[St-1].LG * qCosAlphaD;
             QEntite.PosOPG.Y := QEntite.PosExtr0.Y - TabVisee[St-1].LG * qSinAlphaD;
@@ -929,10 +959,10 @@ var
 
             QEntite.PosOPD.Z := QEntite.PosExtr0.Z + TabVisee[St-1].HZ;
             QEntite.PosOPG.Z := QEntite.PosExtr0.Z - TabVisee[St-1].HN;
-            AlphaD := CalculerAngleBissecteur(TabVisee[St].DeltaX - TabVisee[St-1].DeltaX,
-                                              TabVisee[St].DeltaY - TabVisee[St-1].DeltaY,
-                                              TabVisee[St+1].DeltaX - TabVisee[St].DeltaX,
-                                              TabVisee[St+1].DeltaY - TabVisee[St].DeltaY);
+            AlphaD := CalculerAngleBissecteur(TabVisee[St].AccroissXYZ.X - TabVisee[St-1].AccroissXYZ.X,
+                                              TabVisee[St].AccroissXYZ.Y - TabVisee[St-1].AccroissXYZ.Y,
+                                              TabVisee[St+1].AccroissXYZ.X - TabVisee[St].AccroissXYZ.X,
+                                              TabVisee[St+1].AccroissXYZ.Y - TabVisee[St].AccroissXYZ.Y);
             SinCos(AlphaD, qSinAlphaD, qCosAlphaD);
             QEntite.PosPG.X := QEntite.PosStation.X - TabVisee[St].LG * qCosAlphaD;
             QEntite.PosPG.Y := QEntite.PosStation.Y - TabVisee[St].LG * qSinAlphaD;
@@ -1060,11 +1090,15 @@ var
     VS.Commentaires     := ''; //VA.Commentaires;
     VS.IDTerrainStation := ''; //VA.IDTerrainStation;
     VS.TypeVisee        := tgVISEE_RADIANTE;
-    CalculerVisee(VS, MyCode, MyExpe, DX, DY, 1.00, DZ, DP);
+    CalculerVisee(VS, MyCode, MyExpe, DX, DY, DZ, DP);
 
-    DX := EE.PosStation.X + VS.DeltaX;
-    DY := EE.PosStation.Y + VS.DeltaY;
-    DZ := EE.PosStation.Z + VS.DeltaZ;
+    DX := EE.PosStation.X + VS.AccroissXYZ.X; // DX := EE.PosStation.X + VS.DeltaX;
+    DY := EE.PosStation.Y + VS.AccroissXYZ.Y; // DY := EE.PosStation.Y + VS.DeltaY;
+    DZ := EE.PosStation.Z + VS.AccroissXYZ.Z; // DZ := EE.PosStation.Z + VS.DeltaZ;
+
+
+
+
     //******************************
     // TODO: Dans GHCaveDraw, les antennes ne doivent servir que de guides et
     //       n'ont pas à être capturées
@@ -1089,12 +1123,12 @@ var
     OutEE.oHN             := 0.00;
     // centerline
     OutEE.PosExtr0   := EE.PosStation;
-    OutEE.PosStation := MakeTPoint3Df(DX, DY, DZ);
+    OutEE.PosStation.setFrom(DX, DY, DZ);
     // habillage
     OutEE.PosOPG := EE.PosStation;
     OutEE.PosOPD := EE.PosStation;
-    OutEE.PosPG  := MakeTPoint3Df(DX, DY, DZ);
-    OutEE.PosPD  := MakeTPoint3Df(DX, DY, DZ);
+    OutEE.PosPG.setFrom(DX, DY, DZ);
+    OutEE.PosPD.setFrom(DX, DY, DZ);
     // couleur par défaut
     OutEE.CouleurDegrade:= FPalette256.GetColorByIndex(MyExpe.IdxCouleur); //clGray ;
     // commentaires
@@ -1151,9 +1185,10 @@ begin
     ND := GetNoeud(J.NoSer, J.NoSt);
     if (ND >= 0) then
     begin
-      J.X := FTableNoeuds[i].XN;
-      J.Y := FTableNoeuds[i].YN;
-      J.Z := FTableNoeuds[i].ZN;
+      J.Position := FTableNoeuds[i].Position;
+      //J. X := FTableNoeuds[i].XN;
+      //J.Y := FTableNoeuds[i].YN;
+      //J.Z := FTableNoeuds[i].ZN;
       FBDDEntites.AddJonction(J);
     end;
   end;

@@ -118,7 +118,6 @@ implementation
 { TObjSerie }
 procedure TObjSerie.ClearStations();
 begin
-
   FAccrX := 0.00;
   FAccrY := 0.00;
   FAccrZ := 0.00;
@@ -160,10 +159,8 @@ begin
   WU.HN          := qHN;
   WU.IDTerrainStation := qIDTerrain;
   WU.Commentaires     := qComments;
-  WU.DeltaX := 0.00;
-  WU.DeltaY := 0.00;
-  WU.DeltaZ := 0.00;
-  WU.DeltaP := 0.00;
+  WU.AccroissXYZ.Empty();
+  WU.AccroissP        := 0.00;
   self.AddVisee(WU);
 end;
 
@@ -259,7 +256,6 @@ end;
 procedure TObjSerie.SetSeriePtExtremites(const Sd: TNumeroSerie; const Pd: integer;
                                          const Sa: TNumeroSerie; const Pa: integer);
 begin
-  //AfficherMessage(Format('Depart: %d.%d - Arrivee: %d.%d',[Sd, Pd, Sa, Pa]));
   SetNoSerieDep(Sd);
   SetNoPointDep(Pd);
   SetNoSerieArr(Sa);

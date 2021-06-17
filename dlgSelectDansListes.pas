@@ -283,9 +283,9 @@ var
           DrawColRectColoreWithTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[1], true, bg, es.eCouleur, '');
           DrawColTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[2], true , _AnsiToLCLStr(es.eNomEntree));
           DrawColTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[3], true , Format(FMTSERST,[es.eRefSer, es.eRefSt]));
-          DrawColTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[4], true , FormatterNombreAvecSepMilliers(es.eXEntree));
-          DrawColTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[5], true , FormatterNombreAvecSepMilliers(es.eYEntree));
-          DrawColTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[6], true , FormatterNombreAvecSepMilliers(es.eZEntree));
+          DrawColTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[4], true , FormatterNombreAvecSepMilliers(es.ePosition.X));
+          DrawColTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[5], true , FormatterNombreAvecSepMilliers(es.ePosition.Y));
+          DrawColTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[6], true , FormatterNombreAvecSepMilliers(es.ePosition.Z));
         end;
       mslRESEAUX:
         begin

@@ -215,7 +215,7 @@ begin
   SetLength(FListeArcs, 0);
   QNbPts := self.GetNbVertex();
   if (QNbPts < 2) then exit;
-  Delta := MakeTDGCPoint2D(0.0, 0.0);
+  Delta.Empty();
   SetLength(FListeArcs, QNbPts - 1);
   // TODO: C'est dans ce secteur qu'il faut gérer le mode ByDefault
   for i := 1 to QNbPts-1 do
@@ -226,8 +226,8 @@ begin
     AB.PT1 := V1;
     AB.PT2 := V2;
 
-    Delta := MakeTDGCPoint2D(V2.X - V1.X, V2.Y - V1.Y);
-    AB.TangP1 := MakeTDGCPoint2D(Delta.X / 3, Delta.Y / 3);
+    Delta.setFrom(V2.X - V1.X, V2.Y - V1.Y);
+    AB.TangP1.setFrom(Delta.X / 3, Delta.Y / 3);
     R1 := Hypot(Delta.X, Delta.Y) / 3;
 
     AB.TangP2.X := -AB.TangP1.X;
@@ -281,14 +281,14 @@ var
     ErrCode: integer;
   begin
     P0 := A.PT1;
-    P1 := MakeTDGCPoint2D(A.PT1.X + A.TangP1.X, A.PT1.Y + A.TangP1.Y);
-    P2 := MakeTDGCPoint2D(A.PT2.X + A.TangP2.X, A.PT2.Y + A.TangP2.Y);
+    P1.setFrom(A.PT1.X + A.TangP1.X, A.PT1.Y + A.TangP1.Y);
+    P2.setFrom(A.PT2.X + A.TangP2.X, A.PT2.Y + A.TangP2.Y);
     P3 := A.PT2;
 
     DGCCalcBezierCurve(P0, P1, P2, P3, 20, Bezier);
     for s := 0 to High(Bezier) do
     begin
-      PT := MakeTDGCPoint2D(Bezier[s].X, Bezier[s].Y);
+      PT.setFrom(Bezier[s].X, Bezier[s].Y);
       FBoundingBox.X1 := Min(FBoundingBox.X1, Pt.X);
       FBoundingBox.Y1 := Min(FBoundingBox.Y1, Pt.Y);
       FBoundingBox.X2 := Max(FBoundingBox.X2, Pt.X);

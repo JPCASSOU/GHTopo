@@ -86,13 +86,14 @@ type
      function GetCoordosPlan(const PM: TPoint3Df): TPoint;
      function GetCoordosVertexToPlan(const PM: TMNTVertex): TPoint;
 
-     function GetNearTriangleIdx(const QX, QY, QZ: double): integer;
+
      function GetTriangleIdxContenantPoint(const QX, QY: double): integer;
      function IntersectPlanVerticalAndTriangle(const QT: TMNTTriangleABC; const ExtrProfil1, ExtrProfil2: TPoint3Df; out QIntersect: TIntersectPlanTriangle): boolean;
      function IsValidTriangle(const TR: TMNTTriangleABC): boolean;
      function  TriangleContainsPoint(const T: TMNTTriangleABC; const QX, QY: double): boolean;
      procedure SetTypeMaillage(const B: TMNTTypeMaillage; const PrgmLineTag: integer);
 
+     procedure UpdateMiniMaxi(const V: TMNTVertex);
    public
      function  Initialiser(const BE: TBDDEntites): boolean;
      procedure Finaliser();
@@ -240,18 +241,7 @@ uses
   DGCDummyUnit;
 
 
-function MakeTVertex(const QID: Int64; const QX, QY, QZ: double; const C: TColor): TMNTVertex;
-begin
-  Result.ID := QID;
-  Result.X := QX;
-  Result.Y := QY;
-  Result.Z := QZ;
-  Result.Couleur := C;
-  Result.Norme := 0.00;
-  Result.NormX := 0.00;
-  Result.NormY := 0.00;
-  Result.NormZ := 0.00;
-end;
+
 
 // couleur OpenGL
 // Retourne sous forme de couleur OpenGL la couleur passée en argument
@@ -290,9 +280,9 @@ begin
   VB := GetVertex(TR.PointB);
   VC := GetVertex(TR.PointC);
 
-  a := Hypot(VB.X - VC.X, VB.Y - VC.Y);
-  b := Hypot(VA.X - VC.X, VA.Y - VC.Y);
-  c := Hypot(VA.X - VB.X, VA.Y - VB.Y);
+  a := Hypot(VB.Position.X - VC.Position.X, VB.Position.Y - VC.Position.Y);
+  b := Hypot(VA.Position.X - VC.Position.X, VA.Position.Y - VC.Position.Y);
+  c := Hypot(VA.Position.X - VB.Position.X, VA.Position.Y - VB.Position.Y);
 
   if ((a > MAX_LONGUEUR_COTE) or (b > MAX_LONGUEUR_COTE) or (c > MAX_LONGUEUR_COTE)) then exit(false);
 
@@ -304,7 +294,6 @@ procedure TMaillage.CalculerTINNormales(const QScale, QMagn: double);
 var
   i, Nb: integer;
   V1, V2, W: TPoint3Df;
-  Norm, NormW: double;
   MM: double;
   VA, VB, VC, VV: TMNTVertex;
   TR: TMNTTriangleABC;
@@ -316,11 +305,7 @@ begin
   for i:=0 to Nb -1 do
   begin
     VV := GetVertex(i);
-
-    VV.NormX := 0.0;
-    VV.NormY := 0.0;
-    VV.NormZ := 0.0;
-    VV.Norme := 0.0;
+    VV.Normale.Empty();
     PutVertex(i, VV);
   end;
   Nb := GetNbTriangles;
@@ -333,39 +318,33 @@ begin
         VA := GetVertex(PointA);
         VB := GetVertex(PointB);
         VC := GetVertex(PointC);
-        V1.X := MM * (VB.X - VA.X);
-        V1.Y := MM * (VB.Y - VA.Y);
-        V1.Z := MM * (VB.Z - VA.Z);
-        V2.X := MM * (VC.X - VA.X);
-        V2.Y := MM * (VC.Y - VA.Y);
-        V2.Z := MM * (VC.Z - VA.Z);
-        // produit vectoriel: normale du triangle
-        W.X := V1.Y * V2.Z - V1.Z * V2.Y;
-        W.Y := V1.Z * V2.X - V1.X * V2.Z;
-        W.Z := V1.X * V2.Y - V1.Y * V2.X;
+        V1.setFrom(MM * (VB.Position.X - VA.Position.X),
+                   MM * (VB.Position.Y - VA.Position.Y),
+                   MM * (VB.Position.Z - VA.Position.Z));
 
-        Norm:=sqrt(sqr(w.x)+sqr(w.y)+sqr(w.z));
-        VA.Norme += Norm;
-        VA.NormX += W.X; VA.NormY += W.Y; VA.NormZ += W.Z;
-        VB.Norme += Norm;
-        VB.NormX += W.X; VB.NormY += W.Y; VB.NormZ += W.Z;
-        VC.Norme += Norm;
-        VC.NormX += W.X; VC.NormY += W.Y;
-        VC.NormZ += W.Z;
+        V2.setFrom(MM * (VC.Position.X - VA.Position.X),
+                   MM * (VC.Position.Y - VA.Position.Y),
+                   MM * (VC.Position.Z - VA.Position.Z));
+
+        // produit vectoriel: normale du triangle
+        W.setFrom(V1.Y * V2.Z - V1.Z * V2.Y,
+                  V1.Z * V2.X - V1.X * V2.Z,
+                  V1.X * V2.Y - V1.Y * V2.X);
+
+        VA.AddAtNormale(W.X, W.Y, W.Z);
+        VB.AddAtNormale(W.X, W.Y, W.Z);
+        VC.AddAtNormale(W.X, W.Y, W.Z);
         PutVertex(PointA, VA);
         PutVertex(PointB, VB);
         PutVertex(PointC, VC);
       end;
   end;
   // normalisation
-  Nb := GetNbVertex;
+  Nb := GetNbVertex();
   for i:= 0 to Nb - 1 do
   begin
     VV := GetVertex(i);
-
-    VV.NormX := VV.NormX/(VV.Norme+1e-12);
-    VV.NormY := VV.NormY/(VV.Norme+1e-12);
-    VV.NormZ := VV.NormZ/(VV.Norme+1e-12);
+    VV.Normalize();
     PutVertex(i, VV);
   end;
 end;
@@ -469,12 +448,13 @@ begin
   begin
     MyVertex := GetVertex(i);
     MyVertex.Couleur := IIF (QDoDegrade,
-                             GetColorDegrade(MyVertex.Z, FCoordsMini.Z, FCoordsMaxi.Z, FColorMin, FColorMax),
+                             GetColorDegrade(MyVertex.Position.Z, FCoordsMini.Z, FCoordsMaxi.Z, FColorMin, FColorMax),
                              FColorMin);
     PutVertex(i, MyVertex);
 
   end;
 end;
+// Fonctionne mais lent ++
 procedure TMaillage.RecenserTrianglesVoisins();
 var
   i, j, n: Integer;
@@ -533,6 +513,7 @@ var
   VX: TPoint3Df;              //   function GetTriangle(const Idx: integer): TMNTTriangleABC; inline;
   QListeTrianglesVisites: array of boolean;
   QTriangle: TMNTTriangleABC;
+  AreteAB, AreteBC, AreteCA: TGeoSegment3D;
   function FindFirstIdxTriangleContainsAltitude(): TMNTNumeroTriangle;
   var
     QTri: TMNTTriangleABC;
@@ -547,6 +528,10 @@ var
   end;
 begin
   result := false;
+  Exit;
+
+  (*
+
   ClearConsoleErreur();
   n := self.GetNbTriangles();
   AfficherMessageErreur(Format('%s.ExtraireIsovaleurAsPolyPolyline: Alt: %.0f - %d triangles', [classname, Altitude, n]));
@@ -564,13 +549,29 @@ begin
     QTriangle := GetTriangle(QFirstIdxTriangle);
     AfficherMessageErreur(Format('Triangle %d : %.2f, %.2f', [QFirstIdxTriangle, QTriangle.BoundingBox.C1.Z, QTriangle.BoundingBox.C2.Z]));
 
+    // recherche des intersections entre le plan de cote Z et les côtés du triangle
+    AreteAB := QMakeGeoSegment(QTriangle.PointA, QTriangle.PointB);
+    AreteBC := QMakeGeoSegment(QTriangle.PointB, QTriangle.PointC);
+    AreteCA := QMakeGeoSegment(QTriangle.PointC, QTriangle.PointA);
+    if (IntersectPlanHorizontalSegment(Altitude, AreteAB, QX, QY)) then
+    begin
+      PP := TPolyPolyLigne.Create;
+      PP.Initialiser(Format('Isovaleur %f', [Altitude]));
+    end;
+  try
+
+    n := PP.GetNbPolylines();
+    AfficherMessageErreur(format('Polypolyligne "%s": %d polylignes', [PP.GetName(), n]));
+    PP.BeginPolyline();
+    end;
+
 
   end;
 
+   //*)
 
 
-
-
+   (*
 
 
 
@@ -621,7 +622,8 @@ begin
       PP.AddVertex(402920.59, 3090756.75, 810.00);
       PP.AddVertex(402944.03, 3090744.25, 810.00);
     PP.EndPolyline();
-
+    //*)
+    (*
     // contrôle
     n := PP.GetNbPolylines();
     AfficherMessageErreur(format('Polypolyligne "%s": %d polylignes', [PP.GetName(), n]));
@@ -651,7 +653,7 @@ begin
   finally
     //FreeAndNil(PP);
   end;
-
+  //*)
 end;
 
 
@@ -685,6 +687,17 @@ begin
   AfficherMessageErreur(Format('--> SetMaillageValide: %s - Ligne: %d', [EWE, PrgmLineTag]));
 
   FTypeMaillage := B;
+end;
+
+procedure TMaillage.UpdateMiniMaxi(const V: TMNTVertex);
+begin
+  if (V.Position.X < FCoordsMini.X) then FCoordsMini.X := V.Position.X;
+  if (V.Position.Y < FCoordsMini.Y) then FCoordsMini.Y := V.Position.Y;
+  if (V.Position.Z < FCoordsMini.Z) then FCoordsMini.Z := V.Position.Z;
+
+  if (V.Position.X > FCoordsMaxi.X) then FCoordsMaxi.X := V.Position.X;
+  if (V.Position.Y > FCoordsMaxi.Y) then FCoordsMaxi.Y := V.Position.Y;
+  if (V.Position.Z > FCoordsMaxi.Z) then FCoordsMaxi.Z := V.Position.Z;
 end;
 
 
@@ -766,7 +779,7 @@ begin
   S1 := GetVertex(T.PointA);
   S2 := GetVertex(T.PointB);
   S3 := GetVertex(T.PointC);
-  Result := PointInTriangle(QX, QY, S1.X, S1.Y, S2.X, S2.Y, S3.X, S3.Y);
+  Result := PointInTriangle(QX, QY, S1.Position.X, S1.Position.Y, S2.Position.X, S2.Position.Y, S3.Position.X, S3.Position.Y);
 end;
 
 
@@ -803,9 +816,9 @@ begin
     S1 := GetVertex(EWE.PointA);
     S2 := GetVertex(EWE.PointB);
     S3 := GetVertex(EWE.PointC);
-    QZ := GeoCalcAltitudeXYInTriangle(S1.X, S1.Y, S1.Z,
-                                      S2.X, S2.Y, S2.Z,
-                                      S3.X, S3.Y, S3.Z,
+    QZ := GeoCalcAltitudeXYInTriangle(S1.Position.X, S1.Position.Y, S1.Position.Z,
+                                      S2.Position.X, S2.Position.Y, S2.Position.Z,
+                                      S3.Position.X, S3.Position.Y, S3.Position.Z,
                                       QX, QY);
     Result := True;
   end;
@@ -822,7 +835,7 @@ var
   NameScene: String;
   procedure QWriteVertex(const V: TMNTVertex; const IsLast: boolean);
   begin
-    MyX3D.AddVertexCoordinates(V.X, V.Y, V.Z, IsLast);
+    MyX3D.AddVertexCoordinates(V.Position.X, V.Position.Y, V.Position.Z, IsLast);
   end;
 
   procedure QWrite3DFace(const T: TMNTTriangleABC);
@@ -830,7 +843,7 @@ var
     MyX3D.AddIndexedFaceSet([T.PointA, T.PointB, T.PointC]);
   end;
 begin
-  QStdColorMNT := MakeTColorRGBA(clLime, 128);
+  QStdColorMNT.setFrom(clLime, 128);
   NameScene   := 'MNT';
   NbVertex    := GetNbVertex();
   NbTriangles := GetNbTriangles();
@@ -855,26 +868,6 @@ begin
 end;
 
 
-function TMaillage.GetNearTriangleIdx(const QX, QY, QZ: double): integer;
-var
-  EWE: TMNTTriangleABC;
-  VA, VB, VC: TMNTVertex;
-  i, Nb: Integer;
-begin
-  Result := -1;
-  Nb := GetNbTriangles;
-  for i := 0 to Nb - 1 do
-  begin
-    EWE := GetTriangle(i);
-    VA  := GetVertex(EWE.PointA);
-    VB  := GetVertex(EWE.PointB);
-    VC  := GetVertex(EWE.PointC);
-    //dx  := (VA.X
-    //+ VB.X + VC.X) / 3;
-    //d   := MinimumDistanceFromPointToTriangle(Px,Py,x1,y1,x2,y2,x3,y3:TGeoFloat):TGeoFloat;
-
-  end;
-end;
 
 function TMaillage.CalcDistanceAuVersant(const PT: TPoint3Df): double;
 begin
@@ -962,21 +955,21 @@ begin
       if (FDoUseDegrades) then
       begin
         QAffecterCouleur(VA.Couleur, FOpacity);
-        glVertex3f(VA.X * MM, VA.Y * MM, VA.Z * FZ);
+        glVertex3f(VA.Position.X * MM, VA.Position.Y * MM, VA.Position.Z * FZ);
         QAffecterCouleur(VB.Couleur, FOpacity);
-        glVertex3f(VB.X * MM, VB.Y * MM, VB.Z * FZ);
+        glVertex3f(VB.Position.X * MM, VB.Position.Y * MM, VB.Position.Z * FZ);
         QAffecterCouleur(VC.Couleur, FOpacity);
-        glVertex3f(VC.X * MM, VC.Y * MM, VC.Z * FZ);
+        glVertex3f(VC.Position.X * MM, VC.Position.Y * MM, VC.Position.Z * FZ);
         QAffecterCouleur(VA.Couleur, FOpacity);
-        glVertex3f(VA.X * MM, VA.Y * MM, VA.Z * FZ);
+        glVertex3f(VA.Position.X * MM, VA.Position.Y * MM, VA.Position.Z * FZ);
       end
       else
       begin
         QAffecterCouleur(FColorMin, FOpacity);
-        glVertex3f(VA.X * MM, VA.Y * MM, VA.Z * FZ);
-        glVertex3f(VB.X * MM, VB.Y * MM, VB.Z * FZ);
-        glVertex3f(VC.X * MM, VC.Y * MM, VC.Z * FZ);
-        glVertex3f(VA.X * MM, VA.Y * MM, VA.Z * FZ);
+        glVertex3f(VA.Position.X * MM, VA.Position.Y * MM, VA.Position.Z * FZ);
+        glVertex3f(VB.Position.X * MM, VB.Position.Y * MM, VB.Position.Z * FZ);
+        glVertex3f(VC.Position.X * MM, VC.Position.Y * MM, VC.Position.Z * FZ);
+        glVertex3f(VA.Position.X * MM, VA.Position.Y * MM, VA.Position.Z * FZ);
       end;
     glEnd;
   end;
@@ -1003,27 +996,27 @@ var
     if (FDoUseDegrades) then
     begin
       QAffecterCouleur(QVA.Couleur, FOpacity);
-      glNormal3F(QVA.NormX, QVA.NormY, QVA.NormZ);
-      glVertex3f(QVA.X * MM, QVA.Y * MM, QVA.Z * FZ);
+      glNormal3F(QVA.Normale.X, QVA.Normale.Y, QVA.Normale.Z);
+      glVertex3f(QVA.Position.X * MM, QVA.Position.Y * MM, QVA.Position.Z * FZ);
 
       QAffecterCouleur(QVB.Couleur, FOpacity);
-      glNormal3F(QVB.NormX, QVB.NormY, QVB.NormZ);
-      glVertex3f(QVB.X * MM, QVB.Y * MM, QVB.Z * FZ);
+      glNormal3F(QVB.Normale.X, QVB.Normale.Y, QVB.Normale.Z);
+      glVertex3f(QVB.Position.X * MM, QVB.Position.Y * MM, QVB.Position.Z * FZ);
 
       QAffecterCouleur(QVC.Couleur, FOpacity);
-      glNormal3F(QVC.NormX, QVC.NormY, QVC.NormZ);
-      glVertex3f(QVC.X * MM, QVC.Y * MM, QVC.Z * FZ);
+      glNormal3F(QVC.Normale.X, QVC.Normale.Y, QVC.Normale.Z);
+      glVertex3f(QVC.Position.X * MM, QVC.Position.Y * MM, QVC.Position.Z * FZ);
 
     end
     else
     begin
       QAffecterCouleur(FColorMin, FOpacity);
-      glNormal3F(QVA.NormX, QVA.NormY, QVA.NormZ);
-      glVertex3f(QVA.X * MM, QVA.Y * MM, QVA.Z * FZ);
-      glNormal3F(QVB.NormX, QVB.NormY, QVB.NormZ);
-      glVertex3f(QVB.X * MM, QVB.Y * MM, QVB.Z * FZ);
-      glNormal3F(QVC.NormX, QVC.NormY, QVC.NormZ);
-      glVertex3f(QVC.X * MM, QVC.Y * MM, QVC.Z * FZ);
+      glNormal3F(QVA.Normale.X, QVA.Normale.Y, QVA.Normale.Z);
+      glVertex3f(QVA.Position.X * MM, QVA.Position.Y * MM, QVA.Position.Z * FZ);
+      glNormal3F(QVB.Normale.X, QVB.Normale.Y, QVB.Normale.Z);
+      glVertex3f(QVB.Position.X * MM, QVB.Position.Y * MM, QVB.Position.Z * FZ);
+      glNormal3F(QVC.Normale.X, QVC.Normale.Y, QVC.Normale.Z);
+      glVertex3f(QVC.Position.X * MM, QVC.Position.Y * MM, QVC.Position.Z * FZ);
     end;
   end;
 begin
@@ -1043,7 +1036,7 @@ begin
                       GetVertex(TR.PointC));
   end;
   // verso
-  for i:=0 to GetNbTriangles - 1 do
+  for i :=0 to GetNbTriangles - 1 do
   begin
     TR := GetTriangle(i);
     QDessinerTriangle(GetVertex(TR.PointC),
@@ -1057,16 +1050,14 @@ function TMaillage.GetCoordosVertexToPlan(const PM: TMNTVertex): TPoint;
 var
   EWE : TPoint2Df;
 begin
-  EWE.X  := PM.X;
-  EWE.Y  := PM.Y;
+  EWE.setFrom(PM.Position.X, PM.Position.Y);
   Result := FProcGCSToSRC(EWE);
 end;
 function TMaillage.GetCoordosPlan(const PM: TPoint3Df): TPoint;
 var
   EWE : TPoint2Df;
 begin
-  EWE.X  := PM.X;
-  EWE.Y  := PM.Y;
+  EWE.setFrom(PM.X, PM.Y);
   Result := FProcGCSToSRC(EWE);
 end;
 
@@ -1087,7 +1078,7 @@ var
   i: Integer;
   VX1, VX2, VX3: TMNTVertex;
   PP1, PP2, PP3: TPoint;
-  PM: TPoint3Df;
+  PM3: TPoint3Df;
   QT: TGeoTriangle3D;
   I1, I2: TGeoPoint3D;
   PP: TPoint;
@@ -1120,8 +1111,7 @@ begin
       for i := 0 to GetNbVertex - 1 do
       begin
         VX1 := GetVertex(i);
-
-        if (PointInRectangle(MakeTPoint2Df(VX1.X, VX1.Y), viewBox)) then
+        if (PointInRectangle(VX1.Position.X, VX1.Position.Y, viewBox)) then
         begin
           PP1 := GetCoordosVertexToPlan(VX1);
           bmp.CanvasBGRA.EllipseC(PP1.X, PP1.Y, 2, 2);
@@ -1141,9 +1131,9 @@ begin
         VX1 := GetVertex(TR.PointA);
         VX2 := GetVertex(TR.PointB);
         VX3 := GetVertex(TR.PointC);
-        if (PointInRectangle(MakeTPoint2Df(VX1.X, VX1.Y), viewBox) OR
-            PointInRectangle(MakeTPoint2Df(VX2.X, VX2.Y), viewBox) OR
-            PointInRectangle(MakeTPoint2Df(VX3.X, VX3.Y), viewBox)) then
+        if (PointInRectangle(VX1.Position.X, VX1.Position.Y, viewBox) OR
+            PointInRectangle(VX2.Position.X, VX2.Position.Y, viewBox) OR
+            PointInRectangle(VX3.Position.X, VX3.Position.Y, viewBox)) then
         begin
           PP1 := GetCoordosVertexToPlan(VX1);
           PP2 := GetCoordosVertexToPlan(VX2);
@@ -1166,9 +1156,9 @@ begin
       VX2 := GetVertex(TR.PointB);
       VX3 := GetVertex(TR.PointC);
 
-      if (PointInRectangle(MakeTPoint2Df(VX1.X, VX1.Y), viewBox) OR
-          PointInRectangle(MakeTPoint2Df(VX2.X, VX2.Y), viewBox) OR
-          PointInRectangle(MakeTPoint2Df(VX3.X, VX3.Y), viewBox)) then
+      if (PointInRectangle(VX1.Position.X, VX1.Position.Y, viewBox) OR
+          PointInRectangle(VX2.Position.X, VX2.Position.Y, viewBox) OR
+          PointInRectangle(VX3.Position.X, VX3.Position.Y, viewBox)) then
       begin
         QT := GetGeoTriangle3D(TR);
         QZ := 10*Trunc(TR.BoundingBox.C1.Z / 10) + 0.01 - 10.00;
@@ -1179,10 +1169,10 @@ begin
           QDefineCrayon(psSolid, IIF((NbC mod 5 = 0), 2, 0), LineContourColor, LineContourOpacity);
           if (IntersectPlanHorizontalTriangle(QZ, QT, I1, I2)) then
           begin
-            PM.X := I1.X; PM.Y := I1.Y; PM.Z := MyIsovaleur;
-            PP1  := GetCoordosPlan(PM);
-            PM.X := I2.X; PM.Y := I2.Y;
-            PP2  := GetCoordosPlan(PM);
+            PM3.setFrom(I1.X, I1.Y, MyIsovaleur);
+            PP1  := GetCoordosPlan(PM3);
+            PM3.setFrom(I2.X, I2.Y, MyIsovaleur);
+            PP2  := GetCoordosPlan(PM3);
             bmp.CanvasBGRA.MoveTo(PP1.X, PP1.Y);
             bmp.CanvasBGRA.LineTo(PP2.X, PP2.Y);
           end;
@@ -1201,10 +1191,10 @@ begin
         QT := GetGeoTriangle3D(TR);
         if (IntersectPlanHorizontalTriangle(MyIsovaleur + 1e-03, QT, I1, I2)) then
         begin
-          PM := MakeTPoint3Df(I1.X, I1.Y, MyIsovaleur);
-          PP1  := GetCoordosPlan(PM);
-          PM := MakeTPoint3Df(I2.X, I2.Y, MyIsovaleur);
-          PP2  := GetCoordosPlan(PM);
+          PM3.setFrom(I1.X, I1.Y, MyIsovaleur);
+          PP1  := GetCoordosPlan(PM3);
+          PM3.setFrom(I2.X, I2.Y, MyIsovaleur);
+          PP2  := GetCoordosPlan(PM3);
           bmp.CanvasBGRA.MoveTo(PP1.X, PP1.Y);
           bmp.CanvasBGRA.LineTo(PP2.X, PP2.Y);
         end;
@@ -1225,11 +1215,11 @@ begin
         if (MyProfilTopo.GetNbPointsProfilTN() > 0) then
         begin
           PPP := MyProfilTopo.GetPointProfilTN(0);
-          PM := MakeTPoint3Df(PPP.X, PPP.Y, PPP.Z);
-          PP1  := GetCoordosPlan(PM);
+          PM3.setFrom(PPP.X, PPP.Y, PPP.Z);
+          PP1  := GetCoordosPlan(PM3);
           PPP  := MyProfilTopo.GetPointProfilTN(MyProfilTopo.GetNbPointsProfilTN() - 1);
-          PM   := MakeTPoint3Df(PPP.X, PPP.Y, PPP.Z);
-          PP2  := GetCoordosPlan(PM);
+          PM3.setFrom(PPP.X, PPP.Y, PPP.Z);
+          PP2  := GetCoordosPlan(PM3);
           bmp.CanvasBGRA.MoveTo(PP1.X, PP1.Y);
           bmp.CanvasBGRA.LineTo(PP2.X, PP2.Y);
         end;
@@ -1244,18 +1234,18 @@ function TMaillage.GetGeoTriangle2D(const QT: TMNTTriangleABC): TGeoTriangle2D;
 var
  V1, V2, V3: TMNTVertex;
 begin
- V1 := GetVertex(QT.PointA);
- V2 := GetVertex(QT.PointB);
- V3 := GetVertex(QT.PointC);
+  V1 := GetVertex(QT.PointA);
+  V2 := GetVertex(QT.PointB);
+  V3 := GetVertex(QT.PointC);
 
- Result[1].x := V1.X;
- Result[1].y := V1.Y;
+  Result[1].x := V1.Position.X;
+  Result[1].y := V1.Position.Y;
 
- Result[2].x := V2.X;
- Result[2].y := V2.Y;
+  Result[2].x := V2.Position.X;
+  Result[2].y := V2.Position.Y;
 
- Result[3].x := V3.X;
- Result[3].y := V3.Y;
+  Result[3].x := V3.Position.X;
+  Result[3].y := V3.Position.Y;
 end;
 // transformation d'un triangle TTriangulation en TGeoTriangle;
 function TMaillage.GetGeoTriangle3D(const QT: TMNTTriangleABC): TGeoTriangle3D;
@@ -1266,19 +1256,19 @@ begin
  V2 := GetVertex(QT.PointB);
  V3 := GetVertex(QT.PointC);
 
- Result[1].x := V1.X;
- Result[1].y := V1.Y;
- Result[1].z := V1.Z;
+ Result[1].x := V1.Position.X;
+ Result[1].y := V1.Position.Y;
+ Result[1].z := V1.Position.Z;
 
 
- Result[2].x := V2.X;
- Result[2].y := V2.Y;
- Result[2].z := V2.Z;
+ Result[2].x := V2.Position.X;
+ Result[2].y := V2.Position.Y;
+ Result[2].z := V2.Position.Z;
 
 
- Result[3].x := V3.X;
- Result[3].y := V3.Y;
- Result[3].z := V3.Z;
+ Result[3].x := V3.Position.X;
+ Result[3].y := V3.Position.Y;
+ Result[3].z := V3.Position.Z;
 end;
 
 function TMaillage.CalcBoundingBoxTriangle(const T: TMNTTriangleABC): TMNTTriangleABC;
@@ -1291,17 +1281,17 @@ var
     VX: TMNTVertex;
   begin
     VX := GetVertex(P);
-    if (VX.X < QC1.X) then QC1.X := VX.X;
-    if (VX.Y < QC1.Y) then QC1.Y := VX.Y;
-    if (VX.Z < QC1.Z) then QC1.Z := VX.Z;
-    if (VX.X > QC2.X) then QC2.X := VX.X;
-    if (VX.Y > QC2.Y) then QC2.Y := VX.Y;
-    if (VX.Z > QC2.Z) then QC2.Z := VX.Z;
+    if (VX.Position.X < QC1.X) then QC1.X := VX.Position.X;
+    if (VX.Position.Y < QC1.Y) then QC1.Y := VX.Position.Y;
+    if (VX.Position.Z < QC1.Z) then QC1.Z := VX.Position.Z;
+    if (VX.Position.X > QC2.X) then QC2.X := VX.Position.X;
+    if (VX.Position.Y > QC2.Y) then QC2.Y := VX.Position.Y;
+    if (VX.Position.Z > QC2.Z) then QC2.Z := VX.Position.Z;
   end;
 begin
   Result := T;
-  QC1  := MakeTPoint3Df( INF,  INF,  INF);
-  QC2  := MakeTPoint3Df(-INF, -INF, -INF);
+  QC1.setFrom( INF,  INF,  INF);
+  QC2.setFrom(-INF, -INF, -INF);
   WU(T.PointA);
   WU(T.PointB);
   WU(T.PointC);
@@ -1516,13 +1506,10 @@ begin
             if (QQ >= 0) then
             begin
               VV.ID  := StrToIntDef(PrmsLn[0], 0);
-              VV.X   := ConvertirEnNombreReel(PrmsLn[1], -1.00);
-              VV.Y   := ConvertirEnNombreReel(PrmsLn[2], -1.00);
-              VV.Z   := ConvertirEnNombreReel(PrmsLn[3], -1.00);
-              VV.NormX := 0.0;
-              VV.NormY := 0.0;
-              VV.NormZ := 0.0;
-              VV.Norme := 0.0;
+              VV.Position.setFrom(ConvertirEnNombreReel(PrmsLn[1], -1.00),
+                                  ConvertirEnNombreReel(PrmsLn[2], -1.00),
+                                  ConvertirEnNombreReel(PrmsLn[3], -1.00));
+              VV.Normale.Empty();
               VV.Couleur := FColorMin;
               VV.Displayed := true;
               AddVertex(VV);
@@ -1615,7 +1602,7 @@ begin
     for i := 0 to QNbVertex - 1 do
     begin
       MyVertex := self.GetVertex(i);
-      WriteLn(fp, Format(FMTVertex, [MyVertex.ID, MyVertex.X, MyVertex.Y, MyVertex.Z]));
+      WriteLn(fp, Format(FMTVertex, [MyVertex.ID, MyVertex.Position.X, MyVertex.Position.Y, MyVertex.Position.Z]));
     end;
     WriteLn(fp, Format(FORMAT_NB_INTEGER, [-1]));
     WriteLn(fp, 'TRIANGLE');
@@ -1781,23 +1768,24 @@ begin
     for j := 0 to FNbVertexX - 1 do
     begin
       QX := FCoordsMini.X + QEspcX * j;
-      AddVertex(MakeTVertex(QIdxVertex, QX, QY, ZMatrix[i][j], FColorMin));
+      VV.setFrom(QIdxVertex, QX, QY, ZMatrix[i][j], FColorMin);
+      AddVertex(VV);
       QIdxVertex += 1;
     end;
   end;
   AfficherMessage(Format('--> Construction des %d vertex OK', [GetNbVertex]));
   // contrôle: mini et maxi des vertex. A factoriser
-  QMini := MakeTPoint3Df( INFINI,  INFINI,  INFINI);
-  QMaxi := MakeTPoint3Df(-INFINI, -INFINI, -INFINI);
+  QMini.setFrom( INFINI,  INFINI,  INFINI);
+  QMaxi.setFrom(-INFINI, -INFINI, -INFINI);
   for i := 0 to GetNbVertex - 1 do
   begin
     VV := GetVertex(i);
-    if (VV.X < QMini.X) then QMini.X := VV.X;
-    if (VV.Y < QMini.Y) then QMini.Y := VV.Y;
-    if (VV.Z < QMini.Z) then QMini.Z := VV.Z;
-    if (VV.X > QMaxi.X) then QMaxi.X := VV.X;
-    if (VV.Y > QMaxi.Y) then QMaxi.Y := VV.Y;
-    if (VV.Z > QMaxi.Z) then QMaxi.Z := VV.Z;
+    if (VV.Position.X < QMini.X) then QMini.X := VV.Position.X;
+    if (VV.Position.Y < QMini.Y) then QMini.Y := VV.Position.Y;
+    if (VV.Position.Z < QMini.Z) then QMini.Z := VV.Position.Z;
+    if (VV.Position.X > QMaxi.X) then QMaxi.X := VV.Position.X;
+    if (VV.Position.Y > QMaxi.Y) then QMaxi.Y := VV.Position.Y;
+    if (VV.Position.Z > QMaxi.Z) then QMaxi.Z := VV.Position.Z;
   end;
   AfficherMessage(Format('--> De (%.2f, %.2f, %.2f) a (%.2f, %.2f, %.2f)', [ QMini.X,  QMini.Y, QMini.Z, QMaxi.X,  QMaxi.Y, QMaxi.Z]));
   // 73800 triangles
@@ -1833,13 +1821,7 @@ end;
 //******************************************************************************
 procedure TMaillage.AddVertex(const V: TMNTVertex);
 begin
-  if (V.X < FCoordsMini.X) then FCoordsMini.X := V.X;
-  if (V.Y < FCoordsMini.Y) then FCoordsMini.Y := V.Y;
-  if (V.Z < FCoordsMini.Z) then FCoordsMini.Z := V.Z;
-
-  if (V.X > FCoordsMaxi.X) then FCoordsMaxi.X := V.X;
-  if (V.Y > FCoordsMaxi.Y) then FCoordsMaxi.Y := V.Y;
-  if (V.Z > FCoordsMaxi.Z) then FCoordsMaxi.Z := V.Z;
+  UpdateMiniMaxi(V);
   FTableVertex.AddElement(V);
 end;
 
@@ -1848,21 +1830,9 @@ var
   V: TMNTVertex;
 begin
   V.ID := GetNbVertex();
-  V.X  := QX;
-  V.Y  := QY;
-  V.Z  := QZ;
-  V.Norme := 0.00;
-  V.NormX := 0.00;
-  V.NormY := 0.00;
-  V.NormZ := 0.00;
-  if (V.X < FCoordsMini.X) then FCoordsMini.X := V.X;
-  if (V.Y < FCoordsMini.Y) then FCoordsMini.Y := V.Y;
-  if (V.Z < FCoordsMini.Z) then FCoordsMini.Z := V.Z;
-
-  if (V.X > FCoordsMaxi.X) then FCoordsMaxi.X := V.X;
-  if (V.Y > FCoordsMaxi.Y) then FCoordsMaxi.Y := V.Y;
-  if (V.Z > FCoordsMaxi.Z) then FCoordsMaxi.Z := V.Z;
-
+  V.Position.setFrom(QX, QY, QZ);
+  V.Normale.Empty();
+  UpdateMiniMaxi(V);
   FTableVertex.AddElement(V);
 end;
 
@@ -1983,13 +1953,13 @@ var
     QR1, QR2, m: double;
     dx, dy, dz : double;
   begin
-    dx := QIx - AP1.X;
-    dy := QIy - AP1.y;
-    QR1 := Hypot(AP2.X - AP1.X, AP2.Y - AP1.Y);
+    dx := QIx - AP1.Position.X;
+    dy := QIy - AP1.Position.y;
+    QR1 := Hypot(AP2.Position.X - AP1.Position.X, AP2.Position.Y - AP1.Position.Y);
     QR2 := Hypot(dx, dy);
-    dz  := AP2.z - AP1.z;
+    dz  := AP2.Position.Z - AP1.Position.Z;
     m   := QR2 / QR1;
-    Result := AP1.Z + m * dz;
+    Result := AP1.Position.Z + m * dz;
   end;
   function CalcIntersect(const AP1, AP2, AP3: TMNTVertex) : boolean;
   var
@@ -1997,19 +1967,20 @@ var
   begin
     Result := False;
     // premier côté ?
-    if Intersect(TGeoFloat(AP1.X), TGeoFloat(AP1.Y), TGeoFloat(AP2.X), TGeoFloat(AP2.Y),
-                TGeoFloat(ExtrProfil1.X), TGeoFloat(ExtrProfil1.Y),
-                TGeoFloat(ExtrProfil2.X), TGeoFloat(ExtrProfil2.Y),
-                IX1, IY1) then
+    if Intersect(AP1.Position.X, AP1.Position.Y,
+                 AP2.Position.X, AP2.Position.Y,
+                 ExtrProfil1.X, ExtrProfil1.Y,
+                 ExtrProfil2.X, ExtrProfil2.Y,
+                 IX1, IY1) then
     begin
       QIntersect.X1 := IX1;
       QIntersect.Y1 := IY1;
       QIntersect.Z1 := CalcZ(AP1, AP2, IX1, IY1);
       // coté suivant ?
-      if Intersect(TGeoFloat(AP2.X), TGeoFloat(AP2.Y), TGeoFloat(AP3.X), TGeoFloat(AP3.Y),
-              TGeoFloat(ExtrProfil1.X), TGeoFloat(ExtrProfil1.Y),
-              TGeoFloat(ExtrProfil2.X), TGeoFloat(ExtrProfil2.Y),
-              IX1, IY1)
+      if Intersect(AP2.Position.X, AP2.Position.Y, AP3.Position.X, AP3.Position.Y,
+                   ExtrProfil1.X, ExtrProfil1.Y,
+                   ExtrProfil2.X, ExtrProfil2.Y,
+                   IX1, IY1)
       then
       begin
         QIntersect.X2 := IX1;
@@ -2017,10 +1988,10 @@ var
         QIntersect.Z2 := CalcZ(AP2, AP3, IX1, IY1);
       end else
       begin
-        Intersect(TGeoFloat(AP3.X), TGeoFloat(AP3.Y), TGeoFloat(AP1.X), TGeoFloat(AP1.Y),
-              TGeoFloat(ExtrProfil1.X), TGeoFloat(ExtrProfil1.Y),
-              TGeoFloat(ExtrProfil2.X), TGeoFloat(ExtrProfil2.Y),
-              IX1, IY1);
+        Intersect(AP3.Position.X, AP3.Position.Y, AP1.Position.X, AP1.Position.Y,
+                  ExtrProfil1.X, ExtrProfil1.Y,
+                  ExtrProfil2.X, ExtrProfil2.Y,
+                  IX1, IY1);
         QIntersect.X2 := IX1;
         QIntersect.Y2 := IY1;
         QIntersect.Z2 := CalcZ(AP3, AP1, IX1, IY1);
@@ -2134,8 +2105,8 @@ var
   PPP1: TPoint2Df;
 begin
   result := false;
-  QPt1 := MakeTPoint3Df(Pt1.X, Pt1.Y, FCoordsMini.Z);
-  QPt2 := MakeTPoint3Df(Pt2.X, Pt2.Y, FCoordsMaxi.Z);
+  QPt1.setFrom(Pt1.X, Pt1.Y, FCoordsMini.Z);
+  QPt2.setFrom(Pt2.X, Pt2.Y, FCoordsMaxi.Z);
   EWE := Format('%s.ExtractProfilTopo(%.2f, %.2f, %.2f -> %.2f, %.2f, %.2f)', [ClassName, QPt1.X, QPt1.Y, QPt1.Z, QPt2.X, QPt2.Y, QPT2.Z]);
   AfficherMessage(EWE);
   AfficherMessageErreur(EWE);
@@ -2341,10 +2312,10 @@ begin
 
 
 
-      PT1  := MakeTPoint2Df(ConvertirEnNombreReel(AR[7] , 0.00),
-                            ConvertirEnNombreReel(AR[8] , 0.00));
-      PT2  := MakeTPoint2Df(ConvertirEnNombreReel(AR[9] , 0.00),
-                            ConvertirEnNombreReel(AR[10], 0.00));
+      PT1.setFrom(ConvertirEnNombreReel(AR[7] , 0.00),
+                  ConvertirEnNombreReel(AR[8] , 0.00));
+      PT2.setFrom(ConvertirEnNombreReel(AR[9] , 0.00),
+                  ConvertirEnNombreReel(AR[10], 0.00));
       QNom := Trim(AR[11]);
       if (ExtractAndAddProfilTopo(PT1, PT2, QProfilLineAttr, QNom)) then
       begin
@@ -2387,8 +2358,9 @@ begin
       for i := 0 to GetNbVertex() - 1 do
       begin
         MyVertex := GetVertex(i);
-        AfficherMessageErreur(Format('%d: %f %f %f', [i, MyVertex.X, MyVertex.Y, MyVertex.Z]));
-        MyTriangulationDelaunay.AddAPoint(MakeTPoint3Df(MyVertex.X, MyVertex.Y, MyVertex.Z), false);
+        AfficherMessageErreur(Format('%d: %f %f %f', [i, MyVertex.Position.X, MyVertex.Position.Y, MyVertex.Position.Z]));
+        QPoint.setFrom(MyVertex.Position.X, MyVertex.Position.Y, MyVertex.Position.Z);
+        MyTriangulationDelaunay.AddAPoint(QPoint, false);
       end;
 
       //MyTriangulationDelaunay.Mesh();
@@ -2404,13 +2376,8 @@ begin
         begin
           QPoint := MyTriangulationDelaunay.GetPoint(i);
           MyVertex.ID := i;
-          MyVertex.X  := QPoint.X;
-          MyVertex.Y  := QPoint.Y;
-          MyVertex.Z  := QPoint.Z;
-          MyVertex.Norme := 0.00;
-          MyVertex.NormX  := 0.00;
-          MyVertex.NormY  := 0.00;
-          MyVertex.NormZ  := 0.00;
+          MyVertex.Position.setFrom(QPoint.X, QPoint.Y, QPoint.Z);
+          MyVertex.Normale.Empty();
           self.AddVertex(MyVertex);
         end;
       end;
@@ -2447,24 +2414,24 @@ var
 begin
    Result := false;
    if (not IsValidTriangle(ATriangle)) then Exit;
-   UZ := MakeTPoint3Df(0, 0, 1);
+   UZ.setFrom(0, 0, 1);
    PA := GetVertex(ATriangle.PointA);
    PB := GetVertex(ATriangle.PointB);
    PC := GetVertex(ATriangle.PointC);
-   lAB := Hypot3D(PA.X - PB.X, PA.Y - PB.Y, PA.Z - PB.Z);
-   lBC := Hypot3D(PB.X - PC.X, PB.Y - PC.Y, PB.Z - PC.Z);
-   lCA := Hypot3D(PC.X - PA.X, PC.Y - PA.Y, PC.Z - PA.Z);
+   lAB := Hypot3D(PA.Position.X - PB.Position.X, PA.Position.Y - PB.Position.Y, PA.Position.Z - PB.Position.Z);
+   lBC := Hypot3D(PB.Position.X - PC.Position.X, PB.Position.Y - PC.Position.Y, PB.Position.Z - PC.Position.Z);
+   lCA := Hypot3D(PC.Position.X - PA.Position.X, PC.Position.Y - PA.Position.Y, PC.Position.Z - PA.Position.Z);
    if (IsZero(lAB) OR  IsZero(lBC) OR IsZero(lCA)) then Exit;
    if ((lAB > MAX_COTE_TRIANGLE) OR  (lBC > MAX_COTE_TRIANGLE) OR (lCA > MAX_COTE_TRIANGLE)) then Exit;
 
    // orientation du triangle
-   VAB := MakeTPoint3Df(PB.X - PA.X, PB.Y - PA.Y, PB.Z - PA.Z);
-   VAC := MakeTPoint3Df(PC.X - PA.X, PC.Y - PA.Y, PC.Z - PA.Z);
+   VAB.setFrom(PB.Position.X - PA.Position.X, PB.Position.Y - PA.Position.Y, PB.Position.Z - PA.Position.Z);
+   VAC.setFrom(PC.Position.X - PA.Position.X, PC.Position.Y - PA.Position.Y, PC.Position.Z - PA.Position.Z);
 
    // produit vectoriel: normale du triangle
-   VN.X := VAB.Y * VAC.Z - VAB.Z * VAC.Y;
-   VN.Y := VAB.Z * VAC.X - VAB.X * VAC.Z;
-   VN.Z := VAB.X * VAC.Y - VAB.Y * VAC.X;
+   VN.setFrom(VAB.Y * VAC.Z - VAB.Z * VAC.Y,
+              VAB.Z * VAC.X - VAB.X * VAC.Z,
+              VAB.X * VAC.Y - VAB.Y * VAC.X);
    // Si la composante Z du vecteur normal est négative, échanger B et C
    if (VN.Z < 0) then Swap(ATriangle.PointB, ATriangle.PointC);
    Result := True;
@@ -2560,7 +2527,8 @@ begin
     for i := 0 to QNbVertex - 1 do
     begin
       MyVertex := GetVertex(i);
-      WriteLn(fp, Format('%d %.2f %.2f %.2f %d', [i, MyVertex.X, MyVertex.Y, MyVertex.Z, 1]));
+      //WriteLn(fp, Format('%d %.2f %.2f %.2f %d', [i, MyVertex.Position.X, MyVertex.Position.Y, MyVertex.Position.Z, 1]));
+      writeln(fp, MyVertex.MakeLigneForMailleur(i));
     end;
     Result := True;
   finally
@@ -2579,7 +2547,7 @@ begin
   for i := self.GetNbVertex() downto 0 do
   begin
     MyVertex := GetVertex(i);
-    if (not PointInPolygon(MyVertex.X, MyVertex.Y, P)) then FTableVertex.RemoveElement(i);
+    if (not PointInPolygon(MyVertex.Position.X, MyVertex.Position.Y, P)) then FTableVertex.RemoveElement(i);
   end;
   Result := (GetNbVertex() >= 3);
 
@@ -2592,9 +2560,9 @@ var
   MyTriangle: TMNTTriangleABC;
   function QVertexInBoundingBox(const V: TMNTVertex): boolean;
   begin
-    Result := IsInRange(V.X, BB.C1.X, BB.C2.X) AND
-              IsInRange(V.Y, BB.C1.Y, BB.C2.Y) AND
-              IsInRange(V.Z, BB.C1.Z, BB.C2.Z);
+    Result := IsInRange(V.Position.X, BB.C1.X, BB.C2.X) AND
+              IsInRange(V.Position.Y, BB.C1.Y, BB.C2.Y) AND
+              IsInRange(V.Position.Z, BB.C1.Z, BB.C2.Z);
   end;
   function QTriangleInBoundingBox(const T: TMNTTriangleABC): boolean;
   var
@@ -2655,8 +2623,8 @@ end;
 
 procedure TMaillage.ReinitBoundinxBoxWithoutData();
 begin
-  FCoordsMini:= MakeTPoint3Df(INFINI, INFINI, INFINI);
-  FCoordsMaxi:= MakeTPoint3Df(-INFINI, -INFINI, -INFINI);
+  FCoordsMini.setFrom( INFINI,  INFINI,  INFINI);
+  FCoordsMaxi.setFrom(-INFINI, -INFINI, -INFINI);
 end;
 
 function TMaillage.ChargerResultatsDuMailleur(const BaseFileName: TStringDirectoryFilename): boolean;

@@ -207,9 +207,11 @@ end;
 
 
 procedure TSceneX3D.TraceCube(const NomCube: string; const CBG, CHD: TPoint3Df);
+var ColorCube: TColorRGBA;
 begin
   BeginShape(NomCube);
-    DescribeShapeMaterial(NomCube, MakeTColorRGBA(clBlue, 255));
+    ColorCube.setFrom(clBlue, 255);
+    DescribeShapeMaterial(NomCube, ColorCube);
     WriteLine(Format('      <IndexedLineSet DEF=''%s'' coordIndex=''%s''>', ['ILS', '0 1 2 3 0 4 5 6 7 4 -1 1 5 -1 2 6 -1 3 7 -1']));
       WriteLine(Format('        <Coordinate DEF=''%s'' point=''', ['CoordsCorners']));
         AddVertexCoordinates(CBG.X, CBG.Y, CBG.Z);

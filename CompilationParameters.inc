@@ -50,11 +50,8 @@
 {$UNDEF GROS_MINET}
 
 //******************************************************************************
-
 //******************************************************************************
 // Affichage des fenêtres
-
-
 // Modèle de stockage des matrices
 // Si ce paramètre est défini, ce sera des tableaux de listes
 // sinon, c'est des TArray2Df
@@ -70,14 +67,13 @@
 //******************************************************************************
 // Compiler pour Raspberry Pi
 // /!\ Dans les options de compilation, désactiver toutes les optimisations
-{$DEFINE RASPBERRY_PI} // Le
+{$DEFINE RASPBERRY_PI}
 {$UNDEF RASPBERRY_PI}
 
 // Mode pour la version de GHTopo sur RPI ou tablette
 // Ne peut pas partir dans le DPR du projet
-{$DEFINE GHTOPO_SIMPLIFIE}            // Par défaut: our version Raspberry, valable aussi sur PC
-{$UNDEF GHTOPO_SIMPLIFIE}            // Si désactivé, passe en GHTopo standard multi-fenêtres (Delphi-like)
-
+{$DEFINE GHTOPO_SIMPLIFIE}         // Par défaut: our version Raspberry, valable aussi sur PC
+{$UNDEF GHTOPO_SIMPLIFIE}          // Si désactivé, passe en GHTopo standard multi-fenêtres (Delphi-like)
 // utiliser les coupes développées
 {$DEFINE USE_COUPES_DEVELOPPEES}
 {.$UNDEF USE_COUPES_DEVELOPPEES}
@@ -87,22 +83,18 @@
 
 // Spécial Raspberry PI
 {$IFDEF RASPBERRY_PI}
-  {$DEFINE GHTOPO_SIMPLIFIE}      // Armement automatique le mode GHTopo simplifié
-  {$UNDEF USE_COUPES_DEVELOPPEES} // Désarme le mode Coupes développées
+  {$DEFINE GHTOPO_SIMPLIFIE}       // Armement automatique le mode GHTopo simplifié
 {$EndIf RASPBERRY_PI}
-
 {$IFDEF GHTOPO_SIMPLIFIE}
-  {$UNDEF USE_VIEWER_OPENGL}       // Le mode GHTopo simplifié désactive le viewer OpenGL
-  {$UNDEF USE_COUPES_DEVELOPPEES}  // Coupes développées désactivées
-  {$UNDEF GROS_MINET}              // Mode Gros Minet désactivé
+  {$UNDEF USE_VIEWER_OPENGL}       // Le mode GHTopo simplifié désarme le viewer OpenGL
+  {$UNDEF USE_COUPES_DEVELOPPEES}  // Désarme le mode Coupes développées
+  {$UNDEF GROS_MINET}              // Désarme le mode Gros Minet
 {$ENDIF}
-
-
 // MacOS NON SUPPORTE
 
 // Spécial Windows
 {$IFDEF MSWINDOWS}
-   {$DEFINE DISP_FRM_JOURNAL}    // journal
+   {$DEFINE DISP_FRM_JOURNAL}    // journal ; sinon, le terminal fait l'affaire
 {$ENDIF}
 
 // Spécial Linux
@@ -125,16 +117,5 @@
 // débogage: assertions
 {$ASSERTIONS ON}
 {.$ASSERTIONS OFF}
-
-// graphes
-
-
-
-
-
-
-
-
-
 
 

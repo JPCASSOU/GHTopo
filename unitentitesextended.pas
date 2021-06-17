@@ -231,7 +231,7 @@ type
     function  GetRecapitulation(): TVentilationSpeleometrie;
 
     // fonctions de recherche
-    function GetStationOrEntranceFromXYZ(const X, Y, Z: double;
+    function GetStationOrEntranceFromXYZ(const QX, QY, QZ: double;
                                          const RayonMaxiCapture: double;
                                          const TablesAParcourir: TBDDEntitesFindTablesAParcourir;
                                          const IgnoreZ: boolean;
@@ -821,9 +821,9 @@ begin
       MyJonction := GetJonction(i);
       EWE := Format(FMTSERST + #9 + FORMAT_STRING + #9 + FORMAT_STRING + #9 + FORMAT_STRING,
                     [MyJonction.NoSer, MyJonction.NoSt,
-                     FormatterNombreOOo(MyJonction.X, 3, true),
-                     FormatterNombreOOo(MyJonction.Y, 3, true),
-                     FormatterNombreOOo(MyJonction.Z, 3, true)
+                     FormatterNombreOOo(MyJonction.Position.X, 3, true),
+                     FormatterNombreOOo(MyJonction.Position.Y, 3, true),
+                     FormatterNombreOOo(MyJonction.Position.Z, 3, true)
                     ]);
       WriteLn(fp, EWE);
     end;
@@ -846,7 +846,7 @@ begin
   except
     WU   := clWhite;
   end;
-  Result := MakeTColorRGBA(WU, $FF);
+  Result.setFrom(WU, $FF);
 end;
 
 
@@ -910,7 +910,7 @@ begin
   except
     WU  := clWhite;
   end;
-  Result := MakeTColorRGBA(WU, $FF);
+  Result.setFrom(WU, $FF);
 end;
 
 function TBDDEntites.GetCouleurEntiteRGBBySecteur(const E: TBaseStation): TColor;
@@ -960,7 +960,7 @@ begin
   except
     WU := clWhite;
   end;
-  Result := MakeTColorRGBA(WU, $FF);
+  Result.setFrom(WU, $FF);
 end;
 function TBDDEntites.GetCouleurRGBAExpeByIdx(const IDX: TNumeroExpe): TColorRGBA;
 var
@@ -973,7 +973,7 @@ begin
   except
     WU := clWhite;
   end;
-  Result := MakeTColorRGBA(WU, $FF);
+  Result.setFrom(WU, $FF);
 end;
 
 
@@ -997,6 +997,7 @@ const
   GM = 1e20;
 var
   i, NbEntrances: integer;
+  PM3: TPoint3Df;
   XMini, XMaxi, YMini, YMaxi, ZMini, ZMaxi: double;
   EWE: TBaseStation;
   MyEntrance: TEntrance;
@@ -1123,24 +1124,23 @@ begin
         for i := 1 to NbEntrances - 1 do
         begin
           MyEntrance := self.GetEntrance(i);
-
-          if (not QIsValidCoords(MakeTPoint3Df(MyEntrance.eXEntree, MyEntrance.eYEntree, MyEntrance.eZEntree))) then continue;
-          XMini := Min(XMini, MyEntrance.eXEntree);
-          YMini := Min(YMini, MyEntrance.eYEntree);
-          ZMini := Min(ZMini, MyEntrance.eZEntree);
-          XMaxi := Max(XMaxi, MyEntrance.eXEntree);
-          YMaxi := Max(YMaxi, MyEntrance.eYEntree);
-          ZMaxi := Max(ZMaxi, MyEntrance.eZEntree);
+          if (not QIsValidCoords(MyEntrance.ePosition)) then continue;
+          XMini := Min(XMini, MyEntrance.ePosition.X);
+          YMini := Min(YMini, MyEntrance.ePosition.Y);
+          ZMini := Min(ZMini, MyEntrance.ePosition.Z);
+          XMaxi := Max(XMaxi, MyEntrance.ePosition.X);
+          YMaxi := Max(YMaxi, MyEntrance.ePosition.Y);
+          ZMaxi := Max(ZMaxi, MyEntrance.ePosition.Z);
 
         end;
-        FMetafilteredCoinBasGauche := MakeTPoint3Df(XMini, YMini, ZMini);
-        FMetafilteredCoinHautDroit := MakeTPoint3Df(XMaxi, YMaxi, ZMaxi);
+        FMetafilteredCoinBasGauche.setFrom(XMini, YMini, ZMini);
+        FMetafilteredCoinHautDroit.setFrom(XMaxi, YMaxi, ZMaxi);
       end;
     end;
 
     // affectation des membres privés suivants
-    FCoinBasGauche := MakeTPoint3Df(XMini, YMini, ZMini);
-    FCoinHautDroit := MakeTPoint3Df(XMaxi, YMaxi, ZMaxi);
+    FCoinBasGauche.setFrom(XMini, YMini, ZMini);
+    FCoinHautDroit.setFrom(XMaxi, YMaxi, ZMaxi);
     AfficherMessage(Format('-- Reseau complet : Mini: %.0f, %.0f, %.0f', [FCoinBasGauche.X, FCoinBasGauche.Y, FCoinBasGauche.Z]));
     AfficherMessage(Format('-- Reseau complet : Maxi: %.0f, %.0f, %.0f', [FCoinHautDroit.X, FCoinHautDroit.Y, FCoinHautDroit.Z]));
     AfficherMessage(Format('-- Zone filtree   : Mini: %.0f, %.0f, %.0f', [FMetafilteredCoinBasGauche.X, FMetafilteredCoinBasGauche.Y, FMetafilteredCoinBasGauche.Z]));
@@ -1222,7 +1222,7 @@ end;
 // Retourne: VRAI si entité trouvée, FAUX sinon
 // Transmet: Entité trouvée
 //           Index interne de l'entité
-function TBDDEntites.GetStationOrEntranceFromXYZ(const X, Y, Z: double;
+function TBDDEntites.GetStationOrEntranceFromXYZ(const QX, QY, QZ: double;
                                                  const RayonMaxiCapture: double;
                                                  const TablesAParcourir: TBDDEntitesFindTablesAParcourir;
                                                  const IgnoreZ: boolean;
@@ -1249,8 +1249,8 @@ begin
     for i := 0 to Nb - 1  do
     begin
       QEN := GetEntrance(i);
-      if (IgnoreZ) then d := Hypot2D(QEN.eXEntree - X, QEN.eYEntree - Y)
-                   else d := Hypot3D(QEN.eXEntree - X, QEN.eYEntree - Y, QEN.eZEntree - Z);
+      if (IgnoreZ) then d := Hypot2D(QEN.ePosition.X - QX, QEN.ePosition.Y - QY)
+                   else d := Hypot3D(QEN.ePosition.X - QX, QEN.ePosition.Y - QY, QEN.ePosition.Z - QZ);
       if (d <= RayonMaxiCapture) then
       begin
         if (d < dMax) then
@@ -1279,7 +1279,7 @@ begin
       if (QBP.Type_Entite = tgVISEE_RADIANTE) then Continue;
       // on zappe les entitées métafiltrées
       if (not QBP.Enabled) then Continue;
-       d := Hypot2D(QBP.PosStation.X - X, QBP.PosStation.Y - Y);
+       d := Hypot2D(QBP.PosStation.X - QX, QBP.PosStation.Y - QY);
       //if (IgnoreZ) then d := Hypot2D(QBP.PosStation.X - X, QBP.PosStation.Y - Y)
       //             else d := Hypot3D(QBP.PosStation.X - X, QBP.PosStation.Y - Y, QBP.PosStation.Z - Z);
       //if (d <= RayonMaxiCapture) then
@@ -1337,9 +1337,7 @@ begin
         EE.Entite_Station  := Entr.eRefSt;
         EE.IDTerrain       := Format('%s - %d.%d - Entree: %s', [Entr.eIDTerrain, Entr.eRefSer, Entr.eRefSt, Entr.eNomEntree]);
         EE.oCommentaires   := Entr.eObserv;
-        EE.PosStation.X    := Entr.eXEntree;
-        EE.PosStation.Y    := Entr.eYEntree;
-        EE.PosStation.Z    := Entr.eZEntree;
+        EE.PosStation      := Entr.ePosition;
         Result := True;
         Exit;
       end;
@@ -2290,8 +2288,8 @@ var
     begin
       MyEntrance := GetEntrance(i);
       if (Assigned(LocalProcProgression)) then LocalProcProgression(format('Marker entrance %d: %s', [i, MyEntrance.eNomEntree]), i, 0, NbE, 1);
-      FSVGCanvas.DrawCircle(NOM_STYLE_ENTRANCE, MyEntrance.eXEntree, MyEntrance.eYEntree, 5.00, 5.00);
-      FSVGCanvas.DrawTexte(NOM_STYLE_ENTRANCE, 1, MyEntrance.eXEntree, MyEntrance.eYEntree, 0.00, MyEntrance.eNomEntree);
+      FSVGCanvas.DrawCircle(NOM_STYLE_ENTRANCE, MyEntrance.ePosition.X, MyEntrance.ePosition.Y, 5.00, 5.00);
+      FSVGCanvas.DrawTexte(NOM_STYLE_ENTRANCE, 1, MyEntrance.ePosition.X, MyEntrance.ePosition.Y, 0.00, MyEntrance.eNomEntree);
     end;
   end;
 
@@ -2306,8 +2304,8 @@ var
     begin
       MyJonction := GetJonction(i);
       if (Assigned(LocalProcProgression)) then LocalProcProgression(format('Marker junction %d: %d%d', [i, MyJonction.NoSer, MyJonction.NoSt]), i, 0, NbE, 100);
-      FSVGCanvas.DrawCircle(NOM_STYLE_NODES_DEFAULT, MyJonction.X, MyJonction.Y, 2.00, 2.00);
-      FSVGCanvas.DrawTexte(NOM_STYLE_NODES_DEFAULT, 1, MyJonction.X, MyJonction.Y, 0.00, format(FMTSERST, [MyJonction.NoSer, MyJonction.NoSt]));
+      FSVGCanvas.DrawCircle(NOM_STYLE_NODES_DEFAULT, MyJonction.Position.X, MyJonction.Position.Y, 2.00, 2.00);
+      FSVGCanvas.DrawTexte(NOM_STYLE_NODES_DEFAULT, 1, MyJonction.Position.X, MyJonction.Position.Y, 0.00, format(FMTSERST, [MyJonction.NoSer, MyJonction.NoSt]));
     end;
   end;
 
@@ -2362,7 +2360,7 @@ var
     HauteurNord    := LongueurEchelle / 2;
 
     BB := FSVGCanvas.GetDrawingBounds();
-    C1 := MakeTPoint3Df(BB.X1 + POS_ECHELLE, BB.Y1 + POS_ECHELLE, 0.00);
+    C1.setFrom(BB.X1 + POS_ECHELLE, BB.Y1 + POS_ECHELLE, 0.00);
     FSVGCanvas.BeginGroupe(EWE, EWE, 0.00, 0.00);
       FSVGCanvas.DrawRectangle(NOM_STYLE_REGLE_NORD_EVEN, C1.X, C1.Y, C1.X + LongueurEchelle, C1.Y + HauteurEchelle);
       for i := 0 to NB_CASES_ECHELLE - 1 do
@@ -2704,9 +2702,9 @@ begin
 
 
     // calcul coordonnées
-    CalculerVisee(VQ, CC, EX, dX, dY, 1.0, dZ, dP);
+    CalculerVisee(VQ, CC, EX, dX, dY, dZ, dP);
     EE.PosExtr0        := EWE.PosStation;
-    EE.PosStation := MakeTPoint3Df(EE.PosExtr0.X + dX, EE.PosExtr0.Y + dY, EE.PosExtr0.Z + dZ);
+    EE.PosStation.setFrom(EE.PosExtr0.X + dX, EE.PosExtr0.Y + dY, EE.PosExtr0.Z + dZ);
     EE.Type_Entite     := QV.TypeVisee;
     Result := True;
   except
@@ -2761,9 +2759,9 @@ begin
     TR.Developpement    := 0.00;
     TR.NomReseauSecteur := WU;
     TR.NbVisees         := 0;
-    TR.CoordMini        := MakeTPoint3Df( INFINI,  INFINI,  INFINI);
-    TR.CoordMaxi        := MakeTPoint3Df(-INFINI, -INFINI, -INFINI);
-    TR.Etendue          := MakeTPoint3Df(0.00, 0.00, 0.00);
+    TR.CoordMini.setFrom( INFINI,  INFINI,  INFINI);
+    TR.CoordMaxi.setFrom(-INFINI, -INFINI, -INFINI);
+    TR.Etendue.Empty();
     for i := 0 to Nb - 1 do
     begin
       EE := self.GetEntiteVisee(i);
@@ -2790,9 +2788,9 @@ begin
         CheckC1(EE);
         CheckC2(EE);
         TR.NbVisees  += 1;
-        TR.Etendue   := MakeTPoint3Df(TR.CoordMaxi.X - TR.CoordMini.X,
-                                      TR.CoordMaxi.Y - TR.CoordMini.Y,
-                                      TR.CoordMaxi.Z - TR.CoordMini.Z);
+        TR.Etendue.setFrom(TR.CoordMaxi.X - TR.CoordMini.X,
+                           TR.CoordMaxi.Y - TR.CoordMini.Y,
+                           TR.CoordMaxi.Z - TR.CoordMini.Z);
       end
     end;
     TR.DonneesValides := (TR.Developpement > 0.0001);
@@ -2887,10 +2885,10 @@ begin
           begin
             MyPen.Color := GetColorViseeFromModeRepresentation(FM, MyEntite);
             MyPen.fWidth:= 0.00;
-            PP[0] := MakeTPoint2Df(MyEntite.PosOPG.X, MyEntite.PosOPG.Y);
-            PP[1] := MakeTPoint2Df(MyEntite.PosOPD.X, MyEntite.PosOPD.Y);
-            PP[2] := MakeTPoint2Df(MyEntite.PosPD.X, MyEntite.PosPD.Y);
-            PP[3] := MakeTPoint2Df(MyEntite.PosPG.X, MyEntite.PosPG.Y);
+            PP[0].setFrom(MyEntite.PosOPG.X, MyEntite.PosOPG.Y);
+            PP[1].setFrom(MyEntite.PosOPD.X, MyEntite.PosOPD.Y);
+            PP[2].setFrom(MyEntite.PosPD.X, MyEntite.PosPD.Y);
+            PP[3].setFrom(MyEntite.PosPG.X, MyEntite.PosPG.Y);
             MyPSCanvas.DrawLine('', PP[1].X, PP[1].Y, PP[2].X, PP[2].Y);
             MyPSCanvas.DrawLine('', PP[0].X, PP[0].Y, PP[3].X, PP[3].Y);
           end;

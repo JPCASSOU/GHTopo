@@ -145,8 +145,8 @@ begin
     EWE := FDocTopoCourant.GetCodeEPSGSystemeCoordonnees();
     lbSystemeCoordsCourant.Caption := Format('EPSG:%d - %s', [EWE.CodeEPSG, EWE.NomEPSG]);
     MyEntrance := FDocTopoCourant.GetEntrance(0);
-    editX1.Value := MyEntrance.eXEntree;
-    editY1.Value := MyEntrance.eYEntree;
+    editX1.Value := MyEntrance.ePosition.X;
+    editY1.Value := MyEntrance.ePosition.Y;
 
     // récupération des Idx
     MiouMiou(editFirstNumCodeForSynthese   , FDocTopoCourant.getMaxIdxCode());
@@ -336,20 +336,20 @@ begin
     pnlReprojection.Enabled := (EWE1.CodeEPSG <> EWE2.CodeEPSG);
 
     MyEntrance := FDocTopoAAjouter.GetEntrance(0);
-    editX1.Value := MyEntrance.eXEntree;
-    editY1.Value := MyEntrance.eYEntree;
+    editX1.Value := MyEntrance.ePosition.X;
+    editY1.Value := MyEntrance.ePosition.Y;
     // reprojection d'office
     if (EWE1.CodeEPSG = EWE2.CodeEPSG) then
     begin
-      PO.U := MyEntrance.eXEntree;  PO.V := MyEntrance.eYEntree;
+      PO.U := MyEntrance.ePosition.X;  PO.V := MyEntrance.ePosition.Y;
       PC := FCoordConvertisseur.ConversionSyst1ToSyst2EPSG(EWE1.CodeEPSG, EWE2.CodeEPSG, PO);
       editX2.Value := PC.U;
       editY2.Value := PC.V;
     end
     else
     begin
-      editX2.Value := MyEntrance.eXEntree;
-      editY2.Value := MyEntrance.eYEntree;
+      editX2.Value := MyEntrance.ePosition.X;
+      editY2.Value := MyEntrance.ePosition.Y;
     end;
     // Point zéro du réseau ajouté
     editPtZeroReseauAddedSerie.AsInteger := 100000 + FDocTopoCourant.GetNbEntrances() + 1;
@@ -549,12 +549,12 @@ begin
         EPSGDest := FDocTopoCourant.GetCodeEPSGSystemeCoordonnees();
         if (EPSGSrc.CodeEPSG <> EPSGDest.CodeEPSG) then
         begin
-          PScr.U := MyEntrance.eXEntree;
-          PScr.V := MyEntrance.eYEntree;
+          PScr.U := MyEntrance.ePosition.X;
+          PScr.V := MyEntrance.ePosition.Y;
 
           PDest := FCoordConvertisseur.ConversionSyst1ToSyst2EPSG(EPSGSrc.CodeEPSG, EPSGDest.CodeEPSG, PScr);
-          MyEntrance.eXEntree := PDest.U;
-          MyEntrance.eYEntree := PDest.V;
+          MyEntrance.ePosition.X := PDest.U;
+          MyEntrance.ePosition.Y := PDest.V;
         end;
         //*)
         FDocTopoCourant.AddEntrance(MyEntrance);

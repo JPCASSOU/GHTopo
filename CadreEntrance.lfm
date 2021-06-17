@@ -6,6 +6,7 @@ object CdrEntreeCavites: TCdrEntreeCavites
   Align = alClient
   ClientHeight = 173
   ClientWidth = 568
+  LCLVersion = '2.0.0.4'
   TabOrder = 0
   DesignLeft = 92
   DesignTop = 265

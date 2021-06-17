@@ -80,13 +80,13 @@ type
     // Les noeuds
     procedure  BeginNodeList();  // initialise la liste des noeuds
       // QSerie et QStation forment le label du sommet au format '%d.%d'
-      procedure  AddStation(const QSerie, QStation: integer; const QX, QY, QZ: double; const QMetaData: string);
-      function   GetStation(const Idx: integer): TBZClassNode;
-      function   GetNbStations(): integer;
+    procedure  AddStation(const QSerie, QStation: integer; const QPosition: TPoint3Df; const QMetaData: string);
+    function   GetStation(const Idx: integer): TBZClassNode;
+    function   GetNbStations(): integer;
     procedure  EndNodesList();  // clôture cette liste et effectue les traitements préparatoires (tris, ...)
     function   AddArcBetweenStations(const Ser1, St1, Ser2, St2: integer; const Bidirectionnel: boolean = true; const Weight: double = 1.00): boolean;
     function   RemoveNode(const Ser1, St1: integer): boolean;
-    function RemoveArcBetweenStations(const Ser1, St1, Ser2, St2: integer;  const Bidirectionnel: boolean): boolean;
+    function   RemoveArcBetweenStations(const Ser1, St1, Ser2, St2: integer;  const Bidirectionnel: boolean): boolean;
 
     // spécifique stations topo
     function RechercherPlusCourtChemin(var MyPath: TPathBetweenNodes): boolean;
@@ -211,10 +211,10 @@ begin
   for i := 0 to Nb -1 do
   begin
     MyNoeud := GetStation(i);
-    FXMaxi := Max(FXMaxi, MyNoeud.X);
-    FYMaxi := Max(FYMaxi, MyNoeud.Y);
-    FXMini := Min(FXMini, MyNoeud.X);
-    FYMini := Min(FYMini, MyNoeud.Y);
+    FXMaxi := Max(FXMaxi, MyNoeud.Position.X);
+    FYMaxi := Max(FYMaxi, MyNoeud.Position.Y);
+    FXMini := Min(FXMini, MyNoeud.Position.X);
+    FYMini := Min(FYMini, MyNoeud.Position.Y);
   end;
 end;
 
@@ -248,7 +248,7 @@ begin
     ExtractSerStFromTIDStation(MyStation.IDStation, QSr, QSt);
     AfficherMessageErreur(Format(' %d: %d: %d.%d %f, %f, %f',
                     [i, MyStation.IDStation, QSr, QSt,
-                     MyStation.X, MyStation.Y, MyStation.Z]));
+                     MyStation.Position.X, MyStation.Position.Y, MyStation.Position.Z]));
   end;
   AfficherMessageErreur('');
 end;
@@ -312,7 +312,7 @@ begin
   for i := 0 to Nb - 1 do
   begin
     MyNoeud := GetStation(i);
-    WU := (MyNoeud.X - QX) ** 2 + (MyNoeud.Y - QY) ** 2;
+    WU := (MyNoeud.Position.X - QX) ** 2 + (MyNoeud.Position.Y - QY) ** 2;
     if (WU < QDist) then
     begin
       Result := True;
@@ -343,7 +343,7 @@ begin
   // Passe 1: Les noeuds
   self.BeginNodeList();
   MyEntrance := FBDDEntites.GetEntrance(0);
-  self.AddStation(1, 0, MyEntrance.eXEntree, MyEntrance.eYEntree, MyEntrance.eZEntree, MyEntrance.eNomEntree);
+  self.AddStation(1, 0, MyEntrance.ePosition, MyEntrance.eNomEntree);
   // les séries
   NbSeries := FDocuTopo.GetNbSeries();
   for NumSerie := 1 to NbSeries - 1 do
@@ -358,7 +358,7 @@ begin
       SetLastError(ERR_GRAPHE_ARC_EXTR_DEB_NOT_FOUND, Format('Noeud départ %d %d.%d non trouvé', [Myserie.GetNumeroDeSerie(), Qser0, QPt0]));
       continue;
     end;
-    self.AddStation(QJonction.NoSer, QJonction.NoSt, QJonction.X, QJonction.Y, QJonction.Z, QJonction.ToString());
+    self.AddStation(QJonction.NoSer, QJonction.NoSt, QJonction.Position, QJonction.ToString());
     // s'il y a un seule station dans la série, on attrappe la station d'arrivée eton crée un arc
     if (2 = NbPts) then
     begin
@@ -368,7 +368,7 @@ begin
       begin
         Continue;
       end;
-      self.AddStation(QJonction.NoSer, QJonction.NoSt, QJonction.X, QJonction.Y, QJonction.Z, QJonction.ToString());
+      self.AddStation(QJonction.NoSer, QJonction.NoSt, QJonction.Position, QJonction.ToString());
       continue;
     end
     else        // les points topo intermédiaires
@@ -378,14 +378,14 @@ begin
         Qser1 := MySerie.GetNumeroDeSerie();
         if (FBDDEntites.GetEntiteViseeFromSerSt(Qser1, QPt1, QBP1)) then
         begin
-          self.AddStation(QSer1, QPt1,  QBP1.PosStation.X, QBP1.PosStation.Y, QBP1.PosStation.Z, QBP1.oCommentaires);
+          self.AddStation(QSer1, QPt1,  QBP1.PosStation, QBP1.oCommentaires);
         end;
       end;
       // et on ajoute la station de fin de la série
       QSer1 := MySerie.GetNoSerieArr();
       QPt1  := myserie.GetNoPointArr();
       if (not FBDDEntites.FindJonctionBySerieSt(QSer1, QPt1, QJonction)) then Continue;
-      self.AddStation(QJonction.NoSer, QJonction.NoSt, QJonction.X, QJonction.Y, QJonction.Z, QJonction.ToString());
+      self.AddStation(QJonction.NoSer, QJonction.NoSt, QJonction.Position, QJonction.ToString());
     end;
   end;
     self.EndNodesList();
@@ -437,11 +437,11 @@ begin
   Result := self.Count;
 end;
 
-procedure TPathFindingGraphe.AddStation(const QSerie, QStation: integer; const QX, QY, QZ: double; const QMetaData: string);
+procedure TPathFindingGraphe.AddStation(const QSerie, QStation: integer; const QPosition: TPoint3Df; const QMetaData: string);
 var
   FN: TBZClassNode;
 begin
-  FN := self.AddNode(MakeTIDBaseStation(QSerie, QStation, false), QX, QY, QZ, QMetaData);
+  FN := self.AddNode(MakeTIDBaseStation(QSerie, QStation, false), QPosition, QMetaData);
 end;
 
 procedure TPathFindingGraphe.EndNodesList();
@@ -574,10 +574,9 @@ var
     NbVoisins := BS1.NodeLinkList.Count;
     AfficherMessageErreur(format('-- Parcours du noeud terminé: %d - %d voisins', [BS1.IDStation, NbVoisins]))
   end;
-
 begin
   result := QRemoveArc(Ser1, St1, Ser2, St2); // sens aller
-  if (Bidirectionnel) then result := QRemoveArc(Ser2, St2, Ser1, St1);
+  if (Bidirectionnel) then result := QRemoveArc(Ser2, St2, Ser1, St1); // sens retour éventuel
 end;
 
 
@@ -621,13 +620,13 @@ begin
       MyPath.LongueurParcours := 0.00;
       for i := 0 to (QNbC - 1) do MyPath.AddNoeud(FShortestPath.GetElement(QNbC - 1 - i));
       // calcul de la longueur du parcours
-      for i := 1 to MyPath.GetNbNoeuds() -1 do
+      for i := 1 to MyPath.GetNbNoeuds() - 1 do
       begin
         StDepart  := self.GetStation(MyPath.GetNoeud(i-1));
         StArrivee := self.GetStation(MyPath.GetNoeud(i));
-        MyPath.LongueurParcours += Hypot3D(StArrivee.X - StDepart.X,
-                                           StArrivee.Y - StDepart.Y,
-                                           StArrivee.Z - StDepart.Z);
+        MyPath.LongueurParcours += Hypot3D(StArrivee.Position.X - StDepart.Position.X,
+                                           StArrivee.Position.Y - StDepart.Position.Y,
+                                           StArrivee.Position.Z - StDepart.Position.Z);
       end;
     end
     else
@@ -701,9 +700,9 @@ begin
       MyStation := GetStation(i);
       ExtractSerStFromTIDStation(MyStation.IDStation, QSR, QST);
       WrtLn(Format(FMT_NOEUD, [i, MyStation.IDStation, QSR, QST,
-                               FormatterNombreOOo(MyStation.X),
-                               FormatterNombreOOo(MyStation.Y),
-                               FormatterNombreOOo(MyStation.Z)]));
+                               FormatterNombreOOo(MyStation.Position.X),
+                               FormatterNombreOOo(MyStation.Position.Y),
+                               FormatterNombreOOo(MyStation.Position.Z)]));
     end;
     // Les arcs
     WrtLn(Format('#Arcs: %d', [0]));
@@ -753,7 +752,6 @@ begin
     //1	1	335	12	255	128	0	Itineraire3
     for i := 0 to Nb - 1 do
     begin
-      //AfficherMessage(Format(' --> Calcul de %d: %s', [i, MyITI.NomItineraire]));
       EWE := Split(Trim(LS.Strings[i]), #9);
       MyITI.SerieDepart    := StrToIntDef(EWE[0], 1);
       MyITI.StationDepart  := StrToIntDef(EWE[1], 0);
@@ -1101,9 +1099,9 @@ begin
             end;
             WrtLinFmt('  %s.AddNoeud("%s", %d, %d, %d, [%s]);', [JS_GRAPHE_CLASS_VAR_NAME,
                                                                   FormatterTIDStation(MyNoeud.IDStation),
-                                                                  ToJSCoord(MyNoeud.X),
-                                                                  ToJSCoord(MyNoeud.Y),
-                                                                  ToJSCoord(MyNoeud.Z),
+                                                                  ToJSCoord(MyNoeud.Position.X),
+                                                                  ToJSCoord(MyNoeud.Position.Y),
+                                                                  ToJSCoord(MyNoeud.Position.Z),
                                                                   EWE]);
           end;
           WrtLinFmt('  %s = %s.GetXMini();', [JS_GLOBAL_VAR_FXMini, JS_GRAPHE_CLASS_VAR_NAME]);
@@ -1112,7 +1110,6 @@ begin
           WrtLinFmt('  %s = %s.GetYMaxi();', [JS_GLOBAL_VAR_FYMaxi, JS_GRAPHE_CLASS_VAR_NAME]);
 
           WrtLinFmt('  %s(St1, St2);', [JS_FUNCTION_CalcCheminMinimalBetweenTwoNodes]);
-
           WriteLine('  // et on fixe le noeud courant');
           WrtLinFmt('  %s = %s.GetNoeud(%d);', [JS_GLOBAL_VAR_FGlobalNoeudCourant, JS_GRAPHE_CLASS_VAR_NAME,1]);
           WrtLinFmt('  %s.innerHTML = "ID = " + %s.IDNoeud;', [JS_DOCUMENT_FORM_lbCanvasMousePos, JS_GLOBAL_VAR_FGlobalNoeudCourant]);
@@ -1193,14 +1190,14 @@ begin
         EndDiv();
         BeginDiv(NAMEREF_PANNEAU_ROADMAP); //    // Feuille de route
           BeginForm(JS_DOCUMENT_FORM_NAME_ROADMAP);                      // la liste des items
-            WrtLinFmt('    <LABEL id="%s" value="">%s</LABEL><BR>'    , [JS_DOCUMENT_FORM_lbRoadmapNbPoints, 'lbRoadmapNbPoints']);
+            AddFormLabel(JS_DOCUMENT_FORM_lbRoadmapNbPoints, 'lbRoadmapNbPoints');
             WrtLinFmt('    <select id="%s" name="%s" style="width:%d%%" onChange="%s()"> </select><BR>', [JS_DOCUMENT_FORM_lsbRoadMap , JS_DOCUMENT_FORM_lsbRoadMap, 100, JS_DOCUMENT_FORM_lsbRoadmap_ProcOnSelect]);
-            WrtLinFmt('    <LABEL id="%s" value="">%s</LABEL><BR>'    , [JS_DOCUMENT_FORM_lbCanvasMousePos  , '--']);
+            AddFormLabel(JS_DOCUMENT_FORM_lbCanvasMousePos   , '--');
             WriteLine('    <HR>');
-            WrtLinFmt('    <LABEL id="%s" value="">%s</LABEL><BR>'    , [JS_DOCUMENT_FORM_lbAzimutNextPoint , '--']);
+            AddFormLabel(JS_DOCUMENT_FORM_lbAzimutNextPoint  , '--');
             WriteLine('    <BR>');
-            WrtLinFmt('    <LABEL id="%s" value="">%s</LABEL><BR>'    , [JS_DOCUMENT_FORM_lbDistNextPoint   , '--']);
-            WrtLinFmt('    <LABEL id="%s" value="">%s</LABEL><BR>'    , [JS_DOCUMENT_FORM_lbPenteNextPoint  , '--']);
+            AddFormLabel(JS_DOCUMENT_FORM_lbDistNextPoint    , '--');
+            AddFormLabel(JS_DOCUMENT_FORM_lbPenteNextPoint   , '--');
           EndForm();
         EndDiv();
      EndBODY();

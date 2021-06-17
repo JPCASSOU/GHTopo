@@ -1215,7 +1215,6 @@ begin
       lsbPathRoadMap.Items.add(MyNode.ToString());
     end;
     lsbPathRoadMap.ItemIndex := 0;
-    //DisplayBearingToNext(0);
     GHTopoContext2DA1.SetShortestPath(FShortestPath);
     GHTopoContext2DA1.RefreshDessin();
     result := True;
@@ -1236,22 +1235,18 @@ begin
     lbNextWpt.Caption := 'Finish';
     Exit;
   end;
-
   WptCurr := FGraphe.GetStation(FShortestPath.GetNoeud(IdxWpt));
   WptNext := FGraphe.GetStation(FShortestPath.GetNoeud(IdxWpt+1));
   lbNextWpt.Caption := WptNext.ToString();
-  qdx := WptNext.X - WptCurr.X;
-  qdy := WptNext.Y - WptCurr.Y;
-  qdz := WptNext.Z - WptCurr.Z;
+  qdx := WptNext.Position.X - WptCurr.Position.X;
+  qdy := WptNext.Position.Y - WptCurr.Position.Y;
+  qdz := WptNext.Position.Z - WptCurr.Position.Z;
   GetBearingInc(qdx, qdy, qdz, QDist, QAz, QIncl, 360.00, 360.00);
   lbNextWptAzimut.Caption   := FormatterNombreAvecSepMilliers(QAz  , 3) + ' °';
   lbNextWptDistance.Caption := FormatterNombreAvecSepMilliers(QDist, 3) + ' m';
-  // et on centre la carte sur le point
-  GHTopoContext2DA1.CentrerVueSurPointXY(WptNext.X, WptNext.Y, True, WptNext.ToString());
-  // sans modifier la station courante
-  //  self.SetCurrentStation(QMyBaseStation, True);
+  // et on centre la carte sur le point sans modifier la station courante
+  GHTopoContext2DA1.CentrerVueSurPointXY(WptNext.Position.X, WptNext.Position.Y, True, WptNext.ToString());
   CdrBoussole1.SetAzimut(QAz);
-
 end;
 
 

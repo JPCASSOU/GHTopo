@@ -803,9 +803,9 @@ begin
     begin
       MyVertex := FMyMaillage.GetVertex(i);
       grdMaillageCoordsXYZ.Cells[0, i+1] := format('%d', [i]);
-      grdMaillageCoordsXYZ.Cells[1, i+1] := FormatterNombreOOo(MyVertex.X, 3);
-      grdMaillageCoordsXYZ.Cells[2, i+1] := FormatterNombreOOo(MyVertex.Y, 3);
-      grdMaillageCoordsXYZ.Cells[3, i+1] := FormatterNombreOOo(MyVertex.Z, 3);
+      grdMaillageCoordsXYZ.Cells[1, i+1] := FormatterNombreOOo(MyVertex.Position.X, 3);
+      grdMaillageCoordsXYZ.Cells[2, i+1] := FormatterNombreOOo(MyVertex.Position.Y, 3);
+      grdMaillageCoordsXYZ.Cells[3, i+1] := FormatterNombreOOo(MyVertex.Position.Z, 3);
     end;
   end;
   if (NbTriangles > 0) then
@@ -1093,7 +1093,7 @@ end;
 
 function TCdrCalculette.GetCoordonneesA(): TPoint2Df;
 begin
-  Result := MakeTPoint2Df(editX_Cible1JPC.Value, editY_Cible1JPC.Value);
+  Result.setFrom(editX_Cible1JPC.Value, editY_Cible1JPC.Value);
 end;
 
 function TCdrCalculette.GetCurrentCodeEPSGNomSysteme(): TLabelSystemesCoordsEPSG;

@@ -20,32 +20,27 @@ type
     procedure VuePaint(Sender: TObject);
   strict private
     FTmpBuffer: TBGRABitmap;
-    FUNITE_Azimut       : double;
-    FUNITE_Azimut_SUR_2 : double;
-    FUNITE_Azimut_SUR_4 : double;
+    FUNITE_Azimut                 : double;
+    FUNITE_Azimut_SUR_2           : double;
+    FUNITE_Azimut_SUR_4           : double;
     TWO_PI_SUR_UNITE_Azimut       : double;
-    FUNITE_Inclinaison  : double;
-    FUNITE_Inclinaison_SUR_4 : double;
+    FUNITE_Inclinaison            : double;
+    FUNITE_Inclinaison_SUR_4      : double;
     TWO_PI_SUR_UNITE_Inclinaison  : double;
-
-
-
-    //FTableSinus  : array of double;
-    //FTableCosinus: array of double;
     FDrawInProcess: boolean;
-    FRegionXMini  :double;
-    FRegionXMaxi  :double;
-    FRegionYMini  :double;
-    FRegionYMaxi  :double;
+    FRegionXMini  : double;
+    FRegionXMaxi  : double;
+    FRegionYMini  : double;
+    FRegionYMaxi  : double;
     // paramètres de vues
     FRappHLVue      : double;
     FRappScrReal    : double;
     FInvRappScrReal : double;
     function  AzimutToAngleRad(const A: double): double;
-    function InclinaisonToAngleRad(const A: double): double;
+    function  InclinaisonToAngleRad(const A: double): double;
     procedure InitTablesTrigo();
     procedure DessinerBoussole();
-    function  GetRYMaxi: double;
+    function  GetRYMaxi(): double;
     function  GetCoordsPlan(const QX, QY: double): TPoint;
     procedure SetViewLimits(const X1, Y1, X2, Y2: double);
   private
@@ -116,7 +111,7 @@ end;
 
 
 
-function TCdrBoussole.GetRYMaxi: double;
+function TCdrBoussole.GetRYMaxi(): double;
 begin
   // calcul du rapport Hauteur/largeur de vue
   FRappHLVue := Vue.Height / Vue.Width;

@@ -105,7 +105,9 @@ type
     procedure DrawEntrances(const QBmp: TBGRABitmap; const DoDrawNames: boolean);
     procedure DrawPolygonales(const QBmp: TBGRABitmap; const EntitiesColored: boolean);
     procedure DrawReferentiel(const QBmp: TBGRABitmap);
-    function  Get2DDepthCoordinates(const X, Y, Z: double): TPoint2DDepth;
+    function  Get2DDepthCoordinatesFromXYZ(const QX, QY, QZ: double): TPoint2DDepth;
+    function  Get2DDepthCoordinatesFromP3D(const QP: TPoint3Df): TPoint2DDepth;
+
     function  GetScreenCoordinates(const X, Y: double; const DoConvertTCanvasCoords: boolean): TPoint;
     function MakePortionTubeVisee(const E: TBaseStation; out APortionTube: TPortionTubeVisee): boolean;
     //function MakeFPColor(const C: TColor): TFPColor;
@@ -119,7 +121,10 @@ type
     function  PrecalculerMaillage(): boolean;
     procedure TracerMaillage();
     procedure TracerProfils(const TmpBuffer: TBGRABitmap);
-    function  IsPointInCube(const QX, QY, QZ: double): boolean;
+    function  IsPointInCube(const QX, QY, QZ: double): boolean; overload;
+    function  IsPointInCube(const QP: TPoint3Df): boolean; overload;
+
+
   public
     { public declarations }
     function  InitialiseVue3D(const QBDDEntites   : TBDDEntites;
@@ -333,9 +338,9 @@ begin
     //AfficherMessage(Format('--   Mini: %.2f - %.2f - %.2f', [cnMini.X, cnMini.Y, cnMini.Z]));
     //AfficherMessage(Format('--   Maxi: %.2f - %.2f - %.2f', [cnMaxi.X, cnMaxi.Y, cnMaxi.Z]));
 
-    FOffset := MakeTPoint3Df(-(cnMini.X+ 0.5*(cnMaxi.X - cnMini.X)),
-                             -(cnMini.Y+ 0.5*(cnMaxi.Y - cnMini.Y)),
-                             -(cnMini.Z+ 0.5*(cnMaxi.Z - cnMini.Z)));
+    FOffset.setFrom(-(cnMini.X+ 0.5*(cnMaxi.X - cnMini.X)),
+                    -(cnMini.Y+ 0.5*(cnMaxi.Y - cnMini.Y)),
+                    -(cnMini.Z+ 0.5*(cnMaxi.Z - cnMini.Z)));
 
     //AfficherMessage(Format('--   Offset: %.2f - %.2f - %.2f', [FOffset.X, FOffset.Y, FOffset.Z]));
   end;
@@ -378,27 +383,27 @@ begin
 
   CalcProjPolygonale(DoDestTCanvas, DoCalcViseesRadiantes);
   // direction d'observation
-  FLookAt := MakeTPoint3Df(Cos(MiouPhi)*Cos(MiouTheta),
-                           Cos(MiouPhi)*sin(MiouTheta),
-                           sin(MiouPhi));
+  FLookAt.setFrom(Cos(MiouPhi)*Cos(MiouTheta),
+                  Cos(MiouPhi)*sin(MiouTheta),
+                  sin(MiouPhi));
   // cube
   cnMini := FBDDEntites.GetCoinBasGauche;
   cnMaxi := FBDDEntites.GetCoinHautDroit;
-  c := Get2DDepthCoordinates(cnMini.X, cnMini.Y, cnMini.Z);
+  c := Get2DDepthCoordinatesFromXYZ(cnMini.X, cnMini.Y, cnMini.Z);
   FCubeEnglobant[1] := GetScreenCoordinates(c.X, C.Y, DoDestTCanvas);
-  c := Get2DDepthCoordinates(cnMaxi.X, cnMini.Y, cnMini.Z);
+  c := Get2DDepthCoordinatesFromXYZ(cnMaxi.X, cnMini.Y, cnMini.Z);
   FCubeEnglobant[2] := GetScreenCoordinates(c.X, C.Y, DoDestTCanvas);
-  c :=Get2DDepthCoordinates(cnMaxi.X, cnMaxi.Y, cnMini.Z);
+  c :=Get2DDepthCoordinatesFromXYZ(cnMaxi.X, cnMaxi.Y, cnMini.Z);
   FCubeEnglobant[3] := GetScreenCoordinates(c.X, C.Y, DoDestTCanvas);
-  c := Get2DDepthCoordinates(cnMini.X, cnMaxi.Y, cnMini.Z);
+  c := Get2DDepthCoordinatesFromXYZ(cnMini.X, cnMaxi.Y, cnMini.Z);
   FCubeEnglobant[4] := GetScreenCoordinates(c.X, C.Y, DoDestTCanvas);
-  c :=Get2DDepthCoordinates(cnMini.X, cnMini.Y, cnMaxi.Z);
+  c :=Get2DDepthCoordinatesFromXYZ(cnMini.X, cnMini.Y, cnMaxi.Z);
   FCubeEnglobant[5] := GetScreenCoordinates(c.X, C.Y, DoDestTCanvas);
-  c := Get2DDepthCoordinates(cnMaxi.X, cnMini.Y, cnMaxi.Z);
+  c := Get2DDepthCoordinatesFromXYZ(cnMaxi.X, cnMini.Y, cnMaxi.Z);
   FCubeEnglobant[6] := GetScreenCoordinates(c.X, C.Y, DoDestTCanvas);
-  c := Get2DDepthCoordinates(cnMaxi.X, cnMaxi.Y, cnMaxi.Z);
+  c := Get2DDepthCoordinatesFromXYZ(cnMaxi.X, cnMaxi.Y, cnMaxi.Z);
   FCubeEnglobant[7] := GetScreenCoordinates(c.X, C.Y, DoDestTCanvas);
-  c := Get2DDepthCoordinates(cnMini.X, cnMaxi.Y, cnMaxi.Z);
+  c := Get2DDepthCoordinatesFromXYZ(cnMini.X, cnMaxi.Y, cnMaxi.Z);
   FCubeEnglobant[8] := GetScreenCoordinates(c.X, C.Y, DoDestTCanvas);
   // précalculer les volumes (inutile ici)
   FDoDraw := True; //PrecalculVolumesCavite(DoDestTCanvas);
@@ -451,23 +456,6 @@ end;
 
 
 
-// coordonnées de transferts
-function TCdrVue3DExt.Get2DDepthCoordinates(const X, Y, Z: double): TPoint2DDepth;
-var
-  QXX, QYY, QZZ: Double;
-begin
-  QXX := X+FOffset.X;
-  QYY := Y+FOffset.Y;
-  QZZ := Z+FOffset.Z;
-  Result.X := -(QXX) * FMatAux[1] +
-               (QYY) * FMatAux[3];
-  Result.Y := -(QXX) * FMatAux[5]
-              -(QYY) * FMatAux[6]+
-               (FVue3DParams.CoefMagnification*(QZZ)) * FMatAux[4];
-  Result.Depth:= (-(QXX) * FMatAux[7]
-                  -(QYY) * FMatAux[8]
-                  -(QZZ) * FMatAux[2]);
-end;
 function TCdrVue3DExt.GetScreenCoordinates (const X,Y: double; const DoConvertTCanvasCoords: boolean): TPoint;
 begin
   if (DoConvertTCanvasCoords) then
@@ -521,14 +509,14 @@ procedure TCdrVue3DExt.CalcProjPolygonale(const DoDestTCanvas: boolean; const Do
         V.ColorEntite := IIF(Miou = teuVISEES, FBDDEntites.GetColorViseeFromModeRepresentation(FVue3DParams.ModeRepresentation, E), clGray);
         V.Type_Entite  := E.Type_Entite;
         V.DateLeve     := E.DateLeve;
-        PtOut := Get2DDepthCoordinates(E.PosExtr0.X, E.PosExtr0.Y, E.PosExtr0.Z);
+        PtOut := Get2DDepthCoordinatesFromP3D(E.PosExtr0);
         V.Une_Station_1_X := PtOut.X;
         V.Une_Station_1_Y := PtOut.Y;
         P := GetScreenCoordinates(PtOut.X, PtOut.Y, DoDestTCanvas);
         V.CoordEcrSt1X:=P.X;
         V.CoordEcrSt1Y:=P.Y;
         d1:=PtOut.Depth;
-        PtOut :=  Get2DDepthCoordinates(E.PosStation.X, E.PosStation.Y, E.PosStation.Z);
+        PtOut := Get2DDepthCoordinatesFromP3D(E.PosStation);
         V.Une_Station_2_X := PtOut.X;
         V.Une_Station_2_Y := PtOut.Y;
         V.Depth           := 0.50 * (d1+PtOut.Depth);
@@ -599,8 +587,8 @@ begin
       // NOTA: Les visées en antennes ne sont pas prises en compte par
       //       les fonctions de recherche et d'indexation de GHCaveDraw
       QID := MakeGHCaveDrawIDPtCenterline(EWE);
-      PtOutExtr1 :=  Get2DDepthCoordinates(EWE.PosExtr0.X, EWE.PosExtr0.Y, EWE.PosExtr0.Z);
-      PtOutExtr2 :=  Get2DDepthCoordinates(EWE.PosStation.X, EWE.PosStation.Y, EWE.PosStation.Z);
+      PtOutExtr1 :=  Get2DDepthCoordinatesFromP3D(EWE.PosExtr0);
+      PtOutExtr2 :=  Get2DDepthCoordinatesFromP3D(EWE.PosStation);
       WrtLn(Format(FMT_BASEPOINTS,
                   [QID  ,
                    EWE.IDTerrain,
@@ -622,8 +610,8 @@ begin
         // NOTA: Les visées en antennes ne sont pas prises en compte par
         //       les fonctions de recherche et d'indexation de GHCaveDraw
         QID := MakeGHCaveDrawIDPtAntenne(EWE, i);
-        PtOutExtr1 :=  Get2DDepthCoordinates(EWE.PosExtr0.X, EWE.PosExtr0.Y, EWE.PosExtr0.Z);
-        PtOutExtr2 :=  Get2DDepthCoordinates(EWE.PosStation.X, EWE.PosStation.Y, EWE.PosStation.Z);
+        PtOutExtr1 :=  Get2DDepthCoordinatesFromP3D(EWE.PosExtr0);
+        PtOutExtr2 :=  Get2DDepthCoordinatesFromP3D(EWE.PosStation);
         WrtLn(Format(FMT_BASEPOINTS,
                     [QID  ,
                      EWE.IDTerrain,
@@ -675,40 +663,40 @@ begin
   with E do
   begin
     // paroi gauche Quad 1
-    P1 := MakeTPoint3Df(PosPG.X , PosPG.Y , PosPG.Z);   // X2PG, Y2PG, Z2PB);
-    P2 := MakeTPoint3Df(PosOPG.X, PosOPG.Y, PosOPG.Z);  // X1PG, Y1PG, Z1PB);
-    P3 := MakeTPoint3Df(PosOPG.X, PosOPG.Y, PosOPD.Z);  // X1PG, Y1PG, Z1PH);
-    P4 := MakeTPoint3Df(PosPG.X , PosPG.Y , PosPD.Z);   // X2PG, Y2PG, Z2PH);
+    P1.setfrom(PosPG.X , PosPG.Y , PosPG.Z);   // X2PG, Y2PG, Z2PB);
+    P2.setfrom(PosOPG.X, PosOPG.Y, PosOPG.Z);  // X1PG, Y1PG, Z1PB);
+    P3.setfrom(PosOPG.X, PosOPG.Y, PosOPD.Z);  // X1PG, Y1PG, Z1PH);
+    P4.setfrom(PosPG.X , PosPG.Y , PosPD.Z);   // X2PG, Y2PG, Z2PH);
     APortionTube.Facettes[1] := MakeQuad(P1, P2, P3, P4);
     // paroi droite Quad 2
-    P1 := MakeTPoint3Df(PosOPD.X, PosOPD.Y, PosOPG.Z);  // X1PD, Y1PD, Z1PB);
-    P2 := MakeTPoint3Df(PosPD.X , PosPD.Y , PosPG.Z);   // X2PD, Y2PD, Z2PB);
-    P3 := MakeTPoint3Df(PosPD.X , PosPD.Y , PosPD.Z);   // X2PD, Y2PD, Z2PH);
-    P4 := MakeTPoint3Df(PosOPD.X, PosOPD.Y, PosOPD.Z);  // X1PD, Y1PD, Z1PH);
+    P1.setfrom(PosOPD.X, PosOPD.Y, PosOPG.Z);  // X1PD, Y1PD, Z1PB);
+    P2.setfrom(PosPD.X , PosPD.Y , PosPG.Z);   // X2PD, Y2PD, Z2PB);
+    P3.setfrom(PosPD.X , PosPD.Y , PosPD.Z);   // X2PD, Y2PD, Z2PH);
+    P4.setfrom(PosOPD.X, PosOPD.Y, PosOPD.Z);  // X1PD, Y1PD, Z1PH);
     APortionTube.Facettes[2] := MakeQuad(P1, P2, P3, P4);
     // paroi de dessus Quad 3
-    P1 := MakeTPoint3Df(PosOPD.X, PosOPD.Y, PosOPD.Z);  // X1PD, Y1PD, Z1PH);
-    P2 := MakeTPoint3Df(PosPD.X , PosPD.Y , PosPD.Z);   // X2PD, Y2PD, Z2PH);
-    P3 := MakeTPoint3Df(PosPG.X , PosPG.Y , PosPD.Z);   // X2PG, Y2PG, Z2PH);
-    P4 := MakeTPoint3Df(PosOPG.X, PosOPG.Y, PosOPD.Z);  // X1PG, Y1PG, Z1PH);
+    P1.setfrom(PosOPD.X, PosOPD.Y, PosOPD.Z);  // X1PD, Y1PD, Z1PH);
+    P2.setfrom(PosPD.X , PosPD.Y , PosPD.Z);   // X2PD, Y2PD, Z2PH);
+    P3.setfrom(PosPG.X , PosPG.Y , PosPD.Z);   // X2PG, Y2PG, Z2PH);
+    P4.setfrom(PosOPG.X, PosOPG.Y, PosOPD.Z);  // X1PG, Y1PG, Z1PH);
     APortionTube.Facettes[3] := MakeQuad(P1, P2, P3, P4);
     // paroi de dessous Quad 4
-    P1 := MakeTPoint3Df(PosOPG.X, PosOPG.Y, PosOPG.Z);  // X1PG, Y1PG, Z1PB);
-    P2 := MakeTPoint3Df(PosPG.X , PosPG.Y , PosPG.Z);   // X2PG, Y2PG, Z2PB);
-    P3 := MakeTPoint3Df(PosPD.X , PosPD.Y , PosPG.Z);   // X2PD, Y2PD, Z2PB);
-    P4 := MakeTPoint3Df(PosOPD.X, PosOPD.Y, PosOPG.Z);  // X1PD, Y1PD, Z1PB);
+    P1.setfrom(PosOPG.X, PosOPG.Y, PosOPG.Z);  // X1PG, Y1PG, Z1PB);
+    P2.setfrom(PosPG.X , PosPG.Y , PosPG.Z);   // X2PG, Y2PG, Z2PB);
+    P3.setfrom(PosPD.X , PosPD.Y , PosPG.Z);   // X2PD, Y2PD, Z2PB);
+    P4.setfrom(PosOPD.X, PosOPD.Y, PosOPG.Z);  // X1PD, Y1PD, Z1PB);
     APortionTube.Facettes[4] := MakeQuad(P1, P2, P3, P4);
     // paroi de face
-    P1 := MakeTPoint3Df(PosOPG.X, PosOPG.Y, PosOPG.Z);  // X1PG, Y1PG, Z1PB);
-    P2 := MakeTPoint3Df(PosOPD.X, PosOPD.Y, PosOPG.Z);  // X1PD, Y1PD, Z1PB);
-    P3 := MakeTPoint3Df(PosOPD.X, PosOPD.Y, PosOPD.Z);  // X1PD, Y1PD, Z1PH);
-    P4 := MakeTPoint3Df(PosOPG.X, PosOPG.Y, PosOPD.Z);  // X1PG, Y1PG, Z1PH);
+    P1.setfrom(PosOPG.X, PosOPG.Y, PosOPG.Z);  // X1PG, Y1PG, Z1PB);
+    P2.setfrom(PosOPD.X, PosOPD.Y, PosOPG.Z);  // X1PD, Y1PD, Z1PB);
+    P3.setfrom(PosOPD.X, PosOPD.Y, PosOPD.Z);  // X1PD, Y1PD, Z1PH);
+    P4.setfrom(PosOPG.X, PosOPG.Y, PosOPD.Z);  // X1PG, Y1PG, Z1PH);
     APortionTube.Facettes[5] := MakeQuad(P1, P2, P3, P4);
     // paroi de derrière
-    P1 := MakeTPoint3Df(PosPD.X , PosPD.Y , PosPG.Z);
-    P2 := MakeTPoint3Df(PosPG.X , PosPG.Y , PosPG.Z);
-    P3 := MakeTPoint3Df(PosPG.X , PosPG.Y , PosPD.Z);
-    P4 := MakeTPoint3Df(PosPD.X , PosPD.Y , PosPD.Z);   // X2PD, Y2PD, Z2PH);
+    P1.setfrom(PosPD.X , PosPD.Y , PosPG.Z);
+    P2.setfrom(PosPG.X , PosPG.Y , PosPG.Z);
+    P3.setfrom(PosPG.X , PosPG.Y , PosPD.Z);
+    P4.setfrom(PosPD.X , PosPD.Y , PosPD.Z);   // X2PD, Y2PD, Z2PH);
     APortionTube.Facettes[6] := MakeQuad(P1, P2, P3, P4);
     result := True;
   end; //with E do begin
@@ -746,20 +734,20 @@ var
     begin
       with QD do
       begin
-        PP:=Get2DDepthCoordinates(VertexA.X, VertexA.Y, VertexA.Z);
+        PP := Get2DDepthCoordinatesFromP3D(VertexA);
         Vertex2D_A := GetScreenCoordinates(PP.X, PP.Y, DoDestTCanvas);
-        PP:=Get2DDepthCoordinates(VertexB.X, VertexB.Y, VertexB.Z);
+        PP := Get2DDepthCoordinatesFromP3D(VertexB);
         Vertex2D_B := GetScreenCoordinates(PP.X, PP.Y, DoDestTCanvas);
-        PP:=Get2DDepthCoordinates(VertexC.X, VertexC.Y, VertexC.Z);
+        PP := Get2DDepthCoordinatesFromP3D(VertexC);
         Vertex2D_C := GetScreenCoordinates(PP.X, PP.Y, DoDestTCanvas);
-        PP:=Get2DDepthCoordinates(VertexD.X, VertexD.Y, VertexD.Z);
+        PP := Get2DDepthCoordinatesFromP3D(VertexD);
         Vertex2D_D := GetScreenCoordinates(PP.X, PP.Y, DoDestTCanvas);
         //test de visibilité
-        U := MakeTPoint3Df(VertexB.X-VertexA.X, VertexB.Y-VertexA.Y, VertexB.Z-VertexA.Z);
-        V := MakeTPoint3Df(VertexC.X-VertexA.X, VertexC.Y-VertexA.Y, VertexC.Z-VertexA.Z);
+        U.setfrom(VertexB.X-VertexA.X, VertexB.Y-VertexA.Y, VertexB.Z-VertexA.Z);
+        V.setfrom(VertexC.X-VertexA.X, VertexC.Y-VertexA.Y, VertexC.Z-VertexA.Z);
         W1:= ProduitVectoriel(U, V);
-        U := MakeTPoint3Df(VertexC.X-VertexA.X, VertexC.Y-VertexA.Y, VertexC.Z-VertexA.Z);
-        V := MakeTPoint3Df(VertexD.X-VertexA.X, VertexD.Y-VertexA.Y, VertexD.Z-VertexA.Z);
+        U.setfrom(VertexC.X-VertexA.X, VertexC.Y-VertexA.Y, VertexC.Z-VertexA.Z);
+        V.setfrom(VertexD.X-VertexA.X, VertexD.Y-VertexA.Y, VertexD.Z-VertexA.Z);
         W2:= ProduitVectoriel(U, V);
         W1.X := W1.X + W2.X;
         W1.Y := W1.Y + W2.Y;
@@ -770,9 +758,9 @@ var
               W1.Z * FLookAt.Z;
         FacetteVisible := ((PS/NW) > 0.00);
         // calcul de profondeur
-        M := MakeTPoint3Df(0.25*(VertexA.X+VertexB.X+VertexC.X+VertexD.X),
-                           0.25*(VertexA.Y+VertexB.Y+VertexC.Y+VertexD.Y),
-                           0.25*(VertexA.Z+VertexB.Z+VertexC.Z+VertexD.Z));
+        M.setFrom(0.25*(VertexA.X+VertexB.X+VertexC.X+VertexD.X),
+                  0.25*(VertexA.Y+VertexB.Y+VertexC.Y+VertexD.Y),
+                  0.25*(VertexA.Z+VertexB.Z+VertexC.Z+VertexD.Z));
         Depth := -FMatAux[7] * M.X
                  -FMatAux[8] * M.Y
                  -FMatAux[2] * M.Z;
@@ -882,9 +870,9 @@ begin
   for i := 0 to Nb - 1 do
   begin
     MyEntrance := FBDDEntites.GetEntrance(i);
-    if (IsPointInCube(MyEntrance.eXEntree, MyEntrance.eYEntree, MyEntrance.eZEntree)) then
+    if (IsPointInCube(MyEntrance.ePosition)) then
     begin
-      PtOut :=  Get2DDepthCoordinates(MyEntrance.eXEntree, MyEntrance.eYEntree, MyEntrance.eZEntree);
+      PtOut :=  Get2DDepthCoordinatesFromP3D(MyEntrance.ePosition);
       P := GetScreenCoordinates(PtOut.X, PtOut.Y, True);
       QBmp.CanvasBGRA.Brush.Color:=clFuchsia;
       QBmp.CanvasBGRA.EllipseC(P.x, P.y, R666, R666);
@@ -953,9 +941,9 @@ var
   Rp        : TPoint;
 begin
   // calculs préliminaires
-  X1 := MakeTPoint3Df(1.0, 0.0, 0.0);
-  X2 := MakeTPoint3Df(0.0, 1.0, 0.0);
-  X3 := MakeTPoint3Df(0.0, 0.0, 1.0);
+  X1.setfrom(1.0, 0.0, 0.0);
+  X2.setfrom(0.0, 1.0, 0.0);
+  X3.setfrom(0.0, 0.0, 1.0);
 
   // transformations en repère local (ne pas utiliser Get2DDepthCoordinates())
   R1.X := -X1.X * FMatAux[1] +
@@ -996,6 +984,28 @@ begin
   Rp.y := rYo - round(REFERENTIEL_RSZ * R3.Y);
   QBmp.CanvasBGRA.LineTo(Rp.X, Rp.Y);
   QBmp.CanvasBGRA.TextOut(Rp.x+2, Rp.y+2, REFERENTIEL_LBL_Z);
+end;
+
+function TCdrVue3DExt.Get2DDepthCoordinatesFromXYZ(const QX, QY, QZ: double): TPoint2DDepth;
+var
+  QXX, QYY, QZZ: Double;
+begin
+  QXX := QX+FOffset.X;
+  QYY := QY+FOffset.Y;
+  QZZ := QZ+FOffset.Z;
+  Result.X := -(QXX) * FMatAux[1] +
+               (QYY) * FMatAux[3];
+  Result.Y := -(QXX) * FMatAux[5]
+              -(QYY) * FMatAux[6]+
+               (FVue3DParams.CoefMagnification*(QZZ)) * FMatAux[4];
+  Result.Depth:= (-(QXX) * FMatAux[7]
+                  -(QYY) * FMatAux[8]
+                  -(QZZ) * FMatAux[2]);
+end;
+
+function TCdrVue3DExt.Get2DDepthCoordinatesFromP3D(const QP: TPoint3Df): TPoint2DDepth;
+begin
+  result := Get2DDepthCoordinatesFromXYZ(QP.X, QP.Y, QP.Z);
 end;
 
 procedure TCdrVue3DExt.DrawVolumesCavite(const QBmp: TBGRABitmap);
@@ -1064,9 +1074,9 @@ var
   begin
     // calculs préliminaires
     EWE := FVue3DParams.CoefMagnification * FMatAux[4];
-    X1 := MakeTPoint3Df(1.0, 0.0, 0.0);
-    X2 := MakeTPoint3Df(0.0, 1.0, 0.0);
-    X3 := MakeTPoint3Df(0.0, 0.0, 1.0);
+    X1.setfrom(1.0, 0.0, 0.0);
+    X2.setfrom(0.0, 1.0, 0.0);
+    X3.setfrom(0.0, 0.0, 1.0);
     // transformations en repère local (ne pas utiliser Get2DDepthCoordinates())
     R1.X := -X1.X * FMatAux[1] +
              X1.Y * FMatAux[3];
@@ -1445,13 +1455,13 @@ var
 
       FSVGCanvas.BeginListeVertex();
         MyPointProfil := QProfil.GetPointProfilTN(0);
-        PP := Get2DDepthCoordinates(MyPointProfil.X, MyPointProfil.Y, MyPointProfil.Z);
+        PP := Get2DDepthCoordinatesFromXYZ(MyPointProfil.X, MyPointProfil.Y, MyPointProfil.Z);
         PPA := GetScreenCoordinates(PP.X, PP.Y, false);
         FSVGCanvas.AddVertex(PPA.X, PPA.Y);
         for p := 1 to NbP - 1 do
         begin
           MyPointProfil := QProfil.GetPointProfilTN(p);
-          PP := Get2DDepthCoordinates(MyPointProfil.X, MyPointProfil.Y, MyPointProfil.Z);
+          PP := Get2DDepthCoordinatesFromXYZ(MyPointProfil.X, MyPointProfil.Y, MyPointProfil.Z);
           PPA := GetScreenCoordinates(PP.X, PP.Y, false);
           FSVGCanvas.AddVertex(PPA.X, PPA.Y);
         end;
@@ -1593,7 +1603,7 @@ begin
     for i := 0 to NbVertexes - 1 do
     begin
       MyVertex := FMyMaillage.GetVertex(i);
-      FTableVertexProjetesMaillage[i] := Get2DDepthCoordinates(MyVertex.X, MyVertex.Y, MyVertex.Z);
+      FTableVertexProjetesMaillage[i] := Get2DDepthCoordinatesFromP3D(MyVertex.Position);
     end;
     //QSortByDepth(0, NbVertexes - 1);
     result := true;
@@ -1620,13 +1630,13 @@ var
     NbP := QProfil.GetNbPointsProfilTN();
     QProfil.LineAttributes.SetTBGRAPen(TmpBuffer.CanvasBGRA.Pen);
     MyPointProfil := QProfil.GetPointProfilTN(0);
-    PP := Get2DDepthCoordinates(MyPointProfil.X, MyPointProfil.Y, MyPointProfil.Z);
+    PP := Get2DDepthCoordinatesFromXYZ(MyPointProfil.X, MyPointProfil.Y, MyPointProfil.Z);
     PC := GetScreenCoordinates(PP.X, PP.Y, True);
     TmpBuffer.CanvasBGRA.MoveTo(PC);
     for p := 1 to NbP - 1 do
     begin
       MyPointProfil := QProfil.GetPointProfilTN(p);
-      PP := Get2DDepthCoordinates(MyPointProfil.X, MyPointProfil.Y, MyPointProfil.Z);
+      PP := Get2DDepthCoordinatesFromXYZ(MyPointProfil.X, MyPointProfil.Y, MyPointProfil.Z);
       PC := GetScreenCoordinates(PP.X, PP.Y, True);
       TmpBuffer.CanvasBGRA.LineTo(PC);
     end;
@@ -1649,6 +1659,11 @@ begin
   result := IsInRange(QX, cnMini.X, cnMaxi.X) and
             IsInRange(QY, cnMini.Y, cnMaxi.Y) and
             IsInRange(QZ, cnMini.Z, cnMaxi.Z);
+end;
+
+function TCdrVue3DExt.IsPointInCube(const QP: TPoint3Df): boolean;
+begin
+  self.IsPointInCube(QP.X, QP.Y, QP.Z);
 end;
 
 

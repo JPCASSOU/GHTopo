@@ -352,8 +352,7 @@ begin
   dy := FYMax - FYMin;
   x1 := QX - FXMin;
   y1 := QY - FYMin;
-  Result := MakeTPoint2Df(592 * x1 / dx,
-                          592 * y1 / dx);
+  Result.setFrom(592 * x1 / dx, 592 * y1 / dx);
 end;
 
 // définition de couches

@@ -100,40 +100,14 @@ function EnsureMakeFilename(const S: TStringDirectoryFilename): TStringDirectory
 
 // makers de structures
 function MakeTPoint(const QX, QY: integer): TPoint;
-function MakeTPoint2Df(const QX, QY: double): TPoint2Df;
-function MakeTPoint3Df(const QX, QY, QZ: double): TPoint3Df;
-function MakeTRect2Df(const QX1, QY1, QX2, QY2: double): TRect2Df;
+//function MakeTPoint2Df(const QX, QY: double): TPoint2Df;
+//function MakeTPoint3Df(const QX, QY, QZ: double): TPoint3Df;
+//function MakeTRect2Df(const QX1, QY1, QX2, QY2: double): TRect2Df;
 function MakeTPointCoupeDeveloppee(const QP, QZ: double): TPointCoupeDeveloppee;
 function MakeTMarker(const D: boolean; const QX, QY: double; const C: TColor; const S: string): TMarker;
 function MakeTIDBaseStation(const S: TNumeroSerie; const P: integer; const IsAntenne: boolean): TIDBaseStation;
 
-function MakeTUneVisee(const QNoVisee          : integer;
-                       const QTypeVisee        : TTypeDeVisee;
-                       const QIdSecteur        : TNumeroSecteur;
-                       const QCode             : TNumeroCode;
-                       const QExpe             : TNumeroExpe;
-                       const QL, QAz, QP       : double;
-                       const QLG, QLD, QHZ, QHN: double;
-                       const QIDStation        : string = '';
-                       const QCommentaire      : string = ''): TUneVisee;
 function MakeTParamFoncCorrectionAngulaire(const QCo, QErreurMax, QPosErrMax: double): TParamFoncCorrectionAngulaire; // correction angulaire
-function MakeTReseau(const QColorReseau: TColor; const QTypeReseau: integer; const QNomReseau, QObsReseau: string): TReseau;
-function MakeTSecteur(const QCouleurSecteur: TColor; const QNomSecteur: string): TSecteur;
-function MakeTEntrance(const QNomEntree: string;
-                       const QIDTerrain: string;
-                       const QXEntree  : double;
-                       const QYEntree  : double;
-                       const QZEntree  : double;
-                       const QRefSer   : integer;
-                       const QRefSt    : integer;
-                       const QObserv   : string): TEntrance;
-function MakeTExpe(const QNumeroExpe: TNumeroExpe;
-                   const YYYY, MM, DD: word;
-                   const QIdxCouleur: TIdxCouleur;
-                   const QModeDecl   : TModeCalculDeclimag;
-                   const QDeclinaisonInDegrees: double;
-                   const QSpeleometre, QSpeleographe: string;
-                   const QCommentaires: string): TExpe;
 function MakeUsualTCode(const NumeroCode: TNumeroCode;
                         const GradAz, GradInc, FactLongueur: double;
                         const PsiL, PsiAz, PsiP: double;
@@ -174,6 +148,8 @@ function IsInRange(const Value, MinValue, MaxValue: integer): Boolean; inline; o
 // fonctions graphiques
 function IntersectRectangles(const R1, R2: TRect2Df): boolean;
 function PointInRectangle(const P: TPoint2Df; const R: TRect2Df): boolean; overload; inline;
+function PointInRectangle(const QX, QY: double; const R: TRect2Df): boolean; overload; inline;
+
 function PointInRectangle(const P: TPoint3Df; const R: TRect2Df): boolean; overload; inline;
 function SegmentInRectangle(const P1, P2: TPoint2Df; const R: TRect2Df; const PartiallyInRectangle: boolean = true): boolean; overload;
 function SegmentInRectangle(const X1, Y1, X2, Y2: double; const R: TRect2Df; const PartiallyInRectangle: boolean = true): boolean; overload;
@@ -261,8 +237,7 @@ function GetFloatBValue(const C: TColor): double; inline;
 function SVGColor(const C: TColor): string;
 //function KMLColor(const C: TColor; const A: byte = 255): string; overload; inline;
 function KMLColor(const R, G, B, A: byte): string; inline;
-function MakeTColorRGBA(const Coul: TColor; const Alpha: byte): TColorRGBA; overload;
-function MakeTColorRGBA(const r, g, b, a: byte): TColorRGBA; overload;
+
 
 function Acad2RGB(const n : integer) : tColor; deprecated; // palette par défaut d'Autocad
 function RGB2Acad(const C: TColor) : Byte; deprecated;
@@ -282,6 +257,8 @@ function ChooseColorFromInterval(const Value: double; const Intervalles: array o
 // fonctions de calculs trigo et sur les visées
 function Hypot2D(const DX, DY: Double): Double; inline;
 function Hypot3D(const DX, DY, DZ: Double): Double; inline;
+function DistanceBetweenTwoTPoint3Df(const P1, P2: TPoint3Df): double;
+
 function DegMinSec2DegDec(const S: string): double;
 function CalculerAngleBissecteur(const dX1, dY1, dX2, dY2: double): double;  // calcul de l'angle bissecteur de deux segments
 
@@ -289,9 +266,7 @@ function GetAzimut(const dx, dy: Double; const Unite: double): double;
 procedure GetBearingInc(const dx, dy, dz: double; var Dist, Az, Inc: double; const fUB, fUC: Double); // Azimut et pente
 procedure CalculerVisee(var MaVisee: TUneVisee;       // calcul d'une visée
                         const CC: TCode; const EE: TExpe;
-                        var AX, AY: double;
-                        const Sens: double;
-                        var AZ, AP: double);
+                        var AX, AY, AZ, AP: double);
 
 
 function GetTypeDeVisee(const T: integer): TTypeDeVisee;          // retourne le type de visé
@@ -332,7 +307,6 @@ function  MakeLabelNoeud(const ND: TJonctionXYZ): String;
 function  MakeLibelleStationTopo(const E: TBaseStation): string;
 function  MakeLibelleCode(const E: TCode): string;
 function  MakeLibelleExpe(const E: TExpe): string;
-function  EmptyVisee(const C: string): TUneVisee;
 function  ExtractSerStFromTIDStation(const QIDBaseStation: TIDBaseStation; out QSR: TNumeroSerie; out QST: TNumeroStation): boolean;
 function  ChooseColorByTypeEntite(const TE: TTypeDeVisee): TColor;
 function  FormatterIDTerrainStation(const S: string): string;
@@ -927,24 +901,6 @@ begin
   Result.Y := QY;
 end;
 
-function MakeTPoint2Df(const QX, QY: double): TPoint2Df;
-begin
-  Result.X := QX;
-  Result.Y := QY;
-end;
-
-function MakeTPoint3Df(const QX, QY, QZ: double): TPoint3Df;
-begin
-  Result.X := QX;
-  Result.Y := QY;
-  Result.Z := QZ;
-end;
-function MakeTRect2Df(const QX1, QY1, QX2, QY2: double): TRect2Df;
-begin
-  Result.X1:= QX1; Result.X2 := QX2;
-  Result.Y1:= QY1; Result.Y2 := QY2;
-end;
-
 function MakeTPointCoupeDeveloppee(const QP, QZ: double): TPointCoupeDeveloppee;
 begin
   Result.P := QP;
@@ -961,38 +917,7 @@ end;
 
 
 
-function MakeTUneVisee(const QNoVisee          : integer;
-                       const QTypeVisee        : TTypeDeVisee;
-                       const QIdSecteur        : TNumeroSecteur;
-                       const QCode             : TNumeroCode;
-                       const QExpe             : TNumeroExpe;
-                       const QL, QAz, QP       : double;
-                       const QLG, QLD, QHZ, QHN: double;
-                       const QIDStation        : string = '';
-                       const QCommentaire      : string = ''): TUneVisee;
-begin
-  Result.NoVisee   := QNoVisee;
-  result.TypeVisee := QTypeVisee;
-  Result.IDSecteur := QIdSecteur;
-  Result.Code      := QCode;
-  Result.Expe      := QExpe;
 
-  Result.Longueur  := QL;
-  Result.Azimut    := QAz;
-  Result.Pente     := QP;
-  Result.LG        := QLG;
-  Result.LD        := QLD;
-  Result.HZ        := QHZ;
-  Result.HN        := QHN;
-  result.IDTerrainStation  := QIDStation;
-  Result.Commentaires      := QCommentaire;
-  Result.DeltaX    := 0.00;
-  Result.DeltaY    := 0.00;
-  Result.DeltaY    := 0.00;
-  Result.DeltaP    := 0.00;
-  Result.AccroissP := 0.00;
-  Result.AccroissZ := 0.00;
-end;
 
 function MakeTParamFoncCorrectionAngulaire(const QCo, QErreurMax, QPosErrMax: double): TParamFoncCorrectionAngulaire;
 begin
@@ -1001,56 +926,8 @@ begin
   Result.PosErrMax := QPosErrMax;
 end;
 
-function MakeTReseau(const QColorReseau: TColor; const QTypeReseau: integer; const QNomReseau, QObsReseau: string): TReseau;
-begin
-  result.ColorReseau     := QColorReseau;
-  result.TypeReseau      := QTypeReseau;
-  result.NomReseau       := QNomReseau;
-  result.ObsReseau       := QObsReseau;
-end;
-function MakeTSecteur(const QCouleurSecteur: TColor; const QNomSecteur: string): TSecteur;
-begin
-  result.CouleurSecteur  := QCouleurSecteur;
-  Result.NomSecteur      := QNomSecteur;
-end;
-function MakeTEntrance(const QNomEntree: string;
-                       const QIDTerrain: string;
-                       const QXEntree  : double;
-                       const QYEntree  : double;
-                       const QZEntree  : double;
-                       const QRefSer   : integer;
-                       const QRefSt    : integer;
-                       const QObserv   : string): TEntrance;
-begin
-  result.eNomEntree := QNomEntree;
-  result.eIDTerrain := QIDTerrain;
-  result.eXEntree   := QXEntree;
-  result.eYEntree   := QYEntree;
-  result.eZEntree   := QZEntree;
-  result.eRefSer    := QRefSer;
-  result.eRefSt     := QRefSt;
-  result.eObserv    := QObserv;
-end;
 {$WARNING: TEXpe.DateExpe à implementer}
-function MakeTExpe(const QNumeroExpe: TNumeroExpe;
-                   const YYYY, MM, DD: word;
-                   const QIdxCouleur: TIdxCouleur;
-                   const QModeDecl   : TModeCalculDeclimag;
-                   const QDeclinaisonInDegrees: double;
-                   const QSpeleometre, QSpeleographe: string;
-                   const QCommentaires: string): TExpe;
-begin
-  Result.IDExpe     := QNumeroExpe;
-  Result.AnneeExpe  := YYYY;
-  Result.MoisExpe   := MM;
-  Result.JourExpe   := DD;
-  Result.IdxCouleur := QIdxCouleur;
-  Result.ModeDecl   := QModeDecl;
-  Result.DeclinaisonInDegrees:= QDeclinaisonInDegrees;
-  Result.Operateur  := QSpeleometre;
-  Result.ClubSpeleo := QSpeleographe;
-  Result.Commentaire:= QCommentaires;
-end;
+
 function MakeUsualTCode(const NumeroCode: TNumeroCode;
                         const GradAz, GradInc, FactLongueur: double;
                         const PsiL, PsiAz, PsiP: double;
@@ -1129,13 +1006,13 @@ begin
     oHZ             := 0.00;
     oHN             := 0.00;
     // centerline
-    PosExtr0   := MakeTPoint3Df(0.00, 0.00, 0.00);
-    PosStation := MakeTPoint3Df(0.00, 0.00, 0.00);
+    PosExtr0.Empty();
+    PosStation.Empty();
     // habillage
-    PosOPD          := MakeTPoint3Df(0.00, 0.00, 0.00);
-    PosOPG          := MakeTPoint3Df(0.00, 0.00, 0.00);
-    PosPD           := MakeTPoint3Df(0.00, 0.00, 0.00);
-    PosPG           := MakeTPoint3Df(0.00, 0.00, 0.00);
+    PosOPD.Empty();
+    PosOPG.Empty();
+    PosPD.Empty();
+    PosPG.Empty();
     CouleurStd      := clBlue;
     CouleurDegrade  := clWhite;
     IsPOI           := false;
@@ -1256,6 +1133,11 @@ begin
   Result := IsInRange(P.X, R.X1, R.X2) AND IsInRange(P.Y, R.Y1, R.Y2);
 end;
 
+function PointInRectangle(const QX, QY: double; const R: TRect2Df): boolean;
+begin
+  Result := IsInRange(QX, R.X1, R.X2) AND IsInRange(QY, R.Y1, R.Y2);
+end;
+
 function PointInRectangle(const P: TPoint3Df; const R: TRect2Df): boolean;
 begin
   Result := IsInRange(P.X, R.X1, R.X2) AND IsInRange(P.Y, R.Y1, R.Y2);
@@ -1268,8 +1150,12 @@ begin
 end;
 
 function SegmentInRectangle(const X1, Y1, X2, Y2: double; const R: TRect2Df; const PartiallyInRectangle: boolean): boolean;
+var
+  P1, P2: TPoint2Df;
 begin
-  Result := SegmentInRectangle(MakeTPoint2Df(X1, Y1), MakeTPoint2Df(X2, Y2), R, PartiallyInRectangle);
+  P1.setFrom(X1, Y1);
+  P2.setFrom(X2, Y2);
+  Result := SegmentInRectangle(P1, P2, R, PartiallyInRectangle);
 end;
 
 function QuadInRectangle(const P1, P2, P3, P4: TPoint2Df; const R: TRect2Df): boolean;
@@ -2005,21 +1891,9 @@ begin
   Result := Format('<color>%.2X%.2X%.2X%.2X</color>',[A, B, G, R]);
 end;
 
-function MakeTColorRGBA(const Coul: TColor; const Alpha: byte): TColorRGBA;
-begin
-  Result.R := Red(Coul);
-  Result.G := Green(Coul);
-  Result.B := Blue(Coul);
-  Result.A := Alpha;
-end;
 
-function MakeTColorRGBA(const r, g, b, a: byte): TColorRGBA;
-begin
-  Result.R := r;
-  Result.G := g;
-  Result.B := b;
-  Result.A := a;
-end;
+
+
 
 function Acad2RGB(const n : integer) : tColor; // palette par défaut d'Autocad
 var r,g,b,
@@ -2158,6 +2032,12 @@ function Hypot3D(const DX, DY, DZ: Double): Double;
 begin
   Result := Sqrt(dx*dx + dy*dy +dz*dz);
 end;
+
+function DistanceBetweenTwoTPoint3Df(const P1, P2: TPoint3Df): double;
+begin
+  result := Hypot3D(P2.X - P1.X, P2.Y - P1.Y, P2.Z - P1.Z);
+end;
+
 function DegMinSec2DegDec(const S: string): double;
 var
   WU: String;
@@ -2259,9 +2139,7 @@ end;
 procedure CalculerVisee(var MaVisee: TUneVisee;
                         const CC: TCode;
                         const EE: TExpe;
-                        var AX, AY: double;
-                        const Sens: double;
-                        var AZ, AP: double);
+                        var AX, AY, AZ, AP: double);
 const
   TWO_PI = 2*PI;
   PI_SUR_2 = pi / 2;
@@ -2290,8 +2168,6 @@ begin
   udd := 400.00;
   if (ubb = 0) then LeCode.GradAz  := DEGRES_PAR_TOUR;
   if (ucc = 0) then LeCode.GradInc := DEGRES_PAR_TOUR;
-  //WriteLn(Format('LeCode.GradAz = %f ucc = %f',[ucc]));
-
   // NOTA: La déclinaison magnétique est positive si Nm est à droite de Ng, négative sinon
   // Elle s'AJOUTE à l'azimut, et est TOUJOURS EN DEGRES
   QDeclinaison := LaExpe.DeclinaisonInDegrees;
@@ -2407,13 +2283,13 @@ begin
   AX += RX;
   AY += RY;
   AZ += RZ;
-  AP += RP * Sens;
-  MaVisee.DeltaX := RX;
-  MaVisee.DeltaY := RY;
-  MaVisee.DeltaZ := RZ;
-  MaVisee.DeltaP := RP;
-  MaVisee.AccroissP := AP;
-  MaVisee.AccroissZ := AZ;
+  AP += RP;
+  MaVisee.AccroissXYZ.setFrom(RX, RY, RZ);
+  //MaVisee.DeltaX := RX;
+  //MaVisee.DeltaY := RY;
+  //MaVisee.DeltaZ := RZ;
+  //MaVisee.DeltaP := RP;
+  MaVisee.AccroissP := RP;
   //AfficherMessageErreur(Format('%f, %f', [MaVisee.AccroissP, MaVisee.AccroissZ]));
 end;
 function GetTypeDeVisee(const T: integer): TTypeDeVisee;
@@ -2662,11 +2538,6 @@ begin
   WU := IIF(QIdxNameSpace = 0, '', Format('@%d', [QIdxNameSpace]));
   Result := Format('%d%s - %s', [QNoCode, WU, '']);
 end;
-// visée vide
-function EmptyVisee(const C: string): TUneVisee;
-begin
-  result := MakeTUneVisee(0, tgDEFAULT, 0, 1, 1, 0.001, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '', C);
-end;
 function ExtractSerStFromTIDStation(const QIDBaseStation: TIDBaseStation; out QSR: TNumeroSerie; out QST: TNumeroStation): boolean;
 var
   QRT: LongInt;
@@ -2861,8 +2732,8 @@ function ConversionCoordonneesIsoleesEPSG(const Src, Tgt: integer; const PointIn
 var
   PIN, POUT: TPoint2Df;
 begin
-  PIN  := MakeTPoint2Df(PointInX, PointInY);
-  POUT := MakeTPoint2Df(0.00, 0.00);
+  PIN.setFrom(PointInX, PointInY);
+  POUT.Empty();
   Result := ConversionCoupleCoordonneesIsoleesEPSG(src, Tgt, PIN, POUT);
   PointOutX := POUT.X;
   PointOutY := POUT.Y;
@@ -2891,7 +2762,6 @@ begin
   Result := 0.00;
   DT := EncodeDate(YYYY, MM, DD);
   CalcDeclimagIsolee(Lat, Lon, Alt, DT, Result);
-
 end;
 
 //******************************************************************************
@@ -3052,7 +2922,6 @@ begin
   Result := '';
   if (CreateGUID(MyGUID) = 0) then
   begin
-    //Result := MyGUID.ToString(false);
     Result := Format('%.8X-', [MyGUID.time_low]) +
               Format('%.4X-', [MyGUID.time_mid]) +
               Format('%.4X-', [MyGUID.time_hi_and_version]) +
@@ -3131,12 +3000,9 @@ begin
   RayonTolerance := sin(ToleranceAngulaire * TwoPi_Sur_GradAz);
   sincos(Theta , sa , ca);
   sincos(Thetar, sar, car);
-  //AfficherMessage(Format('Theta  = %.5f   sa = %.5f   ca = %.5f', [Theta , sa , ca]));
-  //AfficherMessage(Format('Thetar = %.5f  sar = %.5f  car = %.5f', [Thetar , sar , car]));
   qdx := sa - sar;
   qdy := ca - car;
   qdr := hypot(qdx, qdy);
-  //AfficherMessage(Format('r = %.5f, dr = %.5f, dx = %.5f, dy = %.5f', [RayonTolerance , qdr, qdx, qdy]));
   Result := (qdr < RayonTolerance);
 end;
 function IsNearToInclinaison(const GradInc: double; const Inclinaison, InclinaisonRef: double; const ToleranceAngulaire: double): boolean;
@@ -3248,9 +3114,9 @@ begin
     QDL := abs(ArrVisees[i].Longueur - ViseeMoyenne.Longueur);
     QConditionLongueursOK := (QDL < ToleranceDistances);
     // La nouvelle origine est l'extrémité de la visée moyenne
-    QProjXYZ := MakeTPoint3Df(QArrProjXYZ[i].X - QProjViseeMoyenne.X,
-                              QArrProjXYZ[i].Y - QProjViseeMoyenne.Y,
-                              QArrProjXYZ[i].Z - QProjViseeMoyenne.Z);
+    QProjXYZ.setFrom(QArrProjXYZ[i].X - QProjViseeMoyenne.X,
+                     QArrProjXYZ[i].Y - QProjViseeMoyenne.Y,
+                     QArrProjXYZ[i].Z - QProjViseeMoyenne.Z);
     QR  := Hypot3D(QProjXYZ.X, QProjXYZ.Y, QProjXYZ.Z);
 
     // Test de proximité des extrémités des visées avec celle de la visée moyenne

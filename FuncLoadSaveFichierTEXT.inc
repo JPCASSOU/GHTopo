@@ -338,16 +338,16 @@ begin
                              AfficherMessage(Format(rsWARNINGENTRYADDED,[QN]));
                              eNomEntree:= Format(rsRD_TAB_ENTRANCE,[QN]);
                            end;
-                           eXEntree  := ConvertirEnNombreReel(PrmsLn[COL_XENTREE], 0.00);
-                           eYEntree  := ConvertirEnNombreReel(PrmsLn[COL_YENTREE], 0.00);
-                           eZEntree  := ConvertirEnNombreReel(PrmsLn[COL_ZENTREE], 0.00);
+                           ePosition.setFrom(ConvertirEnNombreReel(PrmsLn[COL_XENTREE], 0.00),
+                                             ConvertirEnNombreReel(PrmsLn[COL_YENTREE], 0.00),
+                                             ConvertirEnNombreReel(PrmsLn[COL_ZENTREE], 0.00));
                            // couleurs non supportées = couleur par défault
                            eCouleur  := clGray;
                            //------------
                            // entrées non géoréférencées ?
-                           if (eXEntree < 100.00) or
-                              (eYEntree < 100.00) or
-                              (eZEntree < 100.00)
+                           if (ePosition.X < 100.00) or
+                              (ePosition.Y < 100.00) or
+                              (ePosition.Z < 100.00)
                            then WriteWarning(Format(GetResourceString(rsRD_TAB_ENTR_NOGEOREF),
                                                    [NoLigneTEXT,QN, eNomEntree]));
                            eRefSer   := StrToIntDef(PrmsLn[COL_ENT_SER],1);
@@ -624,9 +624,9 @@ begin
       // section -5 = Coordonnées
       //-5     1   1   1   1   629000.72   178000.68     1777.71     1     0
       EWE := makeColonnesEnTete(false, -5, i+1, 1, 1, 1) +
-             FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [myEntree.eXEntree]), 12, taRightJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [myEntree.eYEntree]), 12, taRightJustify) +
-             FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [myEntree.eZEntree]), 12, taRightJustify) +
+             FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [myEntree.ePosition.X]), 12, taRightJustify) +
+             FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [myEntree.ePosition.Y]), 12, taRightJustify) +
+             FormatterFixedColumn(Format(FORMAT_NB_REAL_2_DEC, [myEntree.ePosition.Z]), 12, taRightJustify) +
              FormatterFixedColumn(Format(FORMAT_NB_INTEGER,    [myEntree.eRefSer]), 6, taRightJustify) +
              FormatterFixedColumn(Format(FORMAT_NB_INTEGER,    [myEntree.eRefSt]), 6, taRightJustify);
       WriteLn(fp, EWE);

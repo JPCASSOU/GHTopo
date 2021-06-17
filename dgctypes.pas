@@ -10,21 +10,31 @@ const DGC_DEFAULT_PEN_WIDTH_IN_MM = 0.025;
 const DIEU_AU_CARRE = -1; // dieu étant imaginaire pur, son carré vaut -1 ;-))))
 const DGC_DEFAULT_FONT_NAME = 'Arial';
 
-type TDGCPoint2D = record
+type
+
+{ TDGCPoint2D }
+
+ TDGCPoint2D = record
   X:  double;
   Y:  double;
+  procedure setFrom(const QX, QY: double);
+  procedure Empty();
 end;
 type TDGCArrayPoints2D = array of TDGCPoint2D;
 type TDGCPoint2Dh = record  // coordonnées 2D homogènes
   X:  double;
   Y:  double;
   H:  double;
+  procedure setFrom(const QX, QY: double; const QH: double = 1.0);
+  procedure Empty();
 end;
 type TDGCBoundingBox = record
   X1:  double;
   Y1:  double;
   X2:  double;
   Y2:  double;
+  procedure setFrom(const QX1, QY1, QX2, QY2: double);
+  procedure Empty();
 end;
 type TDGCMatrix3x3 = array[0..2, 0..2] of double;
 
@@ -67,7 +77,11 @@ type TDGCDessinObjet = record
   DessinObjet    : TObject;
   function GetDescroDessinObjet(): string;
 end;
-type TDGCStyleSheet = record
+type
+
+{ TDGCStyleSheet }
+
+ TDGCStyleSheet = record
   Stylename        : string;
   Description      : string;
   // Crayon
@@ -88,8 +102,11 @@ type TDGCStyleSheet = record
   FontOpacity      : byte;
   FontSizeInPts    : integer;
   FontSizeInMM     : double;
-
   FontStyle        : TFontStyles;
+  procedure setPen(const QPenColor: TColor; const QPenOpacity : byte; const QPenStyle: TPenStyle; const QPenWidthInPX: byte; const QPenWidthInMM: double);
+  procedure setBrush(const QBrushColor: TColor; const QBrushOpacity: byte; const BrushStyle: TBrushStyle);
+  procedure setFont(const QFontName: string; const QFontColor: TColor; const QFontOpacity: byte; const QFontStyle: TFontStyles; const QFontSizeInPts: integer; const QFontSizeInMM: double);
+  procedure setDefault();
 end;
 
 
@@ -119,6 +136,90 @@ type TProcTransmitCoords     = procedure(const P: TDGCPoint2D) of object;
 implementation
 uses
   DGCDummyUnit; // pour limiter le bug de 'Fin de code source non trouvée
+
+{ TDGCStyleSheet }
+
+procedure TDGCStyleSheet.setPen(const QPenColor: TColor; const QPenOpacity: byte; const QPenStyle: TPenStyle; const QPenWidthInPX: byte; const QPenWidthInMM: double);
+begin
+  self.PenColor         := QPenColor;
+  self.PenOpacity       := QPenOpacity;
+  self.PenStyle         := QPenStyle;
+  self.PenWidthInPX     := QPenWidthInPX;
+  self.PenWidthInMM     := QPenWidthInMM;
+end;
+
+procedure TDGCStyleSheet.setBrush(const QBrushColor: TColor; const QBrushOpacity: byte; const BrushStyle: TBrushStyle);
+begin
+  self.BrushColor       := QBrushColor;
+  self.BrushOpacity     := QBrushOpacity;
+  self.BrushStyle       := BrushStyle;
+end;
+
+procedure TDGCStyleSheet.setFont(const QFontName: string; const QFontColor: TColor; const QFontOpacity: byte; const QFontStyle: TFontStyles; const QFontSizeInPts: integer; const QFontSizeInMM: double);
+begin
+  self.FontName         := QFontName;
+  self.FontColor        := QFontColor;
+  self.FontOpacity      := QFontOpacity;
+  self.FontSizeInPts    := QFontSizeInPts;
+  self.FontSizeInMM     := QFontSizeInMM;
+  self.FontStyle        := QFontStyle;
+end;
+
+procedure TDGCStyleSheet.setDefault();
+begin
+  self.setPen(clBlack, 255, psSolid, 0, DGC_DEFAULT_PEN_WIDTH_IN_MM);
+  self.setBrush(clWhite, 255, bsSolid);
+  self.setFont(DGC_DEFAULT_FONT_NAME, clBlack, 255, [], 10, 1.20);
+end;
+
+{ TDGCPoint2D }
+
+procedure TDGCPoint2D.setFrom(const QX, QY: double);
+begin
+  self.X := QX;
+  self.Y := QY;
+end;
+
+procedure TDGCPoint2D.Empty();
+begin
+  self.X := 0.00;
+  self.Y := 0.00;
+end;
+
+{ TDGCPoint2Dh }
+
+procedure TDGCPoint2Dh.setFrom(const QX, QY: double; const QH: double = 1.0);
+begin
+  self.X := QX;
+  self.Y := QY;
+  self.H := QH;
+end;
+
+procedure TDGCPoint2Dh.Empty();
+begin
+  self.X := 0.00;
+  self.Y := 0.00;
+  self.H := 1.00;
+end;
+
+{ TDGCBoundingBox }
+
+procedure TDGCBoundingBox.setFrom(const QX1, QY1, QX2, QY2: double);
+begin
+  self.X1 := QX1;
+  self.Y1 := QY1;
+  self.X2 := QX2;
+  self.Y2 := QY2;
+
+end;
+
+procedure TDGCBoundingBox.Empty();
+begin
+  self.X1 := 0.00;
+  self.Y1 := 0.00;
+  self.X2 := 0.00;
+  self.Y2 := 0.00;
+end;
 
 
 

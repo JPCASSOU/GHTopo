@@ -11,10 +11,10 @@ unit frmRPIMainWnd;
 interface
 uses
   {$INCLUDE SelectionLangues.inc} // insère les unités en fonction de la langue
+  StructuresDonnees,
   Common,
   Graphics,
   LazFileUtils,
-  StructuresDonnees,
   ToporobotClasses2012,
   CodeCalculTopo,
   UnitEntitesExtended,
@@ -107,6 +107,7 @@ type
     CdrListeViseesEnAntenne1: TCdrListeViseesEnAntenne;
     CdrNavigateurSeries1: TCdrNavigateurSeries;
     CdrSerieIndependant1: TCdrSerieIndependant;
+    chkModeFonctionnement: TCheckBox;
     GHTopoContext2DA1: TGHTopoContext2DA;
     lbNextWptAzimut1: TStaticText;
     lsbPathRoadMap: TComboBox;
@@ -175,7 +176,6 @@ type
     tabShtListesSimples: TTabSheet;
     tabShtDistoX: TTabSheet;
     tabShtVuePlan: TTabSheet;
-    btnModeTopoNavig: TToggleBox;
 
     procedure acCheckDatabaseExecute(Sender: TObject);
     procedure acDeleteAnnotationExecute(Sender: TObject);
@@ -225,11 +225,13 @@ type
     procedure btnStyleObjet9Click(Sender: TObject);
 
     procedure Button4Click(Sender: TObject);
+    procedure chkModeFonctionnementChange(Sender: TObject);
     procedure editFileNameChange(Sender: TObject);
     procedure editFileNameKeyPress(Sender: TObject; var Key: char);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
+    procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure lbEtapeClick(Sender: TObject);
     procedure lsbPathRoadMapChange(Sender: TObject);
@@ -247,6 +249,7 @@ type
     FModeFonctionnementGHTopoContext2D: TModeFonctionnementGHTopoContext2D;
     FModeUseMiniDialogSaveXTB: TModeUseMiniDialogSaveXTB;
     FCurrentDocTopoName: TStringDirectoryFilename;
+    procedure CentrerPnlAcquitteVisee();
     procedure DisplayBearingToNext(const IdxWpt: integer);
     function  RecalculerShortestPath(const StationDepart, StationArrivee: string): boolean;
     procedure SetModeFonctionnement(const MF: TModeFonctionnementGHTopoContext2D);
@@ -267,7 +270,7 @@ type
     function  InitialiserGHTopoRPC(): boolean;
     procedure FinaliserGHTopoRPC();
     procedure InitCaptions();
-    procedure DispProgression(const Etape: string; const Done, Starting, Ending: integer);
+    procedure DispProgression(const Etape: string; const Done, Starting, Ending, Step: integer);
     procedure QuickSaveHorodatee();
     procedure ReactualiserTables(const B: boolean);
 
@@ -671,11 +674,28 @@ begin
   end;
   InitCaptions();
 end;
+
+procedure TRPIMainWnd.FormResize(Sender: TObject);
+begin
+  CentrerPnlAcquitteVisee();
+end;
+
+procedure TRPIMainWnd.CentrerPnlAcquitteVisee();
+const MG = 40;
+begin
+  if (pnlAcquitteVisee.Visible) then
+  begin
+    pnlAcquitteVisee.Width   := self.ClientWidth - 2 * MG;
+    pnlAcquitteVisee.Top     := (self.ClientHeight - pnlAcquitteVisee.Height) div 2;
+    pnlAcquitteVisee.Left    := MG;
+  end;
+end;
+
 function TRPIMainWnd.InitialiserGHTopoRPC(): boolean;
 begin
   Result := false;
-  btnModeTopoNavig.Checked  := false;
-  btnModeTopoNavig.Caption  := 'TOPO';
+  chkModeFonctionnement.Checked  := false;
+  chkModeFonctionnement.Caption  := 'TOPO';
   FModeUseMiniDialogSaveXTB := aesNONE;
   pnlSaveAs.Visible         := false;
   pnlQuickOpen.Visible      := false;
@@ -1135,7 +1155,7 @@ begin
 end;
 //******************************************************************************
 //type TProcDisplayProgression = procedure (const Etape: string; const Done, Starting, Ending: integer) of object;
-procedure  TRPIMainWnd.DispProgression(const Etape: string; const Done, Starting, Ending: integer);
+procedure  TRPIMainWnd.DispProgression(const Etape: string; const Done, Starting, Ending, Step: integer);
 begin
   lbEtape.Caption       := Etape;
   ProgressBar1.Min      := Starting;
@@ -1152,7 +1172,7 @@ begin
   SetVisibiliteProgressBar(true);
   CodeCalcul := TCodeDeCalcul.Create;
   try
-    CodeCalcul.Initialiser(FDocumentToporobot, FBDDEntites);
+    CodeCalcul.Initialiser(FDocumentToporobot, FBDDEntites, DispProgression);
     Result    := CodeCalcul.CalculComplet(False);
     Result    := True;
   finally
@@ -1199,9 +1219,9 @@ end;
 
 procedure TRPIMainWnd.btnModeTopoNavigChange(Sender: TObject);
 begin
-  if (btnModeTopoNavig.Checked) then SetModeFonctionnement(mfgcNAVIGATION)
-                                else SetModeFonctionnement(mfgcSURVEYING);
+
 end;
+
 
 procedure TRPIMainWnd.btnNewDocCancelClick(Sender: TObject);
 begin
@@ -1287,23 +1307,30 @@ end;
 
 procedure TRPIMainWnd.btnStationDepartClick(Sender: TObject);
 var
-  EWE: TCaption;
+  QStation: TBaseStation;
+  EWE: String;
 begin
-  EWE := btnStationDepart.Caption;
+  QStation:= GHTopoContext2DA1.GetCurrentStationNearToMousePos();
+  EWE := QStation.toString();
   if (SaisirIDStation('Départ', EWE)) then
   begin
+    btnStationDepart.Caption := EWE;
     if (RecalculerShortestPath(EWE, btnStationArrivee.Caption)) then  btnStationDepart.Caption := EWE;
-
+    SetModeFonctionnement(mfgcNAVIGATION);
   end;
 end;
 procedure TRPIMainWnd.btnStationArriveeClick(Sender: TObject);
 var
   EWE: TCaption;
+  QStation: TBaseStation;
 begin
-  EWE := btnStationArrivee.Caption;
+  QStation:= GHTopoContext2DA1.GetCurrentStationNearToMousePos();
+  EWE := QStation.toString();
   if (SaisirIDStation('Arrivée', EWE)) then
   begin
+    btnStationArrivee.Caption := EWE;
     if (RecalculerShortestPath(btnStationDepart.Caption, EWE)) then  btnStationArrivee.Caption := EWE;
+    SetModeFonctionnement(mfgcNAVIGATION);
   end;
 end;
 
@@ -1318,8 +1345,7 @@ var
 begin
   if (not GHTopoContext2DA1.CanDraw) then exit;
   MyOnglet := GHTopoContext2DA1.GetOngletByIndex(0);
-  if (ParametrerOngletVue2D(MyOnglet)) then
-    GHTopoContext2DA1.PutOngletByIndex(0, MyOnglet, True);
+  if (ParametrerOngletVue2D(MyOnglet)) then  GHTopoContext2DA1.PutOngletByIndex(0, MyOnglet, True);
 end;
 
 procedure TRPIMainWnd.btnStyleObjet0Click(Sender: TObject);
@@ -1377,6 +1403,12 @@ begin
   FBDDEntites.ExporterAntennesNuagePoints(GetGHTopoDirectory() + '_Nuageoints.ply');
 end;
 
+procedure TRPIMainWnd.chkModeFonctionnementChange(Sender: TObject);
+begin
+  if (chkModeFonctionnement.Checked) then SetModeFonctionnement(mfgcNAVIGATION)
+                                     else SetModeFonctionnement(mfgcSURVEYING);
+end;
+
 procedure TRPIMainWnd.SetModeFonctionnement(const MF: TModeFonctionnementGHTopoContext2D);
 var
   EWE: TBaseStation;
@@ -1385,7 +1417,7 @@ begin
   case FModeFonctionnementGHTopoContext2D of
     mfgcSURVEYING :
     begin
-      btnModeTopoNavig.Caption := 'TOPO';
+      chkModeFonctionnement.Caption := 'TOPO';
       pnlOutilsCroquis.Visible := True;
       pnlNavigation.Visible    := false;
       // et on centre sur la station courante
@@ -1394,7 +1426,7 @@ begin
     end;
     mfgcNAVIGATION:
     begin
-      btnModeTopoNavig.Caption := 'NAVIG';
+      chkModeFonctionnement.Caption := 'NAVIG';
       pnlOutilsCroquis.Visible := false;
       pnlProgression.Visible   := True;
       lbEtape.caption          := 'Construction du graphe';

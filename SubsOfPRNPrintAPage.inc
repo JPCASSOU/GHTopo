@@ -105,8 +105,8 @@
         Printer.Canvas.Font.Height := Millimetres2PixelsYf(3.00);
         while (A < Coin2.X) do
         begin
-          C1 := MakeTPoint2Df(A, Coin1.Y);
-          C2 := MakeTPoint2Df(A, Coin2.Y);
+          C1.setFrom(A, Coin1.Y);
+          C2.setFrom(A, Coin2.Y);
           P1 := Coord2Draft(C1.X, C1.Y);
           P2 := Coord2Draft(C2.X, C2.Y);
           Printer.Canvas.MoveTo(P1); Printer.Canvas.LineTo(P2);
@@ -119,8 +119,8 @@
          A := FVue2DParams.ongQdrSpc * t;
          while (A<Coin2.Y) do
          begin
-           C1 := MakeTPoint2Df(Coin1.X, A);
-           C2 := MakeTPoint2Df(Coin2.X, A);
+           C1.setFrom(Coin1.X, A);
+           C2.setFrom(Coin2.X, A);
            P1:=Coord2Draft(C1.X, C1.Y);
            P2:=Coord2Draft(C2.X, C2.Y);
            Printer.Canvas.MoveTo(P1); Printer.Canvas.LineTo(P2);
@@ -141,13 +141,13 @@
          B:=B0;
          while (B < Coin2.Y) do
          begin
-           C1 := MakeTPoint2Df(A - FQdrCrossSize, B);
-           C2 := MakeTPoint2Df(A + FQdrCrossSize, B);
+           C1.setFrom(A - FQdrCrossSize, B);
+           C2.setFrom(A + FQdrCrossSize, B);
            P1 := Coord2Draft(C1.X, C1.Y);
            P2 := Coord2Draft(C2.X, C2.Y);
            Printer.Canvas.MoveTo(P1); Printer.Canvas.LineTo(P2);
-           C1 := MakeTPoint2Df(A, B - FQdrCrossSize);
-           C2 := MakeTPoint2Df(A, B + FQdrCrossSize);
+           C1.setFrom(A, B - FQdrCrossSize);
+           C2.setFrom(A, B + FQdrCrossSize);
            P1 := Coord2Draft(C1.X, C1.Y);
            P2 := Coord2Draft(C2.X, C2.Y);
            Printer.Canvas.MoveTo(P1); Printer.Canvas.LineTo(P2);
@@ -218,7 +218,7 @@
     for i := 0 to Nb - 1 do
     begin
       MyEntrance := FBDDEntites.GetEntrance(i);
-      PM := MakeTPoint2Df(MyEntrance.eXEntree, MyEntrance.eYEntree);
+      PM.setFrom(MyEntrance.ePosition.X, MyEntrance.ePosition.Y);
       P2 := Coord2Draft(PM.X, PM.Y);
       Printer.Canvas.Pen.Width   := 0;
       Printer.Canvas.Brush.Color := clFuchsia;
@@ -356,7 +356,7 @@
     for i := 0 to QNbJonctions do
     begin
       MyJonction := FBDDEntites.GetJonction(i);
-      P1 := Coord2Draft(MyJonction.X, MyJonction.Y);
+      P1 := Coord2Draft(MyJonction.Position.X, MyJonction.Position.Y);
       Printer.Canvas.TextOut(P1.x + 2, P1.Y + 2, MyJonction.ToString());
     end;
   end;
@@ -484,7 +484,8 @@
     var
       MyStyle: TTexteAttributs;
       QP: TPoint;
-      EWE: TPoint3Df;
+      P1, EWE: TPoint3Df;
+
       // TODO: A factoriser
       function InterpreterAnnotation(): string;
       var
@@ -495,8 +496,8 @@
         Result   := A.Texte;
         aSerie   := A.Position.IDBaseStation div NB_MAXI_SERIES_PAR_CAVITE;
         aStation := (A.Position.IDBaseStation mod NB_MAXI_SERIES_PAR_CAVITE) div 10;
-
-        FBDDEntites.CalcCoordinatesFromBasePtAndOffset(A.Position.IDBaseStation, MakeTPoint3Df(0.00, 0.00, 0.00), EWE);
+        P1.Empty();
+        FBDDEntites.CalcCoordinatesFromBasePtAndOffset(A.Position.IDBaseStation, P1, EWE);
         Result := StringReplace(Result, '%z', Format('Alt %.2f', [EWE.Z]), [rfIgnoreCase, rfReplaceAll]);
         Result := StringReplace(Result, FORMAT_STRING, Format(FMTSERST, [aSerie, aStation]), [rfIgnoreCase, rfReplaceAll]);
       end;

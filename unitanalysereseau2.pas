@@ -427,7 +427,7 @@ var
   UneVisee: TUneVisee;
 begin
   ViderTableJonctionsBranches();
-  UneVisee := EmptyVisee('');
+  UneVisee.Empty('');
   SetLength(Branche.PointsTopo, 0);              // N
   addViseeAtBranche(Branche, UneVisee);          // N
   Branche.NoBranche    := 0;

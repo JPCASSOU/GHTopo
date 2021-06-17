@@ -1250,6 +1250,7 @@ function TCdrPascalScript.DT_BeginNewSerie(const QNumeroSerie: integer;
 var
   EWE: TNumeroSerie;
   QInternaIdxSerie: integer;
+  MyVisee: TUneVisee;
 begin
   result := false;
   FCurrentSerieAssigned := false;
@@ -1266,7 +1267,8 @@ begin
     FCurrentSerie := TObjSerie.Create;
     try
       FCurrentSerie.ClearStations();
-      FCurrentSerie.AddVisee(EmptyVisee(''));
+      MyVisee.Empty('');
+      FCurrentSerie.AddVisee(MyVisee);
       FCurrentSerie.SetNumeroSerie(EWE);
       FCurrentSerie.SetNomObsSerie(QName, '');
       FCurrentSerie.SetChanceObstacle(0, 0);
@@ -1319,9 +1321,7 @@ var
 begin
   EE.eRefSer  := RefSer;
   EE.eRefSt   := RefSt;
-  EE.eXEntree := XEntree;
-  EE.eYEntree := YEntree;
-  EE.eZEntree := ZEntree;
+  EE.ePosition.setFrom(XEntree, YEntree, ZEntree);
   EE.eCouleur := RGBToColor(R and 255, G and 255, B and 255);
   EE.eNomEntree  := NomEntree;
   EE.eIDTerrain  := IDTerrain;
@@ -1341,9 +1341,7 @@ begin
     EE := FDocuTopo.GetEntrance(QIdx);
     EE.eRefSer  := RefSer;
     EE.eRefSt   := RefSt;
-    EE.eXEntree := XEntree;
-    EE.eYEntree := YEntree;
-    EE.eZEntree := ZEntree;
+    EE.ePosition.setFrom(XEntree, YEntree, ZEntree);
     EE.eCouleur := RGBToColor(R and 255, G and 255, B and 255);
     EE.eNomEntree  := NomEntree;
     EE.eIDTerrain  := IDTerrain;
@@ -1409,11 +1407,14 @@ end;
 procedure TCdrPascalScript.MNT_AddProfil(const ProfilName: string; const X1, Y1, X2, Y2: double);
 var
   WU: TLineAttributes;
+  P1, P2: TPoint2Df;
 begin
   if (FMyMaillage.IsValidMaillage()) then
   begin
     WU.SetAttributes(clRed, 255, 1, 0.015);
-    FMyMaillage.ExtractAndAddProfilTopo(MakeTPoint2Df(X1, Y1), MakeTPoint2Df(X2, Y2), WU, ProfilName);
+    P1.setFrom(X1, Y1);
+    P2.setFrom(X2, Y2);
+    FMyMaillage.ExtractAndAddProfilTopo(P1, P2, WU, ProfilName);
   end;
 end;
 
@@ -1514,10 +1515,10 @@ begin
   caL := cos(AlphaL);
   saL := sin(AlphaL);
   // Transport du vecteur normal vers l'origine
-  RectZone[0] := MakeTPoint2Df(X1, Y1);
-  RectZone[1] := MakeTPoint2Df(X2, Y2);
-  RectZone[2] := MakeTPoint2Df(X2 + qdxH, Y2 + qdyH);
-  RectZone[3] := MakeTPoint2Df(X1 + qdxH, Y1 + qdyH);
+  RectZone[0].setFrom(X1, Y1);
+  RectZone[1].setFrom(X2, Y2);
+  RectZone[2].setFrom(X2 + qdxH, Y2 + qdyH);
+  RectZone[3].setFrom(X1 + qdxH, Y1 + qdyH);
   QH := Hypot2D(qdxH, qdyH);
   QL := Hypot2D(qdxL, qdyL);
   QPasX := QL / NbX;

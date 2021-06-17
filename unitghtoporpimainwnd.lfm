@@ -301,18 +301,7 @@ object GHTopoRPIMainWnd: TGHTopoRPIMainWnd
       Caption = 'tabshtDistoX'
       ClientHeight = 627
       ClientWidth = 672
-      inline CdrDistoX1: TCdrDistoX
-        Height = 627
-        Width = 672
-        ClientHeight = 627
-        ClientWidth = 672
-        inherited PageControl1: TPageControl
-          Height = 586
-          Width = 666
-          ActivePage = CdrDistoX1.tabCalibration
-          TabIndex = 2
-        end
-      end
+
     end
     object TabSheet1: TTabSheet
       Caption = 'TabSheet1'

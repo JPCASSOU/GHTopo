@@ -183,7 +183,7 @@ var
   dx: Extended;
 begin
 
-  FRegionDeDessin := MakeTRect2Df(QX1, QY1, QX2, QY2);
+  FRegionDeDessin.setfrom(QX1, QY1, QX2, QY2);
   dx := FRegionDeDessin.X2 - FRegionDeDessin.X1;
   // calcul du rapport Hauteur/largeur de vue
   RappHLVue       := Self.Height / self.Width;
@@ -280,9 +280,11 @@ procedure TGHTopoDrawingContext.DrawTexte(const X, Y: Double; const Alignement: 
 var
   PP, PosTXT: TPoint;
   ExTxt: TSize;
+  PM : TPoint2Df;
 begin
-  if (not PointInRectangle(MakeTPoint2Df(X, Y), FRegionDeDessin)) then exit;
-  PP := QGetCoordsPlan(MakeTPoint2Df(X, Y));
+  PM.setFrom(X, Y);
+  if (not PointInRectangle(PM, FRegionDeDessin)) then exit;
+  PP := QGetCoordsPlan(PM);
   ExTxt :=  self.CanvasBGRA.TextExtent(T);
   // 7 8 9
   // 4 5 6
@@ -319,7 +321,7 @@ var
   dl: Integer;
   dh: Integer;
 begin
-  if (PointInRectangle(MakeTPoint2Df(x, y), FRegionDeDessin)) then
+  if (PointInRectangle(x, y, FRegionDeDessin)) then
   begin
     PP := QGetCoordsPlan(X, Y);
     dl := L shr 1;
@@ -678,8 +680,8 @@ begin
   for i := 0 to n - 1 do
   begin
     J  := FBDDEntites.GetJonction(i);
-    DrawShape(J.X, J.Y, 1, R, R);
-    DrawTexte(J.X - 0.3, J.Y - 0.3, 7, MakeLabelNoeud(J));
+    DrawShape(J.Position.X, J.Position.Y, 1, R, R);
+    DrawTexte(J.Position.X - 0.3, J.Position.Y - 0.3, 7, MakeLabelNoeud(J));
   end;
   RestoreBrosseEtCrayon();
   RestoreFonte();
@@ -719,6 +721,7 @@ var
   i, QNb:      integer;
   q1, q2: boolean;
   QColorQuad: TColor;
+  S1, S2, S3, S4: TPoint2Df;
 begin
   q1 := (edFillGalerie in FVue2DParams.ongElementsDrawn);
   q2 := (edWalls       in FVue2DParams.ongElementsDrawn);
@@ -733,10 +736,11 @@ begin
       if (E.Type_Entite in [tgSURFACE, tgENTRANCE])  then Continue;       // topo de surface et cheminement spéciaux: sans objet
       if (q1) then
       begin // remplissages
-        DrawQuad(MakeTPoint2Df(E.PosOPG.X, E.PosOPG.Y),
-                 MakeTPoint2Df(E.PosOPD.X, E.PosOPD.Y),
-                 MakeTPoint2Df(E.PosPD.X , E.PosPD.Y),
-                 MakeTPoint2Df(E.PosPG.x , E.PosPG.Y));
+        S1.setFrom(E.PosOPG.X, E.PosOPG.Y);
+        S2.setFrom(E.PosOPD.X, E.PosOPD.Y);
+        S3.setFrom(E.PosPD.X , E.PosPD.Y);
+        S4.setFrom(E.PosPG.x , E.PosPG.Y);
+        DrawQuad(S1, S2, S3, S4);
       end;
       if (q2) then
       begin // parois
@@ -756,10 +760,11 @@ begin
       if (q1) then
       begin // remplissages
         DefineBrosseEtCrayon(bsSolid, QColorQuad, FVue2DParams.ongFillOpacite, psClear, 0, QColorQuad, FVue2DParams.ongFillOpacite);
-        DrawQuad(MakeTPoint2Df(E.PosOPG.X, E.PosOPG.Y),
-                 MakeTPoint2Df(E.PosOPD.X, E.PosOPD.Y),
-                 MakeTPoint2Df(E.PosPD.X , E.PosPD.Y),
-                 MakeTPoint2Df(E.PosPG.x , E.PosPG.Y));
+        S1.setFrom(E.PosOPG.X, E.PosOPG.Y);
+        S2.setFrom(E.PosOPD.X, E.PosOPD.Y);
+        S3.setFrom(E.PosPD.X , E.PosPD.Y);
+        S4.setFrom(E.PosPG.x , E.PosPG.Y);
+        DrawQuad(S1, S2, S3, S4);
         RestoreBrosseEtCrayon();
       end;
       if (q2) then
@@ -789,9 +794,9 @@ begin
   begin
     E := FBDDEntites.GetEntrance(i);
     DefineBrosse(bsSolid, clFuchsia, 64);
-    DrawShape(E.eXEntree, E.eYEntree, 1, R666, R666);
+    DrawShape(E.ePosition.X, E.ePosition.Y, 1, R666, R666);
     DefineBrosse(bsSolid, FVue2DParams.ongBackGround, 64);
-    if (DoDrawNames) then DrawTexte(E.eXEntree, E.eYEntree, 1, GetResourceString(E.eNomEntree));
+    if (DoDrawNames) then DrawTexte(E.ePosition.X, E.ePosition.Y, 1, GetResourceString(E.eNomEntree));
   end; // for
   DefineBrosseEtCrayon(bsSolid, FVue2DParams.ongBackGround, 128, psSolid, 0, clBlack, 255);
   RestoreFonte();
@@ -800,11 +805,14 @@ end;
 procedure TGHTopoDrawingContext.DrawCadre();
 var
   C1, C2: TPoint3Df;
+  P1, P2: TPoint2Df;
 begin
   DefineBrosseEtCrayon(bsClear, FVue2DParams.ongBackGround, 0, psSolid, 0, clRed, 255);
   C1 := FBDDEntites.GetCoinBasGauche();
   C2 := FBDDEntites.GetCoinHautDroit();
-  DrawRectangle(MakeTPoint2Df(C1.X, C1.Y), MakeTPoint2Df(C2.X, C2.Y), false);
+  P1.setFrom(C1.X, C1.Y);
+  P2.setFrom(C2.X, C2.Y);
+  DrawRectangle(P1, P2, false);
 end;
 //******************************************************************************
 // Krobard
@@ -826,21 +834,23 @@ var
     // TODO: A factoriser
     function InterpreterAnnotation(): string;
     var
-      EWE: TPoint3Df;
+      P1, EWE: TPoint3Df;
       aSerie, aStation: TIDBaseStation;
     begin
       Result   := MyAnnotation.Texte;
       aSerie   := MyAnnotation.Position.IDBaseStation div NB_MAXI_SERIES_PAR_CAVITE;
       aStation := (MyAnnotation.Position.IDBaseStation mod NB_MAXI_SERIES_PAR_CAVITE) div 10;
-      FBDDEntites.CalcCoordinatesFromBasePtAndOffset(MyAnnotation.Position.IDBaseStation, MakeTPoint3Df(0.00, 0.00, 0.00), EWE);
+      P1.Empty();
+      FBDDEntites.CalcCoordinatesFromBasePtAndOffset(MyAnnotation.Position.IDBaseStation, P1, EWE);
       Result := StringReplace(Result, '%z', Format('Alt %.2f', [EWE.Z]), [rfIgnoreCase, rfReplaceAll]);
       Result := StringReplace(Result, FORMAT_STRING, Format(FMTSERST, [aSerie, aStation]), [rfIgnoreCase, rfReplaceAll]);
     end;
   begin
     try
+
       if (FBDDEntites.CalcCoordinatesFromBasePtAndOffset(MyAnnotation.Position.IDBaseStation, MyAnnotation.Position.Offset, PM)) then
       begin
-        if (not PointInRectangle(MakeTPoint2Df(PM.X, PM.Y), FRegionDeDessin)) then Exit;
+        if (not PointInRectangle(PM.X, PM.Y, FRegionDeDessin)) then Exit;
         QStyleAnn := FKrobard.GetStyleAnnotation(MyAnnotation.IDStyle);
         DrawTexteCroquis(PM.X, PM.Y, QStyleAnn, InterpreterAnnotation());
       end;
@@ -855,38 +865,45 @@ var
     PV: TKrobardPolyVertex;
     QPolygon: array of TPoint;
     PM: TPoint3Df;
+    P1, P2: TPoint2Df;
   begin
-    QStylePoly := FKrobard.GetStylePolyligne(MyPoly.IDStyle);
+    // TODO:
+    // Bug inexplicable et exaspérant: Si on ne met pas un AfficherMessage() de la forme
+    // AfficherMessageErreur(format('Draw courbe (%d)', [Nb])): le tracé est OK
+    // AfficherMessageErreur(format('Draw courbe (%d)', [0])) : le tracé est OK
+    // AfficherMessageErreur('toto'); : Pas de tracé
+    // Degré de frustration sur l'échelle de Néron: 32 ( = 120 chrétiens égorgés lors des jeux du cirque )
+    AfficherMessageErreur(format('Draw poly (%d)', [Nb]));  // Indispensable, sinon le tracé de la courbe ne se fait pas !!!
     Nb := Length(MyPoly.Sommets);
-    // rejeter les objets dégénérés ou hors fenêtre de vue
     if (Nb < 2) then Exit;
+    QStylePoly := FKrobard.GetStylePolyligne(MyPoly.IDStyle);
+    // rejeter les objets dégénérés ou hors fenêtre de vue
     if (not IntersectRectangles(MyPoly.BoundingBox, FRegionDeDessin)) then Exit;
     SetLength(QPolygon, Nb);
     try  // indispensable pour Windows 10
       if (DoDrawBoundingBox) then  // bounding box
       begin
         DefineCrayon(psDash, 0, clGray, 255);
-        DrawRectangle(MakeTPoint2Df(MyPoly.BoundingBox.X1, MyPoly.BoundingBox.Y1),
-                      MakeTPoint2Df(MyPoly.BoundingBox.X2, MyPoly.BoundingBox.Y2), false);
+        P1.setFrom(MyPoly.BoundingBox.X1, MyPoly.BoundingBox.Y1);
+        P2.setFrom(MyPoly.BoundingBox.X2, MyPoly.BoundingBox.Y2);
+        DrawRectangle(P1, P2, false);
       end;
-      DefineBrosseEtCrayon(bsSolid, QStylePoly.FillColor, QStylePoly.FillOpacity,
-                           QStylePoly.LineStyle, QStylePoly.LineWidth, QStylePoly.LineColor, QStylePoly.LineOpacity);
+      DefineBrosseEtCrayon(bsSolid, QStylePoly.FillColor, QStylePoly.FillOpacity, QStylePoly.LineStyle, QStylePoly.LineWidth, QStylePoly.LineColor, QStylePoly.LineOpacity);
       for i := 0 to Nb - 1 do
       begin
         PV := MyPoly.Sommets[i];
-        if (FBDDEntites.CalcCoordinatesFromBasePtAndOffset(PV.IDBaseStation, PV.Offset, PM)) then QPolygon[i] := QGetCoordsPlan(MakeTPoint2Df(PM.X, PM.Y));
+        if (FBDDEntites.CalcCoordinatesFromBasePtAndOffset(PV.IDBaseStation, PV.Offset, PM)) then QPolygon[i] := QGetCoordsPlan(PM.X, PM.Y);
       end;
-      if (Nb < 2) then Exit; // nouveau test de sécurité
-      if (QStylePoly.Closed) then CanvasBGRA.Polygon(QPolygon)
-                             else CanvasBGRA.Polyline(QPolygon);
+      if (QStylePoly.Closed) then CanvasBGRA.Polygon(QPolygon) else CanvasBGRA.Polyline(QPolygon);
+
     except
+      AfficherMessageErreur('**** ERREUR TRACE POLY ***');
       pass; //on E: Exception do ShowMessage(E.Message);
     end;
   end;
 begin
   NbAnnotations := FKrobard.GetNbAnnotations();
   NbPolys       := FKrobard.GetNbPolylines();
-
   AfficherMessage(Format('*** DrawCroquis(): %d; %d styles ; %d ann. %d poly',
                         [FKrobard.GetNbStylesAnnotations(), FKrobard.GetNbStylesPolyLines(),
                          NbAnnotations, NbPolys]));
@@ -912,7 +929,7 @@ var
   QTxt: String;
 begin
   try
-    PM := MakeTPoint2Df(QCurrentStation.PosStation.X, QCurrentStation.PosStation.Y);
+    PM.setFrom(QCurrentStation.PosStation.X, QCurrentStation.PosStation.Y);
     if (PointInRectangle(PM, FRegionDeDessin)) then
     begin
       DefineBrosseEtCrayon(bsSolid, clYellow, 128, psSolid, 0, clAqua, 255);
@@ -978,15 +995,15 @@ var
     s: Integer;
   begin
     DefineCrayon(qStyle, qWidth, qColor, qOpacity);
-    TraceVers(PP[0].X, PP[0].Y, false);
-    for s := 1 to High(PP) do TraceVers(PP[s].X, PP[s].Y, True);
+    TraceVers(PP[0].Position.X, PP[0].Position.Y, false);
+    for s := 1 to High(PP) do TraceVers(PP[s].Position.X, PP[s].Position.Y, True);
   end;
   procedure DrwStations();
   var
     s: Integer;
   begin
     DefineBrosseEtCrayon(bsSolid, clRed, 192, pssolid, 1, clRed, 255);
-    for s := 1 to High(PP) do self.DrawShape(PP[s].X, PP[s].Y, 1, 8, 8);
+    for s := 1 to High(PP) do self.DrawShape(PP[s].Position.X, PP[s].Position.Y, 1, 8, 8);
   end;
 begin
   Nb := FP.GetNbNoeuds();

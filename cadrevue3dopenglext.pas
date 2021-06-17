@@ -550,62 +550,62 @@ var
       z1 := 0.50 * (PosOPG.Z + PosExtr0.Z);
       z2 := 0.50 * (PosOPD.Z + PosExtr0.Z);
 
-      Vertex[1] := MakeTPoint3Df(PosExtr0.X * M, PosExtr0.Y * M, PosOPG.Z * FZ);
-      Vertex[2] := MakeTPoint3Df(PosOPD.X * M, PosOPD.Y * M, z1 * FZ);
-      Vertex[3] := MakeTPoint3Df(Vertex[2].X, Vertex[2].Y, z2 * FZ);
-      Vertex[4] := MakeTPoint3Df(Vertex[1].X, Vertex[1].Y, PosOPD.Z * FZ);
-      Vertex[5] := MakeTPoint3Df(PosOPG.X * M, PosOPG.Y * M, z2 * FZ);
-      Vertex[6] := MakeTPoint3Df(Vertex[5].X, Vertex[5].Y, z1 * FZ);
+      Vertex[1].setfrom(PosExtr0.X * M, PosExtr0.Y * M, PosOPG.Z * FZ);
+      Vertex[2].setfrom(PosOPD.X * M, PosOPD.Y * M, z1 * FZ);
+      Vertex[3].setfrom(Vertex[2].X, Vertex[2].Y, z2 * FZ);
+      Vertex[4].setfrom(Vertex[1].X, Vertex[1].Y, PosOPD.Z * FZ);
+      Vertex[5].setfrom(PosOPG.X * M, PosOPG.Y * M, z2 * FZ);
+      Vertex[6].setfrom(Vertex[5].X, Vertex[5].Y, z1 * FZ);
 
       z1 := 0.50 * (PosPG.Z + PosStation.Z);
       z2 := 0.50 * (PosPD.Z + PosStation.Z);
 
-      Vertex[7] := MakeTPoint3Df(PosStation.X * M, PosStation.Y * M, PosPG.Z * FZ);
-      Vertex[8] := MakeTPoint3Df(PosPD.X * M, PosPD.Y * M, z1 * FZ);
-      Vertex[9] := MakeTPoint3Df(Vertex[8].X, Vertex[8].Y, z2 * FZ);
-      Vertex[10]:= MakeTPoint3Df(Vertex[7].X, Vertex[7].Y, PosPD.Z * FZ);
-      Vertex[11]:= MakeTPoint3Df(PosPG.X * M, PosPG.Y * M, z2 * FZ);
-      Vertex[12]:= MakeTPoint3Df(Vertex[11].X, Vertex[11].Y, z1 * FZ);
+      Vertex[7].setfrom(PosStation.X * M, PosStation.Y * M, PosPG.Z * FZ);
+      Vertex[8].setfrom(PosPD.X * M, PosPD.Y * M, z1 * FZ);
+      Vertex[9].setfrom(Vertex[8].X, Vertex[8].Y, z2 * FZ);
+      Vertex[10].setfrom(Vertex[7].X, Vertex[7].Y, PosPD.Z * FZ);
+      Vertex[11].setfrom(PosPG.X * M, PosPG.Y * M, z2 * FZ);
+      Vertex[12].setfrom(Vertex[11].X, Vertex[11].Y, z1 * FZ);
       // calcul des normales
-      Normales[1]:= MakeTPoint3Df(0.0, 0.0, -1.0);
+      Normales[1].setfrom(0.0, 0.0, -1.0);
       Normales[2]:=GetNormale(PosOPD.X - PosExtr0.X,
                               PosOPD.Y - PosExtr0.Y,
                               PosOPG.Z - PosExtr0.Z);
       Normales[3]:=GetNormale(PosOPD.X - PosExtr0.x,
                               PosOPD.Y - PosExtr0.Y,
                               PosOPD.Z - PosExtr0.Z);
-      Normales[4]:= MakeTPoint3Df(0.0, 0.0, 1.0);
+      Normales[4].setfrom(0.0, 0.0, 1.0);
       Normales[5]:=GetNormale(PosOPG.X - PosExtr0.X,
                               PosOPG.Y - PosExtr0.Y,
                               PosOPD.Z - PosExtr0.Z);
       Normales[6]:=GetNormale(PosOPG.X - PosExtr0.x,
                               PosOPG.Y - PosExtr0.Y,
                               PosOPG.Z - PosExtr0.Z);
-      Normales[7] := MakeTPoint3Df(0.0, 0.0, -1.0);
+      Normales[7] .setfrom(0.0, 0.0, -1.0);
       Normales[8]:=GetNormale(PosPD.X - PosStation.X,
                               PosPD.Y - PosStation.Y,
                               PosPG.Z - PosStation.Z);
       Normales[9]:=GetNormale(PosPD.X - PosStation.X,
                               PosPD.Y - PosStation.Y,
                               PosPD.Z - PosStation.Z);
-      Normales[10] := MakeTPoint3Df(0.0, 0.0, 1.0);
+      Normales[10] .setfrom(0.0, 0.0, 1.0);
       Normales[11]:=GetNormale(PosPG.X - PosStation.X,
                                PosPG.Y - PosStation.Y,
                                PosPD.Z - PosStation.Z);
       Normales[12]:=GetNormale(PosPG.X - PosStation.X,
                                PosPG.Y - PosStation.Y,
                                PosPG.Z - PosStation.Z);
-      V1 := MakeTPoint3Df(Vertex[2].X - Vertex[6].X,
+      V1.setfrom(Vertex[2].X - Vertex[6].X,
                           Vertex[2].Y - Vertex[6].Y,
                           Vertex[2].Z - Vertex[6].Z);
-      V2 := MakeTPoint3Df(Vertex[5].X - Vertex[6].X,
+      V2.setfrom(Vertex[5].X - Vertex[6].X,
                           Vertex[5].Y - Vertex[6].Y,
                           Vertex[5].Z - Vertex[6].Z);
       Normales[13] := ProduitVectoriel(V1,V2,True);
-      V1 := MakeTPoint3Df(Vertex[8].X - Vertex[12].X,
+      V1.setfrom(Vertex[8].X - Vertex[12].X,
                           Vertex[8].Y - Vertex[12].Y,
                           Vertex[8].Z - Vertex[12].Z);
-      V2 := MakeTPoint3Df(Vertex[9].X - Vertex[12].X,
+      V2.setfrom(Vertex[9].X - Vertex[12].X,
                           Vertex[9].Y - Vertex[12].Y,
                           Vertex[9].Z - Vertex[12].Z);
       Normales[14]:=ProduitVectoriel(V1,V2,True);

@@ -499,7 +499,7 @@ begin
   inc(FNbPoints);
   //SetLength(FListePoints, FNbPoints);
   New(FListePoints[FNbPoints-1]);
-  FListePoints[FNbPoints-1]^ := MakeTPoint3Df(QX, QY, QZ);
+  FListePoints[FNbPoints-1]^.setFrom(QX, QY, QZ);
   PointAdded := FListePoints[FNbPoints - 1];
   {$ENDIF}
   result := true;

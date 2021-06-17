@@ -370,7 +370,7 @@ begin
   begin
     //ExtractSerStFromTIDStation(QST.IDStation, QSer, QPt);
     //lbMouseCoords.Caption := Format('%d.%d: %f, %.2f', [QSer, QPt, QST.X, QST.Y]);
-    lbMouseCoords.Caption := Format('%s: %f, %.2f', [FCurrentStation.ToString(), FCurrentStation.X, FCurrentStation.Y]);
+    lbMouseCoords.Caption := Format('%s: %f, %.2f', [FCurrentStation.ToString(), FCurrentStation.Position.X, FCurrentStation.Position.Y]);
   end;
 end;
 
@@ -453,9 +453,7 @@ begin
   begin
     StDepart  := FGraphe.GetStation(MyPath.GetNoeud(0));
     StArrivee := FGraphe.GetStation(MyPath.GetNoeud(NbPointsPassage-1));
-    DistanceEuclidienne += Hypot3D(StArrivee.X - StDepart.X,
-                                   StArrivee.Y - StDepart.Y,
-                                   StArrivee.Z - StDepart.Z);
+    DistanceEuclidienne += DistanceBetweenTwoTPoint3Df(StDepart.Position, StArrivee.Position);
 
 
     lbNbPointsPassage.Caption     := Format('%d points', [NbPointsPassage]);
@@ -471,13 +469,12 @@ begin
     begin
       StDepart   := FGraphe.GetStation(MyPath.GetNoeud(i));
       StArrivee  := FGraphe.GetStation(MyPath.GetNoeud(i+1));
-      QLongueurParcours += Hypot3D(StArrivee.X - StDepart.X,
-                                     StArrivee.Y - StDepart.Y,
-                                     StArrivee.Z - StDepart.Z);
+      QLongueurParcours += DistanceBetweenTwoTPoint3Df(StDepart.Position, StArrivee.Position);
+
       ExtractSerStFromTIDStation(StArrivee.IDStation, QSr, QSt);
-      GetBearingInc(StArrivee.X - StDepart.X,
-                    StArrivee.Y - StDepart.Y,
-                    StArrivee.Z - StDepart.Z,
+      GetBearingInc(StArrivee.Position.X - StDepart.Position.X,
+                    StArrivee.Position.Y - StDepart.Position.Y,
+                    StArrivee.Position.Z - StDepart.Position.Z,
                     QLong, QAz, QPente,
                     IIF(cmbUniteBoussole.ItemIndex = 0, 360.00, 400.00), 360.00);
       grdRoadmap.Cells[0, i+1] := Format('%d', [i+1]);
@@ -489,9 +486,9 @@ begin
       grdRoadmap.Cells[4, i+1] := FormatterNombreOOo(QPente);
 
 
-      grdRoadmap.Cells[5, i+1] := FormatterNombreOOo(StArrivee.X, 3);
-      grdRoadmap.Cells[6, i+1] := FormatterNombreOOo(StArrivee.Y, 3);
-      grdRoadmap.Cells[7, i+1] := FormatterNombreOOo(StArrivee.Z, 3);
+      grdRoadmap.Cells[5, i+1] := FormatterNombreOOo(StArrivee.Position.X, 3);
+      grdRoadmap.Cells[6, i+1] := FormatterNombreOOo(StArrivee.Position.Y, 3);
+      grdRoadmap.Cells[7, i+1] := FormatterNombreOOo(StArrivee.Position.Z, 3);
 
       grdRoadmap.Cells[8, i+1] := FormatterNombreOOo(QLongueurParcours);
       grdRoadmap.Cells[9, i+1] := StDepart.MetaData;
@@ -521,7 +518,7 @@ begin
       for i := 0 to Nb -1 do
       begin
         MySt := FGraphe.GetStation(i);
-        CdrDGCDrawingContext1.AddEllipse(1, MySt.X, MySt.Y, 0.2, 0.2);
+        CdrDGCDrawingContext1.AddEllipse(1, MySt.Position.X, MySt.Position.Y, 0.2, 0.2);
       end;
     CdrDGCDrawingContext1.EndGroupe('Noeuds');
     AfficherMessageErreur('DessinerGraphe(): 002');
@@ -536,7 +533,7 @@ begin
           for j := 0 to QNBa - 1 do
           begin
             StVoisine := FGraphe.GetStation(MySt.LinkNode[j].TargetNodeIndex);
-            CdrDGCDrawingContext1.AddLine(2, MySt.X, MySt.Y, StVoisine.X, StVoisine.Y);
+            CdrDGCDrawingContext1.AddLine(2, MySt.Position.X, MySt.Position.Y, StVoisine.Position.X, StVoisine.Position.Y);
           end;
         end;
       end;
@@ -552,11 +549,10 @@ begin
         MySt0 := FGraphe.GetStation(MyPath.GetNoeud(i-1));
         MySt  := FGraphe.GetStation(MyPath.GetNoeud(i));
 
-        CdrDGCDrawingContext1.AddLine(3, MySt0.X, MySt0.Y, MySt.X, MySt.Y);
-        CdrDGCDrawingContext1.AddEllipse(3, MySt.X, MySt.Y, 0.3, 0.3);
-        //ExtractSerStFromTIDStation(MyST.IDStation, QSr, QSt);
-        //CdrDGCDrawingContext1.AddTexte(3 ,  MySt.X + 0.35,  MySt.Y + 0.35, 1, 0, Format(FMTSERST, [QSr, QSt]));
-        CdrDGCDrawingContext1.AddTexte(3 ,  MySt.X + 0.35,  MySt.Y + 0.35, 1, 0, MySt.ToString());
+        CdrDGCDrawingContext1.AddLine(3, MySt0.Position.X, MySt0.Position.Y, MySt.Position.X, MySt.Position.Y);
+        CdrDGCDrawingContext1.AddEllipse(3, MySt.Position.X, MySt.Position.Y, 0.3, 0.3);
+
+        CdrDGCDrawingContext1.AddTexte(3 ,  MySt.Position.X + 0.35,  MySt.Position.Y + 0.35, 1, 0, MySt.ToString());
       end;
     end;
     CdrDGCDrawingContext1.EndGroupe('Chemins');

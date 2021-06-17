@@ -316,8 +316,8 @@ begin
     FListOfEntities.ClearListe();
     FListOfStyles.ClearListe(True);
     FCurrentStyleSheet := 0;
-    FOriginalCoinBasGauche := MakeTDGCPoint2D(X1, Y1);
-    FOriginalCoinHautDroit := MakeTDGCPoint2D(X2, Y2);
+    FOriginalCoinBasGauche.setFrom(X1, Y1);
+    FOriginalCoinHautDroit.setFrom(X2, Y2);
     self.ResetVue(false);
     //Label1.Caption:= format('%f, %f -> %f, %f', [FRegionCMini.X, FRegionCMini.Y, FRegionCMaxi.X, FRegionCMaxi.Y]);
     FDessinReady := True;
@@ -442,25 +442,11 @@ function  TCdrDGCDrawingContext.MakeTDGCStyleSheet(const QStylename: string;
                                                    const QFontStyle: TFontStyles;
                                                    const QDescription: string = ''): TDGCStyleSheet;
 begin
-  with Result do
-  begin
-    Stylename      := QStylename;
-    PenColor       := QPenColor;
-    PenOpacity     := QPenOpacity;
-    PenStyle       := QPenStyle;
-    PenWidthInPX   := QPenWidthInPX;
-    PenWidthInMM   := QPenWidthInMM;
-    BrushColor     := QBrushColor;
-    BrushOpacity   := QBrushOpacity;
-    BrushStyle     := QBrushStyle;
-    FontName       := QFontName;
-    FontColor      := QFontColor;
-    FontOpacity    := QFontOpacity;
-    FontSizeInPts  := QFontSizeInPts;
-    FontSizeInMM   := QFontSizeInMM;
-    FontStyle      := QFontStyle;
-    Description    := QDescription;
-  end;
+  Result.Stylename   := QStylename;
+  Result.Description := QDescription;
+  Result.setPen(QPenColor, QPenOpacity, QPenStyle, QPenWidthInPX, QPenWidthInMM);
+  Result.setBrush(QBrushColor, QBrushOpacity, QBrushStyle);
+  Result.setFont(QFontName, QFontColor, QFontOpacity, QFontStyle, QFontSizeInPts, QFontSizeInMM);
 end;
 procedure TCdrDGCDrawingContext.AddStyleSheet(const OS: TDGCStyleSheet);
 begin
@@ -468,7 +454,7 @@ begin
 end;
 
 procedure TCdrDGCDrawingContext.AddStyleSheet(const QStylename: string;
-                                               const QPenColor: TColor;
+                                              const QPenColor: TColor;
                                                const QPenOpacity: byte;
                                                const QPenStyle: TPenStyle;
                                                const QPenWidthInPX     : byte;
@@ -488,25 +474,11 @@ var
   n: Integer;
 begin
   n := FListOfStyles.GetNbElements() - 1;
-  with MyStyle do
-  begin
-    Stylename      := QStylename;
-    PenColor       := QPenColor;
-    PenOpacity     := QPenOpacity;
-    PenStyle       := QPenStyle;
-    PenWidthInPX   := QPenWidthInPX;
-    PenWidthInMM   := QPenWidthInMM;
-    BrushColor     := QBrushColor;
-    BrushOpacity   := QBrushOpacity;
-    BrushStyle     := QBrushStyle;
-    FontName       := QFontName;
-    FontColor      := QFontColor;
-    FontOpacity    := QFontOpacity;
-    FontSizeInPts  := QFontSizeInPts;
-    FontSizeInMM   := QFontSizeInMM;
-    FontStyle      := QFontStyle;
-    Description    := Format('Style%d: %s', [n, QDescription]);
-  end;
+  MyStyle.Stylename   := QStylename;
+  MyStyle.Description := Format('Style%d: %s', [n, QDescription]);
+  MyStyle.setPen(QPenColor, QPenOpacity, QPenStyle, QPenWidthInPX, QPenWidthInMM);
+  MyStyle.setBrush(QBrushColor, QBrushOpacity, QBrushStyle);
+  MyStyle.setFont(QFontName, QFontColor, QFontOpacity, QFontStyle, QFontSizeInPts, QFontSizeInMM);
   FListOfStyles.AddElement(MyStyle);
 end;
 
@@ -598,12 +570,14 @@ end;
 procedure TCdrDGCDrawingContext.SetFontHeight(const QHeightInMeters: double);
 var
   MyFont: TDGCFont;
+  P0, P1: TDGCPoint2D;
   PP0, PP1: TPoint;
 begin
   {$NOTE Redéfinition à la volée déconseillée - Utiliser les feuilles de style}
-  PP0 := GetCoordsPlan(MakeTDGCPoint2D(0.0, 0.0));
-  PP1 := GetCoordsPlan(MakeTDGCPoint2D(QHeightInMeters, QHeightInMeters));
-
+  P0.setFrom(0.0, 0.0);
+  P1.setFrom(QHeightInMeters, QHeightInMeters);
+  PP0 := GetCoordsPlan(P0);
+  PP1 := GetCoordsPlan(P1);
   MyFont := TDGCFont.Create;
   MyFont.Height   := PP1.y - PP0.y;
   FListOfEntities.AddElement(tdoCMD_SET_FONT, '', MyFont);
@@ -700,31 +674,36 @@ var
   end;
   procedure QDrawInfiniteHVLine(const E: TDGCInfiniteLine);
   var
+    P1, P2: TDGCPoint2D;
     PP1, PP2: TPoint;
   begin
     if (FCurrentStyleSheet <> E.IdxStyleSheet) then QUseStyleSheet(E.IdxStyleSheet);
     case E.Orientation of
      tdgcVERTICAL_LINE:
        begin
-         PP1 := GetCoordsPlan(MakeTDGCPoint2D(E.PositionCentre.X, FRegionCMini.Y));
-         PP2 := GetCoordsPlan(MakeTDGCPoint2D(E.PositionCentre.X, FRegionCMaxi.Y));
+         P1.setFrom(E.PositionCentre.X, FRegionCMini.Y);
+         P2.setFrom(E.PositionCentre.X, FRegionCMaxi.Y);
        end;
      tdgcHORIZONTAL_LINE:
        begin
-         PP1 := GetCoordsPlan(MakeTDGCPoint2D(FRegionCMini.X, E.PositionCentre.Y));
-         PP2 := GetCoordsPlan(MakeTDGCPoint2D(FRegionCMaxi.X, E.PositionCentre.Y));
+         P1.setFrom(FRegionCMini.X, E.PositionCentre.Y);
+         P2.setFrom(FRegionCMaxi.X, E.PositionCentre.Y);
        end;
     end;
+    PP1 := GetCoordsPlan(P1);
+    PP2 := GetCoordsPlan(P2);
     FTmpBuffer.CanvasBGRA.MoveTo(PP1.x, PP1.y);
     FTmpBuffer.CanvasBGRA.LineTo(PP2.x, PP2.y);
   end;
   procedure QDrawEllipse(const E: TDGCEllipse);
   var
+    P1: TDGCPoint2D;
     PPC, PPR: TPoint;
   begin
     if (FCurrentStyleSheet <> E.IdxStyleSheet) then QUseStyleSheet(E.IdxStyleSheet);
     PPC := GetCoordsPlan(E.Centre);
-    PPR := GetCoordsPlan(MakeTDGCPoint2D(E.Centre.X + E.Rayon1, E.Centre.Y + E.Rayon2));
+    P1.setFrom(E.Centre.X + E.Rayon1, E.Centre.Y + E.Rayon2);
+    PPR := GetCoordsPlan(P1);
     FTmpBuffer.CanvasBGRA.EllipseC(PPC.X, PPC.Y, PPR.X - PPC.X, PPR.Y - PPC.Y);
   end;
   procedure QDrawTriangle(const E: TDGCTriangle);
@@ -768,11 +747,15 @@ var
     i, Nb: integer;
     procedure QDrawBezierArc(const B: TDGCBezierArc; const QContinuous: boolean);
     var
+      P1, P2: TDGCPoint2D;
       QArcBezier: array[0..3] of TPoint;
+
     begin
+      P1.setFrom(B.PT1.X + B.TangP1.X, B.PT1.Y + B.TangP1.Y);
+      P2.setFrom(B.PT2.X + B.TangP2.X, B.PT2.Y + B.TangP2.Y);
       QArcBezier[0] := GetCoordsPlan(B.PT1);
-      QArcBezier[1] := GetCoordsPlan(MakeTDGCPoint2D(B.PT1.X + B.TangP1.X, B.PT1.Y + B.TangP1.Y));
-      QArcBezier[2] := GetCoordsPlan(MakeTDGCPoint2D(B.PT2.X + B.TangP2.X, B.PT2.Y + B.TangP2.Y));
+      QArcBezier[1] := GetCoordsPlan(P1);
+      QArcBezier[2] := GetCoordsPlan(P2);
       QArcBezier[3] := GetCoordsPlan(B.PT2);
       FTmpBuffer.CanvasBGRA.PolyBezier(QArcBezier, E.Filled, QContinuous);
     end;
@@ -1033,7 +1016,7 @@ begin
     mtgcsPAN_SECOND_POINT:
       begin
         ReinitFZC(False, True);
-        QOffset := MakeTDGCPoint2D(FZC2.X - FZC1.X, FZC2.Y - FZC1.Y);
+        QOffset.setFrom(FZC2.X - FZC1.X, FZC2.Y - FZC1.Y);
         DeplacerVue(QOffset.X, QOffset.Y);
         SetModeTravail(mtgcsREADY);
         Vue.Invalidate;
@@ -1173,8 +1156,8 @@ begin
   d2 := qY2 - qY1;
   // si zone trop étroite, abandonner
   if (Abs(d1) < Epsilon) or (Abs(d2) < Epsilon) then Exit;
-  FRegionCMini := MakeTDGCPoint2D(qX1, qY1);
-  FRegionCMaxi := MakeTDGCPoint2D(qX2, qY2);
+  FRegionCMini.setFrom(qX1, qY1);
+  FRegionCMaxi.setFrom(qX2, qY2);
   if (FIsOrthonormal) then
   begin
     FRegionCMaxi.Y := GetRYMaxi();
@@ -1222,8 +1205,10 @@ function TCdrDGCDrawingContext.AddInfiniteLine(const QIdxStyleSheet: integer;
                                                const DoFlush: boolean = false): boolean;
 var
   E: TDGCInfiniteLine;
+  P1: TDGCPoint2D;
 begin
-  E := TDGCInfiniteLine.Create(QIdxStyleSheet, QOrientation, MakeTDGCPoint2D(QX, QY));
+  P1.setFrom(QX, QY);
+  E := TDGCInfiniteLine.Create(QIdxStyleSheet, QOrientation, P1);
   Result := FListOfEntities.AddElement(tdoENTITY_INFINITE_LINE, '', E);
 end;
 
@@ -1232,25 +1217,34 @@ function TCdrDGCDrawingContext.AddLine(const QIdxStyleSheet: integer;
                                        const X1, Y1, X2, Y2: double; const QName: string = 'Line'; const DoFlush: boolean = false): boolean;
 var
   MySegment: TDGCSegment;
+  P1, P2: TDGCPoint2D;
 begin
-  MySegment := TDGCSegment.Create(QIdxStyleSheet, MakeTDGCPoint2D(X1, Y1), MakeTDGCPoint2D(X2, Y2));
+  P1.setFrom(X1, Y1);
+  P2.setFrom(X2, Y2);
+  MySegment := TDGCSegment.Create(QIdxStyleSheet, P1, P2);
   Result := FListOfEntities.AddElement(tdoENTITY_SEGMENT, QName, MySegment);
 end;
 function TCdrDGCDrawingContext.AddEllipse(const QIdxStyleSheet: integer;
                                           const X1, Y1, R1, R2: double; const QName: string = 'Ellipse'; const DoFlush: boolean = false): boolean;
 var
   MyEllipse: TDGCEllipse;
+  P1: TDGCPoint2D;
 begin
-  MyEllipse := TDGCEllipse.Create(QIdxStyleSheet, MakeTDGCPoint2D(X1, Y1), R1, R2);
+  P1.setFrom(X1, Y1);
+  MyEllipse := TDGCEllipse.Create(QIdxStyleSheet, P1, R1, R2);
   Result := FListOfEntities.AddElement(tdoENTITY_Ellipse, QName, MyEllipse);
  end;
 function TCdrDGCDrawingContext.AddTriangle(const QIdxStyleSheet: integer;
                                            const X1, Y1, X2, Y2, X3, Y3: double; const QName: string = 'Triangle'; const DoFlush: boolean = false): boolean;
 var
   MyTriangle: TDGCTriangle;
+  P1, P2, P3: TDGCPoint2D;
 begin
+  P1.setFrom(X1, Y1);
+  P2.setFrom(X2, Y2);
+  P3.setFrom(X3, Y3);
   if (not FDessinReady) then Exit;
-  MyTriangle := TDGCTriangle.Create(QIdxStyleSheet, MakeTDGCPoint2D(X1, Y1), MakeTDGCPoint2D(X2, Y2), MakeTDGCPoint2D(X3, Y3));
+  MyTriangle := TDGCTriangle.Create(QIdxStyleSheet, P1, P2, P3);
   Result := FListOfEntities.AddElement(tdoENTITY_TRIANGLE, QName, MyTriangle);
 end;
 
@@ -1258,8 +1252,11 @@ function TCdrDGCDrawingContext.AddRectangle(const QIdxStyleSheet: integer;
                                             const X1, Y1, X2, Y2: double; const QName: string; const DoFlush: boolean): boolean;
 var
   MyRectangle: TDGCRectangle;
+  P1, P2: TDGCPoint2D;
 begin
-  MyRectangle := TDGCRectangle.Create(QIdxStyleSheet, MakeTDGCPoint2D(X1, Y1), MakeTDGCPoint2D(X2, Y2));
+  P1.setFrom(X1, Y1);
+  P2.setFrom(X2, Y2);
+  MyRectangle := TDGCRectangle.Create(QIdxStyleSheet, P1, P2);
   Result := FListOfEntities.AddElement(tdoENTITY_RECTANGLE, QName, MyRectangle);
 end;
 
@@ -1322,6 +1319,8 @@ end;
 
 // Ajout de polyligne/polygone
 procedure TCdrDGCDrawingContext.AddVertex(const QX, QY: double);
+var
+  P1: TDGCPoint2D;
 begin
   if (not FMakingPolyLineGon) then
   begin
@@ -1333,7 +1332,8 @@ begin
     FLastError := format('Champ %s.FTemporaryPolyLineGon non initialisé', [ClassName]);
     Exit;
   end;
-  FTemporaryPolyLineGon.AddVertex(MakeTDGCPoint2D(QX, QY));
+  P1.setFrom(QX, QY);
+  FTemporaryPolyLineGon.AddVertex(P1);
 end;
 function TCdrDGCDrawingContext.BeginPolyline(const QIdxStyleSheet: integer;
                                              const QName: string = 'PolyLine'; const QDoFlush: boolean = false): boolean;
@@ -1424,8 +1424,10 @@ function TCdrDGCDrawingContext.AddTexte(const QIdxStyleSheet: integer;
                                         const DoFlush: boolean): boolean;
 var
   MyTexte: TDGCText;
+  P1: TDGCPoint2D;
 begin
-  MyTexte := TDGCText.Create(QIdxStyleSheet, MakeTDGCPoint2D(X1, Y1), QAlignment, QOrientation, QText);
+  P1.setFrom(X1, Y1);
+  MyTexte := TDGCText.Create(QIdxStyleSheet, P1, QAlignment, QOrientation, QText);
   result  := FListOfEntities.AddElement(tdoENTITY_TEXT, 'Text', MyTexte);
 end;
 

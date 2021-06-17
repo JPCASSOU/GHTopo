@@ -483,16 +483,14 @@ begin
             MyPolyline.Sommets[St] := MyVertex;
           end; // St := 0 to QNbSts -1 do;
           // calcul de la bounding box
-          MyPolyline.BoundingBox := MakeTRect2Df(INFINI, INFINI, -INFINI, -INFINI);
+          MyPolyline.BoundingBox.ResetBoundingBox();
           for St := 0 to QNbSts -1 do
           begin
             MyVertex := MyPolyline.Sommets[St];
             if (FBDDEntites.CalcCoordinatesFromBasePtAndOffset(MyVertex.IDBaseStation, MyVertex.Offset, QPoint)) then
             begin
-              MyPolyline.BoundingBox.X1 := Min(MyPolyline.BoundingBox.X1, QPoint.X);
-              MyPolyline.BoundingBox.Y1 := Min(MyPolyline.BoundingBox.Y1, QPoint.Y);
-              MyPolyline.BoundingBox.X2 := Max(MyPolyline.BoundingBox.X2, QPoint.X);
-              MyPolyline.BoundingBox.Y2 := Max(MyPolyline.BoundingBox.Y2, QPoint.Y);
+              MyPolyline.BoundingBox.UpdateBoundingBox(QPoint);
+
             end;
           end; // St :
           if (Length(MyPolyline.Sommets) > 0) then self.AddPolyline(MyPolyline);
@@ -652,8 +650,11 @@ begin
 end;
 
 procedure TCroquisTerrain.AddVertexAtBuffer(const QX, QY: double);
+var
+  P1: TPoint3Df;
 begin
-  FBufferOfVertex.AddElement(MakeTPoint3Df(QX, QY, 0.00));
+  P1.setFrom(QX, QY, 0.00);
+  FBufferOfVertex.AddElement(P1);
 end;
 
 procedure TCroquisTerrain.EndPolyline();
@@ -687,24 +688,20 @@ begin
   Nb := length(QSimplifie);
   if (Nb < 2) then Exit; // nouveau test pour éviter de sortir un dégénéré
   // bounding box
-  MyPoly.BoundingBox := MakeTRect2Df(INFINI, INFINI, -INFINI, -INFINI);
+  MyPoly.BoundingBox.ResetBoundingBox();
   try  // et on construit l'objet de sortie
     MyPoly.IDStyle := FCurrentIdxStylePolyligne;
     SetLength(MyPoly.Sommets, Nb);
     for i := 0 to Nb - 1 do
     begin
       BuffVertex := QSimplifie[i];
-      // bounding box
-      MyPoly.BoundingBox.X1 := Min(Mypoly.BoundingBox.X1, BuffVertex.X);
-      MyPoly.BoundingBox.Y1 := Min(Mypoly.BoundingBox.Y1, BuffVertex.Y);
-      MyPoly.BoundingBox.X2 := Max(Mypoly.BoundingBox.X2, BuffVertex.X);
-      MyPoly.BoundingBox.Y2 := Max(Mypoly.BoundingBox.Y2, BuffVertex.Y);
+      MyPoly.BoundingBox.UpdateBoundingBox(BuffVertex);
       if (FBDDEntites.GetStationOrEntranceFromXYZ(BuffVertex.X, BuffVertex.Y, 0.00, MAX_DISTANCE_CAPTURE, [tpVISEES], False, QIdx, QBaseStation, QEntrance, QDistance, QE)) then
       begin
         MyPoly.Sommets[i].IDBaseStation := MakeTIDBaseStation(QBaseStation.Entite_Serie, QBaseStation.Entite_Station, false);
-        MyPoly.Sommets[i].Offset        := MakeTPoint3Df(BuffVertex.X - QBaseStation.PosStation.X,
-                                                         BuffVertex.Y - QBaseStation.PosStation.Y,
-                                                         QBaseStation.PosStation.Z);
+        MyPoly.Sommets[i].Offset.setFrom(BuffVertex.X - QBaseStation.PosStation.X,
+                                         BuffVertex.Y - QBaseStation.PosStation.Y,
+                                         QBaseStation.PosStation.Z);
       end;
     end;
     FBufferOfVertex.ClearListe(); // et on vide le buffer pour une autre utilisation

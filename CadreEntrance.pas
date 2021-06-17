@@ -57,6 +57,7 @@ type TCdrEntreeCavites = class(TFrame)
   end;
 
 implementation
+uses DGCDummyUnit;
 
 {$R *.lfm}
 
@@ -83,7 +84,7 @@ var
 begin
   QResultatCalcul := 0.00;
   QDeclimag       := 0.00;
-  QCoords := MakeTPoint2Df(0.00, 0.00);
+  QCoords.Empty();
 
   (*
   if (CallCalculette(FDocTopo, FBDDEntites, nil,'', 1, QCoords, QResultatCalcul, QDeclimag)) then
@@ -160,9 +161,9 @@ begin;
   editNomEntree.Text := _AnsiToLCLStr(E.eNomEntree);
   editIDTerrain.Text := _AnsiToLCLStr(E.eIDTerrain);
   btnCouleurEntrance.ButtonColor := E.eCouleur;
-  editXEntree.Value  := E.eXEntree;
-  editYEntree.Value  := E.eYEntree;
-  editZEntree.Value  := E.eZEntree;
+  editXEntree.Value  := E.ePosition.X;
+  editYEntree.Value  := E.ePosition.Y;
+  editZEntree.Value  := E.ePosition.Z;
   editSerie.AsInteger:= E.eRefSer;
   editPoint.AsInteger:= E.eRefSt;
   editCommentaires.Text:=_AnsiToLCLStr(E.eObserv);
@@ -195,11 +196,9 @@ begin
   Result.eNomEntree   := _LCLStrToAnsi(Trim(editNomEntree.Text));
   Result.eIDTerrain   := _LCLStrToAnsi(Trim(editIDTerrain.Text));
   Result.eCouleur     := btnCouleurEntrance.ButtonColor;
-  Result.eXEntree     := editXEntree.Value;
-  Result.eYEntree     := editYEntree.Value;
-  Result.eZEntree     := editZEntree.Value;
   Result.eRefSer      := editSerie.AsInteger;
   Result.eRefSt       := editPoint.AsInteger;
+  Result.ePosition.setFrom(editXEntree.Value, editYEntree.Value, editZEntree.Value);
   Result.eObserv      := _LCLStrToAnsi(trim(editCommentaires.Text));
 end;
 

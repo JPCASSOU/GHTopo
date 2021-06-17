@@ -13,13 +13,14 @@ unit StructuresDonnees;
 // 20/07/2016: Les étiquettes de terrain et alias de stations topo sont gérés dans une table à part entière
 // 29/11/2018: Type TStation supprimé -
 // 13/06/2019: Point de contrôle temporel (contrôle de version)
-
+// 17/05/2021: Mise à profit des pseudo-classes (des record qui contiennent des méthodes) de FPC 3.1
 
 
 {$INCLUDE CompilationParameters.inc}
 interface
 uses
   Classes
+  , math
   , SysUtils
   , Graphics
   , FastGEO
@@ -94,7 +95,7 @@ const MON_DOSSIER_RPI_DOCS       = '0_Docs_GHTopoRPI';
 CONST GHTOPO_STD_INI_FILENAME    = 'GHTopo_settings.ini';
 CONST GHTOPO_RPI_INI_FILENAME    = 'GHTopoRPI_settings.ini';
 
-// mot-clé pour infiquer un point d'intérêt
+// mot-clé pour indiquer un point d'intérêt
 CONST KEYWORD_POI_TODO           = '$poi:';
 CONST KEYWORD_POI_DONE           = '$done:';
 
@@ -115,11 +116,7 @@ const
   INI_FTP_User                   = 'FTPUser';     DEFAULT_FTP_USER     = 'synclinal65';
 
   NB_MAX_RECENT_FILES            = 10;
-type TFTPParameters = record
-  HostName: string;
-  User    : string;
-  Port    : string;
-end;
+
 // pour GHCaveDraw
 type TIDBaseStation = type Int64;
 
@@ -141,7 +138,6 @@ type TNumeroReseau   = type integer;
 type TNumeroSecteur  = type integer;
 type TNumeroSerie    = type Integer;
 type TNumeroStation  = type Integer;
-
 type TNumeroExpe     = type integer;
 type TNumeroCode     = type integer;
 type TIdxCouleur     = type Integer; // index sur palette de couleurs TOPOROBOT
@@ -364,15 +360,27 @@ type TMatrix3x3       = array[1..3, 1..3] of double;
 type TMatrix          = array of array of double;
 type TIncidenceMatrix = array of array of ShortInt;  // seules valeurs: -1, 0, +1
 
-type TPoint3Df = record
+type
+
+{ TPoint3Df }
+
+ TPoint3Df = record
   X:  double;
   Y:  double;
   Z:  double;
-
+  procedure setFrom(const QX, QY, QZ: double);
+  procedure Empty();
+  function  getNorme(): double;
 end;
-type TPoint2Df = record
+type
+
+{ TPoint2Df }
+
+ TPoint2Df = record
   X:  double;
   Y:  double;
+  procedure setFrom(const QX, QY: double);
+  procedure Empty();
 end;
 type TPoint2DfTagged = record
   X: double;
@@ -396,21 +404,26 @@ type TPointOfConduitTransected = record
   Caption: string;
 end;
 // type rectangle
-type TRect2Df = record
+type
+
+{ TRect2Df }
+
+ TRect2Df = record
   X1: double;
   Y1: double;
   X2: double;
   Y2: double;
+  procedure setFrom(const QX1, QY1, QX2, QY2: double);
+  procedure ResetBoundingBox();
+  procedure UpdateBoundingBox(const QX, QY: double); overload;
+  procedure UpdateBoundingBox(const PT: TPoint2Df); overload;
+  procedure UpdateBoundingBox(const PT: TPoint3Df); overload;
 end;
 
 type TArrayPoints2Df = array of TPoint2Df;
 type TArrayPoints3Df = array of TPoint3Df;
 
-// couleur TOPOROBOT: couple Index - Couleur, évitant un appel de TPalette256
-type TToporobotCouleur = record
-  Index  : integer;
-  Couleur: TColor;
-end;
+
 
 // couple de points de sections transversale
 // contenant les coordonnées X, Y des points extremes d'une section transversale
@@ -435,37 +448,54 @@ type TTextFileFormat=(tfWINDOWS, tfUNIX, tfMAC);
 // Types de données TOPOROBOT
 //****************************
 // entrées
-type TEntrance    = record
+type
+
+{ TEntrance }
+
+ TEntrance    = record
   eNomEntree: string;
   eIDTerrain: string;
-  eXEntree  : double;
-  eYEntree  : double;
-  eZEntree  : double;
-  eRefSer   : integer;
-  eRefSt    : integer;
+  ePosition : TPoint3Df;
+  eRefSer   : TNumeroSerie;
+  eRefSt    : TNumeroStation;
   eCouleur  : TColor;
   eObserv   : string;
+  procedure setFrom(const NomEntree, IDTerrain: string; const X, Y, Z: double; const RefSer: TNumeroSerie; const RefSt: TNumeroStation; const Couleur: TColor; const Observ: string);
 end;
 
 // réseau ou secteur spéléologique
 // Section -8 du fichier xtb
 // Une série ne peut faire partie de plusieurs réseaux.
 
-type TReseau = record
+type
+
+{ TReseau }
+
+ TReseau = record
   ColorReseau  : TColor;
   TypeReseau   : integer; // type de réseau:
   NomReseau    : string;
   ObsReseau    : string;
+  procedure setFrom(const C: TColor; const T: integer; const Nom, Obs: string);
 end;
 
 // secteurs
-type TSecteur = record
-  NomSecteur     : string;
+type
+
+{ TSecteur }
+
+ TSecteur = record
   CouleurSecteur : TColor;
+  NomSecteur     : string;
+  procedure setFrom(const C: TColor; const Nom: string);
 end;
 // expés
 type TModeCalculDeclimag = (cdmAUTOMATIQUE, cdmMANUEL);
-type TExpe = record
+type
+
+{ TExpe }
+
+ TExpe = record
   IDExpe      : TNumeroExpe;
   {$WARNING: TEXpe.DateExpe à implementer}
   JourExpe    : integer; {$WARNING: Remplacer ces trois champs par un TDateTime}
@@ -478,6 +508,14 @@ type TExpe = record
   DeclinaisonInDegrees : double;
   IdxCouleur  : TIdxCouleur;
   Commentaire : string;
+  procedure setFrom(const QNumeroExpe: TNumeroExpe;
+                    const YYYY, MM, DD: word;
+                    const QIdxCouleur: TIdxCouleur;
+                    const QModeDecl   : TModeCalculDeclimag;
+                    const QDeclinaisonInDegrees: double;
+                    const QSpeleometre, QSpeleographe: string;
+                    const QCommentaires: string);
+
 end;
 // fonctions trigonométriques de correction angulaire
 type TParamFoncCorrectionAngulaire = record
@@ -523,12 +561,19 @@ type TUneVisee = record
     HN        : double;                                                                 //   HN                  : double;
     IDTerrainStation: string;                                                           //   IDTerrainStation    : string;
     Commentaires    : string;                                                           //   Commentaire         : string;
-    DeltaX    : double;                                                                 //
-    DeltaY    : double;                                                                 //
-    DeltaZ    : double;                                                                 //
-    DeltaP    : double;                                                                 //
-    AccroissP : double;                                                                 //
-    AccroissZ : double;                                                                 // PtArrivee           : integer;    //        'Arrivée visée
+    AccroissXYZ: TPoint3Df;                                                           //
+    AccroissP  : double;                                                                 //
+    //AccroissZ : double;                                                                 // PtArrivee           : integer;    //        'Arrivée visée
+    procedure setFrom(const QNoVisee          : integer;
+                      const QTypeVisee        : TTypeDeVisee;
+                      const QIdSecteur        : TNumeroSecteur;
+                      const QCode             : TNumeroCode;
+                      const QExpe             : TNumeroExpe;
+                      const QL, QAz, QP       : double;
+                      const QLG, QLD, QHZ, QHN: double;
+                      const QIDStation        : string = '';
+                      const QCommentaire      : string = '');
+    procedure Empty(const Commentaire: string = '');
 end;
 // visées en antenne
 // Nota: Les codes et expés d'une visée radiante héritent de ceux de la station d'accrochage
@@ -592,7 +637,6 @@ type
 
  TBaseStation = record
    // serie et point
-   //IDStation         : TIDBaseStation;
    IDTerrain         : string;
    Entite_Serie      : TNumeroSerie;            // Série
    Entite_Station    : TNumeroStation;          // Station
@@ -637,11 +681,7 @@ type
 end;
 //*)
 
-// coordonnées WGS84
-type TPointWGS84 = record
-  Longitude : double;
-  Latitude  : double;
-end;
+
 // angle
 type TUniteAngles = (uaRADIANS, uaDEGRES, uaGRADES);
 
@@ -658,11 +698,7 @@ const // Ne pas définir de type énuméré afin d'éviter une dépendance avec 
   OSM_MARKER_STYLE_NABLA   = 4;
   OSM_MARKER_STYLE_LOSANGE = 5;
 type TFormatExportGIS = (gisOSM, gisKML, gisGeoJSON, gisDXF);
-type TKMLPlaceMark = record
-  Latitude  : double;
-  Longitude : double;
-  Etiquette : string;
-end;
+
 
 
 type TPolyMode = (tpmENTETE_POLY, tpmSTART_POLY, tpmPOINT_POLY, tpmEND_POLY);
@@ -673,7 +709,6 @@ type TMarker = record
   Y        : double;
   Couleur  : TColor;
   Caption  : string;
-  //...
 end;
 
 // couleurs 32 bits
@@ -682,6 +717,8 @@ type TColorRGBA = record
   G: byte;
   B: byte;
   A: byte;
+  procedure setFrom(const QR, QG, QB, QA: byte); overload;
+  procedure setFrom(const Coul: TColor; const Alpha: byte); overload;
 end;
 
 
@@ -733,29 +770,6 @@ type TProcOfObjectWithAShot               = procedure (out Horodate: TDateTime; 
 // enum TTodoAction, enrichissable à volonté
 type TTodoAction                          = (tdoAcnBASESTATION_DISPLAY, tdoAcnBASESTATION_EDITSERIE);
 type TProcOfObjectWithATBaseStation       = procedure (const BP: TBaseStation; const TodoAction: TTodoAction) of object;
-
-
-type TIsoHypse = record
-  Cote: double;
-  Color: TColor;
-end;
-type TMaillageVertex = record
-  ID         : integer;
-  X          : double;
-  Y          : double;
-  Z          : double;
-  NormX      : double;
-  NormY      : double;
-  NormZ      : double;
-  Norme      : double;
-end;
-
-// Paramètres EPSG
-type TParametresEPSG = record
-  CodeEPSG   : integer;
-  Parameters : string;
-  Comments   : string;
-end;
 
 // onglets pour les vues 2D
 const NB_MAX_ONGLETS = 10;
@@ -823,17 +837,21 @@ type TMNTBoundingBox  = record
   C1: TPoint3Df;
   C2: TPoint3Df;
 end;
-type TMNTVertex = record
+type
+
+{ TMNTVertex }
+
+ TMNTVertex = record
   ID         : TMNTNumeroVertex;
-  X          : double;
-  Y          : double;
-  Z          : double;
-  NormX      : double;
-  NormY      : double;
-  NormZ      : double;
-  Norme      : double;
   Couleur    : TColor;
+  Position   : TPoint3Df;
+  Normale    : TPoint3Df;
   Displayed  : boolean;
+  procedure setFrom(const QID: Int64; const QX, QY, QZ: double; const C: TColor); overload;
+  procedure AddAtPosition(const QX, QY, QZ: double);
+  procedure AddAtNormale(const QX, QY, QZ: double);
+  procedure Normalize();
+  function  MakeLigneForMailleur(const Idx: integer): string;
 end;
 
 type TMNTTriangleABC = record
@@ -983,9 +1001,7 @@ type  TJonctionXYZ = record
    NoNoeud     : TNodeNum;
    NoSer       : TNumeroSerie;
    NoSt        : integer;
-   X           : double;
-   Y           : double;
-   Z           : double;
+   Position    : TPoint3Df;
    NbRefs      : integer;
    IDJonction  : string;
    function ToString(): string;
@@ -1003,15 +1019,9 @@ type TBrancheXYZ = record
   Rigidite      : double;  // module de raideur, égal à 1.00 par défaut
   PointsTopo    : array of TUneVisee;
   NbPoints      : integer;
-  DeltaX        : double;
-  DeltaY        : double;
-  DeltaZ        : double;
-  XDepart       : double;
-  YDepart       : double;
-  ZDepart       : double;
-  XArrivee      : double;
-  YArrivee      : double;
-  ZArrivee      : double;
+  Accroissement : TPoint3Df;
+  CoordsDepart  : TPoint3Df;
+  CoordsArrivee : TPoint3Df;
 end;
 
 
@@ -1177,11 +1187,7 @@ type TMesureViseeDistoX = record
   Pente           : double;
   TimeStamp       : TDateTime; // horodatage de la visée
 end;
-type
-
-{ TVectorDataDistoX }
-
- TVectorDataDistoX = record
+type  TVectorDataDistoX = record
   X : integer;
   Y : integer;
   Z : integer;
@@ -1210,9 +1216,240 @@ type TProcOfObjectUsesInteger = procedure(const IDThread: integer; const QStart,
 const NB_MAX_THREADS = 4;
 // pour le clavier numérique
 type TPaveNumModeSaisie = (pnmINTEGER, pnmREAL, pnmTOPOROBOT_STATION);
-
+{ TFTPParameters }
+type TFTPParameters = record
+  HostName: string;
+  User    : string;
+  Port    : string;
+  procedure setFrom(const QHost, QUser, QPort: string);
+end;
 
 implementation
+
+{ TRect2Df }
+
+procedure TRect2Df.setFrom(const QX1, QY1, QX2, QY2: double);
+begin
+  self.X1 := QX1;
+  self.Y1 := QY1;
+  self.X2 := QX2;
+  self.Y2 := QY2;
+end;
+
+procedure TRect2Df.ResetBoundingBox();
+begin
+  self.setfrom(INFINI, INFINI, -INFINI, -INFINI);
+end;
+
+procedure TRect2Df.UpdateBoundingBox(const QX, QY: double);
+begin
+   self.X1 := Min(self.X1, QX);
+   self.Y1 := Min(self.Y1, QY);
+   self.X2 := Max(self.X2, QX);
+   self.Y2 := Max(self.Y2, QY);
+end;
+
+procedure TRect2Df.UpdateBoundingBox(const PT: TPoint2Df);
+begin
+  self.UpdateBoundingBox(PT.X, PT.Y);
+end;
+
+procedure TRect2Df.UpdateBoundingBox(const PT: TPoint3Df);
+begin
+  self.UpdateBoundingBox(PT.X, PT.Y);
+end;
+
+{ TFTPParameters }
+
+procedure TFTPParameters.setFrom(const QHost, QUser, QPort: string);
+begin
+  self.HostName := QHost;
+  self.User     := QUser;
+  self.Port     := QPort;
+
+end;
+
+{ TUneVisee }
+
+procedure TUneVisee.setFrom(const QNoVisee: integer;
+                            const QTypeVisee: TTypeDeVisee;
+                            const QIdSecteur: TNumeroSecteur;
+                            const QCode: TNumeroCode; const QExpe: TNumeroExpe;
+                            const QL, QAz, QP: double;
+                            const QLG, QLD, QHZ, QHN: double;
+                            const QIDStation: string; const QCommentaire: string);
+begin
+  self.NoVisee   := QNoVisee;
+  self.TypeVisee := QTypeVisee;
+  self.IDSecteur := QIdSecteur;
+  self.Code      := QCode;
+  self.Expe      := QExpe;
+
+  self.Longueur  := QL;
+  self.Azimut    := QAz;
+  self.Pente     := QP;
+  self.LG        := QLG;
+  self.LD        := QLD;
+  self.HZ        := QHZ;
+  self.HN        := QHN;
+  self.IDTerrainStation  := QIDStation;
+  self.Commentaires      := QCommentaire;
+  self.AccroissXYZ.Empty();
+  self.AccroissP := 0.00;
+  //self.AccroissZ := 0.00;
+end;
+
+procedure TUneVisee.Empty(const Commentaire: string = '');
+begin
+  self.setFrom(0, tgDEFAULT, 0, 1, 1, 0.001, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '', Commentaire);
+end;
+
+{ TExpe }
+
+procedure TExpe.setFrom(const QNumeroExpe: TNumeroExpe;
+                        const YYYY, MM, DD: word;
+                        const QIdxCouleur: TIdxCouleur;
+                        const QModeDecl: TModeCalculDeclimag;
+                        const QDeclinaisonInDegrees: double;
+                        const QSpeleometre, QSpeleographe: string;
+                        const QCommentaires: string);
+begin
+  self.IDExpe     := QNumeroExpe;
+  self.AnneeExpe  := YYYY;
+  self.MoisExpe   := MM;
+  self.JourExpe   := DD;
+  self.IdxCouleur := QIdxCouleur;
+  self.ModeDecl   := QModeDecl;
+  self.DeclinaisonInDegrees:= QDeclinaisonInDegrees;
+  self.Operateur  := QSpeleometre;
+  self.ClubSpeleo := QSpeleographe;
+  self.Commentaire:= QCommentaires;
+end;
+
+
+{ TEntrance }
+
+procedure TEntrance.setFrom(const NomEntree, IDTerrain: string; const X, Y, Z: double; const RefSer: TNumeroSerie; const RefSt: TNumeroStation; const Couleur: TColor; const Observ: string);
+begin
+  self.eNomEntree := NomEntree;
+  self.eIDTerrain := IDTerrain;
+  self.ePosition.setFrom(X, Y, Z);
+  self.eRefSer    := RefSer;
+  self.eRefSt     := RefSt;
+  self.eCouleur   := Couleur;
+  self.eObserv    := Observ;
+end;
+
+{ TPoint2Df }
+
+procedure TPoint2Df.setFrom(const QX, QY: double);
+begin
+  self.X := QX;
+  self.Y := QY;
+end;
+procedure TPoint2Df.Empty();
+begin
+  self.X := 0.00;
+  self.Y := 0.00;
+end;
+
+{ TPoint3Df }
+
+procedure TPoint3Df.setFrom(const QX, QY, QZ: double);
+begin
+  self.X := QX;
+  self.Y := QY;
+  self.Z := QZ;
+end;
+
+procedure TPoint3Df.Empty();
+begin
+  self.X := 0.00;
+  self.Y := 0.00;
+  self.Z := 0.00;
+end;
+
+function TPoint3Df.getNorme(): double;
+begin
+  result := sqrt(sqr(self.x)+sqr(self.y)+sqr(self.z))
+end;
+
+{ TMNTVertex }
+
+procedure TMNTVertex.setFrom(const QID: Int64; const QX, QY, QZ: double; const C: TColor); overload;
+begin
+  self.ID := QID;
+  self.Couleur := C;
+  self.Position.setFrom(QX, QY, QZ);
+  self.Normale.Empty();
+end;
+
+procedure TMNTVertex.AddAtPosition(const QX, QY, QZ: double);
+begin
+  self.Position.X += QX;
+  self.Position.Y += QY;
+  self.Position.Z += QZ;
+end;
+
+procedure TMNTVertex.AddAtNormale(const QX, QY, QZ: double);
+begin
+  self.Normale.X += QX;
+  self.Normale.Y += QY;
+  self.Normale.Z += QZ;
+end;
+
+procedure TMNTVertex.Normalize();
+var
+  WU: Double;
+begin
+  WU := sqrt(sqr(self.Normale.X) + sqr(self.Normale.Y) + sqr(self.Normale.Z));
+  if (not IsZero(WU)) then
+  begin
+    self.Normale.X := self.Normale.X / WU;
+    self.Normale.Y := self.Normale.Y / WU;
+    self.Normale.Z := self.Normale.Z / WU;
+  end;
+end;
+
+function TMNTVertex.MakeLigneForMailleur(const Idx: integer): string;
+begin
+  Result := Format('%d %.2f %.2f %.2f %d', [Idx, self.Position.X, self.Position.Y, self.Position.Z, 1]);
+end;
+
+{ TColorRGBA }
+
+procedure TColorRGBA.setFrom(const QR, QG, QB, QA: byte); overload;
+begin
+  self.R := QR and 255;
+  self.G := QG and 255;
+  self.B := QB and 255;
+  self.A := QA and 255;
+end;
+procedure TColorRGBA.setFrom(const Coul: TColor; const Alpha: byte); overload;
+begin
+  self.R := Red(Coul);
+  self.G := Green(Coul);
+  self.B := Blue(Coul);
+  self.A := Alpha;
+end;
+
+{ TSecteur }
+
+procedure TSecteur.setFrom(const C: TColor; const Nom: string);
+begin
+  self.CouleurSecteur  := C;
+  self.NomSecteur      := Nom;
+end;
+
+{ TReseau }
+
+procedure TReseau.setFrom(const C: TColor; const T: integer; const Nom, Obs: string);
+begin
+  self.ColorReseau  := C;
+  self.TypeReseau   := T;
+  self.NomReseau    := Nom;
+  self.ObsReseau    := Obs;
+end;
 
 
 
@@ -1272,6 +1509,7 @@ function TToporobotIDStation.ToString(): string;
 begin
   Result := Format(FMTSERST, [self.aSerie, self.aStation]);
 end;
+
 
 end.
 

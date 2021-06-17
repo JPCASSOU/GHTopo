@@ -293,9 +293,9 @@ begin
           UneEntree.eNomEntree  := ExtractStringOfNode(WU, GTX_ATTR_ENTRANCE_NAME);
           UneEntree.eRefSer     := ExtractIntOfNode(WU, GTX_ATTR_ENTRANCE_REFSERIE, 1);
           UneEntree.eRefSt      := ExtractIntOfNode(WU, GTX_ATTR_ENTRANCE_REFPT, 0);
-          UneEntree.eXEntree    := ExtractRealOfNode(WU, GTX_ATTR_ENTRANCE_X, -1.00);
-          UneEntree.eYEntree    := ExtractRealOfNode(WU, GTX_ATTR_ENTRANCE_Y, -1.00);
-          UneEntree.eZEntree    := ExtractRealOfNode(WU, GTX_ATTR_ENTRANCE_Z, -1.00);
+          UneEntree.ePosition.setFrom(ExtractRealOfNode(WU, GTX_ATTR_ENTRANCE_X, -1.00),
+                                      ExtractRealOfNode(WU, GTX_ATTR_ENTRANCE_Y, -1.00),
+                                      ExtractRealOfNode(WU, GTX_ATTR_ENTRANCE_Z, -1.00));
           UneEntree.eCouleur    := GHTopoColorToColorDef(ExtractStringOfNode(WU, GTX_ATTR_ENTRANCE_COLOR), clBlue);
           UneEntree.eObserv     := ExtractStringOfNode(WU, GTX_ATTR_ENTRANCE_OBS);
           self.AddEntrance(UneEntree);
@@ -622,9 +622,9 @@ begin
           SubSection.SetAttribute(GTX_ATTR_ENTRANCE_NAME     , Format(FORMAT_STRING, [PasStrToXMLStr(E.eNomEntree)]));
           SubSection.SetAttribute(GTX_ATTR_ENTRANCE_REFSERIE , Format(FORMAT_NB_INTEGER, [E.eRefSer]));
           SubSection.SetAttribute(GTX_ATTR_ENTRANCE_REFPT    , Format(FORMAT_NB_INTEGER, [E.eRefSt]));
-          SubSection.SetAttribute(GTX_ATTR_ENTRANCE_X, Format(FORMAT_NB_REAL_3_DEC, [E.eXEntree]));
-          SubSection.SetAttribute(GTX_ATTR_ENTRANCE_Y, Format(FORMAT_NB_REAL_3_DEC, [E.eYEntree]));
-          SubSection.SetAttribute(GTX_ATTR_ENTRANCE_Z, Format(FORMAT_NB_REAL_3_DEC, [E.eZEntree]));
+          SubSection.SetAttribute(GTX_ATTR_ENTRANCE_X, Format(FORMAT_NB_REAL_3_DEC, [E.ePosition.X]));
+          SubSection.SetAttribute(GTX_ATTR_ENTRANCE_Y, Format(FORMAT_NB_REAL_3_DEC, [E.ePosition.Y]));
+          SubSection.SetAttribute(GTX_ATTR_ENTRANCE_Z, Format(FORMAT_NB_REAL_3_DEC, [E.ePosition.Z]));
           SubSection.SetAttribute(GTX_ATTR_ENTRANCE_COLOR, ColorToGHTopoColor(E.eCouleur));
           SubSection.SetAttribute(GTX_ATTR_ENTRANCE_OBS, PasStrToXMLStr(E.eObserv));
         SectionEntrances.AppendChild(SubSection);

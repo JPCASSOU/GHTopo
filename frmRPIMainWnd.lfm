@@ -1,11 +1,11 @@
 object RPIMainWnd: TRPIMainWnd
-  Left = 650
-  Height = 584
-  Top = 398
-  Width = 1150
+  Left = 332
+  Height = 614
+  Top = 140
+  Width = 893
   Caption = 'RPIMainWnd'
-  ClientHeight = 584
-  ClientWidth = 1150
+  ClientHeight = 614
+  ClientWidth = 893
   Constraints.MaxHeight = 760
   Constraints.MaxWidth = 1150
   DoubleBuffered = True
@@ -19,14 +19,15 @@ object RPIMainWnd: TRPIMainWnd
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
+  OnResize = FormResize
   OnShow = FormShow
   ParentDoubleBuffered = False
   LCLVersion = '2.0.0.4'
   object PageControl1: TPageControl
     Left = 0
-    Height = 584
+    Height = 614
     Top = 0
-    Width = 1150
+    Width = 893
     ActivePage = tabShtVuePlan
     Align = alClient
     Font.CharSet = ANSI_CHARSET
@@ -496,38 +497,38 @@ object RPIMainWnd: TRPIMainWnd
     end
     object tabShtVuePlan: TTabSheet
       Caption = 'tabShtVuePlan'
-      ClientHeight = 555
-      ClientWidth = 1142
+      ClientHeight = 585
+      ClientWidth = 885
       object pnlPlan: TPanel
         Left = 0
-        Height = 559
+        Height = 589
         Top = 0
-        Width = 1012
+        Width = 755
         Anchors = [akTop, akLeft, akRight, akBottom]
         BevelOuter = bvLowered
-        ClientHeight = 559
-        ClientWidth = 1012
+        ClientHeight = 589
+        ClientWidth = 755
         TabOrder = 0
         inline GHTopoContext2DA1: TGHTopoContext2DA
           Left = 1
-          Height = 557
+          Height = 587
           Top = 1
-          Width = 1010
-          ClientHeight = 557
-          ClientWidth = 1010
+          Width = 753
+          ClientHeight = 587
+          ClientWidth = 753
           DesignLeft = 393
           DesignTop = 204
           inherited Panel1: TPanel
-            Height = 467
-            Width = 975
-            ClientHeight = 467
-            ClientWidth = 975
+            Height = 497
+            Width = 718
+            ClientHeight = 497
+            ClientWidth = 718
             inherited Vue: TPaintBox
-              Height = 467
-              Width = 975
+              Height = 497
+              Width = 718
             end
             inherited pnlMaillage: TPanel
-              Top = 404
+              Top = 434
               inherited editIsoValeur: TCurrencyEdit
                 Height = 24
               end
@@ -540,134 +541,134 @@ object RPIMainWnd: TRPIMainWnd
               end
             end
             inherited pnlToast: TPanel
-              Width = 957
+              Width = 700
             end
           end
           inherited lbInfos: TStaticText
-            Width = 585
+            Width = 328
           end
           inherited lbGCSMouse: TStaticText
-            Top = 523
+            Top = 553
           end
           inherited lbModeTravail: TStaticText
-            Left = 900
+            Left = 643
           end
           inherited lbAdditionalInfos: TStaticText
-            Left = 637
+            Left = 380
           end
           inherited pnlFiltres: TPanel
-            Width = 905
-            ClientWidth = 905
+            Width = 648
+            ClientWidth = 648
             inherited editMetaFiltre: TEdit
-              Width = 657
+              Width = 400
             end
             inherited btnApplyMetaFiltre: TButton
-              Left = 738
+              Left = 481
             end
             inherited btnHelpMetaFiltre: TButton
-              Left = 769
+              Left = 512
             end
             inherited chkMetaFiltreActif: TCheckBox
-              Left = 801
+              Left = 544
             end
             inherited lbLongViseesVisibles: TStaticText
-              Left = 852
+              Left = 595
             end
             inherited Button1: TButton
-              Left = 709
+              Left = 452
             end
           end
           inherited btnSerieCouranteDistoX: TButton
-            Left = 908
+            Left = 651
           end
           inherited SpeedButton1: TSpeedButton
-            Left = 975
+            Left = 718
             Flat = False
           end
           inherited SpeedButton5: TSpeedButton
-            Top = 523
+            Top = 553
             Flat = False
           end
           inherited SpeedButton8: TSpeedButton
-            Left = 943
-            Top = 523
+            Left = 686
+            Top = 553
             Flat = False
           end
           inherited SpeedButton9: TSpeedButton
-            Left = 975
+            Left = 718
             Flat = False
           end
           inherited SpeedButton2: TSpeedButton
-            Left = 975
-            Top = 459
+            Left = 718
+            Top = 489
             Flat = False
           end
           inherited SpeedButton7: TSpeedButton
-            Left = 910
-            Top = 523
+            Left = 653
+            Top = 553
             Flat = False
           end
           inherited SpeedButton11: TSpeedButton
-            Left = 975
-            Top = 491
+            Left = 718
+            Top = 521
             Flat = False
           end
           inherited SpeedButton17: TSpeedButton
-            Left = 975
-            Top = 523
+            Left = 718
+            Top = 553
             Flat = False
           end
           inherited SpeedButton18: TSpeedButton
-            Left = 609
+            Left = 352
             Flat = False
           end
           inherited SpeedButton19: TSpeedButton
-            Left = 975
+            Left = 718
             Flat = False
           end
           inherited SpeedButton14: TSpeedButton
-            Left = 975
+            Left = 718
             Flat = False
           end
           inherited SpeedButton15: TSpeedButton
-            Left = 975
-            Top = 427
+            Left = 718
+            Top = 457
             Flat = False
           end
           inherited Panel2: TPanel
-            Left = 975
-            Height = 141
+            Left = 718
+            Height = 171
           end
           inherited Panel3: TPanel
-            Top = 523
-            Width = 457
+            Top = 553
+            Width = 200
           end
           inherited SpeedButton3: TSpeedButton
-            Left = 975
+            Left = 718
             Flat = False
           end
           inherited SpeedButton4: TSpeedButton
-            Left = 975
+            Left = 718
             Flat = False
           end
           inherited SpeedButton16: TSpeedButton
-            Left = 975
+            Left = 718
             Flat = False
           end
           inherited SpeedButton6: TSpeedButton
-            Left = 584
+            Left = 327
             Flat = False
           end
         end
       end
       object pnlCommandes: TPanel
-        Left = 1015
-        Height = 559
+        Left = 758
+        Height = 589
         Top = 0
         Width = 128
         Anchors = [akTop, akRight, akBottom]
         BevelOuter = bvLowered
-        ClientHeight = 559
+        ClientHeight = 589
         ClientWidth = 128
         TabOrder = 1
         object pnlCmdsVue: TPanel
@@ -1042,12 +1043,12 @@ object RPIMainWnd: TRPIMainWnd
         end
         object pnlNavigation: TPanel
           Left = 2
-          Height = 371
-          Top = 184
+          Height = 416
+          Top = 168
           Width = 123
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderStyle = bsSingle
-          ClientHeight = 367
+          ClientHeight = 412
           ClientWidth = 119
           Color = 16512938
           ParentColor = False
@@ -1137,12 +1138,12 @@ object RPIMainWnd: TRPIMainWnd
           end
           object Panel5: TPanel
             Left = 2
-            Height = 174
+            Height = 219
             Top = 188
             Width = 113
             Anchors = [akTop, akLeft, akRight, akBottom]
             BevelOuter = bvLowered
-            ClientHeight = 174
+            ClientHeight = 219
             ClientWidth = 113
             Color = clYellow
             ParentColor = False
@@ -1205,21 +1206,22 @@ object RPIMainWnd: TRPIMainWnd
             end
           end
         end
-        object btnModeTopoNavig: TToggleBox
-          Left = 2
-          Height = 44
-          Top = 136
-          Width = 123
+        object chkModeFonctionnement: TCheckBox
+          Left = 8
+          Height = 20
+          Top = 144
+          Width = 108
           Anchors = [akTop, akLeft, akRight]
-          Caption = 'TOPO'
+          AutoSize = False
+          Caption = 'NAVIG'
           Font.CharSet = ANSI_CHARSET
           Font.Color = clBlack
           Font.Height = -19
-          Font.Name = 'Liberation Sans'
+          Font.Name = 'Arial'
           Font.Pitch = fpVariable
           Font.Quality = fqDraft
           Font.Style = [fsBold]
-          OnChange = btnModeTopoNavigChange
+          OnChange = chkModeFonctionnementChange
           ParentFont = False
           TabOrder = 5
         end
@@ -1228,32 +1230,32 @@ object RPIMainWnd: TRPIMainWnd
     object tabShtDistoX: TTabSheet
       Caption = 'tabShtDistoX'
       ClientHeight = 555
-      ClientWidth = 1140
+      ClientWidth = 1142
       inline CdrDistoXLazserial1: TCdrDistoXLazserial
         Height = 555
-        Width = 1140
+        Width = 1142
         ClientHeight = 555
-        ClientWidth = 1140
+        ClientWidth = 1142
         inherited Button3: TButton
-          Left = 1072
+          Left = 1074
         end
         inherited btnDXScanOnOff: TToggleBox
-          Left = 968
+          Left = 970
         end
         inherited PageControlDistoX: TPageControl
           Height = 506
-          Width = 1136
+          Width = 1138
           ActivePage = CdrDistoXLazserial1.tabShtListeMesures
           TabIndex = 0
           inherited tabShtListeMesures: TTabSheet
-            ClientHeight = 502
-            ClientWidth = 1132
+            ClientHeight = 462
+            ClientWidth = 1130
             inherited hcColsTitres: THeaderControl
-              Width = 1123
+              Width = 1121
             end
             inherited lsbMesures: TListBox
-              Height = 412
-              Width = 1123
+              Height = 372
+              Width = 1121
               ScrollWidth = 1119
             end
           end
@@ -1291,7 +1293,7 @@ object RPIMainWnd: TRPIMainWnd
           end
         end
         inherited pnlUtilitaires: TPanel
-          Left = 932
+          Left = 934
           inherited pnlQuickSaisieVisee: TPanel
             Width = 201
             ClientWidth = 201
@@ -1320,221 +1322,157 @@ object RPIMainWnd: TRPIMainWnd
     end
     object tabShtSeries: TTabSheet
       Caption = 'Séries'
-      ClientHeight = 555
-      ClientWidth = 1140
+      ClientHeight = 585
+      ClientWidth = 885
       object Panel1: TPanel
         Left = 0
         Height = 36
         Top = 0
-        Width = 1140
+        Width = 885
         Anchors = [akTop, akLeft, akRight]
         BevelOuter = bvLowered
         ClientHeight = 36
-        ClientWidth = 1140
+        ClientWidth = 885
         TabOrder = 0
         inline CdrNavigateurSeries1: TCdrNavigateurSeries
           Left = 1
           Top = 1
-          Width = 1138
-          ClientWidth = 1138
+          Width = 883
+          ClientWidth = 883
           DesignLeft = 323
           DesignTop = 295
           inherited SpeedButton1: TSpeedButton
-            Left = 801
+            Left = 546
             Flat = False
           end
           inherited SpeedButton2: TSpeedButton
-            Left = 829
+            Left = 574
             Flat = False
           end
           inherited SpeedButton3: TSpeedButton
-            Left = 857
+            Left = 602
             Flat = False
           end
           inherited SpeedButton5: TSpeedButton
-            Left = 741
+            Left = 486
             Flat = False
           end
           inherited SpeedButton6: TSpeedButton
-            Left = 889
+            Left = 634
             Flat = False
           end
           inherited SpeedButton7: TSpeedButton
-            Left = 945
+            Left = 690
             Flat = False
           end
           inherited SpeedButton8: TSpeedButton
-            Left = 917
+            Left = 662
             Flat = False
           end
           inherited SpeedButton9: TSpeedButton
-            Left = 1009
+            Left = 754
             Flat = False
           end
           inherited SpeedButton11: TSpeedButton
-            Left = 1078
+            Left = 823
             Flat = False
           end
           inherited SpeedButton12: TSpeedButton
-            Left = 977
+            Left = 722
             Flat = False
           end
           inherited editNomSerie: TEdit
-            Width = 652
+            Width = 397
           end
           inherited SpeedButton13: TSpeedButton
-            Left = 1110
+            Left = 855
             Flat = False
           end
           inherited SpeedButton14: TSpeedButton
-            Left = 769
+            Left = 514
             Flat = False
           end
           inherited SpeedButton4: TSpeedButton
-            Left = 1040
+            Left = 785
             Flat = False
-          end
-          inherited lbSearch: TLabel
-            Height = 15
-            Width = 74
           end
         end
       end
       object Panel2: TPanel
         Left = 0
-        Height = 522
+        Height = 552
         Top = 37
-        Width = 1140
+        Width = 885
         Anchors = [akTop, akLeft, akRight, akBottom]
         BevelOuter = bvLowered
-        ClientHeight = 522
-        ClientWidth = 1140
+        ClientHeight = 552
+        ClientWidth = 885
         TabOrder = 1
         inline CdrSerieIndependant1: TCdrSerieIndependant
           Left = 1
-          Height = 520
+          Height = 550
           Top = 1
-          Width = 1138
-          ClientHeight = 520
-          ClientWidth = 1138
+          Width = 883
+          ClientHeight = 550
+          ClientWidth = 883
           DesignLeft = 422
           DesignTop = 298
           inherited pnlEnteteSerie: TPanel
-            Width = 1136
-            ClientWidth = 1136
+            Width = 881
+            ClientWidth = 881
             inherited cmbChance: TComboBox
-              Left = 988
+              Left = 733
             end
             inherited cmbObstacle: TComboBox
-              Left = 988
+              Left = 733
             end
             inherited lblChances: TLabel
-              Left = 925
-              Height = 15
-              Width = 53
+              Left = 669
             end
             inherited lblObstacles: TLabel
-              Left = 924
-              Height = 15
-            end
-            inherited lblSerie: TLabel
-              Height = 15
-              Width = 32
-            end
-            inherited lblSerieName: TLabel
-              Height = 15
-              Width = 63
-            end
-            inherited lblDepart: TLabel
-              Height = 15
-              Width = 40
-            end
-            inherited lblArrivee: TLabel
-              Height = 15
-              Width = 44
+              Left = 669
             end
             inherited editNomSerie: TEdit
-              Height = 27
-              Width = 806
-            end
-            inherited editSerieDepart: TCurrencyEdit
-              Height = 27
-            end
-            inherited editSerieArrivee: TCurrencyEdit
-              Height = 27
-            end
-            inherited editPointDepart: TCurrencyEdit
-              Height = 27
-            end
-            inherited editPointArrivee: TCurrencyEdit
-              Height = 27
-            end
-            inherited editNumeroSerie: TCurrencyEdit
-              Height = 27
-            end
-            inherited Label1: TLabel
-              Height = 15
+              Width = 551
             end
             inherited editCommentaire: TEdit
-              Height = 27
-              Width = 767
-            end
-            inherited Label2: TLabel
-              Height = 15
-            end
-            inherited editRaideur: TCurrencyEdit
-              Height = 27
-            end
-            inherited editNumEntreeRattachement: TCurrencyEdit
-              Height = 27
-            end
-            inherited lbIdxEntree: TLabel
-              Height = 15
-              Width = 71
+              Width = 512
             end
             inherited editLG0: TCurrencyEdit
-              Left = 860
-              Height = 27
+              Left = 605
             end
             inherited editLD0: TCurrencyEdit
-              Left = 928
-              Height = 27
+              Left = 673
             end
             inherited editHZ0: TCurrencyEdit
-              Left = 996
-              Height = 27
+              Left = 741
             end
             inherited editHN0: TCurrencyEdit
-              Left = 1064
-              Height = 27
+              Left = 809
             end
             inherited pnlReseaux: TPanel
-              Width = 759
-              ClientWidth = 759
-              inherited editNumeroReseau: TCurrencyEdit
-                Height = 27
-              end
+              Width = 504
+              ClientWidth = 504
               inherited lbNomReseau: TStaticText
-                Width = 598
+                Width = 343
               end
             end
           end
           inherited pnlTableur: TPanel
-            Height = 381
-            Width = 1136
-            ClientHeight = 381
-            ClientWidth = 1136
+            Height = 411
+            Width = 881
+            ClientHeight = 411
+            ClientWidth = 881
             inherited grdStations: TStringGrid
-              Height = 350
-              Width = 1097
+              Height = 380
+              Width = 842
             end
             inherited lbNbStations: TLabel
-              Height = 15
-              Top = 358
+              Top = 387
             end
             inherited lbMessages: TStaticText
-              Top = 357
-              Width = 671
+              Top = 387
+              Width = 416
             end
             inherited SpeedButton1: TSpeedButton
               Flat = False
@@ -1552,8 +1490,8 @@ object RPIMainWnd: TRPIMainWnd
               Flat = False
             end
             inherited lbLongueurCumulee: TStaticText
-              Left = 974
-              Top = 357
+              Left = 719
+              Top = 387
             end
             inherited SpeedButton6: TSpeedButton
               Flat = False
@@ -1562,7 +1500,7 @@ object RPIMainWnd: TRPIMainWnd
               Flat = False
             end
             inherited Shape1: TShape
-              Width = 1136
+              Width = 881
             end
             inherited SpeedButton9: TSpeedButton
               Flat = False
@@ -1580,19 +1518,15 @@ object RPIMainWnd: TRPIMainWnd
               Flat = False
             end
             inherited lbDataAreModified: TStaticText
-              Left = 867
-              Top = 357
+              Left = 612
+              Top = 387
             end
           end
           inherited btnShowHideHeader: TButton
-            Left = 1103
+            Left = 853
           end
           inherited pnlErreursACorriger: TPanel
-            Left = 668
-            inherited Label5: TLabel
-              Height = 15
-              Width = 188
-            end
+            Left = 413
             inherited lsbErreurs: TListBox
               ScrollWidth = 449
             end
@@ -1603,50 +1537,46 @@ object RPIMainWnd: TRPIMainWnd
     object tabShtAntennes: TTabSheet
       Caption = 'Antennes'
       ClientHeight = 555
-      ClientWidth = 1140
+      ClientWidth = 1142
       inline CdrListeViseesEnAntenne1: TCdrListeViseesEnAntenne
         Height = 555
-        Width = 1140
+        Width = 1142
         ClientHeight = 555
-        ClientWidth = 1140
+        ClientWidth = 1142
         inherited pnlListeAntennes: TPanel
           Height = 515
-          Width = 1135
+          Width = 1137
           ClientHeight = 515
-          ClientWidth = 1135
+          ClientWidth = 1137
           inherited hcColsTitres: THeaderControl
-            Width = 1131
+            Width = 1133
           end
         end
         inherited lbNbViseesAntennes: TLabel
-          Left = 963
+          Left = 965
         end
         inherited Panel2: TPanel
-          Width = 951
-          ClientWidth = 951
+          Width = 953
+          ClientWidth = 953
           inherited SpeedButton3: TSpeedButton
-            Left = 863
+            Left = 865
             Flat = False
           end
           inherited SpeedButton4: TSpeedButton
-            Left = 831
+            Left = 833
             Flat = False
           end
           inherited SpeedButton6: TSpeedButton
-            Left = 923
+            Left = 925
             Flat = False
           end
           inherited SpeedButton7: TSpeedButton
-            Left = 799
+            Left = 801
             Flat = False
           end
           inherited SpeedButton9: TSpeedButton
-            Left = 892
+            Left = 894
             Flat = False
-          end
-          inherited lbSerie: TLabel
-            Height = 15
-            Width = 32
           end
           inherited SpeedButton11: TSpeedButton
             Flat = False
@@ -1662,10 +1592,10 @@ object RPIMainWnd: TRPIMainWnd
           end
           inherited sclStationsOfSerie: TScrollBar
             Height = 13
-            Width = 439
+            Width = 441
           end
           inherited lbNbStationsOfSerie: TStaticText
-            Left = 730
+            Left = 732
           end
           inherited SpeedButton10: TSpeedButton
             Flat = False
@@ -1676,91 +1606,86 @@ object RPIMainWnd: TRPIMainWnd
         end
         inherited lsbViseesAntennes: TListBox
           Height = 485
-          Width = 1130
+          Width = 1132
           ScrollWidth = 1126
         end
       end
     end
     object tabShtListesSimples: TTabSheet
       Caption = 'tabShtListesSimples'
-      ClientHeight = 555
-      ClientWidth = 1140
+      ClientHeight = 585
+      ClientWidth = 885
       inline CdrListesSimples1: TCdrListesSimples
-        Height = 555
-        Width = 1140
-        ClientHeight = 555
-        ClientWidth = 1140
+        Height = 585
+        Width = 885
+        ClientHeight = 585
+        ClientWidth = 885
         inherited Panel1: TPanel
-          Height = 555
-          Width = 1140
-          ClientHeight = 555
-          ClientWidth = 1140
+          Height = 585
+          Width = 885
+          ClientHeight = 585
+          ClientWidth = 885
           inherited lbNbreElements: TStaticText
-            Top = 530
-            Width = 101
+            Top = 560
           end
           inherited SpeedButton3: TSpeedButton
-            Left = 966
+            Left = 711
             Flat = False
           end
           inherited SpeedButton8: TSpeedButton
-            Left = 992
+            Left = 737
             Flat = False
           end
           inherited SpeedButton9: TSpeedButton
-            Left = 1020
+            Left = 765
             Flat = False
           end
           inherited SpeedButton12: TSpeedButton
-            Left = 1048
+            Left = 793
             Flat = False
           end
           inherited SpeedButton2: TSpeedButton
-            Left = 1084
+            Left = 829
             Flat = False
           end
           inherited SpeedButton1: TSpeedButton
-            Left = 1112
+            Left = 857
             Flat = False
           end
           inherited editSearch: TEdit
-            Height = 27
-            Width = 1110
+            Width = 855
           end
           inherited SpeedButton4: TSpeedButton
-            Left = 1114
+            Left = 859
             Flat = False
           end
           inherited hcColsTitres: THeaderControl
-            Width = 1136
+            Width = 881
           end
           inherited lsbListe: TListBox
-            Height = 442
-            Width = 1136
+            Height = 472
+            Width = 881
             ScrollWidth = 1132
           end
           inherited Panel2: TPanel
-            Width = 954
-            ClientWidth = 954
+            Width = 699
+            ClientWidth = 699
             inherited CdrRadioButtons1: TCdrRadioButtons
               Left = 1
               Height = 30
               Top = 1
-              Width = 952
+              Width = 697
             end
           end
           inherited ProgressBar1: TProgressBar
-            Top = 530
-            Width = 802
+            Top = 560
+            Width = 547
           end
           inherited lbRayonCaptureProxi: TLabel
-            Height = 15
-            Top = 531
-            Width = 43
+            Top = 560
           end
           inherited editRayonCaptureProxi: TCurrencyEdit
-            Height = 27
-            Top = 527
+            Top = 560
           end
         end
       end
@@ -1768,13 +1693,13 @@ object RPIMainWnd: TRPIMainWnd
     object tabshtJournal: TTabSheet
       Caption = 'tabshtJournal'
       ClientHeight = 555
-      ClientWidth = 1140
+      ClientWidth = 1142
       object PairSplitter1: TPairSplitter
         Cursor = crVSplit
         Left = 0
         Height = 555
         Top = 0
-        Width = 1140
+        Width = 1142
         Align = alClient
         Position = 412
         SplitterType = pstVertical
@@ -1783,14 +1708,14 @@ object RPIMainWnd: TRPIMainWnd
           Left = 0
           Height = 412
           Top = 0
-          Width = 1140
-          ClientWidth = 1140
+          Width = 1142
+          ClientWidth = 1142
           ClientHeight = 412
           object lsbJournal: TListBox
             Left = 4
             Height = 396
             Top = 8
-            Width = 1135
+            Width = 1137
             Anchors = [akTop, akLeft, akRight, akBottom]
             ItemHeight = 0
             ScrollWidth = 1131
@@ -1802,14 +1727,14 @@ object RPIMainWnd: TRPIMainWnd
           Left = 0
           Height = 138
           Top = 417
-          Width = 1140
-          ClientWidth = 1140
+          Width = 1142
+          ClientWidth = 1142
           ClientHeight = 138
           inline memoErreurs: TSynEdit
             Left = 3
             Height = 138
             Top = 0
-            Width = 1135
+            Width = 1137
             Anchors = [akTop, akLeft, akRight, akBottom]
             Font.Height = -13
             Font.Name = 'Courier New'
@@ -2275,13 +2200,13 @@ object RPIMainWnd: TRPIMainWnd
             Left = 0
             Height = 21
             Top = 116
-            Width = 1139
+            Width = 1141
             Anchors = [akLeft, akRight, akBottom]
             BorderStyle = sbsSunken
             TabOrder = 1
           end
           object SpeedButton23: TSpeedButton
-            Left = 1018
+            Left = 1020
             Height = 32
             Top = 4
             Width = 36
@@ -2292,7 +2217,7 @@ object RPIMainWnd: TRPIMainWnd
             ParentShowHint = False
           end
           object SpeedButton24: TSpeedButton
-            Left = 1058
+            Left = 1060
             Height = 32
             Top = 4
             Width = 36
@@ -2303,7 +2228,7 @@ object RPIMainWnd: TRPIMainWnd
             ParentShowHint = False
           end
           object SpeedButton25: TSpeedButton
-            Left = 1102
+            Left = 1104
             Height = 32
             Top = 4
             Width = 36
@@ -2317,10 +2242,10 @@ object RPIMainWnd: TRPIMainWnd
     end
   end
   object pnlAcquitteVisee: TPanel
-    Left = 260
+    Left = 60
     Height = 40
-    Top = 60
-    Width = 558
+    Top = 184
+    Width = 690
     Caption = 'pnlAcquitteVisee'
     Color = clInfoBk
     Font.CharSet = ANSI_CHARSET
@@ -2337,12 +2262,12 @@ object RPIMainWnd: TRPIMainWnd
   object pnlProgression: TPanel
     Left = 164
     Height = 46
-    Top = 424
-    Width = 740
+    Top = 454
+    Width = 483
     Anchors = [akLeft, akRight, akBottom]
     BevelOuter = bvLowered
     ClientHeight = 46
-    ClientWidth = 740
+    ClientWidth = 483
     Font.CharSet = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -13
@@ -2356,7 +2281,7 @@ object RPIMainWnd: TRPIMainWnd
       Left = 4
       Height = 20
       Top = 24
-      Width = 733
+      Width = 476
       Anchors = [akLeft, akRight, akBottom]
       Smooth = True
       TabOrder = 0
@@ -2365,7 +2290,7 @@ object RPIMainWnd: TRPIMainWnd
       Left = 12
       Height = 16
       Top = 12
-      Width = 733
+      Width = 476
       Anchors = [akTop, akLeft, akRight]
       AutoSize = False
       Caption = 'lbEtape'

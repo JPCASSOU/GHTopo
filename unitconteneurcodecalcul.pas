@@ -186,7 +186,7 @@ begin
   begin
     // créer la table des stations
     setlength(LaBranche.PointsTopo, 0);        //LaBranche.PointsTopo := TListePointsTopo.Create;
-    UneVisee := EmptyVisee('');
+    UneVisee.Empty('');
     addViseeAtBranche(LaBranche, UneVisee); //LaBranche.PointsTopo.AddElement(UneVisee);
     FTableBranches.AddElement(LaBranche);
   end;
@@ -261,9 +261,7 @@ var
   Nd   , QNbSeries, QNbVisees: integer;
   Branche0,
   Branche1, QBranche: TBrancheXYZ;
-  QDeltaX: double;
-  QDeltaY: double;
-  QDeltaZ: double;
+  QAccroissement: TPoint3Df; // QDeltaX
   QPosPtZero: TPoint3Df;
 begin
   AfficherMessage(GetResourceString(rsFINDING_BRANCHES));
@@ -280,9 +278,7 @@ begin
     NoeudArrivee:= 1;
     Rigidite    := 1.00;
     SetLength(PointsTopo, 0);
-    DeltaX:=0.01;
-    DeltaY:=0.01;
-    DeltaZ:=0.01;
+    Accroissement.setFrom(0.01, 0.01, 0.01);
   end;
   AddBranche(Branche0);
   Br := 2;
@@ -356,17 +352,20 @@ begin
     Branche0.NoeudArrivee   := GetIdxJonctionBySerSt(Entr.eRefSer, Entr.eRefSt);
     Branche0.Rigidite       := 1000.0;
     QPosPtZero              := FDocTopo.GetPositionDuPointZero();
-    QDeltaX                 := Entr.eXEntree - QPosPtZero.X;
-    QDeltaY                 := Entr.eYEntree - QPosPtZero.Y;
-    QDeltaZ                 := Entr.eZEntree - QPosPtZero.Z;
-    Branche0.DeltaX         := QDeltaX; //Entr.eDeltaX;
-    Branche0.DeltaY         := QDeltaY; //Entr.eDeltaY;
-    Branche0.DeltaZ         := QDeltaZ; //Entr.eDeltaZ;
+    QAccroissement.setFrom(Entr.ePosition.X - QPosPtZero.X,
+                           Entr.ePosition.Y - QPosPtZero.Y,
+                           Entr.ePosition.Z - QPosPtZero.Z);
+    Branche0.Accroissement := QAccroissement;
+    //Branche0.DeltaX         := QDeltaX; //Entr.eDeltaX;
+    //Branche0.DeltaY         := QDeltaY; //Entr.eDeltaY;
+    //Branche0.DeltaZ         := QDeltaZ; //Entr.eDeltaZ;
     //AfficherMessage(Format('--> %d: %f %f %f',[Ser, Entr.eDeltaX, Entr.eDeltaY, Entr.eDeltaZ]));
     Visee.Code := 0; //1
     Visee.Expe := 0; //1
     l1 := 0.0;    a1 := 0.00;    p1 := 0.00;
-    GetBearingInc(QDeltaX, QDeltaY, QDeltaZ, l1, a1, p1, UNITE_ANGULAIRE_DU_CODE_ZERO, UNITE_ANGULAIRE_DU_CODE_ZERO); // Bug avec 400 grades
+    GetBearingInc(QAccroissement.X, QAccroissement.Y, QAccroissement.Z,
+                  l1, a1, p1,
+                  UNITE_ANGULAIRE_DU_CODE_ZERO, UNITE_ANGULAIRE_DU_CODE_ZERO); // Bug avec 400 grades
     Visee.NoVisee  := 1;
     Visee.Longueur := l1;
     Visee.Azimut   := a1;
@@ -406,14 +405,10 @@ begin
       CalculerVisee(Visee,
                     FDocTopo.GetCodeByNumero(Visee.Code),
                     FDocTopo.GetExpeByNumero(Visee.Expe),
-                    DX, DY,
-                    1.00,
-                    DZ, DP);
+                    DX, DY, DZ, DP);
       Branche.PointsTopo[Vs] := Visee; ////PutBrStation(Br, Vs, Visee);
     end; //for Vs:=0 to Branche.PointsTopo.Count-1 do begin
-    Branche.DeltaX := DX;
-    Branche.DeltaY := DY;
-    Branche.DeltaZ := DZ;
+    Branche.Accroissement.setFrom(DX, DY, DZ);
   //PutBranche(Br, Branche);
   PutBranche(Idx, Branche);
 end;
@@ -443,7 +438,7 @@ begin
   for Br := GetNbBranches() - 1 downto 1 do
   begin
     Branche := GetBranche(Br);
-    LLL := Hypot3D(Branche.DeltaX, Branche.DeltaY, Branche.DeltaZ);
+    LLL := Branche.Accroissement.getNorme(); //Hypot3D(Branche.DeltaX, Branche.DeltaY, Branche.DeltaZ);
     //     1. Ne pas supprimer la branche 0-1   2. Lonqueur considérée comme nulle
     WU := (Branche.NoeudArrivee > 1)           and IsZero(LLL);
     if (WU) then RemoveBranche(Br);

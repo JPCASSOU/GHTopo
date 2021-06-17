@@ -208,9 +208,13 @@ begin
 end;
 
 procedure TDGCEllipse.SetBoundingBox();
+var
+  C1, C2: TDGCPoint2D;
 begin
-  UpdateBoundingBox(FBoundingBox, MakeTDGCPoint2D(FCentre.X - FRayon1, FCentre.Y - FRayon2), True);
-  UpdateBoundingBox(FBoundingBox, MakeTDGCPoint2D(FCentre.X + FRayon1, FCentre.Y + FRayon2), False);
+  C1.setFrom(FCentre.X - FRayon1, FCentre.Y - FRayon2);
+  C2.setFrom(FCentre.X + FRayon1, FCentre.Y + FRayon2);
+  UpdateBoundingBox(FBoundingBox, C1, True);
+  UpdateBoundingBox(FBoundingBox, C2, False);
 end;
 function TDGCEllipse.GetBoundingBox(): TDGCBoundingBox;
 begin

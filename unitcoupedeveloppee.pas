@@ -191,7 +191,7 @@ var
 begin
   Result := Br;
   Result.DeltaP  := 0.0001;
-  Result.DeltaZ := 0.0001;
+  Result.DeltaZ  := 0.0001;
   Nb := 1 + High(Result.ArrVisees);
   if (Nb > 0) then
   begin
@@ -201,11 +201,12 @@ begin
        C := FDocuToporobot.GetCodeByNumero(V.Code);
        E := FDocuToporobot.GetExpeByNumero(V.Expe);
        // factorisation du code
-       CalculerVisee(V, C, E,
-                     AX, AY, 1.00,
-                     AZ, AP);
-       Result.DeltaP := Result.DeltaP + IIF((Result.SensTraceCoupe = stcdVERS_DROITE), V.DeltaP, -V.DeltaP);
-       Result.DeltaZ := Result.DeltaZ + V.DeltaZ;
+       CalculerVisee(V, C, E, AX, AY, AZ, AP);
+       //Result.DeltaP := Result.DeltaP + IIF((Result.SensTraceCoupe = stcdVERS_DROITE), V.DeltaP, -V.DeltaP);
+       //Result.DeltaZ := Result.DeltaZ + V.DeltaZ;
+       Result.DeltaP += IIF((Result.SensTraceCoupe = stcdVERS_DROITE), V.AccroissP, -V.AccroissP);
+       Result.DeltaZ += V.AccroissXYZ.Z;
+
        Result.ArrVisees[i] := V; //PutVisee (i, V);
     end;
   end;
@@ -465,8 +466,8 @@ begin
       for v := 0 to NbS - 1 do
       begin
         myVisee := Br.ArrVisees[v];
-        qP += myVisee.DeltaP * iif((Br.SensTraceCoupe = stcdVERS_DROITE), 1.00, -1.00);
-        qZ += myVisee.DeltaZ;
+        qP += myVisee.AccroissP * iif((Br.SensTraceCoupe = stcdVERS_DROITE), 1.00, -1.00);
+        qZ += myVisee.AccroissXYZ.Z;
         R  := Hypot2D(X - qP, Y - qZ);
         if (R < RMax) then
         begin
@@ -518,21 +519,8 @@ begin
   Result.DeltaZ             := 0.01;
   Result.SensTraceCoupe     := stcdVERS_DROITE;
   SetLength(Result.ArrVisees, 0);
-  V := EmptyVisee('');
-  V.NoVisee          := 0;
-  V.IDTerrainStation := '';
-  V.TypeVisee        := tgDEFAULT;
-  V.IDSecteur        := 0;
-  V.Code             := 0;
-  V.Expe             := 0;
-  V.Longueur         := 0.01;
-  V.Azimut           := 0.00;
-  V.Pente            := -45.00;
-  V.LG               := 0.00;
-  V.LD               := 0.00;
-  V.HZ               := 0.00;
-  V.HN               := 0.00;
-  V.Commentaires     := '';
+  V.Empty();
+  V.setFrom(0, tgDEFAULT, 0, 0, 0, 0.01, 0.00, -45.00, 0.0, 0.0, 0.0, 0.0, '', '');
   addViseeAtBranche(Result, V);
 end;
 procedure TCoupeDeveloppee.addViseeAtBranche(var BR: TBrancheCoupeDeveloppeeAsRecord; const V: TUneVisee);
@@ -708,7 +696,7 @@ begin
     //begin
       VS := EWE.GetVisee(QP);
       Result.P := VS.AccroissP;
-      Result.Z := VS.AccroissZ;
+      Result.Z := VS.AccroissXYZ.Z; //VS.AccroissZ;
     //end;
   except
     pass;
@@ -782,8 +770,10 @@ begin
         for v := 1 to NbV - 1 do
         begin
           myVisee := Brch.ArrVisees[v]; //myVisee := myBranche.GetVisee(v);
-          uP += myVisee.DeltaP * IIF((Brch.SensTraceCoupe = stcdVERS_DROITE), 1.00, -1.00);
-          uZ += myVisee.DeltaZ;
+          //uP += myVisee.DeltaP * IIF((Brch.SensTraceCoupe = stcdVERS_DROITE), 1.00, -1.00);
+          //uZ += myVisee.DeltaZ;
+          uP += myVisee.AccroissP * IIF((Brch.SensTraceCoupe = stcdVERS_DROITE), 1.00, -1.00);
+          uZ += myVisee.AccroissXYZ.Z;
 
           PM := MakeTPointCoupeDeveloppee(JC1.Abscisse + uP, JC1.Cote + uZ);
 
@@ -799,7 +789,7 @@ begin
           E.PosPD.X         := E.PosStation.X;
           E.PosPD.Y         := E.PosStation.Y;
           E.PosPG.Z         := E.PosStation.Z - myVisee.HN;
-          E.PosPD.Z            := E.PosStation.Z + myVisee.HZ;
+          E.PosPD.Z         := E.PosStation.Z + myVisee.HZ;
           QID := MakeTIDBaseStation(E.Entite_Serie, E.Entite_Station, false);
 
 
@@ -884,6 +874,7 @@ procedure TCoupeDeveloppee.ViderListeSeries();
 var
   ii, Nb: Integer;
   UneSerie, OS: TObjSerie;
+  MyVisee: TUneVisee;
 begin
   AfficherMessage(Format('-- %s.ViderListeSeries()',[self.ClassName]));
   Nb := GetNbSeries();
@@ -912,7 +903,8 @@ begin
     UneSerie.SetCouleur(clBlack);
     UneSerie.SetNumeroReseau(0);
     UneSerie.SetNumeroEntrance(0);
-    UneSerie.AddVisee(EmptyVisee('Point 1.0'));
+    MyVisee.Empty('Point 1.0');
+    UneSerie.AddVisee(MyVisee);
   except
     FreeAndNil(UneSerie);
   end;
@@ -1164,7 +1156,7 @@ begin
     for s := 0 to ns -1 do
     begin
       WU := EWE.GetVisee(s);
-      r  := sqr(P - WU.AccroissP) + sqr(Z - WU.AccroissZ);
+      r  := sqr(P - WU.AccroissP) + sqr(Z - WU.AccroissXYZ.Z); //AccroissZ);
       if (r < Nearest) then
       begin
         Result := i;

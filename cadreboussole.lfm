@@ -6,6 +6,7 @@ object CdrBoussole: TCdrBoussole
   Align = alClient
   ClientHeight = 312
   ClientWidth = 316
+  LCLVersion = '2.0.0.4'
   OnResize = FrameResize
   TabOrder = 0
   DesignLeft = 960

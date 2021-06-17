@@ -213,14 +213,14 @@ var
                        UneEntree.eNomEntree := Format(rsRD_TAB_ENTRANCE,[QN]);
                        UneEntree.eCouleur   := clRed;
                      end;
-                     UneEntree.eXEntree  := ConvertirEnNombreReel(PrmsLn[2], 0.00);
-                     UneEntree.eYEntree  := ConvertirEnNombreReel(PrmsLn[3], 0.00);
-                     UneEntree.eZEntree  := ConvertirEnNombreReel(PrmsLn[4], 0.00);
+                     UneEntree.ePosition.setFrom(ConvertirEnNombreReel(PrmsLn[2], 0.00),
+                                                 ConvertirEnNombreReel(PrmsLn[3], 0.00),
+                                                 ConvertirEnNombreReel(PrmsLn[4], 0.00));
 
 
                      //------------
                      // entrées non géoréférencées ?
-                     if (UneEntree.eXEntree < 100.00) or (UneEntree.eYEntree < 100.00) or (UneEntree.eZEntree < 500.00)
+                     if (UneEntree.ePosition.X < 100.00) or (UneEntree.ePosition.Y < 100.00) or (UneEntree.ePosition.Z < 500.00)
                      then WriteWarning(Format(GetResourceString(rsRD_TAB_ENTR_NOGEOREF), [NoLigneTAB, QN, UneEntree.eNomEntree]));
                      UneEntree.eRefSer   := StrToIntDef(PrmsLn[5],1);
                      UneEntree.eRefSt    := StrtoInt(PrmsLn[6]);
@@ -686,7 +686,7 @@ begin
                    Entrance.eNomEntree,
                    Entrance.eIDTerrain,
                    Entrance.eRefSer,  Entrance.eRefSt,
-                   Entrance.eXEntree, Entrance.eYEntree, Entrance.eZEntree,
+                   Entrance.ePosition.X, Entrance.ePosition.Y, Entrance.ePosition.Z,
                    Entrance.eObserv,
                    ColorToGHTopoColor(Entrance.eCouleur)
                    ]));
@@ -702,11 +702,8 @@ begin
                    FORMAT_NB_REAL_3_DEC + TAB + FORMAT_NB_REAL_3_DEC + TAB + FORMAT_NB_REAL_3_DEC + TAB +
                    FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB + FORMAT_STRING,
                           [-5, i+1,
-                          Entrance.eXEntree,
-                          Entrance.eYEntree,
-                          Entrance.eZEntree,
-                          Entrance.eRefSer,
-                          Entrance.eRefSt,
+                          Entrance.ePosition.X, Entrance.ePosition.Y, Entrance.ePosition.Z,
+                          Entrance.eRefSer, Entrance.eRefSt,
                           Entrance.eObserv
                           ]));
     end;

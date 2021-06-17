@@ -398,9 +398,9 @@ begin
              format('#%.2X%.2X%.2X', [Red(EWE.eCouleur), Green(EWE.eCouleur), Blue(EWE.eCouleur)]) + TAB +
              Format(FMTSERST, [EWE.eRefSer, EWE.eRefSt]) + TAB +
              EWE.eNomEntree + TAB +
-             FormatterNombreOOo(EWE.eXEntree, 3, False) + TAB +
-             FormatterNombreOOo(EWE.eYEntree, 3, False) + TAB +
-             FormatterNombreOOo(EWE.eZEntree, 3, False) + TAB +
+             FormatterNombreOOo(EWE.ePosition.X, 3, False) + TAB +
+             FormatterNombreOOo(EWE.ePosition.Y, 3, False) + TAB +
+             FormatterNombreOOo(EWE.ePosition.Z, 3, False) + TAB +
              EWE.eObserv + #13#10;
     end;
     MyClipBoard.AsText := WU;
@@ -799,9 +799,9 @@ var
     DrawColRectColoreWithTexte(lsbEntrances, ARect, HeaderControl2.Sections.Items[1], true, bg, EWE.eCouleur, '');
     DrawColTexte(lsbEntrances, ARect, HeaderControl2.Sections.Items[2], True, Format(FMTSERST, [EWE.eRefSer, EWE.eRefSt]));
     DrawColTexte(lsbEntrances, ARect, HeaderControl2.Sections.Items[3], True, EWE.eNomEntree);
-    DrawColTexte(lsbEntrances, ARect, HeaderControl2.Sections.Items[4], True, FormatterNombreOOo(EWE.eXEntree, 3, false));
-    DrawColTexte(lsbEntrances, ARect, HeaderControl2.Sections.Items[5], True, FormatterNombreOOo(EWE.eYEntree, 3, false));
-    DrawColTexte(lsbEntrances, ARect, HeaderControl2.Sections.Items[6], True, FormatterNombreOOo(EWE.eZEntree, 3, false));
+    DrawColTexte(lsbEntrances, ARect, HeaderControl2.Sections.Items[4], True, FormatterNombreOOo(EWE.ePosition.X, 3, false));
+    DrawColTexte(lsbEntrances, ARect, HeaderControl2.Sections.Items[5], True, FormatterNombreOOo(EWE.ePosition.Y, 3, false));
+    DrawColTexte(lsbEntrances, ARect, HeaderControl2.Sections.Items[6], True, FormatterNombreOOo(EWE.ePosition.Z, 3, false));
     DrawColTexte(lsbEntrances, ARect, HeaderControl2.Sections.Items[7], True, EWE.eObserv);
   end;
 begin

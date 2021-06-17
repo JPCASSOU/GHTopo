@@ -52,15 +52,13 @@ begin
   MyEntrance.eCouleur   := clBlue;
   MyEntrance.eNomEntree := 'Main Entrance';
   MyEntrance.eIDTerrain := '1.0';
-  MyEntrance.eXEntree   := 0.00;
-  MyEntrance.eYEntree   := 0.00;
-  MyEntrance.eZEntree   := 0.00;
+  MyEntrance.ePosition.Empty();
   MyEntrance.eObserv    := '';
   AddEntrance(MyEntrance);
 
   MyCode := MakeUsualTCode(1, 360.00, 360.00, 1.00, 0.01, 1.00, 1.00, 0.00, 0.00, 0.00, 'Topo du ' + DatePascalToDateSQL(QDateSeanceTopo));
   self.AddCode(MyCode);
-  MyExpe := MakeTExpe(1, YearOf(QDateSeanceTopo), MonthOf(QDateSeanceTopo), DayOf(QDateSeanceTopo), 6, cdmAUTOMATIQUE, 0.00, 'Speleometre', 'Speleographe', 'Expe01');
+  MyExpe.setFrom(1, YearOf(QDateSeanceTopo), MonthOf(QDateSeanceTopo), DayOf(QDateSeanceTopo), 6, cdmAUTOMATIQUE, 0.00, 'Speleometre', 'Speleographe', 'Expe01');
   self.AddExpe(MyExpe);
   AfficherMessageErreur(Format('*** %d entrances, %d reseaux, %d secteurs, %d codes, %d seances', [GetNbEntrances(), GetNbReseaux(), GetNbSecteurs(), GetNbCodes(), GetNbExpes()]));
   for i := 0 to GetNbCodes() - 1 do
@@ -209,19 +207,15 @@ begin
         QNumeroDeSerieCourant := QLaStationCourante.aSerie;
         GetSerieByNumeroSerie(QNumeroDeSerieCourant, MySerie, QInternalIdx);
       end;
-      MyVisee := EmptyVisee('');
-      MyVisee.Code      := MyCode.IDCode;
-      MyVisee.Expe      := MyExpe.IDExpe;
-      MyVisee.IDSecteur := 0;
-      MyVisee.TypeVisee := tgDEFAULT;
-      MyVisee.Longueur := ConvertirEnNombreReel(EWE[2], -1.00);
-      MyVisee.Azimut   := ConvertirEnNombreReel(EWE[3],  0.00);
-      MyVisee.Pente    := ConvertirEnNombreReel(EWE[4],  0.00);
-      MyVisee.LG       := 0.00;
-      MyVisee.LD       := 0.00;
-      MyVisee.HZ       := 0.00;
-      MyVisee.HN       := 0.00;
-      MyVisee.Commentaires    := StringReplace(Trim(EWE[6]), '"', '', [rfReplaceAll]);
+      MyVisee.Empty('');
+      MyVisee.setFrom(0,
+                      tgDEFAULT, 0,
+                      MyCode.IDCode, MyExpe.IDExpe,
+                      ConvertirEnNombreReel(EWE[2], -1.00),
+                      ConvertirEnNombreReel(EWE[3],  0.00),
+                      ConvertirEnNombreReel(EWE[4],  0.00),
+                      0.0, 0.0, 0.0, 0.0,
+                      '', StringReplace(Trim(EWE[6]), '"', '', [rfReplaceAll]));
       MySerie.AddVisee(MyVisee);
     end;
     // et affichage de contrôle

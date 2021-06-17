@@ -572,7 +572,7 @@ begin
     WriteLigne('-15' + #9 + format(FORMAT_NB_INTEGER, [DefaultCodeEPSG]));
     WriteLigne('-6'  + #9 + '1' + #9 + 'Entree principale');
     WriteLigne('-5'  + #9 + '1' + #9 + '0.00' + #9 + '0.00' + #9 + '0.00' + #9 + '1' + #9 + '0');
-    MyExpe := MakeTExpe(1, YearOf(Now), MonthOf(Now), DayOf(Now), 39, cdmAUTOMATIQUE, 0.00, 'Team1', 'Team1', 'Expe01');
+    MyExpe.setFrom(1, YearOf(Now), MonthOf(Now), DayOf(Now), 39, cdmAUTOMATIQUE, 0.00, 'Team1', 'Team1', 'Expe01');
     WriteLigne(MakeToporobotTabLineOfExpe(-2, MyExpe));
     MyCode := MakeUsualTCode(1, UNITE_ANGULAIRE_DU_CODE_ZERO, UNITE_ANGULAIRE_DU_CODE_ZERO, 1.00, 0.01, 1.00, 1.00, 0.00, 0.00, 0.00, 'Code01');
     WriteLigne(MakeToporobotTabLineOfCode(-1, mtabEXTENDEDTAB, MyCode));
@@ -667,7 +667,7 @@ begin
   FCurrentNumeroReseau  := 0;
   FCurrentNumeroSecteur := 0;
   // point zéro
-  FPositionPointZero := MakeTPoint3Df(0.00, 0.00, 0.00);
+  FPositionPointZero.Empty();
   AfficherMessage(Format('%s.Create', [self.ClassName]));
   FListeDesSeries := TList.Create;
   FListeDesSeries.Clear;
@@ -692,6 +692,10 @@ procedure TToporobotStructure2012.ReInitialiser(const DoCreateItemsZero: boolean
 var
   UneEntree       : TEntrance;
   UneSerie        : TObjSerie;
+  UnReseau        : TReseau;
+  UnSecteur       : TSecteur;
+  QVisee          : TUneVisee;
+
 begin
   ClearListeSeries();
   ViderTablesSimples();
@@ -719,15 +723,16 @@ begin
   if (self.GetNbEntrances() > 0) then
   begin
     UneEntree := GetEntrance(0);
-    SetDefaultCoords(UneEntree.eXEntree, UneEntree.eYEntree, UneEntree.eZEntree);
+    SetDefaultCoords(UneEntree.ePosition.X, UneEntree.ePosition.Y, UneEntree.ePosition.Z);
   end
   else
   begin
     CreateNewEntrance();
   end;
-
-  AddReseau(MakeTReseau(COULEUR_RESEAU_0, 0, rsMAIN_NETWORK, '')); // Réseau 0
-  AddSecteur(MakeTSecteur(clSilver, 'Undefined'));                 // Secteur 0
+  UnReseau.setFrom(COULEUR_RESEAU_0, 0, rsMAIN_NETWORK, '');
+  AddReseau(UnReseau); // Réseau 0
+  UnSecteur.setFrom(clSilver, 'Undefined');
+  AddSecteur(UnSecteur);                 // Secteur 0
   AddExpe(MakeExpe0(0, 'Expe0'));                                  // Expé 0
   AddCode(MakeCode0(0, 'Code0'));                                  // Code 0
   // série 0
@@ -743,7 +748,8 @@ begin
     uneserie.SetNumeroEntrance(0);                             // Opération 8: Entrée de rattachement
     UneSerie.SetNumeroReseau(0);                               // Opération 9: Réseau de rattachement
     // Opération 10: Traitement des visées
-    UneSerie.AddVisee(EmptyVisee('Point 1.0'));
+    QVisee.Empty('Point 1.0');
+    UneSerie.AddVisee(QVisee);
     AddSerie(UneSerie);
   except
   end;
@@ -815,7 +821,7 @@ begin
 end;
 procedure TToporobotStructure2012.SetDefaultCoords(const X, Y, Z: double); overload;
 begin
-  FPositionPointZero := MakeTPoint3Df(X, Y, Z);
+  FPositionPointZero.setFrom(X, Y, Z);
 end;
 
 procedure TToporobotStructure2012.SetDefaultCoords(const P0: TPoint3Df); overload;
@@ -1644,7 +1650,7 @@ var
 begin
   NbEntrances := GetNbEntrances();
   MyEntrance  := GetEntrance(0);
-  Result      := MakeTPoint3Df( MyEntrance.eXEntree, MyEntrance.eYEntree, MyEntrance.eZEntree);
+  Result := MyEntrance.ePosition;
   Nb := 0;
   QX0 := 0.00;  QY0 := 0.00; QZ0 := 0.00;
 
@@ -1652,20 +1658,15 @@ begin
   begin
     try
       MyEntrance := GetEntrance(i);
-      if (IsZero(MyEntrance.eXEntree) or IsZero(MyEntrance.eYEntree)) then Continue;
-      QX0 += MyEntrance.eXEntree;
-      QY0 += MyEntrance.eYEntree;
-      QZ0 += MyEntrance.eZEntree;
+      if (IsZero(MyEntrance.ePosition.X) or IsZero(MyEntrance.ePosition.Y)) then Continue;
+      QX0 += MyEntrance.ePosition.X;
+      QY0 += MyEntrance.ePosition.Y;
+      QZ0 += MyEntrance.ePosition.Z;
       Nb  += 1;
     except
     end;
   end;
-  if (Nb <> 0) then
-  begin
-    Result.X := QX0 / Nb;
-    Result.Y := QY0 / Nb;
-    Result.Z := QZ0 / Nb;
-  end;
+  if (Nb <> 0) then Result.setFrom(QX0 / Nb, QY0 / Nb, QZ0 / Nb);
 end;
 
 function TToporobotStructure2012.HasNumeroReseau(const Idx: integer): boolean;
@@ -2059,7 +2060,7 @@ begin
                            FORMAT_NB_INTEGER + #9 + FORMAT_NB_INTEGER + #9 +
                            FORMAT_STRING,
                            [i, myEntrance.eNomEntree,
-                            myEntrance.eXEntree, myEntrance.eYEntree, myEntrance.eZEntree,
+                            myEntrance.ePosition.X, myEntrance.ePosition.Y, myEntrance.ePosition.Z,
                             myEntrance.eRefSer, myEntrance.eRefSt,
                             myEntrance.eObserv
                            ]));
@@ -2368,9 +2369,7 @@ begin
   begin
     //UneEntree.eNumEntree := 0;
     UneEntree.eNomEntree := 'Entree par default';
-    UneEntree.eXEntree   := self.FPositionPointZero.X;
-    UneEntree.eYEntree   := self.FPositionPointZero.Y;
-    UneEntree.eZEntree   := self.FPositionPointZero.Z;
+    UneEntree.ePosition  := self.FPositionPointZero;
     UneEntree.eRefSer    := 1;
     UneEntree.eRefSt     := 0;
     UneEntree.eObserv    := 'Entree reparee';
@@ -2380,9 +2379,9 @@ begin
   for i := 0 to Nb - 1 do
   begin
     UneEntree := GetEntrance(i);
-    if (IsZero(UneEntree.eXEntree)) then AddMessageErreur(tmeENTRANCES, cmeERROR, i, Format('%s: Coordonnée X nulle: %.2f', [UneEntree.eNomEntree, UneEntree.eXEntree]));
-    if (IsZero(UneEntree.eYEntree)) then AddMessageErreur(tmeENTRANCES, cmeERROR, i, Format('%s: Coordonnée Y nulle: %.2f', [UneEntree.eNomEntree, UneEntree.eYEntree]));
-    if (IsZero(UneEntree.eZEntree)) then AddMessageErreur(tmeENTRANCES, cmeERROR, i, Format('%s: Coordonnée Z nulle: %.2f', [UneEntree.eNomEntree, UneEntree.eZEntree]));
+    if (IsZero(UneEntree.ePosition.X)) then AddMessageErreur(tmeENTRANCES, cmeERROR, i, Format('%s: Coordonnée X nulle: %.2f', [UneEntree.eNomEntree, UneEntree.ePosition.X]));
+    if (IsZero(UneEntree.ePosition.Y)) then AddMessageErreur(tmeENTRANCES, cmeERROR, i, Format('%s: Coordonnée Y nulle: %.2f', [UneEntree.eNomEntree, UneEntree.ePosition.Y]));
+    if (IsZero(UneEntree.ePosition.Z)) then AddMessageErreur(tmeENTRANCES, cmeERROR, i, Format('%s: Coordonnée Z nulle: %.2f', [UneEntree.eNomEntree, UneEntree.ePosition.Z]));
   end;
 end;
 // 21/08/2017: Ajout de la détection des doublons dans les numéros de séries
@@ -2708,8 +2707,8 @@ begin
     // calcul du centroïde des entrées
     MyCentroide := CalcCentroideEntrees();
     // qu'on convertit en WGS84
-    PTI := MakeTPoint2Df(MyCentroide.X, MyCentroide.Y);
-    PTO := MakeTPoint2Df(0.00, 0.00);
+    PTI.setFrom(MyCentroide.X, MyCentroide.Y);
+    PTO.Empty();
     // si la conversion réussit: Etape 2: Calcul des déclinaisons pour les expés
     EPSG := GetCodeEPSGSystemeCoordonnees();
     if (ConversionCoupleCoordonneesIsoleesEPSG(EPSG.CodeEPSG, CODE_EPSG_WGS84, PTI, PTO)) then
@@ -2950,7 +2949,7 @@ begin
     LS.Add('');
     for i:=0 to GetNbEntrances() - 1 do begin
       E := GetEntrance(i);
-      LS.Add(Format(FMTLNENTREE, [i, E.eXEntree, E.eYEntree, E.eZEntree, E.eNomEntree]));
+      LS.Add(Format(FMTLNENTREE, [i, E.ePosition.X, E.ePosition.Y, E.ePosition.Z, E.eNomEntree]));
     end;
     LS.Add('');
     LS.Add(Format('List of %d series', [GetNbSeries]));
@@ -3133,7 +3132,7 @@ begin
     Serie := GetSerie(1);
     EWE := Format(FMTSERST_VTOPO,[Serie.GetNoSerieDep, Serie.GetNoPointDep]);
     // Trou CDS03,0.000,0.000,0,
-    WriteLn(pTRO, Format('Trou %s,%.3f,%.3f,%f,', [Entree.eNomEntree, Entree.eXEntree / 1000, Entree.eYEntree / 1000, Entree.eZEntree]));
+    WriteLn(pTRO, Format('Trou %s,%.3f,%.3f,%f,', [Entree.eNomEntree, Entree.ePosition.X / 1000, Entree.ePosition.Y / 1000, Entree.ePosition.Z]));
     WriteLn(pTRO, Format('Entree %s',[Format(FMTSERST_VTOPO, [Entree.eRefSer, Entree.eRefSt])]));
     WriteLn(pTRO, Format('Club %s',[rsGHTOPOEXENAME]));
     DefautCouleur:= clRED;
@@ -3572,9 +3571,9 @@ begin
       MyFixPt := GetEntrance(i);
       WrtLn(Format('    fix %s %.2f %.2f %.2f # %s',
                    [ Format(FMTSTS, [MyFixPt.eRefSer, MyFixPt.eRefSt]),
-                     MyFixPt.eXEntree,
-                     MyFixPt.eYEntree,
-                     MyFixPt.eZEntree,
+                     MyFixPt.ePosition.X,
+                     MyFixPt.ePosition.Y,
+                     MyFixPt.ePosition.Z,
                      MyFixPt.eNomEntree
                    ]));
     end;
@@ -4118,7 +4117,7 @@ begin
           MyPOI.Serie        := MySerie.GetNumeroDeSerie();
           MyPOI.Station      := j;
 
-          MyPOI.Coordinates  := MakeTPoint3Df(0.00, 0.00, 0.00);
+          MyPOI.Coordinates.Empty();
           self.AddPointOfInterest(MyPOI);
         end;
       end;
@@ -4577,10 +4576,12 @@ begin
    //SortSeries(); TODO  Trier les séries ?
    UneEntree := GetEntrance(0);
    self.SetRefSeriePoint(UneEntree.eRefSer, UneEntree.eRefSt);
-   self.SetDefaultCoords(UneEntree.eXEntree, UneEntree.eYEntree, UneEntree.eZEntree);
+   self.SetDefaultCoords(UneEntree.ePosition.X, UneEntree.ePosition.Y, UneEntree.ePosition.Z);
 end;
 
 procedure TToporobotStructure2012.CheckerAltimetrieEntrancesByMNT(const FM: TMaillage; const DoAdjustAtMNT: boolean; const DeltaZMax: double);
+const
+  QFMT_ERR_MSG = '%d; %d.%d; %s;  %s; %s; %s;  %s; %s;';
 var
   i, Nb: Integer;
   AltitudeOfMNT, DeltaZ: double;
@@ -4598,14 +4599,14 @@ begin
   for i := 0 to Nb - 1 do
   begin
     MyEntrance := self.GetEntrance(i);
-    FM.CalcAltitudeMaillageAtPoint(MyEntrance.eXEntree, MyEntrance.eYEntree, AltitudeOfMNT);
-    DeltaZ        := MyEntrance.eZEntree - AltitudeOfMNT;
-    AfficherMessageErreur(format('%d; %d.%d; %s;  %s; %s; %s;  %s; %s;', [i, MyEntrance.eRefSer, MyEntrance.eRefSt, MyEntrance.eNomEntree,
-                                                                      FormatterNombreOOo(MyEntrance.eXEntree),
-                                                                      FormatterNombreOOo(MyEntrance.eYEntree),
-                                                                      FormatterNombreOOo(MyEntrance.eZEntree),
-                                                                      FormatterNombreOOo(AltitudeOfMNT),
-                                                                      FormatterNombreOOo(DeltaZ)]));
+    FM.CalcAltitudeMaillageAtPoint(MyEntrance.ePosition.X, MyEntrance.ePosition.Y, AltitudeOfMNT);
+    DeltaZ        := MyEntrance.ePosition.Z - AltitudeOfMNT;
+    AfficherMessageErreur(format(QFMT_ERR_MSG, [i, MyEntrance.eRefSer, MyEntrance.eRefSt, MyEntrance.eNomEntree,
+                                                FormatterNombreOOo(MyEntrance.ePosition.X),
+                                                FormatterNombreOOo(MyEntrance.ePosition.Y),
+                                                FormatterNombreOOo(MyEntrance.ePosition.Z),
+                                                FormatterNombreOOo(AltitudeOfMNT),
+                                                FormatterNombreOOo(DeltaZ)]));
 
   end;
 end;

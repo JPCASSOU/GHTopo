@@ -529,9 +529,9 @@ var
           QDrawColTexte(hcColsTitres.Sections.Items[1], false, Format(FORMAT_NB_INTEGER,[Index]));
           QDrawColTexte(hcColsTitres.Sections.Items[3], True , es.eNomEntree);
           QDrawColTexte(hcColsTitres.Sections.Items[4], True , Format(FMTSERST,[es.eRefSer, es.eRefSt]));
-          QDrawColTexte(hcColsTitres.Sections.Items[5], True , FormatterNombreAvecSepMilliers(es.eXEntree));
-          QDrawColTexte(hcColsTitres.Sections.Items[6], True , FormatterNombreAvecSepMilliers(es.eYEntree));
-          QDrawColTexte(hcColsTitres.Sections.Items[7], True , FormatterNombreAvecSepMilliers(es.eZEntree));
+          QDrawColTexte(hcColsTitres.Sections.Items[5], True , FormatterNombreAvecSepMilliers(es.ePosition.X));
+          QDrawColTexte(hcColsTitres.Sections.Items[6], True , FormatterNombreAvecSepMilliers(es.ePosition.Y));
+          QDrawColTexte(hcColsTitres.Sections.Items[7], True , FormatterNombreAvecSepMilliers(es.ePosition.Z));
         end;
       mslRESEAUX:
         begin

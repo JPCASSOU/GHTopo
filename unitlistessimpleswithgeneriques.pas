@@ -689,7 +689,7 @@ begin
       MyVisee.IDTerrainStation := '';
       MyVisee.TypeVisee        := tgVISEE_RADIANTE;
 
-      CalculerVisee(MyVisee, QCode, QExpe, EWE.DX, EWE.DY, 1.00, EWE.DZ, EWE.DP);
+      CalculerVisee(MyVisee, QCode, QExpe, EWE.DX, EWE.DY, EWE.DZ, EWE.DP);
       EWE.AzimutAbsolu := AZ0 + ArcTan2(EWE.dy, EWE.dx);
       ArrAntennesFound[i] := EWE; // et on met à jour
     end;

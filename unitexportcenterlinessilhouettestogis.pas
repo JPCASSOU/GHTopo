@@ -272,12 +272,12 @@ var
       MyEntrance := FDocTopo.GetEntrance(i);
       EWE := Format('%d: %s', [i, MyEntrance.eNomEntree]);
 
-      MyPoint.U  := MyEntrance.eXEntree;
-      MyPoint.V  := MyEntrance.eYEntree;
+      MyPoint.U  := MyEntrance.ePosition.X;
+      MyPoint.V  := MyEntrance.ePosition.Y;
 
       PP := FConvertisseur.ConversionSyst1ToSyst2EPSG(FMyEPSG.CodeEPSG, 4326, MyPoint);
 
-      DC.AddMarker(MyEntrance.eXEntree, MyEntrance.eYEntree, MyEntrance.eZEntree, PP.U, PP.V, MyEntrance.eNomEntree, format(FMTSERST, [MyEntrance.eRefSer, MyEntrance.eRefSt]), '', '', '');
+      DC.AddMarker(MyEntrance.ePosition.X, MyEntrance.ePosition.Y, MyEntrance.ePosition.Z, PP.U, PP.V, MyEntrance.eNomEntree, format(FMTSERST, [MyEntrance.eRefSer, MyEntrance.eRefSt]), '', '', '');
 
       if (assigned(FProcProgression)) then FProcProgression(EWE, i, 0, Nb, 10);
     end;
@@ -354,14 +354,14 @@ var
       begin
         MyEntrance := FDocTopo.GetEntrance(i);
         EWE := Format('%d: %s', [i, MyEntrance.eNomEntree]);
-        MyPoint.U  := MyEntrance.eXEntree;
-        MyPoint.V  := MyEntrance.eYEntree;
+        MyPoint.U  := MyEntrance.ePosition.X;
+        MyPoint.V  := MyEntrance.ePosition.Y;
 
         PP := FConvertisseur.ConversionSyst1ToSyst2EPSG(FMyEPSG.CodeEPSG, CODE_EPSG_WGS84, MyPoint);
         DC.AddMarker(QLayer.LayerVarName,
-                     MyEntrance.eXEntree,
-                     MyEntrance.eYEntree,
-                     MyEntrance.eZEntree,
+                     MyEntrance.ePosition.X,
+                     MyEntrance.ePosition.Y,
+                     MyEntrance.ePosition.Z,
                      PP.U, PP.V,
                      format(FMTSERST, [MyEntrance.eRefSer, MyEntrance.eRefSt]),
                      MyEntrance.eNomEntree,
@@ -483,16 +483,20 @@ var
       begin
         MyNode := FBDDEntites.GetJonction(i);
         EWE := Format('Jonctions: %d: %d%d', [i, MyNode.NoSer, MyNode.NoSt]);
-        MyPoint.U  := MyNode.X;
-        MyPoint.V  := MyNode.Y;
+        MyPoint.U  := MyNode.Position.X;
+        MyPoint.V  := MyNode.Position.Y;
 
         PP := FConvertisseur.ConversionSyst1ToSyst2EPSG(FMyEPSG.CodeEPSG, CODE_EPSG_WGS84, MyPoint);
         DC.AddMarker(QLayer.LayerVarName,
-                     MyNode.X, MyNode.Y, MyNode.Z,
+                     MyNode.Position.X, MyNode.Position.Y, MyNode.Position.Z,
                      PP.U, PP.V,
                      MyNode.ToString(),
                      MyNode.IDJonction,
-                     Format('X = %s, Y = %s, Z = %s', [FormatterNombreAvecSepMilliers(MyNode.X), FormatterNombreAvecSepMilliers(MyNode.Y), FormatterNombreAvecSepMilliers(MyNode.Z)]),
+                     Format('X = %s, Y = %s, Z = %s', [
+                        FormatterNombreAvecSepMilliers(MyNode.Position.X),
+                        FormatterNombreAvecSepMilliers(MyNode.Position.Y),
+                        FormatterNombreAvecSepMilliers(MyNode.Position.Z)
+                     ]),
                      '',
                      '' // pas de photo
                      );
@@ -731,7 +735,7 @@ var
     begin
       MyNode := FBDDEntites.GetJonction(i);
       EWE := Format('Jonctions: %d: %d%d', [i, MyNode.NoSer, MyNode.NoSt]);
-      MyExport.DrawCircle(QLayer.LayerName, MyNode.X, MyNode.Y, MyNode.Z, QR);
+      MyExport.DrawCircle(QLayer.LayerName, MyNode.Position.X, MyNode.Position.Y, MyNode.Position.Z, QR);
       //MyExport.DrawTexte(QLayer.LayerName, MyNode.X + QR, MyNode.Y + QR, MyNode.Z, 3.00, Format(FMTSERST, [MyNode.NoSer, MyNode.NoSt]));
       if (assigned(FProcProgression)) then FProcProgression(EWE, i, 0, Nb, 100);
     end;
