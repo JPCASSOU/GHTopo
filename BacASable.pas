@@ -64,13 +64,7 @@ procedure TdlgBacASable.btnSelectAttrTexteClick(Sender: TObject);
 var
   EWE: TTexteAttributs;
 begin
-  EWE.FontName     := DEFAULT_FONT_NAME;
-  EWE.FontColor    := clRed;
-  EWE.FontStyle    := [fsBold, fsItalic];
-  EWE.BackColor    := clYellow;
-  EWE.HauteurTexte := 3.50;
-  EWE.Position     := 7;
-  EWE.AngleRot     := 62;
+  EWE.setFrom('Style01', DEFAULT_FONT_NAME, clRed, clYellow, [fsBold, fsItalic], 3.5, 74, 62);
   EWE := SelectAttributsTexte(EWE);
 end;
 end.

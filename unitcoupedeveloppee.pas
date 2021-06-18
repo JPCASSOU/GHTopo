@@ -187,7 +187,8 @@ var
   V: TUneVisee;
   C: TCode;
   E: TExpe;
-  AX, AY, AP, AZ: double;
+  AC: TPoint3Df;
+  AP: double;
 begin
   Result := Br;
   Result.DeltaP  := 0.0001;
@@ -201,7 +202,8 @@ begin
        C := FDocuToporobot.GetCodeByNumero(V.Code);
        E := FDocuToporobot.GetExpeByNumero(V.Expe);
        // factorisation du code
-       CalculerVisee(V, C, E, AX, AY, AZ, AP);
+       AC.Empty();
+       CalculerVisee(V, C, E, AC, AP);
        //Result.DeltaP := Result.DeltaP + IIF((Result.SensTraceCoupe = stcdVERS_DROITE), V.DeltaP, -V.DeltaP);
        //Result.DeltaZ := Result.DeltaZ + V.DeltaZ;
        Result.DeltaP += IIF((Result.SensTraceCoupe = stcdVERS_DROITE), V.AccroissP, -V.AccroissP);

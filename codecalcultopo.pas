@@ -1057,18 +1057,21 @@ var
   function CalcViseeAntenne(const VA: TViseeAntenne; out   OutEE: TBaseStation): boolean;
   var
     VS      : TUneVisee;
-    DX, DY, DZ, DP: double;
-    EE: TBaseStation;
-    MyCode: TCode;
-    MyExpe: TExpe;
+    DC      : TPoint3Df;
+    DP      : double;
+    EE      : TBaseStation;
+    MyCode  : TCode;
+    MyExpe  : TExpe;
   begin
     result := false;
-    DX := 0.00; DY := 0.00; DZ := 0.00;
+    DC.Empty();
+    DP := 0.00;
     if (FBDDEntites.GetEntiteViseeFromSerSt(VA.SerieDepart, VA.PtDepart, EE)) then
     begin
-      DX := EE.PosStation.X;
-      DY := EE.PosStation.Y;
-      DZ := EE.PosStation.Z;
+      DC := EE.PosStation; //
+      //DX := EE.PosStation.X;
+      //DY := EE.PosStation.Y;
+      //DZ := EE.PosStation.Z;
       // les codes et expés de l'antenne héritent de ceux de la station d'accrochage
       MyCode := FDocTopo.GetCodeByNumero(EE.eCode);
       MyExpe := FDocTopo.GetExpeByNumero(EE.eExpe);
@@ -1090,15 +1093,14 @@ var
     VS.Commentaires     := ''; //VA.Commentaires;
     VS.IDTerrainStation := ''; //VA.IDTerrainStation;
     VS.TypeVisee        := tgVISEE_RADIANTE;
-    CalculerVisee(VS, MyCode, MyExpe, DX, DY, DZ, DP);
+    CalculerVisee(VS, MyCode, MyExpe, DC, DP);
+    DC.setFrom(EE.PosStation.X + VS.AccroissXYZ.X,
+               EE.PosStation.Y + VS.AccroissXYZ.Y,
+               EE.PosStation.Z + VS.AccroissXYZ.Z);
 
-    DX := EE.PosStation.X + VS.AccroissXYZ.X; // DX := EE.PosStation.X + VS.DeltaX;
-    DY := EE.PosStation.Y + VS.AccroissXYZ.Y; // DY := EE.PosStation.Y + VS.DeltaY;
-    DZ := EE.PosStation.Z + VS.AccroissXYZ.Z; // DZ := EE.PosStation.Z + VS.DeltaZ;
-
-
-
-
+    //DX := EE.PosStation.X + VS.AccroissXYZ.X; // DX := EE.PosStation.X + VS.DeltaX;
+    //DY := EE.PosStation.Y + VS.AccroissXYZ.Y; // DY := EE.PosStation.Y + VS.DeltaY;
+    //DZ := EE.PosStation.Z + VS.AccroissXYZ.Z; // DZ := EE.PosStation.Z + VS.DeltaZ;
     //******************************
     // TODO: Dans GHCaveDraw, les antennes ne doivent servir que de guides et
     //       n'ont pas à être capturées
@@ -1123,12 +1125,12 @@ var
     OutEE.oHN             := 0.00;
     // centerline
     OutEE.PosExtr0   := EE.PosStation;
-    OutEE.PosStation.setFrom(DX, DY, DZ);
+    OutEE.PosStation := DC; //.setFrom(DX, DY, DZ);
     // habillage
     OutEE.PosOPG := EE.PosStation;
     OutEE.PosOPD := EE.PosStation;
-    OutEE.PosPG.setFrom(DX, DY, DZ);
-    OutEE.PosPD.setFrom(DX, DY, DZ);
+    OutEE.PosPG := DC; //.setFrom(DX, DY, DZ);
+    OutEE.PosPD := DC; //.setFrom(DX, DY, DZ);
     // couleur par défaut
     OutEE.CouleurDegrade:= FPalette256.GetColorByIndex(MyExpe.IdxCouleur); //clGray ;
     // commentaires

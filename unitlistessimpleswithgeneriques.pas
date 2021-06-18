@@ -492,17 +492,19 @@ var
   end;
   function VecMinFloat3D(const A, B: TViseeAntenneFound): TViseeAntenneFound;
   begin
-    Result.dx := A.dx - B.dx;
-    Result.dy := A.dy - B.dy;
-    Result.dz := A.dz - B.dz;
+    Result.Position.setFrom(A.Position.X - B.Position.X,
+                            A.Position.Y - B.Position.Y,
+                            A.Position.Z - B.Position.Z);
   end;
   function DotProdFloat3D(const A, B: TViseeAntenneFound): double; inline;  // Dotproduct = A * B
   begin
-    Result := A.dx * B.dx + A.dy * B.dy + A.dz * B.dz;
+    Result := A.Position.x * B.Position.x + A.Position.y * B.Position.y + A.Position.z * B.Position.z;
+
   end;
   function NormSquaredFloat3D(const A: TViseeAntenneFound): double; inline;  // Square of the norm |A|
   begin
-    Result := A.dx * A.dx + A.dy * A.dy + A.dz * A.dz;
+    Result := sqr(A.Position.x) + sqr(A.Position.y) + sqr(A.Position.z);
+
   end;
   function DistSquaredFloat3D(const A, B: TViseeAntenneFound): double;  inline;  // Square of the distance from A to B
   begin
@@ -586,9 +588,9 @@ var
           except
             B := 0; // in case CU = 0
           end;
-          PB.dx := P0.dx + B * U.dx;
-          PB.dy := P0.dy + B * U.dy;
-          PB.dz := P0.dz + B * U.dz;
+          PB.Position.setFrom(P0.Position.x + B * U.Position.x,
+                              P0.Position.y + B * U.Position.y,
+                              P0.Position.z + B * U.Position.z);
           DV2 := DistSquaredFloat3D(ArrAntennesFound[ii], PB);
         end;
       end;
@@ -670,9 +672,7 @@ begin
     for i := 0 to NbAntennesFound - 1 do
     begin
       EWE := ArrAntennesFound[i];
-      EWE.DX := 0.00;
-      EWE.DY := 0.00;
-      EWE.DZ := 0.00;
+      EWE.Position.Empty();
       EWE.DP := 0.00;
 
       MyVisee.IDSecteur       := 0; // VA.Secteur; // TODO: Secteur à implémenter
@@ -689,8 +689,8 @@ begin
       MyVisee.IDTerrainStation := '';
       MyVisee.TypeVisee        := tgVISEE_RADIANTE;
 
-      CalculerVisee(MyVisee, QCode, QExpe, EWE.DX, EWE.DY, EWE.DZ, EWE.DP);
-      EWE.AzimutAbsolu := AZ0 + ArcTan2(EWE.dy, EWE.dx);
+      CalculerVisee(MyVisee, QCode, QExpe, EWE.Position, EWE.DP);
+      EWE.AzimutAbsolu := AZ0 + ArcTan2(EWE.Position.y, EWE.Position.x);
       ArrAntennesFound[i] := EWE; // et on met à jour
     end;
     // tri des shots par azimut
@@ -744,9 +744,9 @@ begin
                              FormatterNombreOOo(EWE.VA.Longueur, 3),
                              FormatterNombreOOo(EWE.VA.Azimut, 3),
                              FormatterNombreOOo(EWE.VA.Pente, 3),
-                             FormatterNombreOOo(EWE.DX, 3),
-                             FormatterNombreOOo(EWE.dy, 3),
-                             FormatterNombreOOo(EWE.dz, 3)]));  //*)
+                             FormatterNombreOOo(EWE.Position.X, 3),
+                             FormatterNombreOOo(EWE.Position.y, 3),
+                             FormatterNombreOOo(EWE.Position.z, 3)]));  //*)
     //**********************************************************
     end;
     QDispMsgErr(Format('Etape %d: %s', [6,  'Purge']));

@@ -342,7 +342,11 @@ type TModeRepresentationGaleries = (rgENTRANCES, rgRESEAUX, rgSECTEURS, rgSEANCE
 type TBDDEntitesFindViseeOrEntrance =  (tpVISEES, tpENTRANCES);
 type TBDDEntitesFindTablesAParcourir = set of TBDDEntitesFindViseeOrEntrance;
 // attributs de texte
-type TTexteAttributs = record
+type
+
+{ TTexteAttributs }
+
+ TTexteAttributs = record
   StyleName    : string;
   FontName     : string;
   FontColor    : TColor;
@@ -351,6 +355,13 @@ type TTexteAttributs = record
   HauteurTexte : double;
   Alignement   : byte;  // position du texte; cf organisation d'un clavier numérique pour le point d'accrochage
   AngleRot     : integer;
+  procedure setFrom(const QStyleName, QFontName: string;
+                    const QFontColor, QBackColor : TColor;
+                    const QFontStyle: TFontStyles;
+                    const QHauteurTexte: double;
+                    const QAlignement: byte;  // position du texte; cf organisation d'un clavier numérique pour le point d'accrochage
+                    const QAngleRot: integer);
+  procedure setDefault();
 end;
 
 
@@ -629,14 +640,18 @@ type
 
    function toString(): string;
 end;
-type TViseeAntenneFound = record
-  Idx : Int64;
-  VA  : TViseeAntenne;
-  dx  : double;
-  dy  : double;
-  dz  : double;
-  dp  : double;
+type
+
+{ TViseeAntenneFound }
+
+ TViseeAntenneFound = record
+  Idx      : Int64;
+  VA       : TViseeAntenne;
+  Position : TPoint3Df;
+  dp       : double;
   AzimutAbsolu: double;
+  procedure setFrom(const QIdx: Int64; const QVA: TViseeAntenne; const QPosition : TPoint3Df; const Qdp : double; const QAzimutAbsolu: double);
+
 end;
 
 type TArrayOfTViseeAntenne = array of TViseeAntenneFound;
@@ -1279,6 +1294,36 @@ implementation
 uses
   {$INCLUDE SelectionLangues.inc} // insère les unités en fonction de la langue
   Common;
+
+{ TTexteAttributs }
+
+procedure TTexteAttributs.setFrom(const QStyleName, QFontName: string; const QFontColor, QBackColor: TColor; const QFontStyle: TFontStyles; const QHauteurTexte: double; const QAlignement: byte; const QAngleRot: integer);
+begin
+  self.StyleName    := QStyleName;
+  self.FontName     := QFontName;
+  self.FontColor    := QFontColor;
+  self.BackColor    := QBackColor;
+  self.FontStyle    := QFontStyle;
+  self.HauteurTexte := QHauteurTexte;
+  self.Alignement   := QAlignement;  // position du texte; cf organisation d'un clavier numérique pour le point d'accrochage
+  self.AngleRot     := QAngleRot;
+end;
+
+procedure TTexteAttributs.setDefault();
+begin
+  setFrom('Style0', DEFAULT_FONT_NAME, clBlack, clWhite, [], 1.25, 0, 0);
+end;
+
+{ TViseeAntenneFound }
+
+procedure TViseeAntenneFound.setFrom(const QIdx: Int64; const QVA: TViseeAntenne; const QPosition: TPoint3Df; const Qdp: double; const QAzimutAbsolu: double);
+begin
+  self.Idx      := QIdx;
+  self.VA       := QVA;
+  self.Position := QPosition;
+  self.dp       := Qdp;
+  self.AzimutAbsolu := QAzimutAbsolu;
+end;
 
 { TParamFoncCorrectionAngulaire }
 

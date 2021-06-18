@@ -1422,7 +1422,8 @@ function TGHTopoContext2DA.AjouterUneViseeALaSerieCourante(const QTypeVisee: TTy
                                                            const QIDLitteral, QCommentaire: string;
                                                            const DoRefreshPlan: boolean): boolean;
 var
-  QX, QY, QZ, QP: double;
+  QPt0: TPoint3Df;
+  QP: double;
   CC: TCode;
   QInternalIdxserie, NbVisees: integer;
   MySerie: TObjSerie;
@@ -1465,9 +1466,10 @@ begin
     MySerie.AddVisee(VS);                                                         // on ajoute la visée:
     MySerie.SetSeriePtArr(MySerie.GetNumeroDeSerie(), MySerie.GetNbVisees() - 1); // et on met à jour l'objet MySerie:
     // Pour éviter de devoir recalculer tout le réseau, on crée une nouvelle entité dans FBDDEntites;
-    QX := 0.00; QY := 0.00; QZ := 0.00; QP := 0.00;
-    CalculerVisee(VS, CC, EE, QX, QY, QZ, QP);
-    MyBaseStation := UpdateBaseStationWithOffset(MyBaseStation, QX, QY, QZ);
+    QPt0.Empty();
+    QP := 0.00;
+    CalculerVisee(VS, CC, EE, QPt0, QP);
+    MyBaseStation := UpdateBaseStationWithOffset(MyBaseStation, QPt0.X, QPt0.Y, QPt0.Z);
     MyBaseStation.Entite_Serie   := MySerie.GetNumeroDeSerie();
     MyBaseStation.Entite_Station := MySerie.GetNbVisees() - 1;
     MyBaseStation.IDTerrain      := QIDLitteral;
@@ -1492,7 +1494,8 @@ end;
 
 function TGHTopoContext2DA.AjouterUneAntenneALaStationCourante(const QLongueur, QAzimut, QPente: double; const DoRefreshPlan: boolean): boolean;
 var
-  QX, QY, QZ, QP: double;
+  QPt0: TPoint3Df;
+  QP: double;
   CC: TCode;
   EE: TExpe;
   QNouvelleEntite: TBaseStation;
@@ -1507,14 +1510,15 @@ begin
              FCurrentDistoXNumeroSerie, FCurrentDistoXNumeroStation,
              QLongueur, QAzimut, QPente);
   FDocuTopo.AddViseeAntenne(VA);
-  QX := 0.00; QY := 0.00; QZ := 0.00; QP := 0.00;
+  QPt0.Empty();
+  QP := 0.00;
   VS.setFrom(0, tgVISEE_RADIANTE,
              FCurrentDistoXNumeroSecteur,
              FCurrentDistoXNumeroCode, FCurrentDistoXNumeroExpe,
              QLongueur, QAzimut, QPente,
              0.0, 0.0, 0.0, 0.0, '', '');
-  CalculerVisee(VS, CC, EE, QX, QY, QZ, QP);
-  QNouvelleEntite := UpdateBaseStationWithOffset(FCurrentStation, QX, QY, QZ);
+  CalculerVisee(VS, CC, EE, QPt0, QP);
+  QNouvelleEntite := UpdateBaseStationWithOffset(FCurrentStation, QPt0.X, QPt0.Y, QPt0.Z);
   QNouvelleEntite.Type_Entite    := tgVISEE_RADIANTE;
   QNouvelleEntite.Entite_Serie   := FCurrentDistoXNumeroSerie;
   QNouvelleEntite.Entite_Station := FCurrentDistoXNumeroStation;

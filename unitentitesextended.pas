@@ -2663,7 +2663,8 @@ var
   EX: TExpe;
   EWE: TBaseStation;
   VQ: TUneVisee;
-  dX, dY, dZ, dP: double;
+  dC: TPoint3Df;
+  dP: double;
 begin
   Result := false;
   try
@@ -2702,9 +2703,10 @@ begin
 
 
     // calcul coordonnées
-    CalculerVisee(VQ, CC, EX, dX, dY, dZ, dP);
+    dC.Empty(); // TODO: Revoir ici
+    CalculerVisee(VQ, CC, EX, dC, dP);
     EE.PosExtr0        := EWE.PosStation;
-    EE.PosStation.setFrom(EE.PosExtr0.X + dX, EE.PosExtr0.Y + dY, EE.PosExtr0.Z + dZ);
+    EE.PosStation.setFrom(EE.PosExtr0.X + dC.X, EE.PosExtr0.Y + dC.Y, EE.PosExtr0.Z + dC.Z);
     EE.Type_Entite     := QV.TypeVisee;
     Result := True;
   except

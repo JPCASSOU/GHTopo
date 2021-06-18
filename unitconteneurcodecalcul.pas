@@ -392,23 +392,25 @@ end;
 procedure TConteneurCodeCalcul.ProcessBranche(const NoThread, Idx: integer);
 var
   Branche: TBrancheXYZ;
-  DX, DY, DZ, DP: double;
+  DC: TPoint3Df;
+  DP: double;
   Vs: Integer;
   Visee: TUneVisee;
 begin
   //Branche:= GetBranche(Br);
   Branche:= GetBranche(Idx);
-    DX := 0.0; DY := 0.0; DZ := 0.0; DP := 0.0;
+    DC.Empty();
+    DP := 0.0;
     for Vs := 0 to High(Branche.PointsTopo) do //Branche.PointsTopo.GetNbElements() - 1 do
     begin
       Visee := Branche.PointsTopo[Vs];
       CalculerVisee(Visee,
                     FDocTopo.GetCodeByNumero(Visee.Code),
                     FDocTopo.GetExpeByNumero(Visee.Expe),
-                    DX, DY, DZ, DP);
+                    DC, DP);
       Branche.PointsTopo[Vs] := Visee; ////PutBrStation(Br, Vs, Visee);
     end; //for Vs:=0 to Branche.PointsTopo.Count-1 do begin
-    Branche.Accroissement.setFrom(DX, DY, DZ);
+    Branche.Accroissement := DC; //.setFrom(DX, DY, DZ);
   //PutBranche(Br, Branche);
   PutBranche(Idx, Branche);
 end;

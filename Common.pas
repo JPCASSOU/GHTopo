@@ -100,13 +100,9 @@ function EnsureMakeFilename(const S: TStringDirectoryFilename): TStringDirectory
 
 // makers de structures
 function MakeTPoint(const QX, QY: integer): TPoint;
-//function MakeTPoint2Df(const QX, QY: double): TPoint2Df;
-//function MakeTPoint3Df(const QX, QY, QZ: double): TPoint3Df;
-//function MakeTRect2Df(const QX1, QY1, QX2, QY2: double): TRect2Df;
 function MakeTPointCoupeDeveloppee(const QP, QZ: double): TPointCoupeDeveloppee;
 function MakeTMarker(const D: boolean; const QX, QY: double; const C: TColor; const S: string): TMarker;
 function MakeTIDBaseStation(const S: TNumeroSerie; const P: integer; const IsAntenne: boolean): TIDBaseStation;
-
 
 function MakeTStationMatchFound(const S, P: integer; const M: string): TStationMatchFound;
 
@@ -243,7 +239,8 @@ function GetAzimut(const dx, dy: Double; const Unite: double): double;
 procedure GetBearingInc(const dx, dy, dz: double; var Dist, Az, Inc: double; const fUB, fUC: Double); // Azimut et pente
 procedure CalculerVisee(var MaVisee: TUneVisee;       // calcul d'une visée
                         const CC: TCode; const EE: TExpe;
-                        var AX, AY, AZ, AP: double);
+                        var QCoordsCourantes: TPoint3Df;
+                        var QChainageHZ: double);
 
 
 function GetTypeDeVisee(const T: integer): TTypeDeVisee;          // retourne le type de visé
@@ -1934,16 +1931,14 @@ var
   V1, V2, W: TPoint3Df;
 begin
   // vecteur V1           vecteur V2        vecteur w
-  V1.X := dX1;           V2.X := dX2;         W.X  := 0.0;
-  V1.Y := dY1;           V2.Y := dY2;         W.Y  := 0.0;
-  V1.Z := 0.0;           V2.Z := 0.0;         W.Z  := 1.0;
+  V1.setFrom(dX1, dY1, 0.00);
+  V2.setFrom(dX2, dY2, 0.00);
+  W.setFrom(0, 0, 1);
   // produits vectoriels
   v1 := ProduitVectoriel(v1,w,True);
   v2 := ProduitVectoriel(v2,w,True);
   //composition vectorielle
-  w.x := v1.x + v2.X ;
-  w.y := v1.y + v2.Y;
-  w.z := v1.z + v2.z;
+  w.setFrom(v1.x + v2.X, v1.y + v2.Y, v1.z + v2.z);
   // angles
   Result := ArcTan2(w.y+1e-12, w.x +1e-12);
 end;
@@ -1961,9 +1956,7 @@ begin
   Result := a * 0.50 * Unite / pi;
 end;
 // retourne la longueur, direction et pente pour dx, dy, dz
-procedure GetBearingInc(const dx, dy, dz: double;
-                        var Dist, Az, Inc: double;
-                        const fUB, fUC: Double);
+procedure GetBearingInc(const dx, dy, dz: double;  var Dist, Az, Inc: double; const fUB, fUC: Double);
 var
   dp: Double;
 begin;
@@ -1973,10 +1966,7 @@ begin;
   Az   := GetAzimut(dx,dy, fUB);
 end;
 // calcul des accroissements pour une visée
-procedure CalculerVisee(var MaVisee: TUneVisee;
-                        const CC: TCode;
-                        const EE: TExpe;
-                        var AX, AY, AZ, AP: double);
+procedure CalculerVisee(var MaVisee: TUneVisee;  const CC: TCode; const EE: TExpe; var QCoordsCourantes: TPoint3Df; var QChainageHZ: double);
 const
   TWO_PI = 2*PI;
   PI_SUR_2 = pi / 2;
@@ -2026,17 +2016,13 @@ begin
     end;
     349, 350: begin  // visées inverses en degrés
        UB := TWO_PI / DEGRES_PAR_TOUR;
-       Az1 := CalcAzimutCorrige(MaVisee.Azimut,
-                                DEGRES_PAR_TOUR,
-                                LeCode.ParamsFuncCorrAz);
+       Az1 := CalcAzimutCorrige(MaVisee.Azimut, DEGRES_PAR_TOUR, LeCode.ParamsFuncCorrAz);
        Az1 := Az1 * UB + QDeclinaison * DEG_TO_RAD;
        Az1 := PI+Az1;
     end;
     389, 390: begin // visées inverses en grades
        UB  := TWO_PI / GRADES_PAR_TOUR;
-       Az1 := CalcAzimutCorrige(MaVisee.Azimut,
-                                GRADES_PAR_TOUR,
-                                LeCode.ParamsFuncCorrAz);
+       Az1 := CalcAzimutCorrige(MaVisee.Azimut, GRADES_PAR_TOUR, LeCode.ParamsFuncCorrAz);
        Az1 := Az1 * UB + QDeclinaison * DEG_TO_RAD;
        Az1 := PI+Az1;
     end;
@@ -2106,7 +2092,6 @@ begin
     end;
   else
     begin // zéro horizontal par défault
-      //AfficherMessage('toto');
       UC := TWO_PI / DEGRES_PAR_TOUR;
       Pente1 := (QCorrectionPente + MaVisee.Pente) * UC;
       LP := QLongueurVisee * Cos(Pente1);
@@ -2117,17 +2102,12 @@ begin
   //==============
   RP := Hypot(RX, RY);
   RZ += CC.ErreurTourillon; // On applique in fine la correction de l'erreur de tourillons
-  AX += RX;
-  AY += RY;
-  AZ += RZ;
-  AP += RP;
-  MaVisee.AccroissXYZ.setFrom(RX, RY, RZ);
-  //MaVisee.DeltaX := RX;
-  //MaVisee.DeltaY := RY;
-  //MaVisee.DeltaZ := RZ;
-  //MaVisee.DeltaP := RP;
+  QCoordsCourantes.X += RX;
+  QCoordsCourantes.Y += RY;
+  QCoordsCourantes.Z += RZ;
+  QChainageHZ        += RP;
+   MaVisee.AccroissXYZ.setFrom(RX, RY, RZ);
   MaVisee.AccroissP := RP;
-  //AfficherMessageErreur(Format('%f, %f', [MaVisee.AccroissP, MaVisee.AccroissZ]));
 end;
 function GetTypeDeVisee(const T: integer): TTypeDeVisee;
 begin
