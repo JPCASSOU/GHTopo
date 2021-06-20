@@ -1516,7 +1516,7 @@ begin
              FCurrentDistoXNumeroSecteur,
              FCurrentDistoXNumeroCode, FCurrentDistoXNumeroExpe,
              QLongueur, QAzimut, QPente,
-             0.0, 0.0, 0.0, 0.0, '', '');
+             0.0, 0.0, 0.0, 0.0, Now(), '', '');
   CalculerVisee(VS, CC, EE, QPt0, QP);
   QNouvelleEntite := UpdateBaseStationWithOffset(FCurrentStation, QPt0.X, QPt0.Y, QPt0.Z);
   QNouvelleEntite.Type_Entite    := tgVISEE_RADIANTE;

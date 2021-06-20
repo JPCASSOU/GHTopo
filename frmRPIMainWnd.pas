@@ -351,13 +351,14 @@ begin
   WptCurr := FGraphe.GetStation(FShortestPath.GetNoeud(IdxWpt));
   WptNext := FGraphe.GetStation(FShortestPath.GetNoeud(IdxWpt+1));
   lbNextWpt.Caption := WptNext.ToString();
-  qdx := WptNext.X - WptCurr.X;
-  qdy := WptNext.Y - WptCurr.Y;
-  qdz := WptNext.Z - WptCurr.Z;
+  qdx := WptNext.Position.X - WptCurr.Position.X;
+  qdy := WptNext.Position.Y - WptCurr.Position.Y;
+  qdz := WptNext.Position.Z - WptCurr.Position.Z;
   GetBearingInc(qdx, qdy, qdz, QDist, QAz, QIncl, 360.00, 360.00);
   lbNextWptAzimut.Caption:= format('%.1f°', [QAz]);
   // et on centre la carte sur le point
-  GHTopoContext2DA1.CentrerVueSurPointXY(WptNext.X, WptNext.Y, True, WptNext.ToString());
+  showmessagefmt('Next: %d - %f, %f', [WptNext.IDStation, WptNext.Position.X, WptNext.Position.Y]);
+  GHTopoContext2DA1.CentrerVueSurPointXY(WptNext.Position.X, WptNext.Position.Y, True, WptNext.ToString());
   // sans modifier la station courante
   //  self.SetCurrentStation(QMyBaseStation, True);
 
@@ -393,7 +394,7 @@ begin
   if ((FModeFonctionnementGHTopoContext2D = mfgcNAVIGATION) AND (Nb > 2))then
   begin
     MyNode := FGraphe.GetStation(FShortestPath.GetNoeud(lsbPathRoadMap.ItemIndex));
-    GHTopoContext2DA1.CentrerVueSurPointXY(MyNode.X, MyNode.Y, True, MyNode.ToString());
+    GHTopoContext2DA1.CentrerVueSurPointXY(MyNode.Position.X, MyNode.Position.Y, True, MyNode.ToString());
   end;
 end;
 
@@ -692,6 +693,7 @@ begin
 end;
 
 function TRPIMainWnd.InitialiserGHTopoRPC(): boolean;
+var QPT0: TPoint3Df;
 begin
   Result := false;
   chkModeFonctionnement.Checked  := false;
@@ -732,7 +734,8 @@ begin
     FCurrentSystemeEPSG := FConvertisseurCoordonnees.GetEPSGSystemeFromCodeEPSG(2154);
     FDocumentToporobot.ReInitialiser(True);
     FCroquisTerrain.Initialiser(FBDDEntites,'MyCroquis001.xml');
-    FBDDEntites.Initialiser(MakeTPoint3Df(0,0,0), clAqua, clMaroon);
+    QPT0.Empty();
+    FBDDEntites.Initialiser(QPT0, clAqua, clMaroon);
     FMaillage.Initialiser(FBDDEntites);
     if (Not RestoreLastDocument()) then InitNewDocument();
     Result := True;

@@ -215,6 +215,7 @@ begin
                       ConvertirEnNombreReel(EWE[3],  0.00),
                       ConvertirEnNombreReel(EWE[4],  0.00),
                       0.0, 0.0, 0.0, 0.0,
+                      Now(),
                       '', StringReplace(Trim(EWE[6]), '"', '', [rfReplaceAll]));
       MySerie.AddVisee(MyVisee);
     end;

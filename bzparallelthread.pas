@@ -144,8 +144,8 @@ begin
 end;
 {$ELSE}
 begin
-  //Result := 1;
-  result := sysconf(_SC_NPROCESSORS_ONLN);
+  Result := 1;
+  //result := sysconf(_SC_NPROCESSORS_ONLN);
 end;
 {$ENDIF}
 

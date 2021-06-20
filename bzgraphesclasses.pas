@@ -529,10 +529,7 @@ Var
 begin
   aNode := TBZClassNode.Create(Self, QIDStation, QPosition, QMetaData);
   aNode.IDStation := QIDStation;
-  //aNode.X := QX;
-  //aNode.Y := QY;
-  //aNode.Z := QZ;
-
+  aNode.Position := QPosition;
   Idx := Self.AddNode(aNode);
   aNode.NodeIndex := Idx;
   Result := aNode;

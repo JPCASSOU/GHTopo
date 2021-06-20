@@ -122,6 +122,7 @@ function IIF(const Condition: boolean; const V1, V2: double): double; inline; ov
 function IIF(const Condition: boolean; const V1, V2: TColor): TColor; inline; overload;
 function IIF(const Condition: boolean; const V1, V2: String): String; inline; overload;
 function IIF(const Condition: boolean; const V1, V2: char): char; inline; overload;
+function IIF(const Condition: boolean; const V1, V2: byte): byte; inline; overload;
 
 // check de valeurs; les bornes sont comprises
 function IsInRange(const Value, MinValue, MaxValue: double): Boolean; inline; overload;
@@ -963,6 +964,12 @@ function IIF(const Condition: boolean; const V1, V2: char): char; overload;
 begin
   if (Condition) then Result := V1 else Result := V2;
 end;
+
+function IIF(const Condition: boolean; const V1, V2: byte): byte;
+begin
+  if (Condition) then Result := V1 else Result := V2;
+end;
+
 function IsInRange(const Value, MinValue, MaxValue: double): Boolean; overload;
 begin
   Result := ((Value >= MinValue) and (Value <= MaxValue));
@@ -3042,8 +3049,8 @@ begin
 end;
 {$ELSE}
 begin
-  //Result := 1;
-  result := sysconf(_SC_NPROCESSORS_ONLN);
+  Result := 1;
+  //result := sysconf(_SC_NPROCESSORS_ONLN);
 end;
 {$ENDIF}
 

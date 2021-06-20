@@ -522,7 +522,7 @@ begin
   Result.SensTraceCoupe     := stcdVERS_DROITE;
   SetLength(Result.ArrVisees, 0);
   V.Empty();
-  V.setFrom(0, tgDEFAULT, 0, 0, 0, 0.01, 0.00, -45.00, 0.0, 0.0, 0.0, 0.0, '', '');
+  V.setFrom(0, tgDEFAULT, 0, 0, 0, 0.01, 0.00, -45.00, 0.0, 0.0, 0.0, 0.0, Now(), '', '');
   addViseeAtBranche(Result, V);
 end;
 procedure TCoupeDeveloppee.addViseeAtBranche(var BR: TBrancheCoupeDeveloppeeAsRecord; const V: TUneVisee);

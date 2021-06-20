@@ -21,7 +21,6 @@ uses
   , BGRABitmap
   , BGRABitmapTypes
   , BGRAGradients
-  //, unitUtilsComposants
   ;
 type
 
@@ -119,13 +118,8 @@ type
     procedure DrawCurrentStationTopo(const QCurrentStation: TBaseStation);
     procedure DrawMaillage(const QMaillageDisplayed: boolean; const QIsovaleur: double; const ContourLinesColor: TColor; const ContourLinesOpacity: byte);
 
-    //{$IFDEF GHTOPO_SIMPLIFIE}
     procedure DrawOverlay();
     procedure DrawShortestPath(const FG: TPathFindingGraphe; const FP: TPathBetweenNodes);
-    //{$ENDIF GHTOPO_SIMPLIFIE}
-
-
-
 end;
 
 
@@ -153,7 +147,7 @@ begin
     FModeSelectionListe     := ModeSelectionListe;
     result        := True;
   finally
-
+    pass;
   end;
 end;
 
@@ -280,6 +274,7 @@ var
   PP, PosTXT: TPoint;
   ExTxt: TSize;
   PM : TPoint2Df;
+  cxdiv2, cydiv2: LongInt;
 begin
   PM.setFrom(X, Y);
   if (not FRegionDeDessin.ContainsPoint(PM)) then exit;
@@ -289,15 +284,17 @@ begin
   // 4 5 6
   // 1 2 3
   //   0
+  cxdiv2 := ExTxt.cx div 2;
+  cydiv2 := ExTxt.cy div 2;
   case Alignement of
-    0,1: PosTXT := MakeTPoint(PP.X, PP.Y - ExTxt.cy);
-    2  : PosTXT := MakeTPoint(PP.X - ExTxt.cx div 2, PP.Y - ExTxt.cy);
-    3  : PosTXT := MakeTPoint(PP.X - ExTxt.cx, PP.Y - ExTxt.cy);
-    4  : PosTXT := MakeTPoint(PP.X, PP.Y - ExTxt.cy div 2);
-    5  : PosTXT := MakeTPoint(PP.X - ExTxt.cx div 2, PP.Y - ExTxt.cy div 2);
-    6  : PosTXT := MakeTPoint(PP.X - ExTxt.cx, PP.Y - ExTxt.cy div 2);
-    7  : PosTXT := MakeTPoint(PP.X, PP.Y);
-    8  : PosTXT := MakeTPoint(PP.X - ExTxt.cx div 2, PP.Y);
+    0,1: PosTXT := MakeTPoint(PP.X                  , PP.Y - ExTxt.cy);
+    2  : PosTXT := MakeTPoint(PP.X - cxdiv2     , PP.Y - ExTxt.cy);
+    3  : PosTXT := MakeTPoint(PP.X - ExTxt.cx   , PP.Y - ExTxt.cy);
+    4  : PosTXT := MakeTPoint(PP.X              , PP.Y - cydiv2);
+    5  : PosTXT := MakeTPoint(PP.X - cxdiv2     , PP.Y - cydiv2);
+    6  : PosTXT := MakeTPoint(PP.X - ExTxt.cx   , PP.Y - cydiv2);
+    7  : PosTXT := MakeTPoint(PP.X              , PP.Y);
+    8  : PosTXT := MakeTPoint(PP.X - cxdiv2     , PP.Y);
     9  : PosTXT := MakeTPoint(PP.X - ExTxt.cx, PP.Y);
   else
     PosTXT := MakeTPoint(PP.X, PP.Y - ExTxt.cy);
@@ -368,13 +365,11 @@ end;
 
 procedure TGHTopoDrawingContext.EndDrawing();
 begin
+  pass;
   //DrawPipistrelle(self);
 end;
 // définir crayons, brosse et fontes
-procedure TGHTopoDrawingContext.DefineCrayon(const qStyle: TPenStyle;
-                                             const qWidth: integer;
-                                             const qColor: TColor;
-                                             const qOpacity: byte);
+procedure TGHTopoDrawingContext.DefineCrayon(const qStyle: TPenStyle; const qWidth: integer; const qColor: TColor; const qOpacity: byte);
 begin
   FOldPenStyle    := self.CanvasBGRA.Pen.Style;
   FOldPenColor    := self.CanvasBGRA.Pen.Color;
@@ -402,9 +397,7 @@ begin
 end;
 
 
-procedure TGHTopoDrawingContext.DefineBrosse(const qStyle: TBrushStyle;
-                                             const qColor: TColor;
-                                             const qOpacity: byte);
+procedure TGHTopoDrawingContext.DefineBrosse(const qStyle: TBrushStyle; const qColor: TColor; const qOpacity: byte);
 begin
   FOldBrushStyle    := self.CanvasBGRA.Brush.Style;
   FOldBrushColor    := self.CanvasBGRA.Brush.Color;
@@ -837,7 +830,7 @@ var
       aSerie, aStation: TIDBaseStation;
     begin
       Result   := MyAnnotation.Texte;
-      aSerie   := MyAnnotation.Position.IDBaseStation div NB_MAXI_SERIES_PAR_CAVITE;
+      aSerie   :=  MyAnnotation.Position.IDBaseStation div NB_MAXI_SERIES_PAR_CAVITE;
       aStation := (MyAnnotation.Position.IDBaseStation mod NB_MAXI_SERIES_PAR_CAVITE) div 10;
       P1.Empty();
       FBDDEntites.CalcCoordinatesFromBasePtAndOffset(MyAnnotation.Position.IDBaseStation, P1, EWE);
@@ -846,7 +839,6 @@ var
     end;
   begin
     try
-
       if (FBDDEntites.CalcCoordinatesFromBasePtAndOffset(MyAnnotation.Position.IDBaseStation, MyAnnotation.Position.Offset, PM)) then
       begin
         if (not FRegionDeDessin.ContainsPoint(PM)) then Exit;

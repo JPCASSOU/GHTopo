@@ -406,6 +406,10 @@ resourcestring
     rsCDR_SERIE_COL_HZ                       = 'Haut';
     rsCDR_SERIE_COL_HN                       = 'Bas';
     rsCDR_SERIE_COL_COMMENTAIRE              = 'Commentaire';
+    rsCDR_SERIE_COL_HORODATE                 = 'Horodatage';
+    rsCDR_SERIE_COL_TEMPERATURE              = 'Température';
+    rsCDR_SERIE_COL_HUMIDITY                 = 'Humidité';
+
   rsCDR_SERIE_UNDOCOPY_CODE_EXPE             = 'Affecter code et séance à partir de cette ligne';
   rsCDR_SERIE_LOCKED                         = 'Verrouillé';
   rsCDR_SERIE_NBLINES                        = 'Nombre de lignes';

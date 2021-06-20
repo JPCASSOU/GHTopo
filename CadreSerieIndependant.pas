@@ -221,59 +221,25 @@ implementation
 uses
   DGCDummyUnit;
 const
+  GRD_STATIONS_NB_COLONNES   = 17;
   WDTH_COL_0         = 64;
-  {$IFDEF GROS_MINET}
-     NUM_COL_SECTEUR   = 0;
-     NUM_COL_IDTERRAIN = 1;
-     NUM_COL_TYPEGAL   = 2;
-     WDTH_COL_SECTEUR  = 2;
-  {$ELSE}
-     NUM_COL_IDTERRAIN = 1;
-     NUM_COL_SECTEUR   = 2;
-     NUM_COL_TYPEGAL   = 3;
-     {$IFNDEF RASPBERRY_PI}
-     WDTH_COL_IDTERRAIN = 2;
-     WDTH_COL_SECTEUR   = 2;
-     WDTH_COL_TYPE      = 20;
-     {$ELSE}
-     WDTH_COL_IDTERRAIN = 100;
-     WDTH_COL_SECTEUR   = 60;
-     WDTH_COL_TYPE      = 20;
-     {$ENDIF RASPBERRY_PI}
-  {$ENDIF}
-  NUM_COL_CODE = 1 + NUM_COL_TYPEGAL;
-  NUM_COL_EXPE = 1 + NUM_COL_CODE;
-  NUM_COL_L    = 1 + NUM_COL_EXPE;
-  NUM_COL_A    = 2 + NUM_COL_EXPE;
-  NUM_COL_P    = 3 + NUM_COL_EXPE;
-  NUM_COL_LG   = 4 + NUM_COL_EXPE;
-  NUM_COL_LD   = 5 + NUM_COL_EXPE;
-  NUM_COL_HZ   = 6 + NUM_COL_EXPE;
-  NUM_COL_HN   = 7 + NUM_COL_EXPE;
-  NUM_COL_OBS  = 8 + NUM_COL_EXPE;
-  NUM_COL_HORODATE = 1 + NUM_COL_OBS;
-  NUM_COL_TRAME    = 1 + NUM_COL_HORODATE;
-
-
-
-
-
-
-
-  WDTH_COL_CODE = 36;
-  WDTH_COL_EXPE = WDTH_COL_CODE;
-  WDTH_COL_L    = 68;
-  WDTH_COL_AZ   = 60;
-  WDTH_COL_P    = 60;
   WDTH_COL_LRUD = 50;
-  WDTH_COL_LG = WDTH_COL_LRUD;
-  WDTH_COL_LD = WDTH_COL_LRUD;
-  WDTH_COL_HZ = WDTH_COL_LRUD;
-  WDTH_COL_HN = WDTH_COL_LRUD;
-
-  WDTH_COL_OBS = 320;
-  WDTH_COL_HORODATE = 200;
-  WDTH_COL_TRAME    = 320;
+  NUM_COL_IDTERRAIN   = 1;      WDTH_COL_IDTERRAIN   = 100;
+  NUM_COL_SECTEUR     = 2;      WDTH_COL_SECTEUR     = 50;
+  NUM_COL_TYPEVISEE   = 3;      WDTH_COL_TYPEVISEE   = 20;
+  NUM_COL_CODE        = 4;      WDTH_COL_CODE        = 36;
+  NUM_COL_EXPE        = 5;      WDTH_COL_EXPE        = WDTH_COL_CODE;
+  NUM_COL_L           = 6;      WDTH_COL_L           = 68;
+  NUM_COL_A           = 7;      WDTH_COL_AZ          = 60;
+  NUM_COL_P           = 8;      WDTH_COL_P           = 60;
+  NUM_COL_LG          = 9;      WDTH_COL_LG          = WDTH_COL_LRUD;
+  NUM_COL_LD          = 10;     WDTH_COL_LD          = WDTH_COL_LRUD;
+  NUM_COL_HZ          = 11;     WDTH_COL_HZ          = WDTH_COL_LRUD;
+  NUM_COL_HN          = 12;     WDTH_COL_HN          = WDTH_COL_LRUD;
+  NUM_COL_OBS         = 13;     WDTH_COL_OBS         = 300;
+  NUM_COL_HORODATE    = 14;     WDTH_COL_HORODATE    = 200;
+  NUM_COL_TEMPERATURE = 15;     WDTH_COL_TEMPERATURE = 50;
+  NUM_COL_HUMIDITY    = 16;     WDTH_COL_HUMIDITY    = 50;
 
 {$R *.lfm}
 // Un TToporobotStructure2012 est indispensable pour l'appel
@@ -415,14 +381,10 @@ end;
 
 procedure TCdrSerieIndependant.InitCadre();
 const
-
-  GRD_STATIONS_NB_COLONNES   = {$IFDEF GROS_MINET}13 {$ELSE} 14 {$ENDIF};
-  LARGEUR_COLONNES_SECTEUR   = {$IFDEF GROS_MINET} 0 {$ELSE} 60 {$ENDIF};
+  LARGEUR_COLONNES_SECTEUR   = 30;
   NB_LINES = 500;
 var
   i: integer;
-  cc: integer;
-  WU: integer;
   EWE, QCurrPosImg: integer;
   QNumeroDeSerie: TNumeroSerie;
   procedure MiouMiou(const Miou: boolean);
@@ -447,19 +409,14 @@ begin
   AfficherEnteteComplet(True);
   pnlErreursACorriger.Top := 0;
   grdStations.ColCount := GRD_STATIONS_NB_COLONNES;
-  {$IFDEF GROS_MINET}
-    MiouMiou(false);
-    acChooseSecteur.Enabled   := false;
-  {$ELSE}
-    MiouMiou(true);
-    acChooseSecteur.Enabled   := True;
-  {$ENDIF}
+  MiouMiou(true);
+  acChooseSecteur.Enabled   := True;
   pnlErreursACorriger.top := 0;
   grdStations.FixedRows := 1;
   grdStations.Cells[0                   , 0] := GetResourceString(rsCDR_SERIE_COL_POINT);
   grdStations.Cells[NUM_COL_IDTERRAIN   , 0] := GetResourceString(rsCDR_SERIE_COL_ID_TERRAIN);
   grdStations.Cells[NUM_COL_SECTEUR     , 0] := GetResourceString(rsCDR_SERIE_COL_SECTEUR);
-  grdStations.Cells[NUM_COL_TYPEGAL     , 0] := GetResourceString(rsCDR_SERIE_COL_TYPE);
+  grdStations.Cells[NUM_COL_TYPEVISEE   , 0] := GetResourceString(rsCDR_SERIE_COL_TYPE);
   grdStations.Cells[NUM_COL_CODE        , 0] := GetResourceString(rsCDR_SERIE_COL_CODE);
   grdStations.Cells[NUM_COL_EXPE        , 0] := GetResourceString(rsCDR_SERIE_COL_EXPE);
 
@@ -471,37 +428,43 @@ begin
   grdStations.Cells[NUM_COL_LD          , 0] := GetResourceString(rsCDR_SERIE_COL_LD);
   grdStations.Cells[NUM_COL_HZ          , 0] := GetResourceString(rsCDR_SERIE_COL_HZ);
   grdStations.Cells[NUM_COL_HN          , 0] := GetResourceString(rsCDR_SERIE_COL_HN);
+
   grdStations.Cells[NUM_COL_OBS         , 0] := GetResourceString(rsCDR_SERIE_COL_COMMENTAIRE);
+
+  grdStations.Cells[NUM_COL_HORODATE    , 0] := GetResourceString(rsCDR_SERIE_COL_HORODATE);
+  grdStations.Cells[NUM_COL_TEMPERATURE , 0] := GetResourceString(rsCDR_SERIE_COL_TEMPERATURE);
+  grdStations.Cells[NUM_COL_HUMIDITY    , 0] := GetResourceString(rsCDR_SERIE_COL_HUMIDITY);
+
   with grdStations do
   begin
     cmbChance.ItemIndex := 0;
     cmbObstacle.ItemIndex := 0;
     RowCount := 1 + NB_LINES;
     EWE := FCurrentSerie.GetNbVisees;
-    cc := 0;
     ColWidths[0] := WDTH_COL_0;
-    ColWidths[NUM_COL_IDTERRAIN] := WDTH_COL_IDTERRAIN;
+    ColWidths[NUM_COL_IDTERRAIN]   := WDTH_COL_IDTERRAIN;
+    ColWidths[NUM_COL_SECTEUR]     := WDTH_COL_SECTEUR;
+    ColWidths[NUM_COL_TYPEVISEE]   := WDTH_COL_TYPEVISEE;
 
-    ColWidths[NUM_COL_SECTEUR]   := WDTH_COL_SECTEUR; //60
-    ColWidths[NUM_COL_CODE]      := WDTH_COL_CODE;
-    ColWidths[NUM_COL_EXPE]      := WDTH_COL_EXPE;
-    ColWidths[NUM_COL_TYPEGAL]   := WDTH_COL_TYPE;
-    ColWidths[NUM_COL_L]         := WDTH_COL_L;
-    ColWidths[NUM_COL_A]         := WDTH_COL_AZ;
-    ColWidths[NUM_COL_P]         := WDTH_COL_P;
+    ColWidths[NUM_COL_CODE]        := WDTH_COL_CODE;
+    ColWidths[NUM_COL_EXPE]        := WDTH_COL_EXPE;
+
+    ColWidths[NUM_COL_L]           := WDTH_COL_L;
+    ColWidths[NUM_COL_A]           := WDTH_COL_AZ;
+    ColWidths[NUM_COL_P]           := WDTH_COL_P;
+
     for i := NUM_COL_LG to NUM_COL_HN     do ColWidths[i] := WDTH_COL_LRUD;
-    for i := 0 to NUM_COL_OBS - 1         do cc := cc + ColWidths[i];
-    ColWidths[NUM_COL_OBS] := WDTH_COL_OBS;
+
+    ColWidths[NUM_COL_OBS]         := WDTH_COL_OBS;
+    ColWidths[NUM_COL_HORODATE]    := WDTH_COL_HORODATE;
+    ColWidths[NUM_COL_TEMPERATURE] := WDTH_COL_TEMPERATURE;
+    ColWidths[NUM_COL_HUMIDITY]    := WDTH_COL_HUMIDITY;
+
+
+
     // [MODIF_ENTETE_TABLEUR]
     QNumeroDeSerie := FCurrentSerie.GetNumeroDeSerie();
     for i := 1 to RowCount - 1 do Cells[0, i] := Format(FMTSERST, [QNumeroDeSerie, i]);
-    WU := grdStations.Left + grdStations.GridLineWidth * 2;
-
-    WU := WU + grdStations.ColWidths[0] + 1;
-    WU := WU + grdStations.ColWidths[1] + 1;
-    WU := WU + grdStations.ColWidths[2] + 1;
-    WU := WU + grdStations.ColWidths[3] + 1;
-    WU := WU + grdStations.ColWidths[4] + 1;
 
     // Sous Delphi, utiliser l'option goAlwaysShowEditor
     Options := [goEditing,
@@ -591,25 +554,28 @@ begin
   begin
     V := FCurrentSerie.GetVisee(i);
     try
-      grdStations.Cells[NUM_COL_IDTERRAIN , i] := V.IDTerrainStation;
-      {$IFDEF GROS_MINET}
-        ;
-      {$ELSE}
-        grdStations.Cells[NUM_COL_SECTEUR   , i] := Format(FORMAT_NB_INTEGER, [V.IDSecteur]);
-      {$ENDIF}
+      grdStations.Cells[NUM_COL_IDTERRAIN   , i] := V.IDTerrainStation;
+      grdStations.Cells[NUM_COL_SECTEUR     , i] := Format(FORMAT_NB_INTEGER, [V.IDSecteur]);
+      grdStations.Cells[NUM_COL_TYPEVISEE   , i] := format(FORMAT_NB_INTEGER, [Ord(V.TypeVisee)]);
 
-      grdStations.Cells[NUM_COL_TYPEGAL   , i] := format(FORMAT_NB_INTEGER, [Ord(V.TypeVisee)]);
-      grdStations.Cells[NUM_COL_CODE      , i] := format(FORMAT_NB_INTEGER, [V.Code]);
-      grdStations.Cells[NUM_COL_EXPE      , i] := format(FORMAT_NB_INTEGER, [V.Expe]);
-      grdStations.Cells[NUM_COL_L         , i] := format(FORMAT_NB_REAL_3_DEC, [V.Longueur]);
-      grdStations.Cells[NUM_COL_A         , i] := format(FORMAT_NB_REAL_3_DEC, [V.Azimut]);
-      grdStations.Cells[NUM_COL_P         , i] := format(FORMAT_NB_REAL_3_DEC, [V.Pente]);
+      grdStations.Cells[NUM_COL_CODE        , i] := format(FORMAT_NB_INTEGER, [V.Code]);
+      grdStations.Cells[NUM_COL_EXPE        , i] := format(FORMAT_NB_INTEGER, [V.Expe]);
 
-      grdStations.Cells[NUM_COL_LG        , i] := format(FORMAT_NB_REAL_3_DEC, [V.LG]);
-      grdStations.Cells[NUM_COL_LD        , i] := format(FORMAT_NB_REAL_3_DEC, [V.LD]);
-      grdStations.Cells[NUM_COL_HZ        , i] := format(FORMAT_NB_REAL_3_DEC, [V.HZ]);
-      grdStations.Cells[NUM_COL_HN        , i] := format(FORMAT_NB_REAL_3_DEC, [V.HN]);
-      grdStations.Cells[NUM_COL_OBS       , i] := _AnsiToLCLStr(V.Commentaires);
+      grdStations.Cells[NUM_COL_L           , i] := format(FORMAT_NB_REAL_3_DEC, [V.Longueur]);
+      grdStations.Cells[NUM_COL_A           , i] := format(FORMAT_NB_REAL_3_DEC, [V.Azimut]);
+      grdStations.Cells[NUM_COL_P           , i] := format(FORMAT_NB_REAL_3_DEC, [V.Pente]);
+
+      grdStations.Cells[NUM_COL_LG          , i] := format(FORMAT_NB_REAL_3_DEC, [V.LG]);
+      grdStations.Cells[NUM_COL_LD          , i] := format(FORMAT_NB_REAL_3_DEC, [V.LD]);
+      grdStations.Cells[NUM_COL_HZ          , i] := format(FORMAT_NB_REAL_3_DEC, [V.HZ]);
+      grdStations.Cells[NUM_COL_HN          , i] := format(FORMAT_NB_REAL_3_DEC, [V.HN]);
+
+      grdStations.Cells[NUM_COL_OBS         , i] := _AnsiToLCLStr(V.Commentaires);
+      grdStations.Cells[NUM_COL_HORODATE    , i] := DateTimePascalToDateTimeSQL(V.Horodatage);
+
+      grdStations.Cells[NUM_COL_TEMPERATURE , i] := format(FORMAT_NB_REAL_3_DEC, [V.Temperature]);
+      grdStations.Cells[NUM_COL_HUMIDITY    , i] := format(FORMAT_NB_REAL_3_DEC, [V.Humidity]);
+
     except
     end;
   end;
@@ -695,7 +661,7 @@ begin
         SR  := FDocuToporobot.GetSecteur(EWE);
         HintText := Format('Secteur %d: %s', [EWE, SR.NomSecteur]);
       end;
-    NUM_COL_TYPEGAL:
+    NUM_COL_TYPEVISEE:
       begin
         HintText := GetDescTypeVisee(TTypeDeVisee(EWE));
       end;
@@ -741,7 +707,7 @@ begin
         WU := MiouMiou(WU);
         grdStations.Cells[NUM_COL_SECTEUR, grdStations.Row] := Format(FORMAT_NB_INTEGER, [WU]);
       end;
-    NUM_COL_TYPEGAL:
+    NUM_COL_TYPEVISEE:
       begin
         (*
         QQ := grdStations.Left;
@@ -838,7 +804,7 @@ begin
           Row := Row + 1;
           Cells[NUM_COL_IDTERRAIN , Row] := IncrementString(Cells[NUM_COL_IDTERRAIN, Row - 1]);
           Cells[NUM_COL_SECTEUR   , Row] := Cells[NUM_COL_SECTEUR, Row-1];
-          Cells[NUM_COL_TYPEGAL   , Row] := Cells[NUM_COL_TYPEGAL, Row - 1]; // type visée
+          Cells[NUM_COL_TYPEVISEE , Row] := Cells[NUM_COL_TYPEVISEE, Row - 1]; // type visée
           Cells[NUM_COL_CODE      , Row] := Cells[NUM_COL_CODE, Row - 1];      // code
           Cells[NUM_COL_EXPE      , Row] := Cells[NUM_COL_EXPE, Row - 1];      // expé
           Col := NUM_COL_EXPE;
@@ -858,14 +824,13 @@ var
 begin
   SC := grdStations.Selection;
   NbCellsSelected := (1 + SC.Right - SC.Left) * (1 + SC.Bottom - SC.Top); // ne pas afficher si sélection de plusieurs cellules
-  if ((aRow > 0) and (aCol = NUM_COL_TYPEGAL) and (1 = NbCellsSelected)) then
+  if ((aRow > 0) and (aCol = NUM_COL_TYPEVISEE) and (1 = NbCellsSelected)) then
   begin
     R := grdStations.CellRect(aCol, aRow);
     R.Left   := R.Left + grdStations.Left;
     R.Right  := R.Right + grdStations.Left;
     R.Top    := R.Top + grdStations.Top;
     R.Bottom := R.Bottom + grdStations.Top;
-
    end;
    CanSelect := True;
 end;
@@ -1291,10 +1256,10 @@ procedure TCdrSerieIndependant.ConfigurerGrdPopUp(const NumColonne: integer);
 begin
   mnuChooseReseauSecteurCodeExpe.Visible := True;
   case grdStations.Col of
-    NUM_COL_SECTEUR: mnuChooseReseauSecteurCodeExpe.Action := acChooseSecteur;
-    NUM_COL_TYPEGAL: mnuChooseReseauSecteurCodeExpe.Action := acChooseTypeVisee;
-    NUM_COL_CODE   : mnuChooseReseauSecteurCodeExpe.Action := acChooseCode;
-    NUM_COL_EXPE   : mnuChooseReseauSecteurCodeExpe.Action := acChooseExpe;
+    NUM_COL_SECTEUR    : mnuChooseReseauSecteurCodeExpe.Action := acChooseSecteur;
+    NUM_COL_TYPEVISEE  : mnuChooseReseauSecteurCodeExpe.Action := acChooseTypeVisee;
+    NUM_COL_CODE       : mnuChooseReseauSecteurCodeExpe.Action := acChooseCode;
+    NUM_COL_EXPE       : mnuChooseReseauSecteurCodeExpe.Action := acChooseExpe;
   else
     begin
       mnuChooseReseauSecteurCodeExpe.Action := nil;
@@ -1364,16 +1329,12 @@ var
 
     // TODO: entrées
     // TODO: réseaux
-    {$IFDEF GROS_MINET} // secteurs non supportés dans ce mode
-      pass;
-    {$ELSE}
-      n := FDocuToporobot.GetNbSecteurs();
-      if (not IsInRange(Ord(AStation.IDSecteur), 0, n - 1)) then AddMsgErreur(i, NUM_COL_SECTEUR, Format(rsCDR_SERIES_MSG_ERROR_NONEXISTENT_SECTEUR, [AStation.IDSecteur, 0, n - 1]));
-    {$ENDIF}
+    n := FDocuToporobot.GetNbSecteurs();
+    if (not IsInRange(Ord(AStation.IDSecteur), 0, n - 1)) then AddMsgErreur(i, NUM_COL_SECTEUR, Format(rsCDR_SERIES_MSG_ERROR_NONEXISTENT_SECTEUR, [AStation.IDSecteur, 0, n - 1]));
 
     //if (not FDocuToporobot.ExistsIdxSecteur(AStation.IDSecteur)) then AddMsgErreur(i, NUM_COL_SECTEUR, Format(rsCDR_SERIES_MSG_ERROR_NONEXISTENT_SECTEUR, [AStation.IDSecteur]));
     // type de visée
-    if (not IsInRange(Ord(AStation.TypeVisee), 0, 10)) then AddMsgErreur(i, NUM_COL_TYPEGAL, Format(rsCDR_SERIES_MSG_ERROR_INVALID_TYPE_VISEE, [AStation.TypeVisee, 0, 10]));
+    if (not IsInRange(Ord(AStation.TypeVisee), 0, 10)) then AddMsgErreur(i, NUM_COL_TYPEVISEE, Format(rsCDR_SERIES_MSG_ERROR_INVALID_TYPE_VISEE, [AStation.TypeVisee, 0, 10]));
     // longueur, ne doit pas dépasser 160 m
     AMin := 0.00; AMax := SEUIL_LONGUEUR_MAXI_TOPOROBOT;
     if (not IsInRange(AStation.Longueur, AMin, AMax)) then AddMsgErreur(i, NUM_COL_L, Format(rsCDR_SERIES_MSG_ERROR_INVALID_LONGUEUR, [AStation.Longueur, AMin, AMax]));
@@ -1478,13 +1439,8 @@ begin
     begin
       if (IsEmptyRow(i)) then Break;
       V.IDTerrainStation := FormatterIDTerrainStation(grdStations.Cells[NUM_COL_IDTERRAIN, i]);
-
-      {$IFDEF GROS_MINET}      // **** Dans le mode Gros Minet, les secteurs sont perdus !!! ***
-      V.IDSecteur := 0;
-      {$ELSE}
       V.IDSecteur        := StrToIntDef(grdStations.Cells[NUM_COL_SECTEUR, i], 0);
-      {$ENDIF}
-      V.TypeVisee        := GetTypeDeVisee(StrToIntDef(grdStations.Cells[NUM_COL_TYPEGAL, i], 0));
+      V.TypeVisee        := GetTypeDeVisee(StrToIntDef(grdStations.Cells[NUM_COL_TYPEVISEE, i], 0));
       V.Code             := StrToIntDef(grdStations.Cells[NUM_COL_CODE, i], 1);
       V.Expe             := StrToIntDef(grdStations.Cells[NUM_COL_EXPE, i], 1);
       V.Longueur         := ConvertirEnNombreReel(grdStations.Cells[NUM_COL_L, i], 0.00);
@@ -1495,6 +1451,9 @@ begin
       V.HZ               := ConvertirEnNombreReel(grdStations.Cells[NUM_COL_HZ, i], 0.00);
       V.HN               := ConvertirEnNombreReel(grdStations.Cells[NUM_COL_HN, i], 0.00);
       V.Commentaires     := _LCLStrToAnsi(Trim(grdStations.Cells[NUM_COL_OBS, i]));
+      V.Horodatage       := DateTimeSQLToDateTimePascal(grdStations.Cells[NUM_COL_HORODATE, i]);
+      V.Temperature      := ConvertirEnNombreReel(grdStations.Cells[NUM_COL_TEMPERATURE, i], 0.00);
+      V.Humidity         := ConvertirEnNombreReel(grdStations.Cells[NUM_COL_HUMIDITY   , i], 0.00);
       CheckAStation(V);
       FCurrentSerie.AddVisee(V);
     end;

@@ -583,7 +583,11 @@ end;
 type TSensTraceCoupeDev = (stcdVERS_DROITE, stcdVERS_GAUCHE);
 // visées
 // TODO: Fusionnet TUneVisee et TUneStation
-type TUneVisee = record
+type
+
+{ TUneVisee }
+
+ TUneVisee = record
     NoVisee   : integer; // Indispensable pour les branches et les antennes             //
     TypeVisee : TTypeDeVisee;                                                           //   TypeVisee           : TTypeDeVisee;
     IDSecteur : TNumeroSecteur;                                                         //   stSecteur           : TNumeroSecteur;
@@ -596,11 +600,15 @@ type TUneVisee = record
     LG        : double;                                                                 //   LG                  : double;
     HZ        : double;                                                                 //   HZ                  : double;
     HN        : double;                                                                 //   HN                  : double;
+    // Données supplémentaires enregistrées par le nouvel appareil BRIC4 https://www.caveexploration.org/gear/bric4
+    Horodatage : TDateTime;
+    Temperature: double;
+    Humidity   : double;
     IDTerrainStation: string;                                                           //   IDTerrainStation    : string;
     Commentaires    : string;                                                           //   Commentaire         : string;
-    AccroissXYZ: TPoint3Df;                                                           //
-    AccroissP  : double;                                                                 //
-    //AccroissZ : double;                                                                 // PtArrivee           : integer;    //        'Arrivée visée
+    AccroissXYZ: TPoint3Df;                                                             //
+    AccroissP  : double;                                                                //
+    //AccroissZ : double;                                                               // PtArrivee           : integer;    //        'Arrivée visée
     procedure setFrom(const QNoVisee          : integer;
                       const QTypeVisee        : TTypeDeVisee;
                       const QIdSecteur        : TNumeroSecteur;
@@ -608,8 +616,13 @@ type TUneVisee = record
                       const QExpe             : TNumeroExpe;
                       const QL, QAz, QP       : double;
                       const QLG, QLD, QHZ, QHN: double;
+                      const QHorodatage       : TDateTime;
                       const QIDStation        : string = '';
-                      const QCommentaire      : string = '');
+                      const QCommentaire      : string = '';
+                      const QTemperature      : double = 0.00;
+                      const QHumidity         : double = 0.00);
+
+
     procedure Empty(const Commentaire: string = '');
 end;
 // visées en antenne
@@ -1583,8 +1596,14 @@ procedure TUneVisee.setFrom(const QNoVisee: integer;
                             const QCode: TNumeroCode; const QExpe: TNumeroExpe;
                             const QL, QAz, QP: double;
                             const QLG, QLD, QHZ, QHN: double;
-                            const QIDStation: string; const QCommentaire: string);
+                            const QHorodatage       : TDateTime;
+                            const QIDStation        : string = '';
+                            const QCommentaire      : string = '';
+                            const QTemperature      : double = 0.00;
+                            const QHumidity         : double = 0.00);
+
 begin
+  self.Horodatage:= QHorodatage;
   self.NoVisee   := QNoVisee;
   self.TypeVisee := QTypeVisee;
   self.IDSecteur := QIdSecteur;
@@ -1598,17 +1617,28 @@ begin
   self.LD        := QLD;
   self.HZ        := QHZ;
   self.HN        := QHN;
+
   self.IDTerrainStation  := QIDStation;
   self.Commentaires      := QCommentaire;
   self.AccroissXYZ.Empty();
   self.AccroissP := 0.00;
   //self.AccroissZ := 0.00;
+  self.Temperature       := QTemperature;
+  self.Humidity          := QHumidity;
+  self.Horodatage        := QHorodatage;
+
 end;
 
 procedure TUneVisee.Empty(const Commentaire: string = '');
 begin
-  self.setFrom(0, tgDEFAULT, 0, 1, 1, 0.001, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, '', Commentaire);
+  self.setFrom(0, tgDEFAULT, 0, 1, 1,
+               0.001, 0.00, 0.00,
+               0.00, 0.00, 0.00, 0.00,
+               Now(),
+               '', Commentaire);
 end;
+
+
 
 { TExpe }
 

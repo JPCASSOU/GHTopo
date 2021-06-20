@@ -114,6 +114,7 @@ type
     FCurrentSerieAssigned: boolean;
 
 
+    procedure DefineTypesAndRecords();
     procedure DisplayHelpForProc(const MyProc: TPSRegProc);
 
     // vers la console
@@ -423,20 +424,22 @@ begin
     FBDDEntites := QBDDEntites;
     FMyMaillage := QMaillage;
   {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
+  DefineTypesAndRecords(); // TODO Ici ou dans RecenserAdditionalProcs() ?;
   PSScriptDebugger1.Compile;
   PSScriptDebugger1.ClearBreakPoints;
   InitCaptions();
   result := true;
 end;
+procedure TCdrPascalScript.DefineTypesAndRecords();
+begin
+  //PSScriptDebugger1.Comp.;
+end;
+
 procedure TCdrPascalScript.RecenserAdditionalProcs(Sender: TPSScriptDebugger);
 var
   EWE: String;
 begin
- // sender.Defines.Clear;
-  //sender.Defines.Add('TGHStringArray = array[0 .. 63] of string');
-
-
-
+  DefineTypesAndRecords(); // TODO Ici ou dans Initialise() ?;
   sender.AddFunction(@pass                     , 'procedure pass;');
   sender.AddFunction(@GetGHTopoVersion         , 'function GetGHTopoVersion(): string;');
   sender.AddFunction(@GetGHTopoDirectory       , 'function GetGHTopoDirectory(): string');
@@ -444,8 +447,6 @@ begin
   sender.AddFunction(@ExtractFileExt           , 'function ExtractFileExt(const FileName: string): string;');
   sender.AddFunction(@ExtractFileName          , 'function ExtractFileName(const FileName: string): string;');
   sender.AddFunction(@GetGUID                  , 'function GetGUID(): string;');
-
-  //sender.AddFunction(@split                    , 'function Split(const MyStr: string; const Sep: char): TGHStringArray;');
 
   sender.AddFunction(@Format                   , 'function format(Const Fmt : String; const Args : Array of const) : String;');
   sender.AddFunction(@Format                   , 'function sprintf(Const Fmt : String; const Args : Array of const) : String;');
@@ -550,8 +551,6 @@ begin
     sender.AddMethod(FDocuTopo, @TToporobotStructure2012.GetNbAntennes               , 'function  GetNbAntennes(): integer;');
     sender.AddMethod(FDocuTopo, @TToporobotStructure2012.CheckerLesDonneesTopo       , 'procedure CheckerLesDonneesTopo();');
 
-
-
     sender.AddMethod(self     , @TCdrPascalScript.DT_GetNbreStationsOfSerieByIdx     , 'function  GetNbStationsOfSerieByIdx(const Idx: integer): integer;');
     sender.AddMethod(self     , @TCdrPascalScript.DT_GetNbreStationsOfSerieByNoSerie , 'function  GetNbStationsOfSerieByNoSerie(const NumeroSerie: integer): integer;');
     sender.AddMethod(self     , @TCdrPascalScript.DT_GetNumeroEtNomDeSerieByIdx      , 'function DT_GetNumeroEtNomDeSerieByIdx(const Idx: integer; out QNumSerie: integer; out QNomSerie: string; out QNbVisees: integer): boolean;');
@@ -574,7 +573,6 @@ begin
 
     // BDD entités
     sender.AddMethod(self     , @TCdrPascalScript.BDE_ExtractCoordsFromSerSt         , 'function  BDE_ExtractCoordsFromSerSt(const QSerie, QStation: integer; out QX, QY, QZ: double): boolean;');
-
 
     // fiches PDF de stations
     sender.AddMethod(self     , @TCdrPascalScript.BeginListeFichesStations           , 'function  BeginListeFichesStations(): boolean;');
@@ -599,10 +597,10 @@ begin
   // QRCode
   sender.AddMethod(self       , @TCdrPascalScript.QRCode_Generate                    , 'procedure QRCode_Generate(const ImgWidth: integer; const QFilenamePNG: string; const QTextToEncode: string);');
   // display graphisme
-  sender.AddMethod(self     , @TCdrPascalScript.PS2D_BeginDrawing                  , 'function  PS2D_BeginDrawing(const w, h: integer): boolean;');
-  sender.AddMethod(self     , @TCdrPascalScript.PS2D_EndAndDisplayDrawing          , 'procedure PS2D_EndAndDisplayDrawing();');
+  sender.AddMethod(self       , @TCdrPascalScript.PS2D_BeginDrawing                  , 'function  PS2D_BeginDrawing(const w, h: integer): boolean;');
+  sender.AddMethod(self       , @TCdrPascalScript.PS2D_EndAndDisplayDrawing          , 'procedure PS2D_EndAndDisplayDrawing();');
 
-  sender.AddMethod(self     , @TCdrPascalScript.PS2D_SetBackgroundColor            , 'procedure PS2D_SetBackgroundColor(const R, G, B, A: byte);');
+  sender.AddMethod(self       , @TCdrPascalScript.PS2D_SetBackgroundColor            , 'procedure PS2D_SetBackgroundColor(const R, G, B, A: byte);');
   EWE := 'function  PS2D_AddStyleSheet(const QStylename: string; ' +
          'const QPenColorR, QPenColorG, QPenColorB, QPenOpacity: byte; const QPenWidtdhInPX: byte;' +
          'const QBshColorR, QBshColorG, QBshColorB, QBshOpacity: byte; const QBshStyle: byte;' +

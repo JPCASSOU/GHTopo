@@ -54,6 +54,7 @@ type
     FLastError: TGrapheLastError;
     FAfficherGraphe      : TProcOjObject;
 
+
     function SetLastError(const QErrCode: integer; const QErrMsg: string): boolean;
   private
     function   Reset(): boolean;
@@ -78,6 +79,7 @@ type
     function  FormatterTIDStation(const QId: TIDStation): string;
     procedure ListerLesNoeuds(const Caption: string; const DoDisplayDependances: boolean = false);
     // Les noeuds
+    procedure DisplaySommetsGraphe();
     procedure  BeginNodeList();  // initialise la liste des noeuds
       // QSerie et QStation forment le label du sommet au format '%d.%d'
     procedure  AddStation(const QSerie, QStation: integer; const QPosition: TPoint3Df; const QMetaData: string);
@@ -321,6 +323,23 @@ begin
     end;
   end;
 end;
+procedure TPathFindingGraphe.DisplaySommetsGraphe();
+var
+  Nb, i: Integer;
+  ST: TBZClassNode;
+  QSR: TNumeroSerie;
+  QST: TNumeroStation;
+begin
+  Nb := GetNbStations();
+  AfficherMessageErreur(Format('%s.DisplaySommetsGraphe(%d)', [classname, Nb]));
+  if (0 = Nb) then exit;
+  for i := 0 to nb - 1 do
+  begin
+    ST := self.GetStation(i);
+    ExtractSerStFromTIDStation(ST.IDStation, QSR, QST);
+    AfficherMessageErreur(format('%d: %d.%d %.2f, %.2f', [i, QSR, QST, ST.Position.X, ST.Position.Y]));
+  end;
+end;
 
 function TPathFindingGraphe.ConstruireGraphe(): boolean;
 var
@@ -429,7 +448,10 @@ begin
         self.AddArcBetweenStations(QSer0, QPt0, QSer1, QPt1);
       end;
     end;
-    Result := True;
+
+  // contrôle
+  //DisplaySommetsGraphe();
+  Result := True;
 end;
 
 function TPathFindingGraphe.GetNbStations(): integer;

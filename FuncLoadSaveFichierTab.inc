@@ -359,6 +359,10 @@ var
                  blaireau    := StrToIntDef(PrmsLn[13], 0);
                  qVisee.TypeVisee   := GetTypeDeVisee(blaireau); // galerie fossile supposée
                  qVisee.IDSecteur   := StrToIntDef(PrmsLn[14], 0);
+                 // Certains appareils collectent des données supplémentaires: GHTopo les supporte
+                 qVisee.Horodatage  := DateTimeSQLToDateTimePascal(PrmsLn[15]);
+                 qVisee.Temperature := ConvertirEnNombreReel(PrmsLn[16], 0.00);
+                 qVisee.Humidity    := ConvertirEnNombreReel(PrmsLn[17], 0.00);
                  UneSerie.AddVisee(qVisee);
                end;
              end   // if Prefix2
@@ -790,12 +794,14 @@ begin
         end;
         for St := 0 to Serie.GetNbVisees - 1 do
         begin
-          Station:=Serie.GetVisee(St);
-          with Station do begin
+          Station := Serie.GetVisee(St);
+          with Station do
+          begin
             case ModeSaveTAB of
               mtabEXTENDEDTAB:
               begin
-                WrtLn(Format(LINE_STATION + TAB + FORMAT_STRING + TAB + FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER,
+                WrtLn(Format(LINE_STATION + TAB + FORMAT_STRING + TAB + FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER +
+                             TAB + FORMAT_STRING + TAB + FORMAT_NB_REAL_3_DEC + TAB + FORMAT_NB_REAL_3_DEC,
                                 [Serie.GetNumeroDeSerie(), St,
                                  Code, Expe,
                                  Longueur, Azimut, Pente,
@@ -803,7 +809,9 @@ begin
                                  Commentaires,
                                  IDTerrainStation,
                                  TypeVisee,
-                                 IDSecteur
+                                 IDSecteur,
+                                 DateTimePascalToDateTimeSQL(Now()), //Horodatage,
+                                 Temperature, Humidity
                                 ]));
               end;
               mtabTOPOROBOT:
@@ -817,7 +825,7 @@ begin
                                 ]));
               end;
             end;
-          end;
+          end; //  with Station do begin
         end;
       end;
     end;

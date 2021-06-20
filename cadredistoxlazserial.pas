@@ -88,36 +88,25 @@ const
 
   INVALID_HANDLE_VALUE = THandle(-1);
 
-  DISTOX_COMMAND_EXTINCTION              = 52;  // $34: extinction du Disto
-  DISTOX_COMMAND_READ_MEMORY_AT_ADDRESS  = 56;  // $38: b111000 ; conflict with measure trigging command
+  DISTOX_COMMAND_EXTINCTION              : byte = 52;  // $34: extinction du Disto
+  DISTOX_COMMAND_READ_MEMORY_AT_ADDRESS  : byte = 56;  // $38: b111000 ; conflict with measure trigging command
 
-  DISTOX_COMMAND_MODE_CALIBRATION_ON     = 49;  // $30: b110001:
-  DISTOX_COMMAND_MODE_CALIBRATION_OFF    = 48;  // $31: b110000:
-  DISTOX_COMMAND_LASER_ON                = 54;  // $36: b110110: Laser ON
-  DISTOX_COMMAND_LASER_OFF               = 55;  // $37: b110111: Laser OFF
-  DISTOX_COMMAND_SCAN_CONTINU_ON         = 54;  // en attente TODO: Valeurs a confirmer
-  DISTOX_COMMAND_SCAN_CONTINU_OFF        = 55;  // en attente
+  DISTOX_COMMAND_MODE_CALIBRATION_ON     : byte = 49;  // $30: b110001:
+  DISTOX_COMMAND_MODE_CALIBRATION_OFF    : byte = 48;  // $31: b110000:
+  DISTOX_COMMAND_LASER_ON                : byte = 54;  // $36: b110110: Laser ON
+  DISTOX_COMMAND_LASER_OFF               : byte = 55;  // $37: b110111: Laser OFF
+  DISTOX_COMMAND_SCAN_CONTINU_ON         : byte = 54;  // en attente TODO: Valeurs a confirmer
+  DISTOX_COMMAND_SCAN_CONTINU_OFF        : byte = 55;  // en attente
   ///!\ Le mode Silencieux ne transmet pas les données
   //DISTOX_COMMAND_BEEP_ON                = $33;  // $33: Silent ON  = à ne pas utiliser
   //DISTOX_COMMAND_BEEP_OFF               = $32;  // $33: Silent OFF
-  DISTOX_COMMAND_TRIG_DATA_SHOT          =  56;  // $38: lecture d'une visée;    conflict with measure trigging command
-  DISTOX_COMMAND_BOOTLOADER_READ_DATA_AT_ADDRESS =  58;  // $38: b111010 ;
+  DISTOX_COMMAND_TRIG_DATA_SHOT          : byte =  56;  // $38: lecture d'une visée;    conflict with measure trigging command
+  DISTOX_COMMAND_BOOTLOADER_READ_DATA_AT_ADDRESS : byte =  58;  // $38: b111010 ;
 
 const NB_MESURES_ACQUISES_POUR_UNE_VISEE = 3;
 
-type TBufferOf8Bytes        = array[0..7] of byte;
+type TBufferOf8Bytes        = array[0..7]   of byte;
 type TBufferBootLoaderBlock = array[0..263] of byte;
-
-type TMesureDistoXATraiter = record
-  Longueur: double;
-  Azimut  : double;
-  Pente   : double;
-  dx      : double;
-  dy      : double;
-  dp      : double;
-  dz      : double;
-end;
-
 
 
 type
@@ -203,15 +192,14 @@ type
     function  MakeBackupLine(const M: TMesureViseeDistoX): string;
     function  DistoX_Acknowledge(const QTypeData: byte): boolean;
     function  DistoX_LireEtDecoderBuffer8Bytes(out MyOP: byte;
-                                              out MyMesureVisee: TMesureViseeDistoX;
-                                              out MyVectorData, MyGCalibrationData, MyMCalibrationData: TVectorDataDistoX): boolean;
+                                               out MyMesureVisee: TMesureViseeDistoX;
+                                               out MyVectorData, MyGCalibrationData, MyMCalibrationData: TVectorDataDistoX): boolean;
     function  DistoX_SendReadCommandAtAddress(const QCmd: byte; const QAddress: word): boolean;
     function  DistoX_ReadBufferOf8BytesAtAddress(const QAddress: word; out MyBuffer: TBufferOf8Bytes): boolean;
     procedure ReceptionnerEtTraiterVisee(const M: TMesureViseeDistoX);
 
     procedure SendBytes(const Bytes: array of Byte);
     procedure SendText(const S: string);
-
 
     procedure SetModeCalibrationOnOff(const b: boolean);
     procedure SetDistoXScanContinuous(const b: boolean);
@@ -223,9 +211,7 @@ type
     // =========================================================================
   private
     // Station courante
-    //FCurrentSerie : TNumeroSerie;
-    //FCurrentPoint : Integer;
-     // Liste des mesures DistoX
+    // Liste des mesures DistoX
     FListeMesuresTopoDistoX: TListeMesuresTopoDistoX;
     // Nom du fichier backup
     FBackUpMesuresFileName: string;
@@ -1025,7 +1011,10 @@ begin
 end;
 
 procedure TCdrDistoXLazserial.SetModeCalibrationOnOff(const b: boolean);
+var
+  EWE: byte;
 begin
+  EWE := IIF(b, DISTOX_COMMAND_MODE_CALIBRATION_ON, DISTOX_COMMAND_MODE_CALIBRATION_OFF);
   if (b) then LazSerial1.SynSer.SendByte(DISTOX_COMMAND_MODE_CALIBRATION_ON)
          else LazSerial1.SynSer.SendByte(DISTOX_COMMAND_MODE_CALIBRATION_OFF);
 end;

@@ -100,20 +100,24 @@ const
       GTX_ATTR_SERIE_COLOR    = 'Color';
       GTX_KEY_STATIONS        = 'Stations';
         GTX_KEY_VISEE         = 'Shot';
-          GTX_ATTR_VISEE_ID   = 'ID';
-          GTX_ATTR_VISEE_LBL  = 'Label';
-          GTX_ATTR_VISEE_SECTEUR = GTX_KEY_SECTEUR;
-          GTX_ATTR_VISEE_TYPE = 'TypeShot';
-          GTX_ATTR_VISEE_CODE = GTX_KEY_CODE;
-          GTX_ATTR_VISEE_EXPE = GTX_KEY_EXPE;
-          GTX_ATTR_VISEE_LONG = 'Length';
-          GTX_ATTR_VISEE_AZ   = 'Az';
-          GTX_ATTR_VISEE_P    = 'Incl';
-          GTX_ATTR_VISEE_LG   = 'Left';
-          GTX_ATTR_VISEE_LD   = 'Right';
-          GTX_ATTR_VISEE_HZ   = 'Up';
-          GTX_ATTR_VISEE_HN   = 'Down';
-          GTX_ATTR_VISEE_OBS  = 'Comments';
+          GTX_ATTR_VISEE_HORODATE    = 'Horodate';
+          GTX_ATTR_VISEE_TEMPERATURE = 'Temperature';
+          GTX_ATTR_VISEE_HUMIDITE    = 'Humidity';
+          GTX_ATTR_VISEE_ID          = 'ID';
+          GTX_ATTR_VISEE_LBL         = 'Label';
+          GTX_ATTR_VISEE_SECTEUR     = GTX_KEY_SECTEUR;
+          GTX_ATTR_VISEE_TYPE        = 'TypeShot';
+          GTX_ATTR_VISEE_CODE        = GTX_KEY_CODE;
+          GTX_ATTR_VISEE_EXPE        = GTX_KEY_EXPE;
+          GTX_ATTR_VISEE_LONG        = 'Length';
+          GTX_ATTR_VISEE_AZ          = 'Az';
+          GTX_ATTR_VISEE_P           = 'Incl';
+          GTX_ATTR_VISEE_LG          = 'Left';
+          GTX_ATTR_VISEE_LD          = 'Right';
+          GTX_ATTR_VISEE_HZ          = 'Up';
+          GTX_ATTR_VISEE_HN          = 'Down';
+          GTX_ATTR_VISEE_OBS         = 'Comments';
+
 
   GTX_KEY_SECTION_ANTENNAS    = 'AntennaShots';
     GTX_KEY_ANTENNA_SHOT      = 'AntennaShot';
@@ -471,6 +475,9 @@ begin
 
                 UneVisee.Commentaires     := ExtractStringOfNode(WOK, GTX_ATTR_VISEE_OBS);
 
+                UneVisee.Horodatage       := DateTimeSQLToDateTimePascal(ExtractStringOfNode(WOK, GTX_ATTR_VISEE_HORODATE));
+                UneVisee.Temperature      := ExtractRealOfNode(WOK, GTX_ATTR_VISEE_TEMPERATURE, 0.00);
+                UneVisee.Humidity         := ExtractRealOfNode(WOK, GTX_ATTR_VISEE_HUMIDITE   , 0.00);
                 UneSerie.AddVisee(UneVisee);
               except
               end;
@@ -757,6 +764,10 @@ begin
             SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_HZ      , Format(FORMAT_NB_REAL_3_DEC, [ST.HZ]));                     // HZ        : double;
             SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_HN      , Format(FORMAT_NB_REAL_3_DEC, [ST.HN]));                     // HN        : double;
             SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_OBS     , PasStrToXMLStr(ST.Commentaires));                             // Commentaires    : string;
+            SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_HORODATE   , DateTimePascalToDateTimeSQL(ST.Horodatage));
+            //SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_HORODATE   , DateTimePascalToDateTimeSQL(ST.Horodatage));
+            SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_TEMPERATURE, Format(FORMAT_NB_REAL_3_DEC, [ST.Temperature]));
+            SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_HUMIDITE   , Format(FORMAT_NB_REAL_3_DEC, [ST.Humidity]));
           SubSubSection.AppendChild(SubSubSubSection);
         end;
       end;
