@@ -4,12 +4,13 @@
     <PathDelim Value="\"/>
     <Version Value="11"/>
     <BuildModes Active="Default"/>
-    <Units Count="114">
+    <Units Count="135">
       <Unit0>
         <Filename Value="GHTopoRPI.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="44"/>
-        <CursorPos Y="28"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="45"/>
+        <CursorPos Y="15"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -20,11 +21,10 @@
         <ComponentName Value="RPIMainWnd"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <TopLine Value="1444"/>
-        <CursorPos X="31" Y="1466"/>
+        <TopLine Value="754"/>
+        <CursorPos X="78" Y="807"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit1>
       <Unit2>
@@ -57,11 +57,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="CadreListeViseesEnAntenne"/>
-        <EditorIndex Value="28"/>
-        <TopLine Value="338"/>
-        <CursorPos X="81" Y="360"/>
+        <EditorIndex Value="10"/>
+        <TopLine Value="159"/>
+        <CursorPos X="108" Y="173"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit4>
       <Unit5>
@@ -78,9 +79,7 @@
         <ComponentName Value="dlgClavierNumerique"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="41"/>
-        <TopLine Value="56"/>
-        <CursorPos X="146" Y="81"/>
+        <EditorIndex Value="44"/>
         <UsageCount Value="202"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -93,10 +92,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="CadreRoseDiagramme"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="119"/>
-        <CursorPos X="104" Y="65"/>
+        <EditorIndex Value="30"/>
+        <TopLine Value="121"/>
+        <CursorPos X="55" Y="145"/>
         <UsageCount Value="201"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit7>
       <Unit8>
@@ -106,10 +106,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="CadreDepthDiagramme"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="137"/>
-        <CursorPos X="29" Y="139"/>
+        <EditorIndex Value="31"/>
+        <TopLine Value="179"/>
+        <CursorPos X="78" Y="209"/>
         <UsageCount Value="201"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit8>
       <Unit9>
@@ -139,6 +140,37 @@
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit10>
       <Unit11>
+        <Filename Value="processutils.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="100"/>
+        <CursorPos X="30" Y="45"/>
+        <UsageCount Value="89"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="unitautocompletionspeleo.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="unitAutoCompletionSpeleo"/>
+        <EditorIndex Value="43"/>
+        <TopLine Value="32"/>
+        <CursorPos X="74" Y="57"/>
+        <UsageCount Value="87"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="unitlistemesurestopodistox.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="unitListeMesuresTopoDistoX"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="17"/>
+        <CursorPos X="14" Y="44"/>
+        <UsageCount Value="37"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit13>
+      <Unit14>
         <Filename Value="cadredrawinggcscontext.pas"/>
         <ComponentName Value="CdrDrawingContextGCS"/>
         <HasResources Value="True"/>
@@ -146,57 +178,56 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="1163"/>
         <CursorPos Y="1188"/>
-        <UsageCount Value="140"/>
+        <UsageCount Value="134"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit11>
-      <Unit12>
+      </Unit14>
+      <Unit15>
         <Filename Value="cadrecalculette.pas"/>
         <UnitName Value="CadreCalculette"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="12"/>
-        <CursorPos X="15" Y="31"/>
-        <UsageCount Value="71"/>
+        <EditorIndex Value="29"/>
+        <TopLine Value="1522"/>
+        <CursorPos Y="1549"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit12>
-      <Unit13>
+      </Unit15>
+      <Unit16>
         <Filename Value="frmJournal.pas"/>
         <ComponentName Value="dlgProcessing"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="50" Y="8"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="40"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit13>
-      <Unit14>
+      </Unit16>
+      <Unit17>
         <Filename Value="CompilationParameters.inc"/>
-        <EditorIndex Value="24"/>
-        <TopLine Value="29"/>
+        <EditorIndex Value="47"/>
+        <TopLine Value="50"/>
         <CursorPos X="3" Y="76"/>
         <UsageCount Value="108"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit14>
-      <Unit15>
+      </Unit17>
+      <Unit18>
         <Filename Value="CallDialogsStdVersion.pas"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="36"/>
-        <TopLine Value="746"/>
-        <CursorPos X="21" Y="774"/>
+        <EditorIndex Value="37"/>
+        <TopLine Value="748"/>
+        <CursorPos X="21" Y="775"/>
         <UsageCount Value="101"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit15>
-      <Unit16>
+      </Unit18>
+      <Unit19>
         <Filename Value="unitclassemaillage.pas"/>
         <UnitName Value="UnitClasseMaillage"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="-1"/>
         <CursorPos X="16" Y="29"/>
-        <UsageCount Value="84"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="78"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit16>
-      <Unit17>
+      </Unit19>
+      <Unit20>
         <Filename Value="dlghelpsystem.pas"/>
         <ComponentName Value="frmHelpSystem"/>
         <HasResources Value="True"/>
@@ -205,147 +236,137 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="150"/>
         <CursorPos X="96" Y="172"/>
-        <UsageCount Value="25"/>
+        <UsageCount Value="19"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit17>
-      <Unit18>
+      </Unit20>
+      <Unit21>
         <Filename Value="cadrevue3dopenglext.pas"/>
         <ComponentName Value="CdrVue3DOpenGLExt"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="CadreVue3DOpenGLExt"/>
-        <EditorIndex Value="29"/>
-        <TopLine Value="8"/>
-        <CursorPos X="91" Y="40"/>
-        <UsageCount Value="68"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="27" Y="3"/>
+        <UsageCount Value="78"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit18>
-      <Unit19>
+      </Unit21>
+      <Unit22>
         <Filename Value="cadreeditseriesflatmode.pas"/>
         <ComponentName Value="CdrEditSeriesModeFlat"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="CadreEditSeriesFlatMode"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="70"/>
+        <UsageCount Value="64"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit19>
-      <Unit20>
+      </Unit22>
+      <Unit23>
         <Filename Value="cadreghtopocontext2d.pas"/>
         <ComponentName Value="GHTopoContext2DA"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="CadreGHTopoContext2D"/>
-        <EditorIndex Value="15"/>
-        <TopLine Value="242"/>
-        <CursorPos X="82" Y="247"/>
+        <EditorIndex Value="8"/>
+        <TopLine Value="517"/>
+        <CursorPos X="72" Y="540"/>
         <UsageCount Value="101"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit20>
-      <Unit21>
+      </Unit23>
+      <Unit24>
         <Filename Value="UnitMessages_fr.pas"/>
-        <EditorIndex Value="21"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="1275"/>
         <CursorPos X="84" Y="1294"/>
-        <UsageCount Value="101"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="95"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit21>
-      <Unit22>
+      </Unit24>
+      <Unit25>
         <Filename Value="unitconteneurcodecalcul.pas"/>
         <UnitName Value="unitConteneurCodeCalcul"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="15"/>
-        <CursorPos X="108" Y="43"/>
-        <UsageCount Value="85"/>
+        <EditorIndex Value="18"/>
+        <TopLine Value="341"/>
+        <CursorPos X="78" Y="366"/>
+        <UsageCount Value="91"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit22>
-      <Unit23>
+      </Unit25>
+      <Unit26>
         <Filename Value="StructuresDonnees.pas"/>
-        <EditorIndex Value="35"/>
-        <TopLine Value="696"/>
-        <CursorPos X="111" Y="721"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="1288"/>
+        <CursorPos X="34" Y="1315"/>
         <UsageCount Value="102"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit23>
-      <Unit24>
+      </Unit26>
+      <Unit27>
         <Filename Value="cadrenavigateurseries.pas"/>
         <ComponentName Value="CdrNavigateurSeries"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="cadreNavigateurSeries"/>
-        <EditorIndex Value="-1"/>
+        <EditorIndex Value="11"/>
         <TopLine Value="176"/>
-        <CursorPos X="16" Y="181"/>
-        <UsageCount Value="31"/>
+        <CursorPos X="8" Y="208"/>
+        <UsageCount Value="55"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit24>
-      <Unit25>
+      </Unit27>
+      <Unit28>
         <Filename Value="toporobotclasses2012.pas"/>
         <UnitName Value="ToporobotClasses2012"/>
-        <EditorIndex Value="23"/>
-        <TopLine Value="133"/>
-        <CursorPos X="3" Y="137"/>
-        <UsageCount Value="100"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="337"/>
+        <CursorPos X="37" Y="358"/>
+        <UsageCount Value="101"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit25>
-      <Unit26>
+      </Unit28>
+      <Unit29>
         <Filename Value="Common.pas"/>
-        <EditorIndex Value="30"/>
-        <TopLine Value="95"/>
-        <CursorPos X="65" Y="125"/>
-        <UsageCount Value="100"/>
+        <EditorIndex Value="16"/>
+        <TopLine Value="52"/>
+        <CursorPos X="11" Y="78"/>
+        <UsageCount Value="101"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit26>
-      <Unit27>
+      </Unit29>
+      <Unit30>
         <Filename Value="cadrelistessimples.pas"/>
         <ComponentName Value="CdrListesSimples"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="CadreListesSimples"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="124"/>
-        <CursorPos X="96" Y="147"/>
-        <UsageCount Value="71"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit27>
-      <Unit28>
-        <Filename Value="unitentitesextended.pas"/>
-        <UnitName Value="UnitEntitesExtended"/>
-        <EditorIndex Value="14"/>
-        <TopLine Value="219"/>
-        <CursorPos X="37" Y="235"/>
-        <UsageCount Value="100"/>
+        <EditorIndex Value="9"/>
+        <TopLine Value="1302"/>
+        <CursorPos X="150" Y="1314"/>
+        <UsageCount Value="95"/>
         <Loaded Value="True"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit28>
-      <Unit29>
-        <Filename Value="unitlistessimpleswithgeneriques.pas"/>
-        <UnitName Value="UnitListesSimplesWithGeneriques"/>
-        <EditorIndex Value="-1"/>
-        <UsageCount Value="70"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit29>
-      <Unit30>
-        <Filename Value="dlgSelectDansListes.pas"/>
-        <ComponentName Value="dlgSelectElement"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="366"/>
-        <CursorPos X="104" Y="401"/>
-        <UsageCount Value="5"/>
+        <LoadedDesigner Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit30>
       <Unit31>
+        <Filename Value="unitentitesextended.pas"/>
+        <UnitName Value="UnitEntitesExtended"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="219"/>
+        <CursorPos X="37" Y="235"/>
+        <UsageCount Value="94"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit31>
+      <Unit32>
+        <Filename Value="unitlistessimpleswithgeneriques.pas"/>
+        <UnitName Value="UnitListesSimplesWithGeneriques"/>
+        <EditorIndex Value="7"/>
+        <TopLine Value="272"/>
+        <CursorPos X="32" Y="299"/>
+        <UsageCount Value="81"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit32>
+      <Unit33>
         <Filename Value="cadrevue3dext.pas"/>
         <ComponentName Value="CdrVue3DExt"/>
         <HasResources Value="True"/>
@@ -354,58 +375,49 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="166"/>
         <CursorPos X="55" Y="174"/>
-        <UsageCount Value="42"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit31>
-      <Unit32>
-        <Filename Value="CadreExpe.pas"/>
-        <ComponentName Value="CdrExpe"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Frame"/>
-        <EditorIndex Value="-1"/>
-        <UsageCount Value="4"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit32>
-      <Unit33>
-        <Filename Value="codecalcultopo.pas"/>
-        <UnitName Value="CodeCalculTopo"/>
-        <EditorIndex Value="37"/>
-        <TopLine Value="616"/>
-        <CursorPos X="102" Y="632"/>
-        <UsageCount Value="76"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="36"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit33>
       <Unit34>
+        <Filename Value="codecalcultopo.pas"/>
+        <UnitName Value="CodeCalculTopo"/>
+        <EditorIndex Value="46"/>
+        <TopLine Value="1087"/>
+        <CursorPos Y="1105"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit34>
+      <Unit35>
         <Filename Value="unitutilscomposants.pas"/>
         <UnitName Value="unitUtilsComposants"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="288"/>
         <CursorPos X="120" Y="293"/>
-        <UsageCount Value="123"/>
+        <UsageCount Value="117"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit34>
-      <Unit35>
+      </Unit35>
+      <Unit36>
         <Filename Value="calculmatriciel3x3.pas"/>
         <UnitName Value="CalculMatriciel3x3"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="34"/>
         <CursorPos X="91" Y="65"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="18"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit35>
-      <Unit36>
+      </Unit36>
+      <Unit37>
         <Filename Value="CadreSerieIndependant.pas"/>
         <ComponentName Value="CdrSerieIndependant"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="964"/>
-        <CursorPos X="22" Y="999"/>
-        <UsageCount Value="112"/>
+        <TopLine Value="1469"/>
+        <CursorPos X="5" Y="1488"/>
+        <UsageCount Value="106"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit36>
-      <Unit37>
+      </Unit37>
+      <Unit38>
         <Filename Value="cadredixtoxnew.pas"/>
         <ComponentName Value="CdrDistoX2New"/>
         <HasResources Value="True"/>
@@ -413,19 +425,19 @@
         <UnitName Value="CadreDixtoXNew"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="48" Y="2"/>
-        <UsageCount Value="28"/>
+        <UsageCount Value="22"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit37>
-      <Unit38>
+      </Unit38>
+      <Unit39>
         <Filename Value="unitminimalcom.pas"/>
         <UnitName Value="UnitMinimalCOM"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="214"/>
         <CursorPos X="16" Y="226"/>
-        <UsageCount Value="51"/>
+        <UsageCount Value="45"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit38>
-      <Unit39>
+      </Unit39>
+      <Unit40>
         <Filename Value="cadrelisteseries.pas"/>
         <ComponentName Value="CdrListeSeries"/>
         <HasResources Value="True"/>
@@ -434,18 +446,19 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="140"/>
         <CursorPos X="7" Y="149"/>
-        <UsageCount Value="80"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit39>
-      <Unit40>
-        <Filename Value="MetaFiltre.inc"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="51"/>
-        <CursorPos X="118" Y="51"/>
-        <UsageCount Value="71"/>
+        <UsageCount Value="74"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit40>
       <Unit41>
+        <Filename Value="MetaFiltre.inc"/>
+        <EditorIndex Value="17"/>
+        <TopLine Value="259"/>
+        <CursorPos X="31" Y="304"/>
+        <UsageCount Value="76"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit41>
+      <Unit42>
         <Filename Value="vueen3dext.pas"/>
         <ComponentName Value="frmVue3DExt"/>
         <HasResources Value="True"/>
@@ -454,94 +467,92 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="232"/>
         <CursorPos X="71" Y="233"/>
-        <UsageCount Value="110"/>
+        <UsageCount Value="104"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit41>
-      <Unit42>
+      </Unit42>
+      <Unit43>
         <Filename Value="unitobjetserie.pas"/>
         <UnitName Value="UnitObjetSerie"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="391"/>
         <CursorPos X="24" Y="413"/>
-        <UsageCount Value="23"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit42>
-      <Unit43>
-        <Filename Value="unitCroquisTerrain.pas"/>
-        <EditorIndex Value="22"/>
-        <TopLine Value="26"/>
-        <CursorPos Y="44"/>
-        <UsageCount Value="100"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="17"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit43>
       <Unit44>
+        <Filename Value="unitCroquisTerrain.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="26"/>
+        <CursorPos Y="44"/>
+        <UsageCount Value="94"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit44>
+      <Unit45>
         <Filename Value="unitMatricesCreusesArray2D.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="127"/>
         <CursorPos X="3" Y="159"/>
-        <UsageCount Value="47"/>
+        <UsageCount Value="41"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit44>
-      <Unit45>
+      </Unit45>
+      <Unit46>
         <Filename Value="cadredistoxlazserial.pas"/>
         <ComponentName Value="CdrDistoXLazserial"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="CadreDistoXLazSerial"/>
-        <EditorIndex Value="34"/>
-        <TopLine Value="67"/>
-        <CursorPos X="58" Y="103"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="570"/>
+        <CursorPos X="9" Y="603"/>
         <UsageCount Value="100"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit45>
-      <Unit46>
+      </Unit46>
+      <Unit47>
         <Filename Value="unithelpsystemxml.pas"/>
         <UnitName Value="UnitHelpSystemXML"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="135"/>
         <CursorPos X="44" Y="135"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="40"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit46>
-      <Unit47>
+      </Unit47>
+      <Unit48>
         <Filename Value="C:\lazarus\lcl\controls.pp"/>
         <UnitName Value="Controls"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="1608"/>
         <CursorPos X="15" Y="1629"/>
-        <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit47>
-      <Unit48>
-        <Filename Value="centreimpressionext.pas"/>
-        <UnitName Value="CentreImpressionExt"/>
-        <EditorIndex Value="39"/>
-        <CursorPos X="12" Y="15"/>
-        <UsageCount Value="123"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit48>
       <Unit49>
+        <Filename Value="centreimpressionext.pas"/>
+        <UnitName Value="CentreImpressionExt"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="12" Y="15"/>
+        <UsageCount Value="117"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit49>
+      <Unit50>
         <Filename Value="unitexportgis.pas"/>
         <UnitName Value="unitExportGIS"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="335"/>
         <CursorPos X="65" Y="345"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="2"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit49>
-      <Unit50>
+      </Unit50>
+      <Unit51>
         <Filename Value="C:\lazarus\components\zeos\src\plain\ZPlainLoader.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="216"/>
         <CursorPos X="51" Y="220"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit50>
-      <Unit51>
+      </Unit51>
+      <Unit52>
         <Filename Value="frmEditFiltres.pas"/>
         <ComponentName Value="dlgEditFiltres"/>
         <HasResources Value="True"/>
@@ -549,65 +560,64 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="375"/>
         <CursorPos X="129" Y="385"/>
-        <UsageCount Value="70"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit51>
-      <Unit52>
-        <Filename Value="unittghtopodrawdrawingcontext.pas"/>
-        <UnitName Value="UnitTGHTopoDrawDrawingContext"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="930"/>
-        <CursorPos X="31" Y="943"/>
-        <UsageCount Value="70"/>
+        <UsageCount Value="64"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit52>
       <Unit53>
+        <Filename Value="unittghtopodrawdrawingcontext.pas"/>
+        <UnitName Value="UnitTGHTopoDrawDrawingContext"/>
+        <EditorIndex Value="38"/>
+        <TopLine Value="603"/>
+        <CursorPos X="78" Y="621"/>
+        <UsageCount Value="81"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit53>
+      <Unit54>
         <Filename Value="frmAjouterSeriesDepuisAutreDoc.pas"/>
         <ComponentName Value="dlgAddSeriesFromOtherDoc"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="32"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="413"/>
         <CursorPos X="74" Y="429"/>
-        <UsageCount Value="84"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
+        <UsageCount Value="78"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit53>
-      <Unit54>
+      </Unit54>
+      <Unit55>
         <Filename Value="evaluateur_expressions.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="888"/>
         <CursorPos X="94" Y="917"/>
-        <UsageCount Value="70"/>
+        <UsageCount Value="64"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit54>
-      <Unit55>
+      </Unit55>
+      <Unit56>
         <Filename Value="cadredgcdrawingcontext.pas"/>
         <ComponentName Value="CdrDGCDrawingContext"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="CadreDGCDrawingContext"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="1392"/>
-        <CursorPos X="16" Y="1417"/>
-        <UsageCount Value="65"/>
+        <EditorIndex Value="33"/>
+        <TopLine Value="729"/>
+        <CursorPos Y="748"/>
+        <UsageCount Value="95"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit55>
-      <Unit56>
+      </Unit56>
+      <Unit57>
         <Filename Value="frmselectghtopofiles.pas"/>
         <ComponentName Value="dlgSelectGHTopoFiles"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frmSelectGHTopoFiles"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="464"/>
         <CursorPos X="167" Y="460"/>
-        <UsageCount Value="85"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="79"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit56>
-      <Unit57>
+      </Unit57>
+      <Unit58>
         <Filename Value="dlgediterpoi.pas"/>
         <ComponentName Value="frmEditerPOI"/>
         <HasResources Value="True"/>
@@ -616,22 +626,23 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="51"/>
         <CursorPos X="92" Y="84"/>
-        <UsageCount Value="70"/>
+        <UsageCount Value="64"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit57>
-      <Unit58>
+      </Unit58>
+      <Unit59>
         <Filename Value="dlgstatistiquesext.pas"/>
         <ComponentName Value="frmStatistiquesExt"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="dlgStatistiquesExt"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="120"/>
-        <CursorPos X="33" Y="141"/>
-        <UsageCount Value="70"/>
+        <EditorIndex Value="41"/>
+        <CursorPos X="2" Y="25"/>
+        <UsageCount Value="96"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit58>
-      <Unit59>
+      </Unit59>
+      <Unit60>
         <Filename Value="CadreListesPourVueGraphique.pas"/>
         <ComponentName Value="CdrListesPourVisualisateurs"/>
         <HasResources Value="True"/>
@@ -639,42 +650,42 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="623"/>
         <CursorPos X="7" Y="646"/>
-        <UsageCount Value="71"/>
+        <UsageCount Value="65"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit59>
-      <Unit60>
+      </Unit60>
+      <Unit61>
         <Filename Value="unitcoupedeveloppee.pas"/>
         <UnitName Value="unitCoupeDeveloppee"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="1215"/>
         <CursorPos X="8" Y="1242"/>
-        <UsageCount Value="71"/>
+        <UsageCount Value="65"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit60>
-      <Unit61>
+      </Unit61>
+      <Unit62>
         <Filename Value="unitsilhouettegalerie.pas"/>
         <UnitName Value="UnitSilhouetteGalerie"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="123"/>
         <CursorPos X="83" Y="134"/>
-        <UsageCount Value="71"/>
+        <UsageCount Value="65"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit61>
-      <Unit62>
+      </Unit62>
+      <Unit63>
         <Filename Value="frmclaviervirtuel.pas"/>
         <ComponentName Value="dlgClavierVirtuel"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frmClavierVirtuel"/>
-        <EditorIndex Value="43"/>
-        <TopLine Value="11"/>
-        <CursorPos X="56" Y="18"/>
+        <EditorIndex Value="42"/>
+        <TopLine Value="135"/>
+        <CursorPos X="83" Y="138"/>
         <UsageCount Value="101"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit62>
-      <Unit63>
+      </Unit63>
+      <Unit64>
         <Filename Value="frmeditannotation.pas"/>
         <ComponentName Value="dlgEditAnnotation"/>
         <HasResources Value="True"/>
@@ -683,311 +694,203 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="113"/>
         <CursorPos X="6" Y="140"/>
-        <UsageCount Value="21"/>
+        <UsageCount Value="15"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit63>
-      <Unit64>
+      </Unit64>
+      <Unit65>
         <Filename Value="frmpavenumvirtuel.pas"/>
         <ComponentName Value="dlgPaveNumVirtuel"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frmPaveNumVirtuel"/>
-        <EditorIndex Value="40"/>
-        <CursorPos X="79" Y="20"/>
-        <UsageCount Value="100"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit64>
-      <Unit65>
-        <Filename Value="SubsOfPRNPrintAPage.inc"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="288"/>
-        <CursorPos X="5" Y="307"/>
-        <UsageCount Value="11"/>
+        <CursorPos X="79" Y="20"/>
+        <UsageCount Value="94"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit65>
       <Unit66>
+        <Filename Value="SubsOfPRNPrintAPage.inc"/>
+        <EditorIndex Value="39"/>
+        <TopLine Value="20"/>
+        <CursorPos X="23" Y="47"/>
+        <UsageCount Value="24"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit66>
+      <Unit67>
         <Filename Value="unitleafletexport.pas"/>
         <UnitName Value="UnitLeafletExport"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="102"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="5"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit66>
-      <Unit67>
+      </Unit67>
+      <Unit68>
         <Filename Value="cadrehistodirectionsext.pas"/>
         <UnitName Value="CadreHistoDirectionsExt"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="119"/>
         <CursorPos X="6" Y="137"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="5"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit67>
-      <Unit68>
+      </Unit68>
+      <Unit69>
         <Filename Value="cadrecalculette.lfm"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="1924"/>
         <CursorPos X="11" Y="1959"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="5"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
-      </Unit68>
-      <Unit69>
+      </Unit69>
+      <Unit70>
         <Filename Value="C:\lazarus\lcl\graphics.pp"/>
         <UnitName Value="Graphics"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="539"/>
         <CursorPos X="26" Y="562"/>
-        <UsageCount Value="7"/>
-      </Unit69>
-      <Unit70>
-        <Filename Value="frmfindastation.pas"/>
-        <ComponentName Value="dlgFindAStation"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="frmFindAStation"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="59"/>
-        <CursorPos X="3" Y="76"/>
-        <UsageCount Value="5"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
+        <UsageCount Value="1"/>
       </Unit70>
       <Unit71>
-        <Filename Value="unitutilscpu.pas"/>
-        <UnitName Value="unitUtilsCPU"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="22"/>
-        <CursorPos X="86" Y="43"/>
-        <UsageCount Value="5"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit71>
-      <Unit72>
-        <Filename Value="frmquestionouinonwithaction.pas"/>
-        <ComponentName Value="dlgQuestionOuiNonWithAction"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="frmQuestionOuiNonWithAction"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="9"/>
-        <CursorPos X="83" Y="22"/>
-        <UsageCount Value="4"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit72>
-      <Unit73>
-        <Filename Value="frmeditexpe.pas"/>
-        <ComponentName Value="dlgEditExpe"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="frmEditExpe"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="11" Y="11"/>
-        <UsageCount Value="4"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit73>
-      <Unit74>
-        <Filename Value="frmeditcode.pas"/>
-        <ComponentName Value="dlgEditCode"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="frmEditCode"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="18"/>
-        <CursorPos Y="53"/>
-        <UsageCount Value="4"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit74>
-      <Unit75>
-        <Filename Value="CadreCode.pas"/>
-        <ComponentName Value="CdrCode"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Frame"/>
-        <EditorIndex Value="-1"/>
-        <UsageCount Value="4"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit75>
-      <Unit76>
-        <Filename Value="frmeditentrance.pas"/>
-        <ComponentName Value="dlgEditEntrance"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="frmEditEntrance"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="19"/>
-        <CursorPos X="120" Y="30"/>
-        <UsageCount Value="4"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit76>
-      <Unit77>
-        <Filename Value="CadreEntrance.pas"/>
-        <ComponentName Value="CdrEntreeCavites"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Frame"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="52"/>
-        <CursorPos X="89" Y="79"/>
-        <UsageCount Value="4"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit77>
-      <Unit78>
-        <Filename Value="frmdisplaymultithreadprocessings.pas"/>
-        <ComponentName Value="dlgDispMultiThreadProcessing"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="frmDisplayMultiThreadProcessings"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="54"/>
-        <CursorPos X="166" Y="81"/>
-        <UsageCount Value="3"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit78>
-      <Unit79>
         <Filename Value="frminfosdetailleesstation.pas"/>
         <UnitName Value="frmInfosDetailleesStation"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="64" Y="7"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="3"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit79>
-      <Unit80>
+      </Unit71>
+      <Unit72>
         <Filename Value="unitgraphes1.pas"/>
         <UnitName Value="UnitGraphes1"/>
-        <EditorIndex Value="17"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="402"/>
         <CursorPos X="24" Y="443"/>
-        <UsageCount Value="57"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="51"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit80>
-      <Unit81>
+      </Unit72>
+      <Unit73>
         <Filename Value="SelectionLangues.inc"/>
-        <EditorIndex Value="19"/>
+        <EditorIndex Value="-1"/>
         <CursorPos X="4" Y="4"/>
-        <UsageCount Value="111"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="105"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit81>
-      <Unit82>
+      </Unit73>
+      <Unit74>
         <Filename Value="BZArrayClasses.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="106"/>
         <CursorPos X="5" Y="130"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit82>
-      <Unit83>
+      </Unit74>
+      <Unit75>
         <Filename Value="dgcutilitydialogs.pas"/>
         <UnitName Value="DGCUtilityDialogs"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="51" Y="23"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit83>
-      <Unit84>
+      </Unit75>
+      <Unit76>
         <Filename Value="backup\CompilationParameters.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="13"/>
         <CursorPos X="66" Y="22"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit84>
-      <Unit85>
+      </Unit76>
+      <Unit77>
         <Filename Value="backup\CallDialogsStdVersion.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="293"/>
         <CursorPos X="7" Y="312"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit85>
-      <Unit86>
+      </Unit77>
+      <Unit78>
         <Filename Value="backup\cadredistoxlazserial.pas"/>
         <UnitName Value="CadreDistoXLazSerial"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="721"/>
-        <CursorPos X="33" Y="738"/>
-        <UsageCount Value="10"/>
+        <TopLine Value="306"/>
+        <CursorPos X="58" Y="314"/>
+        <UsageCount Value="11"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit86>
-      <Unit87>
+      </Unit78>
+      <Unit79>
         <Filename Value="backup\cadreghtopocontext2d.pas"/>
         <UnitName Value="CadreGHTopoContext2D"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="2863"/>
         <CursorPos X="5" Y="2882"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="4"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit87>
-      <Unit88>
+      </Unit79>
+      <Unit80>
         <Filename Value="cadredistoxlazserial.lfm"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="770"/>
         <CursorPos X="112" Y="777"/>
-        <UsageCount Value="28"/>
+        <UsageCount Value="22"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
-      </Unit88>
-      <Unit89>
+      </Unit80>
+      <Unit81>
         <Filename Value="C:\lazarus\lcl\dialogs.pp"/>
         <UnitName Value="Dialogs"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="740"/>
         <CursorPos X="10" Y="762"/>
-        <UsageCount Value="28"/>
-      </Unit89>
-      <Unit90>
+        <UsageCount Value="22"/>
+      </Unit81>
+      <Unit82>
         <Filename Value="frmminiconvertisseur.pas"/>
         <UnitName Value="frmMiniConvertisseur"/>
-        <EditorIndex Value="42"/>
-        <UsageCount Value="87"/>
-        <Loaded Value="True"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="81"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit90>
-      <Unit91>
+      </Unit82>
+      <Unit83>
         <Filename Value="dlgParametrerOngletVue2D.pas"/>
-        <EditorIndex Value="38"/>
+        <EditorIndex Value="-1"/>
         <CursorPos X="21" Y="5"/>
-        <UsageCount Value="62"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="56"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit91>
-      <Unit92>
+      </Unit83>
+      <Unit84>
         <Filename Value="frmdisplaygraphe.pas"/>
         <UnitName Value="frmDisplayGraphe"/>
-        <EditorIndex Value="20"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="49"/>
         <CursorPos X="81" Y="55"/>
-        <UsageCount Value="22"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="16"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit92>
-      <Unit93>
+      </Unit84>
+      <Unit85>
         <Filename Value="unitremotefunctions.pas"/>
         <UnitName Value="UnitRemoteFunctions"/>
-        <EditorIndex Value="26"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="34"/>
         <CursorPos X="87" Y="34"/>
-        <UsageCount Value="22"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="16"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit93>
-      <Unit94>
+      </Unit85>
+      <Unit86>
         <Filename Value="cadrepascalscript.pas"/>
         <UnitName Value="CadrePascalScript"/>
         <EditorIndex Value="13"/>
-        <TopLine Value="188"/>
-        <CursorPos X="34" Y="212"/>
-        <UsageCount Value="22"/>
+        <TopLine Value="491"/>
+        <CursorPos X="29" Y="515"/>
+        <UsageCount Value="46"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit94>
-      <Unit95>
+      </Unit86>
+      <Unit87>
         <Filename Value="dlgexportverssigext.pas"/>
         <UnitName Value="dlgExportVersSIGExt"/>
-        <EditorIndex Value="31"/>
+        <EditorIndex Value="-1"/>
         <CursorPos X="3" Y="12"/>
-        <UsageCount Value="22"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="16"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit95>
-      <Unit96>
+      </Unit87>
+      <Unit88>
         <Filename Value="dlgimportationhades.pas"/>
         <ComponentName Value="frmImportHADES"/>
         <HasResources Value="True"/>
@@ -995,289 +898,528 @@
         <UnitName Value="dlgImportationHADES"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="60" Y="27"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="4"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit88>
+      <Unit89>
+        <Filename Value="frmGHTopoMainBar.pas"/>
+        <ComponentName Value="GHTopoMainMenuBar"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="376"/>
+        <CursorPos X="42" Y="382"/>
+        <UsageCount Value="35"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit89>
+      <Unit90>
+        <Filename Value="frmselecttopographes.pas"/>
+        <UnitName Value="frmSelectTopographes"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="15" Y="12"/>
+        <UsageCount Value="16"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit90>
+      <Unit91>
+        <Filename Value="FuncImportPocketTopoTxt.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="25"/>
+        <CursorPos X="11" Y="46"/>
+        <UsageCount Value="16"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit91>
+      <Unit92>
+        <Filename Value="FuncLoadSaveFichierTab.inc"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="24" Y="3"/>
+        <UsageCount Value="16"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit92>
+      <Unit93>
+        <Filename Value="FuncLoadSaveFichierTEXT.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="141"/>
+        <CursorPos X="16" Y="162"/>
+        <UsageCount Value="16"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit93>
+      <Unit94>
+        <Filename Value="uDsCoordinates.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="253"/>
+        <CursorPos X="24" Y="274"/>
+        <UsageCount Value="16"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit94>
+      <Unit95>
+        <Filename Value="UnitAnnotations.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="171"/>
+        <CursorPos X="26" Y="192"/>
+        <UsageCount Value="16"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit95>
+      <Unit96>
+        <Filename Value="UnitFusionTopos.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="79"/>
+        <CursorPos X="7" Y="100"/>
+        <UsageCount Value="16"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit96>
       <Unit97>
-        <Filename Value="frmGHTopoMainBar.pas"/>
-        <EditorIndex Value="33"/>
-        <TopLine Value="717"/>
-        <CursorPos X="29" Y="744"/>
-        <UsageCount Value="22"/>
-        <Loaded Value="True"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit97>
-      <Unit98>
-        <Filename Value="frmselecttopographes.pas"/>
-        <UnitName Value="frmSelectTopographes"/>
-        <EditorIndex Value="5"/>
-        <CursorPos X="15" Y="12"/>
-        <UsageCount Value="22"/>
-        <Loaded Value="True"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit98>
-      <Unit99>
-        <Filename Value="FuncImportPocketTopoTxt.inc"/>
-        <EditorIndex Value="6"/>
-        <TopLine Value="25"/>
-        <CursorPos X="11" Y="46"/>
-        <UsageCount Value="22"/>
-        <Loaded Value="True"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit99>
-      <Unit100>
-        <Filename Value="FuncLoadSaveFichierTab.inc"/>
-        <EditorIndex Value="7"/>
-        <CursorPos X="24" Y="3"/>
-        <UsageCount Value="22"/>
-        <Loaded Value="True"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit100>
-      <Unit101>
-        <Filename Value="FuncLoadSaveFichierTEXT.inc"/>
-        <EditorIndex Value="8"/>
-        <TopLine Value="141"/>
-        <CursorPos X="16" Y="162"/>
-        <UsageCount Value="22"/>
-        <Loaded Value="True"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit101>
-      <Unit102>
-        <Filename Value="uDsCoordinates.pas"/>
-        <EditorIndex Value="9"/>
-        <TopLine Value="253"/>
-        <CursorPos X="24" Y="274"/>
-        <UsageCount Value="22"/>
-        <Loaded Value="True"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit102>
-      <Unit103>
-        <Filename Value="UnitAnnotations.pas"/>
-        <EditorIndex Value="10"/>
-        <TopLine Value="171"/>
-        <CursorPos X="26" Y="192"/>
-        <UsageCount Value="22"/>
-        <Loaded Value="True"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit103>
-      <Unit104>
-        <Filename Value="UnitFusionTopos.pas"/>
-        <EditorIndex Value="12"/>
-        <TopLine Value="79"/>
-        <CursorPos X="7" Y="100"/>
-        <UsageCount Value="22"/>
-        <Loaded Value="True"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit104>
-      <Unit105>
         <Filename Value="unitghtoporpimainwnd.pas"/>
         <ComponentName Value="GHTopoRPIMainWnd"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="unitGHTopoRPIMainWnd"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="61" Y="9"/>
-        <UsageCount Value="14"/>
+        <CursorPos X="26" Y="14"/>
+        <UsageCount Value="28"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit105>
-      <Unit106>
+      </Unit97>
+      <Unit98>
         <Filename Value="unitgraphes11.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="657"/>
         <CursorPos X="11" Y="678"/>
-        <UsageCount Value="14"/>
+        <UsageCount Value="8"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit106>
-      <Unit107>
+      </Unit98>
+      <Unit99>
         <Filename Value="UnitHelpSystem.pas"/>
-        <EditorIndex Value="18"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="154"/>
         <CursorPos X="10" Y="174"/>
-        <UsageCount Value="22"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="16"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit107>
-      <Unit108>
+      </Unit99>
+      <Unit100>
         <Filename Value="unittsageomag.pas"/>
         <UnitName Value="UnitTSAGeoMag"/>
-        <EditorIndex Value="27"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="876"/>
         <CursorPos X="23" Y="897"/>
-        <UsageCount Value="22"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="16"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit108>
-      <Unit109>
+      </Unit100>
+      <Unit101>
         <Filename Value="C:\lazarus\components\lazutils\lazfileutils.pas"/>
         <UnitName Value="LazFileUtils"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="85"/>
         <CursorPos X="10" Y="106"/>
-        <UsageCount Value="20"/>
-        <Loaded Value="True"/>
-      </Unit109>
-      <Unit110>
+        <UsageCount Value="14"/>
+      </Unit101>
+      <Unit102>
         <Filename Value="unitexifutils.pas"/>
         <UnitName Value="UnitExifUtils"/>
-        <EditorIndex Value="25"/>
+        <EditorIndex Value="-1"/>
         <CursorPos X="61" Y="17"/>
-        <UsageCount Value="17"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="11"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit110>
-      <Unit111>
+      </Unit102>
+      <Unit103>
         <Filename Value="unitghtoporpimainwnd.lfm"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="284"/>
         <CursorPos X="24" Y="288"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="3"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
-      </Unit111>
-      <Unit112>
+      </Unit103>
+      <Unit104>
         <Filename Value="frmvueplan2d.pas"/>
         <ComponentName Value="frmVueEnPlan"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frmVuePlan2D"/>
-        <EditorIndex Value="16"/>
+        <EditorIndex Value="-1"/>
         <CursorPos X="29" Y="4"/>
-        <UsageCount Value="16"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit104>
+      <Unit105>
+        <Filename Value="bzgraphestypes.pas"/>
+        <UnitName Value="BZGraphesTypes"/>
+        <EditorIndex Value="28"/>
+        <TopLine Value="29"/>
+        <CursorPos X="36" Y="70"/>
+        <UsageCount Value="41"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit105>
+      <Unit106>
+        <Filename Value="frmRPIMainWnd.lfm"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1157"/>
+        <CursorPos X="84" Y="1208"/>
+        <UsageCount Value="4"/>
+        <DefaultSyntaxHighlighter Value="LFM"/>
+      </Unit106>
+      <Unit107>
+        <Filename Value="C:\lazarus\fpc\3.0.4\source\packages\fcl-process\src\process.pp"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="116"/>
+        <CursorPos X="14" Y="143"/>
+        <UsageCount Value="4"/>
+      </Unit107>
+      <Unit108>
+        <Filename Value="C:\lazarus\fpc\3.0.4\source\packages\fcl-process\src\win\process.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="282"/>
+        <CursorPos X="3" Y="322"/>
+        <UsageCount Value="4"/>
+      </Unit108>
+      <Unit109>
+        <Filename Value="C:\lazarus\fpc\3.0.4\source\rtl\objpas\classes\classesh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="759"/>
+        <CursorPos X="14" Y="779"/>
+        <UsageCount Value="5"/>
+      </Unit109>
+      <Unit110>
+        <Filename Value="C:\lazarus\fpc\3.0.4\source\rtl\objpas\classes\streams.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="448"/>
+        <CursorPos X="5" Y="454"/>
+        <UsageCount Value="5"/>
+      </Unit110>
+      <Unit111>
+        <Filename Value="C:\lazarus\fpc\3.0.4\source\rtl\objpas\classes\stringl.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1472"/>
+        <CursorPos X="15" Y="1479"/>
+        <UsageCount Value="4"/>
+      </Unit111>
+      <Unit112>
+        <Filename Value="dgcdummyunit.pas"/>
+        <UnitName Value="DGCDummyUnit"/>
+        <EditorIndex Value="3"/>
+        <CursorPos Y="6"/>
+        <UsageCount Value="42"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit112>
       <Unit113>
-        <Filename Value="bzgraphestypes.pas"/>
-        <UnitName Value="BZGraphesTypes"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="10"/>
-        <CursorPos X="11" Y="46"/>
-        <UsageCount Value="11"/>
-        <Loaded Value="True"/>
+        <Filename Value="dgccontext2d2.pas"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="19"/>
+        <UsageCount Value="12"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit113>
+      <Unit114>
+        <Filename Value="C:\lazarus\lcl\stdctrls.pp"/>
+        <UnitName Value="StdCtrls"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1064"/>
+        <CursorPos X="45" Y="1072"/>
+        <UsageCount Value="8"/>
+      </Unit114>
+      <Unit115>
+        <Filename Value="clipper.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="4420"/>
+        <CursorPos X="12" Y="4445"/>
+        <UsageCount Value="9"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit115>
+      <Unit116>
+        <Filename Value="dgcclasssectionofbeam.pas"/>
+        <UnitName Value="DGCClassSectionOfBeam"/>
+        <EditorIndex Value="21"/>
+        <CursorPos X="29"/>
+        <UsageCount Value="40"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit116>
+      <Unit117>
+        <Filename Value="dgcprimitivescomplexes.pas"/>
+        <UnitName Value="DGCPrimitivesComplexes"/>
+        <EditorIndex Value="22"/>
+        <TopLine Value="265"/>
+        <CursorPos X="87" Y="297"/>
+        <UsageCount Value="40"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit117>
+      <Unit118>
+        <Filename Value="dgctypes.pas"/>
+        <UnitName Value="DGCTypes"/>
+        <EditorIndex Value="26"/>
+        <TopLine Value="261"/>
+        <CursorPos X="29" Y="291"/>
+        <UsageCount Value="40"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit118>
+      <Unit119>
+        <Filename Value="dgcancestorprimitives.pas"/>
+        <UnitName Value="DGCAncestorPrimitives"/>
+        <EditorIndex Value="25"/>
+        <CursorPos X="28" Y="23"/>
+        <UsageCount Value="40"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit119>
+      <Unit120>
+        <Filename Value="dgcutilityfunctions.pas"/>
+        <UnitName Value="DGCUtilityFunctions"/>
+        <EditorIndex Value="24"/>
+        <CursorPos X="96" Y="19"/>
+        <UsageCount Value="39"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit120>
+      <Unit121>
+        <Filename Value="dgcprimitivessimples.pas"/>
+        <UnitName Value="DGCPrimitivesSimples"/>
+        <EditorIndex Value="23"/>
+        <TopLine Value="51"/>
+        <CursorPos X="96" Y="235"/>
+        <UsageCount Value="39"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit121>
+      <Unit122>
+        <Filename Value="dgcunitlistestylesobjets.pas"/>
+        <UnitName Value="DGCUnitListeStylesObjets"/>
+        <EditorIndex Value="27"/>
+        <TopLine Value="43"/>
+        <CursorPos Y="59"/>
+        <UsageCount Value="39"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit122>
+      <Unit123>
+        <Filename Value="dgcstylespenbrushfont.pas"/>
+        <UnitName Value="DGCStylesPenBrushFont"/>
+        <EditorIndex Value="36"/>
+        <CursorPos X="76" Y="36"/>
+        <UsageCount Value="39"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit123>
+      <Unit124>
+        <Filename Value="svgcanvasunit.pas"/>
+        <UnitName Value="SVGCanvasUnit"/>
+        <EditorIndex Value="35"/>
+        <TopLine Value="133"/>
+        <CursorPos X="103" Y="148"/>
+        <UsageCount Value="38"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit124>
+      <Unit125>
+        <Filename Value="frmpsdrawing2d.pas"/>
+        <UnitName Value="frmPSDrawing2D"/>
+        <EditorIndex Value="34"/>
+        <TopLine Value="95"/>
+        <CursorPos X="106" Y="112"/>
+        <UsageCount Value="38"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit125>
+      <Unit126>
+        <Filename Value="cadregrapheitineraire.pas"/>
+        <ComponentName Value="CdrGrapheItineraire"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="CadreGrapheItineraire"/>
+        <EditorIndex Value="32"/>
+        <TopLine Value="509"/>
+        <CursorPos X="52" Y="534"/>
+        <UsageCount Value="37"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit126>
+      <Unit127>
+        <Filename Value="0_GHTopoScript001.pas"/>
+        <EditorIndex Value="40"/>
+        <CursorPos X="3" Y="9"/>
+        <UsageCount Value="35"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit127>
+      <Unit128>
+        <Filename Value="cadreopengl3.pas"/>
+        <UnitName Value="CadreOpenGL3"/>
+        <EditorIndex Value="12"/>
+        <TopLine Value="421"/>
+        <CursorPos X="91" Y="430"/>
+        <UsageCount Value="35"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit128>
+      <Unit129>
+        <Filename Value="CadreProfilsTopo.pas"/>
+        <EditorIndex Value="14"/>
+        <TopLine Value="82"/>
+        <CursorPos X="5" Y="115"/>
+        <UsageCount Value="35"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit129>
+      <Unit130>
+        <Filename Value="CadreSelectThetaPhi.pas"/>
+        <EditorIndex Value="15"/>
+        <TopLine Value="75"/>
+        <CursorPos Y="95"/>
+        <UsageCount Value="35"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit130>
+      <Unit131>
+        <Filename Value="CadreSerieIndependant_bak.pas"/>
+        <UnitName Value="CadreSerieIndependant"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1124"/>
+        <CursorPos X="59" Y="1131"/>
+        <UsageCount Value="5"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit131>
+      <Unit132>
+        <Filename Value="unitfichestopo.pas"/>
+        <UnitName Value="UnitFichesTopo"/>
+        <EditorIndex Value="19"/>
+        <TopLine Value="140"/>
+        <CursorPos X="61" Y="171"/>
+        <UsageCount Value="19"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit132>
+      <Unit133>
+        <Filename Value="frmDistanceEntreDeuxPoints.pas"/>
+        <EditorIndex Value="20"/>
+        <TopLine Value="146"/>
+        <CursorPos X="62" Y="173"/>
+        <UsageCount Value="19"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit133>
+      <Unit134>
+        <Filename Value="unitdistoxlinux.pas"/>
+        <UnitName Value="unitDistoXLinux"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="51"/>
+        <CursorPos X="78" Y="76"/>
+        <UsageCount Value="15"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit134>
     </Units>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="28" HistoryIndex="27">
       <Position1>
-        <Filename Value="cadredistoxlazserial.pas"/>
-        <Caret Line="103" Column="58" TopLine="67"/>
+        <Filename Value="unitlistemesurestopodistox.pas"/>
+        <Caret Line="101" Column="29" TopLine="99"/>
       </Position1>
       <Position2>
-        <Filename Value="frmRPIMainWnd.pas"/>
-        <Caret Line="396" Column="56" TopLine="375"/>
+        <Filename Value="unitlistemesurestopodistox.pas"/>
+        <Caret Line="37" Column="15" TopLine="12"/>
       </Position2>
       <Position3>
-        <Filename Value="frmRPIMainWnd.pas"/>
-        <Caret Line="397" Column="56" TopLine="389"/>
+        <Filename Value="unitlistemesurestopodistox.pas"/>
+        <Caret Line="75" Column="25" TopLine="54"/>
       </Position3>
       <Position4>
-        <Filename Value="frmRPIMainWnd.pas"/>
-        <Caret Line="399" Column="72" TopLine="389"/>
+        <Filename Value="unitlistemesurestopodistox.pas"/>
+        <Caret Line="40" Column="15" TopLine="9"/>
       </Position4>
       <Position5>
-        <Filename Value="frmRPIMainWnd.pas"/>
-        <Caret Line="1321" Column="28" TopLine="1310"/>
+        <Filename Value="unitlistemesurestopodistox.pas"/>
+        <Caret Line="144" Column="31" TopLine="144"/>
       </Position5>
       <Position6>
-        <Filename Value="frmRPIMainWnd.pas"/>
-        <Caret Line="254" Column="15" TopLine="228"/>
+        <Filename Value="unitlistemesurestopodistox.pas"/>
+        <Caret Line="54" Column="15" TopLine="13"/>
       </Position6>
       <Position7>
-        <Filename Value="frmRPIMainWnd.pas"/>
-        <Caret Line="1452" Column="3" TopLine="1444"/>
+        <Filename Value="unitlistemesurestopodistox.pas"/>
+        <Caret Line="133" Column="41" TopLine="130"/>
       </Position7>
       <Position8>
-        <Filename Value="frmRPIMainWnd.pas"/>
-        <Caret Line="381" Column="20" TopLine="379"/>
+        <Filename Value="unitlistemesurestopodistox.pas"/>
+        <Caret Line="53" Column="16" TopLine="28"/>
       </Position8>
       <Position9>
-        <Filename Value="frmRPIMainWnd.pas"/>
-        <Caret Line="253" Column="15" TopLine="227"/>
+        <Filename Value="unitlistemesurestopodistox.pas"/>
+        <Caret Line="126" Column="3" TopLine="123"/>
       </Position9>
       <Position10>
-        <Filename Value="frmRPIMainWnd.pas"/>
-        <Caret Line="357" Column="9" TopLine="332"/>
+        <Filename Value="unitlistemesurestopodistox.pas"/>
+        <Caret Line="55" Column="47" TopLine="27"/>
       </Position10>
       <Position11>
-        <Filename Value="frmRPIMainWnd.pas"/>
-        <Caret Line="334" Column="112" TopLine="332"/>
+        <Filename Value="unitlistemesurestopodistox.pas"/>
+        <Caret Line="54" Column="63" TopLine="28"/>
       </Position11>
       <Position12>
-        <Filename Value="frmRPIMainWnd.pas"/>
-        <Caret Line="1320" Column="18" TopLine="1310"/>
+        <Filename Value="unitlistemesurestopodistox.pas"/>
+        <Caret Line="138" Column="33" TopLine="130"/>
       </Position12>
       <Position13>
-        <Filename Value="frmRPIMainWnd.pas"/>
-        <Caret Line="380" Column="13" TopLine="378"/>
+        <Filename Value="unitlistemesurestopodistox.pas"/>
+        <Caret Line="126" Column="71" TopLine="101"/>
       </Position13>
       <Position14>
-        <Filename Value="frmRPIMainWnd.pas"/>
-        <Caret Line="253" Column="15" TopLine="227"/>
+        <Filename Value="unitlistemesurestopodistox.pas"/>
+        <Caret Line="53" Column="51" TopLine="53"/>
       </Position14>
       <Position15>
-        <Filename Value="frmRPIMainWnd.pas"/>
-        <Caret Line="352" Column="30" TopLine="332"/>
+        <Filename Value="unitlistemesurestopodistox.pas"/>
+        <Caret Line="128" Column="3" TopLine="124"/>
       </Position15>
       <Position16>
-        <Filename Value="frmRPIMainWnd.pas"/>
-        <Caret Line="350" Column="77" TopLine="332"/>
+        <Filename Value="cadredistoxlazserial.pas"/>
+        <Caret Line="244" Column="51" TopLine="244"/>
       </Position16>
       <Position17>
-        <Filename Value="frmRPIMainWnd.pas"/>
-        <Caret Line="6" Column="50"/>
+        <Filename Value="cadredistoxlazserial.pas"/>
       </Position17>
       <Position18>
-        <Filename Value="frmRPIMainWnd.pas"/>
-        <Caret Line="1335" Column="22" TopLine="1325"/>
+        <Filename Value="cadredistoxlazserial.pas"/>
+        <Caret Line="254" Column="31" TopLine="209"/>
       </Position18>
       <Position19>
-        <Filename Value="frmRPIMainWnd.pas"/>
-        <Caret Line="254" Column="15" TopLine="228"/>
+        <Filename Value="cadredistoxlazserial.pas"/>
+        <Caret Line="495" Column="3" TopLine="463"/>
       </Position19>
       <Position20>
-        <Filename Value="frmRPIMainWnd.pas"/>
-        <Caret Line="1466" Column="31" TopLine="1444"/>
+        <Filename Value="cadredistoxlazserial.pas"/>
+        <Caret Line="246" Column="15" TopLine="219"/>
       </Position20>
       <Position21>
-        <Filename Value="unitgraphes1.pas"/>
-        <Caret Line="92" Column="14" TopLine="66"/>
+        <Filename Value="cadredistoxlazserial.pas"/>
+        <Caret Line="569" Column="13" TopLine="557"/>
       </Position21>
       <Position22>
-        <Filename Value="frmGHTopoMainBar.pas"/>
-        <Caret Line="744" Column="27" TopLine="717"/>
+        <Filename Value="cadredistoxlazserial.pas"/>
+        <Caret Line="575" Column="46" TopLine="550"/>
       </Position22>
       <Position23>
-        <Filename Value="unitgraphes1.pas"/>
-        <Caret Line="75" Column="15" TopLine="47"/>
+        <Filename Value="cadredistoxlazserial.pas"/>
+        <Caret Line="606" Column="41" TopLine="557"/>
       </Position23>
       <Position24>
-        <Filename Value="unitgraphes1.pas"/>
-        <Caret Line="436" TopLine="400"/>
+        <Filename Value="cadredistoxlazserial.pas"/>
+        <Caret Line="497" Column="45" TopLine="471"/>
       </Position24>
       <Position25>
-        <Filename Value="unitgraphes1.pas"/>
-        <Caret Line="112" Column="11" TopLine="88"/>
+        <Filename Value="cadredistoxlazserial.pas"/>
+        <Caret Line="591" Column="21" TopLine="553"/>
       </Position25>
       <Position26>
-        <Filename Value="unitgraphes1.pas"/>
-        <Caret Line="1216" Column="20" TopLine="1212"/>
+        <Filename Value="cadredistoxlazserial.pas"/>
+        <Caret Line="560" Column="18" TopLine="560"/>
       </Position26>
       <Position27>
-        <Filename Value="unitgraphes1.pas"/>
-        <Caret Line="1228" Column="139" TopLine="1211"/>
+        <Filename Value="cadredistoxlazserial.pas"/>
+        <Caret Line="693" Column="34" TopLine="666"/>
       </Position27>
       <Position28>
-        <Filename Value="frmGHTopoMainBar.pas"/>
-        <Caret Line="744" Column="29" TopLine="717"/>
+        <Filename Value="cadredistoxlazserial.pas"/>
+        <Caret Line="603" Column="9" TopLine="570"/>
       </Position28>
-      <Position29>
-        <Filename Value="unitgraphes1.pas"/>
-        <Caret Line="75" Column="15" TopLine="49"/>
-      </Position29>
-      <Position30>
-        <Filename Value="unitgraphes1.pas"/>
-        <Caret Line="443" Column="24" TopLine="402"/>
-      </Position30>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>

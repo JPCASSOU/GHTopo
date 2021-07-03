@@ -27,7 +27,7 @@ type
     procedure Finaliser();
 
     procedure BeginShape(const NameShape: string);
-    procedure DescribeShapeMaterial(const NomShape: string; const Color: TColorRGBA);
+    procedure DescribeShapeMaterial(const NomShape: string; const Color: TGHTopoColor);
     procedure EndShape(const NameShape: string);
 
     procedure BeginIndexedFaceSetSection(const QName: string; const DoColorPerVertex, DoSolid: boolean);
@@ -48,7 +48,7 @@ type
 
 
     procedure TraceCube(const NomCube: string; const CBG, CHD: TPoint3Df);
-    procedure TraceMorceauTube(const E: TBaseStation; const CouleurTube: TColorRGBA);
+    procedure TraceMorceauTube(const E: TBaseStation; const CouleurTube: TGHTopoColor);
 end;
 
 
@@ -130,14 +130,14 @@ procedure TSceneX3D.EndShape(const NameShape: string);
 begin
   WriteLine(Format('    </%s>', [BALISE_SHAPE]))
 end;
-procedure TSceneX3D.DescribeShapeMaterial(const NomShape: string; const Color: TColorRGBA);
+procedure TSceneX3D.DescribeShapeMaterial(const NomShape: string; const Color: TGHTopoColor);
 var
   qr, qg, qb, qt: double;
 begin
-  qr := Color.R / 255.0;
-  qg := Color.G / 255.0;
-  qb := Color.B / 255.0;
-  qt := 1.0 - Color.A / 255.0;
+  qr := Color.Red   / 255.0;
+  qg := Color.Green / 255.0;
+  qb := Color.Blue  / 255.0;
+  qt := 1.0 - (Color.Alpha / 255.0);
   WriteLine(Format('     <%s>', [BALISE_APPEARANCE]));
   WriteLine(Format('        <Material emissiveColor=''%s, %s, %s'' transparency=''%s''/>',
                             [FormatterNombreWithDotDecimal(qr, 3),
@@ -207,7 +207,7 @@ end;
 
 
 procedure TSceneX3D.TraceCube(const NomCube: string; const CBG, CHD: TPoint3Df);
-var ColorCube: TColorRGBA;
+var ColorCube: TGHTopoColor;
 begin
   BeginShape(NomCube);
     ColorCube.setFrom(clBlue, 255);
@@ -229,7 +229,7 @@ end;
 
 
 //******************************************************************************
-procedure TSceneX3D.TraceMorceauTube(const E: TBaseStation; const CouleurTube: TColorRGBA);
+procedure TSceneX3D.TraceMorceauTube(const E: TBaseStation; const CouleurTube: TGHTopoColor);
 var
   EWE: String;
   q, r, s: Integer;

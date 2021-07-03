@@ -475,204 +475,201 @@
         <UnitName Value="frmEditGISLayer"/>
       </Unit51>
       <Unit52>
-        <Filename Value="cadrecoupedeveloppeeext.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="Frame1"/>
-        <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="CadreCoupeDeveloppeeExt"/>
-      </Unit52>
-      <Unit53>
         <Filename Value="unitresolutiontriangles.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="unitResolutionTriangles"/>
-      </Unit53>
-      <Unit54>
+      </Unit52>
+      <Unit53>
         <Filename Value="unitdxfexport.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="unitDXFExport"/>
-      </Unit54>
-      <Unit55>
+      </Unit53>
+      <Unit54>
         <Filename Value="ghtopomultithreading.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="GHTopoMultiThreading"/>
-      </Unit55>
-      <Unit56>
+      </Unit54>
+      <Unit55>
         <Filename Value="dgcclasstrianglequelconque.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="DGCClassTriangleQuelconque"/>
-      </Unit56>
-      <Unit57>
+      </Unit55>
+      <Unit56>
         <Filename Value="dlgediterpoi.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmEditerPOI"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="dlgEditerPOI"/>
-      </Unit57>
-      <Unit58>
+      </Unit56>
+      <Unit57>
         <Filename Value="unititineraires.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="unitItineraires"/>
-      </Unit58>
-      <Unit59>
+      </Unit57>
+      <Unit58>
         <Filename Value="frmdisplaygraphe.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgDisplayGraphe"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frmDisplayGraphe"/>
-      </Unit59>
-      <Unit60>
+      </Unit58>
+      <Unit59>
         <Filename Value="cadregrapheitineraire.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="CdrGrapheItineraire"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="CadreGrapheItineraire"/>
-      </Unit60>
-      <Unit61>
+      </Unit59>
+      <Unit60>
         <Filename Value="unitfichestopo.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UnitFichesTopo"/>
-      </Unit61>
-      <Unit62>
+      </Unit60>
+      <Unit61>
         <Filename Value="frmsearchindatabase.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgSearchInDatabase"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frmSearchInDatabase"/>
-      </Unit62>
-      <Unit63>
+      </Unit61>
+      <Unit62>
         <Filename Value="JSExportGrapheNestedFunc.inc"/>
         <IsPartOfProject Value="True"/>
-      </Unit63>
-      <Unit64>
+      </Unit62>
+      <Unit63>
         <Filename Value="cadrepascalscript.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="CdrPascalScript"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="CadrePascalScript"/>
-      </Unit64>
-      <Unit65>
+      </Unit63>
+      <Unit64>
         <Filename Value="frmpsdrawing2d.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgDispGraphisme2D"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frmPSDrawing2D"/>
-      </Unit65>
-      <Unit66>
+      </Unit64>
+      <Unit65>
         <Filename Value="unitremotefunctions.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UnitRemoteFunctions"/>
+      </Unit65>
+      <Unit66>
+        <Filename Value="FuncImportPocketTopoTxt.inc"/>
+        <IsPartOfProject Value="True"/>
       </Unit66>
       <Unit67>
-        <Filename Value="FuncImportPocketTopoTxt.inc"/>
+        <Filename Value="FuncLoadSaveFichierTEXT.inc"/>
         <IsPartOfProject Value="True"/>
       </Unit67>
       <Unit68>
-        <Filename Value="FuncLoadSaveFichierTEXT.inc"/>
+        <Filename Value="FuncLoadSaveFichierTab.inc"/>
         <IsPartOfProject Value="True"/>
       </Unit68>
       <Unit69>
-        <Filename Value="FuncLoadSaveFichierTab.inc"/>
+        <Filename Value="FuncLoadSaveFichierXML.inc"/>
         <IsPartOfProject Value="True"/>
       </Unit69>
       <Unit70>
-        <Filename Value="FuncLoadSaveFichierXML.inc"/>
+        <Filename Value="FuncLoadSaveFichierJSON.inc"/>
         <IsPartOfProject Value="True"/>
       </Unit70>
       <Unit71>
-        <Filename Value="FuncLoadSaveFichierJSON.inc"/>
-        <IsPartOfProject Value="True"/>
-      </Unit71>
-      <Unit72>
         <Filename Value="ghtopomultithreading2.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="GHTopoMultiThreading2"/>
-      </Unit72>
-      <Unit73>
+      </Unit71>
+      <Unit72>
         <Filename Value="frmtestmultithreading.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgMultiThreading"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frmTestMultithreading"/>
-      </Unit73>
-      <Unit74>
+      </Unit72>
+      <Unit73>
         <Filename Value="codecalcultopo_backup_20210420.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="CodeCalculTopo_Backup_20210420"/>
-      </Unit74>
-      <Unit75>
+      </Unit73>
+      <Unit74>
         <Filename Value="ghtopomultithreading3.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="GHTopoMultiThreading3"/>
-      </Unit75>
-      <Unit76>
+      </Unit74>
+      <Unit75>
         <Filename Value="bzparallelthread.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="BZParallelThread"/>
-      </Unit76>
-      <Unit77>
+      </Unit75>
+      <Unit76>
         <Filename Value="unitgraphes2.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UnitGraphes2"/>
-      </Unit77>
-      <Unit78>
+      </Unit76>
+      <Unit77>
         <Filename Value="dlgCalculette.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmCalculette"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit78>
-      <Unit79>
+      </Unit77>
+      <Unit78>
         <Filename Value="unitexifutils.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UnitExifUtils"/>
-      </Unit79>
-      <Unit80>
+      </Unit78>
+      <Unit79>
         <Filename Value="unitdistancebetween2pointslatlon.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UnitDistanceBetween2PointsLatLon"/>
-      </Unit80>
-      <Unit81>
+      </Unit79>
+      <Unit80>
         <Filename Value="frmboussole.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgBoussole"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frmBoussole"/>
-      </Unit81>
-      <Unit82>
+      </Unit80>
+      <Unit81>
         <Filename Value="cadreboussole.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="CdrBoussole"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="CadreBoussole"/>
-      </Unit82>
-      <Unit83>
+      </Unit81>
+      <Unit82>
         <Filename Value="cadreopengl3.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="CdrOpenGL3"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="CadreOpenGL3"/>
-      </Unit83>
-      <Unit84>
+      </Unit82>
+      <Unit83>
         <Filename Value="frmvisualisateuropengl3.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="dlgVisualisateurOpenGL3"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frmVisualisateurOpenGL3"/>
-      </Unit84>
-      <Unit85>
+      </Unit83>
+      <Unit84>
         <Filename Value="unitpolypolyline.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UnitPolyPolyLine"/>
+      </Unit84>
+      <Unit85>
+        <Filename Value="TypeTGHTopoColor.inc"/>
+        <IsPartOfProject Value="True"/>
       </Unit85>
     </Units>
   </ProjectOptions>

@@ -45,7 +45,7 @@ begin
   result := false;
   InitCaptions();
   editIdxReseau.AsInteger := QIdx;
-  btnColorReseau.Color    := MyReseau.ColorReseau;
+  btnColorReseau.Color    := MyReseau.ColorReseau.toTColor();
   editNomReseau.Text      := _AnsiToLCLStr(MyReseau.NomReseau);
   editObsReseau.Text      := _AnsiToLCLStr(MyReseau.ObsReseau);
   cmbTypeReseau.ItemIndex := MyReseau.TypeReseau;
@@ -81,7 +81,7 @@ end;
 function  TCdrReseaux.GetReseauFromForm(): TReseau;
 begin
   //IdxReseau     := editIdxReseau.AsInteger;
-  Result.ColorReseau   := btnColorReseau.Color;
+  Result.ColorReseau.setFrom(btnColorReseau.Color);
   Result.NomReseau     := _LCLStrToAnsi(Trim(editNomReseau.Text));
   Result.ObsReseau     := _LCLStrToAnsi(Trim(editObsReseau.Text));
   Result.TypeReseau    := cmbTypeReseau.ItemIndex;

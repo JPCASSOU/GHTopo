@@ -342,7 +342,7 @@ begin
                                              ConvertirEnNombreReel(PrmsLn[COL_YENTREE], 0.00),
                                              ConvertirEnNombreReel(PrmsLn[COL_ZENTREE], 0.00));
                            // couleurs non supportées = couleur par défault
-                           eCouleur  := clGray;
+                           eCouleur.setFrom(clGray);
                            //------------
                            // entrées non géoréférencées ?
                            if (ePosition.X < 100.00) or

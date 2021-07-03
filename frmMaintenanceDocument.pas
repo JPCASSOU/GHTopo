@@ -196,6 +196,7 @@ var
   WU: String;
   Nb, i, NbSeriesSelectionnees: Integer;
   MySerieCible , MySerieSource: TObjSerie;
+  CDS: TGHTopoColor;
 begin
   AfficherMessage(format('%s.GenererSubsetXTB(%s)', [ClassName, QFilename]));
   MySubsetXTB := TToporobotStructure2012.Create;
@@ -215,7 +216,8 @@ begin
 
 
     // création de l'entrée 1.0
-    EEE.setFrom('Point_0', '1.0', 0.00, 0.00, 0.00, 1, 0, clRed,'Point de rattachement');
+    CDS.setFrom(clRed);
+    EEE.setFrom('Point_0', '1.0', P1, 1, 0, CDS,'Point de rattachement');
     MySubsetXTB.AddEntrance(EEE);
     Nb := FDocTopo.GetNbReseaux();  // les réseaux
     for i := 0 to Nb - 1 do MySubsetXTB.AddReseau(FDocTopo.GetReseau(i));

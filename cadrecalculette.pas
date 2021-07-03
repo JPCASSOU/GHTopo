@@ -913,7 +913,7 @@ var
     ResetColorRow(lsbAdditionalLayers, ARect, bg, tc);
     DrawColTexte(lsbAdditionalLayers, ARect, HeadCtrlLayers.Sections.Items[0], False, Format(FORMAT_NB_INTEGER,[QLayer.SymboleStyle]));
     DrawColTexte(lsbAdditionalLayers, ARect, HeadCtrlLayers.Sections.Items[1], True , Format(FORMAT_NB_REAL_2_DEC,[QLayer.SymbolSize]));
-    DrawColRectColoreWithTexte(lsbAdditionalLayers, ARect, HeadCtrlLayers.Sections.Items[2], True, bg, QLayer.SymbolColor, '');
+    DrawColRectColoreWithTexte(lsbAdditionalLayers, ARect, HeadCtrlLayers.Sections.Items[2], True, bg, QLayer.SymbolColor.toTColor(), '');
     DrawColTexte(lsbAdditionalLayers, ARect, HeadCtrlLayers.Sections.Items[3], True, QLayer.LayerTitle);
     DrawColTexte(lsbAdditionalLayers, ARect, HeadCtrlLayers.Sections.Items[4], True, QLayer.LayerVarName);
     DrawColTexte(lsbAdditionalLayers, ARect, HeadCtrlLayers.Sections.Items[5], True, QLayer.LayerDescription);
@@ -1202,7 +1202,14 @@ var
         for i := 0 to FOSMAdditionalLayers.Count - 1 do
         begin
           QGisLayer := FOSMAdditionalLayers.GetElement(i);
-          OSMExport.AddLayer(false, true, QGisLayer.LayerVarName, QGisLayer.LayerTitle, QGisLayer.LayerAttribution, '', QGisLayer.SymboleStyle, QGisLayer.SymbolSize, QGisLayer.SymbolColor, QGisLayer.SymbolOpacity / 256);
+          OSMExport.AddLayer(false, true,
+                             QGisLayer.LayerVarName,
+                             QGisLayer.LayerTitle,
+                             QGisLayer.LayerAttribution, '',
+                             QGisLayer.SymboleStyle,
+                             QGisLayer.SymbolSize,
+                             QGisLayer.SymbolColor.toTColor(),
+                             QGisLayer.SymbolColor.Alpha / 256);
         end;
         OSMExport.WriteHeader();
         OSMExport.BeginConditionalSection(True);
@@ -1532,16 +1539,13 @@ begin
   AfficherMessage(Format('%s.Coller', [self.ClassName]));
   //try
     EWE := ChooseChar(cmbSeparateur.ItemIndex, [#9, ';', ',', ':', '|']);
-    //AfficherMessage(Format(FORMAT_NB_INTEGER, [000]));
     // \t Tabulation; Point virgule, Virgule: Deux points| Barre
     GRDCollerDepuisClipBoard(grdDonnees, chkPremLigneIsTitres.Checked, EWE);
-    //AfficherMessage(Format(FORMAT_NB_INTEGER, [001]));
     // A partir d'ici, on n'a plus besoin du presse-papier ni de la liste provisoire
     // On travaille directement sur la grille
     // garnir les combobox
     RemplirLesComboboxDepuisGrille();
     RefactorerTitresDesColonnes();
-    //AfficherMessage(Format(FORMAT_NB_INTEGER, [004]));
   //except
   //end;
 end;
@@ -1685,8 +1689,8 @@ begin
                      MyLayer.LayerTitle,
                      MyLayer.SymboleStyle,
                      FormatterNombreOOo(MyLayer.SymbolSize, 2),
-                     MyLayer.SymbolColor,
-                     MyLayer.SymbolOpacity,
+                     MyLayer.SymbolColor.toTColor(),
+                     MyLayer.SymbolColor.Alpha,
                      MyLayer.LayerDescription,
                      MyLayer.LayerAttribution
                     ]);
@@ -1703,6 +1707,7 @@ var
   Nb, i      : Integer;
   EWE        : TGHStringArray;
   MyLayer    : TGISLayer;
+  WUC: TColor;
 begin
   if (not GHTopoQuestionOuiNon('Le presse-papiers doit contenir des couches valides - Continuer')) then exit;
   MyClipBoard := TClipboard.Create(ctClipboard);
@@ -1727,8 +1732,8 @@ begin
        if (('' = MyLayer.LayerVarName) or ('' = MyLayer.LayerTitle)) then continue;
        MyLayer.SymboleStyle     := StrToIntDef(EWE[3], 0);
        MyLayer.SymbolSize       := ConvertirEnNombreReel(EWE[4], 10.00);
-       MyLayer.SymbolColor      := TColor(StrToIntDef(EWE[5], $FF0000));
-       MyLayer.SymbolOpacity    := StrToIntDef(EWE[6], 255);
+       WUC :=  TColor(StrToIntDef(EWE[5], $FF0000));
+       MyLayer.SymbolColor.setFrom(WUC, StrToIntDef(EWE[6], 255));
        MyLayer.LayerDescription := Trim(EWE[7]);
        MyLayer.LayerAttribution := Trim(EWE[8]);
        FOSMAdditionalLayers.AddElement(MyLayer);
@@ -2106,40 +2111,58 @@ var
   FFF: UnicodeString;
   R, C, Ey: ValReal;
   BB: TDGCBoundingBox;
+  BGC: TDGCColor;
+  ColorLineAxes       , ColorBrushAxes    ,  ColorFontAxes  : TDGCColor;
+  ColorLineEpures     , ColorBrushEpures  ,  ColorFontEpures: TDGCColor;
+  ColorLineMoment     , ColorBrushMoment  ,  ColorFontMoment: TDGCColor;
+  ColorLineCercle     , ColorBrushCercle  ,  ColorFontCercle: TDGCColor;
 begin
   Ey :=  0.5 * abs(S.MainInertia_II - S.MainInertia_I);
-  BB.X1 :=   0.9 * S.MainInertia_I;
-  BB.Y1 := -(1.1 * Ey);
-  BB.X2 :=   1.1 * S.MainInertia_II;
-  BB.Y2 :=   1.1 * Ey;
-  CdrDGCDrawingContext2.Initialiser(BB.X1, BB.Y1, BB.X2, BB.Y2,
-                                    true, btnBackGrdInertieFigure.ButtonColor);
+  BB.setFrom(0.9 * S.MainInertia_I,   -(1.1 * Ey), 1.1 * S.MainInertia_II, 1.1 * Ey);
+  BGC.setFrom(btnBackGrdInertieFigure.ButtonColor, 255);
+  ColorLineAxes.setFrom(clBlack , 255);
+  ColorBrushAxes.setFrom(clBlack , 128 );
+  ColorFontAxes.setFrom(clBlack, 255);
+
+  ColorLineEpures.setFrom(clGreen, 255);
+  ColorBrushEpures.setFrom(clGreen, 128);
+  ColorFontEpures.setFrom(clBlack, 255);
+
+  ColorLineCercle.setFrom(clRed, 255);
+  ColorBrushCercle.setFrom(clYellow, 128);
+  ColorFontCercle.setFrom(clRed, 255);
+
+  ColorLineMoment.setFrom(clBlue, 255);
+  ColorBrushMoment.setFrom(clBlue, 128);
+  ColorFontMoment.setFrom(clBlack, 255);
+
+  CdrDGCDrawingContext2.Initialiser(BB.X1, BB.Y1, BB.X2, BB.Y2, true, BGC);
   CdrDGCDrawingContext2.SetProcOnClick(nil); //self.GetCoordsPointClicked);
   CdrDGCDrawingContext2.BeginDrawing();
-
     CdrDGCDrawingContext2.BeginGroupe('CercleMohr');
-
       CdrDGCDrawingContext2.AddStyleSheet('Axes',
-                                             clBlack   , 255, psSolid, 1, 0.5,
-                                             clBlack   , 128, bsClear,
-                                             'Arial', clBlack, 255, 20, 2.5, [fsBold],
-                                             '');
+                                           ColorLineAxes   , psSolid , 1, 0.5,
+                                           ColorBrushAxes  , bsClear ,
+                                           ColorFontAxes   , [fsBold], 'Arial', 20, 2.5,
+                                           '');
+
       CdrDGCDrawingContext2.AddStyleSheet('Epures',
-                                             clGreen, 255, psSolid, 1, 0.5,
-                                             clGreen, 128, bsClear,
-                                             'Arial', clBlack, 255, 30, 2.5, [fsBold],
-                                             '');
+                                          ColorLineEpures  , psSolid , 1, 0.5,
+                                          ColorBrushEpures , bsClear ,
+                                          ColorFontEpures  , [fsBold], 'Arial', 30, 2.5,
+                                          '');
+
       CdrDGCDrawingContext2.AddStyleSheet('Cercle',
-                                             clRed, 255, psSolid, 2, 0.5,
-                                             clYellow, 128, bsClear,
-                                             'Arial', clRed, 255, 25, 2.5, [fsBold],
-                                             '');
+                                          ColorLineCercle  , psSolid, 2, 0.5,
+                                          ColorBrushCercle , bsClear,
+                                          ColorFontCercle  , [fsBold], 'Arial', 25, 2.5,
+                                          '');
 
       CdrDGCDrawingContext2.AddStyleSheet('Moments',
-                                             clBlue, 255, psSolid, 3, 0.5,
-                                             clBlue, 128, bsClear,
-                                             'Arial', clBlue, 255, 25, 2.5, [fsBold],
-                                             '');
+                                          ColorLineMoment  , psSolid, 3, 0.5,
+                                          ColorBrushMoment , bsClear,
+                                          ColorFontMoment  , [fsBold], 'Arial', 25, 2.5,
+                                          '');
 
       QIdxStyleSheetAxes     := CdrDGCDrawingContext2.GetNbStyleSheets() - 4;
       QIdxStyleSheetEpures   := CdrDGCDrawingContext2.GetNbStyleSheets() - 3;
@@ -2178,18 +2201,24 @@ var
   MySommet: TDGCPoint2D;
   FFF: UnicodeString;
   BB: TDGCBoundingBox;
+  BGC: TDGCColor;
+  ColorLineSection, ColorBrushSection,  ColorFontSection: TDGCColor;
 begin
   BB := S.GetBounds();
   Nb := S.GetNbVertex();
-  CdrDGCDrawingContext1.Initialiser(-100, -100, 500, 500, True, btnBackGrdInertieFigure.ButtonColor);
+  BGC.setFrom(btnBackGrdInertieFigure.ButtonColor, 255);
+  ColorLineSection.setFrom(clRed , 255);
+  ColorBrushSection.setFrom(clYellow , 128 );
+  ColorFontSection.setFrom(clBlack, 255);
+  CdrDGCDrawingContext1.Initialiser(-100, -100, 500, 500, True, BGC);
   CdrDGCDrawingContext1.SetProcOnClick(nil); //self.GetCoordsPointClicked);
   CdrDGCDrawingContext1.BeginDrawing();
     CdrDGCDrawingContext1.BeginGroupe('IPN');
       CdrDGCDrawingContext1.AddStyleSheet('IPN',
-                                             clRed, 255, psSolid, 2, 0.5,
-                                             clYellow, 128, bsSolid,
-                                             'Arial', clBlack, 255, 20, 2.5, [fsBold],
-                                             '');
+                                          ColorLineSection  , psSolid, 2, 0.5,
+                                          ColorBrushSection , bsSolid,
+                                          ColorFontSection  , [fsBold], 'Arial', 20, 2.5,
+                                          '');
       QIdxStyleSheet := CdrDGCDrawingContext1.GetNbStyleSheets() - 1;
       CdrDGCDrawingContext1.BeginPolygon(QIdxStyleSheet, 'MonIPN');
 
@@ -2341,14 +2370,11 @@ begin
   QMsg := IIF(EWE, Format('%dx%d - Lat: %.8f, Lon: %.8f', [FImgInfo.ImgWidth, FImgInfo.ImgHeight,QLat, QLon]), QMsg);
   lbPhotoInfos.Caption := QMsg;
 
-  // et on libère le FImgInfo
-  try
-
+  try   // et on libère le FImgInfo
+    ;;
   finally
     FreeAndNil(FImgInfo);
   end;
-
-
 end;
 
 procedure TCdrCalculette.btnOpenImageClick(Sender: TObject);

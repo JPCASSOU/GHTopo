@@ -93,8 +93,7 @@ begin
     editYEntree.Value := QCoords.Y;
   end;
   //*)
-  QCoords.X := editXEntree.Value;
-  QCoords.Y := editYEntree.Value;
+  QCoords.setFrom(editXEntree.Value, editYEntree.Value);
   EWE := FDocTopo.GetCodeEPSGSystemeCoordonnees();
   if (DisplayMiniConvertisseur(27573, EWE.CodeEPSG, QCoords.X, QCoords.Y)) then
   begin
@@ -160,7 +159,7 @@ begin;
   lbNumEntrance.Caption := Format(FORMAT_NB_INTEGER, [FIdx]);
   editNomEntree.Text := _AnsiToLCLStr(E.eNomEntree);
   editIDTerrain.Text := _AnsiToLCLStr(E.eIDTerrain);
-  btnCouleurEntrance.ButtonColor := E.eCouleur;
+  btnCouleurEntrance.ButtonColor := E.eCouleur.toTColor();
   editXEntree.Value  := E.ePosition.X;
   editYEntree.Value  := E.ePosition.Y;
   editZEntree.Value  := E.ePosition.Z;
@@ -195,7 +194,7 @@ function TCdrEntreeCavites.GetEntrance(): TEntrance;
 begin
   Result.eNomEntree   := _LCLStrToAnsi(Trim(editNomEntree.Text));
   Result.eIDTerrain   := _LCLStrToAnsi(Trim(editIDTerrain.Text));
-  Result.eCouleur     := btnCouleurEntrance.ButtonColor;
+  Result.eCouleur.setFrom(btnCouleurEntrance.ButtonColor);
   Result.eRefSer      := editSerie.AsInteger;
   Result.eRefSt       := editPoint.AsInteger;
   Result.ePosition.setFrom(editXEntree.Value, editYEntree.Value, editZEntree.Value);

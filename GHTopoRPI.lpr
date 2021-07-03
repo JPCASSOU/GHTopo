@@ -11,8 +11,7 @@ uses
   //, dlgSplashScreen
   { you can add units after this }
   , frmRPIMainWnd, laz_synapse
-  , TAChartLazarusPkg, datetimectrls         // Indispensable ici
-  //, CadreRoseDiagramme, CadreDepthDiagramme  // A désactiver sur Raspberry
+  , TAChartLazarusPkg, datetimectrls, unitAutoCompletionSpeleo // Indispensable ici
   ;
 {$R *.res}
 begin

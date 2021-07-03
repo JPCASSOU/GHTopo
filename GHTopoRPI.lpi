@@ -72,7 +72,7 @@
         <PackageName Value="LCL"/>
       </Item14>
     </RequiredPackages>
-    <Units Count="11">
+    <Units Count="14">
       <Unit0>
         <Filename Value="GHTopoRPI.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -150,6 +150,20 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frmRegisterChineseUser"/>
       </Unit10>
+      <Unit11>
+        <Filename Value="processutils.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="unitautocompletionspeleo.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="unitAutoCompletionSpeleo"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="unitlistemesurestopodistox.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="unitListeMesuresTopoDistoX"/>
+      </Unit13>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -262,7 +262,7 @@ begin
     end;
     // et on ajoute l'espace de noms associé
     MyNamespace.Nom      := ExtractFileNameOnly(QFilename);
-    MyNamespace.Couleur  := RGBToColor(Random(255), Random(255), Random(255));
+    MyNamespace.Couleur.setFrom(Random(255), Random(255), Random(255));
     MyNamespace.Description := 'Fusionned from ' + QFilename;
     FPtrDocTopoDest.AddNameSpace(MyNamespace);
 

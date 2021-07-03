@@ -1,7 +1,7 @@
 object frmVueEnPlan: TfrmVueEnPlan
-  Left = 304
+  Left = 233
   Height = 743
-  Top = 236
+  Top = 185
   Width = 1281
   Caption = 'Vue en plan'
   ClientHeight = 743
@@ -63,17 +63,17 @@ object frmVueEnPlan: TfrmVueEnPlan
             ClientHeight = 714
             ClientWidth = 887
             TabOrder = 1
-            inherited Panel1: TPanel
-              Height = 624
-              Width = 852
-              ClientHeight = 624
-              ClientWidth = 852
+            inherited pnlVue: TPanel
+              Height = 629
+              Width = 857
+              ClientHeight = 629
+              ClientWidth = 857
               inherited Vue: TPaintBox
-                Height = 624
-                Width = 852
+                Height = 629
+                Width = 857
               end
               inherited pnlMaillage: TPanel
-                Top = 561
+                Top = 566
                 inherited editIsoValeur: TCurrencyEdit
                   Height = 24
                 end
@@ -86,14 +86,14 @@ object frmVueEnPlan: TfrmVueEnPlan
                 end
               end
               inherited pnlToast: TPanel
-                Width = 834
+                Width = 839
               end
             end
             inherited lbInfos: TStaticText
-              Width = 462
+              Width = 459
             end
             inherited lbGCSMouse: TStaticText
-              Top = 680
+              Top = 682
             end
             inherited lbModeTravail: TStaticText
               Left = 777
@@ -127,40 +127,40 @@ object frmVueEnPlan: TfrmVueEnPlan
               Left = 785
             end
             inherited SpeedButton1: TSpeedButton
-              Left = 852
+              Left = 856
               Flat = False
             end
             inherited SpeedButton5: TSpeedButton
-              Top = 680
+              Top = 682
               Flat = False
             end
             inherited SpeedButton8: TSpeedButton
-              Left = 820
-              Top = 680
+              Left = 827
+              Top = 682
               Flat = False
             end
             inherited SpeedButton9: TSpeedButton
-              Left = 852
+              Left = 856
               Flat = False
             end
             inherited SpeedButton2: TSpeedButton
-              Left = 852
-              Top = 616
+              Left = 856
+              Top = 627
               Flat = False
             end
             inherited SpeedButton7: TSpeedButton
-              Left = 787
-              Top = 680
+              Left = 798
+              Top = 682
               Flat = False
             end
             inherited SpeedButton11: TSpeedButton
-              Left = 852
-              Top = 648
+              Left = 856
+              Top = 656
               Flat = False
             end
             inherited SpeedButton17: TSpeedButton
-              Left = 852
-              Top = 680
+              Left = 856
+              Top = 682
               Flat = False
             end
             inherited SpeedButton18: TSpeedButton
@@ -168,36 +168,36 @@ object frmVueEnPlan: TfrmVueEnPlan
               Flat = False
             end
             inherited SpeedButton19: TSpeedButton
-              Left = 852
+              Left = 856
               Flat = False
             end
             inherited SpeedButton14: TSpeedButton
-              Left = 852
+              Left = 856
               Flat = False
             end
             inherited SpeedButton15: TSpeedButton
-              Left = 852
-              Top = 584
+              Left = 856
+              Top = 598
               Flat = False
             end
             inherited Panel2: TPanel
-              Left = 852
-              Height = 298
+              Left = 856
+              Height = 335
             end
             inherited Panel3: TPanel
-              Top = 680
-              Width = 334
+              Top = 682
+              Width = 354
             end
             inherited SpeedButton3: TSpeedButton
-              Left = 852
+              Left = 856
               Flat = False
             end
             inherited SpeedButton4: TSpeedButton
-              Left = 852
+              Left = 856
               Flat = False
             end
             inherited SpeedButton16: TSpeedButton
-              Left = 852
+              Left = 856
               Flat = False
             end
             inherited SpeedButton6: TSpeedButton

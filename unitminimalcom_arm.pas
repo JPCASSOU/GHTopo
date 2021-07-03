@@ -1,5 +1,6 @@
 unit UnitMinimalCOM_ARM;
 {$MODE DELPHI}
+{$ERROR Inutilisé}
 {$NOTE  Ceci est specifique au Raspberry Pi 3}
 {$ERROR Installer les libs de dev: sudo apt-get install libbluetooth-dev}
 interface

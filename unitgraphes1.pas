@@ -46,15 +46,10 @@ type
 
     FDocuTopo: TToporobotStructure2012;
     FBDDEntites: TBDDEntites;
-    FXMini: double;
-    FXMaxi: double;
-    FYMini: double;
-    FYMaxi: double;
+    FEtendue: TRect2Df;
     FListeDesPlusCourtsChemins: TListeSimple<TPathBetweenNodes>;
     FLastError: TGrapheLastError;
     FAfficherGraphe      : TProcOjObject;
-
-
     function SetLastError(const QErrCode: integer; const QErrMsg: string): boolean;
   private
     function   Reset(): boolean;
@@ -67,10 +62,7 @@ type
     destructor Destroy;
     property  DocuTopo: TToporobotStructure2012 read FDocuTopo;
     property  BDDEntites: TBDDEntites read FBDDEntites;
-    property  XMini: double read FXMini;
-    property  YMini: double read FYMini;
-    property  XMaxi: double read FXMaxi;
-    property  YMaxi: double read FYMaxi;
+
     function  Initialiser(const FD : TToporobotStructure2012; const FE: TBDDEntites): boolean;
     procedure Finaliser();
     function  ConstruireGraphe(): boolean;
@@ -110,7 +102,7 @@ type
                                          const QIDStationDepart, QIDStationArrivee: string;
                                          const BackgroundColorCarte, CouleurCenterlines: TColor;
                                          const CanvasWidthInPixels, CanvasHeightInPixels, WidthMenuLateralInPixels: integer);
-
+    function getBoundinxBox(): TRect2Df;
 end;
 
 
@@ -205,18 +197,12 @@ var
   Nb, i: Integer;
   MyNoeud: TBZClassNode;
 begin
-  FXMini :=  Infinity;
-  FYMini :=  Infinity;
-  FXMaxi := -Infinity;
-  FYMaxi := -Infinity;
+  FEtendue.ResetBoundingBox();
   Nb := GetNbStations();
   for i := 0 to Nb -1 do
   begin
     MyNoeud := GetStation(i);
-    FXMaxi := Max(FXMaxi, MyNoeud.Position.X);
-    FYMaxi := Max(FYMaxi, MyNoeud.Position.Y);
-    FXMini := Min(FXMini, MyNoeud.Position.X);
-    FYMini := Min(FYMini, MyNoeud.Position.Y);
+    FEtendue.UpdateBoundingBox(MyNoeud.Position);
   end;
 end;
 
@@ -243,7 +229,7 @@ begin
   Nb := self.GetNbStations();
   AfficherMessageErreur('----------------------------------------------------------');
   AfficherMessageErreur(Caption);
-  AfficherMessageErreur(Format('%d noeuds (%f, %f) -> %f, %f', [Nb, self.XMini, self.YMini, self.XMaxi, self.YMaxi]));
+  AfficherMessageErreur(Format('%d noeuds (%f, %f) -> %f, %f', [Nb, self.FEtendue.X1, self.FEtendue.Y1, self.FEtendue.X2, self.FEtendue.X2]));
   for i := 0 to Nb - 1 do
   begin
     MyStation := self.GetStation(i);
@@ -1228,6 +1214,12 @@ begin
     Closefile(fp);
   end;
 end;
+
+function TPathFindingGraphe.getBoundinxBox(): TRect2Df;
+begin
+  result := FEtendue;
+end;
+
 end.
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

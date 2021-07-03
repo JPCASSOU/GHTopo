@@ -280,7 +280,7 @@ var
         begin
           ResetColorRow(lsbListeElements, ARect, bg, tc);
           DrawColTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[0], false , Format(FORMAT_NB_INTEGER,[Index]));
-          DrawColRectColoreWithTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[1], true, bg, es.eCouleur, '');
+          DrawColRectColoreWithTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[1], true, bg, es.eCouleur.toTColor(), '');
           DrawColTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[2], true , _AnsiToLCLStr(es.eNomEntree));
           DrawColTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[3], true , Format(FMTSERST,[es.eRefSer, es.eRefSt]));
           DrawColTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[4], true , FormatterNombreAvecSepMilliers(es.ePosition.X));
@@ -291,14 +291,14 @@ var
         begin
           ResetColorRow(lsbListeElements, ARect, bg, tc);
           DrawColTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[0], false, Format(FORMAT_NB_INTEGER,[Index]));
-          DrawColRectColoreWithTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[1], true, bg, rs.ColorReseau, '');
+          DrawColRectColoreWithTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[1], true, bg, rs.ColorReseau.toTColor(), '');
           DrawColTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[2], true , _AnsiToLCLStr(rs.NomReseau));
         end;
       mslSECTEURS:
         begin
           ResetColorRow(lsbListeElements, ARect, bg, tc);
           DrawColTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[0], false, Format(FORMAT_NB_INTEGER,[Index]));
-          DrawColRectColoreWithTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[1], True, bg, sc.CouleurSecteur, '');
+          DrawColRectColoreWithTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[1], True, bg, sc.CouleurSecteur.toTColor(), '');
           DrawColTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[2], true , _AnsiToLCLStr(sc.NomSecteur));
         end;
       mslCODE:
@@ -334,7 +334,8 @@ var
           DrawColTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[2], true , Format(FMTSERST,[sr.GetNoSerieArr, sr.GetNoPointArr]));
           DrawColTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[3], true , _AnsiToLCLStr(sr.GetNomSerie));
           rs := FDocToporobot.GetReseau(sr.GetNumeroReseau);
-          DrawColRectColoreWithTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[4], True, bg, rs.ColorReseau, _AnsiToLCLStr(rs.NomReseau));
+          DrawColRectColoreWithTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[4], True, bg,
+                                     rs.ColorReseau.toTColor(), _AnsiToLCLStr(rs.NomReseau));
           DrawColTexte(lsbListeElements, ARect, hcColsTitres.Sections.Items[5], true , Format(FORMAT_NB_INTEGER,[sr.GetNbVisees]));
           // nombre d'éléments libres entre deux numéros de série
           WU := '';

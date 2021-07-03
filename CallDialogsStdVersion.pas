@@ -235,6 +235,8 @@ function GHTopoInputPasswordQuery(const ACaption, APrompt: string; var QPWD: str
 {$IFDEF GHTOPO_SIMPLIFIE}
   //{$IFDEF RASPBERRY_PI}
   function DisplayClavierVirtuel(const ACaption, APrompt: string; var AValeur: string): boolean;
+  // clavier numérique
+  function DisplayClavierNumerique(const Title: string; const ModeSaisie: TPaveNumModeSaisie; var Value: string): boolean;
   //{$ENDIF RASPBERRY_PI}
 {$ELSE}
 // import depuis un autre document (uniquement en mode GHTopoFX)
@@ -250,8 +252,7 @@ function DisplayGrapheOfReseau(const B: TBDDEntites; const G: TPathFindingGraphe
 procedure RegisterChineseUser();
 // Saisie de ID stations
 function SaisirIDStation(const Msg: string; var S: string): boolean;
-// clavier numérique
-function DisplayClavierNumerique(const Title: string; const ModeSaisie: TPaveNumModeSaisie; var Value: string): boolean;
+
 // Recherche dans la base
 function SearchInGHTopoDatabase(const FD: TToporobotStructure2012; const FE: TBDDEntites; const QFindWhat: string; const QPerformAction: TProcedureOfObject): boolean;
 // tests unitaires pour un TCadreBoussole
@@ -959,9 +960,9 @@ begin
    // {$ELSE}
    //   Result := InputQuery(ACaption, APrompt, QValeur);
    //{$ENDIF RASPBERRY_PI}
- {$ELSE}
+  {$ELSE}
     Result := InputQuery(ACaption, APrompt, QValeur);
- {$ENDIF GHTOPO_SIMPLIFIE}
+  {$ENDIF GHTOPO_SIMPLIFIE}
 
 end;
 
@@ -1640,9 +1641,28 @@ begin
         AValeur := CV.GetValue();
         result  := True;
       end;
+      CV.Finaliser();
     end;
   finally
     FreeAndNil(CV);
+  end;
+end;
+function DisplayClavierNumerique(const Title: string; const ModeSaisie: TPaveNumModeSaisie; var Value: string): boolean;
+var
+  DG: TdlgClavierNumerique;
+begin
+  result := false;
+  DG := TdlgClavierNumerique.create(Application);
+  try
+    DG.Initialiser(Title, ModeSaisie, Value);
+    DG.ShowModal;
+    if (DG.ModalResult = mrOK) then
+    begin
+      Value  := DG.AsString();
+      result := true;
+    end;
+  finally
+    DG.Release;
   end;
 end;
 // import depuis un autre document
@@ -1678,33 +1698,16 @@ begin
     FreeAndNil(TD);
   end;
 end;
-function DisplayClavierNumerique(const Title: string; const ModeSaisie: TPaveNumModeSaisie; var Value: string): boolean;
-var
-  DG: TdlgClavierNumerique;
-begin
-  result := false;
-  DG := TdlgClavierNumerique.create(Application);
-  try
-    DG.Initialiser(Title, ModeSaisie, Value);
-    DG.ShowModal;
-    if (DG.ModalResult = mrOK) then
-    begin
-      Value  := DG.AsString();
-      result := true;
-    end;
-  finally
-    DG.Release;
-  end;
-end;
+
 
 // Saisie de ID stations
 function SaisirIDStation(const Msg: string; var S: string): boolean;
 begin
-  {$IFDEF RASPBERRY_PI}
+  {$IFDEF GHTOPO_SIMPLIFIE}                           //{$IFDEF RASPBERRY_PI}
   Result := DisplayClavierNumerique(Msg, pnmTOPOROBOT_STATION, S);//InputQuery(Msg, 'ID:', S);
   {$ELSE}
   Result := InputQuery(Msg, 'ID:', S);
-  {$ENDIF RASPBERRY_PI}
+  {$endif GHTOPO_SIMPLIFIE}                           //{$ENDIF RASPBERRY_PI}
 end;
 
 // Recherche dans la base

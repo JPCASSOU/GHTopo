@@ -1,6 +1,7 @@
 unit frmHierarchieObjets;
 
 {$mode delphi}
+{$ERROR N'a rien à faire ici}
 
 interface
 

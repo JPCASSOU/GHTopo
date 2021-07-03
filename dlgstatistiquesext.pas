@@ -395,7 +395,7 @@ begin
     begin
       EWE := FBDDEntites.GetEntrance(i);
       WU  += format('%d', [i]) + TAB +
-             format('#%.2X%.2X%.2X', [Red(EWE.eCouleur), Green(EWE.eCouleur), Blue(EWE.eCouleur)]) + TAB +
+             EWE.eCouleur.toHTMLColor() + TAB +
              Format(FMTSERST, [EWE.eRefSer, EWE.eRefSt]) + TAB +
              EWE.eNomEntree + TAB +
              FormatterNombreOOo(EWE.ePosition.X, 3, False) + TAB +
@@ -796,7 +796,7 @@ var
   begin
     ResetColorRow(lsbEntrances, ARect, bg, tc);
     DrawColTexte(lsbEntrances, ARect, HeaderControl2.Sections.Items[0], false, Format('%d', [Index]));
-    DrawColRectColoreWithTexte(lsbEntrances, ARect, HeaderControl2.Sections.Items[1], true, bg, EWE.eCouleur, '');
+    DrawColRectColoreWithTexte(lsbEntrances, ARect, HeaderControl2.Sections.Items[1], true, bg, EWE.eCouleur.toTColor(), '');
     DrawColTexte(lsbEntrances, ARect, HeaderControl2.Sections.Items[2], True, Format(FMTSERST, [EWE.eRefSer, EWE.eRefSt]));
     DrawColTexte(lsbEntrances, ARect, HeaderControl2.Sections.Items[3], True, EWE.eNomEntree);
     DrawColTexte(lsbEntrances, ARect, HeaderControl2.Sections.Items[4], True, FormatterNombreOOo(EWE.ePosition.X, 3, false));

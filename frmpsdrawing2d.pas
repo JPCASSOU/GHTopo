@@ -48,12 +48,14 @@ implementation
 { TdlgDispGraphisme2D }
 
 function TdlgDispGraphisme2D.Initialiser(const w, h: integer): boolean;
+var
+  CGT: TDGCColor;
 begin
   self.Position     := poScreenCenter;
   self.ClientWidth  := w;
   self.ClientHeight := h;
-
-  Result := CdrDGCDrawingContext1.Initialiser(-100, -100, 100, 100, True, clWhite);
+  CGT.setFrom(clWhite, 255);
+  Result := CdrDGCDrawingContext1.Initialiser(-100, -100, 100, 100, True, CGT);
   FCurrentIdxStyleSheet := 0;
   FPolylineClosed       := false;
   try
@@ -71,7 +73,7 @@ end;
 procedure TdlgDispGraphisme2D.SetBackgroundColor(const R, G, B, A: byte);
 begin
   try
-    CdrDGCDrawingContext1.SetBackgroundColor(RGBToColor(R, G, B), A);
+    CdrDGCDrawingContext1.SetBackgroundColor(R, G, B, A);
     CdrDGCDrawingContext1.RefreshVue();
   except
 
@@ -79,15 +81,15 @@ begin
 end;
 
 function TdlgDispGraphisme2D.AddStyleSheet(const QStylename: string;
-                                           const QPenColorR, QPenColorG, QPenColorB, QPenOpacity: byte;
-                                           const QPenWidtdhInPX: byte; const QBshColorR, QBshColorG, QBshColorB,
-                                           QBshOpacity: byte; const QBshStyle: byte; const QFntName: string;
-                                           const QFntColorR, QFntColorG, QFntColorB, QFntOpacity: byte;
-                                           const QFntSizeInPX: byte; const QFntStyle: byte): Integer;
+                                           const QPenColorR, QPenColorG, QPenColorB, QPenOpacity: byte; const QPenWidtdhInPX: byte;
+                                           const QBshColorR, QBshColorG, QBshColorB, QBshOpacity: byte; const QBshStyle: byte;
+                                           const QFntName: string; const QFntColorR, QFntColorG, QFntColorB, QFntOpacity: byte;
+                                           const QFntSizeInPX: byte; const QFntStyle: byte):Integer;
 var
   QPenStyles: TPenStyle;
   QBshStyles: TBrushStyle;
   QFntStyles: TFontStyles;
+  QPenColor, QBrushColor, QFontColor: TDGCColor;
 begin
   Result := -1;
   QPenStyles := psSolid;
@@ -100,10 +102,16 @@ begin
   case QFntStyle of
     1: Include(QFntStyles, fsBold);
   end;
+  QPenColor.setFrom(QPenColorR, QPenColorG, QPenColorB, QPenOpacity);
+  QBrushColor.setFrom(QBshColorR, QBshColorG, QBshColorB, QBshOpacity);
+  QFontColor.setFrom(QFntColorR, QFntColorG, QFntColorB, QFntOpacity);
   CdrDGCDrawingContext1.AddStyleSheet(QStylename,
-                                      RGBToColor(QPenColorR, QPenColorG, QPenColorB), QPenOpacity, QPenStyles, QPenWidtdhInPX, 0.00,
-                                      RGBToColor(QBshColorR, QBshColorG, QBshColorB), QBshOpacity, QBshStyles,
-                                      QFntName, RGBToColor(QFntColorR, QFntColorG, QFntColorB), QFntOpacity, QFntSizeInPX, 2.00, QFntStyles, '');
+                                      QPenColor  , QPenStyles, QPenWidtdhInPX, 0.00,
+                                      QBrushColor, QBshStyles,
+                                      QFontColor , QFntStyles,
+                                      QFntName, QFntSizeInPX,  2.00, '');
+
+
   // et retourne l'index de la dernière StyleSheet créée
   Result := CdrDGCDrawingContext1.GetNbStyleSheets() - 1;
 end;

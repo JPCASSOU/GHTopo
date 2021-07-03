@@ -180,8 +180,10 @@ begin
   lsbViseesAntennes.Visible := false;
   FListeIdxAntennesRetenues.ClearListe();
   lsbViseesAntennes.Clear;
+
   if (0 = QNumeroDeSerie) then    // lister toutes les antennes
   begin
+    AfficherMessage(format('--> Toutes les %d antennes', [NbAntennes]));
     for i := 0 to NbAntennes - 1 do FListeIdxAntennesRetenues.AddElement(i);
   end
   else
@@ -209,6 +211,7 @@ begin
   begin
     pnlListeAntennes.Caption := 'Aucune visée radiante';
   end;
+  AfficherMessage(Format('%d antennes retenues', [FListeIdxAntennesRetenues.GetNbElements()]));
   lsbViseesAntennes.Visible  := True;
   lbNbViseesAntennes.Caption := format('%d antennes affichées sur %d', [FListeIdxAntennesRetenues.GetNbElements(), FMyDocTopo.GetNbAntennes()]);
 end;

@@ -436,7 +436,6 @@ var
   end;
 begin
     // /!\ Eviter les AfficherMessage sauf en débogage: ils ralentissent considérablement l'affichage 3D
-  //AfficherMessage(Format('%s.ReconstruitVue()',[ClassName]));
   //if (Not FDoDraw) then Exit;
   glViewport(0,0, OGLContext.Width,  OGLContext.Height);  // fenêtre de vue
   FDoDraw := (getNbListesAffichages() > 0);

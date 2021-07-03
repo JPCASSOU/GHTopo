@@ -7,25 +7,25 @@ object GHTopoContext2DA: TGHTopoContext2DA
   ClientHeight = 536
   ClientWidth = 881
   TabOrder = 0
-  DesignLeft = 444
-  DesignTop = 225
-  object Panel1: TPanel
+  DesignLeft = 227
+  DesignTop = 192
+  object pnlVue: TPanel
     Left = 0
-    Height = 446
-    Top = 56
-    Width = 846
+    Height = 451
+    Top = 54
+    Width = 851
     Anchors = [akTop, akLeft, akRight, akBottom]
     BevelOuter = bvNone
-    ClientHeight = 446
-    ClientWidth = 846
+    ClientHeight = 451
+    ClientWidth = 851
     DoubleBuffered = False
     ParentDoubleBuffered = False
     TabOrder = 0
     object Vue: TPaintBox
       Left = 0
-      Height = 446
+      Height = 451
       Top = 0
-      Width = 846
+      Width = 851
       Align = alClient
       PopupMenu = PopUpCdrVue2D
       OnMouseDown = VueMouseDown
@@ -269,7 +269,7 @@ object GHTopoContext2DA: TGHTopoContext2DA
     object pnlMaillage: TPanel
       Left = 2
       Height = 60
-      Top = 383
+      Top = 388
       Width = 278
       Anchors = [akLeft, akBottom]
       BevelOuter = bvLowered
@@ -349,7 +349,7 @@ object GHTopoContext2DA: TGHTopoContext2DA
       Left = 8
       Height = 96
       Top = 212
-      Width = 828
+      Width = 833
       Anchors = [akTop, akLeft, akRight]
       Caption = 'pnlToast'
       Color = clYellow
@@ -366,10 +366,10 @@ object GHTopoContext2DA: TGHTopoContext2DA
     end
   end
   object lbInfos: TStaticText
-    Left = 0
+    Left = 2
     Height = 22
-    Top = 32
-    Width = 456
+    Top = 30
+    Width = 453
     Anchors = [akTop, akLeft, akRight]
     BorderStyle = sbsSunken
     Caption = 'lbInfos'
@@ -386,9 +386,9 @@ object GHTopoContext2DA: TGHTopoContext2DA
     Transparent = False
   end
   object lbGCSMouse: TStaticText
-    Left = 8
-    Height = 32
-    Top = 502
+    Left = 4
+    Height = 28
+    Top = 504
     Width = 409
     Anchors = [akLeft, akBottom]
     BorderStyle = sbsSunken
@@ -404,7 +404,7 @@ object GHTopoContext2DA: TGHTopoContext2DA
   object lbModeTravail: TStaticText
     Left = 771
     Height = 20
-    Top = 32
+    Top = 30
     Width = 105
     Anchors = [akTop, akRight]
     BorderStyle = sbsSunken
@@ -422,7 +422,7 @@ object GHTopoContext2DA: TGHTopoContext2DA
   object lbAdditionalInfos: TStaticText
     Left = 508
     Height = 20
-    Top = 32
+    Top = 30
     Width = 258
     Anchors = [akTop, akRight]
     BorderStyle = sbsSunken
@@ -741,10 +741,10 @@ object GHTopoContext2DA: TGHTopoContext2DA
     end
   end
   object SpeedButton1: TSpeedButton
-    Left = 846
-    Height = 32
-    Top = 56
-    Width = 32
+    Left = 850
+    Height = 28
+    Top = 54
+    Width = 28
     Action = acBtnPanNN
     Anchors = [akTop, akRight]
     ShowCaption = False
@@ -752,10 +752,10 @@ object GHTopoContext2DA: TGHTopoContext2DA
     ParentShowHint = False
   end
   object SpeedButton5: TSpeedButton
-    Left = 416
-    Height = 32
-    Top = 502
-    Width = 32
+    Left = 412
+    Height = 28
+    Top = 504
+    Width = 28
     Action = acBtnPanWW
     Anchors = [akLeft, akBottom]
     ShowCaption = False
@@ -763,10 +763,10 @@ object GHTopoContext2DA: TGHTopoContext2DA
     ParentShowHint = False
   end
   object SpeedButton8: TSpeedButton
-    Left = 814
-    Height = 32
-    Top = 502
-    Width = 32
+    Left = 821
+    Height = 28
+    Top = 504
+    Width = 28
     Action = acBtnPanEE
     Anchors = [akRight, akBottom]
     ShowCaption = False
@@ -774,10 +774,10 @@ object GHTopoContext2DA: TGHTopoContext2DA
     ParentShowHint = False
   end
   object SpeedButton9: TSpeedButton
-    Left = 846
-    Height = 32
-    Top = 88
-    Width = 32
+    Left = 850
+    Height = 28
+    Top = 83
+    Width = 28
     Action = acBtnPanSS
     Anchors = [akTop, akRight]
     ShowCaption = False
@@ -785,10 +785,10 @@ object GHTopoContext2DA: TGHTopoContext2DA
     ParentShowHint = False
   end
   object SpeedButton2: TSpeedButton
-    Left = 846
-    Height = 32
-    Top = 438
-    Width = 32
+    Left = 850
+    Height = 28
+    Top = 449
+    Width = 28
     Action = acBtnPanNN
     Anchors = [akRight, akBottom]
     ShowCaption = False
@@ -796,10 +796,10 @@ object GHTopoContext2DA: TGHTopoContext2DA
     ParentShowHint = False
   end
   object SpeedButton7: TSpeedButton
-    Left = 781
-    Height = 32
-    Top = 502
-    Width = 32
+    Left = 792
+    Height = 28
+    Top = 504
+    Width = 28
     Action = acBtnPanWW
     Anchors = [akRight, akBottom]
     ShowCaption = False
@@ -807,10 +807,10 @@ object GHTopoContext2DA: TGHTopoContext2DA
     ParentShowHint = False
   end
   object SpeedButton11: TSpeedButton
-    Left = 846
-    Height = 32
-    Top = 470
-    Width = 32
+    Left = 850
+    Height = 28
+    Top = 478
+    Width = 28
     Action = acBtnPanSS
     Anchors = [akRight, akBottom]
     ShowCaption = False
@@ -818,10 +818,10 @@ object GHTopoContext2DA: TGHTopoContext2DA
     ParentShowHint = False
   end
   object SpeedButton17: TSpeedButton
-    Left = 846
-    Height = 32
-    Top = 502
-    Width = 32
+    Left = 850
+    Height = 28
+    Top = 504
+    Width = 28
     Action = acDispPopUp
     Anchors = [akRight, akBottom]
     OnClick = SpeedButton17Click
@@ -832,7 +832,7 @@ object GHTopoContext2DA: TGHTopoContext2DA
   object SpeedButton18: TSpeedButton
     Left = 480
     Height = 24
-    Top = 32
+    Top = 30
     Width = 24
     Action = acSetCurrentBaseStation
     Anchors = [akTop, akRight]
@@ -841,10 +841,10 @@ object GHTopoContext2DA: TGHTopoContext2DA
     ParentShowHint = False
   end
   object SpeedButton19: TSpeedButton
-    Left = 846
-    Height = 32
-    Top = 184
-    Width = 32
+    Left = 850
+    Height = 28
+    Top = 172
+    Width = 28
     Action = acZoomFenetre
     Anchors = [akTop, akRight]
     ShowCaption = False
@@ -852,10 +852,10 @@ object GHTopoContext2DA: TGHTopoContext2DA
     ParentShowHint = False
   end
   object SpeedButton14: TSpeedButton
-    Left = 846
-    Height = 32
-    Top = 152
-    Width = 32
+    Left = 850
+    Height = 28
+    Top = 141
+    Width = 28
     Action = acPanVue
     Anchors = [akTop, akRight]
     ShowCaption = False
@@ -863,10 +863,10 @@ object GHTopoContext2DA: TGHTopoContext2DA
     ParentShowHint = False
   end
   object SpeedButton15: TSpeedButton
-    Left = 846
-    Height = 32
-    Top = 406
-    Width = 32
+    Left = 850
+    Height = 28
+    Top = 420
+    Width = 28
     Action = acPanVue
     Anchors = [akRight, akBottom]
     ShowCaption = False
@@ -874,10 +874,10 @@ object GHTopoContext2DA: TGHTopoContext2DA
     ParentShowHint = False
   end
   object Panel2: TPanel
-    Left = 846
-    Height = 120
-    Top = 284
-    Width = 32
+    Left = 850
+    Height = 157
+    Top = 262
+    Width = 28
     Anchors = [akTop, akRight, akBottom]
     BevelOuter = bvNone
     Color = 11645361
@@ -885,10 +885,10 @@ object GHTopoContext2DA: TGHTopoContext2DA
     TabOrder = 8
   end
   object Panel3: TPanel
-    Left = 449
-    Height = 32
-    Top = 502
-    Width = 328
+    Left = 444
+    Height = 28
+    Top = 504
+    Width = 348
     Anchors = [akLeft, akRight, akBottom]
     BevelOuter = bvLowered
     Color = 10921638
@@ -896,10 +896,10 @@ object GHTopoContext2DA: TGHTopoContext2DA
     TabOrder = 9
   end
   object SpeedButton3: TSpeedButton
-    Left = 846
-    Height = 32
-    Top = 216
-    Width = 32
+    Left = 850
+    Height = 28
+    Top = 202
+    Width = 28
     Action = acZoomPlus
     Anchors = [akTop, akRight]
     ShowCaption = False
@@ -907,10 +907,10 @@ object GHTopoContext2DA: TGHTopoContext2DA
     ParentShowHint = False
   end
   object SpeedButton4: TSpeedButton
-    Left = 846
-    Height = 32
-    Top = 248
-    Width = 32
+    Left = 850
+    Height = 28
+    Top = 232
+    Width = 28
     Action = acZoomMoins
     Anchors = [akTop, akRight]
     ShowCaption = False
@@ -918,10 +918,10 @@ object GHTopoContext2DA: TGHTopoContext2DA
     ParentShowHint = False
   end
   object SpeedButton16: TSpeedButton
-    Left = 846
-    Height = 32
-    Top = 120
-    Width = 32
+    Left = 850
+    Height = 28
+    Top = 112
+    Width = 28
     Action = acZoomTout
     Anchors = [akTop, akRight]
     ShowCaption = False
@@ -931,7 +931,7 @@ object GHTopoContext2DA: TGHTopoContext2DA
   object SpeedButton6: TSpeedButton
     Left = 455
     Height = 24
-    Top = 32
+    Top = 30
     Width = 25
     Action = acDeleteThisPOI
     Anchors = [akTop, akRight]

@@ -252,7 +252,7 @@ begin
       begin
         EWE := FDocTopo.GetEntrance(i);
         WU := Format('   (%d, %d, %d, %.3f, %.3f, %.3f, "%s", "%s", "%s")', [
-                           EWE.eRefSer, EWE.eRefSt, EWE.eCouleur,
+                           EWE.eRefSer, EWE.eRefSt, EWE.eCouleur.toTColor(),
                            EWE.ePosition.X, EWE.ePosition.Y, EWE.ePosition.Z,
                            mysqli_real_escape_string(EWE.eIDTerrain),
                            mysqli_real_escape_string(EWE.eNomEntree),

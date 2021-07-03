@@ -23,8 +23,9 @@ type
     FBDDEntites       : TBDDEntites;
     FNbPetales        : integer;
     FLongueurMiniVisee: double;
-    FPetalesLineColor : TColor;
-    FPetalesFillColor : TColor;
+    FPetalesLineColor : TDGCColor;
+    FPetalesFillColor : TDGCColor;
+    FPetalesFontColor : TDGCColor;
     FFiltres          : string;
     FClassesRepartRoseDiagram: TVecteurDouble;
   public
@@ -32,8 +33,8 @@ type
                          const Filtres: string;
                          const NbPetales: integer;
                          const LMini: double;
-                         const PetalesLineColor: TColor;
-                         const PetalesFillColor: TColor): boolean;
+                         const PetalesLineColor: TColor; const PetalesFillColor: TColor;
+                         const PetalesLineOpacity: byte = 255;   const PetalesFillOpacity: byte = 128): boolean;
     procedure Finaliser();
     procedure SetFiltres(const s: string);
     procedure SetNbPetales(const n: integer);
@@ -56,11 +57,14 @@ CONST MARGE               : double = 10.00;
 
 function TCdrRoseDiagramme.Initialiser(const DT: TBDDEntites; const Filtres: string;
                              const NbPetales: integer; const LMini: double;
-                             const PetalesLineColor: TColor; const PetalesFillColor: TColor): boolean;
+                             const PetalesLineColor: TColor; const PetalesFillColor: TColor;
+                             const PetalesLineOpacity: byte = 255;   const PetalesFillOpacity: byte = 128): boolean;
 var
   EWE: Double;
+  BGC: TDGCColor;
 begin
   result := false;
+  BGC.setFrom(clWhite, 255);
   try
     FBDDEntites := DT;
     SetFiltres(Filtres);
@@ -69,7 +73,7 @@ begin
     SetLongueurMiniVisee(LMini);
     EWE := RAYON_ROSE_DIAGRAMME + MARGE;
     RecalculerDiagramme();
-    result := CdrDGCDrawingContext1.Initialiser(-EWE, -EWE, EWE, EWE, True);
+    result := CdrDGCDrawingContext1.Initialiser(-EWE, -EWE, EWE, EWE, True, BGC);
   except
 
   end;
@@ -99,8 +103,9 @@ end;
 
 procedure TCdrRoseDiagramme.SetColorPetales(const FG, BG: TColor);
 begin
-  FPetalesLineColor  := FG;
-  FPetalesFillColor  := BG;
+  FPetalesLineColor.setFrom(FG, 255);
+  FPetalesFillColor.setFrom(BG, 192);
+  FPetalesFontColor.setFrom(clBlack, 255);
 end;
 
 procedure TCdrRoseDiagramme.SetNombreColorPetales(const n: integer; const FG, BG: TColor);
@@ -132,19 +137,26 @@ var
   i, j, IdxStyleReticule: Integer;
   Ang1, Ang2, RC: double;
   s1, c1, s2, c2: double;
+  BGC, ColorLineAxes       , ColorBrushAxes    ,  ColorFontAxes  : TDGCColor;
 begin
+  BGC.setFrom(clWhite, 255);
+  ColorLineAxes.setFrom(clSilver , 255);
+  ColorBrushAxes.setFrom(clWhite , 128 );
+  ColorFontAxes.setFrom(clBlack, 255);
   QInterval := pi / FNbPetales;
   QMax666 := -1.00;
   for i := 0 to FNbPetales - 1 do QMax666 := Max(QMax666, FClassesRepartRoseDiagram[i]);
+
+
   CdrDGCDrawingContext1.BeginDrawing();
     CdrDGCDrawingContext1.AddStyleSheet('Barres',
-                                        FPetalesLineColor, 255, psSolid, 1, 0.05,
-                                        FPetalesFillColor, 128, bsSolid,
-                                        DEFAULT_FONT_NAME, clRed, 255, 15, 3.0, [fsBold], '');
+                                        FPetalesLineColor, psSolid, 1, 0.05,
+                                        FPetalesFillColor, bsSolid,
+                                        FPetalesFontColor, [fsBold], DEFAULT_FONT_NAME, 15, 3.0,  '');
     CdrDGCDrawingContext1.AddStyleSheet('Axes',
-                                        clSilver, 255, psSolid, 1, 0.05,
-                                        clWhite, 128, bsClear,
-                                        DEFAULT_FONT_NAME, clRed, 255, 15, 3.0, [], '');
+                                        ColorLineAxes , psSolid, 1, 0.05,
+                                        ColorBrushAxes, bsClear,
+                                        ColorFontAxes , [], DEFAULT_FONT_NAME, 15, 3.0,  '');
     for j := 0 to 1 do // deux demi-diagrammes centralement symétriques
     begin
       EWE := PI * (1 + j);

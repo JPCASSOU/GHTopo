@@ -15,17 +15,17 @@ object CdrCalculette: TCdrCalculette
   Font.Style = [fsBold]
   ParentFont = False
   TabOrder = 0
-  DesignLeft = 554
-  DesignTop = 363
+  DesignLeft = 192
+  DesignTop = 227
   object PageControl1: TPageControl
     Left = 0
     Height = 717
     Top = 0
     Width = 1160
-    ActivePage = tabShtMNT
+    ActivePage = tabShtInerties
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
-    TabIndex = 5
+    TabIndex = 6
     TabOrder = 0
     OnChange = PageControl1Change
     object tabShtCalculatrice: TTabSheet
@@ -2649,74 +2649,74 @@ object CdrCalculette: TCdrCalculette
             end
             object TabSheet4: TTabSheet
               Caption = 'Cercle de MOHR'
-              ClientHeight = 736
-              ClientWidth = 786
+              ClientHeight = 659
+              ClientWidth = 679
               inline CdrDGCDrawingContext2: TCdrDGCDrawingContext
-                Height = 736
-                Width = 786
-                ClientHeight = 736
-                ClientWidth = 786
+                Height = 659
+                Width = 679
+                ClientHeight = 659
+                ClientWidth = 679
                 DesignTop = 201
                 inherited pnlVue: TPanel
-                  Height = 700
-                  Width = 755
-                  ClientHeight = 700
-                  ClientWidth = 755
+                  Height = 623
+                  Width = 648
+                  ClientHeight = 623
+                  ClientWidth = 648
                   inherited Vue: TPaintBox
-                    Height = 698
-                    Width = 753
+                    Height = 621
+                    Width = 646
                   end
                 end
                 inherited lbMousePosition: TStaticText
-                  Top = 705
-                  Width = 651
+                  Top = 628
+                  Width = 544
                 end
                 inherited SpeedButton12: TSpeedButton
-                  Left = 754
+                  Left = 647
                   Flat = False
                 end
                 inherited SpeedButton13: TSpeedButton
-                  Left = 754
+                  Left = 647
                   Flat = False
                 end
                 inherited SpeedButton14: TSpeedButton
-                  Left = 754
+                  Left = 647
                   Flat = False
                 end
                 inherited SpeedButton15: TSpeedButton
-                  Left = 754
+                  Left = 647
                   Flat = False
                 end
                 inherited SpeedButton16: TSpeedButton
-                  Left = 754
+                  Left = 647
                   Flat = False
                 end
                 inherited SpeedButton17: TSpeedButton
-                  Left = 754
+                  Left = 647
                   Flat = False
                 end
                 inherited SpeedButton18: TSpeedButton
-                  Left = 754
-                  Top = 670
+                  Left = 647
+                  Top = 593
                   Flat = False
                 end
                 inherited SpeedButton19: TSpeedButton
-                  Left = 691
-                  Top = 704
+                  Left = 584
+                  Top = 627
                   Flat = False
                 end
                 inherited SpeedButton20: TSpeedButton
-                  Left = 723
-                  Top = 704
+                  Left = 616
+                  Top = 627
                   Flat = False
                 end
                 inherited SpeedButton21: TSpeedButton
-                  Left = 754
-                  Top = 704
+                  Left = 647
+                  Top = 627
                 end
                 inherited SpeedButton22: TSpeedButton
-                  Left = 659
-                  Top = 704
+                  Left = 552
+                  Top = 627
                   Flat = False
                 end
               end

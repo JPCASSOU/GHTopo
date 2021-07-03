@@ -1,13 +1,13 @@
 object RPIMainWnd: TRPIMainWnd
-  Left = 332
-  Height = 490
-  Top = 140
-  Width = 894
+  Left = 507
+  Height = 590
+  Top = 317
+  Width = 1020
   Caption = 'RPIMainWnd'
-  ClientHeight = 490
-  ClientWidth = 894
-  Constraints.MaxHeight = 760
-  Constraints.MaxWidth = 1150
+  ClientHeight = 590
+  ClientWidth = 1020
+  Constraints.MaxHeight = 590
+  Constraints.MaxWidth = 1020
   DoubleBuffered = True
   Font.CharSet = ANSI_CHARSET
   Font.Color = clBlack
@@ -22,13 +22,14 @@ object RPIMainWnd: TRPIMainWnd
   OnResize = FormResize
   OnShow = FormShow
   ParentDoubleBuffered = False
+  Position = poScreenCenter
   LCLVersion = '2.0.0.4'
   object PageControl1: TPageControl
     Left = 0
-    Height = 490
+    Height = 590
     Top = 0
-    Width = 894
-    ActivePage = tabShtVuePlan
+    Width = 1020
+    ActivePage = tabShtDistoX
     Align = alClient
     Font.CharSet = ANSI_CHARSET
     Font.Color = clBlack
@@ -37,139 +38,16 @@ object RPIMainWnd: TRPIMainWnd
     Font.Pitch = fpVariable
     Font.Quality = fqDraft
     ParentFont = False
-    TabIndex = 1
+    TabIndex = 2
     TabOrder = 0
     OnChange = PageControl1Change
     object tabShtMenu: TTabSheet
       Caption = '======'
-      ClientHeight = 461
-      ClientWidth = 886
-      object pnlMainMenu: TPanel
-        Left = 4
-        Height = 456
-        Top = 0
-        Width = 208
-        Anchors = [akTop, akLeft, akBottom]
-        BevelColor = 9868950
-        BevelInner = bvRaised
-        BevelOuter = bvLowered
-        BevelWidth = 3
-        ClientHeight = 456
-        ClientWidth = 208
-        Font.CharSet = ANSI_CHARSET
-        Font.Color = clBlue
-        Font.Height = -13
-        Font.Name = 'Arial'
-        Font.Pitch = fpVariable
-        Font.Quality = fqDraft
-        Font.Style = [fsBold]
-        ParentFont = False
-        TabOrder = 0
-        object lbFichier: TLabel
-          Left = 6
-          Height = 16
-          Top = 12
-          Width = 56
-          Caption = 'lbFichier'
-          ParentColor = False
-        end
-        object BitBtn1: TBitBtn
-          Left = 8
-          Height = 48
-          Top = 28
-          Width = 193
-          Action = acNew
-          Anchors = [akTop, akLeft, akRight]
-          Font.CharSet = ANSI_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Pitch = fpVariable
-          Font.Quality = fqDraft
-          Font.Style = [fsBold]
-          ParentFont = False
-          TabOrder = 0
-        end
-        object BitBtn2: TBitBtn
-          Left = 8
-          Height = 48
-          Top = 80
-          Width = 193
-          Action = acOpen
-          Anchors = [akTop, akLeft, akRight]
-          Font.CharSet = ANSI_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Pitch = fpVariable
-          Font.Quality = fqDraft
-          Font.Style = [fsBold]
-          ParentFont = False
-          TabOrder = 1
-        end
-        object BitBtn3: TBitBtn
-          Left = 8
-          Height = 76
-          Top = 132
-          Width = 193
-          Action = acQSave
-          Anchors = [akTop, akLeft, akRight]
-          Font.CharSet = ANSI_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Pitch = fpVariable
-          Font.Quality = fqDraft
-          Font.Style = [fsBold]
-          ParentFont = False
-          TabOrder = 2
-        end
-        object BitBtn4: TBitBtn
-          Left = 8
-          Height = 62
-          Top = 226
-          Width = 193
-          Action = acCompileExt
-          Anchors = [akTop, akLeft, akRight]
-          Font.CharSet = ANSI_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Pitch = fpVariable
-          Font.Quality = fqDraft
-          Font.Style = [fsBold]
-          ParentFont = False
-          TabOrder = 3
-        end
-        object BitBtn8: TBitBtn
-          Left = 8
-          Height = 60
-          Top = 389
-          Width = 193
-          Action = acQuit
-          Anchors = [akLeft, akRight, akBottom]
-          Font.CharSet = ANSI_CHARSET
-          Font.Color = clBlack
-          Font.Height = -13
-          Font.Name = 'Arial'
-          Font.Pitch = fpVariable
-          Font.Quality = fqDraft
-          Font.Style = [fsBold]
-          ParentFont = False
-          TabOrder = 4
-        end
-        object lbTopographie: TLabel
-          Left = 8
-          Height = 16
-          Top = 208
-          Width = 92
-          Caption = 'lbTopographie'
-          ParentColor = False
-        end
-      end
+      ClientHeight = 561
+      ClientWidth = 1012
       object pnlAdditionalMenu: TPanel
         Left = 212
-        Height = 456
+        Height = 556
         Top = 0
         Width = 208
         Anchors = [akTop, akLeft, akBottom]
@@ -177,7 +55,7 @@ object RPIMainWnd: TRPIMainWnd
         BevelInner = bvRaised
         BevelOuter = bvLowered
         BevelWidth = 3
-        ClientHeight = 456
+        ClientHeight = 556
         ClientWidth = 208
         TabOrder = 3
         object BitBtn7: TBitBtn
@@ -267,7 +145,7 @@ object RPIMainWnd: TRPIMainWnd
         object BitBtn11: TBitBtn
           Left = 8
           Height = 44
-          Top = 404
+          Top = 504
           Width = 192
           Action = acHelp
           Anchors = [akLeft, akRight, akBottom]
@@ -298,30 +176,170 @@ object RPIMainWnd: TRPIMainWnd
           TabOrder = 6
         end
       end
+      object pnlMainMenu: TPanel
+        Left = 4
+        Height = 556
+        Top = 0
+        Width = 208
+        Anchors = [akTop, akLeft, akBottom]
+        BevelColor = 9868950
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        BevelWidth = 3
+        ClientHeight = 556
+        ClientWidth = 208
+        Font.CharSet = ANSI_CHARSET
+        Font.Color = clBlue
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Pitch = fpVariable
+        Font.Quality = fqDraft
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 0
+        object lbFichier: TLabel
+          Left = 6
+          Height = 16
+          Top = 12
+          Width = 56
+          Caption = 'lbFichier'
+          ParentColor = False
+        end
+        object BitBtn1: TBitBtn
+          Left = 8
+          Height = 48
+          Top = 28
+          Width = 193
+          Action = acNew
+          Anchors = [akTop, akLeft, akRight]
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 0
+        end
+        object BitBtn2: TBitBtn
+          Left = 8
+          Height = 48
+          Top = 80
+          Width = 193
+          Action = acOpen
+          Anchors = [akTop, akLeft, akRight]
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 1
+        end
+        object BitBtn3: TBitBtn
+          Left = 8
+          Height = 76
+          Top = 132
+          Width = 193
+          Action = acQSave
+          Anchors = [akTop, akLeft, akRight]
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 2
+        end
+        object BitBtn4: TBitBtn
+          Left = 8
+          Height = 62
+          Top = 226
+          Width = 193
+          Action = acCompileExt
+          Anchors = [akTop, akLeft, akRight]
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 3
+        end
+        object BitBtn8: TBitBtn
+          Left = 8
+          Height = 60
+          Top = 489
+          Width = 193
+          Action = acQuit
+          Anchors = [akLeft, akRight, akBottom]
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 4
+        end
+        object lbTopographie: TLabel
+          Left = 8
+          Height = 16
+          Top = 208
+          Width = 92
+          Caption = 'lbTopographie'
+          ParentColor = False
+        end
+        object BitBtn13: TBitBtn
+          Left = 8
+          Height = 56
+          Top = 292
+          Width = 193
+          Action = acStatistiques
+          Anchors = [akTop, akLeft, akRight]
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 5
+        end
+      end
       object pnlQuickOpen: TPanel
         Left = 220
-        Height = 438
+        Height = 538
         Top = 0
-        Width = 666
+        Width = 792
         Anchors = [akTop, akLeft, akRight, akBottom]
-        ClientHeight = 438
-        ClientWidth = 666
+        ClientHeight = 538
+        ClientWidth = 792
         Color = clSilver
         ParentColor = False
         TabOrder = 1
         object Panel7: TPanel
           Left = 4
-          Height = 388
+          Height = 484
           Top = 8
-          Width = 658
+          Width = 784
           Anchors = [akTop, akLeft, akRight, akBottom]
           BevelOuter = bvLowered
-          ClientHeight = 388
-          ClientWidth = 658
+          ClientHeight = 484
+          ClientWidth = 784
           Color = 12910591
           Font.CharSet = ANSI_CHARSET
           Font.Color = clBlack
-          Font.Height = -19
+          Font.Height = -16
           Font.Name = 'Arial'
           Font.Pitch = fpVariable
           Font.Quality = fqDraft
@@ -331,17 +349,17 @@ object RPIMainWnd: TRPIMainWnd
           TabOrder = 0
           object Label3: TLabel
             Left = 4
-            Height = 22
+            Height = 19
             Top = 5
-            Width = 162
+            Width = 132
             Caption = 'Fichiers en cours'
             ParentColor = False
           end
           object lsbFichiersEnCours: TFileListBox
             Left = 6
-            Height = 352
-            Top = 32
-            Width = 648
+            Height = 456
+            Top = 24
+            Width = 774
             Anchors = [akTop, akLeft, akRight, akBottom]
             Directory = 'C:\lazarus'
             ItemHeight = 0
@@ -350,10 +368,10 @@ object RPIMainWnd: TRPIMainWnd
           end
         end
         object btnQuickOpenOK: TButton
-          Left = 480
+          Left = 583
           Height = 40
-          Top = 394
-          Width = 90
+          Top = 494
+          Width = 100
           Anchors = [akRight, akBottom]
           Caption = 'OK'
           Font.CharSet = ANSI_CHARSET
@@ -368,10 +386,10 @@ object RPIMainWnd: TRPIMainWnd
           TabOrder = 1
         end
         object btnQuickOpenCancel: TButton
-          Left = 572
+          Left = 688
           Height = 40
-          Top = 394
-          Width = 90
+          Top = 494
+          Width = 100
           Anchors = [akRight, akBottom]
           Caption = 'Annuler'
           Font.CharSet = ANSI_CHARSET
@@ -388,12 +406,12 @@ object RPIMainWnd: TRPIMainWnd
       end
       object pnlSaveAs: TPanel
         Left = 216
-        Height = 228
+        Height = 176
         Top = 128
-        Width = 654
+        Width = 780
         Anchors = [akTop, akLeft, akRight]
-        ClientHeight = 228
-        ClientWidth = 654
+        ClientHeight = 176
+        ClientWidth = 780
         Color = clSilver
         Font.CharSet = ANSI_CHARSET
         Font.Color = clBlack
@@ -407,29 +425,37 @@ object RPIMainWnd: TRPIMainWnd
         TabOrder = 2
         object Panel6: TPanel
           Left = 4
-          Height = 178
+          Height = 122
           Top = 4
-          Width = 644
+          Width = 770
           Anchors = [akTop, akLeft, akRight, akBottom]
           BevelOuter = bvLowered
-          ClientHeight = 178
-          ClientWidth = 644
+          ClientHeight = 122
+          ClientWidth = 770
           Color = 12910591
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Pitch = fpVariable
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
           ParentColor = False
+          ParentFont = False
           TabOrder = 0
           object Label1: TLabel
             Left = 4
-            Height = 22
+            Height = 19
             Top = 5
-            Width = 134
+            Width = 111
             Caption = 'Nom du fichier'
             ParentColor = False
           end
           object editFileName: TEdit
-            Left = 6
-            Height = 30
-            Top = 32
-            Width = 634
+            Left = 4
+            Height = 27
+            Top = 24
+            Width = 760
             Anchors = [akTop, akLeft, akRight]
             OnChange = editFileNameChange
             OnKeyPress = editFileNameKeyPress
@@ -437,17 +463,17 @@ object RPIMainWnd: TRPIMainWnd
           end
           object Label2: TLabel
             Left = 4
-            Height = 22
-            Top = 72
-            Width = 149
+            Height = 19
+            Top = 64
+            Width = 122
             Caption = 'dans le dossier:'
             ParentColor = False
           end
           object editCurrentDirectory: TDirectoryEdit
             Left = 6
-            Height = 30
-            Top = 96
-            Width = 634
+            Height = 27
+            Top = 84
+            Width = 760
             ShowHidden = False
             ButtonWidth = 23
             NumGlyphs = 1
@@ -458,10 +484,10 @@ object RPIMainWnd: TRPIMainWnd
           end
         end
         object btnNewDocOK: TButton
-          Left = 458
+          Left = 568
           Height = 40
-          Top = 185
-          Width = 90
+          Top = 133
+          Width = 100
           Anchors = [akRight, akBottom]
           Caption = 'OK'
           Font.CharSet = ANSI_CHARSET
@@ -476,10 +502,10 @@ object RPIMainWnd: TRPIMainWnd
           TabOrder = 1
         end
         object btnNewDocCancel: TButton
-          Left = 558
+          Left = 674
           Height = 40
-          Top = 185
-          Width = 90
+          Top = 133
+          Width = 100
           Anchors = [akRight, akBottom]
           Caption = 'Annuler'
           Font.CharSet = ANSI_CHARSET
@@ -497,38 +523,36 @@ object RPIMainWnd: TRPIMainWnd
     end
     object tabShtVuePlan: TTabSheet
       Caption = 'tabShtVuePlan'
-      ClientHeight = 461
-      ClientWidth = 886
+      ClientHeight = 561
+      ClientWidth = 1012
       object pnlPlan: TPanel
         Left = 0
-        Height = 465
+        Height = 565
         Top = 0
-        Width = 756
+        Width = 882
         Anchors = [akTop, akLeft, akRight, akBottom]
         BevelOuter = bvLowered
-        ClientHeight = 465
-        ClientWidth = 756
+        ClientHeight = 565
+        ClientWidth = 882
         TabOrder = 0
         inline GHTopoContext2DA1: TGHTopoContext2DA
           Left = 1
-          Height = 463
+          Height = 563
           Top = 1
-          Width = 754
-          ClientHeight = 463
-          ClientWidth = 754
-          DesignLeft = 393
-          DesignTop = 204
-          inherited Panel1: TPanel
-            Height = 373
-            Width = 719
-            ClientHeight = 373
-            ClientWidth = 719
+          Width = 880
+          ClientHeight = 563
+          ClientWidth = 880
+          inherited pnlVue: TPanel
+            Height = 478
+            Width = 850
+            ClientHeight = 478
+            ClientWidth = 850
             inherited Vue: TPaintBox
-              Height = 373
-              Width = 719
+              Height = 478
+              Width = 850
             end
             inherited pnlMaillage: TPanel
-              Top = 310
+              Top = 415
               inherited editIsoValeur: TCurrencyEdit
                 Height = 24
               end
@@ -541,134 +565,134 @@ object RPIMainWnd: TRPIMainWnd
               end
             end
             inherited pnlToast: TPanel
-              Width = 701
+              Width = 832
             end
           end
           inherited lbInfos: TStaticText
-            Width = 329
+            Width = 452
           end
           inherited lbGCSMouse: TStaticText
-            Top = 429
+            Top = 531
           end
           inherited lbModeTravail: TStaticText
-            Left = 644
+            Left = 770
           end
           inherited lbAdditionalInfos: TStaticText
-            Left = 381
+            Left = 507
           end
           inherited pnlFiltres: TPanel
-            Width = 649
-            ClientWidth = 649
+            Width = 775
+            ClientWidth = 775
             inherited editMetaFiltre: TEdit
-              Width = 401
+              Width = 527
             end
             inherited btnApplyMetaFiltre: TButton
-              Left = 482
+              Left = 608
             end
             inherited btnHelpMetaFiltre: TButton
-              Left = 513
+              Left = 639
             end
             inherited chkMetaFiltreActif: TCheckBox
-              Left = 545
+              Left = 671
             end
             inherited lbLongViseesVisibles: TStaticText
-              Left = 596
+              Left = 722
             end
             inherited Button1: TButton
-              Left = 453
+              Left = 579
             end
           end
           inherited btnSerieCouranteDistoX: TButton
-            Left = 652
+            Left = 778
           end
           inherited SpeedButton1: TSpeedButton
-            Left = 719
+            Left = 849
             Flat = False
           end
           inherited SpeedButton5: TSpeedButton
-            Top = 429
+            Top = 531
             Flat = False
           end
           inherited SpeedButton8: TSpeedButton
-            Left = 687
-            Top = 429
+            Left = 820
+            Top = 531
             Flat = False
           end
           inherited SpeedButton9: TSpeedButton
-            Left = 719
+            Left = 849
             Flat = False
           end
           inherited SpeedButton2: TSpeedButton
-            Left = 719
-            Top = 365
+            Left = 849
+            Top = 476
             Flat = False
           end
           inherited SpeedButton7: TSpeedButton
-            Left = 654
-            Top = 429
+            Left = 791
+            Top = 531
             Flat = False
           end
           inherited SpeedButton11: TSpeedButton
-            Left = 719
-            Top = 397
+            Left = 849
+            Top = 505
             Flat = False
           end
           inherited SpeedButton17: TSpeedButton
-            Left = 719
-            Top = 429
+            Left = 849
+            Top = 531
             Flat = False
           end
           inherited SpeedButton18: TSpeedButton
-            Left = 353
+            Left = 479
             Flat = False
           end
           inherited SpeedButton19: TSpeedButton
-            Left = 719
+            Left = 849
             Flat = False
           end
           inherited SpeedButton14: TSpeedButton
-            Left = 719
+            Left = 849
             Flat = False
           end
           inherited SpeedButton15: TSpeedButton
-            Left = 719
-            Top = 333
+            Left = 849
+            Top = 447
             Flat = False
           end
           inherited Panel2: TPanel
-            Left = 719
-            Height = 47
+            Left = 849
+            Height = 184
           end
           inherited Panel3: TPanel
-            Top = 429
-            Width = 201
+            Top = 531
+            Width = 347
           end
           inherited SpeedButton3: TSpeedButton
-            Left = 719
+            Left = 849
             Flat = False
           end
           inherited SpeedButton4: TSpeedButton
-            Left = 719
+            Left = 849
             Flat = False
           end
           inherited SpeedButton16: TSpeedButton
-            Left = 719
+            Left = 849
             Flat = False
           end
           inherited SpeedButton6: TSpeedButton
-            Left = 328
+            Left = 454
             Flat = False
           end
         end
       end
       object pnlCommandes: TPanel
-        Left = 759
-        Height = 465
+        Left = 885
+        Height = 565
         Top = 0
         Width = 128
         Anchors = [akTop, akRight, akBottom]
         BevelOuter = bvLowered
-        ClientHeight = 465
+        ClientHeight = 565
         ClientWidth = 128
         TabOrder = 1
         object pnlCmdsVue: TPanel
@@ -1043,17 +1067,16 @@ object RPIMainWnd: TRPIMainWnd
         end
         object pnlNavigation: TPanel
           Left = 2
-          Height = 292
+          Height = 392
           Top = 168
           Width = 123
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderStyle = bsSingle
-          ClientHeight = 288
+          ClientHeight = 388
           ClientWidth = 119
           Color = 16512938
           ParentColor = False
           TabOrder = 4
-          OnClick = pnlNavigationClick
           object lbNbPathStations: TLabel
             Left = 1
             Height = 16
@@ -1137,14 +1160,14 @@ object RPIMainWnd: TRPIMainWnd
             TabOrder = 3
           end
           object Panel5: TPanel
-            Left = 2
-            Height = 95
-            Top = 188
-            Width = 113
+            Left = 1
+            Height = 203
+            Top = 184
+            Width = 116
             Anchors = [akTop, akLeft, akRight, akBottom]
             BevelOuter = bvLowered
-            ClientHeight = 95
-            ClientWidth = 113
+            ClientHeight = 203
+            ClientWidth = 116
             Color = clYellow
             ParentColor = False
             TabOrder = 4
@@ -1152,7 +1175,7 @@ object RPIMainWnd: TRPIMainWnd
               Left = 1
               Height = 24
               Top = 1
-              Width = 111
+              Width = 114
               Alignment = taCenter
               Anchors = [akTop, akLeft, akRight]
               Caption = '---'
@@ -1229,201 +1252,192 @@ object RPIMainWnd: TRPIMainWnd
     end
     object tabShtDistoX: TTabSheet
       Caption = 'tabShtDistoX'
-      ClientHeight = 461
-      ClientWidth = 886
+      ClientHeight = 561
+      ClientWidth = 1012
       inline CdrDistoXLazserial1: TCdrDistoXLazserial
-        Height = 461
-        Width = 886
-        ClientHeight = 461
-        ClientWidth = 886
+        Height = 561
+        Width = 1012
+        ClientHeight = 561
+        ClientWidth = 1012
         inherited Button3: TButton
-          Left = 818
+          Left = 944
         end
         inherited btnDXScanOnOff: TToggleBox
-          Left = 714
+          Left = 840
         end
         inherited PageControlDistoX: TPageControl
-          Height = 412
-          Width = 882
-          inherited tabShtJournal: TTabSheet
-            ClientHeight = 368
-            ClientWidth = 874
-            inherited SynEdit1: TSynEdit
-              Height = 298
-              Width = 876
-            end
-            inherited pnlTamponMesures: TPanel
-              Top = 304
-              inherited lbTamponLine0: TLabel
-                Width = 438
-              end
-              inherited lbTamponLine1: TLabel
-                Width = 438
-              end
-              inherited lbTamponLine2: TLabel
-                Width = 438
+          Height = 512
+          Width = 1008
+          inherited tabShtMisc: TTabSheet
+            ClientHeight = 468
+            ClientWidth = 1000
+            inherited grbxStackMesures: TGroupBox
+              inherited memoTamponMesures: TMemo
+                Lines.Strings = (
+                  'memoTamponMesures'
+                )
               end
             end
           end
         end
         inherited pnlUtilitaires: TPanel
-          Left = 678
+          Left = 804
         end
       end
     end
     object tabShtSeries: TTabSheet
       Caption = 'Séries'
-      ClientHeight = 585
-      ClientWidth = 885
+      ClientHeight = 561
+      ClientWidth = 1012
       object Panel1: TPanel
         Left = 0
         Height = 36
         Top = 0
-        Width = 885
+        Width = 1012
         Anchors = [akTop, akLeft, akRight]
         BevelOuter = bvLowered
         ClientHeight = 36
-        ClientWidth = 885
+        ClientWidth = 1012
         TabOrder = 0
         inline CdrNavigateurSeries1: TCdrNavigateurSeries
           Left = 1
           Top = 1
-          Width = 883
-          ClientWidth = 883
+          Width = 1010
+          ClientWidth = 1010
           DesignLeft = 323
           DesignTop = 295
           inherited SpeedButton1: TSpeedButton
-            Left = 546
+            Left = 673
             Flat = False
           end
           inherited SpeedButton2: TSpeedButton
-            Left = 574
+            Left = 701
             Flat = False
           end
           inherited SpeedButton3: TSpeedButton
-            Left = 602
+            Left = 729
             Flat = False
           end
           inherited SpeedButton5: TSpeedButton
-            Left = 486
+            Left = 613
             Flat = False
           end
           inherited SpeedButton6: TSpeedButton
-            Left = 634
+            Left = 761
             Flat = False
           end
           inherited SpeedButton7: TSpeedButton
-            Left = 690
+            Left = 817
             Flat = False
           end
           inherited SpeedButton8: TSpeedButton
-            Left = 662
+            Left = 789
             Flat = False
           end
           inherited SpeedButton9: TSpeedButton
-            Left = 754
+            Left = 881
             Flat = False
           end
           inherited SpeedButton11: TSpeedButton
-            Left = 823
+            Left = 950
             Flat = False
           end
           inherited SpeedButton12: TSpeedButton
-            Left = 722
+            Left = 849
             Flat = False
           end
           inherited editNomSerie: TEdit
-            Width = 397
+            Width = 524
           end
           inherited SpeedButton13: TSpeedButton
-            Left = 855
+            Left = 982
             Flat = False
           end
           inherited SpeedButton14: TSpeedButton
-            Left = 514
+            Left = 641
             Flat = False
           end
           inherited SpeedButton4: TSpeedButton
-            Left = 785
+            Left = 912
             Flat = False
           end
         end
       end
       object Panel2: TPanel
         Left = 0
-        Height = 552
+        Height = 528
         Top = 37
-        Width = 885
+        Width = 1012
         Anchors = [akTop, akLeft, akRight, akBottom]
         BevelOuter = bvLowered
-        ClientHeight = 552
-        ClientWidth = 885
+        ClientHeight = 528
+        ClientWidth = 1012
         TabOrder = 1
         inline CdrSerieIndependant1: TCdrSerieIndependant
           Left = 1
-          Height = 550
+          Height = 526
           Top = 1
-          Width = 883
-          ClientHeight = 550
-          ClientWidth = 883
+          Width = 1010
+          ClientHeight = 526
+          ClientWidth = 1010
           DesignLeft = 422
           DesignTop = 298
           inherited pnlEnteteSerie: TPanel
-            Width = 881
-            ClientWidth = 881
+            Width = 1008
+            ClientWidth = 1008
             inherited cmbChance: TComboBox
-              Left = 733
+              Left = 860
             end
             inherited cmbObstacle: TComboBox
-              Left = 733
+              Left = 860
             end
             inherited lblChances: TLabel
-              Left = 669
+              Left = 796
             end
             inherited lblObstacles: TLabel
-              Left = 669
+              Left = 796
             end
             inherited editNomSerie: TEdit
-              Width = 551
+              Width = 678
             end
             inherited editCommentaire: TEdit
-              Width = 512
+              Width = 639
             end
             inherited editLG0: TCurrencyEdit
-              Left = 605
+              Left = 732
             end
             inherited editLD0: TCurrencyEdit
-              Left = 673
+              Left = 800
             end
             inherited editHZ0: TCurrencyEdit
-              Left = 741
+              Left = 868
             end
             inherited editHN0: TCurrencyEdit
-              Left = 809
+              Left = 936
             end
             inherited pnlReseaux: TPanel
-              Width = 504
-              ClientWidth = 504
+              Width = 631
+              ClientWidth = 631
               inherited lbNomReseau: TStaticText
-                Width = 343
+                Width = 470
               end
             end
           end
           inherited pnlTableur: TPanel
-            Height = 411
-            Width = 881
-            ClientHeight = 411
-            ClientWidth = 881
+            Height = 387
+            Width = 1008
+            ClientHeight = 387
+            ClientWidth = 1008
             inherited grdStations: TStringGrid
-              Height = 380
-              Width = 842
+              Height = 356
+              Width = 969
             end
             inherited lbNbStations: TLabel
-              Top = 387
+              Top = 363
             end
             inherited lbMessages: TStaticText
-              Top = 387
-              Width = 416
+              Top = 363
+              Width = 543
             end
             inherited SpeedButton1: TSpeedButton
               Flat = False
@@ -1441,8 +1455,8 @@ object RPIMainWnd: TRPIMainWnd
               Flat = False
             end
             inherited lbLongueurCumulee: TStaticText
-              Left = 719
-              Top = 387
+              Left = 846
+              Top = 363
             end
             inherited SpeedButton6: TSpeedButton
               Flat = False
@@ -1451,7 +1465,7 @@ object RPIMainWnd: TRPIMainWnd
               Flat = False
             end
             inherited Shape1: TShape
-              Width = 881
+              Width = 1008
             end
             inherited SpeedButton9: TSpeedButton
               Flat = False
@@ -1469,15 +1483,15 @@ object RPIMainWnd: TRPIMainWnd
               Flat = False
             end
             inherited lbDataAreModified: TStaticText
-              Left = 612
-              Top = 387
+              Left = 739
+              Top = 363
             end
           end
           inherited btnShowHideHeader: TButton
-            Left = 853
+            Left = 978
           end
           inherited pnlErreursACorriger: TPanel
-            Left = 413
+            Left = 540
             inherited lsbErreurs: TListBox
               ScrollWidth = 449
             end
@@ -2193,9 +2207,9 @@ object RPIMainWnd: TRPIMainWnd
     end
   end
   object pnlAcquitteVisee: TPanel
-    Left = 104
+    Left = 144
     Height = 40
-    Top = 172
+    Top = 324
     Width = 690
     Caption = 'pnlAcquitteVisee'
     Color = clInfoBk
@@ -2213,12 +2227,12 @@ object RPIMainWnd: TRPIMainWnd
   object pnlProgression: TPanel
     Left = 164
     Height = 46
-    Top = 330
-    Width = 484
+    Top = 430
+    Width = 610
     Anchors = [akLeft, akRight, akBottom]
     BevelOuter = bvLowered
     ClientHeight = 46
-    ClientWidth = 484
+    ClientWidth = 610
     Font.CharSet = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -13
@@ -2232,7 +2246,7 @@ object RPIMainWnd: TRPIMainWnd
       Left = 4
       Height = 20
       Top = 24
-      Width = 477
+      Width = 603
       Anchors = [akLeft, akRight, akBottom]
       Smooth = True
       TabOrder = 0
@@ -2241,12 +2255,11 @@ object RPIMainWnd: TRPIMainWnd
       Left = 12
       Height = 16
       Top = 12
-      Width = 477
+      Width = 603
       Anchors = [akTop, akLeft, akRight]
       AutoSize = False
       Caption = 'lbEtape'
       ParentColor = False
-      OnClick = lbEtapeClick
     end
   end
   object ActionList1: TActionList
@@ -2382,6 +2395,7 @@ object RPIMainWnd: TRPIMainWnd
     object acStatistiques: TAction
       Category = 'Topographie'
       Caption = 'acStatistiques'
+      ImageIndex = 26
       OnExecute = acStatistiquesExecute
     end
     object acCopierConsoleErreur: TAction
@@ -2421,7 +2435,7 @@ object RPIMainWnd: TRPIMainWnd
   object ImageList1: TImageList
     left = 616
     Bitmap = {
-      4C691A0000001000000010000000C0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      4C691B0000001000000010000000C0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
       C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
       C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
       00FF000000FF000000FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0
@@ -3253,7 +3267,39 @@ object RPIMainWnd: TRPIMainWnd
       CCFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFCCCCCCFFDDDD
       DDFFE3E3E3FFE3E3E3FFE3E3E3FFE3E3E3FFE3E3E3FFE3E3E3FFE3E3E3FFE3E3
       E3FFDDDDDDFFDDDDDDFFDDDDDDFFDDDDDDFFDDDDDDFFE3E3E3FFE3E3E3FFE3E3
-      E3FFE3E3E3FFE3E3E3FFE3E3E3FF
+      E3FFE3E3E3FFE3E3E3FFE3E3E3FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FF000000FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF000000FF0000
+      00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
+      00FF000000FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF
     }
   end
 end

@@ -109,8 +109,6 @@ type
     procedure RefreshGraphe(const MyPath: TPathBetweenNodes);
     procedure DessinerGraphe(const MyPath: TPathBetweenNodes);
     function  GetCurrentStation(): TBZClassNode;
-    procedure SetBackgroundColor(const C: TColor);
-    procedure SetCenterlineColor(const C: TColor);
 end;
 
 
@@ -179,7 +177,6 @@ var
   EE1, EE2: TBaseStation;
   Q1, Q2, EWE: Boolean;
   MyPath: TPathBetweenNodes;
-  QIdx: integer;
 begin
   Q1 := FGraphe.BDDEntites.FindStationByCle(false, Trim(editStationDepart.Text) , EE1);
   Q2 := FGraphe.BDDEntites.FindStationByCle(false, Trim(editStationArrivee.Text), EE2);
@@ -203,7 +200,6 @@ begin
   if (EWE) then FGraphe.PutItineraire(FCurrentIdxItineraire, MyPath);
   RefreshGraphe(MyPath);
   DessinerGraphe(MyPath);
-
 end;
 
 
@@ -259,9 +255,12 @@ end;
 procedure TCdrGrapheItineraire.btnExportHTMLClick(Sender: TObject);
 var
   QMenuWidth: Integer;
+  QFileName: String;
 begin
+  QFileName  := editHTMLOutput.FileName;
+  if (not GHTopoQuestionOuiNon(GetResourceString(rsWARN_FILE_ALREADY_EXISTS))) then exit;
   QMenuWidth := 200;
-  FGraphe.ExporterGrapheEnJavascript('Graphe du réseau', editHTMLOutput.FileName,
+  FGraphe.ExporterGrapheEnJavascript('Graphe du réseau', QFileName,
                                       Trim(editStationDepart.Text), Trim(editStationArrivee.Text),
                                       FMapBackgroundColor, //btnBackgroundCarte.ButtonColor,
                                       FMapCenterlineColor, //btnColorCenterline.ButtonColor,
@@ -269,10 +268,6 @@ begin
                                       editHTMLHeight.AsInteger,
                                       QMenuWidth);
   ShowMessage(GetResourceString(rsDONE_ANY_PROCESS));
-
-
-  // pour ne pas se farcir la procédure chiante de sortie de GHTopo
-  //if (GHTopoQuestionOuiNon('Quitter IMMEDIATEMENT GHTopo ?')) then Application.Terminate;
 end;
 
 procedure TCdrGrapheItineraire.DisplayProgression(const Etape: string; const Done, Starting, Ending, Step: integer);
@@ -301,8 +296,6 @@ begin
     Exit;
   end;
   if (not GHTopoQuestionOuiNon(rsMSG_WARN_LONG_PROCESS)) then Exit;
-
-
   Nb := MyPath.GetNbNoeuds();
   if (0 = Nb) then exit;
   FT := TFichesTopo.Create;
@@ -325,7 +318,6 @@ begin
     pnlProgression.Visible := false;
     FreeAndNil(FT);
   end;
-  //if (GHTopoQuestionOuiNon('Quitter IMMEDIATEMENT GHTopo')) then Application.Terminate;
 end;
 
 
@@ -355,8 +347,6 @@ begin
   FGraphe.GetItineraire(FCurrentIdxItineraire, MyPath);
   RefreshGraphe(MyPath);
 end;
-
-
 
 procedure TCdrGrapheItineraire.GetCoordsPointClicked();
 var
@@ -485,7 +475,6 @@ begin
       grdRoadmap.Cells[3, i+1] := FormatterNombreOOo(QLong);
       grdRoadmap.Cells[4, i+1] := FormatterNombreOOo(QPente);
 
-
       grdRoadmap.Cells[5, i+1] := FormatterNombreOOo(StArrivee.Position.X, 3);
       grdRoadmap.Cells[6, i+1] := FormatterNombreOOo(StArrivee.Position.Y, 3);
       grdRoadmap.Cells[7, i+1] := FormatterNombreOOo(StArrivee.Position.Z, 3);
@@ -505,14 +494,44 @@ var
   QNbA: Int64;
   QSr: TNumeroSerie;
   QSt: TNumeroStation;
+  BGC: TDGCColor;
+  ColorLineNodes       , ColorBrushNodes    ,  ColorFontNodes  : TDGCColor;
+  ColorLineArcs        , ColorBrushArcs     ,  ColorFontArcs   : TDGCColor;
+  ColorLineChemin      , ColorBrushChemin   ,  ColorFontChemin : TDGCColor;
+  QBB: TRect2Df;
 begin
   AfficherMessageErreur('DessinerGraphe()');
-  CdrDGCDrawingContext1.Initialiser(FGraphe.XMini - 10.0, FGraphe.YMini - 10.0, FGraphe.XMaxi + 10.0, FGraphe.YMaxi + 10.0, True, FMapBackgroundColor);
+  BGC.setFrom(FMapBackgroundColor, 255);
+
+
+  ColorLineNodes.setFrom( clRed     , 255);
+  ColorBrushNodes.setFrom(clCream   , 128);
+  ColorFontNodes.setFrom( clMaroon  , 255);
+
+  ColorLineArcs.setFrom(FMapCenterlineColor, 255);
+  ColorBrushArcs.setFrom(clAqua , 128);
+  ColorFontArcs.setFrom(clGreen, 255);
+
+  ColorLineChemin.setFrom(MyPath.Color  , 255);
+  ColorBrushChemin.setFrom(clAqua , 128);
+  ColorFontChemin.setFrom(clMaroon, 255);
+
+  QBB := FGraphe.getBoundinxBox();
+  CdrDGCDrawingContext1.Initialiser(QBB.X1 - 10.0, QBB.Y1 - 10.0, QBB.X2 + 10.0, QBB.Y2 + 10.0, True, BGC);
   CdrDGCDrawingContext1.SetProcOnClick(GetCoordsPointClicked);
   CdrDGCDrawingContext1.BeginDrawing();
-    CdrDGCDrawingContext1.AddStyleSheet('Nodes'  , clRed         , 255, psSolid, 1, 0.00, clCream, 128, bsSolid, 'Arial', clMaroon, 255, 15, 2.00, [fsBold], '');
-    CdrDGCDrawingContext1.AddStyleSheet('Arcs'   , FMapCenterlineColor, 255, psSolid, 1, 0.00, clAqua , 128, bsSolid, 'Arial', clGreen, 255, 14, 2.00, [], '');
-    CdrDGCDrawingContext1.AddStyleSheet('Chemin' , MyPath.Color  , 255, psSolid, 3, 0.00, clAqua , 128, bsSolid, 'Arial', clMaroon, 255, 10, 3.00, [fsBold], '');
+    CdrDGCDrawingContext1.AddStyleSheet('Nodes'  ,
+                                        ColorLineNodes, psSolid, 1, 0.00,
+                                        ColorBrushNodes, bsSolid,
+                                        ColorFontNodes, [], 'Arial', 15, 2.00, '');
+    CdrDGCDrawingContext1.AddStyleSheet('Arcs'   ,
+                                        ColorLineArcs, psSolid, 1, 0.00,
+                                        ColorBrushArcs, bsSolid,
+                                        ColorFontArcs, [], 'Arial',  14, 2.00, '');
+    CdrDGCDrawingContext1.AddStyleSheet('Chemin' ,
+                                        ColorLineChemin, psSolid, 3, 0.00,
+                                        ColorBrushChemin, bsSolid,
+                                        ColorFontChemin, [fsBold], 'Arial',  10, 3.00,  '');
     CdrDGCDrawingContext1.BeginGroupe('Noeuds');
       Nb := FGraphe.GetNbStations();
       for i := 0 to Nb -1 do
@@ -567,15 +586,6 @@ begin
   result := FCurrentStation;
 end;
 
-procedure TCdrGrapheItineraire.SetBackgroundColor(const C: TColor);
-begin
-
-end;
-
-procedure TCdrGrapheItineraire.SetCenterlineColor(const C: TColor);
-begin
-
-end;
 
 
 

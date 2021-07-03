@@ -7,7 +7,7 @@ unit Common;
 // Des détails à revoir
 // 04/10/2013: Centralisation de la conversion de chaines ANSI <> UTF8
 
-// 18/07/2014: Ajout de ConvertirEnNombreReel(), qui supporte infifféremment le point ou la virgule
+// 18/07/2014: Ajout de ConvertirEnNombreReel(), qui supporte indifféremment le point ou la virgule
 // 15/12/2014: Ajout de fonctions pour le DistoX
 // 28/01/2015: Ajout de qques fonctions dont GetDescTypeVisee()
 // 11/04/2015: Adaptation pour Linux : OK
@@ -28,7 +28,8 @@ uses
   , Grids, Clipbrd, LCLType, types // pour les grilles et le presse-papiers
   , Process
   , math
-  , LazFileUtils
+  , dateutils
+  , LazFileUtils, FileUtil
   , Graphics
   , Forms
   //, unitUtilsCPU
@@ -100,12 +101,8 @@ function EnsureMakeFilename(const S: TStringDirectoryFilename): TStringDirectory
 
 // makers de structures
 function MakeTPoint(const QX, QY: integer): TPoint;
-function MakeTPointCoupeDeveloppee(const QP, QZ: double): TPointCoupeDeveloppee;
-function MakeTMarker(const D: boolean; const QX, QY: double; const C: TColor; const S: string): TMarker;
+// TIDBaseStation est un nombre (int64) et non un record
 function MakeTIDBaseStation(const S: TNumeroSerie; const P: integer; const IsAntenne: boolean): TIDBaseStation;
-
-function MakeTStationMatchFound(const S, P: integer; const M: string): TStationMatchFound;
-
 
 // fonctions communes:
 //--------------------
@@ -182,9 +179,6 @@ function FormatterNombreWithDotDecimal(const Value: double; const NbDecs: intege
 
 // convertir en nombre des valeurs de type 123 456 789.10 ou 1245-45785
 function ConvertirEnNombreReel(const S: string; const Default: double): double;
-
-
-
 // fonctions de dates
 //**********************
 function GetAnneeISO(const QAnnee: word): word;                         // obtenir l'année std depuis année abrégées
@@ -197,7 +191,7 @@ function DateTimePascalToDateTimeSQL(const MyDate: TDateTime; const WithMillisec
 function DatePascalToDateHeureCondensee(const QDate: TDateTime): string;        // Dates condensées AAAAMMJJ_HHMNSSMS
 function FormatterDateHeureToporobot(const D: TDateTime; const WithMilliseconds: boolean = false): string;              // date au format JJ/MM/AA HH:MM:SS
 
-
+function FormatterHorodatage(const QDate: TDateTime): string; // DateTimePascalToDateTimeSQL sécurisé
 
 
 // fonctions de couleurs
@@ -209,7 +203,6 @@ function GetFloatGValue(const C: TColor): double; inline;
 function GetFloatBValue(const C: TColor): double; inline;
 
 function SVGColor(const C: TColor): string;
-//function KMLColor(const C: TColor; const A: byte = 255): string; overload; inline;
 function KMLColor(const R, G, B, A: byte): string; inline;
 
 
@@ -221,8 +214,6 @@ function GetColorDegrade(const z, zmin, zmax: Double; const Coul1, Coul2: TColor
 // couleur RGBA au format HTML
 function ColorToHTMLColor(const Couleur: TColor): string;
 function ColorHTMLToColor(const CouleurHTML: string): TColor;
-function ColorToGHTopoColor(const C: TColor): string;
-function GHTopoColorToColorDef(const C: String; const Default: TColor): TColor;
 // intervalle de couleurs
 function ChooseColorInColorArray(const QIdx: integer; const AC: array of TColor; const DefaultColor: TColor = clSilver): TColor;
 function ChooseColorFromInterval(const Value: double; const Intervalles: array of double; const AC: array of TColor; const DefaultColor: TColor = clSilver): TColor;
@@ -231,13 +222,13 @@ function ChooseColorFromInterval(const Value: double; const Intervalles: array o
 // fonctions de calculs trigo et sur les visées
 function Hypot2D(const DX, DY: Double): Double; inline;
 function Hypot3D(const DX, DY, DZ: Double): Double; inline;
+function GetAzimut(const dx, dy: double; const Unite: double): double;
 function DistanceBetweenTwoTPoint3Df(const P1, P2: TPoint3Df): double;
 
 function DegMinSec2DegDec(const S: string): double;
 function CalculerAngleBissecteur(const dX1, dY1, dX2, dY2: double): double;  // calcul de l'angle bissecteur de deux segments
 
-function GetAzimut(const dx, dy: Double; const Unite: double): double;
-procedure GetBearingInc(const dx, dy, dz: double; var Dist, Az, Inc: double; const fUB, fUC: Double); // Azimut et pente
+procedure GetBearingInc(const fUB, fUC: Double; const V: TPoint3Df;  out Dist, Az, Inc: double); // Azimut et pente
 procedure CalculerVisee(var MaVisee: TUneVisee;       // calcul d'une visée
                         const CC: TCode; const EE: TExpe;
                         var QCoordsCourantes: TPoint3Df;
@@ -260,7 +251,6 @@ function CalcPenteCorrigee(const PenteBrute: double;
 // fonctions sur les entités GHTopo
 //*********************************
 function  IsSameSerie(const E0, E1: TBaseStation): boolean;
-function  DecomposeStationToporobot(const S: string): TToporobotIDStation;
 procedure DecomposeNumeroSerie(const QNumSerie: TNumeroSerie; out QIdxNameSpace, QNoSerie: integer);
 procedure DecomposeNumeroCode(const QNumCode: TNumeroCode; out QIdxNameSpace, QNoCode: integer);
 procedure DecomposeNumeroExpe(const QNumExpe: TNumeroExpe; out QIdxNameSpace, QNoExpe: integer);
@@ -316,14 +306,6 @@ function  IsNearToAzimut(const GradAz: double; const Azimut, AzimutRef: double; 
 function  IsNearToInclinaison(const GradInc: double; const Inclinaison, InclinaisonRef: double; const ToleranceAngulaire: double): boolean;
 function  IsNearToLongueur(const Longueur, LongueurRef: double; const ToleranceLongueur: double): boolean;
 
-function  CalcAzimutMoyenOfTMesuresViseeDistoX(const GradAz, GradInc: double;
-                                               const ToleranceDistances: double;
-                                               const ToleranceAngulaire: double;
-                                               const ArrVisees: array of TMesureViseeDistoX;
-                                               out   ViseeMoyenne: TMesureViseeDistoX): boolean;
-// fabrication des lignes Code, Expe, Secteurs, ...
-function  MakeToporobotTabLineOfExpe(const IdxTABSection: integer; const Expe: TExpe): string;
-function  MakeToporobotTabLineOfCode(const IdxTABSection: integer; const ModeSaveTab: TModeSaveTAB; const Code: TCode): string;
 
 // crée un nom de fichier avec la date indiquée, pour les fichiers de backup notamment
 function  MakeFilenameFromDate(const Prefix: string; const MyDate: TDateTime; const Extension: string): TStringDirectoryFilename;
@@ -358,6 +340,8 @@ function FTP_UploadUniqueFile(const QFTPParams: TFTPParameters; const QPassWord:
 function FTP_UploadMultiplesFiles(const QFTPParams: TFTPParameters; const QPassWord: string; const QFilesSRC: array of TStringDirectoryFilename; const QDirectoryTGT: TStringDirectoryFilename): boolean;
 function FTP_UploadFolder(const QFTPParams: TFTPParameters; const QPassWord: string; const QDirectorySRC, QDirectoryTGT: TStringDirectoryFilename): boolean;
 
+// Lister le contenu d'un dossier
+procedure TraiterContenuDeDossier(const PathSource, Destination: TStringDirectoryFilename);
 
 
 
@@ -368,7 +352,6 @@ uses
        frmRPIMainWnd,
     {$ELSE}
        frmJournal,
-
     {$ENDIF}
   {$ENDIF}
   {$IFDEF LINUX}
@@ -488,7 +471,6 @@ var
     QIndent += 2;
     if QFSubPath <> '' then SearchPath += QFSubPath + DirectorySeparator;
     SearchPath += '*';
-
     if (SysUtils.FindFirst(SearchPath, faAnyFile and faDirectory, SearchRec) = 0) then
     begin
       repeat
@@ -503,9 +485,8 @@ var
             ParcourirUnDossier(QFPath, LocalName);
           end
           else
-          begin // traitement sur un fichier
+          begin // traitement sur un fichier ("charge militaire")
             AfficherMessageErreur(EWE + '+-- ' + LocalName);//Lignes.Add(LocalName);
-
             ///TD.SendFile(LocalName);
           end;
         end;
@@ -533,6 +514,8 @@ begin
     FreeAndNil(TD);
   end;
 end;
+
+
 
 
 //******************************************************************************
@@ -793,7 +776,7 @@ begin
     ReWrite(FO);
     try
       try
-        for i:=0 to LS.Count-1 do
+        for i := 0 to LS.Count-1 do
         begin
           ALine := LS.Strings[i]+ENDL; // ne PAS purger la chaîne !!!
           Write(FO, ALine);
@@ -867,33 +850,7 @@ begin
   Result.Y := QY;
 end;
 
-function MakeTPointCoupeDeveloppee(const QP, QZ: double): TPointCoupeDeveloppee;
-begin
-  Result.P := QP;
-  Result.Z := QZ;
-end;
-function MakeTMarker(const D: boolean; const QX, QY: double; const C: TColor; const S: string): TMarker;
-begin
-  Result.Displayed := D;
-  Result.X := QX;
-  Result.Y := QY;
-  Result.Couleur := C;
-  Result.Caption := Trim(S);
-end;
-
-
 {$WARNING: TEXpe.DateExpe à implementer}
-
-
-
-function MakeTStationMatchFound(const S, P: integer; const M: string): TStationMatchFound;
-begin
-  Result.Serie   := S;
-  Result.Station := P;
-  Result.Match   := M;
-end;
-
-
 
 
 //******************************************************************************
@@ -986,11 +943,10 @@ var
   LM, HM     : double;
 begin
   Result:=False;
-  BoundingBox.X1 := Math.Min(R1.X1, R2.X1);
-  BoundingBox.Y1 := Math.Min(R1.Y1, R2.Y1);
-
-  BoundingBox.X2 := Math.Max(R1.X2, R2.X2);
-  BoundingBox.Y2 := Math.Max(R1.Y2, R2.Y2);
+  BoundingBox.setFrom(Math.Min(R1.X1, R2.X1),
+                      Math.Min(R1.Y1, R2.Y1),
+                      Math.Max(R1.X2, R2.X2),
+                      Math.Max(R1.Y2, R2.Y2));
 
   LB:= BoundingBox.X2 - BoundingBox.X1;
   HB:= BoundingBox.Y2 - BoundingBox.Y1;
@@ -1690,6 +1646,15 @@ begin
   if (WithMilliseconds) then Result += Format('.%.3d', [MS]);
 end;
 
+function FormatterHorodatage(const QDate: TDateTime): string; //  DateTimePascalToDateTimeSQL sécurisé
+var
+  Mydate: TDateTime;
+begin
+  Mydate := QDate;
+  if (YearOf(Mydate) < 1950) then Mydate := Now();
+  DateTimePascalToDateTimeSQL(MyDate, True);
+end;
+
 
 
 
@@ -1731,9 +1696,6 @@ function KMLColor(const R, G, B, A: byte): string; inline;
 begin
   Result := Format('<color>%.2X%.2X%.2X%.2X</color>',[A, B, G, R]);
 end;
-
-
-
 
 
 function Acad2RGB(const n : integer) : tColor; // palette par défaut d'Autocad
@@ -1846,21 +1808,8 @@ begin
   WU[1]   := '$';
   Result  := StringToColorDef(WU, clGray);
 end;
-function ColorToGHTopoColor(const C: TColor): string;
-begin
-  Result := Format('$%.3d%.3d%.3d', [Red(C), Green(C), Blue(C)]);
-end;
 
-function GHTopoColorToColorDef(const C: String; const Default: TColor): TColor;
-var
-  R, G, B: byte;
-begin
-  if (length(C) < 10) then Exit(clGray); // la notation Pascal exige 1 + 3*3 caractères
-  R := StrToIntDef(Copy(C, 2, 3), Red(Default));
-  G := StrToIntDef(Copy(C, 5, 3), Green(Default));
-  B := StrToIntDef(Copy(C, 8, 3), Blue(Default));
-  Result := RGBToColor(R, G, B);
-end;
+
 
 //******************************************************************************
 // fonctions de calculs trigo et sur les visées
@@ -1872,6 +1821,14 @@ end;
 function Hypot3D(const DX, DY, DZ: Double): Double;
 begin
   Result := Sqrt(dx*dx + dy*dy +dz*dz);
+end;
+
+function GetAzimut(const dx, dy: double; const Unite: double): double;
+var
+  PP: TPoint3Df;
+begin
+  PP.setFrom(dx, dy, 0.00);
+  Result := PP.getAzimut(Unite);
 end;
 
 function DistanceBetweenTwoTPoint3Df(const P1, P2: TPoint3Df): double;
@@ -1951,26 +1908,15 @@ begin
 end;
 // retourne un azimut
 // TODO: Revoir cette fonction (bug avec les grades)
-function GetAzimut(const dx, dy: Double; const Unite: double): double;
-const TWO_PI = 2 * PI;
-var
-  a: double;
-begin
-  a := ArcTan2(dy, dx + 1e-12);
-  if (a < 0) then a := a + TWO_PI;
-  a := 0.50 * PI - a;
-  if (a < 0) then a := a + TWO_PI;
-  Result := a * 0.50 * Unite / pi;
-end;
+
 // retourne la longueur, direction et pente pour dx, dy, dz
-procedure GetBearingInc(const dx, dy, dz: double;  var Dist, Az, Inc: double; const fUB, fUC: Double);
+procedure GetBearingInc(const fUB, fUC: Double; const V: TPoint3Df;  out Dist, Az, Inc: double);
 var
   dp: Double;
 begin;
-  dp   := Hypot2D(dx, dy);
-  Dist := Hypot2D(dp,dz);
-  Inc  := ArcTan2(dz, dp) * 0.5 * fUC / pi;
-  Az   := GetAzimut(dx,dy, fUB);
+  Dist := V.getNorme();
+  Az   := V.getAzimut(fUB);
+  Inc  := V.getInclinaison(fUC);
 end;
 // calcul des accroissements pour une visée
 procedure CalculerVisee(var MaVisee: TUneVisee;  const CC: TCode; const EE: TExpe; var QCoordsCourantes: TPoint3Df; var QChainageHZ: double);
@@ -2113,7 +2059,7 @@ begin
   QCoordsCourantes.Y += RY;
   QCoordsCourantes.Z += RZ;
   QChainageHZ        += RP;
-   MaVisee.AccroissXYZ.setFrom(RX, RY, RZ);
+  MaVisee.AccroissXYZ.setFrom(RX, RY, RZ);
   MaVisee.AccroissP := RP;
 end;
 function GetTypeDeVisee(const T: integer): TTypeDeVisee;
@@ -2234,21 +2180,6 @@ begin
   Result:= (E0.Entite_Serie        =  E1.Entite_Serie) and
            (E0.Entite_Station      = (E1.Entite_Station - 1));
 
-end;
-function DecomposeStationToporobot(const S: string): TToporobotIDStation;
-var
-  EWE: TGHStringArray;
-begin
-  result.eIdxNameSpace := 0;
-  result.aSerie:= -1;
-  result.aStation:= -1;
-  if (Pos('.', S) = 0) then Exit;
-  EWE := Split(S, '.');
-  try
-    Result.aSerie := StrToIntDef(EWE[0], -1);
-    Result.aStation := StrToIntDef(EWE[1], -1);
-  except
-  end;
 end;
 // extraire l'ID d'espace de noms et le numéro de série originel
 procedure DecomposeNumeroSerie(const QNumSerie: TNumeroSerie; out QIdxNameSpace, QNoSerie: integer);
@@ -2674,168 +2605,10 @@ begin
   Result := (Abs(Longueur - LongueurRef) <= ToleranceLongueur);
 end;
 
-//******************************************************************************
-// Calcul de l'azimut moyen et test de quasi-colinéarité d'une série de mesures DX
-// retourne VRAI si les mesures sont dans les tolérances
-function CalcAzimutMoyenOfTMesuresViseeDistoX(const GradAz, GradInc: double;
-                                              const ToleranceDistances: double;
-                                              const ToleranceAngulaire: double;
-                                              const ArrVisees: array of TMesureViseeDistoX;
-                                              out   ViseeMoyenne: TMesureViseeDistoX): boolean;
-var
-  i, n: Integer;
-  QArrProjXYZ: array of TPoint3Df;  // projections sur XYZ
-  QViseeDX: TMesureViseeDistoX;
-  QProjXYZ, QProjViseeMoyenne: TPoint3Df;
-  ToleranceAngulaireMiseEnDistance: double;
-  QR: Double;
-  QX, QY, QZ: double;
-  TwoPi_Sur_GradAz, TwoPi_Sur_GradInc, Grad_Az_Sur_4, Grad_Inc_Sur_4: double;
-  WU1, WU2: String;
-  QConditionLongueursOK, QConditionAngulaireOK: Boolean;
-  QDL: ValReal;
-  function CalcDXDYDZ(const QL, QAz, QInc: double): TPoint3Df;
-  var
-    QLP: double;
-  begin
-    QLP      := QL  * cos(QInc);
-    Result.X := QLP * Sin(QAz);
-    Result.Y := QLP * Cos(QAz);
-    Result.Z := QL  * sin(QInc);
-  end;
-begin
-  result := false;
-  ViseeMoyenne.Longueur         := -1.00;        // Valeur d'erreur conventionnelle pour les longueurs
-  ViseeMoyenne.Azimut           :=  0.00;
-  ViseeMoyenne.Pente            :=  0.00;
-  ViseeMoyenne.TimeStamp        := Now();
-  n := Length(ArrVisees);
-  AfficherMessageErreur(Format('CalcAzimutMoyenOfTMesuresViseeDistoX(%.2f, %.2f, %.2f, %.5f - n = %d)',
-                              [GradAz, GradInc, ToleranceDistances, ToleranceAngulaire, n]));
-  if (n = 0) then exit(false); // Tableau de mesures vide -> on sort
-  if (n = 1) then // Une seule mesure -> ViséeMoyenne devient une visée radiante
-  begin
-    ViseeMoyenne := ArrVisees[0];
-    Exit(false);
-  end;
-  // relister les mesures
-  AfficherMessageErreur(Format('%d mesures', [n]));
-  for i := 0 to n - 1 do AfficherMessageErreur(Format('%d: %.3f, %.3f, %.3f', [i, ArrVisees[i].Longueur, ArrVisees[i].Azimut, ArrVisees[i].Pente]));
-  AfficherMessageErreur('================================');
-  TwoPi_Sur_GradAz  := TWO_PI / GradAz;
-  TwoPi_Sur_GradInc := TWO_PI / GradInc;
-  Grad_Az_Sur_4     := 0.25 * GradAz;
-  Grad_Inc_Sur_4    := 0.25 * GradInc;
-  // calcul des projections des visées sur XYZ
-  SetLength(QArrProjXYZ, n);
-  // Calcul de la visée moyenne
-  QX := 0.00;
-  QY := 0.00;
-  QZ := 0.00;
-  for i := 0 to n - 1 do
-  begin
-    QArrProjXYZ[i] := CalcDXDYDZ(ArrVisees[i].Longueur, ArrVisees[i].Azimut * TwoPi_Sur_GradAz, ArrVisees[i].Pente * TwoPi_Sur_GradInc);
-    QX += QArrProjXYZ[i].X;
-    QY += QArrProjXYZ[i].Y;
-    QZ += QArrProjXYZ[i].Z;
-  end;
-  // Longueur, azimut et pentes moyens
-  QX := QX / n;
-  QY := QY / n;
-  QZ := QZ / n;
-  GetBearingInc(QX, QY, QZ, ViseeMoyenne.Longueur, ViseeMoyenne.Azimut, ViseeMoyenne.Pente, GradAz, GradInc);
-  // On projette la visée moyenne dans un repère local
-  QProjViseeMoyenne := CalcDXDYDZ(ViseeMoyenne.Longueur, ViseeMoyenne.Azimut * TwoPi_Sur_GradAz, ViseeMoyenne.Pente * TwoPi_Sur_GradInc);
-  AfficherMessageErreur(Format('Visée moyenne: %.2f; %.2f; %.2f - %.3f; %.3f; %.3f',
-                             [ViseeMoyenne.Longueur, ViseeMoyenne.Azimut, ViseeMoyenne.Pente,
-                              QProjViseeMoyenne.X,  QProjViseeMoyenne.Y,  QProjViseeMoyenne.Z]));
-  // On transforme la tolérance angulaire en rayon de capture
-  ToleranceAngulaireMiseEnDistance := ViseeMoyenne.Longueur * sin(ToleranceAngulaire * DEG_TO_RAD);
-  // Parcours de la liste des projetées
-  for i := 0 to n - 1 do
-  begin
-    // Test sur les longueurs
-    QDL := abs(ArrVisees[i].Longueur - ViseeMoyenne.Longueur);
-    QConditionLongueursOK := (QDL < ToleranceDistances);
-    // La nouvelle origine est l'extrémité de la visée moyenne
-    QProjXYZ.setFrom(QArrProjXYZ[i].X - QProjViseeMoyenne.X,
-                     QArrProjXYZ[i].Y - QProjViseeMoyenne.Y,
-                     QArrProjXYZ[i].Z - QProjViseeMoyenne.Z);
-    QR  := Hypot3D(QProjXYZ.X, QProjXYZ.Y, QProjXYZ.Z);
 
-    // Test de proximité des extrémités des visées avec celle de la visée moyenne
-    QConditionAngulaireOK := (QR < ToleranceAngulaireMiseEnDistance);
 
-    WU1 := IIF(QConditionLongueursOK, 'OK', 'NotOK');
-    WU2 := IIF(QConditionAngulaireOK, 'OK', 'NotOK');
 
-    AfficherMessageErreur(Format('%d: %.2f; %.2f; %.2f - dl = %.2f, r = %.3f, r0 = %.3f - Longueurs: %s, angles: %s', [i, QProjXYZ.X, QProjXYZ.Y, QProjXYZ.Z, QDL ,QR, ToleranceAngulaireMiseEnDistance, WU1, WU2]));
-    Result := (QConditionLongueursOK and QConditionAngulaireOK);
-  end;
-end;
 
-function MakeToporobotTabLineOfExpe(const IdxTABSection: integer; const Expe: TExpe): string;
-begin
-   Result := Format(FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                    FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                    FORMAT_STRING+TAB+FORMAT_STRING+TAB+
-                    FORMAT_NB_INTEGER+TAB+FORMAT_NB_REAL_3_DEC+TAB+
-                    FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+ // anciennement '%f'+TAB+FORMAT_NB_INTEGER+TAB+
-                    FORMAT_STRING,
-                           [IdxTABSection,
-                            Expe.IDExpe,
-                            Expe.JourExpe, Expe.MoisExpe, Expe.AnneeExpe, {$WARNING: TEXpe.DateExpe à implementer}
-                            Expe.Operateur, Expe.ClubSpeleo,
-                            Ord(Expe.ModeDecl),
-                            Expe.DeclinaisonInDegrees,
-                            0, Expe.IdxCouleur, //Inclinaison, Couleur,
-                            Expe.Commentaire
-                           ]);
-end;
-
-function MakeToporobotTabLineOfCode(const IdxTABSection: integer; const ModeSaveTab: TModeSaveTAB; const Code: TCode): string;
-const
-  LINE_CODE    = FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                 FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+
-                 FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+
-                 FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+
-                 FORMAT_STRING;
-  FMT_PARAMS_CORR_FUNC = FORMAT_NB_REAL_6_DEC + TAB + FORMAT_NB_REAL_6_DEC + TAB + FORMAT_NB_REAL_6_DEC;
-begin
-  with Code do
-  begin
-    case ModeSaveTAB of
-      mtabEXTENDEDTAB:
-        //-1	1	360.00	360.00	0.05	1.00	1.00	1.00	100.00		5314011	0.000000	0.000000	0.000000	0.000000	0.000000	0.000000
-        Result := Format(LINE_CODE + TAB + FORMAT_NB_INTEGER + TAB +
-                     FMT_PARAMS_CORR_FUNC + TAB +
-                     FMT_PARAMS_CORR_FUNC + TAB +
-                     FORMAT_NB_REAL_3_DEC, //+ TAB +
-                     // FORMAT_NB_REAL_3_DEC + TAB + FORMAT_NB_REAL_3_DEC
-                       [IdxTABSection,
-                        IDCode,
-                        GradAz, GradInc,
-                        PsiL, PsiAz, PsiP,
-                        FactLong,
-                        AngLimite,
-                        Commentaire,
-                        0, //ReservedInt,
-                        ParamsFuncCorrAz.Co, ParamsFuncCorrAz.ErreurMax, ParamsFuncCorrAz.PosErrMax,
-                        ParamsFuncCorrInc.Co, ParamsFuncCorrInc.ErreurMax, ParamsFuncCorrInc.PosErrMax,
-                        ErreurTourillon //, DiametreBoule1, DiametreBoule2;
-                       ]);
-      mtabTOPOROBOT:
-        Result := Format(LINE_CODE,
-                       [IdxTABSection,
-                        IDCode,
-                        GradAz, GradInc,
-                        0.10, 1.0, 1.0, //PsiL, PsiAz, PsiP,
-                        100.00, 0.00, //FactLong, AngLimite,
-                        SafeTruncateString(Commentaire, 50)
-                       ]);
-    end;
-  end; //with Code
-end;
 
 // crée un nom de fichier avec la date indiquée, pour les fichiers de backup notamment
 function MakeFilenameFromDate(const Prefix: string; const MyDate: TDateTime; const Extension: string): TStringDirectoryFilename;
@@ -3067,7 +2840,103 @@ begin
   end;
 end;
 //*)
+//******************************************************************************
+procedure TraiterContenuDeDossier(const PathSource, Destination: TStringDirectoryFilename);
+var
+  QIndentation: Integer;
+  procedure Traitement(const QSrc, QDest: TStringDirectoryFilename);
+  var
+    QDestDir: TStringDirectoryFilename;
+  begin
+    //AfficherMessageErreur(Format('%s - %s --> %s ', [StringOfChar(' ', QIndentation), QSrc, QDest]));
+    QDestDir := ExtractFilePath(QDest);
+    ForceDirectoriesUTF8(QDestDir);
+    if (FileUtil.CopyFile(QSrc, QDest, [cffOverwriteFile, cffPreserveTime], false)) then
+      AfficherMessageErreur('Success to copy: ' + QSrc)
+    else
+      AfficherMessageErreur('Failed to copy: ' + QSrc);
+    //*)
+  end;
+  procedure ParcourirDossier(const MyPath: string);
+  Var
+    S:TSearchRec;
+    QPath: TStringDirectoryFilename;
+    EWE  : TStringDirectoryFilename;
+  begin
+    QPath := IncludeTrailingPathDelimiter(MyPath);
+    if (0 = FindFirst(QPath + '*.*', faAnyFile, S)) then
+    begin
+      repeat
+        // Il faut absolument dans le cas d'une procédure récursive ignorer
+        // les . et .. qui sont toujours placés en début de répertoire
+        // Sinon la procédure va boucler sur elle-même.
+        if ((S.Name <> '.') And (s.Name <> '..')) then
+        begin
+          // FindData n'existe pas sous Linux. Semble fonctionner avec S.Name
+          EWE := QPath + S.Name;
+          //EWE := QPath + S.FindData.cFileName;    // FindData inexistant sous Linux
 
+          if ((S.Attr And faDirectory) <> 0) then
+          begin
+            AfficherMessageErreur(Format('%s Entre dans le dossier: %s' , [StringOfChar(' ', QIndentation), PathSource + EWE]));
+            QIndentation += 2;
+            ParcourirDossier(EWE);
+          end
+          else
+          begin // la charge militaire est ici
+            EWE := StringReplace(EWE, './', '', [rfReplaceAll]); // provisoire
+            Traitement(PathSource + EWE, Destination + EWE);
+
+          end;
+        end;
+      until (FindNext(S) <> 0);
+      QIndentation -= 2;
+    end;
+  end;
+
+begin
+  AfficherMessageErreur('Contenu du dossier: ' + PathSource);
+  if (not DirectoryExistsUTF8(PathSource)) then
+  begin
+    AfficherMessageErreur(Format(GetResourceString(rsERR_MSG_ELEMENT_NOT_FOUND), [PathSource]));
+    exit;
+  end;
+  QIndentation := 0;
+  chdir(PathSource);
+  ParcourirDossier('./');
+end;
+end.
+         // Procédure pour compter les fichiers
+Function CompteFichiers(Chemin:String):Integer;
+
+Begin
+
+  Chemin:=IncludeTrailingPathDelimiter(Chemin);
+  Form1.Label2.Caption:=Chemin;
+  Form1.Label2.Refresh;
+
+  Result:=0;
+  // Recherche de la première entrée du répertoire
+  If FindFirst(Chemin+'*.*',faAnyFile,S)=0
+  Then Begin
+    Repeat
+      // Il faut absolument dans le cas d'une procédure récursive ignorer
+      // les . et .. qui sont toujours placés en début de répertoire
+      // Sinon la procédure va boucler sur elle-même.
+      If (S.Name<>'.')And(s.Name<>'..')
+      Then Begin
+        If (S.Attr And faDirectory)<>0
+          // Dans le cas d'un sous-repertoire on appelle la même procédure
+          Then Result:=Result+CompteFichiers(Chemin+S.FindData.cFileName)
+          // Sinon on compte simplement le fichier
+          Else Inc(Result);
+      End;
+    // Recherche du suivant
+    Until FindNext(S)<>0;
+    FindClose(S);
+  End;
+End;
+end;
 
 
 

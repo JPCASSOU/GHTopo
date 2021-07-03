@@ -73,6 +73,7 @@ var
     UnCode   : TCode;
     UneViseeAntenne: TViseeAntenne;
     MyNameSpace: TNameSpace;
+    CF: TGHTopoColor;
     // il y a des séries ?
     //HasSeries: boolean;
     function LireLigne: string;
@@ -128,9 +129,9 @@ var
               -18: begin // Nouvelle section: Espace de noms (pour les synthèses)
                      //00  01 02       03       04     05 06
                      //-18	0	255 	0 	0 	Pont_de_Gerbaut	Gouffre du Pont de Gerbaut
-                     MyNameSpace.Couleur := RGBToColor(StrToIntDef(Trim(PrmsLn[2]), 255),
-                                                       StrToIntDef(Trim(PrmsLn[3]), 0),
-                                                       StrToIntDef(Trim(PrmsLn[4]), 0));
+                     MyNameSpace.Couleur.setFrom(StrToIntDef(Trim(PrmsLn[2]), 255),
+                                                 StrToIntDef(Trim(PrmsLn[3]), 0),
+                                                 StrToIntDef(Trim(PrmsLn[4]), 0));
                      MyNameSpace.Nom          := Trim(PrmsLn[5]);
                      MyNameSpace.Description  := Trim(PrmsLn[6]);
                      AfficherMessageErreur('Namespace trouvé:' + MyNameSpace.Nom);
@@ -140,12 +141,13 @@ var
 
                 //#### #-16	IDFiltre	NomFiltre	CouleurFiltre_R	CouleurFiltre_G	CouleurFiltre_B	FiltreExpr	Description
                      //-16	0	Aquatopo	0	128	0	SERIE=227
-                     MyFiltre.CouleurFiltre :=  RGBToColor(StrToIntDef(PrmsLn[2], 0),
-                                                           StrToIntDef(PrmsLn[3], 0),
-                                                           StrToIntDef(PrmsLn[4], 0));
-                     MyFiltre.NomFiltre     := Trim(PrmsLn[5]);
-                     MyFiltre.Expression    := Trim(PrmsLn[6]);
-                     MyFiltre.Description   := Trim(PrmsLn[7]);
+                     CF.setFrom(StrToIntDef(PrmsLn[2], 0),
+                                StrToIntDef(PrmsLn[3], 0),
+                                StrToIntDef(PrmsLn[4], 0));
+                     MyFiltre.setFrom(Trim(PrmsLn[5]),
+                                      CF,
+                                      Trim(PrmsLn[6]),
+                                      Trim(PrmsLn[7]));
                      AddFiltrePerso(MyFiltre);  //*)
 
                    end;
@@ -155,9 +157,9 @@ var
                      SetCodeEPSGSystemeCoordonnees(EPSGDefault);
                    end;
               -10: begin // Nouvelle section: secteurs
-                     UnSecteur.CouleurSecteur := RGBToColor(StrToIntDef(PrmsLn[2], 0),
-                                                 StrToIntDef(PrmsLn[3], 0),
-                                                 StrToIntDef(PrmsLn[4], 0));
+                     UnSecteur.CouleurSecteur.setFrom(StrToIntDef(PrmsLn[2], 0),
+                                                      StrToIntDef(PrmsLn[3], 0),
+                                                      StrToIntDef(PrmsLn[4], 0));
                      UnSecteur.NomSecteur     := Trim(PrmsLn[5]);
                      AddSecteur(UnSecteur);
                    end;
@@ -173,9 +175,9 @@ var
                      AddViseeAntenne(UneViseeAntenne);
                    end;
                -8: begin  // réseaux
-                     UnReseau.ColorReseau := RGBToColor(StrToIntDef(PrmsLn[2], 0),
-                                                        StrToIntDef(PrmsLn[3], 0),
-                                                        StrToIntDef(PrmsLn[4], 0));
+                     UnReseau.ColorReseau.setFrom(StrToIntDef(PrmsLn[2], 0),
+                                                  StrToIntDef(PrmsLn[3], 0),
+                                                  StrToIntDef(PrmsLn[4], 0));
                      UnReseau.TypeReseau  := StrToIntDef(PrmsLn[5], 0);
                      UnReseau.NomReseau   := Trim(PrmsLn[6]);
                      UnReseau.ObsReseau   := Trim(PrmsLn[7]);
@@ -206,12 +208,12 @@ var
                        QArrStrg   := Split(QStr, '|');
                        UneEntree.eNomEntree := Trim(QArrStrg[0]);
                        UneEntree.eIDTerrain := Trim(QArrStrg[1]);
-                       UneEntree.eCouleur   := GHTopoColorToColorDef(Trim(QArrStrg[2]), clGray);
+                       UneEntree.eCouleur.setFromStrGHTopoColor(Trim(QArrStrg[2]), clGray);
                        ///eCouleur   := Col
                      except
                        AfficherMessage(Format(rsWARNINGENTRYADDED,[QN]));
                        UneEntree.eNomEntree := Format(rsRD_TAB_ENTRANCE,[QN]);
-                       UneEntree.eCouleur   := clRed;
+                       UneEntree.eCouleur.setFrom(clRed);
                      end;
                      UneEntree.ePosition.setFrom(ConvertirEnNombreReel(PrmsLn[2], 0.00),
                                                  ConvertirEnNombreReel(PrmsLn[3], 0.00),
@@ -440,11 +442,7 @@ end;
 procedure TToporobotStructure2012.SaveToXTB(const FichierTAB: TStringDirectoryFilename; const ModeSaveTAB: TModeSaveTAB; const TextFileFormat: TTextFileFormat);
 const
 
-  LINE_STATION = FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                 FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                 FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+
-                 FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+
-                 FORMAT_STRING;
+
 
   FMT_LINE_NAMESPACE   = FORMAT_NB_INTEGER  + TAB + FORMAT_NB_INTEGER + TAB +
                          '%d ' + TAB + '%d ' + TAB + '%d ' + TAB + // couleur
@@ -536,9 +534,7 @@ begin
         for i := 0 to QNbNamespaces - 1 do
         begin
           MyNamespace := self.GetNameSpace(i);
-          WrtLn(Format(FMT_LINE_NAMESPACE, [-18, i,
-                                            Red(MyNamespace.Couleur), Green(MyNamespace.Couleur), Blue(MyNamespace.Couleur),
-                                            MyNamespace.Nom, MyNamespace.Description]));
+          WrtLn(Format(FMT_LINE_NAMESPACE, [-18, i, MyNamespace.Couleur.Red, MyNamespace.Couleur.Green, MyNamespace.Couleur.Blue, MyNamespace.Nom, MyNamespace.Description]));
         end;
       end
       else WrtLn(Format(FMT_LINE_NAMESPACE, [-18, 0,
@@ -555,19 +551,7 @@ begin
 
       if (QNbFiltresPerso > 0) then
       begin
-        for i := 0 to QNbFiltresPerso - 1 do
-        begin
-          MyFiltrePerso := self.GetFiltrePerso(i);
-          WrtLn(Format(FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB +
-                       FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB +
-                       FORMAT_STRING + TAB +
-                       FORMAT_STRING + TAB + FORMAT_STRING,
-                       [-16, i,
-                        Red(MyFiltrePerso.CouleurFiltre), Green(MyFiltrePerso.CouleurFiltre), Blue(MyFiltrePerso.CouleurFiltre),
-                        MyFiltrePerso.NomFiltre,
-                        MyFiltrePerso.Expression, MyFiltrePerso.Description
-                        ]));
-        end;
+        for i := 0 to QNbFiltresPerso - 1 do WrtLn(GetFiltrePerso(i).toLineXTB(i));
       end;
       // Section -15: Système de coordonnées géographiques (XTB uniquement)
       // TODO: Désactivé pour l'instant - A réimplémenter
@@ -590,20 +574,7 @@ begin
       QNbSecteurs := GetNbSecteurs();
       if (QNbSecteurs > 1) then
       begin
-        for i:=1 to QNbSecteurs - 1 do
-        begin
-          SC := GetSecteur(i);
-          WrtLn(Format(FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                       FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                       FORMAT_STRING,
-                       [-10,
-                        i,
-                        Red(SC.CouleurSecteur),
-                        Green(SC.CouleurSecteur),
-                        Blue(SC.CouleurSecteur),
-                        SC.NomSecteur
-                        ]));
-        end;
+        for i := 1 to QNbSecteurs - 1 do WrtLn(GetSecteur(i).toLineXTB(i));
       end;
       // Section -9: Visées en antennes (Format XTB uniquement)
       QNbAntennes := self.GetNbAntennes();
@@ -618,25 +589,7 @@ begin
         for i := 1 to QNbAntennes - 1 do
         begin
           VA := GetViseeAntenne(i);
-          if (VA.Longueur > 0.001) then
-          begin
-            //-9	1	2	1102	10	101	101	GHLMF	12.56	289.00	-14.00	le chat dans la souricière
-            WrtLn(Format(FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+
-                              TAB + FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + // série, point
-                              TAB + FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + // code, expé
-                              TAB + FORMAT_STRING +          // ID terrain
-                              TAB + FORMAT_NB_REAL_2_DEC+
-                              TAB + FORMAT_NB_REAL_2_DEC+
-                              TAB + FORMAT_NB_REAL_2_DEC+
-                              TAB + FORMAT_STRING ,
-                     [-9, i, VA.Reseau, VA.Secteur,
-                             VA.SerieDepart, VA.PtDepart,
-                             0, 0, //VA.Code, VA.Expe,           // Visées en antenne: Code et expés hérité de leur station d'accrochage
-                             '', //VA.IDTerrainStation,
-                             VA.Longueur, VA.Azimut, VA.Pente,
-                             ''  //VA.Commentaires
-                     ]));
-          end;
+          if (VA.Longueur > 0.001) then  wrtLn(VA.toLineXTB(i));
         end;
       end;
       // Section -8: Réseaux (Format XTB uniquement)
@@ -649,24 +602,7 @@ begin
       QNbReseaux := GetNbReseaux();
       if (QNbReseaux > 1) then
       begin
-        for i:=1 to QNbReseaux - 1 do
-        begin
-          R:=GetReseau(i);
-          WrtLn(Format(FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                       FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                       FORMAT_NB_INTEGER +TAB+
-                       FORMAT_STRING + TAB +
-                       FORMAT_STRING,
-                       [-8,
-                        i,
-                        Red(R.ColorReseau),
-                        Green(R.ColorReseau),
-                        Blue(R.ColorReseau),
-                        R.TypeReseau,
-                        R.NomReseau,
-                        R.ObsReseau
-                        ]));
-        end;
+        for i:=1 to QNbReseaux - 1 do WrtLn(GetReseau(i).toLineXTB(i));
       end;
     end; //  if (ModeSaveTAB = mtabEXTENDEDTAB) then begin
     // Sauvegarde des entrées
@@ -677,40 +613,12 @@ begin
     WrtCommentaire(MakeHeaderRubriquesOfAnRow(TAB, -6, ['ID Entrance', 'NomEntrance', 'Serie', 'Station', 'X Entrance', 'Y Entrance', 'Z Entrance', 'Observ']));
     WrtLn('');
     QNbEntrees := GetNbEntrances();
-    for i := 0 to QNbEntrees - 1 do
-    begin
-      Entrance := GetEntrance(i);
-      AfficherMessage(Format('%d/%d: %d.%d:  %s', [i, QNbEntrees, Entrance.eRefSer, Entrance.eRefSt, Entrance.eNomEntree]));
-      WrtLn(Format(FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB +
-                   FORMAT_STRING + TAB + FORMAT_STRING + TAB +
-                   FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB +
-                   FORMAT_NB_REAL_3_DEC + TAB + FORMAT_NB_REAL_3_DEC + TAB + FORMAT_NB_REAL_3_DEC + TAB +
-                   FORMAT_STRING + TAB + FORMAT_STRING,
-                  [-6, i+1,
-                   Entrance.eNomEntree,
-                   Entrance.eIDTerrain,
-                   Entrance.eRefSer,  Entrance.eRefSt,
-                   Entrance.ePosition.X, Entrance.ePosition.Y, Entrance.ePosition.Z,
-                   Entrance.eObserv,
-                   ColorToGHTopoColor(Entrance.eCouleur)
-                   ]));
-    end;
-
+    for i := 0 to QNbEntrees - 1 do WrtLn(GetEntrance(i).toLineXTBSection6(i));
     AfficherMessage('--> Saving #-5 Deprecated Entrances section');
     WrtCommentaire(MakeHeaderRubriquesOfAnRow(TAB, -5, ['X Entrance', 'Y Entrance', 'Z Entrance', 'Serie', 'Station', 'Observ', '*** Deprecated section. Data moved to #6 section ***']));
     WrtLn('');
-    for i:=0 to QNbEntrees - 1 do
-    begin
-      Entrance := GetEntrance(i);
-      WrtLn(Format(FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB +
-                   FORMAT_NB_REAL_3_DEC + TAB + FORMAT_NB_REAL_3_DEC + TAB + FORMAT_NB_REAL_3_DEC + TAB +
-                   FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB + FORMAT_STRING,
-                          [-5, i+1,
-                          Entrance.ePosition.X, Entrance.ePosition.Y, Entrance.ePosition.Z,
-                          Entrance.eRefSer, Entrance.eRefSt,
-                          Entrance.eObserv
-                          ]));
-    end;
+    for i := 0 to QNbEntrees - 1 do WrtLn(GetEntrance(i).toLineXTBSection5(i));
+
     WrtLn('');
     WrtCommentaire('Trips list');
     WrtLn('');
@@ -720,10 +628,8 @@ begin
     QNbExpes := GetNbExpes();
     if (QNbExpes > 0) then
     begin
-      for  i:= 1 to QNbExpes - 1 do
-      begin
-        WrtLn(MakeToporobotTabLineOfExpe(-2, GetExpe(i)));
-      end;
+      for  i:= 1 to QNbExpes - 1 do  WrtLn(GetExpe(i).toLineXTB());
+      WrtLn('');
     end;
     // Codes
     //-1	999	400.00	400.00	0.00	0.00	0.00	100.00	-100.00	Fixpunkt
@@ -735,10 +641,7 @@ begin
     QNbCodes := GetNbCodes();
     if (QNbCodes > 1) then
     begin
-      for i:=1 to QNbCodes - 1 do
-      begin
-        WrtLn(MakeToporobotTabLineOfCode(-1, ModeSaveTAB, GetCode(i)));
-      end;
+      for i:=1 to QNbCodes - 1 do WrtLn(GetCode(i).toLineXTB(ModeSaveTAB));
       WrtLn('');
     end;
     // Séries
@@ -753,7 +656,6 @@ begin
     begin
       WrtLn('');
       Serie := GetSerie(Sr);
-      //AfficherMessage(Format('---> %d : %s (%d pts)',[Serie.GetNumeroDeSerie(), Serie.GetNomSerie, Serie.GetNbVisees]));
       with Serie do
       begin
         case ModeSaveTAB of
@@ -795,37 +697,7 @@ begin
         for St := 0 to Serie.GetNbVisees - 1 do
         begin
           Station := Serie.GetVisee(St);
-          with Station do
-          begin
-            case ModeSaveTAB of
-              mtabEXTENDEDTAB:
-              begin
-                WrtLn(Format(LINE_STATION + TAB + FORMAT_STRING + TAB + FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER +
-                             TAB + FORMAT_STRING + TAB + FORMAT_NB_REAL_3_DEC + TAB + FORMAT_NB_REAL_3_DEC,
-                                [Serie.GetNumeroDeSerie(), St,
-                                 Code, Expe,
-                                 Longueur, Azimut, Pente,
-                                 LG, LD, HZ, HN,
-                                 Commentaires,
-                                 IDTerrainStation,
-                                 TypeVisee,
-                                 IDSecteur,
-                                 DateTimePascalToDateTimeSQL(Now()), //Horodatage,
-                                 Temperature, Humidity
-                                ]));
-              end;
-              mtabTOPOROBOT:
-              begin
-                WrtLn(Format(LINE_STATION,
-                                [Serie.GetNumeroDeSerie(), St,
-                                 Code, Expe,
-                                 Longueur, Azimut, Pente,
-                                 LG, LD, HZ, HN,
-                                 Commentaires
-                                ]));
-              end;
-            end;
-          end; //  with Station do begin
+          WrtLn(Station.toLineString(ModeSaveTAB, Serie.GetNumeroDeSerie(), St));
         end;
       end;
     end;

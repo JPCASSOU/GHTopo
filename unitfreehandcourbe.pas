@@ -1,5 +1,5 @@
 unit unitFreeHandCourbe;
-
+{$ERROR: Non utilisé pour l'instant}
 {$mode delphi}           ++
 // 08/04/2016: Nouvelle unité: Courbes provisoires à main levée
 // 11/04/2016: Simplification OK

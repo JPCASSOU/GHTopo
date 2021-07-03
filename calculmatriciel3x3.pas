@@ -78,14 +78,14 @@ procedure AfficherMatrix3x3(const Nom: string; const M: TMatrix3x3);
 implementation
 uses Common; // pour AfficherMessage
 
-operator + (const A, B: TPoint3Df)R: TPoint3Df;
+operator + (const A, B: TPoint3Df) R: TPoint3Df;
 begin
   R.X := A.X + B.X;
   R.Y := A.Y + B.Y;
   R.Z := A.Z + B.Z;
 end;
 
-operator - (const A, B: TPoint3Df)R: TPoint3Df;
+operator - (const A, B: TPoint3Df) R: TPoint3Df;
 begin
   R.X := A.X - B.X;
   R.Y := A.Y - B.Y;

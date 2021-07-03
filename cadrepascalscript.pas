@@ -1292,7 +1292,7 @@ begin
     DispPSOutput('*** DT_BeginNewSerie() non appelé ***');
     exit;
   end;
-  FCurrentSerie.AddVisee(QSecteur, QCode, QExpe, TTypeDeVisee(QTypeVisee), QLong, QAz, QPente, QLG, QLD, QHZ, QHN, QIDTerrain, QObserv);
+  FCurrentSerie.AddVisee(QSecteur, QCode, QExpe, TTypeDeVisee(QTypeVisee), QLong, QAz, QPente, QLG, QLD, QHZ, QHN, QIDTerrain, QObserv, Now(), 0.0, 0.0);
 end;
 
 procedure TCdrPascalScript.DT_EndNewSerie();
@@ -1320,7 +1320,7 @@ begin
   EE.eRefSer  := RefSer;
   EE.eRefSt   := RefSt;
   EE.ePosition.setFrom(XEntree, YEntree, ZEntree);
-  EE.eCouleur := RGBToColor(R and 255, G and 255, B and 255);
+  EE.eCouleur.setFrom(R, G, B, 255);
   EE.eNomEntree  := NomEntree;
   EE.eIDTerrain  := IDTerrain;
   EE.eObserv     := Observ;
@@ -1340,7 +1340,7 @@ begin
     EE.eRefSer  := RefSer;
     EE.eRefSt   := RefSt;
     EE.ePosition.setFrom(XEntree, YEntree, ZEntree);
-    EE.eCouleur := RGBToColor(R and 255, G and 255, B and 255);
+    EE.eCouleur.setFrom(R, G, B, 255);
     EE.eNomEntree  := NomEntree;
     EE.eIDTerrain  := IDTerrain;
     EE.eObserv     := Observ;
@@ -1355,7 +1355,7 @@ var
   RR: TReseau;
 begin
   RR.TypeReseau   := QTypeReseau;
-  RR.ColorReseau  := RGBToColor(R and 255, G and 255, B and 255);
+  RR.ColorReseau.setFrom(R, G, B, 255);
   RR.NomReseau    := QNomReseau;
   RR.ObsReseau    := QObsReseau;
   FDocuTopo.AddReseau(RR);
@@ -1409,7 +1409,7 @@ var
 begin
   if (FMyMaillage.IsValidMaillage()) then
   begin
-    WU.SetAttributes(clRed, 255, 1, 0.015);
+    WU.SetAttributes(255, 0, 0, 255, 1, 0.015);
     P1.setFrom(X1, Y1);
     P2.setFrom(X2, Y2);
     FMyMaillage.ExtractAndAddProfilTopo(P1, P2, WU, ProfilName);

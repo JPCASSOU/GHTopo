@@ -537,14 +537,14 @@ var
         begin
           QResetColorRow(bg, tc);
           QDrawColTexte(hcColsTitres.Sections.Items[1], False, Format(FORMAT_NB_INTEGER,[Index]));
-          QDrawColRectColoreWithTexte(hcColsTitres.Sections.Items[2], True, rs.ColorReseau, '');
+          QDrawColRectColoreWithTexte(hcColsTitres.Sections.Items[2], True, rs.ColorReseau.toTColor(), '');
           QDrawColTexte(hcColsTitres.Sections.Items[3], True, rs.NomReseau);
         end;
       mslSECTEURS:
         begin
           QResetColorRow(bg, tc);
           QDrawColTexte(hcColsTitres.Sections.Items[1], False, Format(FORMAT_NB_INTEGER,[Index]));
-          QDrawColRectColoreWithTexte(hcColsTitres.Sections.Items[2], True, sc.CouleurSecteur, '');
+          QDrawColRectColoreWithTexte(hcColsTitres.Sections.Items[2], True, sc.CouleurSecteur.toTColor(), '');
           QDrawColTexte(hcColsTitres.Sections.Items[3], True , sc.NomSecteur);
         end;
       mslCODE:
@@ -584,7 +584,7 @@ var
 
           // réseau
           rs := FDocToporobot.GetReseau(sr.GetNumeroReseau());
-          QDrawColRectColoreWithTexte(hcColsTitres.Sections.Items[5], True, rs.ColorReseau, rs.NomReseau);
+          QDrawColRectColoreWithTexte(hcColsTitres.Sections.Items[5], True, rs.ColorReseau.toTColor(), rs.NomReseau);
           QDrawColTexte(hcColsTitres.Sections.Items[6], True , Format(FORMAT_NB_INTEGER,[sr.GetNbVisees()]));
         end;
       mslDATE:
@@ -596,7 +596,7 @@ var
         begin
           QResetColorRow(bg, tc);
           DecomposeNumeroSerie(sr.GetNumeroDeSerie(), QIdxNameSpace, QNoSerie);
-          QDrawColRectColoreWithTexte(hcColsTitres.Sections.Items[1], True, MyNamespace.Couleur, Format(FORMAT_NB_INTEGER, [Index]));
+          QDrawColRectColoreWithTexte(hcColsTitres.Sections.Items[1], True, MyNamespace.Couleur.toTColor(), Format(FORMAT_NB_INTEGER, [Index]));
           QDrawColTexte(hcColsTitres.Sections.Items[2], True , MyNamespace.Nom);
           QDrawColTexte(hcColsTitres.Sections.Items[3], True , MyNamespace.Description);
         end;

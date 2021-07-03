@@ -13,18 +13,19 @@ object CdrGrapheItineraire: TCdrGrapheItineraire
   Font.Pitch = fpVariable
   Font.Quality = fqDraft
   Font.Style = [fsBold]
+  LCLVersion = '2.0.0.4'
   ParentFont = False
   TabOrder = 0
-  DesignLeft = 544
-  DesignTop = 136
+  DesignLeft = 778
+  DesignTop = 308
   object Panel2: TPanel
     Left = 4
-    Height = 96
+    Height = 94
     Top = 4
     Width = 761
     Anchors = [akTop, akLeft, akRight]
     BevelInner = bvLowered
-    ClientHeight = 96
+    ClientHeight = 94
     ClientWidth = 761
     TabOrder = 0
     object lbStDepart: TLabel
@@ -143,8 +144,8 @@ object CdrGrapheItineraire: TCdrGrapheItineraire
   end
   object PageControl1: TPageControl
     Left = 4
-    Height = 511
-    Top = 104
+    Height = 513
+    Top = 102
     Width = 759
     ActivePage = tabExportHTML
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -309,7 +310,7 @@ object CdrGrapheItineraire: TCdrGrapheItineraire
     end
     object tabExportHTML: TTabSheet
       Caption = 'Export HTML'
-      ClientHeight = 482
+      ClientHeight = 484
       ClientWidth = 751
       object Label2: TLabel
         Left = 4

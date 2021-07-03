@@ -11,23 +11,20 @@ uses
   Classes, SysUtils, Graphics;
 type TDGCPen = class
   public
-    Couleur   : TColor;
-    Opacity   : byte;
+    Couleur   : TDGCColor;
     WidthInPX : integer;
     WidthInMM : double;
     Style     : TPenStyle;
 end;
 type TDGCBrush = class
   public
-    Couleur : TColor;
-    Opacity : byte;
+    Couleur : TDGCColor;
     Style   : TBrushStyle;
 end;
 type TDGCFont = class
   public
     FontName: string;
-    Couleur: TColor;
-    Opacity: byte;
+    Couleur: TDGCColor;
     Height : Integer;
     Style  : TFontStyles;
 end;

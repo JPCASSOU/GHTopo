@@ -71,6 +71,7 @@ uses
   {$ENDIF NOT_EMBEDDED_IN_GHTOPO}
   Common,
   UnitListesSimplesWithGeneriques,
+  unitListeMesuresTopoDistoX,
   unitUtilsComposants,
   math,
   Dialogs,
@@ -103,7 +104,7 @@ const
   DISTOX_COMMAND_TRIG_DATA_SHOT          : byte =  56;  // $38: lecture d'une visée;    conflict with measure trigging command
   DISTOX_COMMAND_BOOTLOADER_READ_DATA_AT_ADDRESS : byte =  58;  // $38: b111010 ;
 
-const NB_MESURES_ACQUISES_POUR_UNE_VISEE = 3;
+
 
 type TBufferOf8Bytes        = array[0..7]   of byte;
 type TBufferBootLoaderBlock = array[0..263] of byte;
@@ -119,28 +120,37 @@ type
     btnListerMesures: TButton;
     btnQSAddVisee: TButton;
     btnRemoveLastVisee: TButton;
+    btnRemoveLastMesures: TButton;
     Button2: TButton;
     Button3: TButton;
     chkAutodetectViseesCheminement: TCheckBox;
     cmbPortsCom: TComboBox;
+    editToleranceLongueurs: TCurrencyEdit;
     editQSAzimut: TCurrencyEdit;
     editQSLongueur: TCurrencyEdit;
     editQSPente: TCurrencyEdit;
+    editToleranceAzimuts: TCurrencyEdit;
+    editTolerancePentes: TCurrencyEdit;
+    grbxStackMesures: TGroupBox;
+    GroupBox1: TGroupBox;
     hcColsTitres: THeaderControl;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
     lbAzimut: TLabel;
-    lbTamponLine0: TLabel;
     lbPort: TLabel;
     lbLongueur: TLabel;
     lbPente: TLabel;
     LazSerial1: TLazSerial;
     lbConnexionStatus: TStaticText;
     lbDistoXName: TStaticText;
-    lbTamponLine1: TLabel;
-    lbTamponLine2: TLabel;
     lsbMesures: TListBox;
+    memoTamponMesures: TMemo;
     PageControlDistoX: TPageControl;
     btnDXScanOnOff: TToggleBox;
-    pnlTamponMesures: TPanel;
     pnlQuickSaisieVisee: TPanel;
     pnlUtilitaires: TPanel;
     btnOpenCloseConnexion: TToggleBox;
@@ -157,6 +167,7 @@ type
     procedure btnTestProcTransmitMesureClick(Sender: TObject);
     procedure btnDemanderMesureClick(Sender: TObject);
     procedure btnRemoveLastViseeClick(Sender: TObject);
+    procedure btnRemoveLastMesuresClick(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
     procedure chkAutodetectViseesCheminementChange(Sender: TObject);
@@ -168,10 +179,8 @@ type
 
   strict private
     FDistoX_Actif : boolean;
-    // Tableau des n dernières mesures acquises
-    FLesDernieresMesures    : array[0 .. NB_MESURES_ACQUISES_POUR_UNE_VISEE - 1]  of TMesureViseeDistoX;
     // En provenance de TPiloteDistoX. On regroupe tout ici
-    FLastMesureVisee        : TMesureViseeDistoX;
+    FLastMesureVisee        : TMesureBruteDistoX;
     FDistoAutoDetectViseesCheminement: boolean; // Le DistoX est en détection automatique de visées
 
     FDistoXSerialNumber     : TDistoXSerialNumber;
@@ -182,21 +191,33 @@ type
     FOldX   : integer;
     FOldY   : integer;
     FOldZ   : Integer;
+
     // Callback pour le traitement de la visée reçue
     FProcTransmitMesureDistoX: TProcTransmitMesureDistoX;
+    FProcDeleteMesureDistoX  : TProcTransmitMesureDistoX;
+
+    // Tampon des dernières mesures
+    //FTamponLastMesures: TTamponMesuresDistoX;
+    // Tolérances pour la détection des visées
+    FToleranceLongueur: double;
+    FToleranceAzimuts : double;
+    FTolerancePentes  : double;
+
+
+
+    procedure DisplayTamponMesures();
     function DistoX_GetDescriptionDevice(): string;
     function DistoX_ExtractNumSerie()       : TDistoXSerialNumber;
     function DistoX_ExtractVersionFirmWare(): TDistoXVersionFirmware;
     function DistoX_ExtractVersionHardware(): TDistoXVersionHardware;
     // commandes du DistoX
-    function  MakeBackupLine(const M: TMesureViseeDistoX): string;
     function  DistoX_Acknowledge(const QTypeData: byte): boolean;
     function  DistoX_LireEtDecoderBuffer8Bytes(out MyOP: byte;
-                                               out MyMesureVisee: TMesureViseeDistoX;
+                                               out MyMesureVisee: TMesureBruteDistoX;
                                                out MyVectorData, MyGCalibrationData, MyMCalibrationData: TVectorDataDistoX): boolean;
     function  DistoX_SendReadCommandAtAddress(const QCmd: byte; const QAddress: word): boolean;
     function  DistoX_ReadBufferOf8BytesAtAddress(const QAddress: word; out MyBuffer: TBufferOf8Bytes): boolean;
-    procedure ReceptionnerEtTraiterVisee(const M: TMesureViseeDistoX);
+    procedure ReceptionnerEtTraiterUneMesure(const M: TMesureBruteDistoX);
 
     procedure SendBytes(const Bytes: array of Byte);
     procedure SendText(const S: string);
@@ -205,9 +226,6 @@ type
     procedure SetDistoXScanContinuous(const b: boolean);
 
     procedure ListerLesPorts();
-    // tampon de mesures
-    procedure EnfilerMesureDansTampon(const M: TMesureViseeDistoX);
-    procedure InitTamponMesures();
     // =========================================================================
   private
     // Station courante
@@ -222,7 +240,7 @@ type
     FDistoXAccuracyPentes            : double;          // inclinaison
     FDoAutoDetectViseeCheminement      : boolean;
     function  Connecter(): integer;
-    procedure AddMesureVisee(const M: TMesureViseeDistoX); overload;
+    procedure AddMesureBruteDistoX(const M: TMesureBruteDistoX);
 
     function  GetMesureVisee(const Idx: integer): TMesureViseeDistoX;
     function  GetNbMesuresVisees(): integer;
@@ -234,16 +252,16 @@ type
     procedure SaveMesuresDistoX(const QFilename: string);
     procedure SetAccuracies(const AccLong, AccAz, AccP: double);
     procedure ListerLesMesures();
-
   public
-    function  Initialiser(const P: TProcTransmitMesureDistoX): boolean;
-    procedure SetProcTransmitMesureDistoX(const P: TProcTransmitMesureDistoX);
+    function  Initialiser(const P, D: TProcTransmitMesureDistoX): boolean;
+    procedure SetProcsForMesureDistoX(const ProcTransmit, ProcDelete  :TProcTransmitMesureDistoX);
+    procedure SetTolerancesPourDetectionVisee(const TL, TAz, TP: double);
     procedure Finaliser();
     // Connecte ou reconnecte le DistoX
     procedure ReConnecterLeDistoX();
     procedure Deconnecter();
     procedure DemanderUneMesure();
-
+    procedure RemoveLastMesures(const NbMesures: integer);
   end;
 
 implementation
@@ -273,39 +291,51 @@ begin
   for i := 0 to High(Result) do Result[i] := 0;
 end;
 { TCdrDistoXLazserial }
-function TCdrDistoXLazserial.MakeBackupLine(const M: TMesureViseeDistoX): string;
+procedure TCdrDistoXLazserial.SetProcsForMesureDistoX(const ProcTransmit, ProcDelete  :TProcTransmitMesureDistoX);
 begin
-  Result := Format('%s; %d;  %10.3f; %9.3f; %9.3f;', [DateTimePascalToDateTimeSQL(M.TimeStamp), M.Device, M.Longueur, M.Azimut, M.Pente]);
+  FProcTransmitMesureDistoX := ProcTransmit;
+  FProcDeleteMesureDistoX   := ProcDelete;
+
 end;
 
-
-procedure TCdrDistoXLazserial.SetProcTransmitMesureDistoX(const P: TProcTransmitMesureDistoX);
+procedure TCdrDistoXLazserial.SetTolerancesPourDetectionVisee(const TL, TAz, TP: double);
 begin
-  FProcTransmitMesureDistoX := P;
+  FToleranceLongueur := TL;
+  FToleranceAzimuts  := TAZ;
+  FTolerancePentes   := TP;
+
+  editToleranceLongueurs.Value := FToleranceLongueur;
+  editToleranceAzimuts.Value   := FToleranceAzimuts;
+  editTolerancePentes.Value    := FTolerancePentes;
 end;
 
-procedure TCdrDistoXLazserial.InitTamponMesures();
+{$NOTE: Sert uniquement au débug. A supprimer ensuite}
+procedure TCdrDistoXLazserial.DisplayTamponMesures();
 var
-  i: Integer;
-  procedure MiouMiou(const LB: TLabel; const idx: integer);
+  M: TMesureBruteDistoX;
+  n, i, IdxFrom, IdxTo, NB_MESURES_POUR_VISEE: Integer;
+  procedure SetIdxFromTo(const I1, I2: integer);
   begin
-    LB.Caption := Format('%d: %.3f : %.3f : %.3f', [idx ,FLesDernieresMesures[idx].Longueur, FLesDernieresMesures[idx].Azimut, FLesDernieresMesures[idx].Pente]);
+    IdxFrom := 0;
+    IdxTo   := n-1;
   end;
+
 begin
-  for i := 0 to NB_MESURES_ACQUISES_POUR_UNE_VISEE - 1 do
+  memoTamponMesures.Lines.Clear;
+  n := FListeMesuresTopoDistoX.getNbMesuresOfBuffer();
+  NB_MESURES_POUR_VISEE := FListeMesuresTopoDistoX.GetNbMesuresPourUneVisee();
+  if (0 = n) then exit;
+
+  if (n < NB_MESURES_POUR_VISEE) then SetIdxFromTo(0, n-1)
+                                 else SetIdxFromTo(n-1 - NB_MESURES_POUR_VISEE, n-1);
+  for i := 0 to n-1 do
   begin
-    FLesDernieresMesures[i].Device          := FDistoXSerialNumber;
-    FLesDernieresMesures[i].TimeStamp       := Now();
-    FLesDernieresMesures[i].Longueur        :=  0.00;
-    FLesDernieresMesures[i].Azimut          :=  0.00;
-    FLesDernieresMesures[i].Pente           :=  0.00;
+    M := FListeMesuresTopoDistoX.GetMesureFromBuffer(i);    {$NOTE: GetMesureFromBuffer n'est utilisé que ici en dehors de sa classe}
+    memoTamponMesures.Lines.Add('%d: %s', [i, M.DebugString()]);
   end;
-  MiouMiou(lbTamponLine0, 0);
-  MiouMiou(lbTamponLine1, 1);
-  MiouMiou(lbTamponLine2, 2);
 end;
 
-function TCdrDistoXLazserial.Initialiser(const P: TProcTransmitMesureDistoX): boolean;
+function TCdrDistoXLazserial.Initialiser(const P, D: TProcTransmitMesureDistoX): boolean;
 begin
   result := false;
   pnlUtilitaires.Visible             := false;
@@ -332,35 +362,47 @@ begin
   tabShtJournal.Caption              := 'Console';
   tabShtMisc.Caption                 := 'Divers';
 
-  SetProcTransmitMesureDistoX(P);
-  InitTamponMesures();
+  SetProcsForMesureDistoX(P, D);
+  // tolérances pour détection de visées
+  SetTolerancesPourDetectionVisee(0.05, 1.0, 1.0);
   FListeMesuresTopoDistoX := TListeMesuresTopoDistoX.Create;
   try
+    FListeMesuresTopoDistoX.Initialiser(-1, FUniteDuDistoX, FUniteDuDistoX, FToleranceLongueur, FToleranceAzimuts, FTolerancePentes);
+    FListeMesuresTopoDistoX.ClearAllListes();
     hcColsTitres.Sections[0].Width := HC_COL_HORODATAGE;
     hcColsTitres.Sections[1].Width := HC_COL_DEVICE;
     hcColsTitres.Sections[2].Width := HC_COL_TYPE_MESURE;
     hcColsTitres.Sections[3].Width := HC_COL_LONGUEUR;
     hcColsTitres.Sections[4].Width := HC_COL_AZIMUT;
     hcColsTitres.Sections[5].Width := HC_COL_PENTE;
-    FListeMesuresTopoDistoX.ClearListe();
-    ListerLesMesures();
+
+
     SynEdit1.Clear;
+    //ListerLesMesures();
+    DisplayTamponMesures();
     result := True;
   except
   end;
+
   PageControlDistoX.ActivePageIndex  := 0;
 end;
 
 
 procedure TCdrDistoXLazserial.Finaliser();
 begin
+
   Deconnecter();
   try
-    FListeMesuresTopoDistoX.ClearListe();
+    FListeMesuresTopoDistoX.Finaliser();
   finally
     FreeAndNil(FListeMesuresTopoDistoX);
   end;
 end;
+
+
+
+
+
 
 function TCdrDistoXLazserial.Connecter(): integer;
 var
@@ -430,38 +472,39 @@ begin
   lsbMesures.ItemIndex := Nb-1;
 end;
 
-
-
-procedure TCdrDistoXLazserial.AddMesureVisee(const M: TMesureViseeDistoX);
+procedure TCdrDistoXLazserial.AddMesureBruteDistoX(const M: TMesureBruteDistoX);
 var
   EWE: String;
 begin
   if (M.Longueur > 0.00001) then
   begin
-    EnfilerMesureDansTampon(M);
-    FListeMesuresTopoDistoX.AddElement(M);
+    FListeMesuresTopoDistoX.AddMesureToBuffer(M);
+    (*
     // ajouter mesure à la liste
-    EWE := MakeBackupLine(M);
+    EWE := M.toBackupLine();
     lsbMesures.Items.Add(EWE);
     lsbMesures.ItemIndex := lsbMesures.Count - 1;
     tabShtListeMesures.Caption := format('Mesures [%d]', [lsbMesures.Items.Count]);
     QAfficherMessage(EWE); // et à la console
+    DisplayTamponMesures(); // lister le tampon de mesures
+    //*)
+
   end;
 end;
 
 function TCdrDistoXLazserial.GetMesureVisee(const Idx: integer): TMesureViseeDistoX;
 begin
-  Result := FListeMesuresTopoDistoX.GetElement(Idx);
+  Result := FListeMesuresTopoDistoX.GetVisee(Idx);
 end;
 
 procedure TCdrDistoXLazserial.PutMesureVisee(const Idx: integer; const M: TMesureViseeDistoX);
 begin
-  FListeMesuresTopoDistoX.PutElement(Idx, M);
+  //FListeMesuresTopoDistoX.PutElement(Idx, M);
 end;
 
 procedure TCdrDistoXLazserial.RemoveMesureVisee(const Idx: integer);
 begin
-  FListeMesuresTopoDistoX.RemoveElement(Idx);
+  //FListeMesuresTopoDistoX.RemoveElement(Idx);
 end;
 
 procedure TCdrDistoXLazserial.RemoveLastMesuresVisees(const Nb: integer);
@@ -478,7 +521,7 @@ end;
 
 function TCdrDistoXLazserial.GetNbMesuresVisees(): integer;
 begin
-  Result := FListeMesuresTopoDistoX.GetNbElements();
+  Result := FListeMesuresTopoDistoX.GetNbVisees();
 end;
 
 procedure TCdrDistoXLazserial.SaveMesuresDistoX(const QFilename: string);
@@ -499,74 +542,77 @@ begin
     for i := 0 to Nb - 1 do
     begin
       M := GetMesureVisee(i);
-      EWE := MakeBackupLine(M);
+      EWE := M.toBackupLine();
       WriteLn(fp, EWE);
     end;
   finally
     Closefile(fp);
   end;
 end;
-//******************************************************************************
-procedure TCdrDistoXLazserial.EnfilerMesureDansTampon(const M: TMesureViseeDistoX);
-var
-  i: Integer;
-  procedure MiouMiou(const LB: TLabel; const idx: integer);
-  begin
-    LB.Caption := Format('%d: %.3f : %.3f : %.3f', [idx ,FLesDernieresMesures[idx].Longueur, FLesDernieresMesures[idx].Azimut, FLesDernieresMesures[idx].Pente]);
-  end;
-begin
-  // Etat initial:
-  //[ 0  :  1  :  2  ]
-  //[444 : 555 : 666 ]
-  // On décale les mesures:
-  for i := 0 to NB_MESURES_ACQUISES_POUR_UNE_VISEE - 2 do FLesDernieresMesures[i] := FLesDernieresMesures[i+1];
-  //[ 0  :  1  :  2  ]
-  //[555 : 666 : ??? ]
-  // et met la mesure  dans la dernière case
-  //[ 0  :  1  :  2  ]
-  //[555 : 666 : 888 ]
-  FLesDernieresMesures[NB_MESURES_ACQUISES_POUR_UNE_VISEE - 1] := M;
-  MiouMiou(lbTamponLine0, 0);
-  MiouMiou(lbTamponLine1, 1);
-  MiouMiou(lbTamponLine2, 2);
-end;
 
-procedure TCdrDistoXLazserial.ReceptionnerEtTraiterVisee(const M: TMesureViseeDistoX);
+
+procedure TCdrDistoXLazserial.ReceptionnerEtTraiterUneMesure(const M: TMesureBruteDistoX);
 var
   MyMesure: TMesureViseeDistoX;
-  n: Integer;
+  i, n, NB_MESURES_POUR_UNE_VISEE: Integer;
 begin
-  MyMesure := M;
+  MyMesure.setFrom(Now, FDistoXSerialNumber, M.Longueur, M.Azimut, M.Pente, tvdRADIANTE);
   if (MyMesure.Longueur > 0.0001) then
   begin
-    MyMesure.Device          := FDistoXSerialNumber;
-    AddMesureVisee(MyMesure);
+    AddMesureBruteDistoX(M);
     // Cas où le nombre de mesures est inférieur à la taille du tampon: C'est une visée radiante
-    n := GetNbMesuresVisees();
-    if (GetNbMesuresVisees() < NB_MESURES_ACQUISES_POUR_UNE_VISEE) then
+    n := FListeMesuresTopoDistoX.getNbMesuresOfBuffer();
+    NB_MESURES_POUR_UNE_VISEE := FListeMesuresTopoDistoX.GetNbMesuresPourUneVisee();
+    if (n < NB_MESURES_POUR_UNE_VISEE) then
     begin
-      if (Assigned(FProcTransmitMesureDistoX)) then FProcTransmitMesureDistoX(MyMesure, tvdRADIANTE);
+      if (Assigned(FProcTransmitMesureDistoX)) then FProcTransmitMesureDistoX(MyMesure);
+      FListeMesuresTopoDistoX.AddVisee(MyMesure);
       exit;
     end;
+
     if (FDistoAutoDetectViseesCheminement) then // Si on est en mode scan, on ne fait qu'ajouter la visée aux visées radiantes
     begin
-      if (CalcAzimutMoyenOfTMesuresViseeDistoX(360.00, 360.00, 0.05, 1.00, FLesDernieresMesures, MyMesure)) then
+      if (FListeMesuresTopoDistoX.CalcAzimutMoyen(MyMesure)) then
       begin
+        AfficherMessageErreur(' -- Visée de cheminement détectée');
         QAfficherMessage('');
         QAfficherMessage(Format('*** Visée de cheminement *** %.3f : %.3f : %.3f',[ MyMesure.Longueur, MyMesure.Azimut, MyMesure.Pente]));
-        if (Assigned(FProcTransmitMesureDistoX)) then FProcTransmitMesureDistoX(MyMesure, tvdCHEMINEMENT);
-        InitTamponMesures();  // et on vide le tampon
+
+        AfficherMessageErreur(' -- Retrait des mesures moyennées');
+        (*
+        for i := 1 to NB_MESURES_POUR_UNE_VISEE do
+        begin
+          AfficherMessageErreur(Format('Retrait élément %d', [GetNbMesuresVisees()]));
+          RemoveLastElement();  // et on vide les dernières mesures
+        end;
+        //*)
+        FListeMesuresTopoDistoX.ClearTampon();
+        AfficherMessageErreur('-- Ajout de la mesure comme cheminement');
+        MyMesure.setTypeMesure(tvdCHEMINEMENT);
+        MyMesure.setDistoXSerialNumber(FDistoXSerialNumber);
+        MyMesure.setTimestamp(Now());
+        if (Assigned(FProcTransmitMesureDistoX)) then FProcTransmitMesureDistoX(MyMesure);
+        FListeMesuresTopoDistoX.AddVisee(MyMesure);
       end
       else
       begin
-        if (Assigned(FProcTransmitMesureDistoX)) then FProcTransmitMesureDistoX(MyMesure, tvdRADIANTE);
+        MyMesure.setTypeMesure(tvdRADIANTE);
+        MyMesure.setDistoXSerialNumber(FDistoXSerialNumber);
+        MyMesure.setTimestamp(Now());;
+        if (Assigned(FProcTransmitMesureDistoX)) then FProcTransmitMesureDistoX(MyMesure);
+        FListeMesuresTopoDistoX.AddVisee(MyMesure);
       end;
     end
     else
     begin
-      if (Assigned(FProcTransmitMesureDistoX)) then FProcTransmitMesureDistoX(MyMesure, tvdRADIANTE);
+      MyMesure.setTypeMesure(tvdRADIANTE);
+      MyMesure.setDistoXSerialNumber(FDistoXSerialNumber);
+      MyMesure.setTimestamp(Now());
+      if (Assigned(FProcTransmitMesureDistoX)) then FProcTransmitMesureDistoX(MyMesure);
+      FListeMesuresTopoDistoX.AddVisee(MyMesure);
     end; //  if (FDistoAutoDetectViseesCheminement)
   end; //  if (MyMesure.Longueur > 0.0001) then
+  ListerLesMesures();
   Application.ProcessMessages;
 end;
 //******************************************************************************
@@ -575,13 +621,13 @@ end;
 procedure TCdrDistoXLazserial.LazSerial1RxData(Sender: TObject);
 var
   QMyOp: byte;
-  MyMesureDistoX: TMesureViseeDistoX;
+  MyMesureDistoX: TMesureBruteDistoX;
   QVectorData, GCalibrationData, QMCalibrationData: TVectorDataDistoX;
 begin
   if (FDistoX_Actif) then
   begin
     DistoX_LireEtDecoderBuffer8Bytes(QMyOp, MyMesureDistoX, QVectorData, GCalibrationData, QMCalibrationData);
-    ReceptionnerEtTraiterVisee(MyMesureDistoX);
+    ReceptionnerEtTraiterUneMesure(MyMesureDistoX);
   end;
 end;
 
@@ -644,7 +690,7 @@ var
 begin
   if (0 = GetNbMesuresVisees()) then exit;
   V := GetMesureVisee(Index);
-  EWE := ''; //ChooseString(ord(V.TypeViseeDistoX), ['UNDEFINED', 'RADIANTE', 'CHEMINEMENT', 'MOYENNEE']);
+  EWE := ChooseString(ord(V.TypeMesure), ['RADIANTE', 'CHEMINEMENT', '--']);
   BGC := clWhite;
   if (odSelected in state) then DessineItem(clBlue, clWhite) else DessineItem(BGC, clBlack);
 end;
@@ -677,7 +723,7 @@ var
   MyPort: TCaption;
 begin
   MyPort := trim(cmbPortsCom.Text);
-  InitTamponMesures();
+  FListeMesuresTopoDistoX.SetDistoXSerialNumber(FDistoXSerialNumber);
   LazSerial1.Device := MyPort;
   LazSerial1.SynSer.AtTimeout       := TIMEOUT_IN_SECONDS * 1000;
   LazSerial1.SynSer.DeadlockTimeout := TIMEOUT_IN_SECONDS * 1000;
@@ -688,21 +734,18 @@ end;
 
 procedure TCdrDistoXLazserial.btnQSAddViseeClick(Sender: TObject);
 var
-  MyMesureDistoX: TMesureViseeDistoX;
+  MyMesureDistoX: TMesureBruteDistoX;
 begin
-  MyMesureDistoX.Device          := FDistoXSerialNumber;
-  MyMesureDistoX.TimeStamp       := Now();
-  MyMesureDistoX.Longueur        := editQSLongueur.Value;
-  MyMesureDistoX.Azimut          := editQSAzimut.Value;
-  MyMesureDistoX.Pente           := editQSPente.Value;
-  ReceptionnerEtTraiterVisee(MyMesureDistoX);
-
+  MyMesureDistoX.setFrom(editQSLongueur.Value, editQSAzimut.Value, editQSPente.Value);
+  ReceptionnerEtTraiterUneMesure(MyMesureDistoX);
 end;
 
 procedure TCdrDistoXLazserial.btnSendBytesClick(Sender: TObject);
 begin
   DemanderUneMesure();
 end;
+
+
 
 procedure TCdrDistoXLazserial.btnTestProcTransmitMesureClick(Sender: TObject);
 begin
@@ -715,10 +758,21 @@ begin
   DemanderUneMesure();
 end;
 procedure TCdrDistoXLazserial.btnRemoveLastViseeClick(Sender: TObject);
+var
+  V: TMesureViseeDistoX;
 begin
-  FListeMesuresTopoDistoX.RemoveLastElement();
+  V := FListeMesuresTopoDistoX.PopVisee();  // Pop: GetLas
+  if (assigned(FProcDeleteMesureDistoX)) then FProcDeleteMesureDistoX(V);
   ListerLesMesures();
+  DisplayTamponMesures();
 end;
+
+procedure TCdrDistoXLazserial.btnRemoveLastMesuresClick(Sender: TObject);
+begin
+  RemoveLastMesures(NB_MESURES_ACQUISES_POUR_UNE_VISEE);
+end;
+
+
 
 procedure TCdrDistoXLazserial.Button2Click(Sender: TObject);
 var
@@ -889,9 +943,8 @@ end;
 // En cas de succès du décodage, l'appelant peut utiliser la visée
 // 01/01/2020: Ceci est validé
 function TCdrDistoXLazserial.DistoX_LireEtDecoderBuffer8Bytes(out MyOP: byte;
-                                                              out MyMesureVisee: TMesureViseeDistoX;
+                                                              out MyMesureVisee: TMesureBruteDistoX;
                                                               out MyVectorData, MyGCalibrationData, MyMCalibrationData: TVectorDataDistoX): boolean;
-const MAX_WORD = 65535;
 var
   i          : Integer;
   MyBuffer   : TBufferOf8Bytes;
@@ -899,17 +952,13 @@ var
   QX, QY, QZ, Dist: word;
   P          : double;
   QMesureIValide: Boolean;
-  function CheckRanges(const FX, FY, FZ: word): boolean; inline;
-  begin
-    Result := InRange(FX, 0, MAX_WORD) and InRange(FY, 0, MAX_WORD) and InRange(FZ, 0, MAX_WORD);
-  end;
+
 begin
   Result := false;
   begin
     try
       MyBuffer := MakeEmptyTBufferOf8Bytes();
       LazSerial1.SynSer.RecvBuffer(@MyBuffer, 8);
-      //MyMesureVisee.DistoXSerialNumber := FDistoXSerialNumber;
       MyMesureVisee.Longueur := 0.00;
       MyMesureVisee.Azimut   := 0.00;
       MyMesureVisee.Pente    := 0.00;
@@ -937,34 +986,23 @@ begin
                 if (Not InRange(P, -0.001, 0.25 * UNITE_ANGULAIRE_PAR_DEFAUT + 0.001)) then P := P - UNITE_ANGULAIRE_PAR_DEFAUT;
                 myMesureVisee.Pente := P;
                 //myMesureVisee.HexaData := Datagram;
-                myMesureVisee.TimeStamp:= Now();
-                // On vire les visées de longueur nulle (qui seront rejetées par GHTopo de toutes façons)
                 QMesureIValide := (MyMesureVisee.Longueur > 0.001);
                 if (QMesureIValide) then FLastMesureVisee := MyMesureVisee;
                 Result := (QMesureIValide);
               end;
               2:  // G Calibration
               begin
-                MyGCalibrationData.X := QX;
-                MyGCalibrationData.Y := QY;
-                MyGCalibrationData.Z := QZ;
-                MyGCalibrationData.TimeStamp := Now();
+                MyGCalibrationData.setFrom(QX, QY, QZ, Now());
                 Result := CheckRanges(QX, QY, QZ);
               end;
               3:  // M Calibration
               begin
-                MyMCalibrationData.X := QX;
-                MyMCalibrationData.Y := QY;
-                MyMCalibrationData.Z := QZ;
-                MyMCalibrationData.TimeStamp := Now();
+                MyMCalibrationData.setFrom(QX, QY, QZ, Now());
                 Result := CheckRanges(QX, QY, QZ);
               end;
               4: // Vecteurs
               begin
-                MyVectorData.X := QX;
-                MyVectorData.Y := QY;
-                MyVectorData.Z := QZ;
-                MyVectorData.TimeStamp := Now();
+                MyVectorData.setFrom(QX, QY, QZ, Now());
                 Result := CheckRanges(QX, QY, QZ);
               end
             else
@@ -986,9 +1024,31 @@ end;
 // utilitaires
 procedure TCdrDistoXLazserial.DemanderUneMesure();
 begin
+  pass;
   //LazSerial1.SynSer.SendByte(DISTOX_COMMAND_TRIG_DATA_SHOT);
 
-  btnQSAddViseeClick(self);
+  //btnQSAddViseeClick(self);
+end;
+
+procedure TCdrDistoXLazserial.RemoveLastMesures(const NbMesures: integer);
+var
+  i: Integer;
+  V: TMesureViseeDistoX;
+begin
+  if (GHTopoQuestionOuiNon(Format('Retirer les %d dernières mesures', [NbMesures]))) then
+  begin
+    for i := 1 to NbMesures do
+    begin;
+      AfficherMessageErreur(format('%s.RemoveLastMesures(%d, %d', [ClassName, NbMesures, FListeMesuresTopoDistoX.GetNbVisees()]));
+      if (FListeMesuresTopoDistoX.GetNbVisees() > NbMesures) then
+      begin
+        V := FListeMesuresTopoDistoX.PopVisee();
+        if (assigned(FProcDeleteMesureDistoX)) then FProcDeleteMesureDistoX(V);
+      end;
+    end;
+    ListerLesMesures();
+    DisplayTamponMesures();
+  end;
 end;
 
 
@@ -1070,3 +1130,59 @@ begin
 end;
 
 end.
+//******************************************************************************
+function TCdrDistoXLazserial.StartProcess(const QCommandLine: string): boolean;
+begin
+  result := false;
+  try
+    if (not FProcessExterne.Running) then
+    begin
+      btnStartProcess.Enabled := false;
+      FProcessExterne.CommandLine := QCommandLine;
+      FProcessExterne.Execute;
+      result := True;
+    end;
+  except
+    pass;
+  end;
+end;
+procedure TCdrDistoXLazserial.ReadOutputIdleTimerTimer(Sender:TObject);
+var
+  NoMoreOutput: boolean;
+  procedure DoStuffForProcess();
+  var
+    Buffer: string;
+    BytesAvailable: DWord;
+    BytesRead:LongInt;
+  begin
+    if (not btnStartProcess.Enabled) then btnStartProcess.Enabled := not FProcessExterne.Running;
+    if (FProcessExterne.Running) then
+    begin
+      BytesAvailable := FProcessExterne.Output.NumBytesAvailable;
+      BytesRead := 0;
+      while BytesAvailable>0 do
+      begin
+        SetLength(Buffer, BytesAvailable);
+        BytesRead := FProcessExterne.OutPut.Read(Buffer[1], BytesAvailable);
+
+        memoOutputProcess.Text := memoOutputProcess.Text + copy(Buffer,1, BytesRead);
+        BytesAvailable := FProcessExterne.Output.NumBytesAvailable;
+        NoMoreOutput := false;
+      end;
+      if (BytesRead>0) then memoOutputProcess.SelStart := Length(memoOutputProcess.Text);
+      //*)
+    end;
+  end;
+begin
+  repeat
+    NoMoreOutput := true;
+    DoStuffForProcess();
+  until noMoreOutput;
+end;
+procedure TCdrDistoXLazserial.btnStartProcessClick(Sender: TObject);
+begin
+  ReadOutputIdleTimer.Interval := 100;
+  FProcessExterne.Options  := [poUsePipes, poStderrToOutPut, poNoConsole];
+  FProcessExterne.Priority := ppNormal;
+  StartProcess(trim(editProcessToExecute.Text));
+end;

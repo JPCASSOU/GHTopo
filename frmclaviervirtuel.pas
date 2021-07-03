@@ -7,9 +7,14 @@ uses
   {$INCLUDE SelectionLangues.inc} // insère les unités en fonction de la langue
   StructuresDonnees,
   Common,
-  Classes, SysUtils, FileUtil, curredit, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls, Buttons;
+  unitAutoCompletionSpeleo,
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls, Buttons;
 
-type TdlgClavierVirtuel = class(TForm)
+type
+
+{ TdlgClavierVirtuel }
+
+ TdlgClavierVirtuel = class(TForm)
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
     btnAddPOI: TButton;
@@ -18,9 +23,9 @@ type TdlgClavierVirtuel = class(TForm)
     btn_Aa: TButton;
     btn_gt: TButton;
     btn_lt: TButton;
-    btn_Shebang: TButton;
-    btn_SimpleQuote: TButton;
     btn_Hashtag: TButton;
+    btn_SimpleQuote: TButton;
+    btn_Point_Interrogation: TButton;
     btn_Comma: TButton;
     btn_Period: TButton;
     btn_Semicolon: TButton;
@@ -76,6 +81,7 @@ type TdlgClavierVirtuel = class(TForm)
     btnRAZTextBox: TButton;
     btnSuggestionsOK: TButton;
     btnSuggestionsCancel: TButton;
+    btnSuggestions: TButton;
     editTexte: TEdit;
     lbPrompt: TLabel;
     lsbSuggestions: TListBox;
@@ -88,6 +94,7 @@ type TdlgClavierVirtuel = class(TForm)
     btnCapsLock: TToggleBox;
     procedure btnAddPOIClick(Sender: TObject);
     procedure btnRAZTextBoxClick(Sender: TObject);
+    procedure btnSuggestionsClick(Sender: TObject);
     procedure btn_0Click(Sender: TObject);
     procedure btn_1Click(Sender: TObject);
     procedure btn_2Click(Sender: TObject);
@@ -106,13 +113,13 @@ type TdlgClavierVirtuel = class(TForm)
     procedure btn_CommaClick(Sender: TObject);
     procedure btn_DbleQuoteClick(Sender: TObject);
     procedure btn_gtClick(Sender: TObject);
-    procedure btn_HashtagClick(Sender: TObject);
+    procedure btn_Point_InterrogationClick(Sender: TObject);
     procedure btn_ltClick(Sender: TObject);
     procedure btn_NnClick(Sender: TObject);
     procedure btn_openParenthClick(Sender: TObject);
     procedure btn_PeriodClick(Sender: TObject);
     procedure btn_SemicolonClick(Sender: TObject);
-    procedure btn_ShebangClick(Sender: TObject);
+    procedure btn_HashtagClick(Sender: TObject);
     procedure btn_SimpleQuoteClick(Sender: TObject);
     procedure btn_SpaceClick(Sender: TObject);
     procedure btn_UnderscoreClick(Sender: TObject);
@@ -149,15 +156,18 @@ type TdlgClavierVirtuel = class(TForm)
     procedure btnSuggestionsOKClick(Sender: TObject);
     procedure btnSuggestionsCancelClick(Sender: TObject);
     procedure editTexteChange(Sender: TObject);
+    procedure editTexteKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+
   private
     { private declarations }
-
+    FAutoCompletionSpeleo: TAutoCompletionSpeleo;
     procedure AddCharacter(const C: char);
     procedure PrepareListeSuggestions();
     procedure SetFocusAtTextbox();
   public
     { public declarations }
     function  Initialiser(const ACaption, APrompt: string; var AValue: string): boolean;
+    procedure Finaliser();
     function  GetValue(): string;
   end;
 
@@ -173,14 +183,26 @@ function TdlgClavierVirtuel.Initialiser(const ACaption, APrompt: string; var AVa
 begin
   result := false;
   pnlSuggestions.Visible := false;
+  pnlSuggestions.Top     := pnlPonctuation.Top;
+  pnlSuggestions.Left    := pnlPonctuation.Left;
+  FAutoCompletionSpeleo := TAutoCompletionSpeleo.create;
+  result := FAutoCompletionSpeleo.Initialiser();
   try
     self.Caption       := ACaption;
     lbPrompt.Caption   := APrompt;
     editTexte.Text     := AValue;
     PrepareListeSuggestions();
     result := True;
-
   except
+  end;
+end;
+
+procedure TdlgClavierVirtuel.Finaliser();
+begin
+  try
+    FAutoCompletionSpeleo.Finaliser();
+  finally
+    FreeAndNil(FAutoCompletionSpeleo);
   end;
 end;
 
@@ -204,10 +226,16 @@ begin
   editTexte.Text := '';
 end;
 
+procedure TdlgClavierVirtuel.btnSuggestionsClick(Sender: TObject);
+begin
+  pnlSuggestions.Visible := True;
+end;
+
 procedure TdlgClavierVirtuel.btnAddPOIClick(Sender: TObject);
 begin
   editTexte.Text := UpperCase(KEYWORD_POI_TODO) + editTexte.Text;
 end;
+
 
 
 
@@ -407,9 +435,9 @@ begin
   AddCharacter(':');
 end;
 
-procedure TdlgClavierVirtuel.btn_ShebangClick(Sender: TObject);
+procedure TdlgClavierVirtuel.btn_HashtagClick(Sender: TObject);
 begin
-  AddCharacter('!');
+  AddCharacter('#');
 end;
 
 procedure TdlgClavierVirtuel.btn_SimpleQuoteClick(Sender: TObject);
@@ -477,9 +505,9 @@ begin
   AddCharacter('>');
 end;
 
-procedure TdlgClavierVirtuel.btn_HashtagClick(Sender: TObject);
+procedure TdlgClavierVirtuel.btn_Point_InterrogationClick(Sender: TObject);
 begin
-  AddCharacter('#');
+  AddCharacter('?');
 end;
 
 procedure TdlgClavierVirtuel.btn_HhClick(Sender: TObject);
@@ -517,7 +545,7 @@ begin
   if (n > 0) then
   begin
     EWE := Trim(editTexte.Text); // supprime du même coup les espaces superflus
-    EWE += ' ' + Trim(lsbSuggestions.Items[n]);
+    EWE += ' ' + FAutoCompletionSpeleo.getElement(n);
     editTexte.Text := EWE;
   end;
   pnlSuggestions.Visible := false;
@@ -528,7 +556,6 @@ procedure TdlgClavierVirtuel.btnSuggestionsCancelClick(Sender: TObject);
 begin
   pnlSuggestions.Visible := false;
   SetFocusAtTextbox();
-
 end;
 
 procedure TdlgClavierVirtuel.editTexteChange(Sender: TObject);
@@ -547,6 +574,12 @@ begin
   end;
 end;
 
+procedure TdlgClavierVirtuel.editTexteKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  pass;
+end;
+
+
 
 procedure TdlgClavierVirtuel.SetFocusAtTextbox();
 begin
@@ -557,28 +590,19 @@ end;
 
 
 procedure TdlgClavierVirtuel.PrepareListeSuggestions();
+var
+  i, Nb: Integer;
 begin
-  lsbSuggestions.Sorted := True;
-  lsbSuggestions.Clear;
-  lsbSuggestions.Items.Add('<rien>');
-  lsbSuggestions.Items.Add(GetResourceString('Carrefour'));
-  lsbSuggestions.Items.Add(GetResourceString('Chatière'));
-  lsbSuggestions.Items.Add(GetResourceString('Arrêt topo'));
-  lsbSuggestions.Items.Add(GetResourceString('Mur'));
-  lsbSuggestions.Items.Add(GetResourceString('Colmatage'));
-  lsbSuggestions.Items.Add(GetResourceString('Concrétions'));
-  lsbSuggestions.Items.Add(GetResourceString('Départs'));
-  lsbSuggestions.Items.Add(GetResourceString('Départ à droite'));
-  lsbSuggestions.Items.Add(GetResourceString('Départ à gauche'));
-  lsbSuggestions.Items.Add(GetResourceString('Base de cheminée'));
-  lsbSuggestions.Items.Add(GetResourceString('Sommet de puits'));
-  lsbSuggestions.Items.Add(GetResourceString('Perte'));
-  lsbSuggestions.Items.Add(GetResourceString('Effondrement'));
-  lsbSuggestions.Items.Add(GetResourceString('Arrivée d''eau'));
-  lsbSuggestions.Items.Add(GetResourceString('Salle'));
-  lsbSuggestions.Items.Add(GetResourceString('Salle ébouleuse'));
+  btnSuggestions.Enabled := false;
+  btnSuggestions.Hint    := 'Suggestions';
 
+  lsbSuggestions.Sorted := false;
+  lsbSuggestions.Clear;
+  Nb := FAutoCompletionSpeleo.getNbElements();
+  if (Nb = 0) then exit;
+  for i := 0 to Nb -1 do lsbSuggestions.Items.add(FAutoCompletionSpeleo.getElement(i));
   lsbSuggestions.ItemIndex := 0;
+  btnSuggestions.Enabled := true;
 end;
 
 

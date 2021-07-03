@@ -183,9 +183,8 @@ type
                               const QP                 : TProcGCSToSRC;
                               const Equidistance       : double;
                               const Isovaleurs         : TArrayOfFloats;
-                              const LineContourColor   : TColor;
-                              const LineContourOpacity : byte;
-                              const IsovaleurColor     : TColor;
+                              const LineContourColor   : TGHTopoColor;
+                              const IsovaleurColor     : TGHTopoColor;
                               const DoDrawTriangles    : boolean;
                               const DoDrawVertex       : boolean;
                               const viewBox            : TRect2Df);
@@ -829,7 +828,7 @@ procedure TMaillage.ExportX3D(const QFichierX3D: TStringDirectoryFilename);
 const
   SHAPE_NAME_MNT  = 'MNT';
 var
-  QStdColorMNT: TColorRGBA;
+  QStdColorMNT: TGHTopoColor;
   NbVertex, NbTriangles, i: Integer;
   MyX3D: TSceneX3D;
   NameScene: String;
@@ -1067,9 +1066,8 @@ procedure TMaillage.TracerMaillage(const Bmp                : TBGRABitmap;
                                     const QP                 : TProcGCSToSRC;
                                     const Equidistance       : double;
                                     const Isovaleurs         : TArrayOfFloats;
-                                    const LineContourColor   : TColor;
-                                    const LineContourOpacity : byte;
-                                    const IsovaleurColor     : TColor;
+                                    const LineContourColor   : TGHTopoColor;
+                                    const IsovaleurColor     : TGHTopoColor;
                                     const DoDrawTriangles    : boolean;
                                     const DoDrawVertex       : boolean;
                                     const viewBox            : TRect2Df);
@@ -1087,12 +1085,13 @@ var
   MyIsovaleur: Double;
   MyProfilTopo: TProfilTopo;
   PPP: TPoint3DfOrderedByP;
-  procedure QDefineCrayon(const qStyle: TPenStyle; const qWidth: integer; const qColor: TColor; const qOpacity: byte);
+  CGT: TGHTopoColor;
+  procedure QDefineCrayon(const qStyle: TPenStyle; const qWidth: integer; const QColor: TGHTopoColor);
   begin
     bmp.CanvasBGRA.Pen.Style   := qStyle;
     bmp.CanvasBGRA.Pen.Width   := qWidth;
-    bmp.CanvasBGRA.Pen.Color   := qColor;
-    bmp.CanvasBGRA.Pen.Opacity := qOpacity;
+    bmp.CanvasBGRA.Pen.Color   := qColor.toTColor();
+    bmp.CanvasBGRA.Pen.Opacity := QColor.Alpha;
   end;
 begin
   AfficherMessage(Format('%s.TracerMaillage(%d vertex, %d triangles)', [ClassName, GetNbVertex(), GetNbTriangles()]));
@@ -1106,7 +1105,8 @@ begin
     if (DoDrawVertex) then
     begin
       AfficherMessage('--> Draw vertex');
-      QDefineCrayon(psSolid, 0, clBlue, 255);
+      CGT.setFrom(clBlue, 255);
+      QDefineCrayon(psSolid, 0, CGT);
       bmp.CanvasBGRA.Brush.Color := clAqua;
       for i := 0 to GetNbVertex - 1 do
       begin
@@ -1124,7 +1124,9 @@ begin
     if (DoDrawTriangles) then
     begin
       AfficherMessage('--> Draw triangles');
-      QDefineCrayon(psSolid, 0, clYellow, 128);
+      CGT.setFrom(clYellow, 128);
+      QDefineCrayon(psSolid, 0, CGT);
+
       for i:= 0 to GetNbTriangles - 1 do
       begin
         TR := GetTriangle(i);
@@ -1166,7 +1168,7 @@ begin
         while(QZ < TR.BoundingBox.C2.Z) do
         begin
           NbC := Trunc(QZ);
-          QDefineCrayon(psSolid, IIF((NbC mod 5 = 0), 2, 0), LineContourColor, LineContourOpacity);
+          QDefineCrayon(psSolid, IIF((NbC mod 5 = 0), 2, 0), LineContourColor);
           if (IntersectPlanHorizontalTriangle(QZ, QT, I1, I2)) then
           begin
             PM3.setFrom(I1.X, I1.Y, MyIsovaleur);
@@ -1184,7 +1186,7 @@ begin
     // isovaleur spécifiée
     if (MyIsovaleur > 0.00) then
     begin
-      QDefineCrayon(psSolid, 0, IsovaleurColor, 255);
+      QDefineCrayon(psSolid, 0, IsovaleurColor);
       for i:= 0 to GetNbTriangles() - 1 do
       begin
         TR := GetTriangle(i);
@@ -1209,8 +1211,7 @@ begin
       begin
         MyProfilTopo := GetProfilTopo(i);
         QDefineCrayon(psSolid, MyProfilTopo.LineAttributes.LineWidthInPixels,
-                               MyProfilTopo.LineAttributes.Color,
-                               MyProfilTopo.LineAttributes.Opacity);
+                               MyProfilTopo.LineAttributes.ColorRGBA);
         AfficherMessage(Format('Profil %d - %d points', [i, MyProfilTopo.GetNbPointsProfilTN()]));
         if (MyProfilTopo.GetNbPointsProfilTN() > 0) then
         begin
@@ -1274,29 +1275,25 @@ end;
 function TMaillage.CalcBoundingBoxTriangle(const T: TMNTTriangleABC): TMNTTriangleABC;
 const
   INF = 1E24;
-var
-  QC1, QC2: TPoint3Df;
   procedure WU(const P: integer);
   var
     VX: TMNTVertex;
   begin
     VX := GetVertex(P);
-    if (VX.Position.X < QC1.X) then QC1.X := VX.Position.X;
-    if (VX.Position.Y < QC1.Y) then QC1.Y := VX.Position.Y;
-    if (VX.Position.Z < QC1.Z) then QC1.Z := VX.Position.Z;
-    if (VX.Position.X > QC2.X) then QC2.X := VX.Position.X;
-    if (VX.Position.Y > QC2.Y) then QC2.Y := VX.Position.Y;
-    if (VX.Position.Z > QC2.Z) then QC2.Z := VX.Position.Z;
+    if (VX.Position.X < Result.BoundingBox.C1.X) then Result.BoundingBox.C1.X := VX.Position.X;
+    if (VX.Position.Y < Result.BoundingBox.C1.Y) then Result.BoundingBox.C1.Y := VX.Position.Y;
+    if (VX.Position.Z < Result.BoundingBox.C1.Z) then Result.BoundingBox.C1.Z := VX.Position.Z;
+    if (VX.Position.X > Result.BoundingBox.C2.X) then Result.BoundingBox.C2.X := VX.Position.X;
+    if (VX.Position.Y > Result.BoundingBox.C2.Y) then Result.BoundingBox.C2.Y := VX.Position.Y;
+    if (VX.Position.Z > Result.BoundingBox.C2.Z) then Result.BoundingBox.C2.Z := VX.Position.Z;
   end;
 begin
   Result := T;
-  QC1.setFrom( INF,  INF,  INF);
-  QC2.setFrom(-INF, -INF, -INF);
+  Result.BoundingBox.C1.setFrom( INF,  INF,  INF);
+  Result.BoundingBox.C2.setFrom(-INF, -INF, -INF);
   WU(T.PointA);
   WU(T.PointB);
   WU(T.PointC);
-  Result.BoundingBox.C1 := QC1;
-  Result.BoundingBox.C2 := QC2;
 end;
 // conversion d'un maillage SRTM HGT en maillage normal
 // Modèle: SRTM3
@@ -1399,11 +1396,8 @@ var
   TR           : TMNTTriangleABC;
   i, j         : integer;
   pFileMAI     : TextFile;
-  postab       : integer;
-  s            : string;
-  V1, V2, W    : TPoint3Df;
+  W    : TPoint3Df;
   PrmsLn       : TGHStringArray;
-  MM: double;
   EWE, MyLigne: String;
   QQ: Integer;
   function LireLigne(): string;
@@ -2244,7 +2238,7 @@ var
   EWE: String;
   PP: TProfilTopo;
   PT1, PT2: TPoint2Df;
-  QCol: TColor;
+  CGT: TGHTopoColor;
 begin
   AfficherMessageErreur(Format('%s.SaveProfilsToFile(): %s', [ClassName, QFilename]));
   Nb := GetNbProfilsTopo();
@@ -2267,8 +2261,8 @@ begin
       PP := GetProfilTopo(i);
       PT1 := PP.GetExtremite1();
       PT2 := PP.GetExtremite2();
-      QCol:= PP.LineAttributes.Color;
-      writeln(fp, Format(EWE, [i, Red(QCol), Green(QCol), Blue(QCol),PP.LineAttributes.Opacity,
+      CGT := PP.LineAttributes.ColorRGBA;
+      writeln(fp, Format(EWE, [i, CGT.Red, CGT.Green, CGT.Blue, CGT.Alpha,
                                PP.LineAttributes.LineWidthInPixels, PP.LineAttributes.LineWidthInMillimeters,
                                PT1.X, PT1.Y,
                                PT2.X, PT2.Y,
@@ -2302,16 +2296,12 @@ begin
       //0   1   2    3   4  5   6     7          8            9            10         11
       //0	0	0	255	255 1 0.015 403080.31	3091003.68	403405.57	3090831.37	Profil_1
 
-      QProfilLineAttr.Color   := RGBToColor(StrToIntDef(AR[1], 0)   and 255,
-                                            StrToIntDef(AR[2], 0)   and 255,
-                                            StrToIntDef(AR[3], 255) and 255);
-      QProfilLineAttr.Opacity                := StrToIntDef(AR[4], 255) and 255;
-      QProfilLineAttr.LineWidthInPixels      := StrToIntDef(AR[5], 0)   and 255;
-      QProfilLineAttr.LineWidthInMillimeters := ConvertirEnNombreReel(AR[6], 0.015);
-
-
-
-
+      QProfilLineAttr.SetAttributes(StrToIntDef(AR[1], 0),
+                                    StrToIntDef(AR[2], 0),
+                                    StrToIntDef(AR[3], 255),
+                                    StrToIntDef(AR[4], 255),
+                                    StrToIntDef(AR[5], 0) and 255,
+                                    ConvertirEnNombreReel(AR[6], 0.015));
       PT1.setFrom(ConvertirEnNombreReel(AR[7] , 0.00),
                   ConvertirEnNombreReel(AR[8] , 0.00));
       PT2.setFrom(ConvertirEnNombreReel(AR[9] , 0.00),

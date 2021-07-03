@@ -153,13 +153,12 @@ begin
   inherited Create(QIdxStyleSheet, QName);
   FP1 := P1;
   FP2 := P2;
-  SetBoundingBox();
+
+  self.SetBoundingBox();
 end;
 procedure TDGCSegment.SetBoundingBox();
 begin
-  UpdateBoundingBox(FBoundingBox, FP1, True);
-  UpdateBoundingBox(FBoundingBox, FP2, False);
-
+  FBoundingBox.setFrom(self.FP1.X, self.FP1.Y, self.FP2.X, self.FP2.Y);
 end;
 
 function TDGCSegment.GetBoundingBox(): TDGCBoundingBox;
@@ -182,13 +181,12 @@ begin
   inherited Create(QIdxStyleSheet, QName);
   FP1 := P1;
   FP2 := P2;
-  SetBoundingBox();
+  self.SetBoundingBox();
 end;
 
 procedure TDGCRectangle.SetBoundingBox();
 begin
-  UpdateBoundingBox(FBoundingBox, FP1, True);
-  UpdateBoundingBox(FBoundingBox, FP2, False);
+  FBoundingBox.setFrom(self.FP1.X, self.FP1.Y, self.FP2.X, self.FP2.Y);
 end;
 
 function TDGCRectangle.GetBoundingBox(): TDGCBoundingBox;
@@ -213,8 +211,7 @@ var
 begin
   C1.setFrom(FCentre.X - FRayon1, FCentre.Y - FRayon2);
   C2.setFrom(FCentre.X + FRayon1, FCentre.Y + FRayon2);
-  UpdateBoundingBox(FBoundingBox, C1, True);
-  UpdateBoundingBox(FBoundingBox, C2, False);
+  FBoundingBox.setFrom(C1.X, C1.Y, C2.X, C2.Y);
 end;
 function TDGCEllipse.GetBoundingBox(): TDGCBoundingBox;
 begin
@@ -232,11 +229,11 @@ begin
   SetBoundingBox();
 end;
 procedure TDGCTriangle.SetBoundingBox();
-
 begin
-  UpdateBoundingBox(FBoundingBox, FP1, True);
-  UpdateBoundingBox(FBoundingBox, FP2, false);
-  UpdateBoundingBox(FBoundingBox, FP3, false);
+  FBoundingBox.Reset();
+  FBoundingBox.upDate(FP1);
+  FBoundingBox.upDate(FP2);
+  FBoundingBox.upDate(FP3);
 end;
 
 
@@ -263,7 +260,7 @@ end;
 
 function TDGCText.GetBoundingBox(): TDGCBoundingBox;
 begin
-
+  Result:= self.FBoundingBox;
 end;
 
 end.

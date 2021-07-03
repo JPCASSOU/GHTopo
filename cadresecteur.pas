@@ -33,7 +33,7 @@ begin
   InitCaptions();
   editIdxSecteur.AsInteger := QIdx;
   editNomSecteur.Text      := _AnsiToLCLStr(MySecteur.NomSecteur);
-  btnColor.ButtonColor     := MySecteur.CouleurSecteur;
+  btnColor.ButtonColor     := MySecteur.CouleurSecteur.toTColor();
   result := true;
 end;
 procedure TCdrSecteur.InitCaptions;
@@ -49,6 +49,6 @@ end;
 function TCdrSecteur.GetSecteurFromForm(): TSecteur;
 begin
   Result.NomSecteur     := _LCLStrToAnsi(Trim(editNomSecteur.Text));
-  Result.CouleurSecteur := btnColor.ButtonColor;
+  Result.CouleurSecteur.setFrom(btnColor.ButtonColor);
 end;
 end.

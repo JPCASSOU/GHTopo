@@ -192,7 +192,7 @@ var
     DrawColTexte(lsbGaleriesRecoupees, ARect, HeaderControl1.Sections.Items[0], False, Format(FORMAT_NB_INTEGER,[Index]));
     DrawColTexte(lsbGaleriesRecoupees, ARect, HeaderControl1.Sections.Items[1], True, Format(FMTSERST, [QNoSerie, MyConduit.Entite_Station]));
     MyReseau := FDocTopo.GetReseau(MyConduit.eReseau);
-    DrawColRectColoreWithTexte(lsbGaleriesRecoupees, ARect, HeaderControl1.Sections.Items[2], True, bg, MyReseau.ColorReseau, '');
+    DrawColRectColoreWithTexte(lsbGaleriesRecoupees, ARect, HeaderControl1.Sections.Items[2], True, bg, MyReseau.ColorReseau.toTColor(), '');
     DrawColTexte(lsbGaleriesRecoupees, ARect, HeaderControl1.Sections.Items[3], True, Format(FORMAT_NB_REAL_3_DEC, [MyConduit.TagDouble]));
     DrawColTexte(lsbGaleriesRecoupees, ARect, HeaderControl1.Sections.Items[4], True, Format(FORMAT_NB_REAL_3_DEC, [MyConduit.PosStation.Z]));
     DrawColTexte(lsbGaleriesRecoupees, ARect, HeaderControl1.Sections.Items[5], True, Format(FORMAT_NB_REAL_3_DEC, [QAltTN]));
@@ -273,8 +273,8 @@ begin
   FProfilReady := false;
   self.Caption := FProfilTopo.ProfilName;
 
-  btnProfilColor.ButtonColor              := FProfilTopo.LineAttributes.Color;
-  sclProfilsLineOpacity.Position          := FProfilTopo.LineAttributes.Opacity;
+  btnProfilColor.ButtonColor              := FProfilTopo.LineAttributes.toTColor();
+  sclProfilsLineOpacity.Position          := FProfilTopo.LineAttributes.getOpacity();
   editProfilsLargeurTraitInPixels.Value   := FProfilTopo.LineAttributes.LineWidthInPixels;
   editProfilsLargeurTraitInMM.Value       := FProfilTopo.LineAttributes.LineWidthInMillimeters;
 
@@ -295,13 +295,13 @@ begin
     FCourbeProfil := TLineSeries.Create(Chart1);
     FCourbeProfil.Clear;
     FCourbeProfil.ShowPoints     := false;
-    FCourbeProfil.LinePen.Color  := FProfilTopo.LineAttributes.Color;
+    FCourbeProfil.LinePen.Color  := FProfilTopo.LineAttributes.toTColor();
     FCourbeProfil.LinePen.Width  := 3;
 
     for i := 0 to Nb - 1 do
     begin
       Pt := FProfilTopo.GetPointProfilTN(i);
-      FCourbeProfil.AddXY(Pt.P, Pt.Z, '', FProfilTopo.LineAttributes.Color);
+      FCourbeProfil.AddXY(Pt.P, Pt.Z, '', FProfilTopo.LineAttributes.toTColor());
     end;
     Chart1.AddSeries(FCourbeProfil);
     FProfilReady  := True;

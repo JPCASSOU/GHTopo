@@ -1,11 +1,11 @@
 object CdrDistoXLazserial: TCdrDistoXLazserial
   Left = 0
-  Height = 553
+  Height = 655
   Top = 0
-  Width = 956
+  Width = 896
   Align = alClient
-  ClientHeight = 553
-  ClientWidth = 956
+  ClientHeight = 655
+  ClientWidth = 896
   Font.CharSet = ANSI_CHARSET
   Font.Color = clBlack
   Font.Height = -13
@@ -14,8 +14,8 @@ object CdrDistoXLazserial: TCdrDistoXLazserial
   Font.Quality = fqDraft
   ParentFont = False
   TabOrder = 0
-  DesignLeft = 293
-  DesignTop = 265
+  DesignLeft = 431
+  DesignTop = 280
   object lbPort: TLabel
     Left = 4
     Height = 16
@@ -43,7 +43,7 @@ object CdrDistoXLazserial: TCdrDistoXLazserial
     Text = 'COM4:'
   end
   object Button3: TButton
-    Left = 888
+    Left = 828
     Height = 36
     Top = 3
     Width = 61
@@ -61,7 +61,7 @@ object CdrDistoXLazserial: TCdrDistoXLazserial
     TabOrder = 1
   end
   object btnDXScanOnOff: TToggleBox
-    Left = 784
+    Left = 724
     Height = 36
     Top = 3
     Width = 100
@@ -96,9 +96,9 @@ object CdrDistoXLazserial: TCdrDistoXLazserial
     TabOrder = 3
   end
   object btnListerMesures: TButton
-    Left = 372
+    Left = 368
     Height = 37
-    Top = 4
+    Top = 3
     Width = 106
     Caption = 'Lister'
     Font.CharSet = ANSI_CHARSET
@@ -114,23 +114,23 @@ object CdrDistoXLazserial: TCdrDistoXLazserial
   end
   object PageControlDistoX: TPageControl
     Left = 4
-    Height = 504
+    Height = 606
     Top = 44
-    Width = 952
-    ActivePage = tabShtJournal
+    Width = 892
+    ActivePage = tabShtListeMesures
     Anchors = [akTop, akLeft, akRight, akBottom]
     TabHeight = 36
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 6
     object tabShtListeMesures: TTabSheet
       Caption = 'tabShtListeMesures'
-      ClientHeight = 436
-      ClientWidth = 936
+      ClientHeight = 562
+      ClientWidth = 884
       object hcColsTitres: THeaderControl
         Left = 0
         Height = 24
         Top = 3
-        Width = 937
+        Width = 885
         DragReorder = False
         Sections = <        
           item
@@ -174,9 +174,9 @@ object CdrDistoXLazserial: TCdrDistoXLazserial
       end
       object lsbMesures: TListBox
         Left = 0
-        Height = 411
+        Height = 537
         Top = 24
-        Width = 937
+        Width = 885
         Anchors = [akTop, akLeft, akRight, akBottom]
         ItemHeight = 18
         OnDrawItem = lsbMesuresDrawItem
@@ -187,13 +187,13 @@ object CdrDistoXLazserial: TCdrDistoXLazserial
     end
     object tabShtJournal: TTabSheet
       Caption = 'tabShtJournal'
-      ClientHeight = 460
-      ClientWidth = 944
+      ClientHeight = 562
+      ClientWidth = 884
       inline SynEdit1: TSynEdit
         Left = 0
-        Height = 390
+        Height = 556
         Top = 0
-        Width = 946
+        Width = 878
         Anchors = [akTop, akLeft, akRight, akBottom]
         Font.Height = -13
         Font.Name = 'Courier New'
@@ -685,60 +685,16 @@ object CdrDistoXLazserial: TCdrDistoXLazserial
           end
         end
       end
-      object pnlTamponMesures: TPanel
-        Left = 0
-        Height = 62
-        Top = 392
-        Width = 460
-        Alignment = taLeftJustify
-        Anchors = [akLeft, akBottom]
-        BevelOuter = bvNone
-        BorderStyle = bsSingle
-        ClientHeight = 58
-        ClientWidth = 456
-        TabOrder = 1
-        object lbTamponLine0: TLabel
-          Left = 4
-          Height = 15
-          Top = 3
-          Width = 442
-          Anchors = [akTop, akLeft, akRight]
-          AutoSize = False
-          Caption = '00'
-          ParentColor = False
-        end
-        object lbTamponLine1: TLabel
-          Left = 4
-          Height = 15
-          Top = 22
-          Width = 442
-          Anchors = [akTop, akLeft, akRight]
-          AutoSize = False
-          Caption = '00'
-          ParentColor = False
-        end
-        object lbTamponLine2: TLabel
-          Left = 4
-          Height = 15
-          Top = 41
-          Width = 442
-          Anchors = [akTop, akLeft, akRight]
-          AutoSize = False
-          Caption = '00'
-          ParentColor = False
-        end
-      end
     end
     object tabShtMisc: TTabSheet
       Caption = 'tabShtMisc'
-      ClientHeight = 460
-      ClientWidth = 809
+      ClientHeight = 562
+      ClientWidth = 884
       object lbConnexionStatus: TStaticText
         Left = 0
         Height = 25
-        Top = 8
-        Width = 324
-        Anchors = [akLeft, akBottom]
+        Top = 5
+        Width = 312
         BorderStyle = sbsSunken
         Caption = 'lbConnexionStatus'
         Color = clDefault
@@ -749,9 +705,8 @@ object CdrDistoXLazserial: TCdrDistoXLazserial
       object lbDistoXName: TStaticText
         Left = 0
         Height = 24
-        Top = 90
-        Width = 324
-        Anchors = [akLeft, akBottom]
+        Top = 33
+        Width = 312
         BorderStyle = sbsSunken
         Caption = 'lbDistoXName'
         Color = clDefault
@@ -759,10 +714,151 @@ object CdrDistoXLazserial: TCdrDistoXLazserial
         TabOrder = 1
         Transparent = False
       end
+      object grbxStackMesures: TGroupBox
+        Left = 0
+        Height = 116
+        Top = 120
+        Width = 672
+        Caption = 'Dernières mesures'
+        ClientHeight = 95
+        ClientWidth = 668
+        TabOrder = 2
+        object memoTamponMesures: TMemo
+          Left = 4
+          Height = 86
+          Top = 4
+          Width = 660
+          Anchors = [akTop, akLeft, akRight, akBottom]
+          Font.CharSet = ANSI_CHARSET
+          Font.Color = clBlue
+          Font.Height = -13
+          Font.Name = 'Courier New'
+          Font.Pitch = fpFixed
+          Font.Quality = fqDraft
+          Font.Style = [fsBold]
+          Lines.Strings = (
+            'memoTamponMesures'
+          )
+          ParentFont = False
+          TabOrder = 0
+        end
+      end
+      object btnRemoveLastMesures: TButton
+        Left = 0
+        Height = 25
+        Top = 240
+        Width = 195
+        Caption = 'btnRemoveLastMesures'
+        OnClick = btnRemoveLastMesuresClick
+        TabOrder = 3
+      end
+      object GroupBox1: TGroupBox
+        Left = 316
+        Height = 109
+        Top = 5
+        Width = 320
+        Caption = 'Paramètres de tolérance pour détection de visées'
+        ClientHeight = 88
+        ClientWidth = 316
+        TabOrder = 4
+        object Label1: TLabel
+          Left = 4
+          Height = 16
+          Top = 4
+          Width = 60
+          Caption = 'Longueurs'
+          ParentColor = False
+        end
+        object Label2: TLabel
+          Left = 4
+          Height = 16
+          Top = 32
+          Width = 48
+          Caption = 'Azimuts'
+          ParentColor = False
+        end
+        object Label3: TLabel
+          Left = 4
+          Height = 16
+          Top = 60
+          Width = 41
+          Caption = 'Pentes'
+          ParentColor = False
+        end
+        object editToleranceLongueurs: TCurrencyEdit
+          Left = 203
+          Height = 24
+          Top = 4
+          Width = 64
+          Alignment = taRightJustify
+          DecimalPlaces = 3
+          DisplayFormat = '0.000'
+          Anchors = [akTop, akRight]
+          MaxValue = 0
+          MinValue = 0
+          TabOrder = 0
+          Value = 0
+        end
+        object Label4: TLabel
+          Left = 273
+          Height = 16
+          Top = 4
+          Width = 40
+          Anchors = [akTop, akRight]
+          Caption = 'mètres'
+          ParentColor = False
+        end
+        object editToleranceAzimuts: TCurrencyEdit
+          Left = 203
+          Height = 24
+          Top = 32
+          Width = 64
+          Alignment = taRightJustify
+          DecimalPlaces = 3
+          DisplayFormat = '0.000'
+          Anchors = [akTop, akRight]
+          MaxValue = 0
+          MinValue = 0
+          TabOrder = 1
+          Value = 0
+        end
+        object Label5: TLabel
+          Left = 274
+          Height = 16
+          Top = 32
+          Width = 39
+          Anchors = [akTop, akRight]
+          Caption = 'degrés'
+          ParentColor = False
+        end
+        object editTolerancePentes: TCurrencyEdit
+          Left = 203
+          Height = 24
+          Top = 60
+          Width = 64
+          Alignment = taRightJustify
+          DecimalPlaces = 3
+          DisplayFormat = '0.000'
+          Anchors = [akTop, akRight]
+          MaxValue = 0
+          MinValue = 0
+          TabOrder = 2
+          Value = 0
+        end
+        object Label6: TLabel
+          Left = 274
+          Height = 16
+          Top = 64
+          Width = 39
+          Anchors = [akTop, akRight]
+          Caption = 'degrés'
+          ParentColor = False
+        end
+      end
     end
   end
   object pnlUtilitaires: TPanel
-    Left = 748
+    Left = 688
     Height = 252
     Top = 44
     Width = 205

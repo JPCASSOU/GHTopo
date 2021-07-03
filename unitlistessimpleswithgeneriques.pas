@@ -38,9 +38,14 @@ type
     procedure InsertElement(const Idx: integer; const E: T);
     procedure AddElement(const E: T);  // et Rros Minet
     function  GetElement(const Idx: integer): T; inline;
+    function  GetLastElement(): T; inline;
     procedure PutElement(const Idx: integer; const E: T); inline;
     function  RemoveElement(const Idx: integer): boolean;
     function  RemoveLastElement(): boolean;
+    procedure EnQueue(const E: T); inline; // file: Ajoute un entrant -- Synonyme de procedure AddElement();
+    function  DeQueue(): T;                // file: extrait et supprime le premier entré (l'élément 0 est devant le guichet)
+    procedure Push(const E: T); inline;    // Pile: Ajoute un élément -- Synonyme de AddElement()
+    function  Pop(): T;                    // Pile: Extrait le dernier élément entré et le supprime de la liste
 
 end;
 
@@ -200,21 +205,18 @@ end;
 
 
 
-// pour le DistoX
-type TListeMesuresTopoDistoX = class(TListeSimple<TMesureViseeDistoX>)
-  private
-  public
-end;
+
 
 type TListeVectorsDataDistoX = class(TListeSimple<TVectorDataDistoX>)
   private
   public
 end;
+(*
 type TListeTPoint2DfTagged = class(TListeSimple<TPoint2DfTagged>)
   private
   public
 end;
-
+//*)
 
 type TListePoints2Df = class(TListeSimple<TPoint2Df>)
   private
@@ -289,6 +291,16 @@ type  TListeSeriesEncadrees = class(TListeSimple<TSerieEncadree>)
   private
   public
 end;
+
+type  TTamponMesuresViseesDistoX = class(TListeSimple<TMesureBruteDistoX>)
+  private
+  public
+end;
+
+type  TListeMesuresViseesDistoX = class(TListeSimple<TMesureViseeDistoX>)
+  private
+  public
+end;
 //******************************************************************************
 implementation
 uses
@@ -307,7 +319,6 @@ begin
     self.Delete(i);                                        // Suppression de l'élément
   end;
 end;
-
 
 
 function TListeSimple<T>.GetNbElements: integer;
@@ -334,6 +345,7 @@ function TListeSimple<T>.GetElement(const Idx: integer): T;
 begin
   Result := T(Items[Idx]^);
 end;
+
 
 
 
@@ -367,6 +379,39 @@ begin
   result := self.RemoveElement(Nb - 1);
 end;
 
+procedure TListeSimple<T>.EnQueue(const E: T);
+begin
+  AddElement(E);
+end;
+
+function TListeSimple<T>.DeQueue(): T;
+begin
+  Result := GetElement(0);
+  RemoveElement(0);
+end;
+
+procedure TListeSimple<T>.Push(const E: T);
+begin
+  AddElement(E);
+end;
+
+function TListeSimple<T>.Pop(): T;
+var
+  n: Integer;
+begin
+  n := GetNbElements();
+  if (n > 0) then
+  begin
+    Result := GetElement(n-1);
+    RemoveElement(n-1);
+  end;
+end;
+function TListeSimple<T>.GetLastElement(): T;
+var n: integer;
+begin
+  n := self.getNbElements();
+  result := self.getElement(n-1);
+end;
 
 { TListeOfGISLayers }
 
@@ -402,8 +447,7 @@ begin
   if (not CheckOSMLayerVarName(QLayerVarName, EWE)) then Exit;
   MyLayer.SymboleStyle        := QSymboleStyle;
   MyLayer.SymbolSize          := QSymbolSize;
-  MyLayer.SymbolColor         := QSymbolColor;
-  MyLayer.SymbolOpacity       := QSymbolOpacity;
+  MyLayer.SymbolColor.setFrom(QSymbolColor, QSymbolOpacity);
   MyLayer.LayerVarName        := EWE;
   MyLayer.LayerTitle          := QLayerTitle;
   MyLayer.LayerDescription    := QLayerDescription;
@@ -960,7 +1004,7 @@ var
   var
     EWE: TToporobotIDStation;
   begin
-    EWE    := DecomposeStationToporobot(Trim(S));
+    EWE.setFrom(S);
     Result := MakeTIDBaseStation(EWE.aSerie, EWE.aStation, false);
   end;
 begin

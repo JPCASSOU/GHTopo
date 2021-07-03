@@ -53,7 +53,7 @@ type
     function  QGetCoordsMonde(const PP: TPoint): TPoint2Df;
     function  QGetCoordsPlan(const PM: TPoint2Df): TPoint; overload;
     function  QGetCoordsPlan(const QX, QY: double): TPoint; overload;
-    function  QGetCouleur(const QQE: TBaseStation): TColor;
+    function  QGetCouleur(const QQE: TBaseStation): TGHTopoColor;
     procedure DrawTexteCroquis(const X, Y: double; const Attr: TTexteAttributs; const Texte: string);
   private
     FVue2DParams           : TVue2DParams;            // éléments dessinés
@@ -79,10 +79,10 @@ type
     // paramètres de la vue
     //procedure SetVue2DParams(const P: TVue2DParams);
     // primitives de dessin
-    procedure DrawAsterisk(const Centre: TPoint2Df; const Rayon, DemiEpaisseur: double; const FillColor: TColor);
+    procedure DrawAsterisk(const Centre: TPoint2Df; const Rayon, DemiEpaisseur: double; const FillColor: TGHTopoColor);
     procedure DrawCenteredRectangle(const Centre: TPoint2Df; const HalfWidth, HalfHeight: double; const Angle: double);
     procedure DrawRectangle(const C1, C2: TPoint2Df; const Filled: boolean);
-    procedure DrawTriangle(const P1, P2, P3: TPoint2Df; const Linecolor, FillColor: TColor; const LineOpacity, FillOpacity: byte; const WL: integer);
+    procedure DrawTriangle(const P1, P2, P3: TPoint2Df; const Linecolor, FillColor: TGHTopoColor; const WL: integer);
     procedure DrawShape(const x, y: Double; const TypeSymbole: byte; const L, H: integer);
     procedure DrawQuad(const P1, P2, P3, P4: TPoint2Df);
     // balises de début et fin de dessin
@@ -90,16 +90,16 @@ type
     procedure EndDrawing();
 
     // gestion des brosses, crayons et fontes
-    procedure DefineBrosse(const qStyle: TBrushStyle; const qColor: TColor; const qOpacity: byte);
-    procedure DefineBrosseEtCrayon(const qBrushStyle: TBrushStyle; const qBrushColor: TColor; const qBrushOpacity: byte; const qPenStyle: TPenStyle; const qPenWidth: integer; const qPenColor: TColor; const qPenOpacity: byte);
-    procedure DefineCrayon(const qStyle: TPenStyle; const qWidth: integer; const qColor: TColor; const qOpacity: byte);
+    procedure DefineBrosse(const qStyle: TBrushStyle; const qColor: TGHTopoColor);
+    procedure DefineBrosseEtCrayon(const qBrushStyle: TBrushStyle; const qBrushColor: TGHTopoColor; const qPenStyle: TPenStyle; const qPenWidth: integer; const qPenColor: TGHTopoColor);
+    procedure DefineCrayon(const qStyle: TPenStyle; const qWidth: integer; const qColor: TGHTopoColor);
     procedure DefineFonte(const QFontName: string; const QFontColor: TColor; const QFontStyle: TFontStyles; const QFontHeight: integer);
     procedure RestoreBrosse();
     procedure RestoreBrosseEtCrayon();
     procedure RestoreCrayon();
     procedure RestoreFonte();
     // dessin des objets
-    procedure DrawQuadrillage(const QdrType: TQdrType; const QdrColor: TColor; const QdrSpacing: double);
+    procedure DrawQuadrillage(const QdrType: TQdrType; const QdrColor: TGHTopoColor; const QdrSpacing: double);
     procedure DrawSegment(const X1, Y1, X2, Y2: Double);
     procedure DrawTexte(const X, Y: Double; const Alignement: integer; const T: string);
     // Dessin des objets GHTopo
@@ -116,7 +116,7 @@ type
     procedure DrawEntrancesOrPointEntities(const DoDrawNames: boolean);
     procedure DrawCroquisTerrain();
     procedure DrawCurrentStationTopo(const QCurrentStation: TBaseStation);
-    procedure DrawMaillage(const QMaillageDisplayed: boolean; const QIsovaleur: double; const ContourLinesColor: TColor; const ContourLinesOpacity: byte);
+    procedure DrawMaillage(const QMaillageDisplayed: boolean; const QIsovaleur: double; const ContourLinesColor: TGHTopoColor);
 
     procedure DrawOverlay();
     procedure DrawShortestPath(const FG: TPathFindingGraphe; const FP: TPathBetweenNodes);
@@ -209,9 +209,9 @@ begin
   self.CanvasBGRA.Polygon(PPP);
 end;
 
-procedure TGHTopoDrawingContext.DrawAsterisk(const Centre: TPoint2Df; const Rayon, DemiEpaisseur: double; const FillColor: TColor);
+procedure TGHTopoDrawingContext.DrawAsterisk(const Centre: TPoint2Df; const Rayon, DemiEpaisseur: double; const FillColor: TGHTopoColor);
 begin
-  DefineBrosseEtCrayon(bsSolid, FillColor, 255, psSolid, 0, FillColor, 255);
+  DefineBrosseEtCrayon(bsSolid, FillColor, psSolid, 0, FillColor);
     self.CanvasBGRA.Brush.Texture:= nil;
     DrawCenteredRectangle(Centre, Rayon, DemiEpaisseur, 0);
     DrawCenteredRectangle(Centre, Rayon, DemiEpaisseur, 60);
@@ -231,8 +231,7 @@ end;
 // dessin d'un triangle
 // très utilisé => procédure distincte
 procedure TGHTopoDrawingContext.DrawTriangle(const P1, P2, P3: TPoint2Df;
-                                             const Linecolor, FillColor: TColor;
-                                             const LineOpacity, FillOpacity: byte;
+                                             const Linecolor, FillColor: TGHTopoColor;
                                              const WL: integer);
 var
   Sommets: array[0..2] of TPoint;
@@ -240,7 +239,7 @@ begin
   Sommets[0] := QGetCoordsPlan(P1);
   Sommets[1] := QGetCoordsPlan(P2);
   Sommets[2] := QGetCoordsPlan(P3);
-  self.DefineBrosseEtCrayon(bsSolid, FillColor, FillOpacity, psSolid, WL, Linecolor, LineOpacity);
+  self.DefineBrosseEtCrayon(bsSolid, FillColor, psSolid, WL, Linecolor);
     self.CanvasBGRA.Brush.Texture:= nil;
     self.CanvasBGRA.Polygon(Sommets);
   self.RestoreBrosseEtCrayon();
@@ -369,7 +368,7 @@ begin
   //DrawPipistrelle(self);
 end;
 // définir crayons, brosse et fontes
-procedure TGHTopoDrawingContext.DefineCrayon(const qStyle: TPenStyle; const qWidth: integer; const qColor: TColor; const qOpacity: byte);
+procedure TGHTopoDrawingContext.DefineCrayon(const qStyle: TPenStyle; const qWidth: integer; const qColor: TGHTopoColor);
 begin
   FOldPenStyle    := self.CanvasBGRA.Pen.Style;
   FOldPenColor    := self.CanvasBGRA.Pen.Color;
@@ -377,8 +376,8 @@ begin
   FOldPenWidth    := self.CanvasBGRA.Pen.Width;
   self.CanvasBGRA.Pen.Style   := qStyle;
   self.CanvasBGRA.Pen.Width   := qWidth;
-  self.CanvasBGRA.Pen.Color   := qColor;
-  self.CanvasBGRA.Pen.Opacity := qOpacity;
+  self.CanvasBGRA.Pen.Color   := qColor.toTColor();
+  self.CanvasBGRA.Pen.Opacity := qColor.Alpha;
 end;
 procedure TGHTopoDrawingContext.DefineFonte(const QFontName: string; const QFontColor: TColor; const QFontStyle: TFontStyles; const QFontHeight: integer);
 begin
@@ -396,23 +395,22 @@ begin
 
 end;
 
-
-procedure TGHTopoDrawingContext.DefineBrosse(const qStyle: TBrushStyle; const qColor: TColor; const qOpacity: byte);
+                   // TODO:             255 chrétiens égorgés
+procedure TGHTopoDrawingContext.DefineBrosse(const qStyle: TBrushStyle; const qColor: TGHTopoColor);
 begin
   FOldBrushStyle    := self.CanvasBGRA.Brush.Style;
   FOldBrushColor    := self.CanvasBGRA.Brush.Color;
   FOldBrushOpacity  := self.CanvasBGRA.Brush.Opacity;
   self.CanvasBGRA.Brush.Texture := nil;
   self.CanvasBGRA.Brush.Style   := qStyle;
-  self.CanvasBGRA.Brush.Color   := qColor;
-  self.CanvasBGRA.Brush.Opacity := qOpacity;
+  self.CanvasBGRA.Brush.Color   := qColor.toTColor();
+  self.CanvasBGRA.Brush.Opacity := qColor.Alpha;
 end;
 
-procedure TGHTopoDrawingContext.DefineBrosseEtCrayon(const qBrushStyle: TBrushStyle; const qBrushColor: TColor; const qBrushOpacity: byte;
-                                                     const qPenStyle  : TPenStyle; const qPenWidth: integer; const qPenColor: TColor; const qPenOpacity: byte);
+procedure TGHTopoDrawingContext.DefineBrosseEtCrayon(const qBrushStyle: TBrushStyle; const qBrushColor: TGHTopoColor; const qPenStyle: TPenStyle; const qPenWidth: integer; const qPenColor: TGHTopoColor);
 begin
-  DefineBrosse(qBrushStyle, qBrushColor, qBrushOpacity);
-  DefineCrayon(qPenStyle, qPenWidth, qPenColor, qPenOpacity);
+  DefineBrosse(qBrushStyle, qBrushColor);
+  DefineCrayon(qPenStyle, qPenWidth, qPenColor);
 end;
 procedure TGHTopoDrawingContext.RestoreBrosse();
 begin
@@ -445,14 +443,14 @@ begin
   RestoreCrayon();
 end;
 //******************************************************************************
-procedure TGHTopoDrawingContext.DrawQuadrillage(const QdrType: TQdrType; const QdrColor: TColor; const QdrSpacing: double);
+procedure TGHTopoDrawingContext.DrawQuadrillage(const QdrType: TQdrType; const QdrColor: TGHTopoColor; const QdrSpacing: double);
 var
   tt: Int64;
   A: Double;
   S: String;
 begin
   AfficherMessage(format('DrawQuadrillage: %f %f, %f %f, %f', [FRegionDeDessin.X1, FRegionDeDessin.Y1, FRegionDeDessin.X2, FRegionDeDessin.Y2, QdrSpacing]));
-  DefineCrayon(psSolid, 0, QdrColor, 255);
+  DefineCrayon(psSolid, 0, QdrColor);
   DefineFonte('Arial', clBlack, [], FONT_HEIGHT_QUADRILLES);
 
   tt := trunc(FRegionDeDessin.X1 / QdrSpacing);
@@ -478,17 +476,17 @@ end;
 
 //******************************************************************************
 //******************************************************************************
-function TGHTopoDrawingContext.QGetCouleur(const QQE: TBaseStation): TColor;
+function TGHTopoDrawingContext.QGetCouleur(const QQE: TBaseStation): TGHTopoColor;
 begin
   case FVue2DParams.ongModeRepresentation of
-    rgENTRANCES    : Result := FBDDEntites.GetCouleurEntiteRGBByEntrance(QQE);
-    rgRESEAUX      : Result := FBDDEntites.GetCouleurEntiteRGBByReseau(QQE);
-    rgSECTEURS     : Result := FBDDEntites.GetCouleurEntiteRGBBySecteur(QQE);
-    rgSEANCES      : Result := FBDDEntites.GetCouleurEntiteRGBByExpe(QQE);
-    rgDEPTH        : Result := FBDDEntites.CalcColorDegradeByAltitude(QQE.PosStation.Z);
-    rgTYPES_VISEES : Result := ChooseColorByTypeEntite(QQE.Type_Entite);
+    rgENTRANCES    : Result := FBDDEntites.GetCouleurEntiteByEntrance(QQE);
+    rgRESEAUX      : Result := FBDDEntites.GetCouleurEntiteByReseau(QQE);
+    rgSECTEURS     : Result := FBDDEntites.GetCouleurEntiteBySecteur(QQE);
+    rgSEANCES      : Result := FBDDEntites.GetCouleurEntiteByExpe(QQE);
+    rgDEPTH        : Result.setFrom(FBDDEntites.CalcColorDegradeByAltitude(QQE.PosStation.Z));
+    rgTYPES_VISEES : Result.setfrom(ChooseColorByTypeEntite(QQE.Type_Entite));
   else
-    Result := clGray;
+    Result.setFrom(clGray, 255);
   end;
 end;
 
@@ -506,14 +504,18 @@ var
   CE            : TNumeroExpe;
   CR            : TNumeroReseau;
   CZ            : TNumeroSecteur;
+  CGT, OVN      : TGHTopoColor;
   procedure MiouMiou(const Miou: TBaseStation);
   begin
-    DefineCrayon(psSolid, 8, clRed, 255);
+    CGT.setFrom(clRed, 255);
+    DefineCrayon(psSolid, 8, CGT);
     DrawSegment(Miou.PosExtr0.X, Miou.PosExtr0.Y, Miou.PosStation.X, Miou.PosStation.Y);
-    DefineCrayon(psSolid, 6, clBlue, 192);
+    CGT.setFrom(clBlue, 192);
+    DefineCrayon(psSolid, 6, CGT);
     DrawSegment(Miou.PosExtr0.X, Miou.PosExtr0.Y, Miou.PosStation.X, Miou.PosStation.Y);
   end;
 begin
+  CGT.setFrom(clRed, 255);
   CA := FDocuTopo.GetCurrentNumeroEntrance();
   CS := FDocuTopo.GetCurrentNumeroSerie();
   CC := FDocuTopo.GetCurrentNumeroCode();
@@ -521,11 +523,11 @@ begin
   CR := FDocuTopo.GetCurrentNumeroReseau();
   CZ := FDocuTopo.GetCurrentNumeroSecteur();
   CN := FDocuTopo.GetCurrentNumeroNamespace();
-  AfficherMessage(' --> DrawPolygonals: ' + inttostr(CN));
+  //AfficherMessage(' --> DrawPolygonals: ' + inttostr(CN));
   NbE := FBDDEntites.GetNbEntitesVisees();
   if (DoDrawFast) then
   begin
-    DefineCrayon(psSolid, 1, clRed, 255);
+    DefineCrayon(psSolid, 1, CGT);
     for i := 0 to NbE - 1 do   // TODO: A vérifier
     begin
       E := FBDDEntites.GetEntiteVisee(i);
@@ -539,14 +541,15 @@ begin
         E := FBDDEntites.GetEntiteVisee(i);
         if (E.Enabled) then
         begin
-          DefineCrayon(psSolid, IIF(E.Highlighted, 5, FVue2DParams.ongViseesLargeurInPX), QGetCouleur(E), 255);
+          DefineCrayon(psSolid, IIF(E.Highlighted, 5, FVue2DParams.ongViseesLargeurInPX), QGetCouleur(E));
           DrawSegment(E.PosExtr0.X, E.PosExtr0.Y, E.PosStation.X, E.PosStation.Y);
         end
         else
         begin
           if (FVue2DParams.ongDoDispViseesNonRetenues) then
           begin
-            DefineCrayon(psSolid, FVue2DParams.ongViseesLargeurInPX, FVue2DParams.ongCouleurViseesNonRetenues, 255);
+            OVN.setFrom(FVue2DParams.ongCouleurViseesNonRetenues, 255);
+            DefineCrayon(psSolid, FVue2DParams.ongViseesLargeurInPX, OVN);
             DrawSegment(E.PosExtr0.X, E.PosExtr0.Y, E.PosStation.X, E.PosStation.Y);
           end;
         end;
@@ -572,10 +575,12 @@ begin
 end;
 procedure TGHTopoDrawingContext.DrawSections();
 var
-  i:      integer;
-  E:      TBaseStation;
+  i      : integer;
+  E      : TBaseStation;
+  CGT    : TGHTopoColor;
 begin
-  DefineCrayon(psSolid, 0, clSilver, 255);
+  CGT.setFrom(clSilver, 255);
+  DefineCrayon(psSolid, 0, CGT);
   for i := 0 to FBDDEntites.GetNbEntitesVisees() - 1 do
   begin
     E := FBDDEntites.GetEntiteVisee(i);
@@ -588,9 +593,12 @@ var
   i:  integer;
   E:  TBaseStation;
   R : integer;
+  CGT1, CGT2: TGHTopoColor;
 begin
   R := 2;
-  DefineBrosseEtCrayon(bsSolid, clRed, 128, psSolid, 0, clRed, 255);
+  CGT1.setFrom(clRed, 128);
+  CGT2.setFrom(clRed, 255);
+  DefineBrosseEtCrayon(bsSolid, CGT1, psSolid, 0, CGT2);
   for i := 0 to FBDDEntites.GetNbEntitesVisees() - 1 do
   begin
     E := FBDDEntites.GetEntiteVisee(i);
@@ -604,8 +612,10 @@ procedure TGHTopoDrawingContext.DrawAntennes();
 var
   i: Integer;
   E: TBaseStation;
+  CGT    : TGHTopoColor;
 begin
-  DefineCrayon(psSolid, 0, clSilver, 255);
+  CGT.setFrom( clSilver, 255);
+  DefineCrayon(psSolid, 0, CGT);
   for i := 0 to FBDDEntites.GetNbEntitesAntennes() - 1 do
   begin
     E := FBDDEntites.GetEntiteAntenne(i);
@@ -617,8 +627,11 @@ procedure TGHTopoDrawingContext.DrawIDStations();
 var
   i:  integer;
   E:  TBaseStation;
+  CGT1, CGT2: TGHTopoColor;
 begin
-  DefineBrosseEtCrayon(bsSolid, FVue2DParams.ongBackGround, 128, psSolid, 0, clBlack, 255);
+  CGT1.setFrom(FVue2DParams.ongBackGround, 128);
+  CGT2.setFrom(clBlack, 255);
+  DefineBrosseEtCrayon(bsSolid, CGT1, psSolid, 0, CGT2);
   DefineFonte(DEFAULT_FONT_NAME, clMaroon, [fsBold], FONT_HEIGHT_IDSTATIONS);
   for i := 0 to FBDDEntites.GetNbEntitesVisees() - 1 do
   begin
@@ -639,8 +652,11 @@ var
   E:  TBaseStation;
   QQ: TPoint3Df;
   WU: Double;
+  CGT1, CGT2: TGHTopoColor;
 begin
-  DefineBrosseEtCrayon(bsSolid, FVue2DParams.ongBackGround, 128, psSolid, 0, clBlack, 255);
+  CGT1.setFrom(FVue2DParams.ongBackGround, 128);
+  CGT2.setFrom(clBlack, 255);
+  DefineBrosseEtCrayon(bsSolid, CGT1, psSolid, 0, CGT2);
   DefineFonte(DEFAULT_FONT_NAME, clBlue, [fsItalic], FONT_HEIGHT_COTATION);
   for i := 0 to FBDDEntites.GetNbEntitesVisees() - 1 do
   begin
@@ -664,10 +680,13 @@ const
 var
   n, i: Integer;
   J : TJonctionXYZ;
+  CGT1, CGT2: TGHTopoColor;
 begin
+  CGT1.setFrom(FVue2DParams.ongBackGround, 128);
+  CGT2.setFrom(clBlack, 255);
   n := FBDDEntites.GetNbJonctions();
   if (n = 0) then exit;
-  DefineBrosseEtCrayon(bsSolid, FVue2DParams.ongBackGround, 128, psSolid, 0, clBlack, 255);
+  DefineBrosseEtCrayon(bsSolid, CGT1, psSolid, 0, CGT2);
   DefineFonte(DEFAULT_FONT_NAME, clMaroon, CanvasBGRA.Font.Style + [fsBold], FONT_HEIGHT_NOEUDS);
   for i := 0 to n - 1 do
   begin
@@ -683,6 +702,7 @@ var
   i:  integer;
   E:  TBaseStation;
   R : integer;
+  CGT1, CGT2: TGHTopoColor;
 begin
   R := 4;
   DefineFonte('Arial', clBlue, [fsBold], 16);
@@ -694,10 +714,14 @@ begin
       if (E.Type_Entite = tgVISEE_RADIANTE) then Continue;
       if (E.IsPOI) then
       begin
-        DefineBrosseEtCrayon(bsSolid, clBlue, 255, psSolid, 0, clBlue, 255);
+        CGT1.setFrom(clBlue, 128);
+        CGT2.setFrom(clBlue, 255);
+        DefineBrosseEtCrayon(bsSolid, CGT1, psSolid, 0, CGT2);
         DrawShape(E.PosStation.X, E.PosStation.Y, 1, R shl 1, R shl 1);
         RestoreBrosseEtCrayon();
-        DefineBrosseEtCrayon(bsSolid, clAqua, 255, psSolid, 0, clAqua, 255);
+        CGT1.setFrom(clAqua, 255);
+        CGT2.setFrom(clAqua, 255);
+        DefineBrosseEtCrayon(bsSolid, CGT1, psSolid, 0, CGT2);
         DrawShape(E.PosStation.X, E.PosStation.Y, 1, R, R);
         RestoreBrosseEtCrayon();
         DrawTexte(E.PosStation.X + 1.0, E.PosStation.Y + 1.0, 1, E.toString());
@@ -712,16 +736,19 @@ var
   E:      TBaseStation;
   i, QNb:      integer;
   q1, q2: boolean;
-  QColorQuad: TColor;
   S1, S2, S3, S4: TPoint2Df;
+  CGT1, CGT2: TGHTopoColor;
 begin
+
   q1 := (edFillGalerie in FVue2DParams.ongElementsDrawn);
   q2 := (edWalls       in FVue2DParams.ongElementsDrawn);
   QNb := FBDDEntites.GetNbEntitesVisees();
   if (QNb = 0) then Exit;
   if (DoDrawFast) then
   begin
-    DefineBrosseEtCrayon(bsSolid, clBlue, FVue2DParams.ongFillOpacite, psClear, 0, clBlue, FVue2DParams.ongFillOpacite);
+    CGT1.setFrom(clBlue, FVue2DParams.ongFillOpacite);
+    CGT2.setFrom(clBlue, FVue2DParams.ongFillOpacite);
+    DefineBrosseEtCrayon(bsSolid, CGT1, psClear, 0, CGT2);
     for i := 0 to QNb - 1 do
     begin
       E := FBDDEntites.GetEntiteVisee(i);
@@ -748,10 +775,12 @@ begin
       E := FBDDEntites.GetEntiteVisee(i);
       if (E.Type_Entite in [tgSURFACE, tgENTRANCE])  then Continue;       // topo de surface et cheminement spéciaux: sans objet
       if (not E.Enabled) then  Continue;                                  // toutes visées hors topo de surface
-      QColorQuad := QGetCouleur(E);
+      CGT1 := QGetCouleur(E);
+      CGT1.setOpacity(FVue2DParams.ongFillOpacite);
+
       if (q1) then
       begin // remplissages
-        DefineBrosseEtCrayon(bsSolid, QColorQuad, FVue2DParams.ongFillOpacite, psClear, 0, QColorQuad, FVue2DParams.ongFillOpacite);
+        DefineBrosseEtCrayon(bsSolid, CGT1, psClear, 0, CGT1);
         S1.setFrom(E.PosOPG.X, E.PosOPG.Y);
         S2.setFrom(E.PosOPD.X, E.PosOPD.Y);
         S3.setFrom(E.PosPD.X , E.PosPD.Y);
@@ -761,7 +790,9 @@ begin
       end;
       if (q2) then
       begin // parois
-        DefineBrosseEtCrayon(bsSolid, QColorQuad, FVue2DParams.ongFillOpacite, psSolid, 0, QColorQuad, (FVue2DParams.ongFillOpacite + 64) AND 255);
+        CGT2 := QGetCouleur(E);
+        CGT2.setOpacity(FVue2DParams.ongFillOpacite + 64);
+        DefineBrosseEtCrayon(bsSolid, CGT1, psSolid, 0, CGT2);
         DrawSegment(E.PosOPG.X, E.PosOPG.Y, E.PosPG.X, E.PosPG.Y);
         DrawSegment(E.PosOPD.X, E.PosOPD.Y, E.PosPD.X, E.PosPD.Y);
         RestoreBrosseEtCrayon();
@@ -776,21 +807,28 @@ var
   i, n:      integer;
   E:      TEntrance;
   R777: Int64;
+  CGT1, CGT2: TGHTopoColor;
 begin
   n := FBDDEntites.GetNbEntrances();
   if (n = 0) then exit;
   if (DoDrawNames) then DefineFonte(DEFAULT_FONT_NAME, clBlue, [fsBold], FONT_HEIGHT_ENTRANCES);
-  DefineBrosseEtCrayon(bsSolid, clFuchsia, 128, psSolid, 0, clBlue, 255);
+  CGT1.setFrom(clFuchsia, 128);
+  CGT2.setFrom(clBlue, 255);
+  DefineBrosseEtCrayon(bsSolid, CGT1, psSolid, 0, CGT2);
   R777 := Trunc(1.15 * R666);
   for i := 0 to n - 1 do
   begin
     E := FBDDEntites.GetEntrance(i);
-    DefineBrosse(bsSolid, clFuchsia, 64);
+    CGT1.setFrom(clFuchsia, 64);
+    DefineBrosse(bsSolid, CGT1);
     DrawShape(E.ePosition.X, E.ePosition.Y, 1, R666, R666);
-    DefineBrosse(bsSolid, FVue2DParams.ongBackGround, 64);
+    CGT2.setFrom(FVue2DParams.ongBackGround, 64);
+    DefineBrosse(bsSolid, CGT2);
     if (DoDrawNames) then DrawTexte(E.ePosition.X, E.ePosition.Y, 1, GetResourceString(E.eNomEntree));
   end; // for
-  DefineBrosseEtCrayon(bsSolid, FVue2DParams.ongBackGround, 128, psSolid, 0, clBlack, 255);
+  CGT1.setFrom(FVue2DParams.ongBackGround, 128);
+  CGT2.setFrom(clBlack, 255);
+  DefineBrosseEtCrayon(bsSolid, CGT1, psSolid, 0, CGT2);
   RestoreFonte();
 end;
 // cadre périmétrique
@@ -798,8 +836,11 @@ procedure TGHTopoDrawingContext.DrawCadre();
 var
   C1, C2: TPoint3Df;
   P1, P2: TPoint2Df;
+  CGT1, CGT2: TGHTopoColor;
 begin
-  DefineBrosseEtCrayon(bsClear, FVue2DParams.ongBackGround, 0, psSolid, 0, clRed, 255);
+  CGT1.setFrom(FVue2DParams.ongBackGround, 0);
+  CGT2.setFrom(clRed, 255);
+  DefineBrosseEtCrayon(bsClear, CGT1, psSolid, 0, CGT2);
   C1 := FBDDEntites.GetCoinBasGauche();
   C2 := FBDDEntites.GetCoinHautDroit();
   P1.setFrom(C1.X, C1.Y);
@@ -857,6 +898,7 @@ var
     QPolygon: array of TPoint;
     PM: TPoint3Df;
     P1, P2: TPoint2Df;
+    CGT1, CGT2: TGHTopoColor;
   begin
     // TODO:
     // Bug inexplicable et exaspérant: Si on ne met pas un AfficherMessage() de la forme
@@ -874,12 +916,16 @@ var
     try  // indispensable pour Windows 10
       if (DoDrawBoundingBox) then  // bounding box
       begin
-        DefineCrayon(psDash, 0, clGray, 255);
+        CGT1.setFrom(clGray, 255);
+        DefineCrayon(psDash, 0, CGT1);
         P1.setFrom(MyPoly.BoundingBox.X1, MyPoly.BoundingBox.Y1);
         P2.setFrom(MyPoly.BoundingBox.X2, MyPoly.BoundingBox.Y2);
         DrawRectangle(P1, P2, false);
       end;
-      DefineBrosseEtCrayon(bsSolid, QStylePoly.FillColor, QStylePoly.FillOpacity, QStylePoly.LineStyle, QStylePoly.LineWidth, QStylePoly.LineColor, QStylePoly.LineOpacity);
+
+      CGT1.setFrom(QStylePoly.FillColor, QStylePoly.FillOpacity);
+      CGT2.setFrom(QStylePoly.LineColor, QStylePoly.LineOpacity);
+      DefineBrosseEtCrayon(bsSolid, CGT1, QStylePoly.LineStyle, QStylePoly.LineWidth, CGT2);
       for i := 0 to Nb - 1 do
       begin
         PV := MyPoly.Sommets[i];
@@ -895,9 +941,11 @@ var
 begin
   NbAnnotations := FKrobard.GetNbAnnotations();
   NbPolys       := FKrobard.GetNbPolylines();
+  (*
   AfficherMessage(Format('*** DrawCroquis(): %d; %d styles ; %d ann. %d poly',
                         [FKrobard.GetNbStylesAnnotations(), FKrobard.GetNbStylesPolyLines(),
                          NbAnnotations, NbPolys]));
+  //*)
   if (not FKrobard.IsReady) then Exit;
   if (NbAnnotations > 0) then
   begin
@@ -918,12 +966,16 @@ var
   PP: TPoint;
   PM: TPoint2Df;
   QTxt: String;
+  CGT1, CGT2: TGHTopoColor;
+
 begin
   try
     PM.setFrom(QCurrentStation.PosStation.X, QCurrentStation.PosStation.Y);
     if (FRegionDeDessin.ContainsPoint(PM)) then
     begin
-      DefineBrosseEtCrayon(bsSolid, clYellow, 128, psSolid, 0, clAqua, 255);
+      CGT1.setFrom(clYellow, 128);
+      CGT2.setFrom(clAqua, 255);
+      DefineBrosseEtCrayon(bsSolid, CGT1, psSolid, 0, CGT2);
        DefineFonte(DEFAULT_FONT_NAME, clBlue, [fsBold, fsUnderline], FONT_HEIGHT_ENTRANCES);
         DrawShape(PM.X, PM.Y, 1, DEMI_COTE, DEMI_COTE);
         QTxt  := QCurrentStation.getLibelleStationTopo();
@@ -936,9 +988,11 @@ begin
   end;
 end;
 //******************************************************************************
-procedure TGHTopoDrawingContext.DrawMaillage(const QMaillageDisplayed: boolean; const QIsovaleur: double; const ContourLinesColor: TColor; const ContourLinesOpacity: byte);
+procedure TGHTopoDrawingContext.DrawMaillage(const QMaillageDisplayed: boolean; const QIsovaleur: double; const ContourLinesColor: TGHTopoColor);
 var
   Isovaleurs: TArrayOfFloats;
+  CGTLineContour: TGHTopoColor;
+  CGTIsovaleur  : TGHTopoColor;
 begin
   if (not assigned(FMaillageMNT)) then Exit;
   SetLength(Isovaleurs, 1);
@@ -946,13 +1000,14 @@ begin
   //try
     if (FMaillageMNT.IsValidMaillage() and QMaillageDisplayed) then
     begin
+      CGTLineContour := ContourLinesColor;
+      CGTIsovaleur.setFrom(clFuchsia, 255);
       FMaillageMNT.TracerMaillage(self,
                                   QGetCoordsPlan,
                                   10.00,
                                   IsoValeurs,
-                                  ContourLinesColor,
-                                  ContourLinesOpacity,
-                                  clFuchsia,
+                                  CGTLineContour,
+                                  CGTIsovaleur,
                                   false,
                                   false,
                                   FRegionDeDessin);
@@ -964,8 +1019,11 @@ end;
 procedure TGHTopoDrawingContext.DrawOverlay();
 var
   Q: Integer;
+  CGT1, CGT2: TGHTopoColor;
 begin
-  DefineBrosseEtCrayon(bsSolid, clMaroon, 64, psSolid, 0, clBlue, 255);
+  CGT1.setFrom(clMaroon, 64);
+  CGT2.setFrom(clBlue, 255);
+  DefineBrosseEtCrayon(bsSolid, CGT1, psSolid, 0, CGT2);
   self.CanvasBGRA.Rectangle(0,0,self.CanvasBGRA.Width, self.CanvasBGRA.Height, True);
   // on trace un réticule
   Q := self.CanvasBGRA.Height div 2;
@@ -984,16 +1042,21 @@ var
   procedure MiouMiou(const qStyle: TPenStyle; const qWidth: integer; const qColor: TColor; const qOpacity: byte);
   var
     s: Integer;
+    CGT1: TGHTopoColor;
   begin
-    DefineCrayon(qStyle, qWidth, qColor, qOpacity);
+    CGT1.setFrom(qColor, qOpacity);
+    DefineCrayon(qStyle, qWidth, CGT1);
     TraceVers(PP[0].Position.X, PP[0].Position.Y, false);
     for s := 1 to High(PP) do TraceVers(PP[s].Position.X, PP[s].Position.Y, True);
   end;
   procedure DrwStations();
   var
     s: Integer;
+    CGT1, CGT2: TGHTopoColor;
   begin
-    DefineBrosseEtCrayon(bsSolid, clRed, 192, pssolid, 1, clRed, 255);
+    CGT1.setFrom(clRed, 192);
+    CGT2.setFrom(clRed, 255);
+    DefineBrosseEtCrayon(bsSolid, CGT1, pssolid, 1, CGT2);
     for s := 1 to High(PP) do self.DrawShape(PP[s].Position.X, PP[s].Position.Y, 1, 8, 8);
   end;
 begin

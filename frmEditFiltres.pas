@@ -141,8 +141,8 @@ begin
     for i := 0 to Nb - 1 do
     begin
       FF := FDocTopo.GetFiltrePerso(i);
-      EWE += Format(QFMT, [Red(FF.CouleurFiltre), Green(FF.CouleurFiltre), Blue(FF.CouleurFiltre),
-                           FF.NomFiltre, FF.Description, FF.Expression]);
+      EWE += Format(QFMT, [FF.Couleur.Red, FF.Couleur.Green, FF.Couleur.Blue,
+                           FF.Nom, FF.Description, FF.Expression]);
     end;
     MyClipBoard.AsText := EWE;
   finally
@@ -160,8 +160,8 @@ begin
     MyClipBoard.Clear;
     // contenu
     FF := GetFiltreFromForm();
-    MyClipBoard.AsText := Format(QFMT, [Red(FF.CouleurFiltre), Green(FF.CouleurFiltre), Blue(FF.CouleurFiltre),
-                                        FF.NomFiltre, FF.Description, FF.Expression]);
+    MyClipBoard.AsText := Format(QFMT, [FF.Couleur.Red, FF.Couleur.Green, FF.Couleur.Blue,
+                                        FF.Nom, FF.Description, FF.Expression]);
   finally
     FreeAndNil(MyClipBoard);//MyClipBoard.Free;
   end;
@@ -359,8 +359,8 @@ var
   begin
     ResetColorRow(lsbFiltresPerso, ARect, bg, tc);
     DrawColTexte(lsbFiltresPerso, ARect, hcColsTitres.Sections.Items[0], False, Format(FORMAT_NB_INTEGER,[Index]));
-    DrawColRectColoreWithTexte(lsbFiltresPerso, ARect, hcColsTitres.Sections.Items[1], true, bg, FF.CouleurFiltre, '');
-    DrawColTexte(lsbFiltresPerso, ARect, hcColsTitres.Sections.Items[2], True, FF.NomFiltre);
+    DrawColRectColoreWithTexte(lsbFiltresPerso, ARect, hcColsTitres.Sections.Items[1], true, bg, FF.Couleur.toTColor(), '');
+    DrawColTexte(lsbFiltresPerso, ARect, hcColsTitres.Sections.Items[2], True, FF.Nom);
     DrawColTexte(lsbFiltresPerso, ARect, hcColsTitres.Sections.Items[3], True, FF.Description);
     DrawColTexte(lsbFiltresPerso, ARect, hcColsTitres.Sections.Items[4], True, FF.Expression);
   end;
@@ -386,10 +386,10 @@ end;
 
 function TdlgEditFiltres.GetFiltreFromForm(): TFiltrePersonnalise;
 begin
-  Result.NomFiltre     := Trim(editFilterName.text);
+  Result.Nom           := Trim(editFilterName.text);
   Result.Description   := Trim(editFilterDescription.Text);
   Result.Expression    := PreparerFiltre();
-  Result.CouleurFiltre := btnFilterColor.ButtonColor;
+  Result.Couleur.setFrom(btnFilterColor.ButtonColor);
 end;
 
 procedure TdlgEditFiltres.PutFiltreInForm(const FF: TFiltrePersonnalise);
@@ -397,9 +397,9 @@ var
   i: Integer;
   EWE, WU: String;
 begin
-  editFilterName.Text        := FF.NomFiltre;
+  editFilterName.Text        := FF.Nom;
   editFilterDescription.Text := FF.Description;
-  btnFilterColor.ButtonColor := FF.CouleurFiltre;
+  btnFilterColor.ButtonColor := FF.Couleur.toTColor();
   // découpage des filtres multiples
   editFilterExpression.Lines.Clear;
   EWE := Trim(FF.Expression);
@@ -427,7 +427,7 @@ begin
   for i := 0 to Nb - 1 do
   begin
     FF := FDocTopo.GetFiltrePerso(i);
-    lsbFiltresPerso.Items.Add(FF.NomFiltre);
+    lsbFiltresPerso.Items.Add(FF.Nom);
   end;
   WU := IIF(-1 = Index, lsbFiltresPerso.Count - 1, Index);
   lsbFiltresPerso.ItemIndex := WU;
@@ -455,16 +455,14 @@ begin
   try
     FDocTopo := FD;
     FEditorExprCurrentLine := 0;
-    FTemporaryFilter.NomFiltre       := 'Nouveau filtre';
-    FTemporaryFilter.CouleurFiltre   := clAqua;
+    FTemporaryFilter.Nom             := 'Nouveau filtre';
+    FTemporaryFilter.Couleur.setFrom(clAqua);
     FTemporaryFilter.Description     := 'Utilise le filtre issu des visualisateurs';
     FTemporaryFilter.Expression      := F;
     // combobox du helper de filtres
     cmbFiltres.clear;
     for i := low(ARRAY_OF_FILTERS) to high(ARRAY_OF_FILTERS) do cmbFiltres.Items.Add(ARRAY_OF_FILTERS[i]);
     cmbFiltres.ItemIndex := 0;
-
-
     ListerLesFiltres(-1);
     Result := True;
   except

@@ -362,7 +362,7 @@ var
         for i := 0 to Nb - 1 do
         begin
           JC := FCoupeDeveloppee.GetJonction(i);
-          PM := MakeTPointCoupeDeveloppee(JC.Abscisse, JC.Cote);
+          PM.setFrom(JC.Abscisse, JC.Cote);
           P1 := GetCoordsPlan(PM);
           EllipseC(P1.X, P1.Y, 4, 4);
         end;
@@ -390,7 +390,7 @@ var
       begin
         Pen.Color   := clBlue;
         Pen.Width   := FCoupeDeveloppeeParams.ViseesLargeur;
-        PM := MakeTPointCoupeDeveloppee(JC1.Abscisse, JC1.Cote);
+        PM.setFrom(JC1.Abscisse, JC1.Cote);
         PP := GetCoordsPlan(PM);
         MoveTo(PP);
         //NbV := myBranche.GetNbVisees;
@@ -407,7 +407,7 @@ var
             uP += myVisee.AccroissP * IIF((myBranche.SensTraceCoupe = stcdVERS_DROITE), 1.00, -1.00);
             uZ += myVisee.AccroissXYZ.Z;
 
-            PM := MakeTPointCoupeDeveloppee(JC1.Abscisse + uP, JC1.Cote + uZ);
+            PM.setFrom(JC1.Abscisse + uP, JC1.Cote + uZ);
             PP := GetCoordsPlan(PM);
             LineTo(PP);
           end;
@@ -430,7 +430,7 @@ var
       begin
         Pen.Color   := clRed;
         pen.Width   := 2;
-        PM := MakeTPointCoupeDeveloppee(JC1.Abscisse, JC1.Cote);
+        PM.setFrom(JC1.Abscisse, JC1.Cote);
         PP := GetCoordsPlan(PM);
         MoveTo(PP);
         NbV := 1 + High(myBranche.ArrVisees); // NbV := myBranche.GetNbVisees;
@@ -449,7 +449,7 @@ var
 
             uH := IIF(IsFloor, uZ - myVisee.HN, uZ + myVisee.HZ);
 
-            PM := MakeTPointCoupeDeveloppee(JC1.Abscisse + uP, JC1.Cote + uH);
+            PM.setFrom(JC1.Abscisse + uP, JC1.Cote + uH);
             PP := GetCoordsPlan(PM);
             LineTo(PP);
           end;
@@ -487,10 +487,10 @@ var
 
             uH := uZ + myVisee.HZ;
             uN := uZ - myVisee.HN;
-            PM := MakeTPointCoupeDeveloppee(JC1.Abscisse + uP, JC1.Cote + uH);
+            PM.setFrom(JC1.Abscisse + uP, JC1.Cote + uH);
             PP := GetCoordsPlan(PM);
             MoveTo(PP);
-            PM := MakeTPointCoupeDeveloppee(JC1.Abscisse + uP, JC1.Cote + uN);
+            PM.setFrom(JC1.Abscisse + uP, JC1.Cote + uN);
             PP := GetCoordsPlan(PM);
             LineTo(PP);
           end;
@@ -513,7 +513,7 @@ var
         QPP: TPoint;
         EWE: TSize;
       begin
-        QPM := MakeTPointCoupeDeveloppee(QAbsc, QCote);
+        QPM.setFrom(QAbsc, QCote);
         QPP := GetCoordsPlan(QPM);
         QPP.X := QPP.X + 2;
         QPP.Y := QPP.Y - 2;
@@ -626,8 +626,8 @@ var
     TmpBuffer.CanvasBGRA.Font.Height := 8;
     while (A < FRegionZMaxi) do
     begin
-      C1 := MakeTPointCoupeDeveloppee(FRegionPMini, A);
-      C2 := MakeTPointCoupeDeveloppee(FRegionPMaxi, A);
+      C1.setFrom(FRegionPMini, A);
+      C2.setFrom(FRegionPMaxi, A);
       QPP1 := GetCoordsPlan(C1);
       QPP2 := GetCoordsPlan(C2);
       if (AmorcesOnly) then QPP2.X := QPP1.X + 40;
@@ -672,8 +672,8 @@ var
   dp, dz: double;
 begin
   // obtenir le centre actuel
-  C := MakeTPointCoupeDeveloppee(0.50 * (FRegionPMaxi - FRegionPMini),
-                                 0.50 * (FRegionZMaxi - FRegionZMini));
+  C.setFrom(0.50 * (FRegionPMaxi - FRegionPMini),
+            0.50 * (FRegionZMaxi - FRegionZMini));
   dp := QP - C.P;
   dz := QZ - C.Z;
   SetViewLimits(FRegionPMini + dp, FRegionZMini + dz, FRegionPMaxi + dp, FRegionZMaxi + dz);

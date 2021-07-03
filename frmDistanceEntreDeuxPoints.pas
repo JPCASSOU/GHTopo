@@ -165,16 +165,17 @@ end;
 
 procedure TdlgDistanceBetweenTwoStations.PutDistsInForm();
 var
-  dx, dy, dz, QDist, QAz, QPente, dp: Double;
+  QDist, QAz, QPente, dp: Double;
+  QV: TPoint3Df;
 begin
-  dx := FStation2.PosStation.X - FStation1.PosStation.X;
-  dy := FStation2.PosStation.Y - FStation1.PosStation.Y;
-  dz := FStation2.PosStation.Z - FStation1.PosStation.Z;
-  dp := Hypot2D(dx, dy);
-  GetBearingInc(dx, dy, dz, QDist, QAz, QPente, UNITE_ANGULAIRE_PAR_DEFAUT, UNITE_ANGULAIRE_PAR_DEFAUT);
-  lbDeltaX.Caption := Format(FORMAT_NB_REAL_3_DEC, [dx]);
-  lbDeltaY.Caption := Format(FORMAT_NB_REAL_3_DEC, [dy]);
-  lbDeltaZ.Caption := Format(FORMAT_NB_REAL_3_DEC, [dz]);
+  QV.setFrom(FStation2.PosStation.X - FStation1.PosStation.X,
+             FStation2.PosStation.Y - FStation1.PosStation.Y,
+             FStation2.PosStation.Z - FStation1.PosStation.Z);
+  dp := QV.getProjHZ();
+  GetBearingInc(UNITE_ANGULAIRE_PAR_DEFAUT, UNITE_ANGULAIRE_PAR_DEFAUT, QV, QDist, QAz, QPente);
+  lbDeltaX.Caption := Format(FORMAT_NB_REAL_3_DEC, [QV.X]);
+  lbDeltaY.Caption := Format(FORMAT_NB_REAL_3_DEC, [QV.Y]);
+  lbDeltaZ.Caption := Format(FORMAT_NB_REAL_3_DEC, [QV.Z]);
 
   lbDistance.Caption   := Format(FORMAT_NB_REAL_3_DEC, [QDist]);
   lbAzimut.Caption     := Format(FORMAT_NB_REAL_6_DEC, [QAz]);

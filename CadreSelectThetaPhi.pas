@@ -92,7 +92,6 @@ Mettre dans cet événement le code du OnMouseUp
 //*)
 procedure TCdrTriedreThetaPhi.VueClick(Sender: TObject);
 begin
-  //AfficherMessage('EWEjkdfhj');
   if (Assigned(FProcDoAction)) then FProcDoAction();
 end;
 
@@ -127,7 +126,6 @@ const
 var
   Rx: double;
   Ry: double;
-
 begin
   try
     Rx := (X2 - X1) / Vue.Width;
@@ -139,8 +137,6 @@ begin
     if (Result.Y < Y1) then Result.Y := Y1;
     if (Result.X > X2) then Result.X := X2;
     if (Result.Y > Y2) then Result.Y := Y2;
-
-
     AfficherMessage(Format('CalcThetaPhi(%d, %d -> %f, %f)', [QX, QY, Result.X, Result.Y]));
     if (Assigned(FProcRefreshXY)) then FProcRefreshXY;
   except
@@ -157,8 +153,6 @@ var
   const
     rSz = 40;
     rXo = 5 + rSz;
-
-
   var
     rYo       : integer;
     X1, X2, X3: TPoint3Df;
@@ -166,9 +160,10 @@ var
     Rp        : TPoint;
   begin
     // calculs préliminaires
-    X1.X  := 1.0; X1.Y  := 0.0; X1.Z  := 0.0; //X1.T  := 1.0;
-    X2.X  := 0.0; X2.Y  := 1.0; X2.Z  := 0.0; //X2.T  := 1.0;
-    X3.X  := 0.0; X3.Y  := 0.0; X3.Z  := 1.0; //X3.T  := 1.0;
+    X1.setFrom(1, 0, 0);
+    X2.setFrom(0, 1, 0);
+    X2.setFrom(0, 0, 1);
+
     // transformations
     R1.X := -X1.X * Aux[1] +
              X1.Y * Aux[3];

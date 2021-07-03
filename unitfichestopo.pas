@@ -163,12 +163,12 @@ var
     FMT_NEAR_ST = '%s: %d.%d - Dist: %.2f m, Cap: %.2f°, Incl: %.2f°';
   var
     SS: String;
+    QV: TPoint3Df;
   begin
-    GetBearingInc(QST.PosStation.X - MyStation.PosStation.X,
-                  QST.PosStation.Y - MyStation.PosStation.Y,
-                  QST.PosStation.Z - MyStation.PosStation.Z,
-                  QLong, QAzimut, QPente,
-                  360.00, 360.00);
+    QV.setFrom(QST.PosStation.X - MyStation.PosStation.X,
+               QST.PosStation.Y - MyStation.PosStation.Y,
+               QST.PosStation.Z - MyStation.PosStation.Z);
+    GetBearingInc(360.00, 360.00, QV, QLong, QAzimut, QPente);
     FPDFDoc.Canvas.SetFont('Arial', HAUTEUR_TEXTE_ID_NEXT_STATION);
     SS := Format(FMT_NEAR_ST, [IIF(AsNext, 'Next', 'Prev'), QST.Entite_Serie, QST.Entite_Station, QLong, QAzimut, QPente]);
     QDrawTexte(QX0 + QMargeX, QHT, SS);
@@ -179,13 +179,7 @@ begin
   Nb := GetNbStations() - 1;
   if (IdxCurr > Nb) then Exit;
   MyStation := GetStation(IdxCurr);
-   // texte pour le QRCode
-  EWE := Format('%d.%d - X = %s, Y = %s, Z = %s',
-                   [MyStation.Entite_Serie, MyStation.Entite_Station,
-                    FormatterNombreAvecSepMilliers(MyStation.PosStation.X, 2),
-                    FormatterNombreAvecSepMilliers(MyStation.PosStation.Y, 2),
-                    FormatterNombreAvecSepMilliers(MyStation.PosStation.Z, 2)
-                    ]);
+  EWE := MyStation.toTextForQRCode();
 
   QMargeX       := FPDFDoc.Canvas.PageWidth  div MG;
   QMargeY       := FPDFDoc.Canvas.PageHeight div MG;

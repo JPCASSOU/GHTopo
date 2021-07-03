@@ -232,27 +232,6 @@ object GHTopoRPIMainWnd: TGHTopoRPIMainWnd
       Caption = 'tabShtVueEnPlan'
       ClientHeight = 627
       ClientWidth = 672
-      inline GHTopoContext2DA1: TGHTopoContext2DA
-        Height = 627
-        Width = 672
-        ClientHeight = 627
-        ClientWidth = 672
-        TabOrder = 1
-        inherited Panel1: TPanel
-          Height = 588
-          Width = 656
-          ClientHeight = 588
-          ClientWidth = 656
-        end
-        inherited Button1: TButton
-          Left = 634
-          Top = 609
-        end
-        inherited Button3: TButton
-          Left = 654
-          Top = 590
-        end
-      end
       object pnlParamsVue: TPanel
         Left = 20
         Height = 280

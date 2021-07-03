@@ -49,7 +49,7 @@ begin
   SetCodeEPSGSystemeCoordonnees(EPSGDefault);
   MyEntrance.eRefSer    := 1;
   MyEntrance.eRefSt     := 0;
-  MyEntrance.eCouleur   := clBlue;
+  MyEntrance.eCouleur.setFrom(clBlue, 255);
   MyEntrance.eNomEntree := 'Main Entrance';
   MyEntrance.eIDTerrain := '1.0';
   MyEntrance.ePosition.Empty();
@@ -116,7 +116,7 @@ begin
     begin
       EWE := ListeOfTGHStringArray.GetElement(i);
       if ('' = Trim(EWE[1])) then ListeOfTGHStringArray.RemoveElement(i);
-      QStationDepart := DecomposeStationToporobot(Trim(EWE[0]));
+      QStationDepart.setFrom(EWE[0]);
       MyAntenne.EntranceRatt:= 0;
       MyAntenne.Reseau      := 0;
       MyAntenne.Secteur     := 0;
@@ -149,8 +149,8 @@ begin
     for i := Nb -1 downto 0 do
     begin
       EWE := ListeOfTGHStringArray.GetElement(i);
-      QStationDepart  := DecomposeStationToporobot(Trim(EWE[0]));
-      QStationArrivee := DecomposeStationToporobot(Trim(EWE[1]));
+      QStationDepart.setFrom(EWE[0]);
+      QStationArrivee.setFrom(EWE[1]);
       if ((QStationArrivee.aSerie > 0) and (0 = QStationArrivee.aStation)) then
       begin
         CreateNewSerie(QStationDepart.aSerie, QStationDepart.aStation, QStationArrivee.aSerie, 'Depart en ' + Trim(EWE[0]));
@@ -201,7 +201,7 @@ begin
     for i := 0 to Nb - 1 do
     begin
       EWE := ListeOfTGHStringArray.GetElement(i);
-      QLaStationCourante := DecomposeStationToporobot(Trim(EWE[0]));
+      QLaStationCourante.setFrom(EWE[0]);
       if (QLaStationCourante.aSerie <> QNumeroDeSerieCourant) then
       begin
         QNumeroDeSerieCourant := QLaStationCourante.aSerie;

@@ -23,6 +23,7 @@ begin
   Application.MainFormOnTaskbar := True;
   //frmSplashScreen := TfrmSplashScreen.Create(Application);
   try
+    //ShowMessage('Vous devez apostasier pour pouvoir utiliser GHTopo. L''utilisation de ce logiciel est interdite aux chrétiens');
     //frmSplashScreen.Show;
     //frmSplashScreen.Update;
     // Create your application forms here

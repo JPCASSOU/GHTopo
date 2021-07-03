@@ -28,7 +28,7 @@ uses
   {$INCLUDE SelectionLangues.inc} // insère les unités en fonction de la langue
   StructuresDonnees,
   Common,
-  math, Types,
+  math, //Types,
   UnitListesSimplesWithGeneriques,
   ToporobotClasses2012,
   UnitEntitesExtended,
@@ -37,7 +37,7 @@ uses
   unitobjetserie,
   UnitClasseMaillage,
   //{$IFDEF GHTOPO_SIMPLIFIE}
-  UnitGraphes1, BZGraphesTypes, BZGraphesClasses,
+  UnitGraphes1, BZGraphesTypes, //BZGraphesClasses,
   //{$ENDIF GHTOPO_SIMPLIFIE}
   FastGEO,
   //types,
@@ -201,7 +201,7 @@ type
     MenuItem8: TMenuItem;
     MenuItem9: TMenuItem;
     mnuMetaFiltreStation: TMenuItem;
-    Panel1: TPanel;
+    pnlVue: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
     pnlToast: TPanel;
@@ -314,6 +314,7 @@ type
     procedure VueMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure VueMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure VuePaint(Sender: TObject);
+
   strict private
     // pour le dessin des étiquettes au survol du plan
     // très bonne rapidité avec la Coume
@@ -394,7 +395,7 @@ type
     FCurrentDistoXNumeroCode          : TNumeroCode;
     FCurrentDistoXNumeroExpe          : TNumeroExpe;
     // marqueurs
-    FCurrentMarker: TMarker;
+    FCurrentMarker: TGHTopoMarker;
     // onglets
     FArrOngletsParams : TArrOngletsParams;
     // gestion des zooms
@@ -420,7 +421,7 @@ type
     procedure QSetPen(const QPM: TPenMode; const QPS: TPenStyle; const QPW: integer; const QPC: TColor);
     procedure Rearmer();
     function  UpdateBaseStationWithOffset(const QE: TBaseStation; const QQX, QQY, QQZ: double): TBaseStation;
-    procedure SetMarker(const M: TMarker);
+    procedure SetMarker(const M: TGHTopoMarker);
     procedure SetNomOnglet(const S: string);
     function  GetBackGrdColorOnglet(const QIdxOnglet: integer): TColor;
     procedure SetBackGrdColorOnglet(const QIdxOnglet: integer; const Col: TColor);
@@ -536,7 +537,7 @@ type
     function IsMaillageDisplayed(): boolean;
     function IsMaillageValide(): boolean;
     {$IFDEF GHTOPO_SIMPLIFIE}
-    procedure TraiterMesureIssueDuDistoX(const MV: TMesureViseeDistoX; const TV: TTypeViseeDistoX; const TagString: string = '');
+    procedure TraiterMesureIssueDuDistoX(const MV: TMesureViseeDistoX; const TagString: string = '');
     {$ENDIF GHTOPO_SIMPLIFIE}
     procedure SetShortestPath(const P: TPathBetweenNodes);
     procedure ExporterPlanEnImage(const ImgWidth, ImgHeight: integer; const DoRecalcDegrades: boolean; const QFileName: string);
@@ -583,10 +584,10 @@ begin
 
   FOverlayed               := false;
   FCanDraw                 := False;
-  //Panel1.DoubleBuffered    := true;
+  //pnlVue.DoubleBuffered    := true;
   pnlToast.Visible         := false;
   DisplayPnlMaillage(false);
-  FCurrentMarker := MakeTMarker(false, 0.0, 0.0, clAqua, '');
+  FCurrentMarker.setFrom(false, 0.0, 0.0, clAqua, '');
   // pointeurs sur les tables
   FDocuTopo            := QDT;
   FCroquisTerrain      := QCT;
@@ -602,28 +603,16 @@ begin
   FProcPerformActionRecalcul           := QProcRecalculerReseau;
   FProcTransmitBasePoint               := QProcTransmitBasePoint;
   // index courants
-   FCurrentDistoXNumeroSerie     := 1;  // pour DistoX
+  FCurrentDistoXNumeroSerie     := 1;  // pour DistoX
   FCurrentDistoXNumeroStation   := 0;  // pour DistoX
   FCurrentInternalIdxEntite     := 0;
-  //ShowMessage('6666-GHCDInit -- Init 3');
-  // Le format Text, obsolète, pose de gros problèmes ici
   try
     SetCurrentNumeroEntrance(0);
-    AfficherMessageErreur('---- 0001');
-
     SetCurrentNumeroReseau(0);
-    AfficherMessageErreur('---- 0002');
-
     SetCurrentNumeroSecteur(0);
-    AfficherMessageErreur('---- 0003');
     SetCurrentNumeroCode(0);
-    AfficherMessageErreur('---- 0004');
     SetCurrentNumeroExpe(0);
-    AfficherMessageErreur('---- 0005');
-
     SetCurrentStationBySerSt(1, 0);
-    AfficherMessageErreur('---- 0006');
-
     SetCurrentNumeroSerieStationPourDistoX(1, -1);
     FStationNearToMouse := FCurrentStation;
   except
@@ -647,7 +636,6 @@ begin
   SetViewLimits(C1.X, C1.Y, C2.X, C2.Y, DbgTag); // renseigne aussi l'onglet courant
   //***********************************
   // /!\ Ne pas aller plus loin dans le débogage si çà plante ici
-  //ShowMessage('6666-GHCDInit -- Init 47');
   //***********************************
   ApplyMetaFiltre(True, '');                   // renseigne aussi l'onglet courant
   ResetVue();
@@ -700,22 +688,11 @@ begin
   // Panneau Maillage inhibé si le maillage n'est pas assigné
   DisplayPnlMaillage(FMyMaillage.IsValidMaillage());
   FCanDraw := True;
-
   InitCaptions();                       // Initialisation de l'interface
   SetLength(FLassoDeSelection, 0);      // lasso de sélection
   Vue.Invalidate;                       // redessiner
   AfficherMemoryUsage();                // afficher mémoire utilisée
   pnlQuickSaisieVisee.Visible := false; // cacher le miniform de visées
-  // pour le dessin des étiquettes au survol du plan
-  (*FEtiquetteOnSurvolPlan_First  := false;
-  FEtiquetteOnSurvolPlan_Tampon := TImage.Create(self);
-  FEtiquetteOnSurvolPlan_ox     := 0;
-  FEtiquetteOnSurvolPlan_oy     := 0;
-  FEtiquetteOnSurvolPlan_ow     := 0;
-  FEtiquetteOnSurvolPlan_oh     := 0;
-  FEtiquetteOnSurvolPlan_X1     := 0;
-  FEtiquetteOnSurvolPlan_Y1     := 0;
-  //*)
   //***************************************
   Result   := True;
   //except
@@ -928,8 +905,8 @@ end;
 procedure TGHTopoContext2DA.ResetVue();
 var
   cnMini, cnMaxi   : TPoint3Df;
-  PM0, PM1         : TPoint2Df;
-  M, dx, dy, L     : double;
+  PM0, PM1, PD     : TPoint2Df;
+  M, L             : double;
   PP               : TPoint;
 begin
   if (not FCanDraw) then Exit;
@@ -940,14 +917,10 @@ begin
   PM1 := GetCoordsMonde(PP);
   PP := MakeTPoint(0, 0);
   PM0 := GetCoordsMonde(PP);
-
-  DX := cnMaxi.X-cnMini.X;
-  DY := cnMaxi.Y-cnMini.Y;
-  M  := 0.02 * Hypot(DX, DY);
-  L  := IIF(DX > DY, DX, DY);
-  DX := PM1.X - PM1.X;
-  DY := PM1.Y - PM0.Y;
-  SetViewLimits(cnMini.X-M, cnMini.Y-M, cnMini.X + L + M, cnMini.Y + L + M, '');
+  PD.setFrom(cnMaxi.X - cnMini.X, cnMaxi.Y - cnMini.Y);
+  M  := 0.02 * PD.getNorme();
+  L  := IIF(PD.X > PD.Y, PD.X, PD.Y);
+  SetViewLimits(cnMini.X - M, cnMini.Y - M, cnMini.X + L + M, cnMini.Y + L + M, '');
   Vue.Invalidate;
 end;
 
@@ -957,7 +930,6 @@ var
   beuh                   : TPoint3Df;
   EWE                    : String;
   QIdxNameSpace, QNoSerie: integer;
-
 begin
   beuh := FBDDEntites.GetDeltaXYZFromPositionSt0(S);
   lbInfos.Color            := IIF(S.IsPOI, clYellow, clDefault);
@@ -967,10 +939,10 @@ begin
   EWE := Format('%d.%d%s', [QNoSerie, S.Entite_Station, IIF(0 = QIdxNameSpace, '', '@' + MyNamespace.Nom)]);
   lbInfos.Caption := Trim(Format('%s (X = %s; Y = %s; Alt = %s; Z = %s ) %s',
                           [EWE,
-                           FormatterNombreAvecSepMilliers(S.PosStation.X),
-                           FormatterNombreAvecSepMilliers(S.PosStation.Y),
-                           FormatterNombreAvecSepMilliers(S.PosStation.Z),
-                           FormatterNombreAvecSepMilliers(beuh.Z),
+                           FormatterNombreAvecSepMilliers(S.PosStation.X, 0),
+                           FormatterNombreAvecSepMilliers(S.PosStation.Y, 0),
+                           FormatterNombreAvecSepMilliers(S.PosStation.Z, 0),
+                           FormatterNombreAvecSepMilliers(beuh.Z, 0),
                            S.oCommentaires]));
 end;
 
@@ -1587,7 +1559,6 @@ procedure TGHTopoContext2DA.acContinueHereExecute(Sender: TObject);
 begin
   SetCurrentStation(FStationNearToMouse, false);
   SetCurrentNumeroSerieStationPourDistoX(FStationNearToMouse.Entite_Serie, -1);
-  //pnlQuickSaisieVisee.Visible := True;
 end;
 
 procedure TGHTopoContext2DA.acCreerEntreeFromThisPointExecute(Sender: TObject);
@@ -1595,13 +1566,14 @@ var
   EE: TEntrance;
   WU: String;
   n: Integer;
+  CDS: TGHTopoColor;
 begin
   WU := FStationNearToMouse.toString();
+  CDS.setFrom(clRed);
   EE.setFrom('Entrance ' + WU, WU,
-             FStationNearToMouse.PosStation.X, FStationNearToMouse.PosStation.Y, FStationNearToMouse.PosStation.Z,
+             FStationNearToMouse.PosStation,
              FStationNearToMouse.Entite_Serie, FStationNearToMouse.Entite_Station,
-             clRed,
-             '');
+             CDS, '');
   n := FDocuTopo.GetNbEntrances();
   if (EditerEntrance(FDocuTopo, n, FBDDEntites, nil, EE)) then
   begin
@@ -1675,18 +1647,18 @@ begin
         MyTabShtPlan.Left +
         MyPnlPlan.Left +
         self.Left +
-        Panel1.Left;
+        pnlVue.Left;
   QY := MyGHTopoMainWnd.Top +
         MyPageCtrl.Top +
         MyTabShtPlan.Top +
         MyPnlPlan.Top +
         self.Top +
-        Panel1.Top;
+        pnlVue.Top;
   PP := GetCoordsPlan(FCurrentStation.PosStation.X, FCurrentStation.PosStation.Y);
   PopUpCdrVue2D.PopUp(QX + PP.X, QY + PP.Y);
   //*)
   PP := GetCoordsPlan(FCurrentStation.PosStation.X, FCurrentStation.PosStation.Y);
-  PP := Panel1.ClientToScreen(PP);
+  PP := pnlVue.ClientToScreen(PP);
   PopUpCdrVue2D.PopUp(PP.X, PP.Y);
 end;
 
@@ -1829,13 +1801,13 @@ begin
     EWE := FBDDEntites.GetExpeByIndex(S.eExpe);
     CDS := FBDDEntites.GetCodeByIndex(S.eCode);
     lbCouleurVisee.Color    := S.CouleurStd;
-    lbColorReseau.Color     := RS.ColorReseau;
+    lbColorReseau.Color     := RS.ColorReseau.toTColor();
     lbColorReseau.Caption   := Format(FORMAT_NB_INTEGER,[S.eReseau]);
     lbNomReseau.Caption     := _AnsiToLCLStr(RS.NomReseau);
-    lbColorSecteur.Color    := SC.CouleurSecteur;
+    lbColorSecteur.Color    := SC.CouleurSecteur.toTColor();
     lbColorSecteur.Caption  := Format(FORMAT_NB_INTEGER,[S.eSecteur]);
     lbNomSecteur.Caption    := _AnsiToLCLStr(SC.NomSecteur);
-    lbColorSeance.Color     := FBDDEntites.GetCouleurEntiteRGBByExpe(S);
+    lbColorSeance.Color     := FBDDEntites.GetCouleurEntiteByExpe(S).toTColor();
     lbColorSeance.Caption   := Format(FORMAT_NB_INTEGER,[S.eExpe]);
     // infos sur le code
     lbCode.Caption          := CDS.getLibelle();
@@ -1894,8 +1866,6 @@ begin
 end;
 //******************************************************************************
 procedure TGHTopoContext2DA.VueMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-const
-  FMT_STATION_1 = '%d.%d - X = %.3f, Y = %.3f, Z = %.3f';
 var
   // pointer la station la plus proche
   QDist, QDistance      : double;
@@ -2044,10 +2014,8 @@ begin
             QDist := Hypot3D(ST2.PosStation.X - ST1.PosStation.X,
                              ST2.PosStation.Y - ST1.PosStation.Y,
                              ST2.PosStation.Z - ST1.PosStation.Z);
-            WU    := 'Accrocher le point:' + #10 +
-                     Format(FMT_STATION_1, [ST1.Entite_Serie, ST1.Entite_Station, ST1.PosStation.X, ST1.PosStation.Y, ST1.PosStation.Z]) + #10 +
-                     'Au point:' + #10 +
-                     Format(FMT_STATION_1, [ST2.Entite_Serie, ST2.Entite_Station, ST2.PosStation.X, ST2.PosStation.Y, ST2.PosStation.Z]) + #10 +
+            WU    := 'Accrocher le point:' + #10 + ST1.DebugString() + #10 +
+                               'Au point:' + #10 + ST2.DebugString() + #10 +
                      Format('Distance: %.3f m', [QDist]);
             if (GHTopoQuestionOuiNon(WU)) then
             begin
@@ -2439,6 +2407,8 @@ procedure TGHTopoContext2DA.VuePaint(Sender: TObject);
 begin
   RedessinEcran(Vue.Width, Vue.Height, False);
 end;
+
+
 
 // cette fonction retourne d'autres paramètres
 function TGHTopoContext2DA.GetRYMaxi(): double;
@@ -2873,6 +2843,7 @@ procedure TGHTopoContext2DA.CentrerVueSurPointXY(const QX, QY: double; const DoM
 var
   C0, Offset: TPoint2Df;
   DbgTag: String;
+  MK: TGHTopoMarker;
 begin
   try
     C0.setFrom(0.5 * (FRegionCMini.X + FRegionCMaxi.X),
@@ -2883,12 +2854,13 @@ begin
     SetViewLimits(FRegionCMini.X + Offset.X, FRegionCMini.Y + Offset.Y,
                   FRegionCMaxi.X + Offset.X, FRegionCMaxi.Y + Offset.Y,
                   DbgTag);
-    SetMarker(MakeTMarker(DoMarker, QX, QY, clAqua, LbMarker));
+    MK.setFrom(DoMarker, QX, QY, clAqua, LbMarker);
+    SetMarker(MK);
     RedessinEcran(Vue.Width, Vue.Height, False);
   except
   end;
 end;
-procedure TGHTopoContext2DA.SetMarker(const M: TMarker);
+procedure TGHTopoContext2DA.SetMarker(const M: TGHTopoMarker);
 begin
   FCurrentMarker := M;
 end;
@@ -3083,6 +3055,7 @@ var
   MyOnglet: TVue2DParams;
   BGC: TBGRAPixel;
   TmpBuffer: TGHTopoDrawingContext;
+  CDS: TGHTopoColor;
 begin
   if (FRedessinInProcess) then exit; // sémaphore 'FRedessinInProcess' est armé ? = On quitte (le dessin est en cours)
   FRedessinInProcess := True;        // Armement du sémaphore
@@ -3101,7 +3074,8 @@ begin
                                   FDoHighLightCurrentItem)) then exit;
     TmpBuffer.SetBounds(FRegionCMini.X, FRegionCMini.Y, FRegionCMaxi.X, FRegionCMaxi.Y);
     TmpBuffer.BeginDrawing();
-      if (edQuadrilles     in MyOnglet.ongElementsDrawn) then TmpBuffer.DrawQuadrillage(MyOnglet.ongQdrType, MyOnglet.ongQdrColor, MyOnglet.ongQdrSpc);
+      CDS.setFrom(MyOnglet.ongQdrColor);
+      if (edQuadrilles     in MyOnglet.ongElementsDrawn) then TmpBuffer.DrawQuadrillage(MyOnglet.ongQdrType, CDS, MyOnglet.ongQdrSpc);
       if (edANTENNES       in MyOnglet.ongElementsDrawn) then TmpBuffer.DrawAntennes();
       if (edCrossSections  in MyOnglet.ongElementsDrawn) then TmpBuffer.DrawSections();
       if (edPolygonals     in MyOnglet.ongElementsDrawn) then TmpBuffer.DrawPolygonals(MyOnglet.ongDrawFastCenterline);
@@ -3115,7 +3089,8 @@ begin
       if (edPOI            in MyOnglet.ongElementsDrawn) then TmpBuffer.DrawPOIs();
       if (edENTRANCE_MKS   in MyOnglet.ongElementsDrawn) then TmpBuffer.DrawEntrancesOrPointEntities(edENTRANCE_NAMES in MyOnglet.ongElementsDrawn);
       if (edCROQUIS        in MyOnglet.ongElementsDrawn) then TmpBuffer.DrawCroquisTerrain();
-      TmpBuffer.DrawMaillage(chkDrawMaillage.Checked, editIsoValeur.Value, btnLineContourColor.ButtonColor, editLineContourOpacity.Value);
+      CDS.setFrom(btnLineContourColor.ButtonColor, editLineContourOpacity.Value);
+      TmpBuffer.DrawMaillage(chkDrawMaillage.Checked, editIsoValeur.Value, CDS);
        // uniquement en mode écran
        if (not DoExportInFile) then TmpBuffer.DrawCurrentStationTopo(FCurrentStation);
 
@@ -3148,7 +3123,6 @@ procedure TGHTopoContext2DA.DisplayToast(const Msg: string);
 var
   QW, QH, QL, QT: Integer;
 begin
-
   //try
   pnlToast.Visible := false;
   QW := trunc(0.7 * self.Width);
@@ -3173,13 +3147,11 @@ begin
 end;
 {$IFDEF GHTOPO_SIMPLIFIE}
 // Spécifique DistoX
-procedure TGHTopoContext2DA.TraiterMesureIssueDuDistoX(const MV: TMesureViseeDistoX; const TV: TTypeViseeDistoX; const TagString: string = '');
+procedure TGHTopoContext2DA.TraiterMesureIssueDuDistoX(const MV: TMesureViseeDistoX; const TagString: string = '');
 var
   MySerie: TObjSerie;
 begin
-
-
-  case TV of
+  case MV.TypeMesure of
     tvdRADIANTE   : AjouterUneAntenneALaStationCourante(MV.Longueur, MV.Azimut, MV.Pente, True);
     tvdCHEMINEMENT:
       begin
@@ -3190,6 +3162,8 @@ begin
 
       end;
     //tvdEMULATED   : AfficherMessageErreur(Format('Mesure émulée: %.3f, %.3f, %.3f', [V.Longueur, V.Azimut, V.Pente]));
+  else
+    pass;
   end;
 end;
 {$ENDIF GHTOPO_SIMPLIFIE}
@@ -3197,6 +3171,7 @@ procedure TGHTopoContext2DA.SetShortestPath(const P: TPathBetweenNodes);
 begin
   FShortestPath := P;
 end;
+
 
 
 end.

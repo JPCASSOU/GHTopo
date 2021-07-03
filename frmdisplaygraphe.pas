@@ -48,7 +48,6 @@ type
     PRPage1: TPRPage;
     procedure btnCopierDistancierClick(Sender: TObject);
     procedure btnAddItineraireClick(Sender: TObject);
-    procedure btnExportHTMLClick(Sender: TObject);
     procedure btnOuvrirItinerairesClick(Sender: TObject);
     procedure btnRemoveArcClick(Sender: TObject);
     procedure btnRemoveNodeClick(Sender: TObject);
@@ -202,10 +201,7 @@ begin
   ListerLesItineraires(-1);
 end;
 
-procedure TdlgDisplayGraphe.btnExportHTMLClick(Sender: TObject);
-begin
 
-end;
 
 
 
@@ -237,8 +233,8 @@ var
   ITI: TPathBetweenNodes;
 begin
   G := CdrGrapheItineraire1.GetGraphe();
-  PT1 := DecomposeStationToporobot(editRemoveArcStDep.Text);
-  PT2 := DecomposeStationToporobot(editRemoveArcStArr.Text);
+  PT1.setFrom(editRemoveArcStDep.Text); //:= DecomposeStationToporobot(editRemoveArcStDep.Text);
+  PT2.setFrom(editRemoveArcStArr.Text); // := DecomposeStationToporobot(editRemoveArcStArr.Text);
 
 
 
@@ -254,7 +250,7 @@ var
   PT1: TToporobotIDStation;
 begin
   G := CdrGrapheItineraire1.GetGraphe();
-  PT1 := DecomposeStationToporobot(editRemoveArcStDep.Text);
+  PT1.setFrom(editRemoveArcStDep.Text);
   G.RemoveNode(PT1.aSerie, PT1.aStation);
 end;
 

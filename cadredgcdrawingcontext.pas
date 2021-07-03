@@ -99,7 +99,7 @@ type
     // position courante
     FCurrentMousePos: TDGCPoint2D;
     // couleurs et styles: brosse, crayon
-    FBackGroundColor  : TColor;
+    FBackGroundColor  : TDGCColor;
     FBackGroundOpacity: byte;
     // étendue originale
     FOriginalCoinBasGauche: TDGCPoint2D;
@@ -150,7 +150,7 @@ type
     procedure QSetPen(const QPM: TPenMode; const QPS: TPenStyle; const QPW: integer; const QPC: TColor);
     procedure Rearmer();
   public
-    function  Initialiser(const X1, Y1, X2, Y2: double; const IsOrthonormal: boolean; const BackColor: TColor = clWhite): boolean;
+    function  Initialiser(const X1, Y1, X2, Y2: double; const IsOrthonormal: boolean; const BackColor: TDGCColor): boolean;
     procedure Finaliser();
     function GetCurrentPosition(): TDGCPoint2D;
     procedure SetProcOnClick(const P: TProcedureOfObject);
@@ -166,48 +166,37 @@ type
     function  GetStyleSheet(const Idx: integer): TDGCStyleSheet;
     procedure PutStyleSheet(const Idx: integer; const FS: TDGCStyleSheet);
     function MakeTDGCStyleSheet(const QStylename: string;
-                                const QPenColor: TColor;
-                                const QPenOpacity: byte;
+                                const QPenColor: TDGCColor;
                                 const QPenStyle: TPenStyle;
                                 const QPenWidthInPX: byte;
                                 const QPenWidthInMM: byte;
-                                const QBrushColor: TColor;
-                                const QBrushOpacity: byte;
+                                const QBrushColor: TDGCColor;
                                 const QBrushStyle: TBrushStyle;
                                 const QFontName: string;
-                                const QFontColor: TColor;
-                                const QFontOpacity: byte;
+                                const QFontColor: TDGCColor;
                                 const QFontSizeInPts: integer;
                                 const QFontSizeInMM: double;
                                 const QFontStyle: TFontStyles;
                                 const QDescription: string = ''): TDGCStyleSheet;
     procedure AddStyleSheet(const OS: TDGCStyleSheet); overload;
-    procedure AddStyleSheet(const QStylename        : string;// Crayon
-                             const QPenColor         : TColor;
-                             const QPenOpacity       : byte;
-                             const QPenStyle         : TPenStyle;
-                             const QPenWidthInPX     : byte;
-                             const QPenWidthInMM     : double;
-                             const QBrushColor       : TColor;
-                             const QBrushOpacity     : byte;
-                             const QBrushStyle       : TBrushStyle;
-                             const QFontName         : string;
-                             // SVG utilise les attributs de ligne et de remplissage pour tracer les textes
-                             const QFontColor        : TColor; // Utilisé par GDI uniquement
-                             const QFontOpacity      : byte;
-                             const QFontSizeInPts: integer;
-                             const QFontSizeInMM: double;
-                             const QFontStyle        : TFontStyles;
-                             const QDescription       : string = ''); overload;
+    procedure AddStyleSheet(const QStylename     : string;// Crayon     // SVG utilise les attributs de ligne et de remplissage pour tracer les textes
+                            const QPenColor      : TDGCColor; const QPenStyle   : TPenStyle; const QPenWidthInPX     : byte;  const QPenWidthInMM     : double;
+                            const QBrushColor    : TDGCColor; const QBrushStyle : TBrushStyle;
+                            const QFontColor     : TDGCColor; const QFontStyle  : TFontStyles;
+                            const QFontName      : string   ;const QFontSizeInPts: integer; const QFontSizeInMM: double;
+                            const QDescription   : string = ''); overload;
     // définition des styles de crayon et brosses
     // méthode déconseillée - Utiliser les feuilles de style
-    procedure SetBackgroundColor(const C: TColor; const QOpacity: byte = 255);
-    function  GetBackgroundColor(): TColor;
-    procedure SetPenColorAttributes(const C: TColor; const QOpacity: byte = 255; const QWidthInPx: integer = 0; const QWidthInMM: double = 0.05; const QStyle: TPenStyle = psSolid);
-    procedure SetBrushColorAttributes(const C: TColor; const QOpacity: byte = 255; const QStyle: TBrushStyle = bsSolid);
-    procedure SetFontColorAttributes(const QFontName:string; const C: TColor; const QOpacity: byte; const QHeight: byte; const QStyle: TFontStyles);
+    procedure SetBackgroundColor(const C: TDGCColor); overload;
+    procedure SetBackgroundColor(const QR, QG, QB, QA: byte); overload;
+
+
+    function  GetBackgroundColor(): TDGCColor;
+    procedure SetPenColorAttributes(const C: TDGCColor; const QWidthInPx: integer = 0; const QWidthInMM: double = 0.05; const QStyle: TPenStyle = psSolid);
+    procedure SetBrushColorAttributes(const C: TDGCColor; const QStyle: TBrushStyle = bsSolid);
+    procedure SetFontColorAttributes(const QFontName:string; const C: TDGCColor; const QHeight: byte; const QStyle: TFontStyles);
     procedure SetFontName(const QFontName: string);
-    procedure SetFontColor(const C: TColor; const QOpacity: byte = 255);
+    procedure SetFontColor(const C: TDGCColor);
     procedure SetFontHeight(const QHeightInPoints: byte)  ; overload;    // en points
     procedure SetFontHeight(const QHeightInMeters: double); overload;    // en mètres
     procedure SetFontStyle(const QStyle: TFontStyles);
@@ -285,7 +274,7 @@ uses
   DGCDummyUnit; // Anti-erreur 'Fin du conde source non trouvée'
 
 {$R *.lfm}
-function TCdrDGCDrawingContext.Initialiser(const X1, Y1, X2, Y2: double; const IsOrthonormal: boolean; const BackColor: TColor = clWhite): boolean;
+function TCdrDGCDrawingContext.Initialiser(const X1, Y1, X2, Y2: double; const IsOrthonormal: boolean; const BackColor: TDGCColor): boolean;
 begin
   Result := false;
   FProcOnClick   := nil;
@@ -300,7 +289,6 @@ begin
     GetCoordsMonde := GetCoordsMondeNonOrthonormal;
     GetCoordsPlan  := GetCoordsPlanNonOrthonormal;
   end;
-
   FModeTravail        := mtgcsREADY;
   FAttenduSecondPoint := false;
   FLastError          := '';
@@ -309,8 +297,9 @@ begin
   FDessinReady        := false;
   FDessinEnCours      := False;
   FMakingPolyLineGon  := false;
-  FCurveFilled        := false;;
+  FCurveFilled        := false;
   FListOfEntities := TDGCListeAffichage.Create;
+
   FListOfStyles   := TDGCListeStylesSheets.Create;
   try
     FListOfEntities.ClearListe();
@@ -322,7 +311,10 @@ begin
     //Label1.Caption:= format('%f, %f -> %f, %f', [FRegionCMini.X, FRegionCMini.Y, FRegionCMaxi.X, FRegionCMaxi.Y]);
     FDessinReady := True;
     result := True;
+
+
     Vue.Invalidate;
+
   except
 
   end;
@@ -426,17 +418,14 @@ begin
 end;
 
 function  TCdrDGCDrawingContext.MakeTDGCStyleSheet(const QStylename: string;
-                                                   const QPenColor: TColor;
-                                                   const QPenOpacity: byte;
+                                                   const QPenColor: TDGCColor;
                                                    const QPenStyle: TPenStyle;
                                                    const QPenWidthInPX: byte;
                                                    const QPenWidthInMM: byte;
-                                                   const QBrushColor: TColor;
-                                                   const QBrushOpacity: byte;
+                                                   const QBrushColor: TDGCColor;
                                                    const QBrushStyle: TBrushStyle;
                                                    const QFontName: string;
-                                                   const QFontColor: TColor;
-                                                   const QFontOpacity: byte;
+                                                   const QFontColor: TDGCColor;
                                                    const QFontSizeInPts: integer;
                                                    const QFontSizeInMM: double;
                                                    const QFontStyle: TFontStyles;
@@ -444,65 +433,60 @@ function  TCdrDGCDrawingContext.MakeTDGCStyleSheet(const QStylename: string;
 begin
   Result.Stylename   := QStylename;
   Result.Description := QDescription;
-  Result.setPen(QPenColor, QPenOpacity, QPenStyle, QPenWidthInPX, QPenWidthInMM);
-  Result.setBrush(QBrushColor, QBrushOpacity, QBrushStyle);
-  Result.setFont(QFontName, QFontColor, QFontOpacity, QFontStyle, QFontSizeInPts, QFontSizeInMM);
+  Result.setPen(QPenColor, QPenStyle, QPenWidthInPX, QPenWidthInMM);
+  Result.setBrush(QBrushColor, QBrushStyle);
+  Result.setFont(QFontName, QFontColor, QFontStyle, QFontSizeInPts, QFontSizeInMM);
 end;
 procedure TCdrDGCDrawingContext.AddStyleSheet(const OS: TDGCStyleSheet);
 begin
   FListOfStyles.AddElement(OS);
 end;
 
-procedure TCdrDGCDrawingContext.AddStyleSheet(const QStylename: string;
-                                              const QPenColor: TColor;
-                                               const QPenOpacity: byte;
-                                               const QPenStyle: TPenStyle;
-                                               const QPenWidthInPX     : byte;
-                                               const QPenWidthInMM     : double;
-                                               const QBrushColor: TColor;
-                                               const QBrushOpacity: byte;
-                                               const QBrushStyle: TBrushStyle;
-                                               const QFontName: string;
-                                               const QFontColor: TColor;
-                                               const QFontOpacity: byte;
-                                               const QFontSizeInPts: integer;
-                                               const QFontSizeInMM: double;
-                                               const QFontStyle: TFontStyles;
-                                               const QDescription: string = '');
+procedure TCdrDGCDrawingContext.AddStyleSheet(const QStylename     : string;// Crayon     // SVG utilise les attributs de ligne et de remplissage pour tracer les textes
+                        const QPenColor      : TDGCColor; const QPenStyle   : TPenStyle; const QPenWidthInPX     : byte;  const QPenWidthInMM     : double;
+                        const QBrushColor    : TDGCColor; const QBrushStyle : TBrushStyle;
+                        const QFontColor     : TDGCColor; const QFontStyle  : TFontStyles;
+                        const QFontName      : string   ;const QFontSizeInPts: integer; const QFontSizeInMM: double;
+                        const QDescription   : string = ''); overload;
 var
   MyStyle: TDGCStyleSheet;
   n: Integer;
 begin
-  n := FListOfStyles.GetNbElements() - 1;
+  n := GetNbStyleSheets();//FListOfStyles.GetNbElements() - 1;
   MyStyle.Stylename   := QStylename;
   MyStyle.Description := Format('Style%d: %s', [n, QDescription]);
-  MyStyle.setPen(QPenColor, QPenOpacity, QPenStyle, QPenWidthInPX, QPenWidthInMM);
-  MyStyle.setBrush(QBrushColor, QBrushOpacity, QBrushStyle);
-  MyStyle.setFont(QFontName, QFontColor, QFontOpacity, QFontStyle, QFontSizeInPts, QFontSizeInMM);
+  MyStyle.setPen(QPenColor, QPenStyle, QPenWidthInPX, QPenWidthInMM);
+  MyStyle.setBrush(QBrushColor, QBrushStyle);
+  MyStyle.setFont(QFontName, QFontColor, QFontStyle, QFontSizeInPts, QFontSizeInMM);
   FListOfStyles.AddElement(MyStyle);
 end;
 
-
-
-procedure TCdrDGCDrawingContext.SetBackgroundColor(const C: TColor; const QOpacity: byte = 255);
+procedure TCdrDGCDrawingContext.SetBackgroundColor(const C: TDGCColor);
 begin
-  FBackGroundColor   := C;
-  FBackGroundOpacity := QOpacity;
+  self.SetBackgroundColor(C.Red, C.Green, C.Blue, C.Alpha);
 end;
 
-function TCdrDGCDrawingContext.GetBackgroundColor(): TColor;
+
+
+
+
+procedure TCdrDGCDrawingContext.SetBackgroundColor(const QR, QG, QB, QA: byte);
+begin
+  FBackGroundColor.setFrom(QR, QG, QB, QA);
+end;
+
+function TCdrDGCDrawingContext.GetBackgroundColor(): TDGCColor;
 begin
   result := FBackGroundColor;
 end;
 
-procedure TCdrDGCDrawingContext.SetPenColorAttributes(const C: TColor; const QOpacity: byte = 255; const QWidthInPx: integer = 0; const QWidthInMM: double = 0.05; const QStyle: TPenStyle = psSolid);
+procedure TCdrDGCDrawingContext.SetPenColorAttributes(const C: TDGCColor; const QWidthInPx: integer = 0; const QWidthInMM: double = 0.05; const QStyle: TPenStyle = psSolid);
 var
   MyPen: TDGCPen;
 begin
   {$NOTE Redéfinition à la volée déconseillée - Utiliser les feuilles de style}
   MyPen := TDGCPen.Create;
   MyPen.Couleur := C;
-  MyPen.Opacity := QOpacity;
   MyPen.WidthInPX   := QWidthInPx;
   MyPen.WidthInMM   := QWidthInMM;
 
@@ -510,19 +494,18 @@ begin
   FListOfEntities.AddElement(tdoCMD_SET_PEN, '', MyPen);
 end;
 
-procedure TCdrDGCDrawingContext.SetBrushColorAttributes(const C: TColor; const QOpacity: byte; const QStyle: TBrushStyle = bsSolid);
+procedure TCdrDGCDrawingContext.SetBrushColorAttributes(const C: TDGCColor; const QStyle: TBrushStyle = bsSolid);
 var
   MyBrush: TDGCBrush;
 begin
   {$NOTE Redéfinition à la volée déconseillée - Utiliser les feuilles de style}
   MyBrush := TDGCBrush.Create;
   MyBrush.Couleur  := C;
-  MyBrush.Opacity  := QOpacity;
   MyBrush.Style    := QStyle;
   FListOfEntities.AddElement(tdoCMD_SET_BRUSH, '', MyBrush);
 end;
 
-procedure TCdrDGCDrawingContext.SetFontColorAttributes(const QFontName:string; const C: TColor; const QOpacity: byte; const QHeight: byte; const QStyle: TFontStyles);
+procedure TCdrDGCDrawingContext.SetFontColorAttributes(const QFontName:string; const C: TDGCColor; const QHeight: byte; const QStyle: TFontStyles);
 var
   MyFont: TDGCFont;
 begin
@@ -530,7 +513,6 @@ begin
   MyFont := TDGCFont.Create;
   MyFont.FontName := QFontName;
   MyFont.Couleur  := C;
-  MyFont.Opacity  := QOpacity;
   MyFont.Height   := QHeight;
   MyFont.Style    := QStyle;
   FListOfEntities.AddElement(tdoCMD_SET_FONT, '', MyFont);
@@ -546,14 +528,13 @@ begin
   FListOfEntities.AddElement(tdoCMD_SET_FONT, '', MyFont);
 end;
 
-procedure TCdrDGCDrawingContext.SetFontColor(const C: TColor; const QOpacity: byte = 255);
+procedure TCdrDGCDrawingContext.SetFontColor(const C: TDGCColor);
 var
   MyFont: TDGCFont;
 begin
   {$NOTE Redéfinition à la volée déconseillée - Utiliser les feuilles de style}
   MyFont := TDGCFont.Create;
   MyFont.Couleur  := C;
-  MyFont.Opacity  := QOpacity;
   FListOfEntities.AddElement(tdoCMD_SET_FONT, '', MyFont);
 end;
 
@@ -618,39 +599,39 @@ var
   begin
     if (QIdxStyleSheet = DIEU_AU_CARRE) then Exit;
     MyStyleSheet := FListOfStyles.GetElement(QIdxStyleSheet);
-    FTmpBuffer.CanvasBGRA.Pen.Color      := MyStyleSheet.PenColor;
-    FTmpBuffer.CanvasBGRA.Pen.Opacity    := MyStyleSheet.PenOpacity;
+    FTmpBuffer.CanvasBGRA.Pen.Color      := MyStyleSheet.PenColor.toTColor();
+    FTmpBuffer.CanvasBGRA.Pen.Opacity    := MyStyleSheet.PenColor.Alpha;
     FTmpBuffer.CanvasBGRA.Pen.Width      := MyStyleSheet.PenWidthInPX;
     FTmpBuffer.CanvasBGRA.Pen.Style      := MyStyleSheet.PenStyle;
-    FTmpBuffer.CanvasBGRA.Brush.Color    := MyStyleSheet.BrushColor;
-    FTmpBuffer.CanvasBGRA.Brush.Opacity  := MyStyleSheet.BrushOpacity;
+    FTmpBuffer.CanvasBGRA.Brush.Color    := MyStyleSheet.BrushColor.toTColor();
+    FTmpBuffer.CanvasBGRA.Brush.Opacity  := MyStyleSheet.BrushColor.Alpha;
     FTmpBuffer.CanvasBGRA.Brush.Style    := MyStyleSheet.BrushStyle;
     FTmpBuffer.CanvasBGRA.Font.Name      := MyStyleSheet.FontName;
     FTmpBuffer.CanvasBGRA.Font.Height    := MyStyleSheet.FontSizeInPts;
-    FTmpBuffer.CanvasBGRA.Font.Color     := MyStyleSheet.FontColor;
-    FTmpBuffer.CanvasBGRA.Font.Opacity   := MyStyleSheet.FontOpacity;
+    FTmpBuffer.CanvasBGRA.Font.Color     := MyStyleSheet.FontColor.toTColor();
+    FTmpBuffer.CanvasBGRA.Font.Opacity   := MyStyleSheet.FontColor.Alpha;
     FTmpBuffer.CanvasBGRA.Font.Style     := MyStyleSheet.FontStyle;
   end;
   // dessin des objets
   procedure QSetPenStyle(const E: TDGCPen);
   begin
-    FTmpBuffer.CanvasBGRA.Pen.Color    := E.Couleur;
-    FTmpBuffer.CanvasBGRA.Pen.Opacity  := E.Opacity;
+    FTmpBuffer.CanvasBGRA.Pen.Color    := E.Couleur.toTColor();
+    FTmpBuffer.CanvasBGRA.Pen.Opacity  := E.Couleur.Alpha;
     FTmpBuffer.CanvasBGRA.Pen.Width    := E.WidthInPX;
     FTmpBuffer.CanvasBGRA.Pen.Style    := E.Style;
   end;
   procedure QSetBrushStyle(const E: TDGCBrush);
   begin
-    FTmpBuffer.CanvasBGRA.Brush.Color    := E.Couleur;
-    FTmpBuffer.CanvasBGRA.Brush.Opacity  := E.Opacity;
+    FTmpBuffer.CanvasBGRA.Brush.Color    := E.Couleur.toTColor();
+    FTmpBuffer.CanvasBGRA.Brush.Opacity  := E.Couleur.Alpha;
     FTmpBuffer.CanvasBGRA.Brush.Style    := E.Style;
   end;
   procedure QSetFontStyle(const E: TDGCFont);
   begin
     FTmpBuffer.CanvasBGRA.Font.Name     := E.FontName;
     FTmpBuffer.CanvasBGRA.Font.Height   := E.Height;
-    FTmpBuffer.CanvasBGRA.Font.Color    := E.Couleur;
-    FTmpBuffer.CanvasBGRA.Font.Opacity  := E.Opacity;
+    FTmpBuffer.CanvasBGRA.Font.Color    := E.Couleur.toTColor();
+    FTmpBuffer.CanvasBGRA.Font.Opacity  := E.Couleur.Alpha;
     FTmpBuffer.CanvasBGRA.Font.Style    := E.Style;
   end;
   procedure QDrawSegment(const E: TDGCSegment);
@@ -821,8 +802,8 @@ begin
     R.Top    := Vue.Top;
     R.Bottom := Vue.Top  + Vue.Height;
     R.Right  := Vue.Left + Vue.Width;
-    FTmpBuffer.CanvasBGRA.Brush.Color := FBackGroundColor;
-    FTmpBuffer.CanvasBGRA.Brush.Opacity := 255;
+    FTmpBuffer.CanvasBGRA.Brush.Color   := FBackGroundColor.toTColor();
+    FTmpBuffer.CanvasBGRA.Brush.Opacity := FBackGroundColor.Alpha;
     FTmpBuffer.CanvasBGRA.Brush.Style   := bsSolid;
     FTmpBuffer.CanvasBGRA.FillRect(R);
     // on dessine ici: exécution de la liste d'affichage
@@ -1519,9 +1500,13 @@ var
   procedure QSVGMakeCSSStylesheet(const E: TDGCStyleSheet);
   begin
     FSVGCanvas.WriteStyleLinePolygoneTexte(E.Stylename,
-                                           E.PenColor, E.PenOpacity, E.PenWidthInMM, E.PenStyle,
-                                           E.BrushColor, E.BrushOpacity, E.BrushStyle,
-                                           E.FontName, E.FontSizeInMM, E.FontColor, E.FontOpacity, E.FontStyle,
+                                           E.PenColor.toTColor(), E.PenColor.Alpha,
+                                           E.PenWidthInMM, E.PenStyle,
+                                           E.BrushColor.toTColor(), E.BrushColor.Alpha,
+                                           E.BrushStyle,
+                                           E.FontName, E.FontSizeInMM,
+                                           E.FontColor.toTColor(), E.FontColor.Alpha,
+                                           E.FontStyle,
                                            E.Description);
   end;
   procedure QSVGPolylineWithCSS(const P: TDGCPolyline);

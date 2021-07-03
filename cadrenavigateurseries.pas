@@ -205,8 +205,7 @@ end;
 
 procedure TCdrNavigateurSeries.editNomSerieKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
-  //if (Key = vkRETURN) then acFindByTextExecute(self);
-  //AfficherMessage(format('Key: %d', [key]));
+  pass;
 end;
 
 procedure TCdrNavigateurSeries.editNomSerieKeyPress(Sender: TObject; var Key: char);

@@ -49,25 +49,23 @@ begin
       Stylename      := 'default';
       Description    := 'Default Stylesheet';
 
-      PenColor       := clBlack;
-      PenOpacity     := 255;
+      PenColor.setFrom(clBlack, 255);
       PenStyle       := psSolid;
       PenWidthInPX   := 0;
       PenWidthInMM   := DGC_DEFAULT_PEN_WIDTH_IN_MM;
 
 
-      BrushColor     := clWhite;
-      BrushOpacity   := 255;
+      BrushColor.setFrom(clWhite, 255);
       BrushStyle     := bsClear;
 
       FontName       := DGC_DEFAULT_FONT_NAME;
-      FontColor      := clBlack;
-      FontOpacity    := 255;
+      FontColor.setFrom(clBlack, 255);
       FontSizeInPts  := 12;
       FontSizeInMM   := 8;
       FontStyle      := [];
     end;
     self.AddElement(MyDefaultStyle);
+
   end;
 end;
 

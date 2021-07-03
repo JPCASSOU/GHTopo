@@ -10,6 +10,33 @@ const DGC_DEFAULT_PEN_WIDTH_IN_MM = 0.025;
 const DIEU_AU_CARRE = -1; // dieu étant imaginaire pur, son carré vaut -1 ;-))))
 const DGC_DEFAULT_FONT_NAME = 'Arial';
 
+// TGHTopoColor: Unifie tous les types de couleur et leurs fonctions
+type
+
+{ TDGCColor }
+
+ TDGCColor = record
+    Red     : byte;
+    Green   : byte;
+    Blue    : byte;
+    Alpha   : byte;
+    function  getFloatBlue(): double;  // retourne un réel entre 0 et 1
+    function  getFloatGreen(): double;
+    function  getFloatRed(): double;
+    function  getFloatAlpha(): double;
+
+    procedure setFrom(const R, G, B: byte; const A: byte = 255); overload;
+    procedure setFrom(const C: TColor; const A: byte = 255); overload;
+    function  toTColor(): TColor;
+    procedure setFromStrGHTopoColor(const S: string; const qDefault: TColor);
+    function  toStrGHTopoColor(): string;
+    procedure setOpacity(const O: byte);
+    function  toHTMLColor(): string;
+    function  toKMLColor(): string;
+    function  toSVGColor(): string;
+    function  toGrayScale(): byte;
+end;
+
 type
 
 { TDGCPoint2D }
@@ -19,22 +46,36 @@ type
   Y:  double;
   procedure setFrom(const QX, QY: double);
   procedure Empty();
+  function  getNorme(): double;
 end;
 type TDGCArrayPoints2D = array of TDGCPoint2D;
-type TDGCPoint2Dh = record  // coordonnées 2D homogènes
+type
+
+{ TDGCPoint2Dh }
+
+ TDGCPoint2Dh = record  // coordonnées 2D homogènes
   X:  double;
   Y:  double;
   H:  double;
   procedure setFrom(const QX, QY: double; const QH: double = 1.0);
   procedure Empty();
+  function  getNorme(): double;
 end;
-type TDGCBoundingBox = record
+type
+
+{ TDGCBoundingBox }
+
+ TDGCBoundingBox = record
   X1:  double;
   Y1:  double;
   X2:  double;
   Y2:  double;
   procedure setFrom(const QX1, QY1, QX2, QY2: double);
   procedure Empty();
+  procedure Reset();
+  procedure upDate(const QX, QY: double); overload;
+  procedure upDate(const P: TDGCPoint2D); overload;
+  procedure upDate(const P: TDGCPoint2Dh); overload;
 end;
 type TDGCMatrix3x3 = array[0..2, 0..2] of double;
 
@@ -85,27 +126,24 @@ type
   Stylename        : string;
   Description      : string;
   // Crayon
-  PenColor         : TColor;
-  PenOpacity       : byte;
+  PenColor         : TDGCColor;
   PenStyle         : TPenStyle;
   PenWidthInPX     : byte;
   PenWidthInMM     : double;
 
   // Brosse
-  BrushColor       : TColor;
-  BrushOpacity     : byte;
+  BrushColor       : TDGCColor;
   BrushStyle       : TBrushStyle;
 
   // Fontes
   FontName         : string;
-  FontColor        : TColor; // Utiliser la couleur de Brush
-  FontOpacity      : byte;
+  FontColor        : TDGCColor; // Utiliser la couleur de Brush
   FontSizeInPts    : integer;
   FontSizeInMM     : double;
   FontStyle        : TFontStyles;
-  procedure setPen(const QPenColor: TColor; const QPenOpacity : byte; const QPenStyle: TPenStyle; const QPenWidthInPX: byte; const QPenWidthInMM: double);
-  procedure setBrush(const QBrushColor: TColor; const QBrushOpacity: byte; const BrushStyle: TBrushStyle);
-  procedure setFont(const QFontName: string; const QFontColor: TColor; const QFontOpacity: byte; const QFontStyle: TFontStyles; const QFontSizeInPts: integer; const QFontSizeInMM: double);
+  procedure setPen(const QPenColor: TDGCColor; const QPenStyle: TPenStyle; const QPenWidthInPX: byte; const QPenWidthInMM: double);
+  procedure setBrush(const QBrushColor: TDGCColor;  const BrushStyle: TBrushStyle);
+  procedure setFont(const QFontName: string; const QFontColor: TDGCColor; const QFontStyle: TFontStyles; const QFontSizeInPts: integer; const QFontSizeInMM: double);
   procedure setDefault();
 end;
 
@@ -137,39 +175,121 @@ implementation
 uses
   DGCDummyUnit; // pour limiter le bug de 'Fin de code source non trouvée
 
-{ TDGCStyleSheet }
+{ TDGCColor }
+{ TGHTopoColor }
 
-procedure TDGCStyleSheet.setPen(const QPenColor: TColor; const QPenOpacity: byte; const QPenStyle: TPenStyle; const QPenWidthInPX: byte; const QPenWidthInMM: double);
+procedure TDGCColor.setFrom(const R, G, B: byte; const A: byte = 255);
+begin
+  self.Red   := R AND 255;
+  self.Green := G AND 255;
+  self.Blue  := B AND 255;
+  self.Alpha := A AND 255;
+end;
+
+procedure TDGCColor.setFrom(const C: TColor; const A: byte = 255);
+begin
+  self.setFrom(Graphics.Red(C), Graphics.Green(C), Graphics.Blue(C), A);
+end;
+
+function TDGCColor.toTColor(): TColor;
+begin
+  result := RGBToColor(self.Red, self.Green, self.Blue);
+end;
+// récupère les RGB depuis les représentations $RRRGGGBBB et #RRRGGGBBB
+procedure TDGCColor.setFromStrGHTopoColor(const S: string; const qDefault: TColor);
+begin
+  if (length(S) < 10) then // la notation Pascal exige 1 + 3*3 caractères
+    self.setFrom(clDefault, 255)
+  else
+    self.setFrom(StrToIntDef(Copy(S, 2, 3), Graphics.Red(qDefault)),
+                 StrToIntDef(Copy(S, 5, 3), Graphics.Green(qDefault)),
+                 StrToIntDef(Copy(S, 8, 3), Graphics.Blue(qDefault)),
+                 255)
+end;
+
+
+function TDGCColor.toStrGHTopoColor(): string;
+begin
+  Result := Format('$%.3d%.3d%.3d', [self.Red, self.Green, self.Blue]);
+end;
+
+procedure TDGCColor.setOpacity(const O: byte);
+begin
+  self.Alpha := O and 255;
+end;
+
+function TDGCColor.toHTMLColor(): string;
+begin
+  Result := format('#%.2X%.2X%.2X', [self.Red, self.Green, self.Blue]);
+end;
+
+function TDGCColor.toKMLColor(): string;
+begin
+  Result := Format('<color>%.2X%.2X%.2X%.2X</color>',[self.Alpha, self.Blue, self.Green, self.Red]);
+end;
+
+function TDGCColor.toSVGColor(): string;
+const m = 1 / 256.0;
+begin
+  Result := Format(' rgb(%.2f%%, %.2f%%, %.2f%%)', [self.Red * m , self.Green * m , self.Blue * m]);
+  Result := StringReplace(Result, DefaultFormatSettings.DecimalSeparator, '.', [rfReplaceAll]);
+end;
+
+function TDGCColor.toGrayScale(): byte; //Convertit une couleur en niveaux de gris; méthode NTSC.
+begin
+  Result := round(0.30 * self.Red + 0.59 * self.Green + 0.11 * self.Blue);
+end;
+
+function TDGCColor.getFloatRed(): double;
+begin
+  Result := self.Red / 256.0;
+end;
+function TDGCColor.getFloatGreen(): double;
+begin
+  Result := self.Green / 256.0;
+end;
+function TDGCColor.getFloatBlue(): double;
+begin
+  Result := self.Blue / 256.0;
+end;
+function TDGCColor.getFloatAlpha(): double;
+begin
+  Result := self.Alpha / 256.0;
+end;
+
+{ TDGCStyleSheet }
+procedure TDGCStyleSheet.setPen(const QPenColor: TDGCColor; const QPenStyle: TPenStyle; const QPenWidthInPX: byte; const QPenWidthInMM: double);
 begin
   self.PenColor         := QPenColor;
-  self.PenOpacity       := QPenOpacity;
   self.PenStyle         := QPenStyle;
   self.PenWidthInPX     := QPenWidthInPX;
   self.PenWidthInMM     := QPenWidthInMM;
 end;
 
-procedure TDGCStyleSheet.setBrush(const QBrushColor: TColor; const QBrushOpacity: byte; const BrushStyle: TBrushStyle);
+procedure TDGCStyleSheet.setBrush(const QBrushColor: TDGCColor;  const BrushStyle: TBrushStyle);
 begin
   self.BrushColor       := QBrushColor;
-  self.BrushOpacity     := QBrushOpacity;
   self.BrushStyle       := BrushStyle;
 end;
 
-procedure TDGCStyleSheet.setFont(const QFontName: string; const QFontColor: TColor; const QFontOpacity: byte; const QFontStyle: TFontStyles; const QFontSizeInPts: integer; const QFontSizeInMM: double);
+procedure TDGCStyleSheet.setFont(const QFontName: string; const QFontColor: TDGCColor; const QFontStyle: TFontStyles; const QFontSizeInPts: integer; const QFontSizeInMM: double);
 begin
   self.FontName         := QFontName;
   self.FontColor        := QFontColor;
-  self.FontOpacity      := QFontOpacity;
   self.FontSizeInPts    := QFontSizeInPts;
   self.FontSizeInMM     := QFontSizeInMM;
   self.FontStyle        := QFontStyle;
 end;
 
 procedure TDGCStyleSheet.setDefault();
+var CGT: TDGCColor;
 begin
-  self.setPen(clBlack, 255, psSolid, 0, DGC_DEFAULT_PEN_WIDTH_IN_MM);
-  self.setBrush(clWhite, 255, bsSolid);
-  self.setFont(DGC_DEFAULT_FONT_NAME, clBlack, 255, [], 10, 1.20);
+  CGT.setFrom(clBlack, 255);
+  self.setPen(CGT, psSolid, 0, DGC_DEFAULT_PEN_WIDTH_IN_MM);
+  CGT.setFrom(clWhite, 255);
+  self.setBrush(CGT, bsSolid);
+  CGT.setFrom(clBlack, 255);
+  self.setFont(DGC_DEFAULT_FONT_NAME, CGT, [], 10, 1.20);
 end;
 
 { TDGCPoint2D }
@@ -184,6 +304,11 @@ procedure TDGCPoint2D.Empty();
 begin
   self.X := 0.00;
   self.Y := 0.00;
+end;
+
+function TDGCPoint2D.getNorme(): double;
+begin
+  result := hypot(self.X, self.Y);
 end;
 
 { TDGCPoint2Dh }
@@ -202,6 +327,13 @@ begin
   self.H := 1.00;
 end;
 
+function TDGCPoint2Dh.getNorme(): double;
+begin
+  result := hypot(self.X, self.Y);
+end;
+
+
+
 { TDGCBoundingBox }
 
 procedure TDGCBoundingBox.setFrom(const QX1, QY1, QX2, QY2: double);
@@ -219,6 +351,29 @@ begin
   self.Y1 := 0.00;
   self.X2 := 0.00;
   self.Y2 := 0.00;
+end;
+
+procedure TDGCBoundingBox.Reset();
+begin
+  self.setfrom(Infinity, Infinity, -Infinity, -Infinity);
+end;
+
+procedure TDGCBoundingBox.upDate(const QX, QY: double);
+begin
+  self.X1 := Min(self.X1, QX);
+  self.Y1 := Min(self.Y1, QY);
+  self.X2 := Max(self.X2, QX);
+  self.Y2 := Max(self.Y2, QY);
+end;
+
+procedure TDGCBoundingBox.upDate(const P: TDGCPoint2D);
+begin
+  self.upDate(P.X, P.Y);
+end;
+
+procedure TDGCBoundingBox.upDate(const P: TDGCPoint2Dh);
+begin
+  self.upDate(P.X, P.Y);
 end;
 
 

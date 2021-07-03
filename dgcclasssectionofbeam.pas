@@ -97,8 +97,7 @@ begin
   try
     FArea       := 0.00;
     FPerimetre  := 0.00;
-    FCentroid.X := 0.00;
-    FCentroid.Y := 0.00;
+    FCentroid.Empty();
     FInertiaOx  := 0.00;
     FInertiaOy  := 0.00;
     FInertiaOxy := 0.00;
@@ -168,8 +167,7 @@ begin
     FCentroid.X += (V1.X + V2.X) * (V1.X * V2.Y - V2.X * V1.Y);
     FCentroid.Y += (V1.Y + V2.Y) * (V1.X * V2.Y - V2.X * V1.Y);
   end;
-  FCentroid.X := Q6A * FCentroid.X;
-  FCentroid.Y := Q6A * FCentroid.Y;
+  FCentroid.setFrom(Q6A * FCentroid.X, Q6A * FCentroid.Y);
 end;
 // calcul des moments quadratiques
 procedure TDGCSectionOfBeam.CalcInertias();
@@ -258,30 +256,18 @@ function  TDGCSectionOfBeam.AddVertex(const VX, VY: double): boolean; overload;
 var
   EWE: TDGCPoint2D;
 begin
-  EWE.X := VX; EWE.Y := VY;
+  EWE.setFrom(VX, VY);
   Result := AddVertex(EWE);
 end;
 
 procedure TDGCSectionOfBeam.CalcBounds();
-const INFINITEE = 1E30;
 var
   i, Nb: Integer;
-  EWE: TDGCPoint2D;
 begin
-  FBounds.X1 :=  INFINITEE;
-  FBounds.Y1 :=  INFINITEE;
-  FBounds.X2 := -INFINITEE;
-  FBounds.Y2 := -INFINITEE;
+  FBounds.Reset();
   Nb := GetNbVertex();
   if (0 = Nb) then exit;
-  for i := 0 to Nb - 1 do
-  begin
-    EWE := getVertex(i);
-    if (EWE.X < FBounds.X1) then FBounds.X1 := EWE.X;
-    if (EWE.Y < FBounds.Y1) then FBounds.Y1 := EWE.Y;
-    if (EWE.X > FBounds.X2) then FBounds.X2 := EWE.X;
-    if (EWE.Y > FBounds.Y2) then FBounds.Y2 := EWE.Y;
-  end;
+  for i := 0 to Nb - 1 do FBounds.upDate(getVertex(i));
 end;
 
 function TDGCSectionOfBeam.GetBounds(): TDGCBoundingBox;

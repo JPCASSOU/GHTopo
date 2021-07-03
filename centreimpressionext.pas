@@ -378,6 +378,7 @@ var
   R              : TRect;
   DC: TGHTopoDrawingContext;
   BGC: TBGRAPixel;
+  QuadrilleColorOpacity: TGHTopoColor;
   // affichage des pages (avec mention de pages vides)
   procedure DrawPages();
   var
@@ -385,9 +386,12 @@ var
     P1, P2: TPoint;
     L1, H1, QInvEchelle, QPageWidthInMM, QPageHeightInMM: Double;
     QC1, QC2: TPoint2Df;
+    CGT1, CGT2: TGHTopoColor;
   begin
     if (not FDoDrawPages) then Exit;
-    DC.DefineBrosseEtCrayon(bsSolid, clWhite, 255, psSolid, 0, clBlue, 255);
+    CGT1.setFrom(clWhite, 255);
+    CGT2.setFrom(clBlue, 255);
+    DC.DefineBrosseEtCrayon(bsSolid, CGT1, psSolid, 0, CGT2);
     DC.DefineFonte(DEFAULT_FONT_NAME, clBlue, [], 8);
     QInvEchelle := 1 / (1000*FEchelle);
     QPageWidthInMM  := Pixels2MillimetresX(Printer.PageWidth);
@@ -410,8 +414,12 @@ var
   var
     QC1, QC2: TPoint3Df;
     P1, P2: TPoint2Df;
+    CGT1, CGT2: TGHTopoColor;
+
   begin
-    DC.DefineBrosseEtCrayon(bsClear, clBlack, 255, psSolid, 0, clSilver, 192);
+    CGT1.setFrom(clBlack, 255);
+    CGT2.setFrom(clSilver, 192);
+    DC.DefineBrosseEtCrayon(bsClear, CGT1, psSolid, 0, CGT2);
     QC1 := FBDDEntites.GetCoinBasGauche();
     QC2 := FBDDEntites.GetCoinHautDroit();
     P1.setFrom(QC1.X, QC1.Y);
@@ -428,7 +436,10 @@ var
     QXo, QYo, QY1: double;
     LargeurCarreau, HauteurCarreau: double;
     QQR1, QQR2: TPoint2Df;
+    CGT1, CGT2: TGHTopoColor;
   begin
+    CGT1.setFrom(clWhite, 128);
+    CGT2.setFrom(clBlack, 255);
     Mg := (FRXMaxi - FRXMini) / 50; // marge
     QXo := FRXMini + Mg;
     QYo := FRYMini + Mg;
@@ -436,7 +447,7 @@ var
     HauteurCarreau := TailleRegle / 25;
     AfficherMessage(Format(' --> DrawRegle: L = %.0f m at (%.0f, %.0f)', [TailleRegle, FRXMini + Mg, FRYMini + Mg]));
     // cadre périmétrique
-    DC.DefineBrosseEtCrayon(bsSolid, clWhite, 128, pssolid, 0, clBlack, 255);
+    DC.DefineBrosseEtCrayon(bsSolid, CGT1 , pssolid, 0, CGT2 );
     QQR1.setFrom(QXo, QYo);
     QQR2.setFrom(QQR1.X + TailleRegle, QQR1.Y + 2 * HauteurCarreau);
     DC.DrawRectangle(QQR1, QQR2, True);
@@ -444,7 +455,8 @@ var
     for i := 0 to NB_CARREAUX_X - 1 do
     begin
       if (Odd(i)) then QY1 := QYo + HauteurCarreau else QY1 := QYo;
-      DC.DefineBrosse(bsSolid, clGray, 192);
+      CGT1.setFrom(clGray, 192);
+      DC.DefineBrosse(bsSolid, CGT1);
       QQR1.setFrom(QXo + (i * LargeurCarreau), QY1);
       QQR2.setFrom(QQR1.X + LargeurCarreau, QQR1.Y + HauteurCarreau);
       DC.DrawRectangle(QQR1, QQR2, True);
@@ -456,19 +468,15 @@ var
     DC.DrawTexte(QQR1.X, QQR2.Y + 1.0, 2, '0');
     DC.DrawTexte(QQR2.X, QQR2.Y + 1.0, 2, Format('%.0f m',[TailleRegle]));
     //QDrawTextLegende(QXo, QYo + 2 * HauteurCarreau + Mg/4, TailleRegle, HauteurCarreau);
+
+
   end;
 begin
   AfficherMessage(Format('%s.DrawApercu',[ClassName]));
   if (FRedessinInProcess) then exit; // sémaphore 'FRedessinInProcess' est armé ? = On quitte (le dessin est en cours)
   FRedessinInProcess := True;        // Armement du sémaphore
-  (*
-  BGC := BGRA(Red(FVue2DParams.ongBackGround),
-              Green(FVue2DParams.ongBackGround),
-              Blue(FVue2DParams.ongBackGround),
-              255);
-  //*)
+  QuadrilleColorOpacity.setFrom(FVue2DParams.ongQdrColor);
   BGC := BGRA(Red(clSilver), Green(clSilver), Blue(clSilver), 255);
-
   DC := TGHTopoDrawingContext.Create(PaintBoxVue.Width, PaintBoxVue.Height, BGC);
   try
     if (DC.Initialiser(FDocuTopo,
@@ -485,7 +493,7 @@ begin
         DrawBoundingBox();         // dessin des limites
         DrawPages();               // dessin des pages
 
-        if (edQuadrilles     in FVue2DParams.ongElementsDrawn) then DC.DrawQuadrillage(FVue2DParams.ongQdrType, FVue2DParams.ongQdrColor, FVue2DParams.ongQdrSpc);
+        if (edQuadrilles     in FVue2DParams.ongElementsDrawn) then DC.DrawQuadrillage(FVue2DParams.ongQdrType, QuadrilleColorOpacity, FVue2DParams.ongQdrSpc);
         //if (edANTENNES       in FVue2DParams.ongElementsDrawn) then DC.DrawAntennes();
         //if (edCrossSections  in FVue2DParams.ongElementsDrawn) then DC.DrawSections();
         if (edPolygonals     in FVue2DParams.ongElementsDrawn) then DC.DrawPolygonals(FVue2DParams.ongDrawFastCenterline);
@@ -506,6 +514,7 @@ begin
     FRedessinInProcess := False; // libération
     FreeAndNil(DC);
   end;
+  //*)
 end;
 // retourne les index de pages en fonction des coordonnées réelles
 procedure TfrmPrintingCenterExt.CalcIndexPageIncludingPt(const Pt: TPoint2Df; var IdxX, IdxY: integer);

@@ -153,10 +153,10 @@ begin
   // réseau et secteur
   RS := FMyTableEntites.GetReseau(FMyStation.eReseau);
   SC := FMyTableEntites.GetSecteur(FMyStation.eSecteur);
-  lbCouleurReseau.Color    := RS.ColorReseau;
+  lbCouleurReseau.Color    := RS.ColorReseau.toTColor();
   lbCouleurReseau.Caption  := Format(FORMAT_NB_INTEGER, [FMyStation.eReseau]);
   lbNomReseau.Caption      := _AnsiToLCLStr(RS.NomReseau);
-  lbCouleurSecteur.Color   := SC.CouleurSecteur;
+  lbCouleurSecteur.Color   := SC.CouleurSecteur.toTColor();
   lbCouleurSecteur.Caption := Format(FORMAT_NB_INTEGER, [FMyStation.eSecteur]);
   lbNomSecteur.Caption     := _AnsiToLCLStr(SC.NomSecteur);
 

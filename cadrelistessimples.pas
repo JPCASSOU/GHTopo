@@ -194,6 +194,8 @@ var
   CC: TCode;
   EX: TExpe;
   EWE: String;
+  CDS: TGHTopoColor;
+  MyPos: TPoint3Df;
 begin
   case FModeBDD of
     mbddENTRANCES     : EWE := rsDLG_BDD_ADD_ENTREE;
@@ -214,7 +216,9 @@ begin
     mbddENTRANCES: // entrées
       begin
         if (not GHTopoQuestionOuiNon(EWE)) then Exit;
-        EE.setFrom('Nouvelle entrée', '', 0.00, 0.00, 0.00, 0, 0, clRed, '');
+        CDS.setFrom(clRed);
+        MyPos.Empty();
+        EE.setFrom('Nouvelle entrée', '', MyPos, 0, 0, CDS, '');
         if (EditerEntrance(FDocumentToporobot, n, FBDDEntites, FMaillage, EE)) then
         begin
           FDocumentToporobot.AddEntrance(EE);
@@ -225,7 +229,8 @@ begin
     mbddRESEAUX  : // réseaux
       begin
         if (not GHTopoQuestionOuiNon(EWE)) then Exit;
-        RS.setFrom(clBlue, 0, 'Nouveau réseau', '');
+        CDS.setFrom(clBlue);
+        RS.setFrom(CDS, 0, 'Nouveau réseau', '');
         if (EditerReseau(FDocumentToporobot, n, RS)) then
         begin
           FDocumentToporobot.AddReseau(RS);
@@ -236,7 +241,8 @@ begin
     mbddSECTEURS : // secteurs;
       begin
         if (not GHTopoQuestionOuiNon(EWE)) then Exit;
-        SS.setFrom(clRed, 'Nouveau secteur');
+        CDS.setFrom(clRed);
+        SS.setFrom(CDS, 'Nouveau secteur');
         if (EditerSecteur(FDocumentToporobot, n, SS)) then
         begin
           FDocumentToporobot.AddSecteur(SS);
@@ -1004,7 +1010,7 @@ var
         begin
           ResetColorRow(lsbListe, ARect, bg, tc);
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[0], false, Format(FORMAT_NB_INTEGER,[Index]));
-          DrawColRectColoreWithTexte(lsbListe, ARect, hcColsTitres.Sections.Items[1], True, bg, es.eCouleur, '');
+          DrawColRectColoreWithTexte(lsbListe, ARect, hcColsTitres.Sections.Items[1], True, bg, es.eCouleur.toTColor(), '');
 
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[2], true, es.eNomEntree);
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[3], true, Format(FMTSERST,[es.eRefSer, es.eRefSt]));
@@ -1018,7 +1024,7 @@ var
         begin
           ResetColorRow(lsbListe, ARect, bg, tc);
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[0], false, Format(FORMAT_NB_INTEGER,[Index]));
-          DrawColRectColoreWithTexte(lsbListe, ARect, hcColsTitres.Sections.Items[1], True, bg, rs.ColorReseau, '');
+          DrawColRectColoreWithTexte(lsbListe, ARect, hcColsTitres.Sections.Items[1], True, bg, rs.ColorReseau.toTColor(), '');
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[2], true, rs.NomReseau);
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[3], true, rs.ObsReseau);
         end;
@@ -1026,7 +1032,7 @@ var
         begin
           ResetColorRow(lsbListe, ARect, bg, tc);
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[0], false, Format(FORMAT_NB_INTEGER,[Index]));
-          DrawColRectColoreWithTexte(lsbListe, ARect,hcColsTitres.Sections.Items[1], True, bg, sc.CouleurSecteur, '');
+          DrawColRectColoreWithTexte(lsbListe, ARect,hcColsTitres.Sections.Items[1], True, bg, sc.CouleurSecteur.toTColor(), '');
           DrawColTexte(lsbListe, ARect, hcColsTitres.Sections.Items[2], true, sc.NomSecteur);
         end;
       mbddCODES:
@@ -1222,7 +1228,7 @@ var
   EWE: TStationProcheOfEndSerie;
   MyLastStationOfSerie: TUneVisee;
 begin
-  AfficherMessage(Format('%s.RechercherProximites(%.2f)', [Classname, QRayonCapture]));
+  //AfficherMessage(Format('%s.RechercherProximites(%.2f)', [Classname, QRayonCapture]));
   NbSeries := FDocumentToporobot.GetNbSeries();
   NbEntitesVisees  := FBDDEntites.GetNbEntitesVisees();
   self.FListeDesProximites.ClearListe();
@@ -1297,7 +1303,7 @@ var
   MySerie: TObjSerie;
   SR     : TSerieEncadree;
 begin
-  AfficherMessage(Format('%s.RechercherSeriesEncadrees()', [Classname]));
+  //AfficherMessage(Format('%s.RechercherSeriesEncadrees()', [Classname]));
   lsbListe.Enabled := false;
   Nb := FDocumentToporobot.GetNbSeries();
   FListeSeriesEncadrees.ClearListe();

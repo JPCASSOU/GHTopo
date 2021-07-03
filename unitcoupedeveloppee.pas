@@ -759,11 +759,9 @@ begin
       JC1 := self.GetJonction(Brch.NumeroNoeudDepart);
       JC2 := self.GetJonction(Brch.NumeroNoeudArrivee);
 
-      PM := MakeTPointCoupeDeveloppee(JC1.Abscisse, JC1.Cote);
+      PM.setFrom(JC1.Abscisse, JC1.Cote);
       NbV := 1 + High(Brch.ArrVisees);
-      E.PosExtr0.X := JC1.Abscisse + ABSCISSE_ORIGINE;
-      E.PosExtr0.Y := JC1.Cote;
-      E.PosExtr0.Z := JC1.Cote;
+      E.PosExtr0.setFrom(JC1.Abscisse + ABSCISSE_ORIGINE, JC1.Cote, JC1.Cote);
 
       if (NbV > 0) then
       begin
@@ -777,25 +775,24 @@ begin
           uP += myVisee.AccroissP * IIF((Brch.SensTraceCoupe = stcdVERS_DROITE), 1.00, -1.00);
           uZ += myVisee.AccroissXYZ.Z;
 
-          PM := MakeTPointCoupeDeveloppee(JC1.Abscisse + uP, JC1.Cote + uZ);
+          PM.setFrom(JC1.Abscisse + uP, JC1.Cote + uZ);
 
           E.Entite_Serie := Brch.NumeroSerie;
-          E.PosStation.X := PM.P + ABSCISSE_ORIGINE;
-          E.PosStation.Y := PM.Z;
-          E.PosStation.Z := PM.Z;
+          E.PosStation.setFrom(PM.P + ABSCISSE_ORIGINE, PM.Z, PM.Z);
           E.Entite_Station  := myVisee.NoVisee;
           E.IDTerrain       := myVisee.IDTerrainStation;
           E.Type_Entite     := myVisee.TypeVisee;
-          E.PosPD.X         := E.PosStation.X;
-          E.PosPD.Y         := E.PosStation.Y;
-          E.PosPD.X         := E.PosStation.X;
-          E.PosPD.Y         := E.PosStation.Y;
-          E.PosPG.Z         := E.PosStation.Z - myVisee.HN;
-          E.PosPD.Z         := E.PosStation.Z + myVisee.HZ;
+          E.PosPD.setFrom(E.PosStation.X,
+                          E.PosStation.Y,
+                          E.PosStation.Z + myVisee.HZ);
+          E.PosPG.setFrom(E.PosStation.X,
+                          E.PosStation.Y,
+                          E.PosStation.Z - myVisee.HN);
+
+
           QID := MakeTIDBaseStation(E.Entite_Serie, E.Entite_Station, false);
-
-
           // ajouter l'entité
+
           WrtLn(Format(FMT_BASEPOINTS,
                [QID  ,
                 E.IDTerrain,
@@ -806,8 +803,9 @@ begin
                 E.PosPD.X, E.PosPG.Z,  E.PosPG.Z,
                 E.PosPD.X, E.PosPD.Z,  E.PosPD.Z
                ]));
+               //*)
           // et préparer la suivante
-          E.PosExtr0 := E.PosStation
+          E.PosExtr0 := E.PosStation;
         end;
       end;
     end;

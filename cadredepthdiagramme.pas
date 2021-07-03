@@ -28,8 +28,9 @@ type
     FBDDEntites: TBDDEntites;
     FFiltres            : String;
     FLongMini           : Double;
-    FColorBarreLine     : TColor;
-    FColorBarreFill     : TColor;
+    FBarresLineColor    : TDGCColor;
+    FBarresFillColor    : TDGCColor;
+    FBarresFontColor    : TDGCColor;
     FNbBarres           : integer;
     FPourcentageSeuilHightLight: Double;
     FClassesRepartDepthDiagram : TVecteurDouble;
@@ -71,9 +72,11 @@ function TCdrDepthDiagramme.Initialiser(const DT: TBDDEntites;
                                         const PourcentageSeuilHightLight: double): boolean;
 var
   EWE: double;
+  BGC: TDGCColor;
 begin
-  EWE := 20.00;
   result := false;
+  BGC.setFrom(clWhite, 255);
+  EWE := 20.00;
   try
     FBDDEntites := DT;
     SetFiltre(Filtres);
@@ -81,12 +84,10 @@ begin
     SetLongueurMini(LMini);
     SetPourcentageSeuilHightLight(PourcentageSeuilHightLight);
     SetColorBarres(BarresLineColor, BarresFillColor);
-
-
     // SetMinMax indispensable ici
     FBDDEntites.SetMinMax(True);
     RecalculerDiagramme();
-    result := CdrDGCDrawingContext1.Initialiser(-EWE, -EWE, EWE, EWE, False);
+    result := CdrDGCDrawingContext1.Initialiser(-EWE, -EWE, EWE, EWE, False, BGC);
   except
   end;
 end;
@@ -102,8 +103,9 @@ end;
 
 procedure TCdrDepthDiagramme.SetColorBarres(const BC, BF: TColor);
 begin
-  FColorBarreLine  := BC;
-  FColorBarreFill  := BF;
+  FBarresLineColor.setFrom(BC, 255);
+  FBarresFillColor.setFrom(BF, 128);
+  FBarresFontColor.setFrom(clBlack, 255);
 end;
 procedure TCdrDepthDiagramme.SetNombreColorBarres(const n: integer; const FG, BG: TColor);
 begin
@@ -156,8 +158,16 @@ var
   LargZoneDiagramme : double;
   HauteurZoneDiagramme, QH, QZ: double;
   FB: TDGCBoundingBox;
-
+  BGC, ColorLineAxes       , ColorBrushAxes    ,  ColorFontAxes  : TDGCColor;
 begin
+  BGC.setFrom(clWhite, 255);
+  ColorLineAxes.setFrom(clSilver , 255);
+  ColorBrushAxes.setFrom(clWhite , 128 );
+  ColorFontAxes.setFrom(clBlack, 255);
+
+
+
+
   CBG := FBDDEntites.GetCoinBasGauche();
   CHD := FBDDEntites.GetCoinHautDroit();
   lbZMax.Caption := Format(FORMAT_NB_REAL_0_DEC, [CHD.Z]);
@@ -173,13 +183,14 @@ begin
 
   CdrDGCDrawingContext1.BeginDrawing();
     CdrDGCDrawingContext1.AddStyleSheet('Barres',
-                                         FColorBarreLine, 255, psSolid, 1, 0.05,
-                                         FColorBarreFill, 128, bsSolid,
-                                         DEFAULT_FONT_NAME, clRed, 255, 15, 1.0, [fsBold], '');
+                                        FBarresLineColor, psSolid, 1, 0.05,
+                                        FBarresFillColor, bsSolid,
+                                        FBarresFontColor, [fsBold], DEFAULT_FONT_NAME, 15, 3.0,  '');
     CdrDGCDrawingContext1.AddStyleSheet('AxeV',
-                                         clBlue, 255, psSolid, 1, 0.05,
-                                         clWhite, 128, bsClear,
-                                         DEFAULT_FONT_NAME, clRed, 255, 15, 3.0, [fsBold], '');
+                                        ColorLineAxes , psSolid, 1, 0.05,
+                                        ColorBrushAxes, bsClear,
+                                        ColorFontAxes , [], DEFAULT_FONT_NAME, 15, 3.0,  '');
+
 
 
     FB := CdrDGCDrawingContext1.GetVueBounds();
@@ -194,8 +205,8 @@ begin
       CdrDGCDrawingContext1.AddRectangle(1, 0.00, QZ, FClassesRepartDepthDiagram[i] * LargZoneDiagramme, QZ + QH);
     end;
     // textes
-    CdrDGCDrawingContext1.SetBrushColorAttributes(CdrDGCDrawingContext1.GetBackgroundColor(), 255, bsSolid);
-    CdrDGCDrawingContext1.SetFontColorAttributes('Arial', clBlue, 255, 15, [fsbold]);
+    CdrDGCDrawingContext1.SetBrushColorAttributes(BGC, bsSolid);
+    CdrDGCDrawingContext1.SetFontColorAttributes('Arial', FBarresFontColor, 15, [fsbold]);
     for i := 0 to FNbBarres - 1 do
     begin
       QZ := CBG.Z + (i - 1) * QH;

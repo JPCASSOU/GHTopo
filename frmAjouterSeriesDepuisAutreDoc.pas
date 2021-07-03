@@ -325,7 +325,7 @@ begin
     // réseau
     MyReseau := FDocTopoAAjouter.GetLastReseau();
     editNouveauReseau.Text     := MyReseau.NomReseau;
-    btnColorReseau.ButtonColor := MyReseau.ColorReseau;
+    btnColorReseau.ButtonColor := MyReseau.ColorReseau.toTColor();
 
     // systèmes de coordonnées
     EWE1 := FDocTopoCourant.GetCodeEPSGSystemeCoordonnees();
@@ -541,7 +541,7 @@ begin
     begin
       try
         MyEntrance := FDocTopoAAjouter.getEntrance(i);
-        MyEntrance.eCouleur:= btnColorReseau.ButtonColor;
+        MyEntrance.eCouleur.setFrom(btnColorReseau.ButtonColor);
         MyEntrance.eRefSer := editPtZeroReseauAddedSerie.AsInteger;//100000 + FDocTopoCourant.GetNbEntrances() + i + 1;
         MyEntrance.eRefSt  := 0;
         // reprojection des coordonnées
@@ -577,7 +577,7 @@ begin
       if (0 = i) then
       begin
         MyReseau.NomReseau    := Trim(editNouveauReseau.Text);
-        MyReseau.ColorReseau  := btnColorReseau.ButtonColor;
+        MyReseau.ColorReseau.setFrom(btnColorReseau.ButtonColor);
       end;
       FDocTopoCourant.AddReseau(MyReseau);
     end;

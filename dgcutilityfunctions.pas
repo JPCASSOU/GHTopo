@@ -10,9 +10,6 @@ uses
   Classes, SysUtils, Graphics, Math;
 procedure nop; inline; // analogue à l'instruction 'pass' du Python
 function   DGCMakeCSSStyle(const S: TDGCStyleSheet): string;
-
-// fonctions utilitaires
-procedure  UpdateBoundingBox(var MyBB: TDGCBoundingBox; const PP: TDGCPoint2D; const DoReset: boolean);
 // calcul de l'angle moyen de deux segments, avec la bonne orientation
 function   DGCGetAngleBissecteur(const X1, Y1, X2, Y2: double): double;
 // produit vectoriel éventuellement normalisé
@@ -36,45 +33,6 @@ begin
   result := 'MakeCSSStyle: Mock for ' + S.Stylename;
 end;
 
-// fonctions de couleurs recadrées sur intervalle [0.00; 1.00]
-function DGCGetFloatRValue(const C: TColor): double;
-begin
-  Result := Red(C) / 256;
-end;
-function DGCGetFloatGValue(const C: TColor): double;
-begin
-  Result := Green(C) / 256;
-end;
-function DGCGetFloatBValue(const C: TColor): double;
-begin
-  Result := Blue(C) / 256;
-end;
-function DGCSVGColor(const C: TColor): string;
-var
-  R,G,B: Double;
-begin
-  R := 100.0 * DGCGetFloatRValue(C);
-  G := 100.0 * DGCGetFloatGValue(C);
-  B := 100.0 * DGCGetFloatBValue(C);
-  //Result:=Format('#%X%X%X',[R,G,B]);
-  Result := Format(' rgb(%.2f%%, %.2f%%, %.2f%%)', [R,G,B]);
-  result := StringReplace(result, DefaultFormatSettings.DecimalSeparator, '.', [rfReplaceAll]);
-end;
-
-procedure UpdateBoundingBox(var MyBB: TDGCBoundingBox; const PP: TDGCPoint2D; const DoReset: boolean);
-begin
-  if (DoReset) then
-  begin
-    MyBB.X1 :=  Infinity;
-    MyBB.Y1 :=  Infinity;
-    MyBB.X2 := -Infinity;
-    MyBB.Y2 := -Infinity;
-  end;
-  MyBB.X1 := Min(MyBB.X1, PP.X);
-  MyBB.Y1 := Min(MyBB.Y1, PP.Y);
-  MyBB.X2 := Max(MyBB.X2, PP.X);
-  MyBB.Y2 := Max(MyBB.Y2, PP.Y);
-end;
 
 // calcul de l'angle moyen de deux segments, avec la bonne orientation
 function DGCGetAngleBissecteur(const X1, Y1, X2, Y2: double): double;
@@ -136,8 +94,8 @@ begin
     B := 3 * Q2 * t;
     C := 3 * Q1 * T2; //T * T;
     D := T3; //T * T * T;
-    AP[i].X := A * P0.X + B * P1.X + C * P2.X + D * P3.X;
-    AP[i].Y := A * P0.Y + B * P1.Y + C * P2.Y + D * P3.Y;
+    AP[i].setFrom(A * P0.X + B * P1.X + C * P2.X + D * P3.X,
+                  A * P0.Y + B * P1.Y + C * P2.Y + D * P3.Y);
     t += PasT;
   end;
 end;

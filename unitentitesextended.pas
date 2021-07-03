@@ -157,20 +157,16 @@ type
     procedure PutEntiteAntenne(const Idx: integer; const E: TBaseStation);
 
     // couleurs en fonction des réseaux
-    function  GetCouleurEntiteRGBByEntrance(const E: TBaseStation): TColor;
-    function  GetCouleurRGBByIdxEntrance(const Idx: integer): TColor;
-    function  GetCouleurEntiteRGBAByReseau(const E: TBaseStation): TColorRGBA;
-    function  GetCouleurEntiteRGBByReseau(const E: TBaseStation): TColor;
-    function  GetCouleurRGBByIdxReseau(const Idx: integer): TColor;
+    function  GetCouleurEntiteByEntrance(const E: TBaseStation): TGHTopoColor;
+    function  GetCouleurEntiteByIdxEntrance(const Idx: integer): TGHTopoColor;
+    function  GetCouleurEntiteByReseau(const E: TBaseStation): TGHTopoColor;
+    function  GetCouleurEntiteByIdxReseau(const Idx: integer): TGHTopoColor;
     // couleurs en fonction des secteurs
-    function  GetCouleurEntiteRGBABySecteur(const E: TBaseStation): TColorRGBA;
-    function  GetCouleurEntiteRGBBySecteur(const E: TBaseStation): TColor;
-    function  GetCouleurRGBByIdxSecteur(const Idx: integer): TColor;
+    function  GetCouleurEntiteBySecteur(const E: TBaseStation): TGHTopoColor;
+    function  GetCouleurEntiteByIdxSecteur(const Idx: integer): TGHTopoColor;
     // couleurs en fonction des expés
-    function  GetCouleurEntiteRGBAByExpe(const E: TBaseStation): TColorRGBA;
-    function  GetCouleurEntiteRGBByExpe(const E: TBaseStation): TColor;
-    function  GetCouleurRGBExpeByIDX(const IDX: integer): TColor;
-    function  GetCouleurRGBAExpeByIdx(const IDX: TNumeroExpe): TColorRGBA;
+    function  GetCouleurEntiteByExpe(const E: TBaseStation): TGHTopoColor;
+    function  GetCouleurEntiteByIdxExpe(const IDX: TNumeroExpe): TGHTopoColor;
     // gestion des entrées
     procedure ClearTableEntrances();
     procedure AddAEntrance(const AEntree: TEntrance);
@@ -267,7 +263,7 @@ type
     // couleur en fonction de l'altitude
     procedure CalcCouleursByDepth(const QColorZMini, QColorZMaxi: TColor);
     // couleur en fonction du mode de travail
-    function  GetColorViseeFromModeRepresentation(const M: TModeRepresentationGaleries; const E: TBaseStation): TColor;
+    function  GetColorViseeFromModeRepresentation(const M: TModeRepresentationGaleries; const E: TBaseStation): TGHTopoColor;
     // diagrammes des directions et des altitudes
     function  ParseRoseDiagram(const NbPetales: integer; const ViseeMini: double): boolean;
     function  ParseDepthHistogramme(const NbPetales: integer; const ViseeMini: double; const Normalize: boolean): Boolean;
@@ -835,159 +831,72 @@ end;
 
 
 //******************************************************************************
-function TBDDEntites.GetCouleurEntiteRGBAByReseau(const E: TBaseStation): TColorRGBA;
+function TBDDEntites.GetCouleurEntiteByReseau(const E: TBaseStation): TGHTopoColor;
 var
-  WU : TColor;
   EWE: TReseau;
 begin
-  try
-    EWE  := self.GetReseau(E.eReseau);
-    WU   := EWE.ColorReseau;
-  except
-    WU   := clWhite;
-  end;
-  Result.setFrom(WU, $FF);
+  EWE  := self.GetReseau(E.eReseau);
+  Result := EWE.ColorReseau;
 end;
 
+function TBDDEntites.GetCouleurEntiteByIdxReseau(const Idx: integer): TGHTopoColor;
+var
+  EWE: TReseau;
+begin
+  EWE := self.GetReseau(Idx);
+  Result := EWE.ColorReseau;
+end;
 
-function TBDDEntites.GetCouleurEntiteRGBByEntrance(const E: TBaseStation): TColor;
+function TBDDEntites.GetCouleurEntiteByEntrance(const E: TBaseStation): TGHTopoColor;
 var
   EWE: TEntrance;
 begin
-  try
-    EWE    := self.GetEntrance(E.eEntrance);
-    Result := EWE.eCouleur;
-  except
-    Result := clWhite;
-  end;
+  EWE    := self.GetEntrance(E.eEntrance);
+  result := EWE.eCouleur;
 end;
 
-function TBDDEntites.GetCouleurRGBByIdxEntrance(const Idx: integer): TColor;
+function TBDDEntites.GetCouleurEntiteByIdxEntrance(const Idx: integer): TGHTopoColor;
 var
   EWE: TEntrance;
 begin
-  try
-    EWE    := self.GetEntrance(Idx);
-    Result := EWE.eCouleur;
-  except
-    Result := clGray;
-  end;
+  EWE    := self.GetEntrance(Idx);
+  Result := EWE.eCouleur;
 end;
 
 
-
-function TBDDEntites.GetCouleurEntiteRGBByReseau(const E: TBaseStation): TColor;
-var
-  EWE: TReseau;
-begin
-  try
-    EWE    := self.GetReseau(E.eReseau);
-    Result := EWE.ColorReseau;
-  except
-    Result := clWhite;
-  end;
-end;
-function TBDDEntites.GetCouleurRGBByIdxReseau(const Idx: integer): TColor;
-var
-  EWE: TReseau;
-begin
-  try
-    EWE    := self.GetReseau(Idx);
-    Result := EWE.ColorReseau;
-  except
-    Result := clWhite;
-  end;
-end;
-
-function TBDDEntites.GetCouleurEntiteRGBABySecteur(const E: TBaseStation): TColorRGBA;
-var
-  EWE: TSecteur;
-  WU : TColor;
-begin
-  try
-    EWE := self.GetSecteur(E.eSecteur);
-    WU  := EWE.CouleurSecteur;
-  except
-    WU  := clWhite;
-  end;
-  Result.setFrom(WU, $FF);
-end;
-
-function TBDDEntites.GetCouleurEntiteRGBBySecteur(const E: TBaseStation): TColor;
+function TBDDEntites.GetCouleurEntiteBySecteur(const E: TBaseStation): TGHTopoColor;
 var
   EWE: TSecteur;
 begin
-  try
-    EWE     := self.GetSecteur(E.eSecteur);
-    Result  := EWE.CouleurSecteur;
-  except
-    Result := clWhite;
-  end;
+  EWE := self.GetSecteur(E.eSecteur);
+  Result := EWE.CouleurSecteur;
 end;
 
-function TBDDEntites.GetCouleurRGBByIdxSecteur(const Idx: integer): TColor;
+
+function TBDDEntites.GetCouleurEntiteByIdxSecteur(const Idx: integer): TGHTopoColor;
 var
   EWE: TSecteur;
 begin
-  try
-    EWE     := self.GetSecteur(Idx);
-    Result  := EWE.CouleurSecteur;
-  except
-    Result := clWhite;
-  end;
+  EWE     := self.GetSecteur(Idx);
+  Result  := EWE.CouleurSecteur;
 end;
 
-function TBDDEntites.GetCouleurEntiteRGBByExpe(const E: TBaseStation): TColor;
+function TBDDEntites.GetCouleurEntiteByExpe(const E: TBaseStation): TGHTopoColor;
 var
   EWE: TExpe;
 begin
-  try
-    EWE := self.GetExpeByIndex(E.eExpe);
-    Result  := FPalette256.GetColorByIndex(EWE.IdxCouleur);
-  except
-    Result := clWhite;
-  end;
+  EWE := self.GetExpeByIndex(E.eExpe);
+  Result.setFrom(FPalette256.GetColorByIndex(EWE.IdxCouleur), 255);
 end;
-
-function TBDDEntites.GetCouleurEntiteRGBAByExpe(const E: TBaseStation): TColorRGBA;
+function TBDDEntites.GetCouleurEntiteByIdxExpe(const IDX: TNumeroExpe): TGHTopoColor;
 var
   EWE: TExpe;
   WU : TColor;
 begin
-  try
-    EWE := self.GetExpeByIndex(E.eExpe);
-    WU  := FPalette256.GetColorByIndex(EWE.IdxCouleur);
-  except
-    WU := clWhite;
-  end;
-  Result.setFrom(WU, $FF);
-end;
-function TBDDEntites.GetCouleurRGBAExpeByIdx(const IDX: TNumeroExpe): TColorRGBA;
-var
-  EWE: TExpe;
-  WU : TColor;
-begin
-  try
-    EWE := self.GetExpeByIndex(IDX);
-    WU  := FPalette256.GetColorByIndex(EWE.IdxCouleur);
-  except
-    WU := clWhite;
-  end;
-  Result.setFrom(WU, $FF);
+  EWE := self.GetExpeByIndex(IDX);
+  Result.setFrom(FPalette256.GetColorByIndex(EWE.IdxCouleur), 255);
 end;
 
-
-function TBDDEntites.GetCouleurRGBExpeByIDX(const IDX: integer): TColor;
-var
-  EWE: TExpe;
-begin
-  try
-    EWE := self.GetExpeByIndex(IDX);
-    Result  := FPalette256.GetColorByIndex(Idx);
-  except
-    Result := clWhite;
-  end;
-end;
 //******************************************************************************
 // Encombrement du réseau
 // définir mini et maxi
@@ -1773,7 +1682,7 @@ begin
                   [QID  ,
                    E.IDTerrain,
                    E.Type_Entite,
-                   GetCouleurEntiteRGBByExpe(E), //E.ColorEntite,
+                   GetCouleurEntiteByExpe(E).toTColor(), //E.ColorEntite,
                    E.PosExtr0.X, E.PosExtr0.Y, E.PosExtr0.Z,
                    E.PosStation.X, E.PosStation.Y, E.PosStation.Z,
                    E.PosPG.X, E.PosPG.Y,  E.PosOPG.Z, // Z1PB,
@@ -1794,7 +1703,7 @@ begin
                     [QID  ,
                      E.IDTerrain,
                      E.Type_Entite,
-                     GetCouleurEntiteRGBByExpe(E),
+                     GetCouleurEntiteByExpe(E).toTColor(),
                      E.PosExtr0.X, E.PosExtr0.Y, E.PosExtr0.Z,
                      E.PosStation.X, E.PosStation.Y, E.PosStation.Z,
                      E.PosPG.X, E.PosPG.Y,  E.PosOPG.Z, // Z1PB,
@@ -1829,17 +1738,17 @@ end;
 
 
 
-function TBDDEntites.GetColorViseeFromModeRepresentation(const M: TModeRepresentationGaleries; const E: TBaseStation): TColor;
+function TBDDEntites.GetColorViseeFromModeRepresentation(const M: TModeRepresentationGaleries; const E: TBaseStation): TGHTopoColor;
 begin
   case M of
-    rgENTRANCES: Result := GetCouleurEntiteRGBByEntrance(E);
-    rgRESEAUX  : Result := GetCouleurEntiteRGBByReseau(E);
-    rgSECTEURS : Result := GetCouleurEntiteRGBBySecteur(E);
-    rgSEANCES  : Result := GetCouleurEntiteRGBByExpe(E);
-    rgGRAY     : Result := clSilver;
-    rgDEPTH    : Result := E.CouleurDegrade;
+    rgENTRANCES: Result := GetCouleurEntiteByEntrance(E);
+    rgRESEAUX  : Result := GetCouleurEntiteByReseau(E);
+    rgSECTEURS : Result := GetCouleurEntiteBySecteur(E);
+    rgSEANCES  : Result := GetCouleurEntiteByExpe(E);
+    rgGRAY     : Result.setFrom(clSilver);
+    rgDEPTH    : Result.setFrom(E.CouleurDegrade);
   else
-    Result     := clSilver;
+    Result.setFrom(clSilver);
   end;
 end;
 
@@ -2097,17 +2006,18 @@ var
     i, Nb: Integer;
     EWE  : TEntrance;
     NS   : String;
-    WU: TColor;
+    WU: TGHTopoColor;
+
   begin
     Nb := GetNbEntrances();
     for i := 0 to Nb - 1 do
     begin
       EWE := GetEntrance(i);
       NS  := Format(FMT_STYLE_ENTRANCE, [i]);
-      WU  := GetCouleurRGBByIdxEntrance(i);
+      WU  := GetCouleurEntiteByIdxEntrance(i);
       FSVGCanvas.WriteStyleLinePolygoneTexte(NS,
-                                             WU, 255, 0.01, psSolid,
-                                             WU, Param2D.ongFillOpacite, bsSolid,
+                                             WU.toTColor(), 255, 0.01, psSolid,
+                                             WU.toTColor(), Param2D.ongFillOpacite, bsSolid,
                                              DEFAULT_FONT_NAME, 0.3, clBlack, 255, [fsBold], EWE.eNomEntree);
     end;
   end;
@@ -2116,17 +2026,17 @@ var
     i, Nb: Integer;
     EWE  : TReseau;
     NS   : String;
-    WU: TColor;
+    WU: TGHTopoColor;
   begin
     Nb := GetNbReseaux;
     for i := 0 to Nb - 1 do
     begin
       EWE := GetReseau(i);
       NS  := Format(FMT_STYLE_RESEAU, [i]);
-      WU  := GetCouleurRGBByIdxReseau(i);
+      WU  := GetCouleurEntiteByIdxReseau(i);
       FSVGCanvas.WriteStyleLinePolygoneTexte(NS,
-                                             WU, 255, 0.01, psSolid,
-                                             WU, Param2D.ongFillOpacite, bsSolid,
+                                             WU.toTColor(), 255, 0.01, psSolid,
+                                             WU.toTColor(), Param2D.ongFillOpacite, bsSolid,
                                              DEFAULT_FONT_NAME, 0.3, clBlack, 255, [], EWE.NomReseau);
     end;
   end;
@@ -2135,17 +2045,17 @@ var
     i, Nb: Integer;
     EWE  : TSecteur;
     NS   : String;
-    WU   : TColor;
+    WU: TGHTopoColor;
   begin
     Nb := GetNbSecteurs;
     for i := 0 to Nb - 1 do
     begin
       EWE := GetSecteur(i);
       NS  := Format(FMT_STYLE_SECTEUR, [i]);
-      WU  := GetCouleurRGBByIdxSecteur(i);
+      WU  := GetCouleurEntiteByIdxSecteur(i);
       FSVGCanvas.WriteStyleLinePolygoneTexte(NS,
-                                             WU, 255, 0.01, psSolid,
-                                             WU, Param2D.ongFillOpacite, bsSolid,
+                                             WU.toTColor(), 255, 0.01, psSolid,
+                                             WU.toTColor(), Param2D.ongFillOpacite, bsSolid,
                                              DEFAULT_FONT_NAME, 0.3, clBlack, 255, [fsBold], EWE.NomSecteur);
 
     end;
@@ -2155,17 +2065,17 @@ var
     i, Nb: Integer;
     EWE  : TExpe;
     NS   : String;
-    WU: TColor;
+    WU: TGHTopoColor;
   begin
     Nb := GetNbExpes;
     for i := 0 to Nb - 1 do
     begin
       EWE := GetExpe(i);
       NS  := Format(FMT_STYLE_SEANCE, [EWE.IDExpe]);
-      WU :=  GetCouleurRGBExpeByIDX(EWE.IdxCouleur);
+      WU :=  GetCouleurEntiteByIdxExpe(EWE.IdxCouleur);
       FSVGCanvas.WriteStyleLinePolygoneTexte(NS,
-                                             WU, 255, 0.01, psSolid,
-                                             WU, Param2D.ongFillOpacite, bsSolid,
+                                             WU.toTColor(), 255, 0.01, psSolid,
+                                             WU.toTColor(), Param2D.ongFillOpacite, bsSolid,
                                              DEFAULT_FONT_NAME, 0.3, clBlack, 255, [fsBold], EWE.Commentaire);
     end;
   end;
@@ -2831,7 +2741,7 @@ begin
         for i := 0 to Nb - 1 do
         begin
           MyEntite := GetEntiteVisee(i);
-          MyPen.Color := GetColorViseeFromModeRepresentation(FM, MyEntite);
+          MyPen.Color := GetColorViseeFromModeRepresentation(FM, MyEntite).toTColor();
           MyPen.fWidth:= 0.50;
           MyPSCanvas.SetPen(MyPen);
           MyPSCanvas.DrawLine('',
@@ -2885,7 +2795,7 @@ begin
           MyEntite := GetEntiteVisee(i);
           if (MyEntite.Type_Entite in [tgDEFAULT, tgFOSSILE, tgVADOSE, tgENNOYABLE, tgSIPHON]) then
           begin
-            MyPen.Color := GetColorViseeFromModeRepresentation(FM, MyEntite);
+            MyPen.Color := GetColorViseeFromModeRepresentation(FM, MyEntite).toTColor();
             MyPen.fWidth:= 0.00;
             PP[0].setFrom(MyEntite.PosOPG.X, MyEntite.PosOPG.Y);
             PP[1].setFrom(MyEntite.PosOPD.X, MyEntite.PosOPD.Y);

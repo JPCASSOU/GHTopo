@@ -473,11 +473,11 @@ begin
   WrtLinFmt('  %s.%s  = new Array();', [JS_THIS, JS_GRAPH_LISTE_NOEUDS]);
   WrtLinFmt('  %s.%s    = new Array();', [JS_THIS, JS_GRAPH_SHORTEST_PATH]);
 
-  WrtLinFmt('  %s.FXMini       = %d;', [JS_THIS, ToJSCoord(self.FXMini)]);
-  WrtLinFmt('  %s.FYMini       = %d;', [JS_THIS, ToJSCoord(self.FYMini)]);
+  WrtLinFmt('  %s.FXMini       = %d;', [JS_THIS, ToJSCoord(self.FEtendue.X1)]);
+  WrtLinFmt('  %s.FYMini       = %d;', [JS_THIS, ToJSCoord(self.FEtendue.Y1)]);
 
-  WrtLinFmt('  %s.FXMaxi       = %d;', [JS_THIS, ToJSCoord(self.FXMaxi)]);
-  WrtLinFmt('  %s.FYMaxi       = %d;', [JS_THIS, ToJSCoord(self.FYMaxi)]);
+  WrtLinFmt('  %s.FXMaxi       = %d;', [JS_THIS, ToJSCoord(self.FEtendue.X2)]);
+  WrtLinFmt('  %s.FYMaxi       = %d;', [JS_THIS, ToJSCoord(self.FEtendue.Y2)]);
   BeginClassJSFunction(JS_THIS, 'Init');
     pass;
   EndClassJSFunction();

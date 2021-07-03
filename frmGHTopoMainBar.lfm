@@ -1082,7 +1082,7 @@ object GHTopoMainMenuBar: TGHTopoMainMenuBar
         Caption = '-'
       end
       object MenuItem60: TMenuItem
-        Caption = 'MenuItem60'
+        Caption = 'Test de FTP'
         OnClick = MenuItem60Click
       end
       object mnuMultiThreading: TMenuItem
@@ -1099,6 +1099,13 @@ object GHTopoMainMenuBar: TGHTopoMainMenuBar
       object mnuTUOpenGL3: TMenuItem
         Caption = 'Nouveau viewer OpenGL'
         OnClick = mnuTUOpenGL3Click
+      end
+      object MenuItem63: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem62: TMenuItem
+        Caption = 'Parcours d''un dossier'
+        OnClick = MenuItem62Click
       end
     end
   end

@@ -75,6 +75,7 @@ type
     BitBtn10: TBitBtn;
     BitBtn11: TBitBtn;
     BitBtn12: TBitBtn;
+    BitBtn13: TBitBtn;
     BitBtn2: TBitBtn;
     BitBtn3: TBitBtn;
     BitBtn4: TBitBtn;
@@ -209,7 +210,6 @@ type
     procedure btnNewDocOKClick(Sender: TObject);
     procedure btnQuickOpenCancelClick(Sender: TObject);
     procedure btnQuickOpenOKClick(Sender: TObject);
-    procedure btnRecalcParcoursClick(Sender: TObject);
     procedure btnStationArriveeClick(Sender: TObject);
     procedure btnStationDepartClick(Sender: TObject);
 
@@ -233,7 +233,6 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure lbEtapeClick(Sender: TObject);
     procedure lsbPathRoadMapChange(Sender: TObject);
     procedure lsbPathRoadMapClick(Sender: TObject);
     procedure MenuItem14Click(Sender: TObject);
@@ -243,7 +242,6 @@ type
     procedure mnuSetMainWnd800x600Click(Sender: TObject);
     procedure mnuSetMainWnd640x480Click(Sender: TObject);
     procedure PageControl1Change(Sender: TObject);
-    procedure pnlNavigationClick(Sender: TObject);
 
   strict private
     FModeFonctionnementGHTopoContext2D: TModeFonctionnementGHTopoContext2D;
@@ -299,7 +297,8 @@ type
     procedure ImplementerModifsSerie();
     // Spécifique au DistoX
     function  PreparerCadreDistoX(): boolean;
-    procedure PasserLaViseeAuCadreUtilisateur(const MV: TMesureViseeDistoX; const TV: TTypeViseeDistoX);
+    procedure PasserLaViseeAuCadreUtilisateur(const MV: TMesureViseeDistoX);
+    procedure DetruireDerniereViseeRecue(const MV: TMesureViseeDistoX);
   public
     function  OuvrirLaTopo(const FData, FKrobard: TStringDirectoryFilename; const ForceReinitNewDoc: boolean): boolean;
 end;
@@ -314,19 +313,25 @@ uses
 // dossier de sauvegarde du document courant
 const BACKUP_FOLDER_CURRENT_DOC_TOPO = '0000_Backup_Topo';
 const BACKUP_ROOT_FILENAME           = 'BackUp00';
+// tabindex du plan
+const
+  IDX_ONGLET_GENERAL          = 0;
+  IDX_ONGLET_VUE_EN_PLAN      = 1;
+  IDX_ONGLET_DISTO_X          = 2;
+  IDX_ONGLET_SERIES           = 3;
+  IDX_ONGLET_VISEES_RADIANTES = 4;
+  IDX_ONGLET_LISTES           = 5;
+  IDX_ONGLET_JOURNAL          = 6;
 
 procedure TRPIMainWnd.SetSizeMainWnd(const w, h: integer);
-begin
-  if ((h < 0) or (h < 0)) then
+  procedure Miou(const qw, qh: integer);
   begin
-    self.Width  := Screen.DesktopWidth;
-    self.Height := Screen.DesktopHeight;
-  end
-  else
-  begin
-    self.Width  := w;
-    self.Height := h;
+    self.Width  := qw;
+    self.Height := qh;
   end;
+
+begin
+  if ((h < 0) or (h < 0)) then Miou(Screen.DesktopWidth, Screen.DesktopHeight) else Miou(w, h);
 end;
 
 
@@ -339,15 +344,12 @@ begin
   lbNextWpt.Caption       := '---';
   lbNextWptAzimut.Caption := '---';
   n := FShortestPath.GetNbNoeuds();
-
   if (0 = n) then Exit;
-
   if (IdxWpt = (n-1)) then
   begin
     lbNextWpt.Caption := 'Finish';
     Exit;
   end;
-
   WptCurr := FGraphe.GetStation(FShortestPath.GetNoeud(IdxWpt));
   WptNext := FGraphe.GetStation(FShortestPath.GetNoeud(IdxWpt+1));
   lbNextWpt.Caption := WptNext.ToString();
@@ -357,11 +359,10 @@ begin
   GetBearingInc(qdx, qdy, qdz, QDist, QAz, QIncl, 360.00, 360.00);
   lbNextWptAzimut.Caption:= format('%.1f°', [QAz]);
   // et on centre la carte sur le point
-  showmessagefmt('Next: %d - %f, %f', [WptNext.IDStation, WptNext.Position.X, WptNext.Position.Y]);
+  //showmessagefmt('Next: %d - %f, %f', [WptNext.IDStation, WptNext.Position.X, WptNext.Position.Y]);
   GHTopoContext2DA1.CentrerVueSurPointXY(WptNext.Position.X, WptNext.Position.Y, True, WptNext.ToString());
   // sans modifier la station courante
   //  self.SetCurrentStation(QMyBaseStation, True);
-
 end;
 
 procedure TRPIMainWnd.FormShow(Sender: TObject);
@@ -371,10 +372,7 @@ begin
   //{$ENDIF}
 end;
 
-procedure TRPIMainWnd.lbEtapeClick(Sender: TObject);
-begin
 
-end;
 
 procedure TRPIMainWnd.lsbPathRoadMapChange(Sender: TObject);
 begin
@@ -387,8 +385,6 @@ procedure TRPIMainWnd.lsbPathRoadMapClick(Sender: TObject);
 var
   Nb: Integer;
   MyNode: TBZClassNode;
-  QSr: TNumeroSerie;
-  QSt: TNumeroStation;
 begin
   Nb := FShortestPath.GetNbNoeuds();
   if ((FModeFonctionnementGHTopoContext2D = mfgcNAVIGATION) AND (Nb > 2))then
@@ -400,7 +396,7 @@ end;
 
 procedure TRPIMainWnd.MenuItem14Click(Sender: TObject);
 begin
-  CdrDistoXLazserial1.SetProcTransmitMesureDistoX(PasserLaViseeAuCadreUtilisateur);
+  CdrDistoXLazserial1.SetProcsForMesureDistoX(PasserLaViseeAuCadreUtilisateur, DetruireDerniereViseeRecue);
 end;
 
 procedure TRPIMainWnd.MenuItem16Click(Sender: TObject);
@@ -433,7 +429,8 @@ var
   MySerie: TObjSerie;
 begin
   case PageControl1.ActivePageIndex of
-    3: begin// page des visées en antennes
+    IDX_ONGLET_VISEES_RADIANTES: // page des visées en antennes
+    begin
       MySerie := CdrSerieIndependant1.GetCurrentSerie();
       CdrListeViseesEnAntenne1.SetCurrentInternalIdxSerie(MySerie.GetNumeroDeSerie());
     end;
@@ -442,10 +439,7 @@ begin
   end;
 end;
 
-procedure TRPIMainWnd.pnlNavigationClick(Sender: TObject);
-begin
 
-end;
 
 procedure TRPIMainWnd.acQuitExecute(Sender: TObject);
 begin
@@ -468,6 +462,7 @@ begin
   GHTopoContext2DA1.SetViewLimits(QCBG, QCHD, '');
   GHTopoContext2DA1.SetCurrentNumeroSerieStationPourDistoX(QCurrentSerieDistoX, QCurrentPointDistoX);
   GHTopoContext2DA1.SetCurrentStationBySerSt(QCurrentSerieDistoX, QCurrentPointDistoX);
+  //PageControl1.ActivePageIndex := IDX_ONGLET_VUE_EN_PLAN;
 end;
 
 procedure TRPIMainWnd.acDemanderUneMesureExecute(Sender: TObject);
@@ -483,7 +478,7 @@ end;
 
 procedure TRPIMainWnd.acSaveAsExecute(Sender: TObject);
 begin
-  pnlSaveAs.Visible := false;
+  pnlSaveAs.Visible    := false;
   pnlQuickOpen.Visible := false;
   QuickSaveHorodatee();
   editFileName.Text              := FCurrentDocTopoName;
@@ -533,7 +528,7 @@ begin
   MyQSaveKrobard := MyFolderQSave + MakeFilenameFromDate('QSave_Krobard', Now(), 'xml');
   QSave(MyQSaveData, MyQSaveKrobard);
   // sauvegarde de la topo courante
-  QBackUpFolder := GetGHTopoDirectory() + BACKUP_FOLDER_CURRENT_DOC_TOPO;
+  QBackUpFolder  := GetGHTopoDirectory() + BACKUP_FOLDER_CURRENT_DOC_TOPO;
   ForceDirectories(QBackUpFolder);
   MyQSaveData    := QBackUpFolder + PathDelim + BACKUP_ROOT_FILENAME + '.xtb';
   MyQSaveKrobard := QBackUpFolder + PathDelim + BACKUP_ROOT_FILENAME + '.xml';
@@ -605,7 +600,7 @@ begin
   if (FDocumentToporobot.CheckerLesDonneesTopo() > 0) then
   begin
     CdrListesSimples1.ListerListesSimples(mbddCHECK_ERRORS);
-    PageControl1.ActivePageIndex := 1;
+    PageControl1.ActivePageIndex := IDX_ONGLET_SERIES;
   end;
 end;
 
@@ -629,9 +624,7 @@ var
 begin
   // export graphique du graphe
   QDocTitle := 'Graphe de ' + FDocumentToporobot.GetNomEtude();
-
-  QFilename := GetGHTopoDirectory() +
-               MakeFilenameFromDate('00_Graphe_LT_', Now(), 'htm');
+  QFilename := GetGHTopoDirectory() + MakeFilenameFromDate('00_Graphe_LT_', Now(), 'htm');
   QDepart   := Trim(btnStationDepart.Caption);
   QArrivee  := trim(btnStationArrivee.Caption);
   QLMenu := 200;
@@ -711,10 +704,7 @@ begin
   tabShtDistoX.Caption          := GetResourceString(rsGHTOPO_RPI_MAIN_WND_TAB_DISTOX);
   tabShtAntennes.Caption        := GetResourceString(rsGHTOPO_RPI_MAIN_WND_TAB_ANTENNES);
   SetVisibiliteProgressBar(false);
-  FCurrentStation.aSerie        := 1;
-  FCurrentStation.aStation      := 0;
-  FCurrentStation.eIdxNameSpace := 0;
-  FCurrentStation.aIDTerrain    := '';
+  FCurrentStation.setFrom(0, 1, 0, '');
   self.Constraints.MaxWidth     := FRM_CONSTRAINT_MAX_WIDTH;
   self.Constraints.MaxHeight    := FRM_CONSTRAINT_MAX_HEIGHT;
   FDocTopoOpenedAndReady := false;  // prêt à dessiner le plan
@@ -749,8 +739,7 @@ procedure TRPIMainWnd.FinaliserGHTopoRPC();
 var
   fp: TextFile;
 begin
-  FCurrentStation.aSerie   := 0;
-  FCurrentStation.aStation := 0;
+  FCurrentStation.setFrom(0, 0, 0, '');
   FDocTopoOpenedAndReady := false;  // prêt à dessiner le plan
   try
     GHTopoContext2DA1.CanDraw := false;
@@ -776,21 +765,27 @@ end;
 // Spécifique cadre DistoX
 function TRPIMainWnd.PreparerCadreDistoX(): boolean;
 begin
-  result := CdrDistoXLazserial1.Initialiser(PasserLaViseeAuCadreUtilisateur);
+  result := CdrDistoXLazserial1.Initialiser(PasserLaViseeAuCadreUtilisateur, DetruireDerniereViseeRecue);
 end;
-procedure TRPIMainWnd.PasserLaViseeAuCadreUtilisateur(const MV: TMesureViseeDistoX; const TV: TTypeViseeDistoX);
+procedure TRPIMainWnd.PasserLaViseeAuCadreUtilisateur(const MV: TMesureViseeDistoX);
 begin
-  if (TV = tvdCHEMINEMENT) then
+  if (MV.TypeMesure = tvdCHEMINEMENT) then
   begin
-    pnlAcquitteVisee.Visible := true;
     pnlAcquitteVisee.Caption := Format('%.3f, %.3f, %.3f', [MV.Longueur, MV.Azimut, MV.Pente]);
-    GHTopoContext2DA1.TraiterMesureIssueDuDistoX(MV, TV);
+    pnlAcquitteVisee.Visible := true;
+    GHTopoContext2DA1.TraiterMesureIssueDuDistoX(MV);
     pnlAcquitteVisee.Visible := false;
   end
   else
   begin
-    GHTopoContext2DA1.TraiterMesureIssueDuDistoX(MV, TV);
+    GHTopoContext2DA1.TraiterMesureIssueDuDistoX(MV);
   end;
+end;
+
+procedure TRPIMainWnd.DetruireDerniereViseeRecue(const MV: TMesureViseeDistoX);
+begin
+  AfficherMessageErreur(format('%s.DetruireDerniereViseeRecue(%s)', [self.ClassName, MV.DebugString()]));
+  if (MV.TypeMesure = tvdRADIANTE) then FDocumentToporobot.RemoveLastViseeAntenne();
 end;
 
 { TRPIMainWnd }
@@ -912,7 +907,7 @@ begin
     if (not FileExistsUTF8(FData)) then
     begin
       showMessageFmt(GetResourceString(rsMSG_FILENOTFOUND), [FData]);
-      Exit;
+      Exit(false);
     end;
   end;
   try
@@ -958,7 +953,7 @@ begin
     begin
       ShowMessage('Le fichier comporte des erreurs - Voir les consoles');
       FDocumentToporobot.Finaliser();   // Echec = on détruit l'objet
-      Exit;
+      Exit(false);
     end;
   end
   else if (Pos('.gtx', FC) > 0) then // fichier GHTopo XML ?
@@ -967,7 +962,7 @@ begin
     begin
       ShowMessage('Le fichier comporte des erreurs. Il doit être audité dans un éditeur XML');
       FDocumentToporobot.Finaliser();
-      Exit;
+      Exit(false);
     end;
   end
   else
@@ -978,7 +973,7 @@ begin
       DisplayTextEditor(GetGHTopoDirectory() + ChangeFileExt(ExtractFileName(FDocumentToporobot.GetDatabaseName), '.err'), True);
       // Echec = on détruit l'objet
       FDocumentToporobot.Finaliser();
-      Exit;
+      Exit(false);
     end;
   end;
   self.Caption := MakeTitleMainWindowGHTopo(ExtractFileName(FC));
@@ -1052,7 +1047,7 @@ begin
   PreparerVue2D(FModeFonctionnementGHTopoContext2D, FBDDEntites);
   if (DoReinitDistoX) then PreparerCadreDistoX();
   PreparerCadreViseesAntennes(FDocumentToporobot);
-  PageControl1.ActivePageIndex := 0; // on se pose sur le plan
+  PageControl1.ActivePageIndex := IDX_ONGLET_VUE_EN_PLAN; // on se pose sur le plan
 end;
 procedure TRPIMainWnd.SetPanelStyles(const QCurrStyleIdx: integer);
 var
@@ -1060,22 +1055,18 @@ var
   procedure MiouMiou(const Miou: TStaticText; const SP: TKrobardStylePolyligne; const QSelected: boolean);
   var
     EWE: Boolean;
+    procedure QAT(const BS: TStaticBorderStyle; const BC: TColor; const BW: integer);
+    begin
+      Miou.BorderStyle  := BS;
+      Miou.Color        := BC;
+      Miou.BorderWidth  := BW;
+    end;
   begin
     EWE := (SP.Closed OR SP.Filled);
     Miou.Caption      := IIF(QSelected, 'X', '');
     Miou.Hint         := Format('%s [Poly%s]', [SP.Name, IIF(EWE, 'gone', 'ligne')]);
-    if (EWE) then
-    begin
-      Miou.BorderStyle  := sbsSingle;
-      Miou.Color        := SP.FillColor;
-      Miou.BorderWidth  := 5;
-    end
-    else
-    begin
-      Miou.BorderStyle  := sbsNone;
-      Miou.Color        := SP.LineColor;
-      Miou.BorderWidth  := 1;
-    end;
+    if (EWE) then  QAT(sbsSingle, SP.FillColor, 5)
+             else  QAT(sbsNone  , SP.LineColor, 1);
   end;
 begin
   FC := GHTopoContext2DA1.GetPtrCroquisTerrain();
@@ -1301,10 +1292,7 @@ begin
   SetVisibiliteProgressBar(false);
 end;
 
-procedure TRPIMainWnd.btnRecalcParcoursClick(Sender: TObject);
-begin
 
-end;
 
 
 

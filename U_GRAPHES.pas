@@ -1,3 +1,4 @@
+{$ERROR Inutilisé dans GHTopo}
 // ------------------------------------
 // Version 1.0 : Algorithmes de graphes
 // ------------------------------------

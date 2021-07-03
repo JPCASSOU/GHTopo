@@ -123,7 +123,7 @@ var
   begin
     ResetColorRow(lsbProfilsTopoMaillage, ARect, bg, tc);
     DrawColTexte(lsbProfilsTopoMaillage, ARect, HeaderControl1.Sections.Items[0], false, Format(FORMAT_NB_INTEGER,[Index]));
-    DrawColRectColoreWithTexte(lsbProfilsTopoMaillage, ARect, HeaderControl1.Sections.Items[1], True, bg, PF.LineAttributes.Color, '');
+    DrawColRectColoreWithTexte(lsbProfilsTopoMaillage, ARect, HeaderControl1.Sections.Items[1], True, bg, PF.LineAttributes.toTColor(), '');
     DrawColTexte(lsbProfilsTopoMaillage, ARect, HeaderControl1.Sections.Items[2], True, PF.ProfilName);
   end;
 begin

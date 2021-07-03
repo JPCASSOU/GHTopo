@@ -272,16 +272,16 @@ begin
   // doit-on dessiner les volumes
   chkVolumesVisibles.Checked   := (edVolumes in  O.ElementsDrawn);
   // couleurs
-  btnCubeColor.ButtonColor     := O.LineCube.Color;
+  btnCubeColor.ButtonColor     := O.LineCube.ColorRGBA.toTColor();
   btnBGColor.ButtonColor       := O.ColorBackGround;
-  btnReferentielColor.Color    := O.LineReferentiel.Color;
+  btnReferentielColor.Color    := O.LineReferentiel.toTColor();
 
   btnDegradeZMiniReseau.ButtonColor  := O.ColorZMiniReseau;
   btnDegradeZMaxiReseau.ButtonColor  := O.ColorZMaxiReseau;
 
   // MNT
   chkDegradeAltitudesMNT.Checked     := O.MaillageUseDegrades;
-  trkbMaillageOpacity.Position       := O.LineMaillage.Opacity;
+  trkbMaillageOpacity.Position       := O.LineMaillage.getOpacity();
   cmbModeDessinMaillage.ItemIndex    := Ord(O.MaillageModeDessin);
   btnDegradeZMiniMNT.ButtonColor     := O.ColorZMiniMNT;
   btnDegradeZMaxiMNT.ButtonColor     := O.ColorZMaxiMNT;
@@ -315,8 +315,8 @@ begin
   editLargeurTraitCenterlineInMM.Value  := O.ongViseesLargeurInMM;
 
   // sauvegarde temp des coordonnées de la zone d'affichage (non modifiables)
-  FC1 := O.ongC1; //  FC1.X := O.ongX1;  FC1.Y := O.ongY1;
-  FC2 := O.ongC2; // FC2.X := O.ongX2;  FC2.Y := O.ongY2;
+  FC1 := O.ongC1;
+  FC2 := O.ongC2;
   lbX1Y1.Caption := Format('Du coin: %.0f - %.0f', [FC1.X, FC1.Y]);
   lbX2Y2.Caption := Format('Au coin: %.0f - %.0f', [FC2.X, FC2.Y]);
   // dégradé

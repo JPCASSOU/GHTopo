@@ -20,7 +20,11 @@ var
     Q666: TTypeDeVisee;
     EWE: TGHStringArray;
     QStartPt, QNumSerie, QEndPoint: LongInt;
+    QV: TPoint3Df;
   begin
+    QV.setFrom(E.PosStation.X - E.PosExtr0.X,
+               E.PosStation.Y - E.PosExtr0.Y,
+               E.PosStation.Z - E.PosExtr0.Z);
     Result := False;
     // -------
     case F.TypeFiltre of
@@ -34,9 +38,7 @@ var
           kFLT_ID : Result := (Trim(F.Valeur) = Trim(E.IDTerrain));
           kFLT_LONGUEUR:
           begin // longueur des visées
-            Long := Hypot3D(E.PosStation.X - E.PosExtr0.X,
-                            E.PosStation.Y - E.PosExtr0.Y,
-                            E.PosStation.Z - E.PosExtr0.Z);
+            Long := QV.getNorme();
             case F.Operateur of
               1: Result := (Long <= ConvertirEnNombreReel(F.Valeur, 0.00));
               3: Result := (Long >= ConvertirEnNombreReel(F.Valeur, 0.00));
@@ -241,20 +243,15 @@ var
           begin // intervalle sur les azimuts
             Af := ConvertirEnNombreReel(F.BorneInf, 0.00);
             Bf := ConvertirEnNombreReel(F.BorneSup, 0.00);
-            V := GetAzimut(E.PosStation.X - E.PosExtr0.X,
-                           E.PosStation.Y - E.PosExtr0.Y,
-                           UNITE_ANGULAIRE_PAR_DEFAUT);
+            V  := QV.getAzimut(UNITE_ANGULAIRE_PAR_DEFAUT);
             Result := ((V > Af) and (V < Bf)) or (((V + 180) > Af) and ((V + 180) < Bf));
           end;
           kFLT_PENTE:
           begin // intervalle sur les inclinaisons
             Af := ConvertirEnNombreReel(F.BorneInf, 0.00);
             Bf := ConvertirEnNombreReel(F.BorneSup, 0.00);
-            Long := 1e-12 + Hypot3D(
-              E.PosStation.X - E.PosExtr0.X,
-              E.PosStation.Y - E.PosExtr0.Y,
-              E.PosStation.Z - E.PosExtr0.Z);
-            H := E.PosStation.Z - E.PosExtr0.Z;
+            Long := QV.getNorme() + 1E-12;
+            H := QV.getProjHZ();
             V := ArcSin(H / Long) * INVDEGREES;
             Result := ((V > Af) and (V < Bf));
           end;

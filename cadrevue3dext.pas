@@ -28,7 +28,7 @@ uses
   SVGCanvasUnit;
 // types locaux
 type TViseesTopo2D = record
-  ColorEntite       : integer;                 // ID unique de l'entité
+  ColorEntite       : TColor;                 // ID unique de l'entité
   Type_Entite       : TTypeDeVisee;             // Type d'entité
   DateLeve          : TDateTime;
   Sub_System        : integer;                 // Sous-réseau
@@ -506,7 +506,10 @@ procedure TCdrVue3DExt.CalcProjPolygonale(const DoDestTCanvas: boolean; const Do
           teuVISEES  : E := FBDDEntites.GetEntiteVisee(i);
           teuANTENNES: E := FBDDEntites.GetEntiteAntenne(i);
         end;
-        V.ColorEntite := IIF(Miou = teuVISEES, FBDDEntites.GetColorViseeFromModeRepresentation(FVue3DParams.ModeRepresentation, E), clGray);
+        if (Miou = teuVISEES) then
+          V.ColorEntite := FBDDEntites.GetColorViseeFromModeRepresentation(FVue3DParams.ModeRepresentation, E).toTColor()
+        else
+          V.ColorEntite := clGray;
         V.Type_Entite  := E.Type_Entite;
         V.DateLeve     := E.DateLeve;
         PtOut := Get2DDepthCoordinatesFromP3D(E.PosExtr0);
@@ -594,7 +597,7 @@ begin
                   [QID  ,
                    EWE.IDTerrain,
                    EWE.Type_Entite,
-                   FBDDEntites.GetCouleurEntiteRGBByExpe(EWE), //EWE.ColorEntite,
+                   FBDDEntites.GetCouleurEntiteByExpe(EWE).toTColor(), //EWE.ColorEntite,
                    PtOutExtr1.X, PtOutExtr1.Y, EWE.PosStation.Z,
                    PtOutExtr2.X, PtOutExtr2.Y, EWE.PosStation.Z,
                    EWE.PosPG.X, EWE.PosPG.Y, EWE.PosOPG.Z,        // EWE.X2PG, EWE.Y2PG,  EWE.Z1PB,
@@ -617,7 +620,7 @@ begin
                     [QID  ,
                      EWE.IDTerrain,
                      EWE.Type_Entite,
-                     FBDDEntites.GetCouleurEntiteRGBByExpe(EWE), //EWE.ColorEntite,
+                     FBDDEntites.GetCouleurEntiteByExpe(EWE).toTColor(), //EWE.ColorEntite,
                      PtOutExtr1.X, PtOutExtr1.Y, EWE.PosStation.Z,
                      PtOutExtr2.X, PtOutExtr2.Y, EWE.PosStation.Z,
                      EWE.PosPG.X, EWE.PosPG.Y, EWE.PosOPG.Z,        // EWE.X2PG, EWE.Y2PG,  EWE.Z1PB,
@@ -638,7 +641,7 @@ end;
 function TCdrVue3DExt.MakePortionTubeVisee(const E: TBaseStation; out APortionTube: TPortionTubeVisee): boolean;
 var
   P1, P2, P3, P4: TPoint3Df;
-  QC: TColor;
+  QC: TGHTopoColor;
   function MakeQuad(const QP1, QP2, QP3, QP4: TPoint3Df): TQuad;
   var
     Q: TQuad;
@@ -708,14 +711,14 @@ var
   i: integer;
   P1, P2, P3, P4: TPoint3Df;
   E: TBaseStation;
-  QC : TColor;
+  //QC : TColor;
   PTC: TPortionTubeVisee;
 begin
   FTableTubesCavite.ClearListe();
   for i := LOW_INDEX to FBDDEntites.GetNbEntitesVisees() - 1 do
   begin
     E  := FBDDEntites.GetEntiteVisee(i);
-    QC := FBDDEntites.GetColorViseeFromModeRepresentation(FVue3DParams.ModeRepresentation, E);
+    //QC := FBDDEntites.GetColorViseeFromModeRepresentation(FVue3DParams.ModeRepresentation, E).toTColor();
     if (MakePortionTubeVisee(E, PTC)) then FTableTubesCavite.AddElement(PTC);
   end;
 end;
@@ -989,19 +992,17 @@ end;
 
 function TCdrVue3DExt.Get2DDepthCoordinatesFromXYZ(const QX, QY, QZ: double): TPoint2DDepth;
 var
-  QXX, QYY, QZZ: Double;
+  QPP: TPoint3Df;
 begin
-  QXX := QX+FOffset.X;
-  QYY := QY+FOffset.Y;
-  QZZ := QZ+FOffset.Z;
-  Result.X := -(QXX) * FMatAux[1] +
-               (QYY) * FMatAux[3];
-  Result.Y := -(QXX) * FMatAux[5]
-              -(QYY) * FMatAux[6]+
-               (FVue3DParams.CoefMagnification*(QZZ)) * FMatAux[4];
-  Result.Depth:= (-(QXX) * FMatAux[7]
-                  -(QYY) * FMatAux[8]
-                  -(QZZ) * FMatAux[2]);
+  QPP.setFrom(QX+FOffset.X, QY+FOffset.Y, QZ+FOffset.Z);
+  Result.X := -(QPP.X) * FMatAux[1] +
+               (QPP.Y) * FMatAux[3];
+  Result.Y := -(QPP.X) * FMatAux[5]
+              -(QPP.Y) * FMatAux[6]+
+               (FVue3DParams.CoefMagnification*(QPP.Z)) * FMatAux[4];
+  Result.Depth:= (-(QPP.X) * FMatAux[7]
+                  -(QPP.Y) * FMatAux[8]
+                  -(QPP.Z) * FMatAux[2]);
 end;
 
 function TCdrVue3DExt.Get2DDepthCoordinatesFromP3D(const QP: TPoint3Df): TPoint2DDepth;
@@ -1025,7 +1026,7 @@ var
 
      QBmp.CanvasBGRA.Pen.Color := clBlack;
      QBmp.CanvasBGRA.Pen.Width := 0;
-     QBmp.CanvasBGRA.Brush.Color:= MyPortionTube.CouleurTube;
+     QBmp.CanvasBGRA.Brush.Color:= MyPortionTube.CouleurTube.toTColor();
      QBmp.CanvasBGRA.MoveTo(P[0]);
      for v:=1 to 3 do QBmp.CanvasBGRA.LineTo(P[v].X,P[v].Y);
      QBmp.CanvasBGRA.Polygon(P);
@@ -1301,7 +1302,7 @@ var
         FSVGCanvas.AddVertex(QD.Vertex2D_C.x, QD.Vertex2D_C.y);
         FSVGCanvas.AddVertex(QD.Vertex2D_D.x, QD.Vertex2D_D.y);
       FSVGCanvas.EndListeVertex();
-      if (QParams3D.ModeRepresentation = rgDEPTH) then FSVGCanvas.DrawPolygonWithoutStyle(clBlack, MyPortionTube.CouleurTube, 0.1, True, false)
+      if (QParams3D.ModeRepresentation = rgDEPTH) then FSVGCanvas.DrawPolygonWithoutStyle(clBlack, MyPortionTube.CouleurTube.toTColor(), 0.1, True, false)
                                                   else FSVGCanvas.DrawPolygon(QStyle, false);
     end;
   begin
@@ -1327,7 +1328,7 @@ var
     begin
       EWE := FBDDEntites.GetEntrance(i);
       NS  := Format(FMT_STYLE_ENTRANCE, [i]);
-      WU  := FBDDEntites.GetCouleurRGBByIdxEntrance(i);
+      WU  := FBDDEntites.GetCouleurEntiteByIdxEntrance(i).toTColor();
       FSVGCanvas.WriteStyleLinePolygoneTexte(NS,
                                              clBlack, 255, 0.1, psSolid,
                                              WU,
@@ -1347,7 +1348,7 @@ var
     begin
       EWE := FBDDEntites.GetReseau(i);
       NS  := Format(FMT_STYLE_RESEAU, [i]);
-      WU  := FBDDEntites.GetCouleurRGBByIdxReseau(i);
+      WU  := FBDDEntites.GetCouleurEntiteByIdxReseau(i).toTColor();
       FSVGCanvas.WriteStyleLinePolygoneTexte(NS,
                                              clBlack, 255, 0.1, psSolid,
                                              WU, QParams3D.FillOpacity, bsSolid,
@@ -1367,7 +1368,7 @@ var
     begin
       EWE := FBDDEntites.GetSecteur(i);
       NS  := Format(FMT_STYLE_SECTEUR, [i]);
-      WU := FBDDEntites.GetCouleurRGBByIdxSecteur(i);
+      WU := FBDDEntites.GetCouleurEntiteByIdxSecteur(i).toTColor();
       FSVGCanvas.WriteStyleLinePolygoneTexte(NS,
                                              clBlack, 255, 0.02, psSolid,
                                              WU, QParams3D.FillOpacity, bsSolid,
@@ -1386,7 +1387,7 @@ var
     begin
       EWE := FBDDEntites.GetExpe(i);
       NS  := Format(FMT_STYLE_SEANCE, [EWE.IDExpe]);
-      WU :=  FBDDEntites.GetCouleurRGBExpeByIDX(EWE.IdxCouleur);
+      WU :=  FBDDEntites.GetCouleurEntiteByIdxExpe(EWE.IdxCouleur).toTColor();
       FSVGCanvas.WriteStyleLinePolygoneTexte(NS,
                                              clBlack, 255, 0.1, psSolid,
                                              WU, QParams3D.FillOpacity, bsSolid,
@@ -1512,7 +1513,7 @@ begin
       FSVGCanvas.EndPatternsSection;                                                                // les patterns ici
       FSVGCanvas.BeginStylesSection;                                                                 // section de styles
         FSVGCanvas.WriteStyleLinePolygoneTexte(NOM_STYLE_CUBE_ENGLOBANT,
-                                               QParams3D.LineCube.Color, QParams3D.LineCube.Opacity, QParams3D.LineCube.LineWidthInMillimeters, psSolid,
+                                               QParams3D.LineCube.toTColor(), QParams3D.LineCube.getOpacity(), QParams3D.LineCube.LineWidthInMillimeters, psSolid,
                                                clWhite, 128, bsClear,
                                                DEFAULT_FONT_NAME, DEFAULT_FONT_HEIGHT_IN_MM ,
                                                clBlack, 255, [],
@@ -1529,7 +1530,7 @@ begin
                                                DEFAULT_FONT_NAME, DEFAULT_FONT_HEIGHT_IN_MM, clBlack, 255, [], 'Background');
 
         FSVGCanvas.WriteStyleLinePolygoneTexte(NOM_STYLE_MAILLAGE,
-                                               QParams3D.LineMaillage.Color, QParams3D.LineMaillage.Opacity, QParams3D.LineMaillage.LineWidthInMillimeters, psSolid,
+                                               QParams3D.LineMaillage.toTColor(), QParams3D.LineMaillage.getOpacity(), QParams3D.LineMaillage.LineWidthInMillimeters, psSolid,
                                                clOlive, 64, bsSolid,
                                                DEFAULT_FONT_NAME, DEFAULT_FONT_HEIGHT_IN_MM, clBlack, 255, [], 'Maillage');
         FSVGCanvas.WriteStyleLinePolygoneTexte(NOM_STYLE_PROFIL_DEFAUT,

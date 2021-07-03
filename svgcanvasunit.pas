@@ -127,6 +127,7 @@ type
     // définition des feuilles de styles
     procedure BeginStylesSection();
     procedure EndStylesSection();
+    // /!\ Ne pas utiliser le TGHTopoColor ici (indépendance)
     procedure WriteStyleLinePolygoneTexte(const QNomstyle: string;
                                           const QLineColor: TColor;
                                           const QLineOpacity: byte;

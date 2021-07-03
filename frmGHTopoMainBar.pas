@@ -18,7 +18,7 @@ uses
   UnitGraphes1,
   CodeCalculTopo,
   ConvertisseurJPC,
-  UnitFichesTopo,
+  //UnitFichesTopo,
   CallDialogsStdVersion,
   unitUtilsComposants, UnitObjetSerie,
   IniFiles,
@@ -102,6 +102,8 @@ type
     MenuItem59: TMenuItem;
     MenuItem60: TMenuItem;
     MenuItem61: TMenuItem;
+    MenuItem62: TMenuItem;
+    MenuItem63: TMenuItem;
     mnuTUOpenGL3: TMenuItem;
     mnuTUBoussole: TMenuItem;
     mnuMultiThreading: TMenuItem;
@@ -251,6 +253,7 @@ type
     procedure lbCurrentCodeEPSGClick(Sender: TObject);
     procedure MenuItem45Click(Sender: TObject);
     procedure MenuItem60Click(Sender: TObject);
+    procedure MenuItem62Click(Sender: TObject);
     procedure mnuTUBoussoleClick(Sender: TObject);
     procedure mnuMultiThreadingClick(Sender: TObject);
 
@@ -311,9 +314,11 @@ var
 implementation
 {$R *.lfm}
 uses
-  unitAnalyseReseau2
+  //unitAnalyseReseau2
   {$IFDEF MSWINDOWS}
-    {$IFDEF DISP_FRM_JOURNAL},  frmJournal   {$ENDIF}
+    {$IFDEF DISP_FRM_JOURNAL}
+    frmJournal
+    {$ENDIF}
   {$ENDIF}         // console de suivi
   , frmLesListesSimples    // gestion des listes simples
   , frmFrontalSeries       // frontal liste des séries
@@ -388,10 +393,7 @@ begin
   FCroquisTerrain            := TCroquisTerrain.Create;
   FBDDEntites                := TBDDEntites.Create;
   FMonMaillage               := TMaillage.Create();
-
   FDocumentToporobot.ReInitialiser(True);
-  //TODO: A voir si c'est indispensable
-  //FBDDEntites.Initialiser(MakeTPoint3Df(0,0,0), clBlue, clMaroon);
   // création des fenêtres permanentes
   {$IFDEF MSWINDOWS}
      {$IFDEF DISP_FRM_JOURNAL} dlgProcessing      := TdlgProcessing.Create(Application);   {$ENDIF}
@@ -485,7 +487,12 @@ begin
         {$ENDIF}
      {$ENDIF}
   {$ENDIF}
-
+  (*
+  ShowMessage('L''utilisation de GHTopo est interdite aux chrétiens' + #13#10 +
+              'Rapprochez-vous des forces de police ou du Bureau 610' + #13#10 +
+              'Les frais s''élèvent à 65.536 RMB sauf si apostasie');
+      Application.Terminate;
+  //*)
   SetCurrentStation(1,0);
   self.Top     :=0;
   self.left    :=0;
@@ -603,6 +610,20 @@ begin
     FFTPParameters.User     := QValues[2];
   end;
   //*)
+
+end;
+
+procedure TGHTopoMainMenuBar.MenuItem62Click(Sender: TObject);
+const
+  QNOM_DOSSIER_TEST = '000000_DossierTestFonctionsDossier';
+var
+  MonDossierSRC, MonDossierDEST: TStringDirectoryFilename;
+begin
+  MonDossierSRC  := GetGHTopoDirectory() + QNOM_DOSSIER_TEST + PathDelim + '00000_SRC' + PathDelim;
+  MonDossierDEST := GetGHTopoDirectory() + QNOM_DOSSIER_TEST + PathDelim + '00000_TGT' + PathDelim;
+
+  ClearConsoleErreur();
+  TraiterContenuDeDossier(MonDossierSRC, MonDossierDEST);
 
 end;
 
@@ -741,10 +762,7 @@ begin
   MyGraphe := TPathFindingGraphe.Create;
   if (MyGraphe.Initialiser(FDocumentToporobot, FBDDEntites)) then
   begin
-    if (MyGraphe.ConstruireGraphe()) then
-    begin
-      DisplayGrapheOfReseau(FBDDEntites, MyGraphe);
-    end;
+    if (MyGraphe.ConstruireGraphe()) then DisplayGrapheOfReseau(FBDDEntites, MyGraphe);
   end;
 end;
 

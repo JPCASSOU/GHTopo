@@ -115,7 +115,7 @@ const MULTIPLICATEUR = 1/10000;// 1/10000
 const MULTIPLICATEUR = 1.0;
 {$ENDIF OPENGL_ANCIENNE_METHODE}
  // couleur OpenGL
- function PascalToGLColor(const Coul: TColor; const Alpha: byte = 255): TGLColor;
+ function TColorToGLColor(const Coul: TColor; const Alpha: byte = 255): TGLColor;
  const
    m = 1/256;
  begin
@@ -125,13 +125,28 @@ const MULTIPLICATEUR = 1.0;
    Result.A := Alpha       * m;
  end;
  // Retourne sous forme de couleur Pascal la couleur OpenGL passée en argument
- function GLToPascalColor(const Coul: TGLColor): TColor;
+ function TGLColorToTColor(const Coul: TGLColor): TColor;
  const
    m = 256;
  begin
    Result := RGBToColor(Round(Coul.R * m), Round(Coul.G * m), Round(Coul.B * m));
  end;
-
+ function TGHTopoColorToGLColor(const Coul: TGHTopoColor): TGLColor;
+ const
+   m = 1/256;
+ begin
+   Result.R := Coul.Red   * m;
+   Result.G := Coul.Green * m;
+   Result.B := Coul.Blue  * m;
+   Result.A := Coul.Alpha * m;
+ end;
+ // Retourne sous forme de couleur Pascal la couleur OpenGL passée en argument
+ function TGLColorToTGHTopoColor(const Coul: TGLColor): TGHTopoColor;
+ const
+   m = 256;
+ begin
+   Result.setFrom(Round(Coul.R * m), Round(Coul.G * m), Round(Coul.B * m), Round(Coul.A * m));
+ end;
 { TCdrVue3DOpenGLExt }
 
 function TCdrVue3DOpenGLExt.InitialiserVue3D(const QPV       : TVue3DParams;
@@ -383,12 +398,12 @@ var
   t: array[0..1] of GLFloat;
   Q1, Q2: Double;
 begin
-    Fcs1.X := FCoin1.X * MULTIPLICATEUR;
-    Fcs1.Y := FCoin1.Y * MULTIPLICATEUR;
-    Fcs1.Z := FCoin1.Z * MULTIPLICATEUR * FVue3DParams.CoefMagnification;
-    Fcs2.X := FCoin2.X * MULTIPLICATEUR;
-    Fcs2.Y := FCoin2.Y * MULTIPLICATEUR;
-    Fcs2.Z := FCoin2.Z * MULTIPLICATEUR * FVue3DParams.CoefMagnification;
+    Fcs1.setFrom(FCoin1.X * MULTIPLICATEUR,
+                 FCoin1.Y * MULTIPLICATEUR,
+                 FCoin1.Z * MULTIPLICATEUR * FVue3DParams.CoefMagnification);
+    Fcs2.setFrom(FCoin2.X * MULTIPLICATEUR,
+                 FCoin2.Y * MULTIPLICATEUR,
+                 FCoin2.Z * MULTIPLICATEUR * FVue3DParams.CoefMagnification);
     // TODO: A revoir
     Q1 := Fcs2.Z;
     Q2 := Fcs1.Z + 0.20 * Hypot2D(Fcs2.X - Fcs1.X, Fcs2.Y - Fcs1.Y);
@@ -438,9 +453,9 @@ begin
          tgENNOYABLE,
          tgSIPHON,
          tgTUNNEL,
-         tgMINE     : c := PascalToGLColor(FBDDEntites.GetColorViseeFromModeRepresentation(FVue3DParams.ModeRepresentation, BP));
-         tgSURFACE  : c := PascalToGLColor(clGray);
-         tgVISEE_RADIANTE: c := PascalToGLColor(clSilver);
+         tgMINE     : c := TGHTopoColorToGLColor(FBDDEntites.GetColorViseeFromModeRepresentation(FVue3DParams.ModeRepresentation, BP));
+         tgSURFACE  : c := TColorToGLColor(clGray);
+         tgVISEE_RADIANTE: c := TColorToGLColor(clSilver);
        else
          Continue;
        end;
@@ -610,7 +625,7 @@ var
                           Vertex[9].Z - Vertex[12].Z);
       Normales[14]:=ProduitVectoriel(V1,V2,True);
     end;
-    c := PascalToGLColor(FBDDEntites.GetColorViseeFromModeRepresentation(FVue3DParams.ModeRepresentation, EE));
+    c := TGHTopoColorToGLColor(FBDDEntites.GetColorViseeFromModeRepresentation(FVue3DParams.ModeRepresentation, EE));
     glMaterialfv(GL_FRONT, GL_AMBIENT, addr(c));
     glBegin(GL_TRIANGLES);
     for p := 1 to 6 do       // Triangles pairs
@@ -627,7 +642,7 @@ var
       p := q - 5;
       if ( p > 6) then p := 1;
       r := p+6;
-       PutVertex(p);
+      PutVertex(p);
       PutVertex(q);
       PutVertex(r);
     end;
@@ -734,7 +749,7 @@ var
     glDisable(GL_LIGHTING);
     glDisable(GL_LIGHT0);
     // le cube enveloppe
-    cc := PascalToGLColor(FVue3DParams.LineCube.Color);
+    cc := TColorToGLColor(FVue3DParams.LineCube.toTColor());
     glColor3d(cc.R, cc.G, cc.B);
     if (edBounds      in FVue3DParams.ElementsDrawn) then glCallList(FglListCUBE);
     if (edPolygonals  in FVue3DParams.ElementsDrawn) then glCallList(FglListPOLYGONALS);
@@ -746,9 +761,9 @@ begin
   if (Not FDoDraw) then Exit;
   // on fait en sorte que le réseau est centré en (0,0,0) de la scène OpenGL
   {$IFDEF OPENGL_ANCIENNE_METHODE}
-  FExcentr.X := 0.50 * (Fcs2.X - Fcs1.X) + Fcs1.X;
-  FExcentr.Y := 0.50 * (Fcs2.Y - Fcs1.Y) + Fcs1.Y;
-  FExcentr.Z := 0.50 * (Fcs2.Z - Fcs1.Z) + Fcs1.Z;
+  FExcentr.setFrom(0.50 * (Fcs2.X - Fcs1.X) + Fcs1.X,
+                   0.50 * (Fcs2.Y - Fcs1.Y) + Fcs1.Y,
+                   0.50 * (Fcs2.Z - Fcs1.Z) + Fcs1.Z);
   {$ELSE}
 
 
@@ -757,7 +772,7 @@ begin
   // Préparation du contexte OpenGL
   glViewport(0,0,OpenGLControl1.Width, OpenGLControl1.Height);  // fenêtre de vue
   glEnable(GL_DEPTH_TEST);
-  BGglColor := PascalToGLColor(FVue3DParams.ColorBackGround);
+  BGglColor := TColorToGLColor(FVue3DParams.ColorBackGround);
   glClearColor(BGglColor.R, BGglColor.G, BGglColor.B, 1.0);
   glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
   glClearDepth(1.0);
@@ -769,7 +784,6 @@ begin
      glMatrixMode (GL_PROJECTION);
      glLoadIdentity();
      gluPerspective(FVue3DParams.FovOrZoom, OpenGLControl1.Width / OpenGLControl1.Height, 0.001, 100.0);    // Fonctionne bien
-
   {$ELSE}
 
 

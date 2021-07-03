@@ -26,7 +26,7 @@
       P[3] := Coord2Draft(E.PosPG.X, E.PosPG.Y);
       if (q1) then
       begin
-        Printer.Canvas.Brush.Color := FBDDEntites.GetColorViseeFromModeRepresentation(FVue2DParams.ongModeRepresentation, E);
+        Printer.Canvas.Brush.Color := FBDDEntites.GetColorViseeFromModeRepresentation(FVue2DParams.ongModeRepresentation, E).toTColor();
         Printer.Canvas.Pen.Color   := Printer.Canvas.Brush.Color;
         Printer.Canvas.Polygon(P);
       end;
@@ -51,7 +51,7 @@
       if (E.Type_Entite = tgENTRANCE)       then Continue;
       if (E.Type_Entite = tgVISEE_RADIANTE) then Continue;
       Printer.Canvas.Pen.Width := Millimetres2PixelsXf(0.35);//FVue2DParams.ongViseesLargeur;
-      Printer.Canvas.Pen.Color := FBDDEntites.GetColorViseeFromModeRepresentation(FVue2DParams.ongModeRepresentation, E);
+      Printer.Canvas.Pen.Color := FBDDEntites.GetColorViseeFromModeRepresentation(FVue2DParams.ongModeRepresentation, E).toTColor();
       if (BlackLines) then Printer.Canvas.Pen.Color := clBlack;
       //Pen.Color := E.ColorEntite;
       P1 := Coord2Draft(E.PosExtr0.X, E.PosExtr0.Y);

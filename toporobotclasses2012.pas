@@ -573,9 +573,9 @@ begin
     WriteLigne('-6'  + #9 + '1' + #9 + 'Entree principale');
     WriteLigne('-5'  + #9 + '1' + #9 + '0.00' + #9 + '0.00' + #9 + '0.00' + #9 + '1' + #9 + '0');
     MyExpe.setFrom(1, YearOf(Now), MonthOf(Now), DayOf(Now), 39, cdmAUTOMATIQUE, 0.00, 'Team1', 'Team1', 'Expe01');
-    WriteLigne(MakeToporobotTabLineOfExpe(-2, MyExpe));
+    WriteLigne(MyExpe.toLineXTB());
     MyCode.setUsualParameters(1, UNITE_ANGULAIRE_DU_CODE_ZERO, UNITE_ANGULAIRE_DU_CODE_ZERO, 1.00, 0.01, 1.00, 1.00, 0.00, 0.00, 0.00, 'Code01');
-    WriteLigne(MakeToporobotTabLineOfCode(-1, mtabEXTENDEDTAB, MyCode));
+    WriteLigne(MyCode.toLineXTB(mtabEXTENDEDTAB));
     //WriteLigne('-2'  + #9 + '1' + #9 + '12' + #9 + '11' + #9 + '2014' + #9 + 'Equipe1' + #9 + 'Equipe1' + #9 + '0' + #9 + '0.00' + #9 + '0' + #9 + '39');
     //WriteLigne('-1'  + #9 + '1' + #9 + QDefaultAnglesUnitsStr + #9 + QDefaultAnglesUnitsStr + #9 + '0.01' + #9 + '1.00' + #9 + '1.00' + #9 + '0.00' + #9 + '0.00' + #9 + 'Code01' + #9 + '0');
     //1	-1	1	0	1	2	2	0	0	Serie principale	A modifier	0	0.01
@@ -695,7 +695,7 @@ var
   UnReseau        : TReseau;
   UnSecteur       : TSecteur;
   QVisee          : TUneVisee;
-
+  CDS             : TGHTopoColor;
 begin
   ClearListeSeries();
   ViderTablesSimples();
@@ -729,9 +729,11 @@ begin
   begin
     CreateNewEntrance();
   end;
-  UnReseau.setFrom(COULEUR_RESEAU_0, 0, rsMAIN_NETWORK, '');
+  CDS.setFrom(COULEUR_RESEAU_0, 255);
+  UnReseau.setFrom(CDS, 0, rsMAIN_NETWORK, '');
   AddReseau(UnReseau); // Réseau 0
-  UnSecteur.setFrom(clSilver, 'Undefined');
+  CDS.setFrom(clSilver);
+  UnSecteur.setFrom(CDS, 'Undefined');
   AddSecteur(UnSecteur);                 // Secteur 0
   AddExpe(MakeExpe0(0, 'Expe0'));                                  // Expé 0
   AddCode(MakeCode0(0, 'Code0'));                                  // Code 0
@@ -877,7 +879,7 @@ var
 begin
   NS.Nom         := ANom;
   NS.Description := ADescription;
-  NS.Couleur     := ACouleur;
+  NS.Couleur.setFrom(ACouleur);
   FTableNameSpaces.AddElement(NS);
 end;
 
@@ -1064,6 +1066,7 @@ var
   nb, QIdx: Integer;
   SR: TObjSerie;
   NSR, QSR: TObjSerie;
+  MyExpe: TExpe;
 begin
   Result := False;
   NSR := TObjSerie.Create;
@@ -1084,11 +1087,14 @@ begin
     NSR.SetNumeroEntrance(SR.GetNumeroEntrance());   // Opération 8: Entrée de rattachement
     NSR.SetNumeroReseau(SR.GetNumeroReseau());       // Opération 9: Réseau de rattachement
     // Opération 10: Traitement des visées
+    MyExpe := GetExpeByNumero(1);
     NSR.AddVisee(0, 1, 1,
                 tgDEFAULT,
                 0.001, 0.00, 0.00,
                 0.00, 0.00, 0.00, 0.00,
-                '', '');
+                '', '',
+                MyExpe.getTDateTime(),
+                0.00, 0.00);
     self.AddSerie(NSR);
     result := True;
   except
@@ -1458,8 +1464,8 @@ begin
   MySerie := TObjSerie.Create;
   MySerie.ClearStations();
   MySerie.SetNumeroSerie(1);
-  MySerie.AddVisee( 0, 0, 0, tgDEFAULT , 0.0100, 45.00, -45.00, 0.0, 0.0, 0.0, 0.0, '', '');
-  MySerie.AddVisee( 0, 0, 0, tgDEFAULT , 0.0125, 45.00, -45.00, 0.0, 0.0, 0.0, 0.0, '', '');
+  MySerie.AddVisee( 0, 0, 0, tgDEFAULT , 0.0100, 45.00, -45.00, 0.0, 0.0, 0.0, 0.0, '', '', Now(), 0.00, 0.00);
+  MySerie.AddVisee( 0, 0, 0, tgDEFAULT , 0.0125, 45.00, -45.00, 0.0, 0.0, 0.0, 0.0, '', '', Now(), 0.00, 0.00);
 
   MySerie.SetSeriePtExtremites(MySerie.GetNumeroDeSerie(), 0, MySerie.GetNumeroDeSerie(), MySerie.GetNbVisees() - 1);
   MySerie.SetChanceObstacle(0, 0);
@@ -2092,7 +2098,7 @@ begin
         WriteLn(fp, Format(FORMAT_NB_INTEGER + #9 + FORMAT_NB_INTEGER + #9 + '#%X' + #9 +
                            FORMAT_STRING + #9 + FORMAT_STRING,
                            [i,
-                            myReseau.TypeReseau, myReseau.ColorReseau,
+                            myReseau.TypeReseau, myReseau.ColorReseau.toTColor(),
                             myReseau.NomReseau,
                             myReseau.ObsReseau
                            ]));
@@ -2122,7 +2128,7 @@ begin
       begin
         mySecteur := GetSecteur(i);
         WriteLn(fp, Format(FORMAT_NB_INTEGER + #9 + '#%X' + #9 + FORMAT_STRING,
-                           [i, mySecteur.CouleurSecteur,
+                           [i, mySecteur.CouleurSecteur.toTColor(),
                             mySecteur.NomSecteur
                            ]));
       end;

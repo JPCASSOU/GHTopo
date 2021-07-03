@@ -645,7 +645,7 @@ var
     QDrawColTexte(hcColsTitres.Sections.Items[HEADER_LST_NUM_COL_ENTREE]          , _AnsiToLCLStr(en.eNomEntree));
     // réseau
     rs := FDocuTopo.GetReseau(sr.GetNumeroReseau());
-    QDrawColRectColoreWithTexte(hcColsTitres.Sections.Items[HEADER_LST_NUM_COL_RESEAU], True, rs.ColorReseau, _AnsiToLCLStr(rs.NomReseau));
+    QDrawColRectColoreWithTexte(hcColsTitres.Sections.Items[HEADER_LST_NUM_COL_RESEAU], True, rs.ColorReseau.toTColor(), _AnsiToLCLStr(rs.NomReseau));
     qDrawColTexte(hcColsTitres.Sections.Items[HEADER_LST_NUM_COL_NB_VISEES]       , Format(FORMAT_NB_INTEGER,[sr.GetNbVisees]));
     // nombre d'éléments libres entre deux numéros de série
     WU := '';

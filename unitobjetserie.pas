@@ -56,7 +56,9 @@ type
                        const qTypeVisee: TTypeDeVisee;
                        const qLong, qAz, qP: double;
                        const qLG, qLD, qHZ, qHN: double;
-                       const qIDTerrain, qComments: string); overload;
+                       const qIDTerrain, qComments: string;
+                       const qHorodatage: TDateTime;
+                       const qTemperature, qHumidity: double); overload;
     function  GetVisee(const Idx: integer): TUneVisee;
     function  GetLastVisee(): TUneVisee;
 
@@ -141,26 +143,23 @@ procedure TObjSerie.AddVisee(const qNoSecteur: integer;
                              const qTypeVisee: TTypeDeVisee;
                              const qLong, qAz, qP: double;
                              const qLG, qLD, qHZ, qHN: double;
-                             const qIDTerrain, qComments: string); overload;
+                             const qIDTerrain, qComments: string;
+                             const qHorodatage: TDateTime;
+                             const qTemperature, qHumidity: double); overload;
 var
   WU: TUneVisee;
+  QNoVisee: Integer;
 begin
-  WU.NoVisee     := self.Count;// - 1;
-  WU.IDSecteur   := qNoSecteur;
-  WU.Code        := qCode;
-  WU.Expe        := qExpe;
-  WU.TypeVisee   := qTypeVisee;
-  WU.Longueur    := qLong;
-  WU.Azimut      := qAz;
-  WU.Pente       := qP;
-  WU.LG          := qLG;
-  WU.LD          := qLD;
-  WU.HZ          := qHZ;
-  WU.HN          := qHN;
-  WU.IDTerrainStation := qIDTerrain;
-  WU.Commentaires     := qComments;
-  WU.AccroissXYZ.Empty();
-  WU.AccroissP        := 0.00;
+  QNoVisee := self.Count;// - 1;
+  WU.setFrom(QNoVisee,
+             qTypeVisee,
+             qNoSecteur,
+             qCode, qExpe,
+             qLong, qAz, qP,
+             qLG, qLD, qHZ, qHN,
+             qHorodatage,
+             qIDTerrain, qComments,
+             qTemperature, qHumidity);
   self.AddVisee(WU);
 end;
 

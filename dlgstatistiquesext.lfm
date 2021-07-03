@@ -1,11 +1,11 @@
 object frmStatistiquesExt: TfrmStatistiquesExt
-  Left = 315
-  Height = 616
-  Top = 257
-  Width = 1099
+  Left = 492
+  Height = 447
+  Top = 292
+  Width = 882
   Caption = 'frmStatistiquesExt'
-  ClientHeight = 616
-  ClientWidth = 1099
+  ClientHeight = 447
+  ClientWidth = 882
   Font.CharSet = ANSI_CHARSET
   Font.Height = -13
   Font.Name = 'Arial'
@@ -19,26 +19,26 @@ object frmStatistiquesExt: TfrmStatistiquesExt
   LCLVersion = '2.0.0.4'
   object TabCtrlStatistiques: TPageControl
     Left = 4
-    Height = 581
+    Height = 412
     Top = 0
-    Width = 1090
-    ActivePage = tabShtTableaux
+    Width = 873
+    ActivePage = tabShtSynthese
     Anchors = [akTop, akLeft, akRight, akBottom]
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 0
     object tabShtSynthese: TTabSheet
       Caption = 'tabShtSynthese'
-      ClientHeight = 552
-      ClientWidth = 1082
+      ClientHeight = 383
+      ClientWidth = 865
       object grbxEtendueReseau: TGroupBox
         Left = 0
         Height = 136
         Top = 240
-        Width = 1077
+        Width = 860
         Anchors = [akTop, akLeft, akRight]
         Caption = 'grbxEtendueReseau'
         ClientHeight = 115
-        ClientWidth = 1073
+        ClientWidth = 856
         TabOrder = 0
         object Label4: TLabel
           Left = 4
@@ -71,7 +71,7 @@ object frmStatistiquesExt: TfrmStatistiquesExt
           Left = 32
           Height = 21
           Top = 31
-          Width = 160
+          Width = 147
           Alignment = taRightJustify
           Anchors = [akLeft, akBottom]
           BorderStyle = sbsSunken
@@ -81,7 +81,7 @@ object frmStatistiquesExt: TfrmStatistiquesExt
           Left = 32
           Height = 21
           Top = 59
-          Width = 160
+          Width = 147
           Alignment = taRightJustify
           Anchors = [akLeft, akBottom]
           BorderStyle = sbsSunken
@@ -91,77 +91,77 @@ object frmStatistiquesExt: TfrmStatistiquesExt
           Left = 32
           Height = 21
           Top = 87
-          Width = 160
+          Width = 147
           Alignment = taRightJustify
           Anchors = [akLeft, akBottom]
           BorderStyle = sbsSunken
           TabOrder = 2
         end
         object lbXMaxi: TStaticText
-          Left = 628
+          Left = 524
           Height = 21
           Top = 31
-          Width = 160
+          Width = 147
           Alignment = taRightJustify
           Anchors = [akLeft, akBottom]
           BorderStyle = sbsSunken
           TabOrder = 3
         end
         object lbYMaxi: TStaticText
-          Left = 628
+          Left = 524
           Height = 21
           Top = 59
-          Width = 160
+          Width = 147
           Alignment = taRightJustify
           Anchors = [akLeft, akBottom]
           BorderStyle = sbsSunken
           TabOrder = 4
         end
         object lbZMaxi: TStaticText
-          Left = 628
+          Left = 524
           Height = 21
           Top = 87
-          Width = 160
+          Width = 147
           Alignment = taRightJustify
           Anchors = [akLeft, akBottom]
           BorderStyle = sbsSunken
           TabOrder = 5
         end
         object lbEtendueX: TStaticText
-          Left = 432
+          Left = 368
           Height = 21
           Top = 31
-          Width = 160
+          Width = 147
           Alignment = taCenter
           Anchors = [akLeft, akBottom]
           BorderStyle = sbsSunken
           TabOrder = 6
         end
         object lbEtendueY: TStaticText
-          Left = 432
+          Left = 368
           Height = 21
           Top = 59
-          Width = 160
+          Width = 147
           Alignment = taCenter
           Anchors = [akLeft, akBottom]
           BorderStyle = sbsSunken
           TabOrder = 7
         end
         object lbEtendueZ: TStaticText
-          Left = 432
+          Left = 368
           Height = 21
           Top = 87
-          Width = 160
+          Width = 147
           Alignment = taCenter
           Anchors = [akLeft, akBottom]
           BorderStyle = sbsSunken
           TabOrder = 8
         end
         object lbStationXMini: TStaticText
-          Left = 200
+          Left = 186
           Height = 21
           Top = 31
-          Width = 188
+          Width = 172
           Anchors = [akLeft, akBottom]
           BorderStyle = sbsSingle
           Color = 13565951
@@ -169,10 +169,10 @@ object frmStatistiquesExt: TfrmStatistiquesExt
           TabOrder = 9
         end
         object lbStationYMini: TStaticText
-          Left = 200
+          Left = 186
           Height = 21
           Top = 59
-          Width = 188
+          Width = 172
           Anchors = [akLeft, akBottom]
           BorderStyle = sbsSingle
           Color = 13565951
@@ -180,10 +180,10 @@ object frmStatistiquesExt: TfrmStatistiquesExt
           TabOrder = 10
         end
         object lbStationZMini: TStaticText
-          Left = 200
+          Left = 186
           Height = 21
           Top = 87
-          Width = 188
+          Width = 172
           Anchors = [akLeft, akBottom]
           BorderStyle = sbsSingle
           Color = 13565951
@@ -191,10 +191,10 @@ object frmStatistiquesExt: TfrmStatistiquesExt
           TabOrder = 11
         end
         object lbStationXMaxi: TStaticText
-          Left = 796
+          Left = 678
           Height = 21
           Top = 31
-          Width = 188
+          Width = 172
           Anchors = [akLeft, akBottom]
           BorderStyle = sbsSingle
           Color = 13565951
@@ -202,10 +202,10 @@ object frmStatistiquesExt: TfrmStatistiquesExt
           TabOrder = 12
         end
         object lbStationYMaxi: TStaticText
-          Left = 796
+          Left = 678
           Height = 21
           Top = 59
-          Width = 188
+          Width = 172
           Anchors = [akLeft, akBottom]
           BorderStyle = sbsSingle
           Color = 13565951
@@ -213,10 +213,10 @@ object frmStatistiquesExt: TfrmStatistiquesExt
           TabOrder = 13
         end
         object lbStationZMaxi: TStaticText
-          Left = 796
+          Left = 678
           Height = 21
           Top = 87
-          Width = 188
+          Width = 172
           Anchors = [akLeft, akBottom]
           BorderStyle = sbsSingle
           Color = 13565951
@@ -227,27 +227,27 @@ object frmStatistiquesExt: TfrmStatistiquesExt
           Left = 32
           Height = 17
           Top = 4
-          Width = 356
+          Width = 326
           Alignment = taCenter
           BorderStyle = sbsSunken
           Caption = 'Mini'
           TabOrder = 15
         end
         object StaticText2: TStaticText
-          Left = 628
+          Left = 524
           Height = 17
           Top = 4
-          Width = 356
+          Width = 326
           Alignment = taCenter
           BorderStyle = sbsSunken
           Caption = 'Maxi'
           TabOrder = 16
         end
         object StaticText3: TStaticText
-          Left = 432
+          Left = 368
           Height = 17
           Top = 4
-          Width = 160
+          Width = 147
           Alignment = taCenter
           BorderStyle = sbsSunken
           Caption = '[<------ OOOOO ------>]'
@@ -258,11 +258,11 @@ object frmStatistiquesExt: TfrmStatistiquesExt
         Left = 0
         Height = 228
         Top = 4
-        Width = 1077
+        Width = 860
         Anchors = [akTop, akLeft, akRight]
         Caption = 'grbxDeveloppements'
         ClientHeight = 207
-        ClientWidth = 1073
+        ClientWidth = 856
         TabOrder = 1
         object lbDevelTopal: TLabel
           Left = 4
@@ -332,7 +332,7 @@ object frmStatistiquesExt: TfrmStatistiquesExt
           TabOrder = 4
         end
         object lbMetrageSpeciaux: TStaticText
-          Left = 444
+          Left = 432
           Height = 21
           Top = 96
           Width = 160
@@ -342,9 +342,9 @@ object frmStatistiquesExt: TfrmStatistiquesExt
           TabOrder = 5
         end
         object lbMetrageTunnels: TStaticText
-          Left = 740
+          Left = 432
           Height = 21
-          Top = 96
+          Top = 152
           Width = 160
           Alignment = taRightJustify
           Anchors = [akLeft, akBottom]
@@ -352,9 +352,9 @@ object frmStatistiquesExt: TfrmStatistiquesExt
           TabOrder = 6
         end
         object lbMetrageMines: TStaticText
-          Left = 740
+          Left = 432
           Height = 21
-          Top = 124
+          Top = 180
           Width = 160
           Alignment = taRightJustify
           Anchors = [akLeft, akBottom]
@@ -398,7 +398,7 @@ object frmStatistiquesExt: TfrmStatistiquesExt
           ParentColor = False
         end
         object lbDevSpeciaux: TLabel
-          Left = 340
+          Left = 324
           Height = 16
           Top = 96
           Width = 96
@@ -407,18 +407,18 @@ object frmStatistiquesExt: TfrmStatistiquesExt
           ParentColor = False
         end
         object lbDevTunnels: TLabel
-          Left = 628
+          Left = 324
           Height = 16
-          Top = 96
+          Top = 152
           Width = 85
           Anchors = [akLeft, akBottom]
           Caption = 'lbDevTunnels'
           ParentColor = False
         end
         object lbDevMines: TLabel
-          Left = 628
+          Left = 324
           Height = 16
-          Top = 124
+          Top = 180
           Width = 73
           Anchors = [akLeft, akBottom]
           Caption = 'lbDevMines'
@@ -436,7 +436,7 @@ object frmStatistiquesExt: TfrmStatistiquesExt
           ParentColor = False
         end
         object lbDevSpecials: TLabel
-          Left = 444
+          Left = 432
           Height = 16
           Top = 76
           Width = 160
@@ -447,9 +447,9 @@ object frmStatistiquesExt: TfrmStatistiquesExt
           ParentColor = False
         end
         object lbDevArtificiels: TLabel
-          Left = 740
+          Left = 432
           Height = 16
-          Top = 76
+          Top = 129
           Width = 160
           Alignment = taCenter
           Anchors = [akLeft, akBottom]
@@ -458,9 +458,9 @@ object frmStatistiquesExt: TfrmStatistiquesExt
           ParentColor = False
         end
         object lbDeniveleTotal: TStaticText
-          Left = 680
+          Left = 532
           Height = 28
-          Top = 4
+          Top = 28
           Width = 200
           Alignment = taRightJustify
           BorderStyle = sbsSunken
@@ -477,19 +477,18 @@ object frmStatistiquesExt: TfrmStatistiquesExt
           ParentColor = False
         end
         object Label7: TLabel
-          Left = 892
+          Left = 740
           Height = 16
-          Top = 8
+          Top = 32
           Width = 12
           Caption = 'm'
           ParentColor = False
         end
         object btnCopier: TButton
-          Left = 916
+          Left = 601
           Height = 25
-          Top = 4
-          Width = 151
-          Anchors = [akTop, akRight]
+          Top = 76
+          Width = 131
           Caption = 'Copier'
           OnClick = btnCopierClick
           TabOrder = 9
@@ -524,7 +523,7 @@ object frmStatistiquesExt: TfrmStatistiquesExt
     object tabShtTableaux: TTabSheet
       Caption = 'Tableaux'
       ClientHeight = 552
-      ClientWidth = 1082
+      ClientWidth = 1003
       object cmbAffichageTableaux: TComboBox
         Left = 4
         Height = 24
@@ -546,7 +545,7 @@ object frmStatistiquesExt: TfrmStatistiquesExt
         Left = 5
         Height = 513
         Top = 36
-        Width = 1076
+        Width = 997
         Anchors = [akTop, akLeft, akRight, akBottom]
         DefaultRowHeight = 20
         Font.CharSet = ANSI_CHARSET
@@ -568,7 +567,7 @@ object frmStatistiquesExt: TfrmStatistiquesExt
         OnDrawCell = grdSyntheseSpeleometriqueDrawCell
       end
       object btnCopyTableauRecap: TButton
-        Left = 831
+        Left = 752
         Height = 28
         Top = 4
         Width = 250
@@ -589,12 +588,12 @@ object frmStatistiquesExt: TfrmStatistiquesExt
     object tabShtDiagrams: TTabSheet
       Caption = 'Diagrammes'
       ClientHeight = 552
-      ClientWidth = 1082
+      ClientWidth = 1003
       object pagectlHistogrammes: TPageControl
         Left = 4
         Height = 517
         Top = 32
-        Width = 1078
+        Width = 999
         ActivePage = tabShtDepthHisto
         Anchors = [akTop, akLeft, akRight, akBottom]
         TabIndex = 1
@@ -740,101 +739,101 @@ object frmStatistiquesExt: TfrmStatistiquesExt
         object tabShtDepthHisto: TTabSheet
           Caption = 'tabShtDepthHisto'
           ClientHeight = 509
-          ClientWidth = 1050
+          ClientWidth = 971
           object Panel5: TPanel
             Left = 2
             Height = 503
             Top = 0
-            Width = 621
+            Width = 542
             Anchors = [akTop, akLeft, akRight, akBottom]
             BevelInner = bvRaised
             BevelOuter = bvLowered
             ClientHeight = 503
-            ClientWidth = 621
+            ClientWidth = 542
             TabOrder = 0
             inline CdrDepthDiagramme1: TCdrDepthDiagramme
               Left = 2
               Height = 499
               Top = 2
-              Width = 617
+              Width = 538
               ClientHeight = 499
-              ClientWidth = 617
+              ClientWidth = 538
               inherited lbZMin: TLabel
                 Top = 463
               end
               inherited Panel1: TPanel
                 Height = 475
-                Width = 571
+                Width = 492
                 ClientHeight = 475
-                ClientWidth = 571
+                ClientWidth = 492
                 inherited CdrDGCDrawingContext1: TCdrDGCDrawingContext
                   Left = 2
                   Height = 471
                   Top = 2
-                  Width = 567
+                  Width = 488
                   ClientHeight = 471
-                  ClientWidth = 567
+                  ClientWidth = 488
                   DesignLeft = 223
                   DesignTop = 59
                   inherited pnlVue: TPanel
                     Height = 435
-                    Width = 536
+                    Width = 457
                     ClientHeight = 435
-                    ClientWidth = 536
+                    ClientWidth = 457
                     inherited Vue: TPaintBox
                       Height = 433
-                      Width = 534
+                      Width = 455
                     end
                   end
                   inherited lbMousePosition: TStaticText
                     Top = 440
-                    Width = 432
+                    Width = 353
                   end
                   inherited SpeedButton12: TSpeedButton
-                    Left = 535
+                    Left = 456
                     Flat = False
                   end
                   inherited SpeedButton13: TSpeedButton
-                    Left = 535
+                    Left = 456
                     Flat = False
                   end
                   inherited SpeedButton14: TSpeedButton
-                    Left = 535
+                    Left = 456
                     Flat = False
                   end
                   inherited SpeedButton15: TSpeedButton
-                    Left = 535
+                    Left = 456
                     Flat = False
                   end
                   inherited SpeedButton16: TSpeedButton
-                    Left = 535
+                    Left = 456
                     Flat = False
                   end
                   inherited SpeedButton17: TSpeedButton
-                    Left = 535
+                    Left = 456
                     Flat = False
                   end
                   inherited SpeedButton18: TSpeedButton
-                    Left = 535
+                    Left = 456
                     Top = 405
                     Flat = False
                   end
                   inherited SpeedButton19: TSpeedButton
-                    Left = 472
+                    Left = 393
                     Top = 439
                     Flat = False
                   end
                   inherited SpeedButton20: TSpeedButton
-                    Left = 504
+                    Left = 425
                     Top = 439
                     Flat = False
                   end
                   inherited SpeedButton21: TSpeedButton
-                    Left = 535
+                    Left = 456
                     Top = 439
                   end
                   inherited SpeedButton22: TSpeedButton
-                    Left = 440
+                    Left = 361
                     Top = 439
                     Flat = False
                   end
@@ -842,12 +841,12 @@ object frmStatistiquesExt: TfrmStatistiquesExt
               end
               inherited sclPourcentageSeuilHightLight: TScrollBar
                 Top = 479
-                Width = 571
+                Width = 492
               end
             end
           end
           object Panel3: TPanel
-            Left = 623
+            Left = 544
             Height = 93
             Top = 0
             Width = 424
@@ -902,13 +901,13 @@ object frmStatistiquesExt: TfrmStatistiquesExt
         Left = 68
         Height = 24
         Top = 4
-        Width = 462
+        Width = 383
         Anchors = [akTop, akLeft, akRight]
         OnChange = editFiltresChange
         TabOrder = 1
       end
       object btnRedrawDiagrams: TButton
-        Left = 922
+        Left = 843
         Height = 26
         Top = 4
         Width = 160
@@ -918,7 +917,7 @@ object frmStatistiquesExt: TfrmStatistiquesExt
         TabOrder = 2
       end
       object btnColorBarresFill: TColorButton
-        Left = 851
+        Left = 772
         Height = 26
         Top = 4
         Width = 64
@@ -930,7 +929,7 @@ object frmStatistiquesExt: TfrmStatistiquesExt
         OnColorChanged = btnColorBarresFillColorChanged
       end
       object btnColorBarresLine: TColorButton
-        Left = 783
+        Left = 704
         Height = 26
         Top = 4
         Width = 64
@@ -942,7 +941,7 @@ object frmStatistiquesExt: TfrmStatistiquesExt
         OnColorChanged = btnColorBarresLineColorChanged
       end
       object editLongViseeMini: TCurrencyEdit
-        Left = 719
+        Left = 640
         Height = 24
         Top = 4
         Width = 60
@@ -955,7 +954,7 @@ object frmStatistiquesExt: TfrmStatistiquesExt
         Value = 0.4
       end
       object lbLongMiniVisee1: TLabel
-        Left = 538
+        Left = 459
         Height = 16
         Top = 4
         Width = 175
@@ -969,9 +968,9 @@ object frmStatistiquesExt: TfrmStatistiquesExt
     object tabShtCoordonnees: TTabSheet
       Caption = 'tabShtCoordonnees'
       ClientHeight = 552
-      ClientWidth = 1082
+      ClientWidth = 1003
       object btnCopyTableauCoords: TButton
-        Left = 829
+        Left = 750
         Height = 28
         Top = 3
         Width = 247
@@ -992,7 +991,7 @@ object frmStatistiquesExt: TfrmStatistiquesExt
         Left = 3
         Height = 491
         Top = 60
-        Width = 1077
+        Width = 998
         Anchors = [akTop, akLeft, akRight, akBottom]
         ItemHeight = 18
         OnDrawItem = lsbViseesDrawItem
@@ -1003,7 +1002,7 @@ object frmStatistiquesExt: TfrmStatistiquesExt
         Left = 3
         Height = 22
         Top = 36
-        Width = 1077
+        Width = 998
         DragReorder = False
         Sections = <        
           item
@@ -1091,7 +1090,7 @@ object frmStatistiquesExt: TfrmStatistiquesExt
     object tabShtReseauSecteur: TTabSheet
       Caption = 'tabShtReseauSecteur'
       ClientHeight = 552
-      ClientWidth = 1082
+      ClientWidth = 1003
       object cmbReseauOuSecteur: TComboBox
         Left = 4
         Height = 24
@@ -1118,7 +1117,7 @@ object frmStatistiquesExt: TfrmStatistiquesExt
         ParentColor = False
       end
       object btnCopyTableauStatsReseaux: TButton
-        Left = 835
+        Left = 756
         Height = 28
         Top = 4
         Width = 245
@@ -1131,7 +1130,7 @@ object frmStatistiquesExt: TfrmStatistiquesExt
         Left = 3
         Height = 513
         Top = 36
-        Width = 1077
+        Width = 998
         AlternateColor = 16711396
         Anchors = [akTop, akLeft, akRight, akBottom]
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goSmoothScroll]
@@ -1146,9 +1145,9 @@ object frmStatistiquesExt: TfrmStatistiquesExt
     object tabShtEntrances: TTabSheet
       Caption = 'tabShtEntrances'
       ClientHeight = 552
-      ClientWidth = 1082
+      ClientWidth = 958
       object btnCopyTableauEntrees: TButton
-        Left = 918
+        Left = 794
         Height = 32
         Top = 1
         Width = 160
@@ -1169,7 +1168,7 @@ object frmStatistiquesExt: TfrmStatistiquesExt
         Left = 0
         Height = 22
         Top = 40
-        Width = 1078
+        Width = 954
         DragReorder = False
         Sections = <        
           item
@@ -1227,7 +1226,7 @@ object frmStatistiquesExt: TfrmStatistiquesExt
         Left = 0
         Height = 488
         Top = 64
-        Width = 1078
+        Width = 954
         Anchors = [akTop, akLeft, akRight, akBottom]
         ItemHeight = 18
         OnDrawItem = lsbEntrancesDrawItem
@@ -1237,9 +1236,9 @@ object frmStatistiquesExt: TfrmStatistiquesExt
     end
   end
   object BitBtn1: TBitBtn
-    Left = 949
+    Left = 732
     Height = 30
-    Top = 582
+    Top = 413
     Width = 142
     Anchors = [akRight, akBottom]
     DefaultCaption = True

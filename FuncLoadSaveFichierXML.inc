@@ -202,14 +202,11 @@ var
     QIN1 := QN.Attributes.GetNamedItem(XMLKey);
     Result := ConvertirEnNombreReel(QIN1.TextContent, QDefaultValue);
   end;
-  function ExtractColorOfNode(var QN: TDOMNode): TColor;
-  var
-    qR, qG, qB: Byte;
+  function ExtractColorOfNode(var QN: TDOMNode): TGHTopoColor;
   begin
-    qR := ExtractByteOfNode(QN, GTX_ATTR_COLOR_R, 255);
-    qG := ExtractByteOfNode(QN, GTX_ATTR_COLOR_G, 255);
-    qB := ExtractByteOfNode(QN, GTX_ATTR_COLOR_B, 255);
-    Result := RGBToColor(qR, qG, qB);
+    Result.setFrom(ExtractByteOfNode(QN, GTX_ATTR_COLOR_R, 255),
+                   ExtractByteOfNode(QN, GTX_ATTR_COLOR_G, 255),
+                   ExtractByteOfNode(QN, GTX_ATTR_COLOR_B, 255));
   end;
 begin
   Result := -1;
@@ -273,8 +270,8 @@ begin
       begin
         try
           WU := ListeDesFiltres.Item[i];
-          UnFiltrePerso.NomFiltre      := ExtractStringOfNode(WU, GTX_ATTR_FILTER_NAME);
-          UnFiltrePerso.CouleurFiltre  := ExtractColorOfNode(WU);
+          UnFiltrePerso.Nom            := ExtractStringOfNode(WU, GTX_ATTR_FILTER_NAME);
+          UnFiltrePerso.Couleur        := ExtractColorOfNode(WU);
           UnFiltrePerso.Expression     := ExtractStringOfNode(WU, GTX_ATTR_FILTER_EXPRESSION);
           UnFiltrePerso.Description    := ExtractStringOfNode(WU, GTX_ATTR_FILTER_DESCRIPTION);
           self.AddFiltrePerso(UnFiltrePerso);
@@ -300,7 +297,8 @@ begin
           UneEntree.ePosition.setFrom(ExtractRealOfNode(WU, GTX_ATTR_ENTRANCE_X, -1.00),
                                       ExtractRealOfNode(WU, GTX_ATTR_ENTRANCE_Y, -1.00),
                                       ExtractRealOfNode(WU, GTX_ATTR_ENTRANCE_Z, -1.00));
-          UneEntree.eCouleur    := GHTopoColorToColorDef(ExtractStringOfNode(WU, GTX_ATTR_ENTRANCE_COLOR), clBlue);
+          // Colour="$255128000"
+          UneEntree.eCouleur.setFromStrGHTopoColor(ExtractStringOfNode(WU, GTX_ATTR_ENTRANCE_COLOR), clBlue);
           UneEntree.eObserv     := ExtractStringOfNode(WU, GTX_ATTR_ENTRANCE_OBS);
           self.AddEntrance(UneEntree);
         except
@@ -398,7 +396,6 @@ begin
           {$WARNING: TEXpe.DateExpe à implementer}
           //UneExpe.DateExpe := ;
           QMyDate               := DateSQLToDatePascal(ExtractStringOfNode(WU, GTX_ATTR_EXPE_DATE));
-
           UneExpe.AnneeExpe     := YearOf(QMyDate);
           UneExpe.MoisExpe      := MonthOf(QMyDate);
           UneExpe.JourExpe      := DayOf(QMyDate);
@@ -587,9 +584,9 @@ begin
         SubSection := MyDocXML.CreateElement(GTX_KEY_NAMESPACE);
           SubSection.SetAttribute(GTX_ATTR_NAMESPACE             , Format(FORMAT_NB_INTEGER, [i]));
           SubSection.SetAttribute(GTX_ATTR_NAMESPACE_NAME        , PasStrToXMLStr(SS.Nom));
-          SubSection.SetAttribute(GTX_ATTR_COLOR_R     , Format(FORMAT_NB_INTEGER, [Red(SS.Couleur)]));
-          SubSection.SetAttribute(GTX_ATTR_COLOR_G     , Format(FORMAT_NB_INTEGER, [Green(SS.Couleur)]));
-          SubSection.SetAttribute(GTX_ATTR_COLOR_B     , Format(FORMAT_NB_INTEGER, [Blue(SS.Couleur)]));
+          SubSection.SetAttribute(GTX_ATTR_COLOR_R     , Format(FORMAT_NB_INTEGER, [SS.Couleur.Red]));
+          SubSection.SetAttribute(GTX_ATTR_COLOR_G     , Format(FORMAT_NB_INTEGER, [SS.Couleur.Green]));
+          SubSection.SetAttribute(GTX_ATTR_COLOR_B     , Format(FORMAT_NB_INTEGER, [SS.Couleur.Blue]));
           SubSection.SetAttribute(GTX_ATTR_NAMESPACE_DESCRIPTION , PasStrToXMLStr(SS.Description));
         SectionNamespaces.AppendChild(SubSection);
       end;
@@ -607,10 +604,10 @@ begin
         FF := GetFiltrePerso(i);
         SubSection := MyDocXML.CreateElement(GTX_KEY_FILTER);
           SubSection.SetAttribute(GTX_ATTR_FILTER_IDX        , Format(FORMAT_NB_INTEGER, [i]));
-          SubSection.SetAttribute(GTX_ATTR_FILTER_NAME       , PasStrToXMLStr(FF.NomFiltre));
-          SubSection.SetAttribute(GTX_ATTR_COLOR_R           , Format(FORMAT_NB_INTEGER, [Red(FF.CouleurFiltre)]));
-          SubSection.SetAttribute(GTX_ATTR_COLOR_G           , Format(FORMAT_NB_INTEGER, [Green(FF.CouleurFiltre)]));
-          SubSection.SetAttribute(GTX_ATTR_COLOR_B           , Format(FORMAT_NB_INTEGER, [Blue(FF.CouleurFiltre)]));
+          SubSection.SetAttribute(GTX_ATTR_FILTER_NAME       , PasStrToXMLStr(FF.Nom));
+          SubSection.SetAttribute(GTX_ATTR_COLOR_R           , Format(FORMAT_NB_INTEGER, [FF.Couleur.Red]));
+          SubSection.SetAttribute(GTX_ATTR_COLOR_G           , Format(FORMAT_NB_INTEGER, [FF.Couleur.Green]));
+          SubSection.SetAttribute(GTX_ATTR_COLOR_B           , Format(FORMAT_NB_INTEGER, [FF.Couleur.Blue]));
           SubSection.SetAttribute(GTX_ATTR_FILTER_EXPRESSION , PasStrToXMLStr(FF.Expression));
           SubSection.SetAttribute(GTX_ATTR_FILTER_DESCRIPTION, PasStrToXMLStr(FF.Description));
         SectionFiltres.AppendChild(SubSection);
@@ -632,7 +629,7 @@ begin
           SubSection.SetAttribute(GTX_ATTR_ENTRANCE_X, Format(FORMAT_NB_REAL_3_DEC, [E.ePosition.X]));
           SubSection.SetAttribute(GTX_ATTR_ENTRANCE_Y, Format(FORMAT_NB_REAL_3_DEC, [E.ePosition.Y]));
           SubSection.SetAttribute(GTX_ATTR_ENTRANCE_Z, Format(FORMAT_NB_REAL_3_DEC, [E.ePosition.Z]));
-          SubSection.SetAttribute(GTX_ATTR_ENTRANCE_COLOR, ColorToGHTopoColor(E.eCouleur));
+          SubSection.SetAttribute(GTX_ATTR_ENTRANCE_COLOR, E.eCouleur.toStrGHTopoColor());
           SubSection.SetAttribute(GTX_ATTR_ENTRANCE_OBS, PasStrToXMLStr(E.eObserv));
         SectionEntrances.AppendChild(SubSection);
       end;
@@ -645,9 +642,9 @@ begin
         R := GetReseau(i);
         SubSection := MyDocXML.CreateElement(GTX_KEY_RESEAU);
           SubSection.SetAttribute(GTX_ATTR_RESEAU_IDX, Format(FORMAT_NB_INTEGER, [i]));
-          SubSection.SetAttribute(GTX_ATTR_COLOR_R, Format(FORMAT_NB_INTEGER, [Red(R.ColorReseau)]));
-          SubSection.SetAttribute(GTX_ATTR_COLOR_G, Format(FORMAT_NB_INTEGER, [Green(R.ColorReseau)]));
-          SubSection.SetAttribute(GTX_ATTR_COLOR_B, Format(FORMAT_NB_INTEGER, [Blue(R.ColorReseau)]));
+          SubSection.SetAttribute(GTX_ATTR_COLOR_R, Format(FORMAT_NB_INTEGER, [R.ColorReseau.Red]));
+          SubSection.SetAttribute(GTX_ATTR_COLOR_G, Format(FORMAT_NB_INTEGER, [R.ColorReseau.Green]));
+          SubSection.SetAttribute(GTX_ATTR_COLOR_B, Format(FORMAT_NB_INTEGER, [R.ColorReseau.Blue]));
           SubSection.SetAttribute(GTX_ATTR_RESEAU_TYPE, Format(FORMAT_NB_INTEGER, [R.TypeReseau]));
           SubSection.SetAttribute(GTX_ATTR_RESEAU_NAME,  PasStrToXMLStr(R.NomReseau));
           SubSection.SetAttribute(GTX_ATTR_RESEAU_OBS,  PasStrToXMLStr(R.ObsReseau));
@@ -662,9 +659,9 @@ begin
         SC := GetSecteur(i);
         SubSection := MyDocXML.CreateElement(GTX_KEY_SECTEUR);
           SubSection.SetAttribute(GTX_ATTR_SECTEUR_IDX    , Format(FORMAT_NB_INTEGER, [i]));
-          SubSection.SetAttribute(GTX_ATTR_COLOR_R, Format(FORMAT_NB_INTEGER, [Red(SC.CouleurSecteur)]));
-          SubSection.SetAttribute(GTX_ATTR_COLOR_G, Format(FORMAT_NB_INTEGER, [Green(SC.CouleurSecteur)]));
-          SubSection.SetAttribute(GTX_ATTR_COLOR_B, Format(FORMAT_NB_INTEGER, [Blue(SC.CouleurSecteur)]));
+          SubSection.SetAttribute(GTX_ATTR_COLOR_R, Format(FORMAT_NB_INTEGER, [SC.CouleurSecteur.Red]));
+          SubSection.SetAttribute(GTX_ATTR_COLOR_G, Format(FORMAT_NB_INTEGER, [SC.CouleurSecteur.Green]));
+          SubSection.SetAttribute(GTX_ATTR_COLOR_B, Format(FORMAT_NB_INTEGER, [SC.CouleurSecteur.Blue]));
           SubSection.SetAttribute(GTX_ATTR_SECTEUR_NAME   , PasStrToXMLStr(SC.NomSecteur));
         SectionSecteurs.AppendChild(SubSection);
       end;
@@ -764,7 +761,7 @@ begin
             SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_HZ      , Format(FORMAT_NB_REAL_3_DEC, [ST.HZ]));                     // HZ        : double;
             SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_HN      , Format(FORMAT_NB_REAL_3_DEC, [ST.HN]));                     // HN        : double;
             SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_OBS     , PasStrToXMLStr(ST.Commentaires));                             // Commentaires    : string;
-            SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_HORODATE   , DateTimePascalToDateTimeSQL(ST.Horodatage));
+            SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_HORODATE   , FormatterHorodatage(ST.Horodatage));
             //SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_HORODATE   , DateTimePascalToDateTimeSQL(ST.Horodatage));
             SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_TEMPERATURE, Format(FORMAT_NB_REAL_3_DEC, [ST.Temperature]));
             SubSubSubSection.SetAttribute(GTX_ATTR_VISEE_HUMIDITE   , Format(FORMAT_NB_REAL_3_DEC, [ST.Humidity]));

@@ -952,24 +952,27 @@ var
             QEntite.PosExtr0.setFrom(TabVisee[St-1].AccroissXYZ.X, TabVisee[St-1].AccroissXYZ.Y, TabVisee[St-1].AccroissXYZ.Z);
             QEntite.PosStation.setFrom(TabVisee[St].AccroissXYZ.X, TabVisee[St].AccroissXYZ.Y, TabVisee[St].AccroissXYZ.Z);
             // habillage
-            QEntite.PosOPG.X := QEntite.PosExtr0.X - TabVisee[St-1].LG * qCosAlphaD;
-            QEntite.PosOPG.Y := QEntite.PosExtr0.Y - TabVisee[St-1].LG * qSinAlphaD;
-            QEntite.PosOPD.X := QEntite.PosExtr0.X + TabVisee[St-1].LD * qCosAlphaD;
-            QEntite.PosOPD.Y := QEntite.PosExtr0.Y + TabVisee[St-1].LD * qSinAlphaD;
+            QEntite.PosOPG.setFrom(QEntite.PosExtr0.X - TabVisee[St-1].LG * qCosAlphaD,
+                                   QEntite.PosExtr0.Y - TabVisee[St-1].LG * qSinAlphaD,
+                                   QEntite.PosExtr0.Z - TabVisee[St-1].HN);
 
-            QEntite.PosOPD.Z := QEntite.PosExtr0.Z + TabVisee[St-1].HZ;
-            QEntite.PosOPG.Z := QEntite.PosExtr0.Z - TabVisee[St-1].HN;
+            QEntite.PosOPD.setFrom(QEntite.PosExtr0.X + TabVisee[St-1].LD * qCosAlphaD,
+                                   QEntite.PosExtr0.Y + TabVisee[St-1].LD * qSinAlphaD,
+                                   QEntite.PosExtr0.Z + TabVisee[St-1].HZ);
+
             AlphaD := CalculerAngleBissecteur(TabVisee[St].AccroissXYZ.X - TabVisee[St-1].AccroissXYZ.X,
                                               TabVisee[St].AccroissXYZ.Y - TabVisee[St-1].AccroissXYZ.Y,
                                               TabVisee[St+1].AccroissXYZ.X - TabVisee[St].AccroissXYZ.X,
                                               TabVisee[St+1].AccroissXYZ.Y - TabVisee[St].AccroissXYZ.Y);
             SinCos(AlphaD, qSinAlphaD, qCosAlphaD);
-            QEntite.PosPG.X := QEntite.PosStation.X - TabVisee[St].LG * qCosAlphaD;
-            QEntite.PosPG.Y := QEntite.PosStation.Y - TabVisee[St].LG * qSinAlphaD;
-            QEntite.PosPD.X := QEntite.PosStation.X + TabVisee[St].LD * qCosAlphaD;
-            QEntite.PosPD.Y := QEntite.PosStation.Y + TabVisee[St].LD * qSinAlphaD;
-            QEntite.PosPD.Z := QEntite.PosStation.Z + TabVisee[St].HZ;
-            QEntite.PosPG.Z := QEntite.PosStation.Z - TabVisee[St].HN;
+            QEntite.PosPG.setFrom(QEntite.PosStation.X - TabVisee[St].LG * qCosAlphaD,
+                                  QEntite.PosStation.Y - TabVisee[St].LG * qSinAlphaD,
+                                  QEntite.PosStation.Z - TabVisee[St].HN);
+
+            QEntite.PosPD.setFrom(QEntite.PosStation.X + TabVisee[St].LD * qCosAlphaD,
+                                  QEntite.PosStation.Y + TabVisee[St].LD * qSinAlphaD,
+                                  QEntite.PosStation.Z + TabVisee[St].HZ);
+
             QEntite.CouleurDegrade := clBlue;                                                        // couleur pour dégradé
             EWE1 := Pos(LowerCase(KEYWORD_POI_TODO), LowerCase(TabVisee[St].Commentaires)) > 0;
             EWE2 := Pos(LowerCase(KEYWORD_POI_DONE), LowerCase(TabVisee[St].Commentaires)) > 0;

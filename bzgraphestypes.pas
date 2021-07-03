@@ -70,7 +70,7 @@ var
   dp: Double;
 begin;
   dp   := Hypot(dx, dy);
-  Dist := Hypot(dp,dz);
+  Dist := Hypot(dp, dz);
   Inc  := ArcTan2(dz, dp) * 0.5 * fUC / pi;
   Az   := GetAzimut(dx,dy, fUB);
 end;

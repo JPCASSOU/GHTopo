@@ -447,6 +447,7 @@ resourcestring
   rsCDR_SERIE_MSG_ERR_LRUD                   = 'La distance ne doit pas être négative';
   rsCDR_SERIE_MSG_WARN_LRUD                  = '[Note]: LRUD disproportionnée - Vérifier ces valeurs';
 
+
   rsCDR_SERIE_NB_ANTENNES_MODIFIEES          = '%d visées rayonnantes modifiées';
   rsCDR_SERIES_MSG_ERROR_LONGUEURS_ADMISES   = ' %.3f m incorrecte; valeurs admises: %.3f à %.3f';
   rsCDR_SERIES_MSG_ERROR_ATTRIBUTED_NO_SERIE = 'Numéro de série déjà attribué';
@@ -605,7 +606,6 @@ resourcestring
   rsDLGCOULSAVEPAL                           = 'Enregistrer palette';
   rsDLGCOULRESTPAL                           = 'Restaurer palette';
   rsDLGCOULFILTERPAL                         = 'Fichiers de palette (*.pal)|*.pal|Tous (*.*)|*.*';
-  rsDLGCOUDELPAL                             = 'Ecraser le fichier existant';
   rsPALETTENOTFOUNT                          = 'Palette introuvable';
   // ******************************************************
   // resourcestring de l''utilitaire d''export graphique
@@ -1423,6 +1423,8 @@ resourcestring
 
   rsMSG_GRAPHE_POINT_NOT_FOUND               = 'Le point de %s %s est introuvable';
   rsMSG_WARN_LONG_PROCESS                    = 'Cette opération est assez longue - Continuer';
+
+  rsERR_MSG_ELEMENT_NOT_FOUND                = '*** Elément introuvable %s - Arrêt';
 //================================================================================
 implementation
 

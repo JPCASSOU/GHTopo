@@ -89,6 +89,7 @@ begin
   FName    := QName;
   FDoFlush := QDoFlush;
   SetLength(FListeVertex, 0);
+  FBoundingBox.Reset();
 end;
 
 destructor TDGCPolyLineGon.Destroy();
@@ -102,8 +103,10 @@ var
   i: Integer;
   P: TDGCPoint2D;
 begin
-  UpdateBoundingBox(FBoundingBox, GetVertex(0), True);
-  for i := 1 to GetNbVertex() - 1 do UpdateBoundingBox(FBoundingBox, GetVertex(i), false);
+  FBoundingBox.Reset();
+
+  //UpdateBoundingBox(FBoundingBox, GetVertex(0), True);
+  for i := 0 to GetNbVertex() - 1 do FBoundingBox.upDate(GetVertex(i));
 end;
 
 function TDGCPolyLineGon.AddVertex(const V: TDGCPoint2D): boolean;
@@ -206,9 +209,8 @@ var
   A0, A1   : TDGCBezierArc;
   V1, V2   : TDGCPoint2D;
   Delta    : TDGCPoint2D;
-  R1       : double;
+  R0, R1   : double;
   AngleTg1, AngleTg2 : double;
-  R2: float;
 begin
   Result := false;
 
@@ -228,7 +230,7 @@ begin
 
     Delta.setFrom(V2.X - V1.X, V2.Y - V1.Y);
     AB.TangP1.setFrom(Delta.X / 3, Delta.Y / 3);
-    R1 := Hypot(Delta.X, Delta.Y) / 3;
+    R1 := Delta.getNorme() / 3;
 
     AB.TangP2.X := -AB.TangP1.X;
     AB.TangP2.Y := -AB.TangP1.Y;
@@ -239,7 +241,7 @@ begin
   begin
     A0 := FListeArcs[i-1];
     A1 := FListeArcs[i];
-
+    (*
     R1 := Hypot(A0.TangP2.X, A0.TangP2.Y);
     AngleTg2 := DGCGetAngleBissecteur(-A0.TangP2.X, -A0.TangP2.Y,
                                        A1.TangP1.X,  A1.TangP1.Y) - PI_2;
@@ -251,6 +253,16 @@ begin
     AngleTg1 := AngleTg2 + PI;
     FListeArcs[i].TangP1.X := R2 * cos(AngleTg1);
     FListeArcs[i].TangP1.Y := R2 * sin(AngleTg1);
+    //*)
+    R0 := A0.TangP2.getNorme();
+    R1 := A1.TangP1.getNorme();
+    AngleTg2 := DGCGetAngleBissecteur(-A0.TangP2.X, -A0.TangP2.Y,
+                                       A1.TangP1.X,  A1.TangP1.Y) - PI_2;
+    FListeArcs[i-1].TangP2.setFrom( cos(AngleTg2) * R0,  sin(AngleTg2) * R0);
+    //AngleTg1 := AngleTg2 + PI;
+    //FListeArcs[i].TangP1.setFrom(R2 * cos(AngleTg1), R2 * sin(AngleTg1);
+    FListeArcs[i-1].TangP1.setFrom(-cos(AngleTg2) * R1, -sin(AngleTg2) * R1);   // cos(x + pi) = -cos(x) et sin(x + pi) = -sin(x)
+
   end;
   // Passe 3: Coordonnées des points de contrôle
   (*
@@ -289,18 +301,12 @@ var
     for s := 0 to High(Bezier) do
     begin
       PT.setFrom(Bezier[s].X, Bezier[s].Y);
-      FBoundingBox.X1 := Min(FBoundingBox.X1, Pt.X);
-      FBoundingBox.Y1 := Min(FBoundingBox.Y1, Pt.Y);
-      FBoundingBox.X2 := Max(FBoundingBox.X2, Pt.X);
-      FBoundingBox.Y2 := Max(FBoundingBox.Y2, Pt.Y);
+      FBoundingBox.upDate(PT);
     end;
   end;
 begin
   Nb := Length(FListeArcs);
-  FBoundingBox.X1 :=  Infinity;
-  FBoundingBox.Y1 :=  Infinity;
-  FBoundingBox.X2 := -Infinity;
-  FBoundingBox.Y2 := -Infinity;
+  FBoundingBox.Reset();
   for i := 0 to Nb - 1  do QBoundingBoxArc(FListeArcs[i]);
 end;
 end.

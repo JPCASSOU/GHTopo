@@ -204,7 +204,7 @@ var
     DrawColTexte(LSB, ARect, hcColsTitres.Sections.Items[2], True , Format(FMTSERST,[sr.GetNoSerieArr, sr.GetNoPointArr]));
     DrawColTexte(LSB, ARect, hcColsTitres.Sections.Items[3], True , _AnsiToLCLStr(sr.GetNomSerie));
     rs := FDocToporobot.GetReseau(sr.GetNumeroReseau());
-    DrawColRectColoreWithTexte(LSB, ARect, hcColsTitres.Sections.Items[4], True , bg, rs.ColorReseau, _AnsiToLCLStr(rs.NomReseau));
+    DrawColRectColoreWithTexte(LSB, ARect, hcColsTitres.Sections.Items[4], True , bg, rs.ColorReseau.toTColor(), _AnsiToLCLStr(rs.NomReseau));
     DrawColTexte(LSB, ARect, hcColsTitres.Sections.Items[5], True , Format(FORMAT_NB_INTEGER,[sr.GetNbVisees()]));
   end;
 begin
@@ -659,8 +659,8 @@ begin
     Q2     := CdrCoupeDeveloppee1.GetCoinHautDroit;
     Sens   := IIF(Grooth, 1, -1);
     Diag   := Sens * CoefZoom * 0.01 * Hypot2D(Q2.P - Q1.P, Q2.Z - Q1.Z);
-    QC1    := MakeTPointCoupeDeveloppee(Q1.P + Diag, Q1.Z + Diag);
-    QC2    := MakeTPointCoupeDeveloppee(Q2.P - Diag, Q2.Z - Diag);
+    QC1.setFrom(Q1.P + Diag, Q1.Z + Diag);
+    QC2.setFrom(Q2.P - Diag, Q2.Z - Diag);
     CdrCoupeDeveloppee1.SetViewLimits(QC1.P, QC1.Z, QC2.P, QC2.Z);
     CdrCoupeDeveloppee1.RedessinEcran;
   except

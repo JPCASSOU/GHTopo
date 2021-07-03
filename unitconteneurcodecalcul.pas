@@ -363,9 +363,8 @@ begin
     Visee.Code := 0; //1
     Visee.Expe := 0; //1
     l1 := 0.0;    a1 := 0.00;    p1 := 0.00;
-    GetBearingInc(QAccroissement.X, QAccroissement.Y, QAccroissement.Z,
-                  l1, a1, p1,
-                  UNITE_ANGULAIRE_DU_CODE_ZERO, UNITE_ANGULAIRE_DU_CODE_ZERO); // Bug avec 400 grades
+    GetBearingInc(UNITE_ANGULAIRE_DU_CODE_ZERO, UNITE_ANGULAIRE_DU_CODE_ZERO,
+                  QAccroissement, l1, a1, p1); // Bug avec 400 grades
     Visee.NoVisee  := 1;
     Visee.Longueur := l1;
     Visee.Azimut   := a1;

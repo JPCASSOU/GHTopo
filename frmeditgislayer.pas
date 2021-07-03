@@ -59,9 +59,9 @@ begin
     editLayerDescription.Text  := QLayer.LayerDescription;
     editLayerAttribution.Text  := QLayer.LayerAttribution;
 
-    btnMarkerColor.ButtonColor := QLayer.SymbolColor;
+    btnMarkerColor.ButtonColor := QLayer.SymbolColor.toTColor();
     editMarkerSize.Value       := QLayer.SymbolSize;
-    editMarkerOpacity.AsInteger:= QLayer.SymbolOpacity;
+    editMarkerOpacity.AsInteger:= QLayer.SymbolColor.Alpha;
     cmbMarkerStyle.Clear;
     cmbMarkerStyle.Items.Add('Marqueur OSM');
     cmbMarkerStyle.Items.Add('Cercle');
@@ -85,10 +85,8 @@ begin
   Result.LayerAttribution      := Trim(editLayerAttribution.Text);
 
   Result.SymboleStyle          := cmbMarkerStyle.ItemIndex;
-  Result.SymbolColor           := btnMarkerColor.ButtonColor;
   Result.SymbolSize            := editMarkerSize.Value;
-  Result.SymbolOpacity         := editMarkerOpacity.AsInteger;
-
+  Result.SymbolColor.setFrom(btnMarkerColor.ButtonColor, editMarkerOpacity.AsInteger);
 end;
 
 end.
