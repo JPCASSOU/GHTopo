@@ -586,11 +586,11 @@ begin
     V.TypeVisee         := TTypeDeVisee(StrToIntDef(EWE[COL_VISEE_TYPE        ], 0)); // 'Type';
     V.Code              := StrToIntDef(EWE[COL_VISEE_CODE        ], 0); // 'Code';
     V.Expe              := StrToIntDef(EWE[COL_VISEE_EXPE        ], 0); // 'Expé';
-    V.Longueur          := ConvertirEnNombreReel(EWE[COL_VISEE_LONGUEUR    ], 0.00); // 'Longueur';
-    V.Azimut            := ConvertirEnNombreReel(EWE[COL_VISEE_AZIMUT      ], 0.00); // 'Azimut';
-    V.Pente             := ConvertirEnNombreReel(EWE[COL_VISEE_PENTE       ], 0.00); // 'Pente';
-    V.LG                := ConvertirEnNombreReel(EWE[COL_VISEE_LG          ], 0.00); // 'LG';
-    V.LD                := ConvertirEnNombreReel(EWE[COL_VISEE_LD          ], 0.00); // 'LD';
+    V.setLongAzInc(EWE[COL_VISEE_LONGUEUR],
+                   EWE[COL_VISEE_AZIMUT  ],
+                   EWE[COL_VISEE_PENTE   ]);
+    V.setLRUD(ConvertirEnNombreReel(EWE[COL_VISEE_LG          ], 0.00); // 'LG';
+              ConvertirEnNombreReel(EWE[COL_VISEE_LD          ], 0.00); // 'LD';
     V.HZ                := ConvertirEnNombreReel(EWE[COL_VISEE_HZ          ], 0.00); // 'HZ';
     V.HN                := ConvertirEnNombreReel(EWE[COL_VISEE_HN          ], 0.00); // 'HN';
     V.Commentaires      := Trim(EWE[COL_VISEE_OBS]);

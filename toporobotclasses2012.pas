@@ -143,6 +143,8 @@ uses
   SysUtils,
   Graphics,
   UnitTSAGeoMag,
+  Clipbrd,
+  LCLType,
   //fpjson, jsonparser,       // pour JSON
   DOM, XMLWrite, XMLRead;   // pour XML
 
@@ -435,14 +437,14 @@ type
 
     function  GetLastFindText(): string; inline;
     // export de listes en CSV
-    procedure ExportListeEntreesCSV(const FileName: TStringDirectoryFilename);
-    procedure ExportListeReseauxCSV(const FileName: TStringDirectoryFilename);
-    procedure ExportListeSecteursCSV(const FileName: TStringDirectoryFilename);
-    procedure ExportListeCodesCSV(const FileName: TStringDirectoryFilename);
-    procedure ExportListeExpesCSV(const FileName: TStringDirectoryFilename);
-    procedure ExportListeEntetesSeries(const FileName: TStringDirectoryFilename);
-    procedure ExportListePOIToCSV(const FileName: TStringDirectoryFilename);
-    procedure ExportListeErreursToCSV(const FileName: TStringDirectoryFilename);
+    procedure ExportListeEntreesCSV(const ToClipBoard: boolean; const FileName: TStringDirectoryFilename);
+    procedure ExportListeReseauxCSV(const ToClipBoard: boolean; const FileName: TStringDirectoryFilename);
+    procedure ExportListeSecteursCSV(const ToClipBoard: boolean; const FileName: TStringDirectoryFilename);
+    procedure ExportListeCodesCSV(const ToClipBoard: boolean; const FileName: TStringDirectoryFilename);
+    procedure ExportListeExpesCSV(const ToClipBoard: boolean; const FileName: TStringDirectoryFilename);
+    procedure ExportListeEntetesSeries(const ToClipBoard: boolean; const FileName: TStringDirectoryFilename);
+    procedure ExportListePOIToCSV(const ToClipBoard: boolean; const FileName: TStringDirectoryFilename);
+    procedure ExportListeErreursToCSV(const ToClipBoard: boolean; const FileName: TStringDirectoryFilename);
     procedure ExportSeriesCSV(const QFileName: TStringDirectoryFilename);
     procedure ExportListeAntennesCSV(const FileName: TStringDirectoryFilename);
 
@@ -2041,260 +2043,352 @@ begin
   Result := FLastFindTextWhat;
 end;
 
-procedure TToporobotStructure2012.ExportListeEntreesCSV(const FileName: TStringDirectoryFilename);
+procedure TToporobotStructure2012.ExportListeEntreesCSV(const ToClipBoard: boolean; const FileName: TStringDirectoryFilename);
 var
-  fp: TextFile;
+  LS: TStringList;
+  CT: TClipboard;
   i, Nb: Integer;
   myEntrance: TEntrance;
+
 begin
   Nb := GetNbEntrances();
   AfficherMessage(Format('%s.ExportListeEntreesCSV: %d', [ClassName, Nb]));
-  if (Nb > 0) then
-  begin
-    try
-      AssignFile(fp, FileName);
-      ReWrite(fp);
-      WriteLn(fp, 'No' + #9 + 'Nom' + #9 +
-                  'X' + #9 + 'Y' + #9 + 'Z' + #9 +
-                  'Serie' + #9 + 'Point' + #9 +
-                  'Observ');
-      for i := 0 to Nb - 1 do
-      begin
-        myEntrance := GetEntrance(i);
-        WriteLn(fp, Format(FORMAT_NB_INTEGER + #9 + FORMAT_STRING + #9 +
-                           FORMAT_NB_REAL_3_DEC + #9 + FORMAT_NB_REAL_3_DEC + #9 + FORMAT_NB_REAL_3_DEC + #9 +
-                           FORMAT_NB_INTEGER + #9 + FORMAT_NB_INTEGER + #9 +
-                           FORMAT_STRING,
-                           [i, myEntrance.eNomEntree,
-                            myEntrance.ePosition.X, myEntrance.ePosition.Y, myEntrance.ePosition.Z,
-                            myEntrance.eRefSer, myEntrance.eRefSt,
-                            myEntrance.eObserv
-                           ]));
-      end;
-    finally
-      CloseFile(fp);
+  if (Nb = 0) then exit;
+  LS := TStringList.Create;
+  try
+    LS.Clear;
+    LS.Add('No' + #9 + 'Nom' + #9 +
+           'X' + #9 + 'Y' + #9 + 'Z' + #9 +
+           'Serie' + #9 + 'Point' + #9 +
+           'Observ');
+    for i := 0 to Nb - 1 do
+    begin
+      myEntrance := GetEntrance(i);
+      LS.Add(Format(FORMAT_NB_INTEGER + #9 + FORMAT_STRING + #9 +
+                         FORMAT_NB_REAL_3_DEC + #9 + FORMAT_NB_REAL_3_DEC + #9 + FORMAT_NB_REAL_3_DEC + #9 +
+                         FORMAT_NB_INTEGER + #9 + FORMAT_NB_INTEGER + #9 +
+                         FORMAT_STRING,
+                         [i, myEntrance.eNomEntree,
+                          myEntrance.ePosition.X, myEntrance.ePosition.Y, myEntrance.ePosition.Z,
+                          myEntrance.eRefSer, myEntrance.eRefSt,
+                          myEntrance.eObserv
+                         ]));
     end;
+    if (ToClipBoard) then
+    begin
+      CT := TClipboard.Create(ctClipBoard);
+      try
+        CT.AsText := LS.Text;
+      finally
+        FreeandNil(CT);
+      end;
+    end
+    else
+    begin
+      LS.SaveToFile(FileName);
+    end;
+    LS.Clear;
+  finally
+
+    FreeandNil(LS);
   end;
 end;
 
-procedure TToporobotStructure2012.ExportListeReseauxCSV(const FileName: TStringDirectoryFilename);
+procedure TToporobotStructure2012.ExportListeReseauxCSV(const ToClipBoard: boolean; const FileName: TStringDirectoryFilename);
 var
-  fp: TextFile;
+  LS: TStringList;
   i, Nb: Integer;
   myReseau: TReseau;
+  CT: TClipboard;
 begin
   Nb := GetNbReseaux;
   AfficherMessage(Format('%s.ExportListeReseauxCSV: %d', [ClassName, Nb]));
-  if (Nb > 0) then
-  begin
-    try
-      AssignFile(fp, FileName);
-      ReWrite(fp);
-      WriteLn(fp, 'No' + #9 + 'Type' + #9 + 'Couleur' + #9 +
-                  'Nom' + #9 + 'Observ');
-      for i := 0 to Nb -1 do
-      begin
-        myReseau := GetReseau(i);
-        WriteLn(fp, Format(FORMAT_NB_INTEGER + #9 + FORMAT_NB_INTEGER + #9 + '#%X' + #9 +
-                           FORMAT_STRING + #9 + FORMAT_STRING,
-                           [i,
-                            myReseau.TypeReseau, myReseau.ColorReseau.toTColor(),
-                            myReseau.NomReseau,
-                            myReseau.ObsReseau
-                           ]));
-      end;
-    finally
-      CloseFile(fp);
+  if (Nb = 0) then exit;
+  LS := TStringList.Create;
+  try
+    LS.Clear;
+    LS.Add('No' + #9 + 'Type' + #9 + 'Couleur' + #9 + 'Nom' + #9 + 'Observ');
+    for i := 0 to Nb -1 do
+    begin
+      myReseau := GetReseau(i);
+      LS.Add(Format(FORMAT_NB_INTEGER + #9 + FORMAT_NB_INTEGER + #9 + '#%X' + #9 +
+                         FORMAT_STRING + #9 + FORMAT_STRING,
+                         [i,
+                          myReseau.TypeReseau, myReseau.ColorReseau.toTColor(),
+                          myReseau.NomReseau,
+                          myReseau.ObsReseau
+                         ]));
     end;
+    if (ToClipBoard) then
+    begin
+      CT := TClipboard.Create(ctClipBoard);
+      try
+        CT.AsText := LS.Text;
+      finally
+        FreeandNil(CT);
+      end;
+    end
+    else
+    begin
+      LS.SaveToFile(FileName);
+    end;
+    LS.Clear;
+  finally
+
+    FreeandNil(LS);
   end;
 end;
 
-procedure TToporobotStructure2012.ExportListeSecteursCSV(const FileName: TStringDirectoryFilename);
+procedure TToporobotStructure2012.ExportListeSecteursCSV(const ToClipBoard: boolean; const FileName: TStringDirectoryFilename);
 var
-  fp: TextFile;
+  LS: TStringList;
+  CT: TClipboard;
   i, Nb: Integer;
   mySecteur: TSecteur;
+
 begin
   Nb := GetNbSecteurs;
   AfficherMessage(Format('%s.ExportListeSecteursCSV: %d', [ClassName, Nb]));
-  if (Nb > 0) then
-  begin
-    try
-      AssignFile(fp, FileName);
-      ReWrite(fp);
-      WriteLn(fp, 'No' + #9 + 'Type' + #9 + 'Couleur' + #9 +
-                  'Nom');
-      for i := 0 to Nb -1 do
-      begin
-        mySecteur := GetSecteur(i);
-        WriteLn(fp, Format(FORMAT_NB_INTEGER + #9 + '#%X' + #9 + FORMAT_STRING,
-                           [i, mySecteur.CouleurSecteur.toTColor(),
-                            mySecteur.NomSecteur
-                           ]));
-      end;
-    finally
-      CloseFile(fp);
+  if (Nb = 0) then exit;
+  LS := TStringList.Create;
+  try
+    LS.Clear;
+    LS.Add('No' + #9 + 'Type' + #9 + 'Couleur' + #9 + 'Nom');
+    for i := 0 to Nb -1 do
+    begin
+      mySecteur := GetSecteur(i);
+      LS.Add(Format(FORMAT_NB_INTEGER + #9 + '#%X' + #9 + FORMAT_STRING,
+                         [i, mySecteur.CouleurSecteur.toTColor(),
+                          mySecteur.NomSecteur
+                         ]));
     end;
+    if (ToClipBoard) then
+    begin
+      CT := TClipboard.Create(ctClipBoard);
+      try
+        CT.AsText := LS.Text;
+      finally
+        FreeandNil(CT);
+      end;
+    end
+    else
+    begin
+      LS.SaveToFile(FileName);
+    end;
+    LS.Clear;
+  finally
+    FreeandNil(LS);
   end;
 end;
 
-procedure TToporobotStructure2012.ExportListeCodesCSV(const FileName: TStringDirectoryFilename);
+procedure TToporobotStructure2012.ExportListeCodesCSV(const ToClipBoard: boolean; const FileName: TStringDirectoryFilename);
 var
-  fp: TextFile;
   i, Nb: Integer;
   myCode: TCode;
+  CT: TClipboard;
+  LS: TStringList;
 begin
   Nb := GetNbCodes();
   AfficherMessage(Format('%s.ExportListeCodesCSV: %d', [ClassName, Nb]));
-  if (Nb > 0) then
-  begin
-    try
-      AssignFile(fp, FileName);
-      ReWrite(fp);
-      WriteLn(fp, FileName);
-      writeln(fp,  'No' + #9 + 'UniteBoussole' + #9 + 'CorrectionAzimut' +  #9 + 'UniteClino' + #9 + 'CorrectionPente' + #9 + 'Observ');
-      for i := 0 to Nb -1 do
-      begin
-        myCode := GetCode(i);
-        //TODO: Export codes à faire
-        WriteLn(fp, Format(FORMAT_NB_INTEGER + #9 +
-                           FORMAT_NB_REAL_3_DEC + #9 + FORMAT_NB_REAL_3_DEC + #9 +
-                           FORMAT_NB_REAL_3_DEC + #9 + FORMAT_NB_REAL_3_DEC + #9 +
-                           FORMAT_STRING,
-                           [myCode.IDCode,
-                            myCode.GradAz , myCode.ParamsFuncCorrAz.Co,
-                            myCode.GradInc, myCode.ParamsFuncCorrInc.Co,
-                            myCode.Commentaire
-                           ]));
-      end;
-    finally
-      CloseFile(fp);
+  if (Nb = 0) then Exit;
+  LS := TStringList.Create;
+  try
+    LS.Clear;
+    LS.Add(FileName);
+    LS.Add('No' + #9 + 'UniteBoussole' + #9 + 'CorrectionAzimut' +  #9 + 'UniteClino' + #9 + 'CorrectionPente' + #9 + 'Observ');
+    for i := 0 to Nb -1 do
+    begin
+      myCode := GetCode(i);
+      //TODO: Export codes à faire
+      LS.Add(Format(FORMAT_NB_INTEGER + #9 +
+                         FORMAT_NB_REAL_3_DEC + #9 + FORMAT_NB_REAL_3_DEC + #9 +
+                         FORMAT_NB_REAL_3_DEC + #9 + FORMAT_NB_REAL_3_DEC + #9 +
+                         FORMAT_STRING,
+                         [myCode.IDCode,
+                          myCode.GradAz , myCode.ParamsFuncCorrAz.Co,
+                          myCode.GradInc, myCode.ParamsFuncCorrInc.Co,
+                          myCode.Commentaire
+                         ]));
     end;
+    if (ToClipBoard) then
+    begin
+      CT := TClipboard.Create(ctClipBoard);
+      try
+        CT.AsText := LS.Text;
+      finally
+        FreeandNil(CT);
+      end;
+    end
+    else
+    begin
+      LS.SaveToFile(FileName);
+    end;
+    LS.Clear;
+  finally
+    FreeandNil(LS);
   end;
 end;
 
-procedure TToporobotStructure2012.ExportListeExpesCSV(const FileName: TStringDirectoryFilename);
+procedure TToporobotStructure2012.ExportListeExpesCSV(const ToClipBoard: boolean; const FileName: TStringDirectoryFilename);
 var
-  fp: TextFile;
   i, Nb: Integer;
   myExpe: TExpe;
+  LS: TStringList;
+  CT: TClipboard;
 begin
   Nb := GetNbExpes;
   AfficherMessage(Format('%s.ExportListeExpesCSV: %d', [ClassName, Nb]));
-
-  if (Nb > 0) then
-  begin
-    try
-      AssignFile(fp, FileName);
-      ReWrite(fp);
-      WriteLn(fp, 'No' + #9 + 'Couleur' + #9 + 'Date' + #9 + 'Equipe' + #9 +
-                  'Observ');
-      for i := 0 to Nb -1 do
-      begin
-        myExpe := GetExpe(i);
-        {$WARNING: TEXpe.DateExpe à implementer}
-        WriteLn(fp, Format(FORMAT_NB_INTEGER + #9 + FORMAT_NB_INTEGER + #9 +
-                           '%.2d/%.2d/%.4d' + #9 +
-                           '%s, %s' + #9 +
-                           FORMAT_STRING,
-                           [myExpe.IDExpe, myExpe.IdxCouleur,
-                            myExpe.JourExpe, myExpe.MoisExpe, myExpe.AnneeExpe,   // DatePascalToDateSQL(myExpe.DateExpe),
-                            myExpe.Operateur, myExpe.ClubSpeleo,
-                            myExpe.Commentaire
-                           ]));
-      end;
-    finally
-      CloseFile(fp);
+  if (Nb = 0) then exit;
+  LS := TStringList.Create;
+  try
+    LS.Clear;
+    LS.Add('No' + #9 + 'Couleur' + #9 + 'Date' + #9 + 'Equipe' + #9 + 'Observ');
+    for i := 0 to Nb -1 do
+    begin
+      myExpe := GetExpe(i);
+      {$WARNING: TEXpe.DateExpe à implementer}
+      LS.Add(Format(FORMAT_NB_INTEGER + #9 + FORMAT_NB_INTEGER + #9 +
+                         '%.2d/%.2d/%.4d' + #9 +
+                         '%s, %s' + #9 +
+                         FORMAT_STRING,
+                         [myExpe.IDExpe, myExpe.IdxCouleur,
+                          myExpe.JourExpe, myExpe.MoisExpe, myExpe.AnneeExpe,   // DatePascalToDateSQL(myExpe.DateExpe),
+                          myExpe.Operateur, myExpe.ClubSpeleo,
+                          myExpe.Commentaire
+                         ]));
     end;
+    if (ToClipBoard) then
+    begin
+      CT := TClipboard.Create(ctClipBoard);
+      try
+        CT.AsText := LS.Text;
+      finally
+        FreeandNil(CT);
+      end;
+    end
+    else
+    begin
+      LS.SaveToFile(FileName);
+    end;
+    LS.Clear;
+  finally
+    FreeandNil(LS);
   end;
 end;
 
 
 
-procedure TToporobotStructure2012.ExportListePOIToCSV(const FileName: TStringDirectoryFilename);
+procedure TToporobotStructure2012.ExportListePOIToCSV(const ToClipBoard: boolean; const FileName: TStringDirectoryFilename);
 var
-  fp: TextFile;
+  LS: TStringList;
+  CT: TClipboard;
   Nb, i: Integer;
   MyPOI: TPointOfInterest;
 begin
   Nb := GetNbPointsOfInterests();
   AfficherMessage(Format('%s.ExportListePOIToCSV: %d', [ClassName, Nb]));
-  if (Nb > 0) then
-  begin
-    try
-      AssignFile(fp, FileName);
-      ReWrite(fp);
-      WriteLn(fp, 'No' + #9 + 'Serie' + #9 + 'Station' + #9 +
-                  //'OffsetX' + #9 + 'OffsetY' + #9 + 'OffsetZ' + #9 +
-                  'Couleur' + #9 + 'IDTerrain' + #9 +
-                  'Description');
-      for i := 0 to Nb -1 do
-      begin
-        MyPOI := GetPointOfInterest(i);
-        WriteLn(fp, Format(FORMAT_NB_INTEGER + #9 +
-                           FORMAT_NB_INTEGER + #9 + FORMAT_NB_INTEGER + #9 +
-                           //FORMAT_NB_REAL_3_DEC + #9 + FORMAT_NB_REAL_3_DEC + #9 + FORMAT_NB_REAL_3_DEC + #9 +
-                           FORMAT_STRING + #9 + FORMAT_STRING + #9 +
-                           FORMAT_STRING,
-                           [i,
-                            MyPOI.Serie, MyPOI.Station,
-                            //MyPOI.Coordinates.X, MyPOI.Coordinates.Y, MyPOI.Coordinates.Z,
-                            ColorToHTMLColor(MyPOI.Couleur), MyPOI.LabelTerrain,
-                            MyPOI.Description
-                           ]));
-      end;
-    finally
-      CloseFile(fp);
+  if (Nb = 0) then exit;
+  LS := TStringList.Create;
+  try
+    LS.Clear;
+    LS.Add('No' + #9 + 'Serie' + #9 + 'Station' + #9 +
+            //'OffsetX' + #9 + 'OffsetY' + #9 + 'OffsetZ' + #9 +
+           'Couleur' + #9 + 'IDTerrain' + #9 +
+           'Description');
+    for i := 0 to Nb -1 do
+    begin
+      MyPOI := GetPointOfInterest(i);
+      LS.Add(Format(FORMAT_NB_INTEGER + #9 +
+                         FORMAT_NB_INTEGER + #9 + FORMAT_NB_INTEGER + #9 +
+                         //FORMAT_NB_REAL_3_DEC + #9 + FORMAT_NB_REAL_3_DEC + #9 + FORMAT_NB_REAL_3_DEC + #9 +
+                         FORMAT_STRING + #9 + FORMAT_STRING + #9 +
+                         FORMAT_STRING,
+                         [i,
+                          MyPOI.Serie, MyPOI.Station,
+                          //MyPOI.Coordinates.X, MyPOI.Coordinates.Y, MyPOI.Coordinates.Z,
+                          ColorToHTMLColor(MyPOI.Couleur), MyPOI.LabelTerrain,
+                          MyPOI.Description
+                         ]));
     end;
+    if (ToClipBoard) then
+    begin
+      CT := TClipboard.Create(ctClipBoard);
+      try
+        CT.AsText := LS.Text;
+      finally
+        FreeandNil(CT);
+      end;
+    end
+    else
+    begin
+      LS.SaveToFile(FileName);
+    end;
+    LS.Clear;
+  finally
+    FreeandNil(LS);
   end;
-
 end;
-procedure TToporobotStructure2012.ExportListeErreursToCSV(const FileName: TStringDirectoryFilename);
+procedure TToporobotStructure2012.ExportListeErreursToCSV(const ToClipBoard: boolean; const FileName: TStringDirectoryFilename);
 var
-  fp: TextFile;
+  LS: TStringList;
+  CT: TClipboard;
   Nb, i: Integer;
   MyErreur: TMessaqeErreurGHTopoCompiler;
 begin
   Nb := GetNbMessagesErreur();
   AfficherMessage(Format('%s.ExportListeErreursToCSV: %d', [ClassName, Nb]));
-  if (Nb > 0) then
-  begin
-    try
-      AssignFile(fp, FileName);
-      ReWrite(fp);
-      WriteLn(fp, 'No' + #9 +
-                  'Table' + #9 + 'Index' + #9 +
-                  'Criticite' + #9 + 'Couleur' + #9 +
-                  'Description');
-      for i := 0 to Nb -1 do
-      begin
-        MyErreur := GetMessageErreur(i);
-        WriteLn(fp, Format(FORMAT_NB_INTEGER + #9 +
-                           FORMAT_STRING + #9 + FORMAT_NB_INTEGER + #9 +
-                           FORMAT_STRING + #9 + FORMAT_STRING + #9 +
-                           FORMAT_STRING,
-                           [i,
-                            DescribeTableExamineeByCode(MyErreur.TableExaminee), MyErreur.Index,
-                            DescribeCriticiteErreur(MyErreur.Criticite), ColorToHTMLColor(MyErreur.Couleur),
-                            MyErreur.Message
-                           ]));
-      end;
-    finally
-      CloseFile(fp);
+  if (Nb = 0) then exit;
+  LS := TStringList.Create;
+  try
+    LS.Clear;
+    LS.Add(FileName);
+    LS.Add('No' + #9 +
+           'Table' + #9 + 'Index' + #9 +
+           'Criticite' + #9 + 'Couleur' + #9 +
+           'Description');
+    for i := 0 to Nb -1 do
+    begin
+      MyErreur := GetMessageErreur(i);
+      LS.Add(Format(FORMAT_NB_INTEGER + #9 +
+                         FORMAT_STRING + #9 + FORMAT_NB_INTEGER + #9 +
+                         FORMAT_STRING + #9 + FORMAT_STRING + #9 +
+                         FORMAT_STRING,
+                         [i,
+                          DescribeTableExamineeByCode(MyErreur.TableExaminee), MyErreur.Index,
+                          DescribeCriticiteErreur(MyErreur.Criticite), ColorToHTMLColor(MyErreur.Couleur),
+                          MyErreur.Message
+                         ]));
     end;
+    if (ToClipBoard) then
+    begin
+      CT := TClipboard.Create(ctClipBoard);
+      try
+        CT.AsText := LS.Text;
+      finally
+        FreeandNil(CT);
+      end;
+    end
+    else
+    begin
+      LS.SaveToFile(FileName);
+    end;
+    LS.Clear;
+  finally
+    FreeandNil(LS);
   end;
-
 end;
 
 
-procedure TToporobotStructure2012.ExportListeEntetesSeries(const FileName: TStringDirectoryFilename);
+procedure TToporobotStructure2012.ExportListeEntetesSeries(const ToClipBoard: boolean; const FileName: TStringDirectoryFilename);
 var
-  fp: TextFile;
+
+  LS: TStringList;
+  CT: TClipboard;
   i: integer;
   S: TObjSerie;
   procedure Wrtln(const S: string);
   begin
-    WriteLn(fp, S);
+    LS.Add(S);
   end;
   procedure WrtItem(const S: TObjSerie);
   const
@@ -2315,9 +2409,9 @@ var
   end;
 begin
   AfficherMessage(Format('%s.ExportListeEntetesSeries', [ClassName]));
-  AssignFile(fp, FileName);
+  LS := TStringList.Create;
   try
-    Rewrite(fp);
+    LS.Clear;
     Wrtln('Serie' + #9 +
           'Nom serie' + #9 +
           'Entree' + #9 +
@@ -2332,8 +2426,22 @@ begin
       S := GetSerie(i);
       WrtItem(S);
     end;
+    if (ToClipBoard) then
+    begin
+      CT := TClipboard.Create(ctClipBoard);
+      try
+        CT.AsText := LS.Text;
+      finally
+        FreeandNil(CT);
+      end;
+    end
+    else
+    begin
+      LS.SaveToFile(FileName);
+    end;
+    LS.Clear;
   finally
-    CloseFile(fp);
+    FreeandNil(LS);
   end;
 end;
 
@@ -4064,12 +4172,12 @@ begin
   AfficherMessageErreur(format('Fuck the Christ: %s.RemovePointOfInterest(%d): ', [ClassName, Idx]));
   if (GetSerieByNumeroSerie(MyPOI.Serie, MySerie, QIdxSerie)) then
   begin
-    AfficherMessageErreur('--001');
+    //AfficherMessageErreur('--001');
     MyStation := MySerie.GetVisee(MyPOI.Station);
-    AfficherMessageErreur(format('--002: %f, %f, %f - %s', [MyStation.Longueur, MyStation.Azimut, MyStation.Pente, MyStation.Commentaires]));
+    //AfficherMessageErreur(format('--002: %f, %f, %f - %s', [MyStation.Longueur, MyStation.Azimut, MyStation.Pente, MyStation.Commentaires]));
     // Basculer le POI à DONE
     MyStation.Commentaires := StringReplace(MyStation.Commentaires, KEYWORD_POI_TODO, KEYWORD_POI_DONE, [rfIgnoreCase]);
-    AfficherMessageErreur(format('--003: %f, %f, %f - %s', [MyStation.Longueur, MyStation.Azimut, MyStation.Pente, MyStation.Commentaires]));
+    //AfficherMessageErreur(format('--003: %f, %f, %f - %s', [MyStation.Longueur, MyStation.Azimut, MyStation.Pente, MyStation.Commentaires]));
     MySerie.PutVisee(MyPOI.Station, MyStation);
     // et supprimer le POI de la liste
     AfficherMessageErreur('Le Christ doit être pendu');

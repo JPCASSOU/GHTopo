@@ -667,7 +667,10 @@ end;
 
 procedure TGHTopoMainMenuBar.mnuTUOpenGL3Click(Sender: TObject);
 begin
+  {$IFDEF USE_VIEWER_OPENGL}
   DisplayVue3DOpenGL3(FBDDEntites, FMonMaillage, '');
+  {$ENDIF}
+  pass;
 end;
 
 

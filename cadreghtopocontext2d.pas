@@ -1426,13 +1426,8 @@ begin
     VS.TypeVisee := QTypeVisee;
     VS.Code      := CC.IDCode;
     VS.Expe      := EE.IDExpe;
-    VS.Longueur  := QLongueur;
-    VS.Azimut    := QAzimut;
-    VS.Pente     := QPente;
-    VS.LG        := QLG;
-    VS.LD        := QLD;
-    VS.HZ        := QHZ;
-    VS.HN        := QHN;
+    VS.setLongAzInc(QLongueur, QAzimut, QPente);
+    VS.setLRUD(QLG, QLD, QHZ, QHN);
     VS.IDTerrainStation := QIDLitteral;
     VS.Commentaires := QCommentaire;
     MySerie.AddVisee(VS);                                                         // on ajoute la visée:

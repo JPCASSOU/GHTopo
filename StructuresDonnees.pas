@@ -278,11 +278,7 @@ type
   Description : string;
   procedure setFrom(const QCouleur: TGHTopoColor; const QNom, QDescription: string);
 end;
-type
-
-{ TGISLayer }
-
- TGISLayer = record
+type TGISLayer = record
   SymboleStyle       : integer; // 0: rien, 1: Cercle, 2: Carré, 3: Etoile, etc ...
   SymbolSize         : double;
   SymbolColor        : TGHTopoColor;
@@ -305,11 +301,7 @@ type TErrorConstruireUneViseeValide = set of (errCVV_NOT_ENOUGHT_NB_SHOTS, errCV
 // pour le parcours des graphes
 type TModeExplorerGraphe = (mpgEN_LARGEUR, mpgEN_PROFONDEUR);
 // pour la recherche de stations topo
-type
-
-{ TStationMatchFound }
-
- TStationMatchFound = record
+type TStationMatchFound = record
   Serie        : TNumeroSerie;
   Station      : TNumeroStation;
   Match        : string;
@@ -637,12 +629,7 @@ end;
 // sens de dessin des séries en coupe développée
 type TSensTraceCoupeDev = (stcdVERS_DROITE, stcdVERS_GAUCHE);
 // visées
-// TODO: Fusionnet TUneVisee et TUneStation
-type
-
-{ TUneVisee }
-
- TUneVisee = record
+type  TUneVisee = record
     NoVisee   : integer; // Indispensable pour les branches et les antennes             //
     TypeVisee : TTypeDeVisee;                                                           //   TypeVisee           : TTypeDeVisee;
     IDSecteur : TNumeroSecteur;                                                         //   stSecteur           : TNumeroSecteur;
@@ -661,9 +648,8 @@ type
     Humidity   : double;
     IDTerrainStation: string;                                                           //   IDTerrainStation    : string;
     Commentaires    : string;                                                           //   Commentaire         : string;
-    AccroissXYZ: TPoint3Df;                                                             //
-    AccroissP  : double;                                                                //
-    //AccroissZ : double;                                                               // PtArrivee           : integer;    //        'Arrivée visée
+    AccroissXYZ     : TPoint3Df;                                                        //
+    AccroissP       : double;                                                           //
     procedure setFrom(const QNoVisee          : integer;
                       const QTypeVisee        : TTypeDeVisee;
                       const QIdSecteur        : TNumeroSecteur;
@@ -677,7 +663,12 @@ type
                       const QTemperature      : double = 0.00;
                       const QHumidity         : double = 0.00);
     procedure Empty(const Commentaire: string = '');
-    function toLineString(const ModeSaveTab: TModeSaveTAB; const QNumeroDeSerie: TNumeroSerie; const QNumeroStation: TNumeroStation): string;
+    function  toLineXTB(const ModeSaveTab: TModeSaveTAB; const QNumeroDeSerie: TNumeroSerie; const QNumeroStation: TNumeroStation): string;
+    procedure setLongAzInc(const L, A, P: double); overload;
+    procedure setLongAzInc(const L, A, P: string); overload;
+    procedure setLRUD(const L, R, U, D: double); overload;
+    procedure setLRUD(const L, R, U, D: string); overload;
+    function  DebugString(): string;
 end;
 // visées en antenne
 // Nota: Les codes et expés d'une visée radiante héritent de ceux de la station d'accrochage
@@ -695,6 +686,8 @@ type
    Azimut              : double;      //         'Azimut
    Pente               : double;      //         'Pente
    MarkedForDelete     : boolean;
+   procedure setLongAzInc(const L, A, P: double); overload;
+   procedure setLongAzInc(const L, A, P: string); overload;
    procedure setFrom(const QEntranceRatt    : TNumeroEntrance;
                      const QReseau          : TNumeroReseau;
                      const QSecteur         : TNumeroSecteur;
@@ -703,6 +696,8 @@ type
                      const QL, QAz, QP      : double;
                      const Marked           : boolean = false);
    function toLineXTB(const QIdx: integer): string;
+   function DebugString(): string;
+
 end;
 type
 
@@ -807,6 +802,8 @@ type
    function getLibelleStationTopo(): string;
    function DebugString(): string;
    function toTextForQRCode(): string;
+   procedure setLongAzInc(const L, A, P: double); overload;
+   procedure setLRUD(const L, R, U, D: double);
 end;
 //*)
 
@@ -2030,15 +2027,8 @@ begin
   self.IDSecteur := QIdSecteur;
   self.Code      := QCode;
   self.Expe      := QExpe;
-
-  self.Longueur  := QL;
-  self.Azimut    := QAz;
-  self.Pente     := QP;
-  self.LG        := QLG;
-  self.LD        := QLD;
-  self.HZ        := QHZ;
-  self.HN        := QHN;
-
+  self.setLongAzInc(QL, QAz, QP);
+  self.setLRUD(QLG, QLD, QHZ, QHN);
   self.IDTerrainStation  := QIDStation;
   self.Commentaires      := QCommentaire;
   self.AccroissXYZ.Empty();
@@ -2047,19 +2037,14 @@ begin
   self.Temperature       := QTemperature;
   self.Humidity          := QHumidity;
   self.Horodatage        := QHorodatage;
-
 end;
 
 procedure TUneVisee.Empty(const Commentaire: string = '');
 begin
-  self.setFrom(0, tgDEFAULT, 0, 1, 1,
-               0.001, 0.00, 0.00,
-               0.00, 0.00, 0.00, 0.00,
-               Now(),
-               '', Commentaire);
+  self.setFrom(0, tgDEFAULT, 0, 1, 1,  0.001, 0.00, 0.00,  0.00, 0.00, 0.00, 0.00, Now(), '', Commentaire);
 end;
 
-function TUneVisee.toLineString(const ModeSaveTab: TModeSaveTAB; const QNumeroDeSerie: TNumeroSerie; const QNumeroStation: TNumeroStation): string;
+function TUneVisee.toLineXTB(const ModeSaveTab: TModeSaveTAB; const QNumeroDeSerie: TNumeroSerie; const QNumeroStation: TNumeroStation): string;
 const
   LINE_STATION = FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
                  FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
@@ -2098,6 +2083,41 @@ begin
       end;
     end;
   end; //  with Station do begin
+end;
+
+procedure TUneVisee.setLongAzInc(const L, A, P: double);
+begin
+  self.Longueur := L;
+  self.Azimut   := A;
+  self.Pente    := P;
+end;
+
+procedure TUneVisee.setLongAzInc(const L, A, P: string);
+begin
+  self.Longueur := ConvertirEnNombreReel(L, 0.00);
+  self.Azimut   := ConvertirEnNombreReel(A, 0.00);
+  self.Pente    := ConvertirEnNombreReel(P, 0.00);
+end;
+
+procedure TUneVisee.setLRUD(const L, R, U, D: double);
+begin
+  self.LG := L;
+  self.LD := R;
+  self.HZ := U;
+  self.HN := D;
+end;
+
+procedure TUneVisee.setLRUD(const L, R, U, D: string);
+begin
+  self.LG := ConvertirEnNombreReel(L, 0.00);
+  self.LD := ConvertirEnNombreReel(R, 0.00);
+  self.HZ := ConvertirEnNombreReel(U, 0.00);
+  self.HN := ConvertirEnNombreReel(D, 0.00);
+end;
+
+function TUneVisee.DebugString(): string;
+begin
+  result := format('L = %.3f, Az = %.3f, P = %.3f', [self.Longueur, self.Azimut, self.Pente]);
 end;
 
 
@@ -2408,6 +2428,20 @@ end;
 
 { TViseeAntenne }
 
+procedure TViseeAntenne.setLongAzInc(const L, A, P: double);
+begin
+  self.Longueur := L;
+  self.Azimut   := A;
+  self.Pente    := P;
+end;
+
+procedure TViseeAntenne.setLongAzInc(const L, A, P: string);
+begin
+  self.Longueur := ConvertirEnNombreReel(L, 0.00);
+  self.Azimut   := ConvertirEnNombreReel(A, 0.00);
+  self.Pente    := ConvertirEnNombreReel(P, 0.00);
+end;
+
 procedure TViseeAntenne.setFrom(const QEntranceRatt: TNumeroEntrance;
                                 const QReseau: TNumeroReseau;
                                 const QSecteur: TNumeroSecteur;
@@ -2447,6 +2481,11 @@ begin
                              self.Longueur, self.Azimut, self.Pente,
                              ''  //self.Commentaires
                      ]);
+end;
+
+function TViseeAntenne.DebugString(): string;
+begin
+  result := format('L = %.3f, Az = %.3f, P = %.3f', [self.Longueur, self.Azimut, self.Pente]);
 end;
 
 { TPointOfInterest }
@@ -2567,6 +2606,21 @@ begin
                     FormatterNombreAvecSepMilliers(self.PosStation.Y, 2),
                     FormatterNombreAvecSepMilliers(self.PosStation.Z, 2)
                     ]);
+end;
+
+procedure TBaseStation.setLongAzInc(const L, A, P: double);
+begin
+  self.oLongueur := L;
+  self.oAzimut   := A;
+  self.oPente    := P;
+end;
+
+procedure TBaseStation.setLRUD(const L, R, U, D: double);
+begin
+  self.oLG := L;
+  self.oLD := R;
+  self.oHZ := U;
+  self.oHN := D;
 end;
 
 

@@ -1421,13 +1421,7 @@ begin
     FCurrentSerie.SetObsSerie(Trim(_LCLStrToAnsi(editCommentaire.Text)));
     // [MODIF_ENTETE_TABLEUR] Attrapper la station 0 de la série
     V := FCurrentSerie.GetVisee(0);
-
-    V.LG := editLG0.Value;            // Nouveau: LRUD de la visée 0
-    V.LD := editLD0.Value;
-    V.HZ := editHZ0.Value;
-    V.HN := editHN0.Value;
-
-
+    V.setLRUD(editLG0.Value, editLD0.Value, editHZ0.Value, editHN0.Value);
     FCurrentSerie.ClearStations();      // Purger la liste des points topos
     FCurrentSerie.AddVisee(V);
     // critère de sortie: Colonne 1 à 5 vides ou nulles
@@ -1443,13 +1437,13 @@ begin
       V.TypeVisee        := GetTypeDeVisee(StrToIntDef(grdStations.Cells[NUM_COL_TYPEVISEE, i], 0));
       V.Code             := StrToIntDef(grdStations.Cells[NUM_COL_CODE, i], 1);
       V.Expe             := StrToIntDef(grdStations.Cells[NUM_COL_EXPE, i], 1);
-      V.Longueur         := ConvertirEnNombreReel(grdStations.Cells[NUM_COL_L, i], 0.00);
-      V.Azimut           := ConvertirEnNombreReel(grdStations.Cells[NUM_COL_A, i], 0.00);
-      V.Pente            := ConvertirEnNombreReel(grdStations.Cells[NUM_COL_P, i], 0.00);
-      V.LG               := ConvertirEnNombreReel(grdStations.Cells[NUM_COL_LG, i], 0.00);
-      V.LD               := ConvertirEnNombreReel(grdStations.Cells[NUM_COL_LD, i], 0.00);
-      V.HZ               := ConvertirEnNombreReel(grdStations.Cells[NUM_COL_HZ, i], 0.00);
-      V.HN               := ConvertirEnNombreReel(grdStations.Cells[NUM_COL_HN, i], 0.00);
+      V.setLongAzInc(grdStations.Cells[NUM_COL_L, i],
+                     grdStations.Cells[NUM_COL_A, i],
+                     grdStations.Cells[NUM_COL_P, i]);
+      V.setLRUD(grdStations.Cells[NUM_COL_LG, i],
+                grdStations.Cells[NUM_COL_LD, i],
+                grdStations.Cells[NUM_COL_HZ, i],
+                grdStations.Cells[NUM_COL_HN, i]);
       V.Commentaires     := _LCLStrToAnsi(Trim(grdStations.Cells[NUM_COL_OBS, i]));
       V.Horodatage       := DateTimeSQLToDateTimePascal(grdStations.Cells[NUM_COL_HORODATE, i]);
       V.Temperature      := ConvertirEnNombreReel(grdStations.Cells[NUM_COL_TEMPERATURE, i], 0.00);

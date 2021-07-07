@@ -206,7 +206,7 @@ var
 begin
   if (DoDialogSaveFile('Fichier CSV|*.csv', '.csv', QFileName, QIdxFilter)) then
   begin
-    FDocuTopo.ExportListeEntetesSeries(QFileName);
+    FDocuTopo.ExportListeEntetesSeries(True, QFileName);
   end;
 end;
 

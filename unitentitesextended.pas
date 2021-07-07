@@ -35,6 +35,7 @@ uses
   UnitListesSimplesWithGeneriques,
   UnitClassPalette,
   Classes, SysUtils, Graphics, math,
+  Clipbrd, LCLType,
   ConvertisseurJPC,
   //UnitDXFDrawing,
   SVGCanvasUnit,
@@ -200,7 +201,7 @@ type
     function  GetNbJonctions(): integer;
     function  FindJonctionBySerieSt(const Ser: TNumeroSerie; const St: TNumeroStation; out QJonction: TJonctionXYZ): boolean;
     procedure SortJonctions();
-    procedure ExporterListeJonctions(const QFilename: TStringDirectoryFilename);
+    procedure ExporterListeJonctions(const ToClipboard: boolean; const QFilename: TStringDirectoryFilename);
 
 
     // utilitaires de tri
@@ -797,21 +798,23 @@ begin
   FTableJonctions.Sort(SortJonctionBySerSt);
 end;
 //*)
-procedure TBDDEntites.ExporterListeJonctions(const QFilename: TStringDirectoryFilename);
+procedure TBDDEntites.ExporterListeJonctions(const ToClipboard: boolean; const QFilename: TStringDirectoryFilename);
 var
-  fp : TextFile;
+  LS: TStringList;
+  CT: TClipboard;
   Nb, i: Integer;
   EWE: String;
   MyJonction: TJonctionXYZ;
+
 begin
   Nb := GetNbJonctions();
   AfficherMessage(format('%s.ExporterListeJonctions(%s): %d nodes', [ClassName, QFilename, Nb]));
   if (Nb <= 1) then Exit;
-  AssignFile(fp, QFilename);
-  Rewrite(fp);
+  LS := TStringList.Create;
   try
+    LS.Clear;
     EWE := 'ID' + #9 + 'Station' + #9 + 'X' + #9 + 'Y' + #9 + 'Z' + #9 + '' + #9 + 'Lat' + #9 + 'Lon';
-    WriteLn(fp, EWE);
+    LS.Add(EWE);
     for i := 1 to Nb - 1 do
     begin
       MyJonction := GetJonction(i);
@@ -821,11 +824,24 @@ begin
                      FormatterNombreOOo(MyJonction.Position.Y, 3, true),
                      FormatterNombreOOo(MyJonction.Position.Z, 3, true)
                     ]);
-      WriteLn(fp, EWE);
+      LS.Add(EWE);
     end;
-
+    if (ToClipBoard) then
+    begin
+      CT := TClipboard.Create(ctClipBoard);
+      try
+        CT.AsText := LS.Text;
+      finally
+        FreeandNil(CT);
+      end;
+    end
+    else
+    begin
+      LS.SaveToFile(QFileName);
+    end;
+    LS.Clear;
   finally
-    closefile(fp);
+    FreeandNil(LS);
   end;
 end;
 
@@ -2603,15 +2619,8 @@ begin
     // tout ceci sera recalculé à la prochaine compilation
     EE.eReseau         := 0;
     EE.eEntrance       := 0;
-    EE.oLongueur       := QV.Longueur;
-    EE.oAzimut         := QV.Azimut;
-    EE.oPente          := QV.Pente;
-    EE.oLD             := QV.LD;
-    EE.oLG             := QV.LG;
-    EE.oHZ             := QV.HZ;
-    EE.oHN             := QV.HN;
-
-
+    EE.setLongAzInc(QV.Longueur, QV.Azimut, QV.Pente);
+    EE.setLRUD(QV.LD, QV.LG, QV.HZ, QV.HN);
     // calcul coordonnées
     dC.Empty(); // TODO: Revoir ici
     CalculerVisee(VQ, CC, EX, dC, dP);

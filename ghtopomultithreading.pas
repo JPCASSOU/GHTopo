@@ -487,13 +487,8 @@ procedure TThreadViseesEnAntennesProcessing.Execute;
     VS.IDSecteur       := 0; // VA.Secteur; // TODO: Secteur à implémenter
     VS.Code            := EE.eCode;
     VS.Expe            := EE.eExpe;
-    VS.Longueur        := VA.Longueur;
-    VS.Azimut          := VA.Azimut;
-    VS.Pente           := VA.Pente;
-    VS.LG := 0.00;
-    VS.LG := 0.00;
-    VS.HZ := 0.00;
-    VS.HN := 0.00;
+    VS.setLongAzInc(VA.Longueur, VA.Azimut, VA.Pente);
+    VS.setLRUD(0.0, 0.0, 0.0, 0.0);
     VS.Commentaires     := VA.Commentaires;
     VS.IDTerrainStation := VA.IDTerrainStation;
     VS.TypeVisee        := tgVISEE_RADIANTE;
@@ -521,13 +516,8 @@ procedure TThreadViseesEnAntennesProcessing.Execute;
     OutEE.DateLeve    := Now();
     OutEE.Enabled           := True;   // drapeau
     // données originales
-    OutEE.oLongueur       := VA.Longueur;
-    OutEE.oAzimut         := VA.Azimut;
-    OutEE.oPente          := VA.Pente;
-    OutEE.oLG             := 0.00;
-    OutEE.oLD             := 0.00;
-    OutEE.oHZ             := 0.00;
-    OutEE.oHN             := 0.00;
+    OutEE.setLongAzInc(VA.Longueur, VA.Azimut, VA.Pente);
+    OutEE.setLRUD(0.00, 0.00, 0.00, 0.00);
     // centerline
     OutEE.PosExtr0   := EE.PosStation;
     OutEE.PosStation := MakeTPoint3Df(DX, DY, DZ);

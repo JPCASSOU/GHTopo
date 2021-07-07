@@ -135,9 +135,7 @@ var
       qVA.Reseau           := qIdxReseau;
       qVA.Secteur          := qMyVisee.IDSecteur;
       //qVA.Commentaires     := '';
-      qVA.Longueur         := ConvertirEnNombreReel(Trim(EWE[0]), -1.00);
-      qVA.Azimut           := ConvertirEnNombreReel(Trim(EWE[1]), 0.00);
-      qVA.Pente            := ConvertirEnNombreReel(Trim(EWE[2]), 0.00);
+      qVA.setLongAzInc(EWE[0], EWE[1], EWE[2]);
       qVA.MarkedForDelete  := false;
       //AfficherMessage(Format('%f, %f, %f',[qVA.Longueur, qVA.Azimut, qVA.Pente]));
       Result := (qVA.Longueur > 0.00);

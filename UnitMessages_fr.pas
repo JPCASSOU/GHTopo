@@ -87,6 +87,7 @@ resourcestring
   rsDONE_PRINTING                            = 'Impression terminée';
   rsDONE_CALCUL                              = 'Calcul terminé';
   rsDONE_ANY_PROCESS                         = 'Opération terminée';
+  rsDONE_COPY_TO_CLIPBOARD                   = 'Texte copié dans le presse papiers';
 
   // *********************************************
   // resourcestring des libellés communs     =
@@ -1425,6 +1426,7 @@ resourcestring
   rsMSG_WARN_LONG_PROCESS                    = 'Cette opération est assez longue - Continuer';
 
   rsERR_MSG_ELEMENT_NOT_FOUND                = '*** Elément introuvable %s - Arrêt';
+
 //================================================================================
 implementation
 

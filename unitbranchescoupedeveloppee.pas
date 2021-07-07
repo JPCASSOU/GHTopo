@@ -115,17 +115,12 @@ begin
   EWE := EmptyVisee('');
   EWE.IDTerrainStation := qIDTerrain;
   EWE.TypeVisee        := qTypeVisee;
-  EWE.IDSecteur   := qSecteur;
-  EWE.Code        := qCode;
-  EWE.Expe        := qExpe;
-  EWE.Longueur    := qLongueur;
-  EWE.Azimut      := qAzimut;
-  EWE.Pente       := qPente;
-  EWE.LG          := qLG;
-  EWE.LD          := qLD;
-  EWE.HZ          := qHZ;
-  EWE.HN          := qHN;
-  EWE.Commentaires:= qCommentaire;
+  EWE.IDSecteur        := qSecteur;
+  EWE.Code             := qCode;
+  EWE.Expe             := qExpe;
+  EWE.setLongAzInc(qLongueur, qAzimut, qPente);
+  EWE.setLRUD(qLG, qLD, qHZ, qHN);
+  EWE.Commentaires     := qCommentaire;
   self.AddElement(EWE);
 end;
 

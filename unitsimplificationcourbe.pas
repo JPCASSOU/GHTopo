@@ -1,4 +1,5 @@
 unit unitSimplificationCourbe;
+{$ERROR: Inutilisé pour l'instant - A conserver}
 sdfsdf
 {$mode delphi}
 

@@ -100,9 +100,6 @@ procedure DisplayVue3DOpenGLExt(const QBDDEntites: TBDDEntites;
 procedure DisplayVue3DOpenGL3(const QBDDEntites: TBDDEntites;
                                 const QMaillage: TMaillage;
                                 const QFiltres: string);
-
-
-
 {$ENDIF}
 
 // affichage d'une station (détails + QR)

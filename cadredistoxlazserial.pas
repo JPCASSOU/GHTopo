@@ -959,9 +959,7 @@ begin
     try
       MyBuffer := MakeEmptyTBufferOf8Bytes();
       LazSerial1.SynSer.RecvBuffer(@MyBuffer, 8);
-      MyMesureVisee.Longueur := 0.00;
-      MyMesureVisee.Azimut   := 0.00;
-      MyMesureVisee.Pente    := 0.00;
+      MyMesureVisee.setFrom(0.00, 0.00, 0.00);
       //MyMesureVisee.HexaData := '';
       QTypeData := MyBuffer[0];
       MyOp       := (QTypeData and $3F);

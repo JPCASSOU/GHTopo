@@ -2229,8 +2229,6 @@ begin
         CdrDGCDrawingContext1.AddTexte(QIdxStyleSheet, MySommet.X + 2, MySommet.Y + 2, 0, 0, Inttostr(i));
       end;
       CdrDGCDrawingContext1.EndPolygon();
-
-
       CdrDGCDrawingContext1.AddEllipse(QIdxStyleSheet, S.Centroid.X, S.Centroid.Y, 8, 8, '');
       CdrDGCDrawingContext1.AddTexte(QIdxStyleSheet,
                                      S.Centroid.X + 10,

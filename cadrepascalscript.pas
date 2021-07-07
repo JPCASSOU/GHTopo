@@ -22,6 +22,7 @@ uses
 
   //GenerationFichesPointsTopo,
   UnitObjetSerie,
+  UnitGraphes1,
   //unitProfilTopo,
   {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
   Classes, SysUtils, Forms, Controls, Buttons, ActnList, ExtCtrls, PairSplitter, StdCtrls, Dialogs, ComCtrls,
@@ -97,6 +98,7 @@ type
     procedure acPSExecuteExecute(Sender: TObject);
     procedure acPSStopExecute(Sender: TObject);
     procedure acSavePSScriptExecute(Sender: TObject);
+    procedure FrameResize(Sender: TObject);
     procedure lsbPSFunctionsDblClick(Sender: TObject);
     procedure lsbPSFunctionsSelectionChange(Sender: TObject; User: boolean);
     procedure PSScriptDebugger1AfterExecute(Sender: TPSScriptDebugger);
@@ -173,6 +175,8 @@ type
     procedure DT_EndNewSerie();
     // Entrées
     procedure DT_AddNewEntrance(const RefSer, RefSt: integer; const XEntree, YEntree, ZEntree: double; const R, G, B: integer; const NomEntree, IDTerrain, Observ: string);
+    function  DT_ExtractDataForEntranceByIdx(const Idx: integer; out RefSer, RefSt: integer; out XEntree, YEntree, ZEntree: double; out NomEntree: string): boolean;
+
     // Réseaux
     procedure DT_AddNewReseau(const QTypeReseau: integer; const R, G, B: integer; const QNomReseau, QObsReseau: string);
 
@@ -206,6 +210,14 @@ type
     function MNT_GenerateSetOfProfils(const X1, Y1, X2, Y2, X3, Y3: double;
                                       const NbX, NbY: integer; const Sens: byte): boolean;
     procedure MNT_CheckerAltimetrieEntrees(const DoAdjustAtMNT: boolean; const DeltaZMax: double);
+    // Génération de graphes en HTML
+    procedure GRAPHE_GenererHTML(const PathStart, PathEnd: string;
+                                 const Width, Height, MenuWidth: integer;
+                                 const QNameItineraire: string;
+                                 const QFilename: string;
+                                 const QMapBackgroundColor: integer = clCream;
+                                 const QMapCenterlineColor: integer = clRed);
+
     {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
     // display graphisme
     function  PS2D_BeginDrawing(const w, h: integer): boolean;
@@ -241,13 +253,16 @@ type
     // QRCode
     procedure QRCode_Generate(const ImgWidth: integer; const QFilenamePNG: string; const QTextToEncode: string);
 
+
   private
+
     FPSDrawing2D: TdlgDispGraphisme2D;
     {$ifdef CALCULETTE_EMBEDDED_IN_GHTOPO}
     FDocuTopo  : TToporobotStructure2012;
     FBDDEntites: TBDDEntites;
     FMyMaillage: TMaillage;
     FLesFichesTopo: TFichesTopo;
+    FMyGraphe     : TPathFindingGraphe;
     {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
     FTransfertFTP: TRemoteServicesFTP;
     procedure ListerPSFunctions();
@@ -369,6 +384,8 @@ begin
   end;
 end;
 
+
+
 // wrappers pour fonctions standard
 // f en préfixe des fonctions, convention C aka fabs(x)
 function fabs(const X: Double): Double; inline;
@@ -423,6 +440,10 @@ begin
     FDocuTopo   := QD;
     FBDDEntites := QBDDEntites;
     FMyMaillage := QMaillage;
+    FMyGraphe   := TPathFindingGraphe.Create;
+    FMyGraphe.Initialiser(FDocuTopo, FBDDEntites);
+    FMyGraphe.ConstruireGraphe();
+
   {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
   DefineTypesAndRecords(); // TODO Ici ou dans RecenserAdditionalProcs() ?;
   PSScriptDebugger1.Compile;
@@ -568,6 +589,7 @@ begin
     sender.AddMethod(self     , @TCdrPascalScript.DT_RemoveSerieByNumSerie           , 'procedure DT_RemoveSerieByNumSerie(const QNumeroSerie: integer);');
     sender.AddMethod(self     , @TCdrPascalScript.DT_RemoveSerieByIdx                , 'procedure DT_RemoveSerieByIdx(const Idx: integer);');
     sender.AddMethod(self     , @TCdrPascalScript.DT_AddNewEntrance                  , 'procedure DT_AddNewEntrance(const RefSer, RefSt: integer; const XEntree, YEntree, ZEntree: double; const R, G, B: integer; const NomEntree, IDTerrain, Observ: string);');
+    sender.AddMethod(self     , @TCdrPascalScript.DT_ExtractDataForEntranceByIdx     , 'function  DT_ExtractDataForEntranceByIdx(const Idx: integer; out RefSer, RefSt: integer; out XEntree, YEntree, ZEntree: double; out NomEntree: string): boolean;');
     sender.AddMethod(self     , @TCdrPascalScript.DT_ModifyEntrance                  , 'function  DT_ModifyEntrance(const QIdx: integer; const RefSer, RefSt: integer; const XEntree, YEntree, ZEntree: double; const R, G, B: integer; const NomEntree, IDTerrain, Observ: string): boolean;');
     sender.AddMethod(self     , @TCdrPascalScript.DT_AddNewReseau                    , 'procedure DT_AddNewReseau(const QTypeReseau: integer; const R, G, B: integer; const QNomReseau, QObsReseau: string); ');
 
@@ -593,6 +615,10 @@ begin
     sender.AddMethod(self     , @TCdrPascalScript.MNT_ExtractAltitudeFromXY          , 'function  MNT_ExtractAltitudeFromXY(const QX, QY: double; out QZ: double): boolean');
     sender.AddMethod(self     , @TCdrPascalScript.MNT_GenerateSetOfProfils           , 'function  MNT_GenerateSetOfProfils(const X1, Y1, X2, Y2, X3, Y3: double; const NbX, NbY: integer; const Sens: byte): boolean;');
     sender.AddMethod(self     , @TCdrPascalScript.MNT_CheckerAltimetrieEntrees       , 'procedure MNT_CheckerAltimetrieEntrees(const DoAdjustAtMNT: boolean; const DeltaZMax: double);');
+    sender.AddMethod(self     , @TCdrPascalScript.GRAPHE_GenererHTML                 , 'procedure GRAPHE_GenererHTML(const PathStart, PathEnd: string; ' +
+                                                                                       'const Width, Height, MenuWidth: integer; ' +
+                                                                                       'const QNameItineraire: string; const QFilename: string; ' +
+                                                                                       'const QMapBackgroundColor, QMapCenterlineColor: integer);');
   {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
   // QRCode
   sender.AddMethod(self       , @TCdrPascalScript.QRCode_Generate                    , 'procedure QRCode_Generate(const ImgWidth: integer; const QFilenamePNG: string; const QTextToEncode: string);');
@@ -602,10 +628,10 @@ begin
 
   sender.AddMethod(self       , @TCdrPascalScript.PS2D_SetBackgroundColor            , 'procedure PS2D_SetBackgroundColor(const R, G, B, A: byte);');
   EWE := 'function  PS2D_AddStyleSheet(const QStylename: string; ' +
-         'const QPenColorR, QPenColorG, QPenColorB, QPenOpacity: byte; const QPenWidtdhInPX: byte;' +
-         'const QBshColorR, QBshColorG, QBshColorB, QBshOpacity: byte; const QBshStyle: byte;' +
-         'const QFntName: string; const QFntColorR, QFntColorG, QFntColorB, QFntOpacity: byte;' +
-         'const QFntSizeInPX: byte; const QFntStyle: byte): integer;';
+                                      'const QPenColorR, QPenColorG, QPenColorB, QPenOpacity: byte; const QPenWidtdhInPX: byte;' +
+                                      'const QBshColorR, QBshColorG, QBshColorB, QBshOpacity: byte; const QBshStyle: byte;' +
+                                      'const QFntName: string; const QFntColorR, QFntColorG, QFntColorB, QFntOpacity: byte;' +
+                                      'const QFntSizeInPX: byte; const QFntStyle: byte): integer;';
 
   sender.AddMethod(self     , @TCdrPascalScript.PS2D_AddStyleSheet                 , EWE);
   sender.AddMethod(self     , @TCdrPascalScript.PS2D_SetStyleSheet                 , 'procedure PS2D_SetStyleSheet(const Idx:integer);');
@@ -699,6 +725,16 @@ begin
   end;
 end;
 
+procedure TCdrPascalScript.FrameResize(Sender: TObject);
+var
+  RX: Extended;
+begin
+  RX := 0.40;
+  PairSplitterside7.Height := self.ClientHeight - 300;
+  PairSplitterSide11.Width := round(self.ClientWidth * RX);
+
+end;
+
 procedure TCdrPascalScript.acLoadPSScriptExecute(Sender: TObject);
 var
   QFileName, EWE: TStringDirectoryFilename;
@@ -750,7 +786,6 @@ begin
   // récupérer le script
   n := editPascalScript.Lines.Count;
   if (0 = n) then Exit;
-
   PSScriptDebugger1.ClearBreakPoints;
   PSScriptDebugger1.Script.Clear;
   PSScriptDebugger1.Comp.OnBeforeOutput := psCompilerBeforeOutput;
@@ -765,8 +800,8 @@ begin
   begin
     PageControlMsgsOutputs.ActivePageIndex := 1;
     // sauvegarde intermédiaire seulement si le script compile OK
-    EWE := GetGHTopoDirectory() + DOSSIER_DE_MES_SCRIPTS + '/' + MakeFilenameFromDate('QSaveScript_', Now(), 'pas');
-    editPascalScript.Lines.SaveToFile(EWE);
+    //EWE := GetGHTopoDirectory() + DOSSIER_DE_MES_SCRIPTS + '/' + MakeFilenameFromDate('QSaveScript_', Now(), 'pas');
+    //editPascalScript.Lines.SaveToFile(EWE);
     ResExec := (PSScriptDebugger1.Exec.RunScript and (PSScriptDebugger1.Exec.ExceptionCode = erNoError));
     if (not ResExec) then
     begin
@@ -919,7 +954,7 @@ begin
   editPascalScript.Lines.Add('  (* Your code here *)');
   editPascalScript.Lines.Add('end;');
   editPascalScript.Lines.Add('(* *************************************** *)');
-  editPascalScript.Lines.Add('(* Don''t edit after this                  *)');
+  editPascalScript.Lines.Add('(* Don''t edit after this                   *)');
   editPascalScript.Lines.Add('begin');
   editPascalScript.Lines.Add(format('  %s();', [QNameMainProc]));
   editPascalScript.Lines.Add('end.');
@@ -1326,6 +1361,22 @@ begin
   EE.eObserv     := Observ;
   FDocuTopo.AddEntrance(EE);
 end;
+
+function TCdrPascalScript.DT_ExtractDataForEntranceByIdx(const Idx: integer; out RefSer, RefSt: integer; out XEntree, YEntree, ZEntree: double; out NomEntree: string): boolean;
+var
+  EE: TEntrance;
+begin
+  result := false;
+  EE := FDocuTopo.GetEntrance(Idx);
+  XEntree   := EE.ePosition.X;
+  YEntree   := EE.ePosition.Y;
+  ZEntree   := EE.ePosition.Z;
+  RefSer    := EE.eRefSer;
+  RefSt     := EE.eRefSt;
+  NomEntree := EE.eNomEntree;
+  result := true;
+end;
+
 function TCdrPascalScript.DT_ModifyEntrance(const QIdx: integer; const RefSer, RefSt: integer; const XEntree, YEntree, ZEntree: double; const R, G, B: integer; const NomEntree, IDTerrain, Observ: string): boolean;
 var
   EE: TEntrance;
@@ -1541,6 +1592,45 @@ begin
   else
     DispPSOutput('*** Maillage invalide ou non chargé ***');
 end;
+procedure TCdrPascalScript.GRAPHE_GenererHTML(const PathStart, PathEnd: string;
+                                              const Width, Height, MenuWidth: integer;
+                                              const QNameItineraire: string;
+                                              const QFilename: string;
+                                              const QMapBackgroundColor: integer = clCream;
+                                              const QMapCenterlineColor: integer = clRed);
+begin
+  FMyGraphe.ExporterGrapheEnJavascript(QNameItineraire, QFileName,
+                                       PathStart, PathEnd,
+                                       TColor(QMapBackgroundColor), //btnBackgroundCarte.ButtonColor,
+                                       TColor(QMapCenterlineColor), //btnColorCenterline.ButtonColor,
+                                       Width, Height, MenuWidth);
+end;
+
+(*
+function TCdrPascalScript.GRAPHE_GenererHTML(const PathStart, PathEnd: string;
+                                             const Width, Height: integer;
+                                             const PathName: string;
+                                             const QFilename): integer;
+var
+  P: TPathBetweenNodes;
+  EWE: Boolean;
+begin
+  Result := 0;
+  Q1 := FBDDEntites.FindStationByCle(false, PathStart) , EE1);
+  Q2 := FBDDEntites.FindStationByCle(false, PathEnd)   , EE2);
+  if (not Q1) then exit(-1);
+  if (not Q2) then exit(-2);
+  FMyGraphe.GetItineraire(0, P);
+  P.Initialiser(EE1.Entite_Serie, EE1.Entite_Station,
+                     EE2.Entite_Serie, EE2.Entite_Station,
+                     Trim(editNomItineraire.Text),
+                     btnCouleur.ButtonColor);
+
+  EWE := FMyGraphe.RechercherPlusCourtChemin(MyPath);
+  if (EWE) then FGraphe.PutItineraire(FCurrentIdxItineraire, MyPath);
+end;
+//*)
+
 
 {$endif CALCULETTE_EMBEDDED_IN_GHTOPO}
 // Graphisme 2D

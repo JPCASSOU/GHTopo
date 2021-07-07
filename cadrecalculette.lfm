@@ -22,10 +22,10 @@ object CdrCalculette: TCdrCalculette
     Height = 717
     Top = 0
     Width = 1160
-    ActivePage = tabShtInerties
+    ActivePage = tabShtPascalScript
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
-    TabIndex = 6
+    TabIndex = 3
     TabOrder = 0
     OnChange = PageControl1Change
     object tabShtCalculatrice: TTabSheet
@@ -1636,10 +1636,10 @@ object CdrCalculette: TCdrCalculette
               inherited PairSplitter6: TPairSplitter
                 Width = 1142
                 inherited PairSplitterSide12: TPairSplitterSide
-                  Width = 849
-                  ClientWidth = 849
+                  Width = 717
+                  ClientWidth = 717
                   inherited editPascalScript: TSynEdit
-                    Width = 849
+                    Width = 717
                   end
                 end
               end
@@ -1652,6 +1652,16 @@ object CdrCalculette: TCdrCalculette
               inherited PageControlMsgsOutputs: TPageControl
                 Height = 320
                 Width = 1142
+                ActivePage = CdrPascalScript1.tabShtCompiloMessages
+                TabIndex = 0
+                inherited tabShtCompiloMessages: TTabSheet
+                  ClientHeight = 291
+                  ClientWidth = 1134
+                  inherited lsbPSMessages: TListBox
+                    Height = 291
+                    Width = 1134
+                  end
+                end
                 inherited tabShtConsoleOutput: TTabSheet
                   ClientHeight = 291
                   ClientWidth = 1134

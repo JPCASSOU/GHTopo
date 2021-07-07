@@ -1,6 +1,6 @@
 unit unitFreeHandCourbe;
 {$ERROR: Non utilisé pour l'instant}
-{$mode delphi}           ++
+{$mode delphi}
 // 08/04/2016: Nouvelle unité: Courbes provisoires à main levée
 // 11/04/2016: Simplification OK
 //             Code original de l'algo de simplification: copyright (c) 2003 Nils Haeck M.Sc. SimDesign
@@ -25,7 +25,9 @@ type
     function Initialise(): boolean;
     procedure Finalise();
     procedure ViderListe();
-    procedure AddPoint2D(const PT: TPoint2Df);
+    procedure AddPoint2D(const PT: TPoint2Df); overload;
+    procedure AddPoint2D(const QX, QY: double); overload;
+
 
     function  GetPoint2d(const Idx: integer): TPoint2Df;
     function  GetNbPoints(): integer;

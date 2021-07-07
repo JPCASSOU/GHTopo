@@ -124,9 +124,7 @@ begin
 
       MyAntenne.SerieDepart := QStationDepart.aSerie;
       MyAntenne.PtDepart    := QStationDepart.aStation;
-      MyAntenne.Longueur    := ConvertirEnNombreReel(Trim(EWE[2]), -1.00);
-      MyAntenne.Azimut      := ConvertirEnNombreReel(Trim(EWE[3]),  0.00);
-      MyAntenne.Pente       := ConvertirEnNombreReel(Trim(EWE[4]),  0.00);
+      MyAntenne.setLongAzInc(EWE[2], EWE[3], EWE[4]);
       if (MyAntenne.Longueur > 0.00) then AddViseeAntenne(MyAntenne);
     end;
     AfficherMessageErreur(Format('==== %d antennes ajoutées', [GetNbAntennes()]));

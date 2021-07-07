@@ -366,13 +366,8 @@ begin
     GetBearingInc(UNITE_ANGULAIRE_DU_CODE_ZERO, UNITE_ANGULAIRE_DU_CODE_ZERO,
                   QAccroissement, l1, a1, p1); // Bug avec 400 grades
     Visee.NoVisee  := 1;
-    Visee.Longueur := l1;
-    Visee.Azimut   := a1;
-    Visee.Pente    := p1;
-    Visee.LD       := 0.00;
-    Visee.LG       := Visee.LD;
-    Visee.HZ       := Visee.LD;
-    Visee.HN       := Visee.LD;
+    Visee.setLongAzInc(l1, a1, p1);
+    Visee.setLRUD(0.00, 0.00, 0.00, 0.00);
     Visee.Commentaires     := '';
     Visee.IDTerrainStation := Format(FMTSERST,[Entr.eRefSer, Entr.eRefSt]);
     Visee.TypeVisee        := tgENTRANCE;

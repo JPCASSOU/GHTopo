@@ -884,10 +884,7 @@ var
       SetLength(TabVisee, 2 + NbViseesInBrche);
       for St:= 0 to NbViseesInBrche - 1 do TabVisee[St] := QBranche.PointsTopo[st];
       //AfficherMessage(Format('----> Points OK - Idx max TabVisee: %d .. %d; NbViseesInBrche = %d', [Low(TabVisee), high(TabVisee), NbViseesInBrche]));
-      TabVisee[0].LD := TabVisee[1].LD;
-      TabVisee[0].LG := TabVisee[1].LG;
-      TabVisee[0].HZ := TabVisee[1].HZ;
-      TabVisee[0].HN := TabVisee[1].HN;
+      TabVisee[0].setLRUD(TabVisee[1].LG, TabVisee[1].LD, TabVisee[1].HZ, TabVisee[1].HN);
       TabVisee[0].TypeVisee := TabVisee[1].TypeVisee;
       if (NbViseesInBrche = 1) then
       begin
@@ -941,13 +938,8 @@ var
             QEntite.Entite_Serie    := QBranche.NoSerie;
             QEntite.Entite_Station  := TabVisee[St].NoVisee;
             // données originales
-            QEntite.oLongueur       := TabVisee[St].Longueur;
-            QEntite.oAzimut         := TabVisee[St].Azimut;
-            QEntite.oPente          := TabVisee[St].Pente;
-            QEntite.oLG             := TabVisee[St].LG;
-            QEntite.oLD             := TabVisee[St].LD;
-            QEntite.oHZ             := TabVisee[St].HZ;
-            QEntite.oHN             := TabVisee[St].HN;
+            QEntite.setLongAzInc(TabVisee[St].Longueur, TabVisee[St].Azimut, TabVisee[St].Pente);
+            QEntite.setLRUD(TabVisee[St].LG, TabVisee[St].LD, TabVisee[St].HZ, TabVisee[St].HN);
             // centerline
             QEntite.PosExtr0.setFrom(TabVisee[St-1].AccroissXYZ.X, TabVisee[St-1].AccroissXYZ.Y, TabVisee[St-1].AccroissXYZ.Z);
             QEntite.PosStation.setFrom(TabVisee[St].AccroissXYZ.X, TabVisee[St].AccroissXYZ.Y, TabVisee[St].AccroissXYZ.Z);
@@ -1043,7 +1035,7 @@ begin;
     t := now() - t;
     AfficherMessageErreur('RecenserDates()');
     FBDDEntites.RecenserDates();   // recenser les dates
-    AfficherMessageErreur(Format('Temps de calcul des %d contours des branches jj: %.8f sec', [NbreBranches, t * 86400]));
+    AfficherMessageErreur(Format('Temps de calcul des %d contours des branches: %.8f sec', [NbreBranches, t * 86400]));
     AfficherMessage('Calcul contours galeries OK');
     if (DoGenerateFile) then pass;
   finally
@@ -1071,10 +1063,7 @@ var
     DP := 0.00;
     if (FBDDEntites.GetEntiteViseeFromSerSt(VA.SerieDepart, VA.PtDepart, EE)) then
     begin
-      DC := EE.PosStation; //
-      //DX := EE.PosStation.X;
-      //DY := EE.PosStation.Y;
-      //DZ := EE.PosStation.Z;
+      DC := EE.PosStation;
       // les codes et expés de l'antenne héritent de ceux de la station d'accrochage
       MyCode := FDocTopo.GetCodeByNumero(EE.eCode);
       MyExpe := FDocTopo.GetExpeByNumero(EE.eExpe);
@@ -1086,13 +1075,8 @@ var
     VS.IDSecteur        := 0; // VA.Secteur; // TODO: Secteur à implémenter
     VS.Code             := EE.eCode;
     VS.Expe             := EE.eExpe;
-    VS.Longueur         := VA.Longueur;
-    VS.Azimut           := VA.Azimut;
-    VS.Pente            := VA.Pente;
-    VS.LG               := 0.00;
-    VS.LG               := 0.00;
-    VS.HZ               := 0.00;
-    VS.HN               := 0.00;
+    VS.setLongAzInc(VA.Longueur, VA.Azimut, VA.Pente);
+    VS.setLRUD(0.00, 0.00, 0.00, 0.00);
     VS.Commentaires     := ''; //VA.Commentaires;
     VS.IDTerrainStation := ''; //VA.IDTerrainStation;
     VS.TypeVisee        := tgVISEE_RADIANTE;
@@ -1119,13 +1103,9 @@ var
     OutEE.DateLeve    := Now();
     OutEE.Enabled         := True;   // drapeau
     // données originales
-    OutEE.oLongueur       := VA.Longueur;
-    OutEE.oAzimut         := VA.Azimut;
-    OutEE.oPente          := VA.Pente;
-    OutEE.oLG             := 0.00;
-    OutEE.oLD             := 0.00;
-    OutEE.oHZ             := 0.00;
-    OutEE.oHN             := 0.00;
+    OutEE.setLongAzInc(VA.Longueur, VA.Azimut, VA.Pente);
+
+    OutEE.setLRUD(0.00, 0.00, 0.00, 0.00);
     // centerline
     OutEE.PosExtr0   := EE.PosStation;
     OutEE.PosStation := DC; //.setFrom(DX, DY, DZ);

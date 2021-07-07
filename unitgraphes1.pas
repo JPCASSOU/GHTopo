@@ -92,6 +92,7 @@ type
     function  GetItineraire(const Idx: integer; out P: TPathBetweenNodes): boolean;
     procedure PutItineraire(const Idx: integer; const P: TPathBetweenNodes);
     procedure RemoveItineraire(const Idx: integer);
+    procedure ClearAllItineraires();
     function  GetNbItineraires(): integer;
 
     function  LoadItinerairesFromFile(const Filename: RawByteString): boolean;
@@ -671,6 +672,11 @@ begin
   Nb := FListeDesPlusCourtsChemins.GetNbElements();
   if ((Idx <= 0) OR (Idx >= Nb)) then exit;  // ne pas supprimer le chemin 0
   FListeDesPlusCourtsChemins.RemoveElement(Idx);
+end;
+
+procedure TPathFindingGraphe.ClearAllItineraires();
+begin
+
 end;
 
 function TPathFindingGraphe.GetNbItineraires(): integer;

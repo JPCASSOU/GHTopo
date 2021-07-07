@@ -440,6 +440,7 @@ begin
 end;
 
 procedure TCdrListesSimples.acExportListesCSVExecute(Sender: TObject);
+const COPY_TO_CLIPBOARD: boolean = true;
 var
   WU: TStringDirectoryFilename;
   EWE: String;
@@ -455,18 +456,19 @@ begin
     mbddCHECK_ERRORS : EWE := 'Database_Check_Error_Messages';
   end;
   WU := Format('Liste001_%s.csv', [EWE]);
-  if (DoDialogSaveFile('CSV file (*.csv)|*.csv|', '.csv', WU, QFilterIndex)) then
+  //if (DoDialogSaveFile('CSV file (*.csv)|*.csv|', '.csv', WU, QFilterIndex)) then
   begin
     case FModeBDD of
-      mbddENTRANCES     : FDocumentToporobot.ExportListeEntreesCSV(WU);
-      mbddRESEAUX       : FDocumentToporobot.ExportListeReseauxCSV(WU);
-      mbddSECTEURS      : FDocumentToporobot.ExportListeSecteursCSV(WU);
-      mbddCODES         : FDocumentToporobot.ExportListeCodesCSV(WU);
-      mbddEXPES         : FDocumentToporobot.ExportListeExpesCSV(WU);
-      mbddPOI           : FDocumentToporobot.ExportListePOIToCSV(WU);
-      mbddCHECK_ERRORS  : FDocumentToporobot.ExportListeErreursToCSV(WU);
-      mbddNOEUDS        : FBDDEntites.ExporterListeJonctions(WU);
+      mbddENTRANCES     : FDocumentToporobot.ExportListeEntreesCSV(COPY_TO_CLIPBOARD, WU);
+      mbddRESEAUX       : FDocumentToporobot.ExportListeReseauxCSV(COPY_TO_CLIPBOARD, WU);
+      mbddSECTEURS      : FDocumentToporobot.ExportListeSecteursCSV(COPY_TO_CLIPBOARD, WU);
+      mbddCODES         : FDocumentToporobot.ExportListeCodesCSV(COPY_TO_CLIPBOARD, WU);
+      mbddEXPES         : FDocumentToporobot.ExportListeExpesCSV(COPY_TO_CLIPBOARD, WU);
+      mbddPOI           : FDocumentToporobot.ExportListePOIToCSV(COPY_TO_CLIPBOARD, WU);
+      mbddCHECK_ERRORS  : FDocumentToporobot.ExportListeErreursToCSV(COPY_TO_CLIPBOARD, WU);
+      mbddNOEUDS        : FBDDEntites.ExporterListeJonctions(COPY_TO_CLIPBOARD, WU);
     end;
+    if (COPY_TO_CLIPBOARD) then ShowMessage(GetResourceString(rsDONE_COPY_TO_CLIPBOARD));
   end;
 end;
 

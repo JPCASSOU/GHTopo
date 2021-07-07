@@ -357,9 +357,7 @@ begin
     MyAntenne.SerieDepart  := MySerie.GetNumeroDeSerie();
     MyAntenne.PtDepart     := MyNumeroStation;
 
-    MyAntenne.Longueur     := QLong;
-    MyAntenne.Azimut       := QAzimut;
-    MyAntenne.Pente        := QPente;
+    MyAntenne.setLongAzInc(QLong, QAzimut, QPente);
     FMyDocTopo.AddViseeAntenne(MyAntenne);
     ListerLesAntennesOfSerie(MySerie, 0);
   end;

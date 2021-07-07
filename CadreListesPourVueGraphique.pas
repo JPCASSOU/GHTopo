@@ -10,16 +10,15 @@ interface
 uses
   {$INCLUDE SelectionLangues.inc} // insère les unités en fonction de la langue
   Classes, SysUtils, FileUtil, Graphics,
-  Forms, Controls, CheckLst, ComCtrls, StdCtrls, Grids, LCLType,
+  Forms, Controls, CheckLst, ComCtrls, StdCtrls,
+  LCLType, types,
   Dialogs,
   StructuresDonnees,
   Common,
-  CallDialogsStdVersion,
-  //UnitClassPalette,
   UnitEntitesExtended,
   CadreGHTopoContext2D, // pour la localisation
   ToporobotClasses2012,
-  unitobjetserie, UnitClassPalette, types;
+  unitobjetserie, UnitClassPalette;
 
 type TIndexItem = record
   aIdx     : integer;

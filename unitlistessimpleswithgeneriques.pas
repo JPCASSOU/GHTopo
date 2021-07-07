@@ -725,10 +725,7 @@ begin
       MyVisee.Longueur        := EWE.VA.Longueur;
       MyVisee.Azimut          := EWE.VA.Azimut;
       MyVisee.Pente           := EWE.VA.Pente;
-      MyVisee.LG := 0.00;
-      MyVisee.LG := 0.00;
-      MyVisee.HZ := 0.00;
-      MyVisee.HN := 0.00;
+      MyVisee.setLRUD(0.00, 0.00, 0.00, 0.00);
       MyVisee.Commentaires     := '';
       MyVisee.IDTerrainStation := '';
       MyVisee.TypeVisee        := tgVISEE_RADIANTE;

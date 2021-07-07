@@ -62,6 +62,7 @@ begin
     BMP.Canvas.FillRect(0, 0, BMP.Width, BMP.Height);
     for i := 1 to m do
     begin
+      //ARow := BMP.ScanLine[i];
       for j := 1 to n do
       begin
         EWE := GetValeur(i, j);

@@ -168,9 +168,7 @@ var
                      UneViseeAntenne.Secteur          := StrToIntDef(PrmsLn[3], 0);
                      UneViseeAntenne.SerieDepart      := StrToIntDef(PrmsLn[4], 0);
                      UneViseeAntenne.PtDepart         := StrToIntDef(PrmsLn[5], 0);
-                     UneViseeAntenne.Longueur         := ConvertirEnNombreReel(PrmsLn[9], 0.00);
-                     UneViseeAntenne.Azimut           := ConvertirEnNombreReel(PrmsLn[10], 0.00);
-                     UneViseeAntenne.Pente            := ConvertirEnNombreReel(PrmsLn[11], 0.00);
+                     UneViseeAntenne.setLongAzInc(PrmsLn[9], PrmsLn[10], PrmsLn[11]);
                      UneViseeAntenne.MarkedForDelete  := False;
                      AddViseeAntenne(UneViseeAntenne);
                    end;
@@ -344,18 +342,13 @@ var
                  qVisee.TypeVisee   := tgDEFAULT;
                  qVisee.Code        := StrToInt(PrmsLn[2]);
                  qVisee.Expe        := StrToInt(PrmsLn[3]);
-                 qVisee.Longueur    := ConvertirEnNombreReel(PrmsLn[4], 0.00);
+                 qVisee.setLongAzInc(PrmsLn[4], PrmsLn[5], PrmsLn[6]);
                  if (qVisee.Longueur < 0.00) then
                  begin
                    WriteWarning(Format(rsRD_TAB_NEG_LONG, [NoLigneTAB, qVisee.Longueur]));
                    qVisee.Longueur := Abs(qVisee.Longueur);
                  end;
-                 qVisee.Azimut      := ConvertirEnNombreReel(PrmsLn[5], 0.00);
-                 qVisee.Pente       := ConvertirEnNombreReel(PrmsLn[6], 0.00);
-                 qVisee.LG          := ConvertirEnNombreReel(PrmsLn[7], 0.00);  //LG
-                 qVisee.LD          := ConvertirEnNombreReel(PrmsLn[8], 0.00);  //LD
-                 qVisee.HZ          := ConvertirEnNombreReel(PrmsLn[9], 0.00);
-                 qVisee.HN          := ConvertirEnNombreReel(PrmsLn[10], 0.00);
+                 qVisee.setLRUD(PrmsLn[7], PrmsLn[8], PrmsLn[9], PrmsLn[10]);
                  qVisee.Commentaires:= PrmsLn[11];
                  qVisee.IDTerrainStation := FormatterIDTerrainStation(PrmsLn[12]);
                  blaireau    := StrToIntDef(PrmsLn[13], 0);
@@ -697,7 +690,7 @@ begin
         for St := 0 to Serie.GetNbVisees - 1 do
         begin
           Station := Serie.GetVisee(St);
-          WrtLn(Station.toLineString(ModeSaveTAB, Serie.GetNumeroDeSerie(), St));
+          WrtLn(Station.toLineXTB(ModeSaveTAB, Serie.GetNumeroDeSerie(), St));
         end;
       end;
     end;

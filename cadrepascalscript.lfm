@@ -6,10 +6,10 @@ object CdrPascalScript: TCdrPascalScript
   Align = alClient
   ClientHeight = 726
   ClientWidth = 1096
-  LCLVersion = '2.0.0.4'
+  OnResize = FrameResize
   TabOrder = 0
-  DesignLeft = 278
-  DesignTop = 252
+  DesignLeft = 369
+  DesignTop = 157
   object pnlEditor: TPanel
     Left = 5
     Height = 670
@@ -43,20 +43,20 @@ object CdrPascalScript: TCdrPascalScript
           Top = 0
           Width = 1086
           Align = alClient
-          Position = 288
+          Position = 420
           object PairSplitterSide11: TPairSplitterSide
             Cursor = crArrow
             Left = 0
             Height = 305
             Top = 0
-            Width = 288
-            ClientWidth = 288
+            Width = 420
+            ClientWidth = 420
             ClientHeight = 305
             object lsbPSFunctions: TListBox
               Left = 0
               Height = 192
               Top = 0
-              Width = 288
+              Width = 420
               Anchors = [akTop, akLeft, akRight, akBottom]
               ItemHeight = 0
               OnDblClick = lsbPSFunctionsDblClick
@@ -68,7 +68,7 @@ object CdrPascalScript: TCdrPascalScript
               Left = 0
               Height = 108
               Top = 196
-              Width = 288
+              Width = 420
               Anchors = [akLeft, akRight, akBottom]
               Color = 8454143
               ScrollBars = ssAutoBoth
@@ -78,17 +78,17 @@ object CdrPascalScript: TCdrPascalScript
           end
           object PairSplitterSide12: TPairSplitterSide
             Cursor = crArrow
-            Left = 293
+            Left = 425
             Height = 305
             Top = 0
-            Width = 793
-            ClientWidth = 793
+            Width = 661
+            ClientWidth = 661
             ClientHeight = 305
             inline editPascalScript: TSynEdit
               Left = 0
               Height = 305
               Top = 0
-              Width = 793
+              Width = 661
               Align = alClient
               Font.Height = -13
               Font.Name = 'Courier New'

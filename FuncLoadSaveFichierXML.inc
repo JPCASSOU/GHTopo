@@ -461,14 +461,13 @@ begin
                 UneVisee.Expe             := TNumeroExpe(ExtractIntOfNode(WOK, GTX_ATTR_VISEE_EXPE, 0));
 
 
-                UneVisee.Longueur         := ExtractRealOfNode(WOK, GTX_ATTR_VISEE_LONG, 0.00);
-                UneVisee.Azimut           := ExtractRealOfNode(WOK, GTX_ATTR_VISEE_AZ  , 0.00);
-                UneVisee.Pente            := ExtractRealOfNode(WOK, GTX_ATTR_VISEE_P   , 0.00);
-
-                UneVisee.LG               := ExtractRealOfNode(WOK, GTX_ATTR_VISEE_LG  , 0.00);
-                UneVisee.LD               := ExtractRealOfNode(WOK, GTX_ATTR_VISEE_LD  , 0.00);
-                UneVisee.HZ               := ExtractRealOfNode(WOK, GTX_ATTR_VISEE_HZ  , 0.00);
-                UneVisee.HN               := ExtractRealOfNode(WOK, GTX_ATTR_VISEE_HN  , 0.00);
+                UneVisee.setLongAzInc(ExtractRealOfNode(WOK, GTX_ATTR_VISEE_LONG, 0.00),
+                                      ExtractRealOfNode(WOK, GTX_ATTR_VISEE_AZ  , 0.00),
+                                      ExtractRealOfNode(WOK, GTX_ATTR_VISEE_P   , 0.00));
+                UneVisee.setLRUD(ExtractRealOfNode(WOK, GTX_ATTR_VISEE_LG  , 0.00),
+                                 ExtractRealOfNode(WOK, GTX_ATTR_VISEE_LD  , 0.00),
+                                 ExtractRealOfNode(WOK, GTX_ATTR_VISEE_HZ  , 0.00),
+                                 ExtractRealOfNode(WOK, GTX_ATTR_VISEE_HN  , 0.00));
 
                 UneVisee.Commentaires     := ExtractStringOfNode(WOK, GTX_ATTR_VISEE_OBS);
 
@@ -501,10 +500,9 @@ begin
           UneViseeAntenne.Secteur            := ExtractIntOfNode(WU, GTX_KEY_ANTENNA_SECTEUR  , 0);
           UneViseeAntenne.SerieDepart        := ExtractIntOfNode(WU, GTX_KEY_ANTENNA_SERIE    , 0);
           UneViseeAntenne.PtDepart           := ExtractIntOfNode(WU, GTX_KEY_ANTENNA_POINT    , 0);
-          UneViseeAntenne.Longueur           := ExtractRealOfNode(WU, GTX_KEY_ANTENNA_LONG, 0.00);
-          UneViseeAntenne.Azimut             := ExtractRealOfNode(WU, GTX_KEY_ANTENNA_AZIMUT, 0.00);
-          UneViseeAntenne.Pente              := ExtractRealOfNode(WU, GTX_KEY_ANTENNA_PENTE, 0.00);
-          //UneViseeAntenne.Commentaires       := ExtractStringOfNode(WU, GTX_KEY_ANTENNA_OBS);
+          UneViseeAntenne.setLongAzInc(ExtractRealOfNode(WU, GTX_KEY_ANTENNA_LONG, 0.00),
+                                       ExtractRealOfNode(WU, GTX_KEY_ANTENNA_AZIMUT, 0.00),
+                                       ExtractRealOfNode(WU, GTX_KEY_ANTENNA_PENTE, 0.00));
           UneViseeAntenne.MarkedForDelete    := false;
           self.AddViseeAntenne(UneViseeAntenne);
         except

@@ -1,8 +1,9 @@
 // Nouveau moteur de calcul par analyse de graphes
 unit unitAnalyseReseau2;
+{$ERROR Inutilisé}
 
 {$INCLUDE CompilationParameters.inc}
-
+                                                        ljkljkl
 interface
 
 uses
@@ -50,8 +51,6 @@ type
     //FListeDesArcs   : TListeSimple<TArcGraphe>;
 
     FListesAdjacence: array of TListOfIntegers;
-
-
 
     //procedure addViseeAtBranche(var BR: TBrancheXYZ; const V: TUneVisee);
     //procedure CalculerAccroissements;
