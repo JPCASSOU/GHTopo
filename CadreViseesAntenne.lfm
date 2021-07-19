@@ -1,11 +1,11 @@
 object CdrAntennes: TCdrAntennes
   Left = 0
-  Height = 366
+  Height = 396
   Top = 0
-  Width = 601
+  Width = 603
   Align = alClient
-  ClientHeight = 366
-  ClientWidth = 601
+  ClientHeight = 396
+  ClientWidth = 603
   Font.CharSet = ANSI_CHARSET
   Font.Color = clBlack
   Font.Height = -13
@@ -13,11 +13,10 @@ object CdrAntennes: TCdrAntennes
   Font.Pitch = fpVariable
   Font.Quality = fqDraft
   Font.Style = [fsBold]
-  LCLVersion = '2.0.0.4'
   ParentFont = False
   TabOrder = 0
-  DesignLeft = 412
-  DesignTop = 202
+  DesignLeft = 769
+  DesignTop = 199
   object BitBtn1: TBitBtn
     Left = 4
     Height = 30
@@ -29,7 +28,7 @@ object CdrAntennes: TCdrAntennes
   object BitBtn2: TBitBtn
     Left = 4
     Height = 30
-    Top = 112
+    Top = 106
     Width = 279
     Action = acViderListeAntennes
     TabOrder = 1
@@ -37,7 +36,7 @@ object CdrAntennes: TCdrAntennes
   object BitBtn3: TBitBtn
     Left = 4
     Height = 30
-    Top = 40
+    Top = 38
     Width = 279
     Action = acSortBySerieSt
     TabOrder = 2
@@ -45,7 +44,7 @@ object CdrAntennes: TCdrAntennes
   object BitBtn4: TBitBtn
     Left = 4
     Height = 30
-    Top = 76
+    Top = 72
     Width = 279
     Action = acAttribCodesExpes
     TabOrder = 3
@@ -53,8 +52,8 @@ object CdrAntennes: TCdrAntennes
   object lbStatutTriAntennes: TStaticText
     Left = 288
     Height = 30
-    Top = 40
-    Width = 310
+    Top = 38
+    Width = 312
     Anchors = [akTop, akLeft, akRight]
     BorderStyle = sbsSingle
     Color = 16777096
@@ -64,8 +63,8 @@ object CdrAntennes: TCdrAntennes
   object lbStatutReattribAntennes: TStaticText
     Left = 288
     Height = 30
-    Top = 76
-    Width = 310
+    Top = 72
+    Width = 312
     Anchors = [akTop, akLeft, akRight]
     BorderStyle = sbsSingle
     Color = 16777096
@@ -75,8 +74,8 @@ object CdrAntennes: TCdrAntennes
   object lbStatutDestructionAntennes: TStaticText
     Left = 288
     Height = 30
-    Top = 112
-    Width = 310
+    Top = 106
+    Width = 312
     Anchors = [akTop, akLeft, akRight]
     BorderStyle = sbsSingle
     Color = 16777096
@@ -87,7 +86,7 @@ object CdrAntennes: TCdrAntennes
     Left = 288
     Height = 30
     Top = 4
-    Width = 310
+    Width = 312
     Anchors = [akTop, akLeft, akRight]
     BorderStyle = sbsSingle
     Color = 16777096
@@ -97,12 +96,12 @@ object CdrAntennes: TCdrAntennes
   object Panel1: TPanel
     Left = 4
     Height = 42
-    Top = 324
-    Width = 594
+    Top = 354
+    Width = 596
     Anchors = [akLeft, akRight, akBottom]
     BevelOuter = bvLowered
     ClientHeight = 42
-    ClientWidth = 594
+    ClientWidth = 596
     TabOrder = 8
     object lbEtapeTraitement: TLabel
       Left = 4
@@ -116,7 +115,7 @@ object CdrAntennes: TCdrAntennes
       Left = 4
       Height = 20
       Top = 20
-      Width = 587
+      Width = 589
       Anchors = [akTop, akLeft, akRight]
       Smooth = True
       TabOrder = 0
@@ -124,13 +123,13 @@ object CdrAntennes: TCdrAntennes
   end
   object GroupBox1: TGroupBox
     Left = 4
-    Height = 167
-    Top = 152
-    Width = 594
+    Height = 173
+    Top = 176
+    Width = 596
     Anchors = [akTop, akLeft, akRight, akBottom]
     Caption = 'Simplification des antennes'
-    ClientHeight = 146
-    ClientWidth = 590
+    ClientHeight = 152
+    ClientWidth = 592
     TabOrder = 9
     object BitBtn5: TBitBtn
       Left = 8
@@ -265,6 +264,23 @@ object CdrAntennes: TCdrAntennes
       ParentColor = False
     end
   end
+  object BitBtn8: TBitBtn
+    Left = 4
+    Height = 30
+    Top = 140
+    Width = 279
+    Action = acExportPLY
+    TabOrder = 10
+  end
+  object lbStatutExportPLY: TStaticText
+    Left = 288
+    Height = 30
+    Top = 140
+    Width = 312
+    Anchors = [akTop, akLeft, akRight]
+    BorderStyle = sbsSingle
+    TabOrder = 11
+  end
   object CdrAntennesActionList: TActionList
     Images = CdrAntennesImagesList
     left = 384
@@ -344,12 +360,17 @@ object CdrAntennes: TCdrAntennes
       ImageIndex = 17
       OnExecute = acSimplifyAntennesOfStationExecute
     end
+    object acExportPLY: TAction
+      Caption = 'acExportPLY'
+      ImageIndex = 18
+      OnExecute = acExportPLYExecute
+    end
   end
   object CdrAntennesImagesList: TImageList
     left = 384
     top = 124
     Bitmap = {
-      4C69120000001000000010000000C0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      4C69130000001000000010000000C0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
       C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
       C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
       C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
@@ -925,6 +946,38 @@ object CdrAntennes: TCdrAntennes
       0000FF0000FF000000000000000000000000000000003E3E3EFF000000000000
       00003E3E3EFF0000000000000000000000000000000000000000000000000000
       0000FF0000FF0000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000004A73FF00000000000000000000
+      000000000000000000000000000000000000004A73FF00000000000000000000
+      00000000000000000000000000000000000000000000004A73FF000000000000
+      000000000000000000000000000000000000004A73FF00000000000000000000
+      0000000000000000000000000000000000000000000000000000004A73FF0000
+      000000000000004A73FF0000000000000000004A73FF0000000000000000004A
+      73FF00000000000000000000000000000000004A73FF0000000000000000004A
+      73FF00000000004A73FF0000000000000000004A73FF00000000004A73FF0000
+      00000000000000000000FF0000FF0000000000000000004A73FF004A73FF004A
+      73FF0000000000000000004A73FF004A73FF0000000000000000004A73FF0000
+      0000FF0000FFFF0000FF0000000000000000000000000000000000000000004A
+      73FF004A73FF00000000004A73FF0000FFFF0000FFFF004A73FF00000000FF00
+      00FF000000000000000000000000000000000000000000000000000000000000
+      0000004A73FF004A73FF0000FFFF0000FFFF0000FFFF0000FFFFFF0000FF0000
+      000000000000000000000000000000000000000000000000000000000000004A
+      73FF004A73FF004A73FF0000FFFF0000FFFF0000FFFF0000FFFF000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000FFFF0000FFFFFF0000FFFF0000FF0000FFFF0000FFFF0000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF004A
+      73FF004A73FF004A73FF00000000000000000000000000000000004A73FF0000
+      FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000FFFF0000
+      FFFF000000000000000000000000000000000000000000000000000000000000
+      000000000000FF0000FF00000000004A73FF004A73FF00000000004A73FF0000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000FF0000FF0000000000000000004A73FF00000000004A73FF00000000004A
+      73FF00000000000000000000000000000000000000000000000000000000FF00
+      00FF000000000000000000000000004A73FF00000000004A73FF000000000000
+      0000004A73FF000000000000000000000000000000000000000000000000FF00
+      00FF000000000000000000000000004A73FF0000000000000000000000000000
+      000000000000004A73FF00000000000000000000000000000000FF0000FF0000
+      0000000000000000000000000000004A73FF0000000000000000000000000000
       0000000000000000000000000000
     }
   end

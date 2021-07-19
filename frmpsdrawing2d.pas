@@ -5,7 +5,7 @@ unit frmPSDrawing2D;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, CadreDGCDrawingContext,
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, PairSplitter, StdCtrls, CadreDGCDrawingContext,
   DGCTypes;
 
 type
@@ -14,14 +14,21 @@ type
 
   TdlgDispGraphisme2D = class(TForm)
     CdrDGCDrawingContext1: TCdrDGCDrawingContext;
+    grbxLayers: TGroupBox;
+    lsbLayers: TListBox;
+    PairSplitter1: TPairSplitter;
+    PairSplitterSide1: TPairSplitterSide;
+    PairSplitterSide2: TPairSplitterSide;
+    procedure FormShow(Sender: TObject);
   private
     FCurrentIdxStyleSheet : integer;
     FPolylineClosed       : boolean;
-
+    procedure ListerLayers();
   public
     function Initialiser(const w, h: integer): boolean;
     procedure Finaliser();
     procedure SetBackgroundColor(const R, G, B, A: byte);
+    procedure AddDXFLayer(const QName: string; const QAcadIdxColor: integer; const  QR, QG, QB, QA: byte);
     function  AddStyleSheet(const QStylename: string;
                             const QPenColorR, QPenColorG, QPenColorB, QPenOpacity: byte; const QPenWidtdhInPX: byte;
                             const QBshColorR, QBshColorG, QBshColorB, QBshOpacity: byte; const QBshStyle: byte;
@@ -47,6 +54,28 @@ implementation
 
 { TdlgDispGraphisme2D }
 
+procedure TdlgDispGraphisme2D.FormShow(Sender: TObject);
+begin
+  ListerLayers();
+end;
+
+procedure TdlgDispGraphisme2D.ListerLayers();
+var
+  i, Nb: Integer;
+  L: TDGCLayer;
+begin
+  lsbLayers.Clear;
+  Nb := CdrDGCDrawingContext1.GetNbLayers();
+  grbxLayers.Caption := format('%d couches', [Nb]);
+  if (Nb = 0) then exit;
+  for i := 0 to Nb - 1 do
+  begin
+    L := CdrDGCDrawingContext1.GetLayer(i);
+    lsbLayers.Items.Add(Format('%d - %d - %s - %s', [i, L.AcadColorIdx, L.Color.toHTMLColor(), L.Name]));
+  end;
+  lsbLayers.ItemIndex := 0;
+end;
+
 function TdlgDispGraphisme2D.Initialiser(const w, h: integer): boolean;
 var
   CGT: TDGCColor;
@@ -59,7 +88,6 @@ begin
   FCurrentIdxStyleSheet := 0;
   FPolylineClosed       := false;
   try
-    //CdrDGCDrawingContext1.AddStyleSheet(');
   except
     ShowMessage('Erreur FGC');
   end;
@@ -78,6 +106,13 @@ begin
   except
 
   end;
+end;
+
+procedure TdlgDispGraphisme2D.AddDXFLayer(const QName: string; const QAcadIdxColor: integer; const  QR, QG, QB, QA: byte);
+begin
+  //ShowMessage('Dans AddDXFLayer: ' + QName);
+  CdrDGCDrawingContext1.AddLayer(QName, QAcadIdxColor, QR, QG, QB, QA);
+
 end;
 
 function TdlgDispGraphisme2D.AddStyleSheet(const QStylename: string;

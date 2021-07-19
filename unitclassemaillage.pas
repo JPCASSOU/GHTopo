@@ -1495,7 +1495,7 @@ begin
           try
             MyLigne  := LireLigne();
             if (Trim(MyLigne) = '') then Continue;
-            PrmsLn := Split(MyLigne, SEPARATOR_TAB); //Split(LireLigne(), SEPARATOR_TAB);
+            PrmsLn := Split(MyLigne, FIELD_SEPARATOR_TAB); //Split(LireLigne(), SEPARATOR_TAB);
             QQ     := StrToInt(PrmsLn[0]);
             if (QQ >= 0) then
             begin
@@ -1522,7 +1522,7 @@ begin
           try
             MyLigne := LireLigne();
             if (Trim(MyLigne) = '') then Continue;
-            PrmsLn  := Split(MyLigne, SEPARATOR_TAB);  // nombre de triangles
+            PrmsLn  := Split(MyLigne, FIELD_SEPARATOR_TAB);  // nombre de triangles
             QQ      := StrToIntDef(PrmsLn[0], -1);
             if (QQ >=0) then
             begin
@@ -2243,15 +2243,15 @@ begin
   AfficherMessageErreur(Format('%s.SaveProfilsToFile(): %s', [ClassName, QFilename]));
   Nb := GetNbProfilsTopo();
   if (Nb = 0) then Exit;
-  EWE := FORMAT_NB_INTEGER + TAB +
-         FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB + // couleur
-         FORMAT_NB_INTEGER + TAB + // opacité
-         FORMAT_NB_INTEGER + TAB + // largeur ligne en pixel
-         FORMAT_NB_REAL_2_DEC + TAB + // largeur ligne en mm
-         FORMAT_NB_REAL_2_DEC + TAB +
-         FORMAT_NB_REAL_2_DEC + TAB +           // extr 1
-         FORMAT_NB_REAL_2_DEC + TAB +
-         FORMAT_NB_REAL_2_DEC + TAB +           // extr 2
+  EWE := FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB +
+         FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB + // couleur
+         FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB + // opacité
+         FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB + // largeur ligne en pixel
+         FORMAT_NB_REAL_2_DEC + FIELD_SEPARATOR_TAB + // largeur ligne en mm
+         FORMAT_NB_REAL_2_DEC + FIELD_SEPARATOR_TAB +
+         FORMAT_NB_REAL_2_DEC + FIELD_SEPARATOR_TAB +           // extr 1
+         FORMAT_NB_REAL_2_DEC + FIELD_SEPARATOR_TAB +
+         FORMAT_NB_REAL_2_DEC + FIELD_SEPARATOR_TAB +           // extr 2
          FORMAT_STRING;
   AssignFile(fp, QFilename);
   try
@@ -2292,7 +2292,7 @@ begin
     while (not eof(fp)) do
     begin
       ReadLn(fp, WU);
-      AR := Split(WU, SEPARATOR_TAB);
+      AR := Split(WU, FIELD_SEPARATOR_TAB);
       //0   1   2    3   4  5   6     7          8            9            10         11
       //0	0	0	255	255 1 0.015 403080.31	3091003.68	403405.57	3090831.37	Profil_1
 

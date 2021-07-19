@@ -19,7 +19,9 @@ uses
   Common,
   evaluateur_expressions,
   StructuresDonnees,
-  ToporobotClasses2012, UnitObjetSerie, Dialogs,
+  ToporobotClasses2012,
+  UnitEntitesExtended,
+  UnitObjetSerie, Dialogs,
   Classes, SysUtils, FileUtil, curredit, Forms, Controls, StdCtrls, Graphics,
   ActnList, Menus, Buttons, LCLType, ExtCtrls, ComCtrls;
 
@@ -43,6 +45,7 @@ type
     acSimplifyAntennesOfAll: TAction;
     acSimplifyAntennesOfSerie: TAction;
     acSimplifyAntennesOfStation: TAction;
+    acExportPLY: TAction;
     acViderListeAntennes: TAction;
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
@@ -51,6 +54,7 @@ type
     BitBtn5: TBitBtn;
     BitBtn6: TBitBtn;
     BitBtn7: TBitBtn;
+    BitBtn8: TBitBtn;
     Button1: TButton;
     CdrAntennesActionList: TActionList;
     CdrAntennesImagesList: TImageList;
@@ -79,8 +83,10 @@ type
     lbStatutTriAntennes: TStaticText;
     Panel1: TPanel;
     ProgressBar1: TProgressBar;
+    lbStatutExportPLY: TStaticText;
     procedure acAttribCodesExpesExecute(Sender: TObject);
     procedure acChangerPointAccrochageAntennesExecute(Sender: TObject);
+    procedure acExportPLYExecute(Sender: TObject);
     procedure acFindStationDepartExecute(Sender: TObject);
     procedure acNettoyerAntennesExecute(Sender: TObject);
     procedure acSimplifyAntennesOfSerieExecute(Sender: TObject);
@@ -92,12 +98,13 @@ type
   private
     { private declarations }
     FMyDocToporobot: TToporobotStructure2012;
+    FMyBDDEntites  : TBDDEntites;
     procedure InitCaptions();
     procedure SetVoyantStatut(const LB: TStaticText; const DoneOK: boolean; const MsgOK: string; const MsgKO: string = 'Echec');
     procedure DisplayProgression(const Etape: string; const Done, Starting, Ending, Step: integer);
   public
     { public declarations }
-    function Initialise(const DT: TToporobotStructure2012) : boolean;
+    function Initialiser(const DT: TToporobotStructure2012; const BE: TBDDEntites) : boolean;
   end;
 
 implementation
@@ -107,11 +114,12 @@ uses
 
 {$R *.lfm}
 
-function TCdrAntennes.Initialise(const DT: TToporobotStructure2012) : boolean;
+function TCdrAntennes.Initialiser(const DT: TToporobotStructure2012; const BE: TBDDEntites) : boolean;
 begin
   Result := False;
   try
     FMyDocToporobot := DT;
+    FMyBDDEntites   := BE;
     InitCaptions();
     GroupBox1.Caption := format(GetResourceString(rsCDR_ANTENNES_LB_NB_ANTENNES), [FMyDocToporobot.GetNbAntennes()]);
     Result := True;
@@ -266,6 +274,7 @@ begin
   end;
 end;
 
+
 procedure TCdrAntennes.DisplayProgression(const Etape: string; const Done, Starting, Ending, Step: integer);
 begin
   lbEtapeTraitement.Caption := Format('%s: %d of %d', [Etape, Done, Ending]);
@@ -313,6 +322,18 @@ begin
       ShowMessageFmt('Point de base %s introuvable', [WU]);
   end;
   //*)
+end;
+
+procedure TCdrAntennes.acExportPLYExecute(Sender: TObject);
+var
+  QFileName: TStringDirectoryFilename;
+  QIdx: integer;
+begin
+  QFilename := 'toto.ply';
+  if (DoDialogSaveFile('Fichiers PLY|*.ply', '.ply', QFileName, QIdx)) then
+  begin
+    FMyBDDEntites.ExporterAntennesNuagePoints(QFileName);
+  end;
 end;
 
 procedure TCdrAntennes.acFindStationDepartExecute(Sender: TObject);

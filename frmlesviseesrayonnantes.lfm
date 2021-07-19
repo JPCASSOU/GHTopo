@@ -1,11 +1,11 @@
 object frmGestionViseesRayonnantes: TfrmGestionViseesRayonnantes
-  Left = 594
-  Height = 405
-  Top = 283
-  Width = 581
+  Left = 402
+  Height = 496
+  Top = 421
+  Width = 748
   Caption = 'frmGestionViseesRayonnantes'
-  ClientHeight = 405
-  ClientWidth = 581
+  ClientHeight = 496
+  ClientWidth = 748
   Font.CharSet = ANSI_CHARSET
   Font.Height = -13
   Font.Name = 'Arial Narrow'
@@ -15,53 +15,56 @@ object frmGestionViseesRayonnantes: TfrmGestionViseesRayonnantes
   LCLVersion = '2.0.0.4'
   object Panel1: TPanel
     Left = 4
-    Height = 359
+    Height = 450
     Top = 4
-    Width = 574
+    Width = 741
     Anchors = [akTop, akLeft, akRight, akBottom]
     BevelOuter = bvLowered
-    ClientHeight = 359
-    ClientWidth = 574
+    ClientHeight = 450
+    ClientWidth = 741
     TabOrder = 0
     inline CdrAntennes1: TCdrAntennes
       Left = 1
-      Height = 357
+      Height = 448
       Top = 1
-      Width = 572
-      ClientHeight = 357
-      ClientWidth = 572
+      Width = 739
+      ClientHeight = 448
+      ClientWidth = 739
       inherited lbStatutTriAntennes: TStaticText
-        Width = 281
+        Width = 448
       end
       inherited lbStatutReattribAntennes: TStaticText
-        Width = 281
+        Width = 448
       end
       inherited lbStatutDestructionAntennes: TStaticText
-        Width = 281
+        Width = 448
       end
       inherited lbStatutNettoyageAntennes: TStaticText
-        Width = 281
+        Width = 448
       end
       inherited Panel1: TPanel
-        Top = 315
-        Width = 565
-        ClientWidth = 565
+        Top = 406
+        Width = 732
+        ClientWidth = 732
         inherited ProgressBar1: TProgressBar
-          Width = 558
+          Width = 725
         end
       end
       inherited GroupBox1: TGroupBox
-        Height = 158
-        Width = 565
-        ClientHeight = 137
-        ClientWidth = 561
+        Height = 225
+        Width = 732
+        ClientHeight = 204
+        ClientWidth = 728
+      end
+      inherited lbStatutExportPLY: TStaticText
+        Width = 448
       end
     end
   end
   object BitBtn1: TBitBtn
-    Left = 412
+    Left = 579
     Height = 32
-    Top = 370
+    Top = 461
     Width = 166
     Anchors = [akRight, akBottom]
     DefaultCaption = True

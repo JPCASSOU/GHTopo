@@ -21,7 +21,7 @@ type TDGCPolyLineGon = class(TDGCPrimitive)
    FBoundingBox : TDGCBoundingBox;
    FName: string;
    FDoFlush: boolean;
-   FListeVertex: array of TDGCPoint2D;
+   FListeVertex: TDGCArrayPoints2D; // array of TDGCPoint2D;
 
  public
    constructor Create(const QIdxStyleSheet: integer; const QName: string; const QDoFlush: boolean);
@@ -29,8 +29,6 @@ type TDGCPolyLineGon = class(TDGCPrimitive)
    //property IdxStyleSheet: integer read FIdxStyleSheet;
    property Name    : string read FName write FName;
    property DoFlush : boolean read FDoFlush write FDoFlush;
-
-
    function AddVertex(const V: TDGCPoint2D): boolean;
    function GetVertex(const Idx: integer): TDGCPoint2D;
    function GetNbVertex(): integer;
@@ -46,6 +44,8 @@ end;
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //+ La courbe de Bézier                                                        +
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
 type
 
 { TDGCCurve }
@@ -56,8 +56,8 @@ type
     FName       : string;
     FFilled     : boolean;
     FDoFlush    : boolean;
-    FListeVertex: array of TDGCPoint2D;
-    FListeArcs  : array of TDGCBezierArc;
+    FListeVertex: TDGCArrayPoints2D; // array of TDGCPoint2D;
+    FListeArcs  : TDGCListBezierArcs;
     procedure AddBezierArc(const BA: TDGCBezierArc);
   public
     constructor Create(const QIdxStyleSheet: integer; const QName: string; const QDoFlush: boolean; const QTypeCurve: TTypeCurve; const QFilled: boolean);
@@ -88,13 +88,13 @@ begin
   //FIdxStyleSheet := QIdxStyleSheet;
   FName    := QName;
   FDoFlush := QDoFlush;
-  SetLength(FListeVertex, 0);
+  FListeVertex.Empty(); // SetLength(FListeVertex, 0);
   FBoundingBox.Reset();
 end;
 
 destructor TDGCPolyLineGon.Destroy();
 begin
-  SetLength(FListeVertex, 0);
+  FListeVertex.Empty();// SetLength(FListeVertex, 0);
   inherited Destroy;
 end;
 
@@ -114,19 +114,22 @@ var
   n: Integer;
 begin
   result := false;
+  FListeVertex.AddElement(V);
+  (*
   n := Length(FListeVertex);
   SetLength(FListeVertex, n + 1);
-  FListeVertex[n] := V;
+  FListeVertex[n] := V;//*)
+
 end;
 
 function TDGCPolyLineGon.GetVertex(const Idx: integer): TDGCPoint2D;
 begin
-  Result := FListeVertex[Idx];
+  Result := FListeVertex.GetElement(Idx);//[Idx];
 end;
 
 function TDGCPolyLineGon.GetNbVertex(): integer;
 begin
-  Result := length(FListeVertex);
+  Result := FListeVertex.GetNbElements();//length(FListeVertex);
 end;
 
 function TDGCPolyLineGon.GetBoundingBox(): TDGCBoundingBox;
@@ -135,12 +138,8 @@ begin
 end;
 
 procedure TDGCCurve.AddBezierArc(const BA: TDGCBezierArc);
-var
-  n: Integer;
 begin
-  n := self.GetNbArcs();
-  SetLength(FListeArcs, n+1);
-  FListeArcs[n] := BA;
+  FListeArcs.AddElement(BA);
 end;
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -149,19 +148,16 @@ end;
 constructor TDGCCurve.Create(const QIdxStyleSheet: integer; const QName: string; const QDoFlush: boolean; const QTypeCurve: TTypeCurve; const QFilled: boolean);
 begin
   inherited Create(QIdxStyleSheet, QName);
-  //FIdxStyleSheet:= QIdxStyleSheet;
-  //FName     := QName;
   FFilled   := QFilled;
   FDoFlush  := QDoFlush;
-  SetLength(FListeVertex, 0);
-  SetLength(FListeArcs  , 0);
+  FListeVertex.Empty();
+  FListeArcs.Empty();
 end;
 
 destructor TDGCCurve.Destroy();
 begin
-  SetLength(FListeVertex, 0);
-  SetLength(FListeArcs, 0);
-
+  FListeVertex.Empty();
+  FListeArcs.Empty();
 end;
 
 function TDGCCurve.AddVertex(const V: TDGCPoint2D): boolean;
@@ -169,30 +165,28 @@ var
   n: Integer;
 begin
   result := false;
-  n := Length(FListeVertex);
-  SetLength(FListeVertex, n + 1);
-  FListeVertex[n] := V;
-  result := length(FListeVertex) > 0;
+  self.FListeVertex.AddElement(V);
+  result := (FListeVertex.GetNbElements() > 0); //length(FListeVertex) > 0;
 end;
 
 function TDGCCurve.GetVertex(const Idx: integer): TDGCPoint2D;
 begin
-  result := FListeVertex[Idx];
+  result := FListeVertex.GetElement(Idx); //[Idx];
 end;
 
 function TDGCCurve.GetNbVertex(): integer;
 begin
-  Result := length(FListeVertex);
+  Result := FListeVertex.GetNbElements();// length(FListeVertex);
 end;
 
 function TDGCCurve.GetNbArcs(): integer;
 begin
-  Result := length(FListeArcs);
+  Result := FListeArcs.GetNbElements();
 end;
 
 function TDGCCurve.GetBezierArc(const Idx: integer): TDGCBezierArc;
 begin
-  Result := FListeArcs[Idx];
+  Result := FListeArcs.GetElement(Idx);
 end;
 
 
@@ -213,12 +207,12 @@ var
   AngleTg1, AngleTg2 : double;
 begin
   Result := false;
-
-  SetLength(FListeArcs, 0);
+  FListeArcs.Empty();
   QNbPts := self.GetNbVertex();
   if (QNbPts < 2) then exit;
   Delta.Empty();
-  SetLength(FListeArcs, QNbPts - 1);
+  FListeArcs.SetCapacity(QNbPts - 1);
+  //SetLength(FListeArcs, QNbPts - 1);
   // TODO: C'est dans ce secteur qu'il faut gérer le mode ByDefault
   for i := 1 to QNbPts-1 do
   begin
@@ -234,13 +228,14 @@ begin
 
     AB.TangP2.X := -AB.TangP1.X;
     AB.TangP2.Y := -AB.TangP1.Y;
-    FListeArcs[i-1] := AB;
+
+    FListeArcs.SetElement(i-1, AB);//[i-1] := AB;
   end;
   // Passe 2: Calcul des tangentes (construction par défaut)
-  for i := 1 to High(FListeArcs) do
+  for i := 1 to FListeArcs.GetNbElements() - 1 do //High(FListeArcs) do
   begin
-    A0 := FListeArcs[i-1];
-    A1 := FListeArcs[i];
+    A0 := FListeArcs.GetElement(i-1); //[i-1];
+    A1 := FListeArcs.GetElement(i); //[i];
     (*
     R1 := Hypot(A0.TangP2.X, A0.TangP2.Y);
     AngleTg2 := DGCGetAngleBissecteur(-A0.TangP2.X, -A0.TangP2.Y,
@@ -258,10 +253,11 @@ begin
     R1 := A1.TangP1.getNorme();
     AngleTg2 := DGCGetAngleBissecteur(-A0.TangP2.X, -A0.TangP2.Y,
                                        A1.TangP1.X,  A1.TangP1.Y) - PI_2;
-    FListeArcs[i-1].TangP2.setFrom( cos(AngleTg2) * R0,  sin(AngleTg2) * R0);
+
+    FListeArcs.M[i-1].TangP2.setFrom( cos(AngleTg2) * R0,  sin(AngleTg2) * R0);
     //AngleTg1 := AngleTg2 + PI;
     //FListeArcs[i].TangP1.setFrom(R2 * cos(AngleTg1), R2 * sin(AngleTg1);
-    FListeArcs[i-1].TangP1.setFrom(-cos(AngleTg2) * R1, -sin(AngleTg2) * R1);   // cos(x + pi) = -cos(x) et sin(x + pi) = -sin(x)
+    FListeArcs.M[i-1].TangP1.setFrom(-cos(AngleTg2) * R1, -sin(AngleTg2) * R1);   // cos(x + pi) = -cos(x) et sin(x + pi) = -sin(x)
 
   end;
   // Passe 3: Coordonnées des points de contrôle
@@ -289,7 +285,7 @@ var
   var
     s: integer;
     Bezier: TDGCArrayPoints2D;
-    P0, P1, P2, P3, PT: TDGCPoint2D;
+    P0, P1, P2, P3, PT, BBS: TDGCPoint2D;
     ErrCode: integer;
   begin
     P0 := A.PT1;
@@ -298,16 +294,17 @@ var
     P3 := A.PT2;
 
     DGCCalcBezierCurve(P0, P1, P2, P3, 20, Bezier);
-    for s := 0 to High(Bezier) do
+    for s := 0 to Bezier.GetNbElements() - 1 do //; High(Bezier) do
     begin
-      PT.setFrom(Bezier[s].X, Bezier[s].Y);
-      FBoundingBox.upDate(PT);
+      //BBS := Bezier.GetElement(s);
+      //PT.setFrom(Bezier[s].X, Bezier[s].Y);
+      FBoundingBox.upDate(Bezier.GetElement(s)); //PT);
     end;
   end;
 begin
-  Nb := Length(FListeArcs);
+  Nb := FListeArcs.GetNbElements();//Length(FListeArcs);
   FBoundingBox.Reset();
-  for i := 0 to Nb - 1  do QBoundingBoxArc(FListeArcs[i]);
+  for i := 0 to Nb - 1  do QBoundingBoxArc(FListeArcs.GetElement(i));
 end;
 end.
 //******************************************************************************

@@ -1694,7 +1694,7 @@ begin
     begin
       E  := GetEntiteVisee(i);
       QID := E.getGHCaveDrawIDPtCenterline();
-      WrtLn(Format(FMT_BASEPOINTS,
+      WrtLn(Format(GCD_FMT_BASEPOINTS,
                   [QID  ,
                    E.IDTerrain,
                    E.Type_Entite,
@@ -1715,7 +1715,7 @@ begin
         // NOTA: Les visées en antennes ne sont pas prises en compte par
         //       les fonctions de recherche et d'indexation de GHCaveDraw
         QID := E.getGHCaveDrawIDPtAntenne(i);
-        WrtLn(Format(FMT_BASEPOINTS,
+        WrtLn(Format(GCD_FMT_BASEPOINTS,
                     [QID  ,
                      E.IDTerrain,
                      E.Type_Entite,

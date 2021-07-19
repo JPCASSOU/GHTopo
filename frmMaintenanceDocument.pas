@@ -22,7 +22,11 @@ uses
   FileUtil, curredit, Forms, Controls, Graphics, Dialogs, Buttons, ComCtrls, ExtCtrls, StdCtrls, EditBtn, Types;
 
 type TAttributsAChanger = set of (aacENTRANCES, aacRESEAUX, aacCODES, aacEXPES, aacSECTEURS);
-type TdlgMaintenanceDocTopo = class(TForm)
+type
+
+{ TdlgMaintenanceDocTopo }
+
+ TdlgMaintenanceDocTopo = class(TForm)
     BitBtn1: TBitBtn;
     btnReattribuerAuxSeriesSelectionnees: TButton;
     btnReattribuerCode: TButton;
@@ -489,7 +493,7 @@ begin
     MyNameSpace := FDocTopo.GetNameSpace(0);
     editNameSpace.Text := MyNameSpace.Nom;
     CdrListesSimples1.InitialiserListeSimple(FDocTopo, FBDDEntites, nil, mbddCODES);
-    CdrAntennes1.Initialise(FD);
+    CdrAntennes1.Initialiser(FD, FBDDEntites);
     CdrListeSeries1.Initialiser(FD, nil, nil, [tbsSORT, tbsCSV, tbsHELP], True);
     // systèmes de coordonnées
     MyEPSG := FDocTopo.GetCodeEPSGSystemeCoordonnees();

@@ -13,7 +13,7 @@ uses
   UnitKMLExport,
   UnitLeafletExport,
   UnitExportGeoJSON,
-  UnitDXFDrawing,
+  //UnitDXFDrawing,
   UnitObjetSerie,
   ConvertisseurJPC
   ;
@@ -144,6 +144,7 @@ var
   MyStation : TBaseStation;
   MyPoint   : TProjUV;
   QListeVx  : TListeSimple<TProjUV>;
+  QNbVx: LongInt;
 begin
   result := false;
   NbVisees := S.GetNbVisees();
@@ -185,8 +186,9 @@ begin
     end;
     // et on ferme le polygone
     QListeVx.AddElement(QListeVx.GetElement(0));
-    SetLength(QPolygoneSilhouette, QListeVx.GetNbElements());
-    for i := 0 to QListeVx.GetNbElements() - 1 do QPolygoneSilhouette[i] := QListeVx.GetElement(i);
+    QNbVx := QListeVx.GetNbElements();
+    QPolygoneSilhouette.SetCapacity(QNbVx);
+    for i := 0 to QNbVx - 1 do QPolygoneSilhouette.SetElement(i, QListeVx.GetElement(i));
     result := true;
   finally
     FreeAndNil(QListeVx);
@@ -238,13 +240,13 @@ var
   procedure QExporterSilhouettes();
   var
     i, Nb: Integer;
-    QPolygoneSilhouette: array of TProjUV;
+    QPolygoneSilhouette: TArrayOfTProjUV;
     MySerie: TObjSerie;
     EWE: String;
   begin
     Nb := FDocTopo.GetNbSeries();
     AfficherMessage(Format ('--> Silhouettes: %d series', [Nb]));
-    SetLength(QPolygoneSilhouette, 0);
+    QPolygoneSilhouette.Empty();
     if (Nb < 2) then exit;
     for i := 1 to Nb - 1 do
     begin
@@ -407,18 +409,19 @@ var
   end;
   procedure QExporterSilhouettes();
   var
-    i, Nb, v: Integer;
-    QPolygoneSilhouette: array of TProjUV;
+    i, Nb, v, QNbVx: Integer;
+    QPolygoneSilhouette: TArrayOfTProjUV;
     QLayer: TOSMLayer;
     MySerie: TObjSerie;
     EWE: String;
+    PV: TProjUV;
   begin
     Nb := FDocTopo.GetNbSeries();
     QLayer := DC.GetLayer(ID_LAYER_SILHOUETTES);
     DC.BeginConditionalSection(True);
 
     AfficherMessage(Format ('--> Silhouettes: %d series', [Nb]));
-    SetLength(QPolygoneSilhouette, 0);
+    QPolygoneSilhouette.Empty();
     if (Nb < 2) then exit;
     for i := 1 to Nb - 1 do
     begin
@@ -427,7 +430,11 @@ var
       if (MakeSilhouetteOfSerie(MySerie, QPolygoneSilhouette)) then
       begin
         DC.BeginPolygon(QLayer.LayerVarName, Format('Serie: %d: %s', [MySerie.GetNumeroDeSerie(), MySerie.GetNomSerie()]), '');
-          for v := 0 to High(QPolygoneSilhouette) do DC.AddVertex(QPolygoneSilhouette[v].U, QPolygoneSilhouette[v].V, 0.00, v = High(QPolygoneSilhouette));
+          for v := 0 to QPolygoneSilhouette.GetNbElements() - 1 do
+          begin
+            PV := QPolygoneSilhouette.GetElement(v);
+            DC.AddVertex(PV.U, PV.V, 0.00, v = (QPolygoneSilhouette.GetNbElements() - 1));
+          end;
         DC.EndPolygon();
       end;
       if (assigned(FProcProgression)) then FProcProgression(EWE, i, 1, Nb, 10);
@@ -598,13 +605,14 @@ var
   procedure QExporterSilhouettes();
   var
     i, v, Nb: Integer;
-    QPolygoneSilhouette: array of TProjUV;
+    QPolygoneSilhouette: TArrayOfTProjUV;
     MySerie: TObjSerie;
     EWE: String;
+    PV: TProjUV;
   begin
     Nb := FDocTopo.GetNbSeries();
     AfficherMessage(Format ('--> Silhouettes: %d series', [Nb]));
-    SetLength(QPolygoneSilhouette, 0);
+    QPolygoneSilhouette.Empty();
     if (Nb < 2) then exit;
     for i := 1 to Nb - 1 do
     begin
@@ -613,7 +621,11 @@ var
       if (MakeSilhouetteOfSerie(MySerie, QPolygoneSilhouette)) then
       begin
         DC.BeginPolygon(Format('Serie: %d: %s', [MySerie.GetNumeroDeSerie(), MySerie.GetNomSerie()]), '');
-          for v := 0 to High(QPolygoneSilhouette) do DC.AddVertex(QPolygoneSilhouette[v].U, QPolygoneSilhouette[v].V, 0.00, v = High(QPolygoneSilhouette));
+          for v := 0 to QPolygoneSilhouette.GetNbElements() - 1 do
+          begin
+            PV := QPolygoneSilhouette.GetElement(v);
+            DC.AddVertex(PV.U, PV.V, 0.00, v = (QPolygoneSilhouette.GetNbElements() - 1));
+          end;
         DC.EndPolygon(i = (Nb - 1));
       end;
       if (assigned(FProcProgression)) then FProcProgression(EWE, i, 1, Nb, 10);
@@ -637,7 +649,7 @@ begin
       DC.WriteHeader();
       // le dessin ici
       if (expgisCENTERLINES in FExportCenterLinesSilhouettes) then QExporterCenterLines();
-      //if (expgisSILHOUETTES in FExportCenterLinesSilhouettes) then QExporterSilhouettes();
+      if (expgisSILHOUETTES in FExportCenterLinesSilhouettes) then QExporterSilhouettes();
 
       DC.WriteFooter();
       DC.Finaliser();
@@ -651,7 +663,7 @@ end;
 
 function TExportGIS.ExporterToDXF(const QFilename: TStringDirectoryFilename): boolean;
 const
-  LAYER_0               = 'Layer0';                ID_LAYER_0              = 0;
+  //LAYER_0               = 'Layer0';                ID_LAYER_0              = 0;
   LAYER_ENTRANCES       = 'ENTRANCES';             ID_LAYER_ENTRANCES      = 1;
   LAYER_CENTERLINES     = 'CENTERLINES';           ID_LAYER_CENTERLINES    = 2;
   LAYER_RADIANT_SHOTS   = 'RADIANTSHOTS';          ID_LAYER_RADIANT_SHOTS  = 3;
@@ -660,6 +672,8 @@ const
   LAYER_SILHOUETTES     = 'SILHOUETTES';           ID_LAYER_SILHOUETTES    = 6;
   LAYER_NOEUDS          = 'NOEUDS';                ID_LAYER_NOEUDS         = 7;
 var
+  ewe : integer;
+  (*
   MyExport: TDXFExport;
   C1, C2: TPoint3Df;
   procedure QExporterCenterLines();
@@ -740,9 +754,11 @@ var
       if (assigned(FProcProgression)) then FProcProgression(EWE, i, 0, Nb, 100);
     end;
   end;
+  //*)
 begin
   result := false;
   AfficherMessage(Format('%s.ExporterToDXF(%s)', [ClassName, QFilename, FDocumentTitle]));
+  (*
   MyExport := TDXFExport.Create;
   FBDDEntites.SortBySerSts();  // Trier par séries et stations
   try
@@ -771,6 +787,7 @@ begin
   finally
     FreeAndNil(MyExport);
   end;
+  //*)
   FBDDEntites.SortByDepth();   // et retrier la table
 end;
 

@@ -26,139 +26,248 @@ uses
   , BGRACanvas
   ;
 
-{$IFDEF MULTI_THREADING}
-CONST MULTI_OR_MONO_THREADED = 'Multithreaded';
-{$ELSE MULTI_THREADING}
-CONST MULTI_OR_MONO_THREADED = 'Monothreaded';
-{$ENDIF MULTI_THREADING}
-
-DEFAULT_PEN_WIDTH_IN_MM      = 0.025;
-DEFAULT_FONT_HEIGHT_IN_UNITS = 14;
-DEFAULT_FONT_HEIGHT_IN_MM    = 3.0; // mm
-
-CONST FRM_CONSTRAINT_MAX_WIDTH  = 0;
-CONST FRM_CONSTRAINT_MAX_HEIGHT = 0;
-const MAX_WORD_VALUE            = 65535;
-
-CONST
+////////////////////////////////////////////////////////////////////////////////
+// Constantes d'inclusion et de copyright
+CONST // sans commentaires (l'auteur de GHTopo est athéiste et christianophobe)
   CRIMINELS_CONTRE_L_HUMANITE = True;
   HITLER     = CRIMINELS_CONTRE_L_HUMANITE;  // sans commentaires
   JESUS      = HITLER;
   MAHOMET    = JESUS;
-// formats de nombres
-const
-  FORMAT_STRING           = '%s';
-  FORMAT_NB_INTEGER       = '%d';
-
-  FORMAT_NB_REAL_0_DEC    = '%.0f';
-  FORMAT_NB_REAL_2_DEC    = '%.2f';
-  FORMAT_NB_REAL_3_DEC    = '%.3f';
-  FORMAT_NB_REAL_6_DEC    = '%.6f';
-// rayon maximal de capture pour
-const MAX_DISTANCE_CAPTURE = 40.00;
-// constantes angulaires
-const TWO_PI: double = 2 * 3.1415926535897932384626;
-// rayon de capture pour les stations proches
-const RAYON_CAPTURE_NEAR_STATIONS = 25.00;
-// unité angulaire par defaut
-const
-  DEGRES_PAR_TOUR          = 360.00;
-  GRADES_PAR_TOUR          = 400.00;
-  SATANGRADES_PAR_TOUR     = 666.00; // lol
-  DEG_TO_RAD               = PI / 180;
-  GON_TO_RAD               = PI / 200;
-const
-  QUADRANT_DEGRES = DEGRES_PAR_TOUR / 4.0;
-  QUADRANT_GRADES = GRADES_PAR_TOUR / 4;
-  ANGLE_JANE_BRIKIN_DEGRES = DEGRES_PAR_TOUR / 2;
-  ANGLE_JANE_BRIKIN_GRADES = GRADES_PAR_TOUR / 2;
-
-
-
-// A adapter en fonction de l'utilisateur
-const UNITE_ANGULAIRE_PAR_DEFAUT  : double = 360.00;
-const UNITE_ANGULAIRE_DU_CODE_ZERO: double = 360.00;
-// année pivot
-const ANNEE_PIVOT: word = 50; // année 1950 = pivot pour les années sur deux chiffres
 // nombre max de séries par cavité
 const NB_MAXI_SERIES_PAR_CAVITE  = 100000;
 const MULTIPLICATEUR_STATION     = 10;
+const MAX_LINES_LOG              = 1000; // nb max de lignes de l'historique des opérations
+const MAX_LINES_ERRORS_LOG       = 2000; // nb max de lignes de l'historique des opérations
+// séparateurs de champs
+const FIELD_SEPARATOR_TAB        = #9;
 
 // dossiers de service
 const MON_DOSSIER_CHIFFRES_TOPO  = '0_Mes_Donnees_Topo';
 const MON_DOSSIER_CROQUIS        = '0_MesCroquis';
 const MON_DOSSIER_QSAVES         = '0_Sauvegardes_Horodatees';
 const MON_DOSSIER_EXPORT_GIS     = '0_Exports_GIS';
-
 const MON_DOSSIER_RPI_DOCS       = '0_Docs_GHTopoRPI';
-// fichier INI
-CONST GHTOPO_STD_INI_FILENAME    = 'GHTopo_settings.ini';
-CONST GHTOPO_RPI_INI_FILENAME    = 'GHTopoRPI_settings.ini';
+const TEMP_COORDS_FILE           = '_TmpCoords.xyz';  // fichiers temporaires
+
+// Espaces de noms
+const NAMESPACE_NAME_BY_DEFAULT = 'Namespace00';
+const NAMESPACE_DESC_BY_DEFAULT = 'Espace de noms par défaut';
+const NAMESPACE_COLOR_BY_DEFAULT: TColor = clred; //TGHTopoColor = TGHTopoColor.setFrom(clRed);
 
 // mot-clé pour indiquer un point d'intérêt
 CONST KEYWORD_POI_TODO           = '$poi:';
 CONST KEYWORD_POI_DONE           = '$done:';
-
-const
-  INI_CURRENT_GCS                = 'CurrentCoordinatesSystem';
-  INI_CODE_EPSG                  = 'CodeEPSG';
-  INI_NOM_EPSG                   = 'NomEPSG';
-
-  INI_SETTINGS_WINDOWS_POSITIONS = 'WindowsPositions';
-  INI_SECTION_USER_FOLDERS       = 'UserAdditionalFolders';
-  INI_SECTION_RECENT_FILES       = 'RecentFiles';
-  INI_SECTION_LAST_FILE_OPENED   = 'LastFile';
-  INI_SECTION_FTP_SETTINGS       = 'RemoteFTP';
-  INI_KEY_LAST_FILE_OPENED       = 'LastOpened';
-
-  INI_FTP_HOSTNAME               = 'FTPHost';     DEFAULT_FTP_HOSTNAME = 'ftp4.phpnet.org';
-  INI_FTP_PORT                   = 'FTPPort';     DEFAULT_FTP_PORT     = '21';
-  INI_FTP_User                   = 'FTPUser';     DEFAULT_FTP_USER     = 'synclinal65';
-
-  NB_MAX_RECENT_FILES            = 10;
-
-// pour GHCaveDraw
-type TIDBaseStation = type Int64;
-
 // spécifique à certains utilisateurs
 {$IFDEF GROS_MINET}
   const DFT_OPERATEUR    = 'CLEMENT Sylvestre';
   const DFT_CLUB_SPELEO  = 'SC Comminges';
   const DFT_REPORTER     = '';
+  const DEFAULT_FTP_HOSTNAME = '';
+  const DEFAULT_FTP_PORT     = '21';
+  const DEFAULT_FTP_USER     = '';
 {$ELSE}
   const DFT_OPERATEUR    = 'MyUser';
   const DFT_CLUB_SPELEO  = 'MyClub';
   const DFT_REPORTER     = '';
+  const DEFAULT_FTP_HOSTNAME = 'ftp4.phpnet.org';
+  const DEFAULT_FTP_PORT     = '21';
+  const DEFAULT_FTP_USER     = 'synclinal65';
 {$ENDIF}
+// constantes pour les EPSG systèmes de coordonnées
+const INI_CURRENT_GCS                = 'CurrentCoordinatesSystem';
+const INI_CODE_EPSG                  = 'CodeEPSG';
+const INI_NOM_EPSG                   = 'NomEPSG';
+// constantes pour les fichiers INI
+// fichier INI
+CONST GHTOPO_STD_INI_FILENAME        = 'GHTopo_settings.ini';
+CONST GHTOPO_RPI_INI_FILENAME        = 'GHTopoRPI_settings.ini';
+const INI_SETTINGS_WINDOWS_POSITIONS = 'WindowsPositions';
+const INI_SECTION_USER_FOLDERS       = 'UserAdditionalFolders';
+const INI_SECTION_RECENT_FILES       = 'RecentFiles';
+const INI_SECTION_LAST_FILE_OPENED   = 'LastFile';
+const INI_SECTION_FTP_SETTINGS       = 'RemoteFTP';
+const INI_KEY_LAST_FILE_OPENED       = 'LastOpened';
+const NB_MAX_RECENT_FILES            = 10;
+// constantes pour le FTP
+const INI_FTP_HOSTNAME               = 'FTPHost';
+const INI_FTP_PORT                   = 'FTPPort';
+const INI_FTP_User                   = 'FTPUser';
+
+// Codes EPSG des systèmes de coordonnées
+const CODE_EPSG_WGS84                      = 4326;
+const CODE_EPSG_LAMBERT_93                 = 2154;
+// anciens codes Lambert
+const  CODE_EPSG_LAMBERT_I_NTF_DEPRECATED   = 27561; //  'NTF (Paris) / Lambert North France' Obsolete
+const CODE_EPSG_LAMBERT_II_NTF_DEPRECATED  = 27562; //  'NTF (Paris) / Lambert Centre France'
+const CODE_EPSG_LAMBERT_III_NTF_DEPRECATED = 27563; //  'NTF (Paris) / Lambert South France'
+const CODE_EPSG_LAMBERT_IV_NTF_DEPRECATED  = 27564; //  'NTF (Paris) / Lambert Corsica'
+// codes actuels
+const CODE_EPSG_LAMBERT_I                  = 27571;
+const CODE_EPSG_LAMBERT_II                 = 27572;
+const CODE_EPSG_LAMBERT_III                = 27573;
+const CODE_EPSG_LAMBERT_IV                 = 27574;
+// lambert 9 zones
+const CODE_EPSG_CC_ZONE_0                  = 3940;
+// codes UTM
+const CODE_EPSG_UTM_ZONE_0_NORTH           = 32600;
+const CODE_EPSG_UTM_ZONE_0_SOUTH           = 32700;
+const CODE_EPSG_GOOGLE                     = 379009;
+{$IFDEF GROS_MINET}
+const DEFAULT_SYSTEME_COORDONNEES_NOM       = 'Lambert III'; // évolutif en LT93
+const DEFAULT_SYSTEME_COORDONNEES_CODE_EPSG = CODE_EPSG_LAMBERT_III; // évolutif en LT93 (2154)
+{$ELSE}
+{$WARNING: Repasser en LT93 par défaut à la prochaine LTS}
+const DEFAULT_SYSTEME_COORDONNEES_NOM       = 'Lambert III'; //'Lambert 93'; // évolutif en LT93
+const DEFAULT_SYSTEME_COORDONNEES_CODE_EPSG = CODE_EPSG_LAMBERT_III; // CODE_EPSG_LAMBERT_93
+{$ENDIF GROS_MINET}
 
 
-// TGHTopoColor: Unifie tous les types de couleur et leurs fonctions
-type TGHTopoColor = record
-  Red     : byte;
-  Green   : byte;
-  Blue    : byte;
-  Alpha   : byte;
-  function  getFloatBlue(): double;  // retourne un réel entre 0 et 1
-  function  getFloatGreen(): double;
-  function  getFloatRed(): double;
-  function  getFloatAlpha(): double;
+{$IFDEF MULTI_THREADING}
+CONST MULTI_OR_MONO_THREADED = 'Multithreaded';
+{$ELSE MULTI_THREADING}
+CONST MULTI_OR_MONO_THREADED = 'Monothreaded';
+{$ENDIF MULTI_THREADING}
+// formats de nombres
+const FORMAT_STRING           = '%s';
+const FORMAT_NB_INTEGER       = '%d';
+const FORMAT_NB_REAL_0_DEC    = '%.0f';
+const FORMAT_NB_REAL_2_DEC    = '%.2f';
+const FORMAT_NB_REAL_3_DEC    = '%.3f';
+const FORMAT_NB_REAL_6_DEC    = '%.6f';
 
-  procedure setFrom(const R, G, B: byte; const A: byte = 255); overload;
-  procedure setFrom(const C: TColor; const A: byte = 255); overload;
-  function  toTColor(): TColor;
-  procedure setFromStrGHTopoColor(const S: string; const qDefault: TColor);
-  function  toStrGHTopoColor(): string;
-  procedure setOpacity(const O: byte);
-  function  toHTMLColor(): string;
-  function  toKMLColor(): string;
-  function  toSVGColor(): string;
-  function  toGrayScale(): byte;
+const DEFAULT_PEN_WIDTH_IN_MM      = 0.025;
+const DEFAULT_FONT_HEIGHT_IN_UNITS = 14;
+const DEFAULT_FONT_HEIGHT_IN_MM    = 3.0; // mm
 
-end;
+CONST FRM_CONSTRAINT_MAX_WIDTH  = 0;
+CONST FRM_CONSTRAINT_MAX_HEIGHT = 0;
+const MAX_WORD_VALUE            = 65535;
 
+// format standard TOPOROBOT Série + Point
+const FMTSERST       = '%d.%d';   // notation standard GHTopo 123.456
+const FMT_NDSER_PT   = '%d-%d';   // pour la liste des jonctions
+const FMTSERST_VTOPO = '%d_%d';   // pour Visual Topo
+const FMTSERSTID    = FMTSERST + ': %s';
+
+
+// année pivot
+const ANNEE_PIVOT: word = 50; // année 1950 = pivot pour les années sur deux chiffres
+
+// constantes angulaires
+const TWO_PI: double = 2 * 3.1415926535897932384626;
+const UNITE_ANGULAIRE_PAR_DEFAUT  : double = 360.00;
+const UNITE_ANGULAIRE_DU_CODE_ZERO: double = 360.00;
+const DEGRES_PAR_TOUR          = 360.00;
+const GRADES_PAR_TOUR          = 400.00;
+const SATANGRADES_PAR_TOUR     = 666.00; // lol
+const DEG_TO_RAD               = PI / 180;
+const GON_TO_RAD               = PI / 200;
+const QUADRANT_DEGRES = DEGRES_PAR_TOUR / 4.0;
+const QUADRANT_GRADES = GRADES_PAR_TOUR / 4;
+const ANGLE_JANE_BRIKIN_DEGRES = DEGRES_PAR_TOUR / 2;
+const ANGLE_JANE_BRIKIN_GRADES = GRADES_PAR_TOUR / 2;
+
+// constantes instrumentales
+// 01/10/2013: Nouveaux instruments
+// code instruments pour les lasermètres-clinomètres de type bâtiment
+// Données recueillies: - Lp (longueur projetée de la visée) -> Longueur
+//                      - dZ (dénivellation de la visée)     -> Pente
+//                      - Angle                              -> Va dans les commentaires
+const UNITE_CLINO_LASERMETRE_STANLEY_TLM330_DIR = 800; // Stanley TLM330
+const UNITE_CLINO_LASERMETRE_STANLEY_TLM330_INV = UNITE_CLINO_LASERMETRE_STANLEY_TLM330_DIR - 10;
+
+
+// constantes de calcul
+// rayon de capture pour les stations proches
+const INFINI: double = 1E30;
+const MAX_DISTANCE_CAPTURE          = 40.00;
+const RAYON_CAPTURE_NEAR_STATIONS   = 25.00;
+const SEUIL_LONGUEUR_NULLE          = 0.001;
+const SEUIL_LONGUEUR_MAXI_TOPOROBOT = 320.00;
+const SEUIL_LRUD_WARN_LENGTH        = 60.00;
+const LONGUEUR_LIMITE_RESEAU        = 160 * 1000;  // seuil au-delà duquel il faut tracer les réseaux en mode rapide
+
+
+// Constantes pour fontes
+const FONT_HEIGHT_COTATION   = 12;
+const FONT_HEIGHT_IDSTATIONS = 12;
+const FONT_HEIGHT_NOEUDS     = 14;
+const FONT_HEIGHT_ENTRANCES  = 16;
+const FONT_HEIGHT_QUADRILLES = 12;
+const DEFAULT_FONT_NAME      = 'Arial';
+const NAME_FOR_DEFAULT_FONT  = 'font_default';
+// couleur du réseau par défaut:
+const COULEUR_RESEAU_0             = $000080FF;   // orange
+const COULEUR_VISEE_ANTENNE        = clGray;      // couleur des visées en antenne
+
+
+// export GHCaveDraw
+const GCD_FMT_BASEPOINTS = '    %d'+FIELD_SEPARATOR_TAB + FORMAT_STRING + // ID de la visée
+        FIELD_SEPARATOR_TAB+FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+FORMAT_NB_INTEGER + // attributs
+        FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC +  // point de départ
+        FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC +  // point d'arrivée
+        FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC +  // point droit  (avec Z du sol)
+        FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC;   // point gauche (avec Z du plafond)
+
+// constantes à utiliser comme des énumérations
+const // Ne pas définir de type énuméré afin d'éviter une dépendance avec GHTopo
+  OSM_MARKER_STYLE_DEFAULT = 0;
+  OSM_MARKER_STYLE_CIRCLE  = 1;
+  OSM_MARKER_STYLE_SQUARE  = 2;
+  OSM_MARKER_STYLE_DELTA   = 3;
+  OSM_MARKER_STYLE_NABLA   = 4;
+  OSM_MARKER_STYLE_LOSANGE = 5;
+// constantes des filtres   Pas de type énuméré
+const
+    kFLT_NIL         = 0;      //  NIL               NIL
+    kFLT_ALL         = 1;      //  ALL               ALL
+    kFLT_ID          = 2;      //  ID                ID
+    kFLT_LONGUEUR    = 3;      //  LONGUEUR          LONGUEUR
+    kFLT_AZIMUT      = 4;      //  AZIMUT            AZIMUT
+    kFLT_PENTE       = 5;      //  PENTE             PENTE
+    kFLT_DATE        = 6;      //  DATE              DATE
+    kFLT_COULEUR     = 7;      //  COULEUR           COULEUR
+    kFLT_X           = 8;      //  X                 X
+    kFLT_Y           = 9;      //  Y                 Y
+    kFLT_Z           = 10;     //  Z                 Z
+    kFLT_LARGEUR     = 11;     //  LARGEUR           LARGEUR
+    kFLT_HAUTEUR     = 12;     //  HAUTEUR           HAUTEUR
+    kFLT_DATES       = 13;     //  DATES             DATES
+    kFLT_COULEURS    = 14;     //  COULEURS          COULEURS
+    kFLT_SERIE       = 15;     //  SERIE;
+    kFLT_RESEAU      = 16;     //  Réseau
+    kFLT_CODE        = 17;     //  code
+    kFLT_EXPE        = 18;     //  Séance (expé)
+    kFLT_TYPEVISEE   = 19;     //  type de visée
+    kFLT_SECTEUR     = 20;     // secteur
+    kFLT_ENTRANCE_RATT = 21;   // entrée de rattachement
+    kFLT_NAMESPACE     = 22;   // espace de noms
+
+
+const // Pour les grilles de stations
+    GHTOPO_GRID_NB_LINES           = 1001; // 1 + Capa mémoire du DistoX
+    LARGEUR_COLONNES_DISTOX_ID     = 60;
+    LARGEUR_COLONNES_BLOCK_SEGMENT = 80;
+    LARGEUR_COLONNES_HORODATE      = 200;
+    LARGEUR_COLONNES_LAP           = 100;
+    LARGEUR_COLONNES_LRUD          = 50;
+    LARGEUR_COLONNES_TRAME_HEXA    = 320;
+
+const // pour le XML
+    XML_CHAR_LT       = '&lt;';   // &lt; -> "<" (lt = lower than = inférieur à = "<" )
+    XML_CHAR_GT       = '&gt;';   // &gt; -> ">" (gt = greater than = supérieur à = ">")
+    XML_CHAR_AMP      = '&amp;';  // &amp; -> "&" (comme dit fraoustin - amp = ampersand)
+    XML_CHAR_APOS     = '&apos;'; // &apos; -> ' (apos = apostrophe)
+    XML_CHAR_QUOT     = '&quot;'; // &quot; -> " (quot = quotation mark = quillemet)
+////////////////////////////////////////////////////////////////////////////////
+// Types renforcés
+type TNodeNum        = 0 .. maxLongint;
+type TIDBaseStation  = type Int64;
 // type de chaînes pour les noms de fichier
 type TStringDirectoryFilename = type RawByteString; //type UnicodeString;
+
 // types d'entiers pour les numéros (qui peuvent être différents de leurs index dans les tables)
+type TIdxNamespace   = type Integer;
 type TNumeroEntrance = type Integer;
 type TNumeroReseau   = type integer;
 type TNumeroSecteur  = type integer;
@@ -168,168 +277,36 @@ type TNumeroExpe     = type integer;
 type TNumeroCode     = type integer;
 type TIdxCouleur     = type Integer; // index sur palette de couleurs TOPOROBOT
 
+// Maillages
+type TMNTNumeroTriangle     = type Int64;
+type TMNTNumeroVertex       = type Int64;
+
+// pour les croquis (simplifié: polygones et polylignes. On ne fait pas un GHCaveDraw !
+type TKrobardIDStylePolyligne  = type integer;
+type TKrobardIDStyleAnnotation = type integer;
+
+// spécifique au DistoX
+type TDistoXSerialNumber     = type word;
+type TDistoXVersionFirmware  = type word;
+type TDistoXVersionHardware  = type word;
+////////////////////////////////////////////////////////////////////////////////
+// Enumérations
+type TUniteAngles = (uaRADIANS, uaDEGRES, uaGRADES);
+// fins de lignes  des standards PC, UNIX, Macintache
+type TTextFileFormat=(tfWINDOWS, tfUNIX, tfMAC);
 type TAxeCoordonnees = (axisX, axisY, axisZ);
-// fontes pour la vue en plan
-const
-  FONT_HEIGHT_COTATION   = 12;
-  FONT_HEIGHT_IDSTATIONS = 12;
-  FONT_HEIGHT_NOEUDS     = 14;
-  FONT_HEIGHT_ENTRANCES  = 16;
-  FONT_HEIGHT_QUADRILLES = 12;
-const
-  // 01/10/2013: Nouveaux instruments
-  // code instruments pour les lasermètres-clinomètres de type bâtiment
-  // Données recueillies: - Lp (longueur projetée de la visée) -> Longueur
-  //                      - dZ (dénivellation de la visée)     -> Pente
-  //                      - Angle                              -> Va dans les commentaires
-  UNITE_CLINO_LASERMETRE_STANLEY_TLM330_DIR = 800; // Stanley TLM330
-  UNITE_CLINO_LASERMETRE_STANLEY_TLM330_INV = UNITE_CLINO_LASERMETRE_STANLEY_TLM330_DIR - 10;
-const INFINI: double = 1E30;
-const // fichiers temporaires
-  TEMP_COORDS_FILE = '_TmpCoords.xyz';
-const
-  // Codes EPSG des systèmes de coordonnées
-  CODE_EPSG_WGS84                      = 4326;
-  CODE_EPSG_LAMBERT_93                 = 2154;
-  // anciens codes Lambert
-  CODE_EPSG_LAMBERT_I_NTF_DEPRECATED   = 27561; //  'NTF (Paris) / Lambert North France' Obsolete
-  CODE_EPSG_LAMBERT_II_NTF_DEPRECATED  = 27562; //  'NTF (Paris) / Lambert Centre France'
-  CODE_EPSG_LAMBERT_III_NTF_DEPRECATED = 27563; //  'NTF (Paris) / Lambert South France'
-  CODE_EPSG_LAMBERT_IV_NTF_DEPRECATED  = 27564; //  'NTF (Paris) / Lambert Corsica'
-  // codes actuels
-  CODE_EPSG_LAMBERT_I                  = 27571;
-  CODE_EPSG_LAMBERT_II                 = 27572;
-  CODE_EPSG_LAMBERT_III                = 27573;
-  CODE_EPSG_LAMBERT_IV                 = 27574;
-  // lambert 9 zones
-  CODE_EPSG_CC_ZONE_0                  = 3940;
-  // codes UTM
-  CODE_EPSG_UTM_ZONE_0_NORTH           = 32600;
-  CODE_EPSG_UTM_ZONE_0_SOUTH           = 32700;
-  CODE_EPSG_GOOGLE                     = 379009;
-  {$IFDEF GROS_MINET}
-  DEFAULT_SYSTEME_COORDONNEES_NOM       = 'Lambert III'; // évolutif en LT93
-  DEFAULT_SYSTEME_COORDONNEES_CODE_EPSG = CODE_EPSG_LAMBERT_III; // évolutif en LT93 (2154)
-  {$ELSE}
-  {$WARNING: Repasser en LT93 par défaut à la prochaine LTS}
-  DEFAULT_SYSTEME_COORDONNEES_NOM       = 'Lambert III'; //'Lambert 93'; // évolutif en LT93
-  DEFAULT_SYSTEME_COORDONNEES_CODE_EPSG = CODE_EPSG_LAMBERT_III; // CODE_EPSG_LAMBERT_93
-  {$ENDIF GROS_MINET}
-const
-
-  SEUIL_LONGUEUR_NULLE                  = 0.001;
-  SEUIL_LONGUEUR_MAXI_TOPOROBOT         = 320.00;
-  SEUIL_LRUD_WARN_LENGTH                = 60.00;
-  TAB                      = #9;
-  SEPARATOR_TAB            : char = #9;
-  MAX_LINES_LOG            = 1000; // nb max de lignes de l'historique des opérations
-  MAX_LINES_ERRORS_LOG     = 2000; // nb max de lignes de l'historique des opérations
+type TCodeEPSG = type Integer;   // type de projection (systeme de coordonnées)
+type TModeAjoutOuModif = (mamAJOUT, mamMODIFICATION);           // mode ajout, modif,
+// format de sauvegarde:
+// mtabEXTENDEDTAB =  format étendu XTB, natif de GHTopo
+// mtabTOPOROBOT   =  pour compat(err)ibilité TOPOROBOT
+type TModeSaveTAB =(mtabEXTENDEDTAB, mtabTOPOROBOT);
+// mode de calcul de déclinaisons magnétiques
+type TModeCalculDeclimag = (cdmAUTOMATIQUE, cdmMANUEL);
 
 
-  DEFAULT_FONT_NAME        = 'Arial';
-  NAME_FOR_DEFAULT_FONT    = 'font_default';
-
-// couleur du réseau par défaut:
-const
-  COULEUR_RESEAU_0             = $000080FF;   // orange
-  COULEUR_VISEE_ANTENNE        = clGray;      // couleur des visées en antenne
-
-// export GHCaveDraw
-const
-  FMT_BASEPOINTS = '    %d'+TAB + FORMAT_STRING + // ID de la visée
-        TAB+FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER + // attributs
-        TAB+FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC +  // point de départ
-        TAB+FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC +  // point d'arrivée
-        TAB+FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC +  // point droit  (avec Z du sol)
-        TAB+FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC;   // point gauche (avec Z du plafond)
-//----------------------------------
-// format standard TOPOROBOT Série + Point
-const FMTSERST       = '%d.%d';   // notation standard GHTopo 123.456
-const FMT_NDSER_PT   = '%d-%d';   // pour la liste des jonctions
-const FMTSERST_VTOPO = '%d_%d';   // pour Visual Topo
-const FMTSERSTID    = FMTSERST + ': %s';
-///*****************************************************************************
-// seuil au-delà duquel il faut tracer les réseaux en mode rapide
-const LONGUEUR_LIMITE_RESEAU = 160 * 1000;
-
-
-// mode ajout, modif,
-type TModeAjoutOuModif = (mamAJOUT, mamMODIFICATION);
-
-// tableau de valeurs réelles
-type TArrayOfFloats   = array of double;
-type TArrayOfIntegers = array of Integer;
-
-//***************************************************************************
-// Espaces de noms
-const NAMESPACE_NAME_BY_DEFAULT = 'Namespace00';
-const NAMESPACE_DESC_BY_DEFAULT = 'Espace de noms par défaut';
-const NAMESPACE_COLOR_BY_DEFAULT: TColor = clred; //TGHTopoColor = TGHTopoColor.setFrom(clRed);
-
-
-type TIdxNamespace = type Integer;
-type
-
-{ TNameSpace }
-
- TNameSpace = record
-  Couleur     : TGHTopoColor;
-  Nom         : string;
-  Description : string;
-  procedure setFrom(const QCouleur: TGHTopoColor; const QNom, QDescription: string);
-end;
-type TGISLayer = record
-  SymboleStyle       : integer; // 0: rien, 1: Cercle, 2: Carré, 3: Etoile, etc ...
-  SymbolSize         : double;
-  SymbolColor        : TGHTopoColor;
-  LayerVarName       : string;
-  LayerTitle         : string;
-  LayerDescription   : string;
-  LayerAttribution   : string;
-  procedure setFrom(const QSymbolStyle  :  integer; // 0: rien, 1: Cercle, 2: Carré, 3: Etoile, etc ...
-                    const QSymbolSize    : double;
-                    const QSymbolColor   : TGHTopoColor;
-                    const QLayerVarName, QLayerTitle, QLayerDescription, QLayerAttribution: string);
-end;
-
-
-// pour support du DistoX
-type TDistoX2PacketOfBytes   = array[0..3] of byte;
-type TDistoX2MemoryMap       = array[0..65535] of byte;
-type TErrorConstruireUneViseeValide = set of (errCVV_NOT_ENOUGHT_NB_SHOTS, errCVV_OUTBOUNDS_LONGUEUR, errCVV_OUTBOUNDS_AZIMUT, errCVV_OUTBOUNDS_PENTE, errCVV_OTHER);
-
-// pour le parcours des graphes
-type TModeExplorerGraphe = (mpgEN_LARGEUR, mpgEN_PROFONDEUR);
-// pour la recherche de stations topo
-type TStationMatchFound = record
-  Serie        : TNumeroSerie;
-  Station      : TNumeroStation;
-  Match        : string;
-  procedure setFrom(const QSerie: TNumeroSerie; const QStation: TNumeroStation; const QMatch: string);
-end;
-type TArrayStationsMatchFound = array of TStationMatchFound;
-// pour export VRML, X3D
-type TModeExportFormat3D = (me3dX3D, me3dVRML, me3dDXF);
-
-// pour l'export ODG:
-
-// type de projection (systeme de coordonnées)
-type TCodeEPSG = type Integer;
-type TLabelSystemesCoordsEPSG = record
-  CodeEPSG: TCodeEPSG;
-  NomEPSG : string;
-end;
-// type de projection (systeme de coordonnées)
-
-
-// type de points pour Proj4s
-type TProjUV = Record
-  U: Double;
-  V: Double;
-End;
-type TArrayOfTProjUV = array of TProjUV;
-type TProjXY = TProjUV;
-
+type TModeExportFormat3D = (me3dX3D, me3dVRML, me3dDXF);        // pour export VRML, X3D
+type TModeExplorerGraphe = (mpgEN_LARGEUR, mpgEN_PROFONDEUR);   // pour le parcours des graphes
 type TTypeDeVisee = (tgDEFAULT,         // X défaut = galerie fossile
                      tgENTRANCE,
                      tgFOSSILE,
@@ -341,22 +318,7 @@ type TTypeDeVisee = (tgDEFAULT,         // X défaut = galerie fossile
                      tgTUNNEL,
                      tgMINE,
                      tgVISEE_RADIANTE);
-type TModeTOptionsCenterLine = set of (mclCENTERLINE, mclCROSS_SECTIONS, mclSTATIONS, mclLBL_STATIONS);
-// vecteurs
-type TVecteurDouble = array of double;
-// tableaux de strings
-const MAX_SIZE_PARAM_ARRAY         =  63;
-const MAX_NB_LIGNES_TSTRINGARRAY2D = 511;
-// TStringArray est un nouveau type de données de FPC 3.0.2
-type TGHStringArray   = array[0 ..MAX_SIZE_PARAM_ARRAY] of string;
-// tableau 2D utilisé par le frontal de saisie des points topo
-type TGHStringArray2D = array[0 .. MAX_NB_LIGNES_TSTRINGARRAY2D] of TGHStringArray;
 
-type TErrorVisee = set of (errvSECTEUR, errvTYPEVISEE,
-                           errvCODE, errvEXPE, errvLONGUEUR_NULLE,
-                           errvLONGUEUR_OVERFLOW, errvAZIMUT, errvPENTE,
-                           errvLG, errvLD, errvHZ, errvHN,
-                           errWarnLG, errWarnLD, errWarnHZ, errWarnHN);
 // pour la sélection du mode vue 3D: GDI ou OpenGL
 type TTypeVue3D = (tv3dGDI, tv3dOPENGL);
 // pour la sélection dans les dialogues listes
@@ -370,48 +332,122 @@ type TElementDrawn     = (edPolygonals, edStations, edIDStations, edAltitudes, e
                           edENTRANCE_MKS, edENTRANCE_NAMES,
                           edCROQUIS, edANTENNES,
                           edJONCTIONS, edPOI);
-type TSetElementsDrawn = set of TElementDrawn;
 // mode de fonctionnement de TGHTopoContext2DA
 type TModeFonctionnementGHTopoContext2D = (mfgcSURVEYING, mfgcNAVIGATION);
 // mode de représentation: par séances, réseaux, gris
-type TModeRepresentationGaleries = (rgENTRANCES, rgRESEAUX, rgSECTEURS, rgSEANCES, rgGRAY, rgDEPTH, rgTYPES_VISEES);
+type TModeRepresentationGaleries    = (rgENTRANCES, rgRESEAUX, rgSECTEURS, rgSEANCES, rgGRAY, rgDEPTH, rgTYPES_VISEES);
 type TBDDEntitesFindViseeOrEntrance =  (tpVISEES, tpENTRANCES);
+
+type TSensTraceCoupeDev             = (stcdVERS_DROITE, stcdVERS_GAUCHE); // sens de dessin des séries en coupe développée
+
+
+
+
+type TGISColorByItems   = (gisCOLOR_UNIQUE, gisCOLOR_ENTRANCES, gisCOLOR_RESEAUX);   // modes d'exportation pour logiciels de carto
+
+
+type TFormatExportGIS = (gisOSM, gisKML, gisGeoJSON, gisDXF);
+type TPolyMode = (tpmENTETE_POLY, tpmSTART_POLY, tpmPOINT_POLY, tpmEND_POLY);
+
+type  TModesTravail  = (mtREADY,
+                        mtPAN_PREMIER_POINT, mtPAN_SECOND_POINT,
+                        mtZOOM_PREMIER_COIN, mtZOOM_SECOND_COIN,
+                        mtMETAFILTRE_ZONE_PREMIER_COIN, mtMETAFILTRE_ZONE_SECOND_COIN,
+                        mtDISTANCE_PREMIER_POINT, mtDISTANCE_SECOND_POINT,
+                        mtADD_SERIE_PREMIER_POINT, mtADD_SERIE_SECOND_POINT,
+                        mtBOUCLER_PREMIER_POINT, mtBOUCLER_SECOND_POINT,
+                        mtPROFIL_MNT_PREMIER_POINT, mtPROFIL_MNT_SECOND_POINT,
+                        mtNEW_ANNOTATION, mtSELECT_ANNOTATION, mtDELETE_ANNOTATION,
+                        mtNEW_POLYLINE, mtADD_VERTEX_POLYLINE, mtDELETE_POLYLINE,
+                        mtNEW_LASSO_SELECTION
+                        );
+type  TQdrType       = (qtNONE, qtGRID, qtCROSS, qtPOINTS);
+// mode de fonctionnement des navigateurs de la BDD
+type TModeBDD = (mbddDISABLED,
+                   mbddENTRANCES,
+                   mbddRESEAUX,
+                   mbddSECTEURS,
+                   mbddCODES,
+                   mbddEXPES,
+                   mbddPOI,
+                   mbddCHECK_ERRORS,
+                   mbddNOEUDS,
+                   mbddNAMESPACES,
+                   mbddPROXIMITES,
+                   mbddSERIES_ENCADREES // séries dont le numéro est différent du numéro de série de la station d'arrivée (= bouclages)
+                   );
+// Pour la Coupe développée
+type TTypeJonction = (tjENTRANCE, tjCARREFOUR, tjEXTREMITE_CONDUIT);
+// mode de paramétrage pour la boite de dialogue du paramétrage des vues
+type TModeDialogParamVues = (mpdVUE2D, mpdVUE3D, mpdCOUPE_DEVELOPPEE);
+
+
+// Clavier virtuel
+type TModeClavierVirtuel = (mkbdvALPHA_MINUSCULES, mkbdvALPHA_MAJUSCULES, mkbdvINTEGER, mkbdvDOUBLE);
+
+// pour le DistoX
+type TModeAttenteDonneesRX = (mrxNONE, mrxDEPILAGE_MESURE);
+type TProtoSerialError = (PROTO_OK,
+                          PROTO_READ, PROTO_WRITE,
+                          PROTO_COMMAND,  PROTO_ADDR,  PROTO_PACKET,
+                          PROTO_CONNECT, PROTO_TIMEOUT, PROTO_MAX);
+// modes de remplacement
+type TModeRemplacementStations = (mrsSECTEURS, mrsCODES, mrsEXPES);
+// Points d'intérêt
+type TPOIStatut = (poiUNKNOWN, poiTODO, poiDONE);
+// pour le clavier numérique
+type TPaveNumModeSaisie = (pnmINTEGER, pnmREAL, pnmTOPOROBOT_STATION);
+
+////////////////////////////////////////////////////////////////////////////////
+// Ensembles
+
+type TErrorConstruireUneViseeValide  = set of (errCVV_NOT_ENOUGHT_NB_SHOTS, errCVV_OUTBOUNDS_LONGUEUR, errCVV_OUTBOUNDS_AZIMUT, errCVV_OUTBOUNDS_PENTE, errCVV_OTHER);
+type TModeTOptionsCenterLine         = set of (mclCENTERLINE, mclCROSS_SECTIONS, mclSTATIONS, mclLBL_STATIONS);
+type TErrorVisee                     = set of (errvSECTEUR, errvTYPEVISEE, errvCODE, errvEXPE,
+                                              errvLONGUEUR_NULLE, errvLONGUEUR_OVERFLOW,
+                                              errvAZIMUT, errvPENTE,
+                                              errvLG, errvLD, errvHZ, errvHN,
+                                              errWarnLG, errWarnLD, errWarnHZ, errWarnHN,
+                                              errOTHER);
+type TSetElementsDrawn               = set of TElementDrawn;
 type TBDDEntitesFindTablesAParcourir = set of TBDDEntitesFindViseeOrEntrance;
-// attributs de texte
-type
+type TGISOutputMode                  = set of (gisCENTERLINES, gisSILHOUETTES);
 
-{ TTexteAttributs }
+// pour éviter un nombre inconsidéré de callbacks utilisant un TBaseStation, on définit une liste d'actions possibles  , enrichissable à volonté
+type TTodoAction                     = (tdoAcnBASESTATION_DISPLAY, tdoAcnBASESTATION_EDITSERIE);
 
- TTexteAttributs = record
-  StyleName    : string;
-  FontName     : string;
-  FontColor    : TColor;
-  BackColor    : TColor;
-  FontStyle    : TFontStyles;
-  HauteurTexte : double;
-  Alignement   : byte;  // position du texte; cf organisation d'un clavier numérique pour le point d'accrochage
-  AngleRot     : integer;
-  procedure setFrom(const QStyleName, QFontName: string;
-                    const QFontColor, QBackColor : TColor;
-                    const QFontStyle: TFontStyles;
-                    const QHauteurTexte: double;
-                    const QAlignement: byte;  // position du texte; cf organisation d'un clavier numérique pour le point d'accrochage
-                    const QAngleRot: integer);
-  procedure setDefault();
+// Maillages
+type TMNTModeDessinMaillage = (M3D_NONE, M3D_WIRE_FRAME, M3D_MESH);
+type TMNTTypeMaillage       = (tmUNKNOWN, tmREGULAR_GRID, tmTRIANGLES);
+
+// modes de remplacement
+type TModeRemplacementAntennes = set of (mraSERIES, mraRESEAUX, mraSECTEURS, mraCODES, mraEXPES);
+
+// messages d'erreur du code de calcul
+type TCriticiteMessaqeErreurGHTopo = (cmeNOTE, cmeWARNING, cmeERROR, cmeCRITICAL, cmeERROR_AUTOFIXED);
+type TTableExaminee                = (tmeENTRANCES, tmeRESEAUX, tmeSECTEURS, tmeCODES, tmeEXPES, tmeSERIES);
+
+// spécifique au DistoX
+type TTypeViseeDistoX = (tvdRADIANTE, tvdCHEMINEMENT);
+
+////////////////////////////////////////////////////////////////////////////////
+// Records
+
+
+// Messages d'erreur de GHTopoCompiler
+type TMessaqeErreurGHTopoCompiler = record
+  TableExaminee : TTableExaminee;
+  Index         : Int64;
+  Criticite     : TCriticiteMessaqeErreurGHTopo;
+  Couleur       : TColor;
+  Message       : string;
 end;
 
 
 
-type TMatrix2x2       = array[1..2, 1..2] of double;
-type TMatrix3x3       = array[1..3, 1..3] of double;
-type TMatrix          = array of array of double;
-type TIncidenceMatrix = array of array of ShortInt;  // seules valeurs: -1, 0, +1
-
-type
-
-{ TPoint3Df }
-
- TPoint3Df = record
+////////////////////////////////////////////////////////////////////////////////
+// Quasi-classes
+type TPoint3Df = record
   X:  double;
   Y:  double;
   Z:  double;
@@ -422,31 +458,17 @@ type
   function getAzimut(const Unite: double): double;
   function getInclinaison(const Unite: double): double;
 end;
-type
-
-{ TPoint2Df }
-
- TPoint2Df = record
+type TPoint2Df = record
   X:  double;
   Y:  double;
   procedure setFrom(const QX, QY: double);
   function  getNorme(): double;
   procedure Empty();
 end;
-(*
-type TPoint2DfTagged = record
-  X: double;
-  Y: double;
-  Tag: integer;
-end;
-//*)
-// vertex avec un attribut de tri
-// (typiquement utilisé pour la construction de profils topo)
-type
 
-{ TPoint3DfOrderedByP }
 
- TPoint3DfOrderedByP = record
+// vertex avec un attribut de tri (typiquement utilisé pour la construction de profils topo)
+type TPoint3DfOrderedByP = record
   X:  double;
   Y:  double;
   Z:  double;
@@ -472,41 +494,128 @@ type   TRect2Df = record
   function  ContainsSegment(const X1, Y1, X2, Y2: double; const PartiallyInRectangle: boolean): boolean; overload;
   function  ContainsQuad(const P1, P2, P3, P4: TPoint2Df): boolean;
 end;
+// Couleurs Macintosh
+type TMacintoshColor = record
+  R : word;
+  G : word;
+  B : word;
+  procedure setFrom(const QR, QG, QB: word);
+end;
+// Couleurs GHTopo
+type TGHTopoColor = record   // TGHTopoColor: Unifie tous les types de couleur et leurs fonctions
+  Red     : byte;
+  Green   : byte;
+  Blue    : byte;
+  Alpha   : byte;
+  function  getFloatBlue(): double;  // retourne un réel entre 0 et 1
+  function  getFloatGreen(): double;
+  function  getFloatRed(): double;
+  function  getFloatAlpha(): double;
 
-
-type TArrayPoints2Df = array of TPoint2Df;
-type TArrayPoints3Df = array of TPoint3Df;
-
-
-
-// couple de points de sections transversale
-// contenant les coordonnées X, Y des points extremes d'une section transversale
-type TPtsSectionTransversale = record
-  PosStation  : TPoint3Df;
-  ParoiGaucheX: double;
-  ParoiGaucheY: double;
-  ParoiDroiteX: double;
-  ParoiDroiteY: double;
+  procedure setFrom(const R, G, B: byte; const A: byte = 255); overload;
+  procedure setFrom(const C: TColor; const A: byte = 255); overload;
+  function  toTColor(): TColor;
+  procedure setFromStrGHTopoColor(const S: string; const qDefault: TColor);
+  function  toStrGHTopoColor(): string;
+  procedure setOpacity(const O: byte);
+  function  toHTMLColor(): string;
+  function  toKMLColor(): string;
+  function  toSVGColor(): string;
+  function  toGrayScale(): byte;
+  function  toAcadColorIdx(): integer;
+  procedure fromAcadColorIdx(const Idx: integer); // conversion depuis un index couleur AutoCAD
 end;
 
-// format de sauvegarde:
-// mtabEXTENDEDTAB =  format étendu XTB, natif de GHTopo
-// mtabTOPOROBOT   =  pour compat(err)ibilité TOPOROBOT
-type TModeSaveTAB =(mtabEXTENDEDTAB, mtabTOPOROBOT);
+// quads pour vue 3D
+type TQuad = record
+   VertexA           : TPoint3Df;
+   VertexB           : TPoint3Df;
+   VertexC           : TPoint3Df;
+   VertexD           : TPoint3Df;
+   //Normale           : TPoint3Df;
+   FacetteVisible    : boolean;
+   Depth             : Double;
+   Vertex2D_A        : TPoint;
+   Vertex2D_B        : TPoint;
+   Vertex2D_C        : TPoint;
+   Vertex2D_D        : TPoint;
+end;
+const NBFACESBYVISEE = 6;
+type TPortionTubeVisee = record
+   Visible           : Boolean;
+   Drawn             : Boolean; // dessiné en fonction du MétaFiltre;
+   CouleurTube       : TGHTopoColor;
+   Type_Entite       : TTypeDeVisee;
+   IdxEntrance       : integer;
+   IdxReseau         : integer;
+   IdxSecteur        : integer;
+   IdxExpe           : integer;
+   Facettes: array[1 .. NBFACESBYVISEE] of TQuad;
+   DepthField        : double;
+   Highlighted       : boolean;
+end;
 
-// gestion des fins de lignes
-// des standards PC, UNIX, Macintache
-type TTextFileFormat=(tfWINDOWS, tfUNIX, tfMAC);
-//***************************************************************************
-//****************************
+// espaces de noms
+type TNameSpace = record
+  Couleur     : TGHTopoColor;
+  Nom         : string;
+  Description : string;
+  procedure setFrom(const QCouleur: TGHTopoColor; const QNom, QDescription: string);
+end;
+
+// Labels EPSG
+type  TLabelSystemesCoordsEPSG = record
+  CodeEPSG: TCodeEPSG;
+  NomEPSG : string;
+  procedure setFrom(const QCode: TCodeEPSG; const QNom: string);
+end;
+
+// type de points pour Proj4s
+type TProjUV = Record
+  U: Double;
+  V: Double;
+  procedure setFrom(const QU, QV: double);
+End;
+type TArrayOfTProjUV = record
+  private
+    M: array of TProjUV;
+  public
+  procedure Empty();
+  procedure SetCapacity(const N: integer);
+  procedure SetElement(const Idx: integer; const QU, QV: double); overload;
+  procedure SetElement(const Idx: integer; const P: TProjUV); overload;
+  function  GetElement(const Idx: integer): TProjUV;
+  function  GetNbElements(): integer;
+  //  function  fromString(const S: string): boolean;
+  //  function  toString(): string;
+end;
+type TProjXY = TProjUV;
+
+//******************************************************************************
 // Types de données TOPOROBOT
 //****************************
+// couple série station au format TOPOROBOT + ID de terrain
+type TToporobotIDStation = record
+  eIdxNameSpace: integer;
+  aSerie: TNumeroSerie;
+  aStation: integer;
+  aIDTerrain: string;
+  procedure setFrom(const QNameSpace: Integer; const QSerie: TNumeroSerie; const QStation: integer; const QIDTerrain: string = ''); overload;
+  procedure setFrom(const S: string); overload;
+  function  ToString(): string;
+end;
+
+// fonctions trigonométriques de correction angulaire
+type TParamFoncCorrectionAngulaire = record
+  Co        : double; // constante d'erreur systématique (e.g: cercle d'un compas bien centré mais avec le zéro non positionné sur le barreau aimanté)
+  ErreurMax : double; // erreur maximale
+  PosErrMax : double; // Angle (azimut ou pente) correspondant à l'erreur maximale
+  procedure Empty();
+  procedure setFrom(const QCo, QErrMax, QPosErrMax: double);
+end;
+
 // entrées
-type
-
-{ TEntrance }
-
- TEntrance    = record
+type  TEntrance    = record
   eNomEntree: string;
   eIDTerrain: string;
   ePosition : TPoint3Df;
@@ -517,19 +626,12 @@ type
   procedure setFrom(const NomEntree, IDTerrain: string; const QPosition: TPoint3Df; const RefSer: TNumeroSerie; const RefSt: TNumeroStation; const Couleur: TGHTopoColor; const Observ: string);
   function  toLineXTBSection6(const QIdx: integer): string;
   function  toLineXTBSection5(const QIdx: integer): string;
-
-
 end;
 
 // réseau ou secteur spéléologique
 // Section -8 du fichier xtb
 // Une série ne peut faire partie de plusieurs réseaux.
-
-type
-
-{ TReseau }
-
- TReseau = record
+type  TReseau = record
   ColorReseau  : TGHTopoColor;
   TypeReseau   : integer; // type de réseau:
   NomReseau    : string;
@@ -539,23 +641,15 @@ type
 end;
 
 // secteurs
-type
-
-{ TSecteur }
-
- TSecteur = record
+type TSecteur = record
   CouleurSecteur : TGHTopoColor;
   NomSecteur     : string;
   procedure setFrom(const C: TGHTopoColor; const Nom: string);
   function  toLineXTB(const QIdx: integer): string;
 end;
+
 // expés
-type TModeCalculDeclimag = (cdmAUTOMATIQUE, cdmMANUEL);
-type
-
-{ TExpe }
-
- TExpe = record
+type TExpe = record
   IDExpe      : TNumeroExpe;
   {$WARNING: TEXpe.DateExpe à implementer}
   JourExpe    : word; {$WARNING: Remplacer ces trois champs par un TDateTime}
@@ -579,27 +673,10 @@ type
   function getDateStr(): string;
   function getTDateTime(): TDateTime;
   function toLineXTB(): string;
-
-end;
-// fonctions trigonométriques de correction angulaire
-type
-
-{ TParamFoncCorrectionAngulaire }
-
- TParamFoncCorrectionAngulaire = record
-  Co        : double; // constante d'erreur systématique (e.g: cercle d'un compas bien centré mais avec le zéro non positionné sur le barreau aimanté)
-  ErreurMax : double; // erreur maximale
-  PosErrMax : double; // Angle (azimut ou pente) correspondant à l'erreur maximale
-  procedure Empty();
-  procedure setFrom(const QCo, QErrMax, QPosErrMax: double);
 end;
 
 // codes
-type
-
-{ TCode }
-
- TCode = record
+type TCode = record
     IDCode           : TNumeroCode;
     GradAz           : double;
     GradInc          : double;
@@ -624,10 +701,8 @@ type
     function ExplainCodeAzimut(): string;
     function ExplainCodePente(): string;
     function toLineXTB(const ModeSaveTab: TModeSaveTAB): string;
-
 end;
-// sens de dessin des séries en coupe développée
-type TSensTraceCoupeDev = (stcdVERS_DROITE, stcdVERS_GAUCHE);
+
 // visées
 type  TUneVisee = record
     NoVisee   : integer; // Indispensable pour les branches et les antennes             //
@@ -670,13 +745,9 @@ type  TUneVisee = record
     procedure setLRUD(const L, R, U, D: string); overload;
     function  DebugString(): string;
 end;
-// visées en antenne
-// Nota: Les codes et expés d'une visée radiante héritent de ceux de la station d'accrochage
-type
+// visées en antenne  Nota: Les codes et expés d'une visée radiante héritent de ceux de la station d'accrochage
 
-{ TViseeAntenne }
-
- TViseeAntenne = record
+type TViseeAntenne = record
    EntranceRatt        : TNumeroEntrance;
    Reseau              : TNumeroReseau;
    Secteur             : TNumeroSecteur;
@@ -697,36 +768,104 @@ type
                      const Marked           : boolean = false);
    function toLineXTB(const QIdx: integer): string;
    function DebugString(): string;
-
 end;
-type
 
-{ TViseeAntenneFound }
+  // Pour le code de calcul
+// Jonctions Toporobot
+type  TJonctionXYZ = record
+   NoNoeud     : TNodeNum;
+   NoSer       : TNumeroSerie;
+   NoSt        : integer;
+   Position    : TPoint3Df;
+   NbRefs      : integer;
+   IDJonction  : string;
+   function ToString(): string;
+   procedure setPositionFromXYZ(const QX, QY, QZ: double);
+end;
 
- TViseeAntenneFound = record
+// Table des branches
+type TBrancheXYZ = record
+  NoEntranceRatt: integer;
+  NoSerie       : integer;
+  NoReseau      : integer;
+  NoBranche     : integer;
+  NomBranche    : string;
+  NoeudDepart   : TNodeNum;
+  NoeudArrivee  : TNodeNum;
+  Rigidite      : double;  // module de raideur, égal à 1.00 par défaut
+  PointsTopo    : array of TUneVisee;
+  NbPoints      : integer;
+  Accroissement : TPoint3Df;
+  CoordsDepart  : TPoint3Df;
+  CoordsArrivee : TPoint3Df;
+end;
+
+
+
+
+//******************************************************************************
+// Couches GIS
+type TGISLayer = record
+  SymboleStyle       : integer; // 0: rien, 1: Cercle, 2: Carré, 3: Etoile, etc ...
+  SymbolSize         : double;
+  SymbolColor        : TGHTopoColor;
+  LayerVarName       : string;
+  LayerTitle         : string;
+  LayerDescription   : string;
+  LayerAttribution   : string;
+  procedure setFrom(const QSymbolStyle  :  integer; // 0: rien, 1: Cercle, 2: Carré, 3: Etoile, etc ...
+                    const QSymbolSize    : double;
+                    const QSymbolColor   : TGHTopoColor;
+                    const QLayerVarName, QLayerTitle, QLayerDescription, QLayerAttribution: string);
+end;
+// attributs de lignes
+type  TLineAttributes = record
+  ColorRGBA   : TGHTopoColor;
+  LineWidthInPixels     : integer;
+  LineWidthInMillimeters: double;
+  procedure SetAttributes(const R, G, B, A: byte; const WdthPX: integer; const WdthMM: double); overload;
+  procedure SetAttributes(const CC: TColor; const AA: byte; const WdthPX: integer; const WdthMM: double); overload;
+  procedure SetTBGRAPen(const P: TBGRAPen);
+  function  toTColor(): TColor;
+  procedure fromTColor(const C: TColor);
+  function  getOpacity(): byte;
+  procedure setOpacity(const O: byte);
+end;
+// attributs de texte
+type  TTexteAttributs = record
+  StyleName    : string;
+  FontName     : string;
+  FontColor    : TColor;
+  BackColor    : TColor;
+  FontStyle    : TFontStyles;
+  HauteurTexte : double;
+  Alignement   : byte;  // position du texte; cf organisation d'un clavier numérique pour le point d'accrochage
+  AngleRot     : integer;
+  procedure setFrom(const QStyleName, QFontName: string;
+                    const QFontColor, QBackColor : TColor;
+                    const QFontStyle: TFontStyles;
+                    const QHauteurTexte: double;
+                    const QAlignement: byte;  // position du texte; cf organisation d'un clavier numérique pour le point d'accrochage
+                    const QAngleRot: integer);
+  procedure setDefault();
+end;
+
+// pour la recherche de stations topo
+type TStationMatchFound = record
+  Serie        : TNumeroSerie;
+  Station      : TNumeroStation;
+  Match        : string;
+  procedure setFrom(const QSerie: TNumeroSerie; const QStation: TNumeroStation; const QMatch: string);
+end;
+// Visées trouvées
+type TViseeAntenneFound = record
   Idx      : Int64;
   VA       : TViseeAntenne;
   Position : TPoint3Df;
   dp       : double;
   AzimutAbsolu: double;
   procedure setFrom(const QIdx: Int64; const QVA: TViseeAntenne; const QPosition : TPoint3Df; const Qdp : double; const QAzimutAbsolu: double);
-
 end;
-
-type TArrayOfTViseeAntenne = array of TViseeAntenneFound;
-
-
-// couple série station au format TOPOROBOT + ID de terrain
-type TToporobotIDStation = record
-  eIdxNameSpace: integer;
-  aSerie: TNumeroSerie;
-  aStation: integer;
-  aIDTerrain: string;
-  procedure setFrom(const QNameSpace: Integer; const QSerie: TNumeroSerie; const QStation: integer; const QIDTerrain: string = ''); overload;
-  procedure setFrom(const S: string); overload;
-  function  ToString(): string;
-end;
-type TArrayOfTToporobotIDStation = array of TToporobotIDStation;
 
 // Station proche de l'extrémité d'une série
 type TStationProcheOfEndSerie = record
@@ -745,11 +884,7 @@ type TSerieEncadree = record
 end;
 
 // structure pour croquis et export GHCavedraw
-type
-
-{ TBaseStation }
-
- TBaseStation = record
+type  TBaseStation = record
    // serie et point
    IDTerrain         : string;
    Entite_Serie      : TNumeroSerie;            // Série
@@ -762,7 +897,6 @@ type
    // stockée ici en raison du grand nombre de calculs pour le dégradé
    CouleurStd        : TColor;
    CouleurDegrade    : TColor;
-
    eEntrance         : integer;
    eSecteur          : integer;
    eReseau           : integer;
@@ -805,35 +939,9 @@ type
    procedure setLongAzInc(const L, A, P: double); overload;
    procedure setLRUD(const L, R, U, D: double);
 end;
-//*)
 
-
-// angle
-type TUniteAngles = (uaRADIANS, uaDEGRES, uaGRADES);
-
-// modes d'exportation pour logiciels de carto
-// gisNONE: le FilterIndex du TOpenDialog démarre à 1 et non 0
-type TGISOutputMode     = set of (gisCENTERLINES, gisSILHOUETTES);
-type TGISColorByItems   = (gisCOLOR_UNIQUE, gisCOLOR_ENTRANCES, gisCOLOR_RESEAUX);
-
-const // Ne pas définir de type énuméré afin d'éviter une dépendance avec GHTopo
-  OSM_MARKER_STYLE_DEFAULT = 0;
-  OSM_MARKER_STYLE_CIRCLE  = 1;
-  OSM_MARKER_STYLE_SQUARE  = 2;
-  OSM_MARKER_STYLE_DELTA   = 3;
-  OSM_MARKER_STYLE_NABLA   = 4;
-  OSM_MARKER_STYLE_LOSANGE = 5;
-type TFormatExportGIS = (gisOSM, gisKML, gisGeoJSON, gisDXF);
-
-
-
-type TPolyMode = (tpmENTETE_POLY, tpmSTART_POLY, tpmPOINT_POLY, tpmEND_POLY);
 // marqueurs sur la carte
-type
-
-{ TGHTopoMarker }
-
- TGHTopoMarker = record
+type TGHTopoMarker = record
   Displayed: boolean;
   X        : double;
   Y        : double;
@@ -841,20 +949,7 @@ type
   Caption  : string;
   procedure setFrom(const QD: boolean; const QX, QY: double; const QC: TGHTopoColor; const QS: string); overload;
   procedure setFrom(const QD: boolean; const QX, QY: double; const QC: TColor; const QS: string); overload;
-
 end;
-
-
-
-
-// Couleurs Macintosh
-type TMacintoshColor = record
-  R : word;
-  G : word;
-  B : word;
-end;
-
-
 // pour stats spéléometriques
 type TVentilationSpeleometrie = record
   Fossiles  : double;
@@ -865,7 +960,6 @@ type TVentilationSpeleometrie = record
   Filons    : double;
   Speciaux  : double;
 end;
-type TTableauVentilationSpeleometrie = array of TVentilationSpeleometrie;
 
 // spéléométrie simplifiée: Dév, XYZ Maxi et mini, Nb de visées
 type TSpeleometrieReseauOuSecteur = record
@@ -878,42 +972,8 @@ type TSpeleometrieReseauOuSecteur = record
   Etendue          : TPoint3Df;
   NbVisees         : integer;
 end;
-type TArraySpeleometrieReseauOuSecteur = array of TSpeleometrieReseauOuSecteur;
-
-type TProcWithFilenameParameter = procedure (const Msg: TStringDirectoryFilename);
-// procédure d'affichage de la progression d'une opération
-type TProcDisplayProgression              = procedure (const Etape: string; const Done, Starting, Ending, Step: integer) of object;
-//type TProcOfObject = procedure of object;
-type TProcOfObjectWithOneBoolParameter    = procedure(const P: boolean) of object;
-type TProcOfObjectWithOneIntParameter     = procedure(const P: integer) of object;
-type TThreadProcOfObjectWithOneIntParameter = procedure(const NoThread, Idx: integer) of object;
-
-type TProcOfObjectWithTNumeroSerie        = procedure(const N: TNumeroSerie) of object;
-type TProcOfObjectReturnsAsBoolean        = function(): boolean of object;
-type TProcOfObjectWithOneStringParameter  = procedure (const Msg: string) of object;
-type TProcOfObjectWithFilenameParameter   = procedure (const Msg: TStringDirectoryFilename) of object;
-type TProcOfObjectWithAShot               = procedure (out Horodate: TDateTime; out QLongueur, QAzimut, QPente: double) of object;
-// pour éviter un nombre inconsidéré de callbacks utilisant un TBaseStation, on définit une liste d'actions possibles
-// enum TTodoAction, enrichissable à volonté
-type TTodoAction                          = (tdoAcnBASESTATION_DISPLAY, tdoAcnBASESTATION_EDITSERIE);
-type TProcOfObjectWithATBaseStation       = procedure (const BP: TBaseStation; const TodoAction: TTodoAction) of object;
 
 // onglets pour les vues 2D
-const NB_MAX_ONGLETS = 10;
-type  TModesTravail  = (mtREADY,
-                        mtPAN_PREMIER_POINT, mtPAN_SECOND_POINT,
-                        mtZOOM_PREMIER_COIN, mtZOOM_SECOND_COIN,
-                        mtMETAFILTRE_ZONE_PREMIER_COIN, mtMETAFILTRE_ZONE_SECOND_COIN,
-                        mtDISTANCE_PREMIER_POINT, mtDISTANCE_SECOND_POINT,
-                        mtADD_SERIE_PREMIER_POINT, mtADD_SERIE_SECOND_POINT,
-                        mtBOUCLER_PREMIER_POINT, mtBOUCLER_SECOND_POINT,
-                        mtPROFIL_MNT_PREMIER_POINT, mtPROFIL_MNT_SECOND_POINT,
-                        mtNEW_ANNOTATION, mtSELECT_ANNOTATION, mtDELETE_ANNOTATION,
-                        mtNEW_POLYLINE, mtADD_VERTEX_POLYLINE, mtDELETE_POLYLINE,
-                        mtNEW_LASSO_SELECTION
-                        );
-type  TQdrType       = (qtNONE, qtGRID, qtCROSS, qtPOINTS);
-
 type TVue2DParams  = record
   ongName: string;
   ongC1                 : TPoint2Df;
@@ -925,18 +985,14 @@ type TVue2DParams  = record
   ongDrawFastCenterline : boolean;
   ongQdrColor           : TColor;
   ongElementsDrawn      : TSetElementsDrawn;
-
   ongDegradeAltMiniReseau: TColor;
   ongDegradeAltMaxiReseau: TColor;
-
   ongDegradeAltMiniMNT  : TColor;
   ongDegradeAltMaxiMNT  : TColor;
 
-  ongViseesLargeurInPX  : integer;
-  ongViseesLargeurInMM  : double;
-
-  ongModeRepresentation : TModeRepresentationGaleries;
-
+  ongViseesLargeurInPX   : integer;
+  ongViseesLargeurInMM   : double;
+  ongModeRepresentation  : TModeRepresentationGaleries;
   ongFillOpacite         : byte;  // 00..255
   ongTailleTexteIDStation: double;
   ongTailleTexteAltitudes: double;
@@ -954,61 +1010,7 @@ type TVue2DParams  = record
   ongDoDispViseesNonRetenues : boolean;
   ongCouleurViseesNonRetenues: TColor; // couleur des visées non retenues par le MétaFiltre
 end;
-// Maillages
-type TMNTNumeroTriangle     = type Int64;
-type TMNTNumeroVertex       = type Int64;
-type TMNTModeDessinMaillage = (M3D_NONE, M3D_WIRE_FRAME, M3D_MESH);
-type TMNTGridArray          = array of array of Double;
-type TMNTTypeMaillage       = (tmUNKNOWN, tmREGULAR_GRID, tmTRIANGLES);
-type TMNTBoundingBox  = record
-  C1: TPoint3Df;
-  C2: TPoint3Df;
-end;
-type
-
-{ TMNTVertex }
-
- TMNTVertex = record
-  ID         : TMNTNumeroVertex;
-  Couleur    : TColor;
-  Position   : TPoint3Df;
-  Normale    : TPoint3Df;
-  Displayed  : boolean;
-  procedure setFrom(const QID: Int64; const QX, QY, QZ: double; const C: TColor); overload;
-  procedure AddAtPosition(const QX, QY, QZ: double);
-  procedure AddAtNormale(const QX, QY, QZ: double);
-  procedure Normalize();
-  function  MakeLigneForMailleur(const Idx: integer): string;
-end;
-
-type TMNTTriangleABC = record
-   Numero     : TMNTNumeroTriangle;
-   PointA     : TMNTNumeroVertex;
-   PointB     : TMNTNumeroVertex;
-   PointC     : TMNTNumeroVertex;
-   VoisinAB   : TMNTNumeroTriangle;
-   VoisinBC   : TMNTNumeroTriangle;
-   VoisinCA   : TMNTNumeroTriangle;
-   Displayed  : boolean;
-   Couleur    : TColor;
-   BoundingBox: TMNTBoundingBox;
-end;
-type
-
-{ TLineAttributes }
-
- TLineAttributes = record
-  ColorRGBA   : TGHTopoColor;
-  LineWidthInPixels     : integer;
-  LineWidthInMillimeters: double;
-  procedure SetAttributes(const R, G, B, A: byte; const WdthPX: integer; const WdthMM: double); overload;
-  procedure SetAttributes(const CC: TColor; const AA: byte; const WdthPX: integer; const WdthMM: double); overload;
-  procedure SetTBGRAPen(const P: TBGRAPen);
-  function  toTColor(): TColor;
-  procedure fromTColor(const C: TColor);
-  function  getOpacity(): byte;
-  procedure setOpacity(const O: byte);
-end;
+// paramétrage frontal graphique Vues et Rendu 3D
 type TVue3DParams  = record
   Name                   : string;
   Filtres                : string;
@@ -1039,6 +1041,7 @@ type TVue3DParams  = record
   MaillageProfilsDisplay : boolean;
   MaillageOpacity        : byte;
 end;
+// paramétrage frontal graphique coupe développée
 type TCoupeDeveloppeeParams  = record
   Name : string;
   BackGround: TColor;
@@ -1051,53 +1054,46 @@ type TCoupeDeveloppeeParams  = record
   ColorZMaxi         : TColor;
   ViseesLargeur      : integer;
 end;
-{$IFDEF GHTOPO_SIMPLIFIE}
-type TArrOngletsParams = array[0..0] of TVue2DParams;
-{$ELSE}
-type TArrOngletsParams = array[0..NB_MAX_ONGLETS] of TVue2DParams;
-{$ENDIF GHTOPO_SIMPLIFIE}
 
-// mode de fonctionnement des navigateurs de la BDD
-type TModeBDD = (mbddDISABLED,
-                 mbddENTRANCES,
-                 mbddRESEAUX,
-                 mbddSECTEURS,
-                 mbddCODES,
-                 mbddEXPES,
-                 mbddPOI,
-                 mbddCHECK_ERRORS,
-                 mbddNOEUDS,
-                 mbddNAMESPACES,
-                 mbddPROXIMITES,
-                 mbddSERIES_ENCADREES // séries dont le numéro est différent du numéro de série de la station d'arrivée (= bouclages)
-                 );
+// pour les maillages
+type TMNTBoundingBox  = record
+  C1: TPoint3Df;
+  C2: TPoint3Df;
+  procedure reset();
+end;
 
+type TMNTVertex = record
+  ID         : TMNTNumeroVertex;
+  Couleur    : TColor;
+  Position   : TPoint3Df;
+  Normale    : TPoint3Df;
+  Displayed  : boolean;
+  procedure setFrom(const QID: Int64; const QX, QY, QZ: double; const C: TColor); overload;
+  procedure AddAtPosition(const QX, QY, QZ: double);
+  procedure AddAtNormale(const QX, QY, QZ: double);
+  procedure Normalize();
+  function  MakeLigneForMailleur(const Idx: integer): string;
+end;
 
-
-// procédures de conversions GCS->Ecran
-type TProcGCSToSRC = function(const PM: TPoint2Df): TPoint of Object;
-type TProcRefreshControlsBy3DView = procedure of object;
-// demander aux modules parents d'effectuer une action sur l'appelant
-type TProcActionModuleParentSurAppelant = procedure of object;
-
-
-
-
-// **********************************************
-//  Types de données pour les outils graphiques
-// **********************************************
+type TMNTTriangleABC = record
+   Numero     : TMNTNumeroTriangle;
+   PointA     : TMNTNumeroVertex;
+   PointB     : TMNTNumeroVertex;
+   PointC     : TMNTNumeroVertex;
+   VoisinAB   : TMNTNumeroTriangle;
+   VoisinBC   : TMNTNumeroTriangle;
+   VoisinCA   : TMNTNumeroTriangle;
+   Displayed  : boolean;
+   Couleur    : TColor;
+   BoundingBox: TMNTBoundingBox;
+end;
 // Pour les coupes developpees
-type
-
-{ TPointCoupeDeveloppee }
-
- TPointCoupeDeveloppee = record
+type TPointCoupeDeveloppee = record
   P: double;
   Z: double;
   procedure setFrom(const QP, QZ: double);
 end;
-// Coupe développée
-type TTypeJonction = (tjENTRANCE, tjCARREFOUR, tjEXTREMITE_CONDUIT);
+
 type TJonctionCoupeDeveloppee = record
   NumeroJonction : Int64;
   TypeJonction   : TTypeJonction;
@@ -1108,8 +1104,18 @@ type TJonctionCoupeDeveloppee = record
   Cote           : double;
 end;
 
+
+
+// couple de points de sections transversale contenant les coordonnées X, Y des points extremes d'une section transversale
+type TPtsSectionTransversale = record
+  PosStation  : TPoint3Df;
+  ParoiGaucheX: double;
+  ParoiGaucheY: double;
+  ParoiDroiteX: double;
+  ParoiDroiteY: double;
+end;
+
 // sections du fichier d'aide
-// objet Section
 type THelpFileSection = record
   Index   : Integer;
   Topics  : string;
@@ -1117,133 +1123,17 @@ type THelpFileSection = record
   Texte   : string;
 end;
 
-// mode de paramétrage pour la boite de dialogue du paramétrage des vues
-type TModeDialogParamVues = (mpdVUE2D, mpdVUE3D, mpdCOUPE_DEVELOPPEE);
-
-// Pour les grilles de stations
-
-const
-  GHTOPO_GRID_NB_LINES           = 1001; // 1 + Capa mémoire du DistoX
-  LARGEUR_COLONNES_DISTOX_ID     = 60;
-  LARGEUR_COLONNES_BLOCK_SEGMENT = 80;
-  LARGEUR_COLONNES_HORODATE      = 200;
-  LARGEUR_COLONNES_LAP           = 100;
-  LARGEUR_COLONNES_LRUD          = 50;
-  LARGEUR_COLONNES_TRAME_HEXA    = 320;
-
-type TNodeNum = 0 .. maxLongint;
-// Jonctions Toporobot
-type
-
-{ TJonctionXYZ }
-
-  TJonctionXYZ = record
-   NoNoeud     : TNodeNum;
-   NoSer       : TNumeroSerie;
-   NoSt        : integer;
-   Position    : TPoint3Df;
-   NbRefs      : integer;
-   IDJonction  : string;
-   function ToString(): string;
-   procedure setPositionFromXYZ(const QX, QY, QZ: double);
-end;
-
-// Table des branches
-type TBrancheXYZ = record
-  NoEntranceRatt: integer;
-  NoSerie       : integer;
-  NoReseau      : integer;
-  NoBranche     : integer;
-  NomBranche    : string;
-  NoeudDepart   : TNodeNum;
-  NoeudArrivee  : TNodeNum;
-  Rigidite      : double;  // module de raideur, égal à 1.00 par défaut
-  PointsTopo    : array of TUneVisee;
-  NbPoints      : integer;
-  Accroissement : TPoint3Df;
-  CoordsDepart  : TPoint3Df;
-  CoordsArrivee : TPoint3Df;
-end;
-
-
-
-
-type TModeClavierVirtuel = (mkbdvALPHA_MINUSCULES, mkbdvALPHA_MAJUSCULES, mkbdvINTEGER, mkbdvDOUBLE);
-
-// pour le DistoX
-
-type TModeAttenteDonneesRX = (mrxNONE, mrxDEPILAGE_MESURE);
-// pour le DistoX
-
-type TProtoSerialError = (PROTO_OK,
-                          PROTO_READ, PROTO_WRITE,
-                          PROTO_COMMAND,  PROTO_ADDR,  PROTO_PACKET,
-                          PROTO_CONNECT, PROTO_TIMEOUT, PROTO_MAX);
-
-// pour le XML
-const
-  XML_CHAR_LT       = '&lt;';   // &lt; -> "<" (lt = lower than = inférieur à = "<" )
-  XML_CHAR_GT       = '&gt;';   // &gt; -> ">" (gt = greater than = supérieur à = ">")
-  XML_CHAR_AMP      = '&amp;';  // &amp; -> "&" (comme dit fraoustin - amp = ampersand)
-  XML_CHAR_APOS     = '&apos;'; // &apos; -> ' (apos = apostrophe)
-  XML_CHAR_QUOT     = '&quot;'; // &quot; -> " (quot = quotation mark = quillemet)
-// types d'événement
-type TNewEvent = procedure (Sender: TObject; Param1: string) of object;
-
-// modes de remplacement
-type TModeRemplacementStations = (mrsSECTEURS, mrsCODES, mrsEXPES);
-type TModeRemplacementAntennes = set of (mraSERIES, mraRESEAUX, mraSECTEURS, mraCODES, mraEXPES);
-
-// quads pour vue 3D
-type TQuad = record
-   VertexA           : TPoint3Df;
-   VertexB           : TPoint3Df;
-   VertexC           : TPoint3Df;
-   VertexD           : TPoint3Df;
-   //Normale           : TPoint3Df;
-   FacetteVisible    : boolean;
-   Depth             : Double;
-   Vertex2D_A        : TPoint;
-   Vertex2D_B        : TPoint;
-   Vertex2D_C        : TPoint;
-   Vertex2D_D        : TPoint;
-end;
-const NBFACESBYVISEE = 6;
-type TPortionTubeVisee = record
-   Visible           : Boolean;
-   Drawn             : Boolean; // dessiné en fonction du MétaFiltre;
-   CouleurTube       : TGHTopoColor;
-   Type_Entite       : TTypeDeVisee;
-   IdxEntrance       : integer;
-   IdxReseau         : integer;
-   IdxSecteur        : integer;
-   IdxExpe           : integer;
-   Facettes: array[1 .. NBFACESBYVISEE] of TQuad;
-   DepthField        : double;
-   Highlighted       : boolean;
-end;
-
 // Filtres nommés
-type
-
-{ TFiltrePersonnalise }
-
- TFiltrePersonnalise = record
-  Nom            : string;
-  Couleur        : TGHTopoColor;
-  Expression     : string;
-  Description    : string;
-  procedure setFrom(const QNom: string; const QCouleur: TGHTopoColor; const QExpression, QDescription: string);
-  function toLineXTB(const QIdx: integer): string;
-
+type TFiltrePersonnalise = record
+    Nom            : string;
+    Couleur        : TGHTopoColor;
+    Expression     : string;
+    Description    : string;
+    procedure setFrom(const QNom: string; const QCouleur: TGHTopoColor; const QExpression, QDescription: string);
+    function toLineXTB(const QIdx: integer): string;
 end;
 // Points d'intérêt
-type TPOIStatut = (poiUNKNOWN, poiTODO, poiDONE);
-type
-
-{ TPointOfInterest }
-
- TPointOfInterest = record
+type  TPointOfInterest = record
   Statut        : TPOIStatut;
   Serie         : TNumeroSerie;
   Station       : integer;
@@ -1253,48 +1143,56 @@ type
   Description   : string;
   function toString(): string;
 end;
-type TCriticiteMessaqeErreurGHTopo = (cmeNOTE, cmeWARNING, cmeERROR, cmeCRITICAL, cmeERROR_AUTOFIXED);
-type TTableExaminee                = (tmeENTRANCES, tmeRESEAUX, tmeSECTEURS, tmeCODES, tmeEXPES, tmeSERIES);
-type TMessaqeErreurGHTopoCompiler = record
-  TableExaminee : TTableExaminee;
-  Index         : Int64;
-  Criticite     : TCriticiteMessaqeErreurGHTopo;
-  Couleur       : TColor;
-  Message       : string;
+
+// Pour le DistoX
+type TMesureViseeDistoX = record
+  TimeStamp       : TDateTime; // horodatage de la visée
+  TypeMesure      : TTypeViseeDistoX;
+  Device          : TDistoXSerialNumber;
+  Longueur        : double;
+  Azimut          : double;
+  Pente           : double;
+  procedure setFrom(const QTimeStamp: TDateTime; const QDevice: TDistoXSerialNumber; const QLongueur, QAzimut, QPente: double; const QTypeMesure: TTypeViseeDistoX = tvdRADIANTE);
+  procedure setTypeMesure(const TM: TTypeViseeDistoX);
+  procedure setTimestamp(const T: TDateTime);
+  procedure setDistoXSerialNumber(const D: TDistoXSerialNumber);
+  procedure Empty(const QDevice: TDistoXSerialNumber);
+  function  DebugString(): string;
+  function  toBackupLine(): string;
 end;
 
-// constantes des filtres
-const
-  kFLT_NIL         = 0;      //  NIL               NIL
-  kFLT_ALL         = 1;      //  ALL               ALL
-  kFLT_ID          = 2;      //  ID                ID
-  kFLT_LONGUEUR    = 3;      //  LONGUEUR          LONGUEUR
-  kFLT_AZIMUT      = 4;      //  AZIMUT            AZIMUT
-  kFLT_PENTE       = 5;      //  PENTE             PENTE
-  kFLT_DATE        = 6;      //  DATE              DATE
-  kFLT_COULEUR     = 7;      //  COULEUR           COULEUR
-  kFLT_X           = 8;      //  X                 X
-  kFLT_Y           = 9;      //  Y                 Y
-  kFLT_Z           = 10;     //  Z                 Z
-  kFLT_LARGEUR     = 11;     //  LARGEUR           LARGEUR
-  kFLT_HAUTEUR     = 12;     //  HAUTEUR           HAUTEUR
-  kFLT_DATES       = 13;     //  DATES             DATES
-  kFLT_COULEURS    = 14;     //  COULEURS          COULEURS
-  kFLT_SERIE       = 15;     //  SERIE;
-  kFLT_RESEAU      = 16;     //  Réseau
-  kFLT_CODE        = 17;     //  code
-  kFLT_EXPE        = 18;     //  Séance (expé)
-  kFLT_TYPEVISEE   = 19;     //  type de visée
-  kFLT_SECTEUR     = 20;     // secteur
-  kFLT_ENTRANCE_RATT = 21;   // entrée de rattachement
-  kFLT_NAMESPACE     = 22;   // espace de noms
+type TMesureBruteDistoX = record // Mesure brute transmise par le DistoX
+  Longueur        : double;
+  Azimut          : double;
+  Pente           : double;
+  DeltaXYZ        : TPoint3Df;
+  procedure setFrom(const QLongueur, QAzimut, QPente: double);
+  procedure Empty();
+  function  DebugString(): string;
+end;
+
+// Vecteur de données DistoX
+type  TVectorDataDistoX = record
+  X : word;
+  Y : word;
+  Z : word;
+  TimeStamp  : TDateTime; // horodatage de la mesure
+  procedure setFrom(const QX, QY, QZ: word); overload;
+  procedure setFrom(const QX, QY, QZ: word; const QTimeStamp: TDateTime); overload;
+  function  CheckRanges(): boolean;
+end;
+type TDataCalibrationDistoX = record
+  MX: word;
+  MY: word;
+  MZ: word;
+  GX: word;
+  GY: word;
+  GZ: word;
+  TimeStamp  : TDateTime; // horodatage de la mesure
+end;
 
 
-  //-----------------------------------------------
-
-// pour les croquis (simplifié: polygones et polylignes. On ne fait pas un GHCaveDraw !
-type TKrobardIDStylePolyligne  = type integer;
-type TKrobardIDStyleAnnotation = type integer;
+// Croquis
 type TKrobardPolyVertex = record
   IDBaseStation: TIDBaseStation;
   Offset       : TPoint3Df;
@@ -1322,88 +1220,7 @@ type TKrobardPolyligne = record
   BoundingBox: TRect2Df;
 end;
 
-// spécifique au DistoX
-type TTypeViseeDistoX = (tvdRADIANTE, tvdCHEMINEMENT);
-type TDistoXSerialNumber     = type word;
-type TDistoXVersionFirmware  = type word;
-type TDistoXVersionHardware  = type word;
-
-
-type
-
-{ TMesureViseeDistoX }
-
- TMesureViseeDistoX = record
-  TimeStamp       : TDateTime; // horodatage de la visée
-  TypeMesure      : TTypeViseeDistoX;
-  Device          : TDistoXSerialNumber;
-  Longueur        : double;
-  Azimut          : double;
-  Pente           : double;
-  procedure setFrom(const QTimeStamp: TDateTime; const QDevice: TDistoXSerialNumber; const QLongueur, QAzimut, QPente: double; const QTypeMesure: TTypeViseeDistoX = tvdRADIANTE);
-  procedure setTypeMesure(const TM: TTypeViseeDistoX);
-  procedure setTimestamp(const T: TDateTime);
-  procedure setDistoXSerialNumber(const D: TDistoXSerialNumber);
-  procedure Empty(const QDevice: TDistoXSerialNumber);
-  function  DebugString(): string;
-  function  toBackupLine(): string;
-end;
-
-type
-
-{ TMesureBruteDistoX }
-
- TMesureBruteDistoX = record
-  Longueur        : double;
-  Azimut          : double;
-  Pente           : double;
-  DeltaXYZ        : TPoint3Df;
-  procedure setFrom(const QLongueur, QAzimut, QPente: double);
-
-  procedure Empty();
-  function  DebugString(): string;
-end;
-
-
-
-
-type
-
-{ TVectorDataDistoX }
-
-  TVectorDataDistoX = record
-  X : word;
-  Y : word;
-  Z : word;
-  TimeStamp  : TDateTime; // horodatage de la mesure
-  procedure setFrom(const QX, QY, QZ: word); overload;
-  procedure setFrom(const QX, QY, QZ: word; const QTimeStamp: TDateTime); overload;
-  function  CheckRanges(): boolean;
-end;
-type TDataCalibrationDistoX = record
-  MX: word;
-  MY: word;
-  MZ: word;
-  GX: word;
-  GY: word;
-  GZ: word;
-  TimeStamp  : TDateTime; // horodatage de la mesure
-end;
-type TArrayMesureViseeDistoX             = array of TMesureViseeDistoX;
-type TProcTransmitMesureDistoX           = procedure (const MV: TMesureViseeDistoX) of object;
-
-// callback pour transfert de série
-type TCallbackGotoErrorSerie       = procedure(const Ser: TNumeroSerie; const St: TNumeroStation) of object;
-
-type TProcOfObjectWithBaseStation  = procedure(const BS: TToporobotIDStation) of object;
-type TProcOfObjectWithXY           = procedure(const QX, QY: double; const TagString: string) of object;
-
-// pour le multithread
-type TProcOfObjectUsesInteger = procedure(const IDThread: integer; const QStart, QEnd, QDone: integer) of object;
-const NB_MAX_THREADS = 4;
-// pour le clavier numérique
-type TPaveNumModeSaisie = (pnmINTEGER, pnmREAL, pnmTOPOROBOT_STATION);
-{ TFTPParameters }
+// pour les transferts FTP
 type TFTPParameters = record
   HostName: string;
   User    : string;
@@ -1411,10 +1228,146 @@ type TFTPParameters = record
   procedure setFrom(const QHost, QUser, QPort: string);
 end;
 
+////////////////////////////////////////////////////////////////////////////////
+// Tableaux statiques
+CONST MAX_IDX_ONGLET = {$IFDEF GHTOPO_SIMPLIFIE} 0 {$ELSE} 10 {$ENDIF};
+const MAX_SIZE_PARAM_ARRAY         =  63;
+const MAX_NB_LIGNES_TSTRINGARRAY2D = 511;
+type TMatrix2x2       = array[1..2, 1..2] of double;
+type TMatrix3x3       = array[1..3, 1..3] of double;
+type TMatrix          = array of array of double;
+type TIncidenceMatrix = array of array of ShortInt;  // seules valeurs: -1, 0, +1
+type TDistoX2PacketOfBytes         = array[0..3] of byte;
+type TDistoX2MemoryMap             = array[0..65535] of byte;
+type TGHStringArray                = array[0 ..MAX_SIZE_PARAM_ARRAY] of string; // TStringArray est un nouveau type de données de FPC 3.0.2
+// tableau 2D utilisé par le frontal de saisie des points topo
+type TGHStringArray2D  = array[0 .. MAX_NB_LIGNES_TSTRINGARRAY2D] of TGHStringArray;
+// Onglets vue en plan
+type TArrOngletsParams = array[0 .. MAX_IDX_ONGLET] of TVue2DParams;
+
+////////////////////////////////////////////////////////////////////////////////
+// Tableaux dynamiques array of <type>
+type TVecteurDouble                    = array of double;
+type TArrayOfFloats                    = array of double;
+type TArrayOfIntegers                  = array of Integer;
+type TArrayStationsMatchFound          = array of TStationMatchFound;
+type TArrayPoints2Df                   = array of TPoint2Df;
+type TArrayPoints3Df                   = array of TPoint3Df;
+type TArrayOfTViseeAntenne             = array of TViseeAntenneFound;
+type TArrayOfTToporobotIDStation       = array of TToporobotIDStation;
+type TTableauVentilationSpeleometrie   = array of TVentilationSpeleometrie;
+type TArraySpeleometrieReseauOuSecteur = array of TSpeleometrieReseauOuSecteur;
+type TArrayMesureViseeDistoX           = array of TMesureViseeDistoX;
+type TMNTGridArray                     = array of array of Double;  // Maillages
+
+////////////////////////////////////////////////////////////////////////////////
+// Types procéduraux
+type TProcWithFilenameParameter = procedure (const Msg: TStringDirectoryFilename) of object;
+// procédure d'affichage de la progression d'une opération
+type TProcDisplayProgression              = procedure (const Etape: string; const Done, Starting, Ending, Step: integer) of object;
+//type TProcOfObject = procedure of object;
+type TProcOfObjectWithOneBoolParameter    = procedure(const P: boolean) of object;
+type TProcOfObjectWithOneIntParameter     = procedure(const P: integer) of object;
+type TThreadProcOfObjectWithOneIntParameter = procedure(const NoThread, Idx: integer) of object;
+
+type TProcOfObjectWithTNumeroSerie        = procedure(const N: TNumeroSerie) of object;
+type TProcOfObjectReturnsAsBoolean        = function(): boolean of object;
+type TProcOfObjectWithOneStringParameter  = procedure (const Msg: string) of object;
+type TProcOfObjectWithFilenameParameter   = procedure (const Msg: TStringDirectoryFilename) of object;
+type TProcOfObjectWithAShot               = procedure (out Horodate: TDateTime; out QLongueur, QAzimut, QPente: double);
+type TProcOfObjectWithATBaseStation       = procedure (const BP: TBaseStation; const TodoAction: TTodoAction) of object;
+
+  // procédures de conversions GCS->Ecran
+type TProcGCSToSRC                        = function(const PM: TPoint2Df): TPoint of Object;
+type TProcRefreshControlsBy3DView         = procedure of object;
+// demander aux modules parents d'effectuer une action sur l'appelant
+type TProcActionModuleParentSurAppelant   = procedure of object;
+// types d'événement
+type TNewEvent                            = procedure (Sender: TObject; Param1: string) of object;
+
+// callback pour transfert de série
+type TCallbackGotoErrorSerie              = procedure(const Ser: TNumeroSerie; const St: TNumeroStation) of object;
+type TProcOfObjectWithBaseStation         = procedure(const BS: TToporobotIDStation) of object;
+type TProcOfObjectWithXY                  = procedure(const QX, QY: double; const TagString: string) of object;
+type TProcTransmitMesureDistoX            = procedure (const MV: TMesureViseeDistoX) of object;
+
+// pour le multithread
+const NB_MAX_THREADS = 4;
+type TProcOfObjectUsesInteger = procedure(const IDThread: integer; const QStart, QEnd, QDone: integer) of object;
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
 implementation
 uses
   {$INCLUDE SelectionLangues.inc} // insère les unités en fonction de la langue
   Common;
+
+{ TMNTBoundingBox }
+
+procedure TMNTBoundingBox.reset();
+begin
+
+end;
+
+{ TMacintoshColor }
+
+procedure TMacintoshColor.setFrom(const QR, QG, QB: word);
+begin
+  self.R := QR;
+  self.G := QG;
+  self.B := QB;
+end;
+
+{ TLabelSystemesCoordsEPSG }
+
+procedure TLabelSystemesCoordsEPSG.setFrom(const QCode: TCodeEPSG; const QNom: string);
+begin
+  self.CodeEPSG := QCode;
+  self.NomEPSG  := QNom;
+end;
+
+{ TProjUV }
+
+procedure TProjUV.setFrom(const QU, QV: double);
+begin
+  self.U := QU;
+  self.V := QV
+end;
+
+{ TArrayOfTProjUV }
+
+procedure TArrayOfTProjUV.Empty();
+begin
+  SetLength(self.M, 0);
+end;
+
+procedure TArrayOfTProjUV.SetCapacity(const N: integer);
+begin
+  SetLength(self.M, N);
+end;
+
+procedure TArrayOfTProjUV.SetElement(const Idx: integer; const QU, QV: double);
+var
+  P: TProjUV;
+begin
+  P.setFrom(QU, QV);
+  self.SetElement(Idx, P);
+end;
+
+procedure TArrayOfTProjUV.SetElement(const Idx: integer; const P: TProjUV);
+begin
+  self.M[Idx] := P;
+end;
+
+function TArrayOfTProjUV.GetElement(const Idx: integer): TProjUV;
+begin
+  Result := self.M[Idx]
+end;
+
+function TArrayOfTProjUV.GetNbElements(): integer;
+begin
+  Result := length(self.M);
+end;
 
 { TFiltrePersonnalise }
 
@@ -1428,10 +1381,10 @@ end;
 
 function TFiltrePersonnalise.toLineXTB(const QIdx: integer): string;
 begin
-  Result := Format(FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB +
-             FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB +
-             FORMAT_STRING + TAB +
-             FORMAT_STRING + TAB + FORMAT_STRING,
+  Result := Format(FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB +
+             FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB +
+             FORMAT_STRING + FIELD_SEPARATOR_TAB +
+             FORMAT_STRING + FIELD_SEPARATOR_TAB + FORMAT_STRING,
              [-16, QIdx,
               self.Couleur.Red, self.Couleur.Green, self.Couleur.Blue,
               self.Nom,
@@ -1654,6 +1607,16 @@ end;
 function TGHTopoColor.toGrayScale(): byte; //Convertit une couleur en niveaux de gris; méthode NTSC.
 begin
   Result := round(0.30 * self.Red + 0.59 * self.Green + 0.11 * self.Blue);
+end;
+
+function TGHTopoColor.toAcadColorIdx(): integer;
+begin
+  result := 0;
+end;
+
+procedure TGHTopoColor.fromAcadColorIdx(const Idx: integer);
+begin
+  self.setFrom(clRED, 255);
 end;
 
 function TGHTopoColor.getFloatRed(): double;
@@ -1884,21 +1847,21 @@ end;
 
 function TCode.toLineXTB(const ModeSaveTab: TModeSaveTAB): string;
 const
-  LINE_CODE    = FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                 FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+
-                 FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+
-                 FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+
+  LINE_CODE    = FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+
+                 FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+
+                 FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+
+                 FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+
                  FORMAT_STRING;
-  FMT_PARAMS_CORR_FUNC = FORMAT_NB_REAL_6_DEC + TAB + FORMAT_NB_REAL_6_DEC + TAB + FORMAT_NB_REAL_6_DEC;
+  FMT_PARAMS_CORR_FUNC = FORMAT_NB_REAL_6_DEC + FIELD_SEPARATOR_TAB + FORMAT_NB_REAL_6_DEC + FIELD_SEPARATOR_TAB + FORMAT_NB_REAL_6_DEC;
 begin
   with self do
   begin
     case ModeSaveTAB of
       mtabEXTENDEDTAB:
         //-1	1	360.00	360.00	0.05	1.00	1.00	1.00	100.00		5314011	0.000000	0.000000	0.000000	0.000000	0.000000	0.000000
-        Result := Format(LINE_CODE + TAB + FORMAT_NB_INTEGER + TAB +
-                     FMT_PARAMS_CORR_FUNC + TAB +
-                     FMT_PARAMS_CORR_FUNC + TAB +
+        Result := Format(LINE_CODE + FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB +
+                     FMT_PARAMS_CORR_FUNC + FIELD_SEPARATOR_TAB +
+                     FMT_PARAMS_CORR_FUNC + FIELD_SEPARATOR_TAB +
                      FORMAT_NB_REAL_3_DEC, //+ TAB +
                      // FORMAT_NB_REAL_3_DEC + TAB + FORMAT_NB_REAL_3_DEC
                        [-1,
@@ -2046,10 +2009,10 @@ end;
 
 function TUneVisee.toLineXTB(const ModeSaveTab: TModeSaveTAB; const QNumeroDeSerie: TNumeroSerie; const QNumeroStation: TNumeroStation): string;
 const
-  LINE_STATION = FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                 FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                 FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+
-                 FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+
+  LINE_STATION = FORMAT_NB_INTEGER+ FIELD_SEPARATOR_TAB +FORMAT_NB_INTEGER+ FIELD_SEPARATOR_TAB +
+                 FORMAT_NB_INTEGER+ FIELD_SEPARATOR_TAB +FORMAT_NB_INTEGER+ FIELD_SEPARATOR_TAB +
+                 FORMAT_NB_REAL_3_DEC+ FIELD_SEPARATOR_TAB +FORMAT_NB_REAL_3_DEC+ FIELD_SEPARATOR_TAB +FORMAT_NB_REAL_3_DEC+ FIELD_SEPARATOR_TAB +
+                 FORMAT_NB_REAL_3_DEC+ FIELD_SEPARATOR_TAB +FORMAT_NB_REAL_3_DEC+ FIELD_SEPARATOR_TAB +FORMAT_NB_REAL_3_DEC+ FIELD_SEPARATOR_TAB +FORMAT_NB_REAL_3_DEC+ FIELD_SEPARATOR_TAB +
                  FORMAT_STRING;
 begin
   with self do
@@ -2057,8 +2020,8 @@ begin
     case ModeSaveTAB of
       mtabEXTENDEDTAB:
       begin
-        Result := Format(LINE_STATION + TAB + FORMAT_STRING + TAB + FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER +
-                         TAB + FORMAT_STRING + TAB + FORMAT_NB_REAL_3_DEC + TAB + FORMAT_NB_REAL_3_DEC,
+        Result := Format(LINE_STATION +  FIELD_SEPARATOR_TAB  + FORMAT_STRING +  FIELD_SEPARATOR_TAB  + FORMAT_NB_INTEGER +  FIELD_SEPARATOR_TAB  + FORMAT_NB_INTEGER +
+                          FIELD_SEPARATOR_TAB  + FORMAT_STRING +  FIELD_SEPARATOR_TAB  + FORMAT_NB_REAL_3_DEC +  FIELD_SEPARATOR_TAB  + FORMAT_NB_REAL_3_DEC,
                         [QNumeroDeSerie, QNumeroStation,
                          Code, Expe,
                          Longueur, Azimut, Pente,
@@ -2166,11 +2129,11 @@ end;
 
 function TExpe.toLineXTB(): string;
 begin
-  Result := Format(FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                    FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                    FORMAT_STRING+TAB+FORMAT_STRING+TAB+
-                    FORMAT_NB_INTEGER+TAB+FORMAT_NB_REAL_3_DEC+TAB+
-                    FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+ // anciennement '%f'+TAB+FORMAT_NB_INTEGER+TAB+
+  Result := Format(FORMAT_NB_INTEGER+ FIELD_SEPARATOR_TAB +FORMAT_NB_INTEGER+ FIELD_SEPARATOR_TAB +
+                    FORMAT_NB_INTEGER+ FIELD_SEPARATOR_TAB +FORMAT_NB_INTEGER+ FIELD_SEPARATOR_TAB +FORMAT_NB_INTEGER+ FIELD_SEPARATOR_TAB +
+                    FORMAT_STRING+ FIELD_SEPARATOR_TAB +FORMAT_STRING+ FIELD_SEPARATOR_TAB +
+                    FORMAT_NB_INTEGER+ FIELD_SEPARATOR_TAB +FORMAT_NB_REAL_3_DEC+ FIELD_SEPARATOR_TAB +
+                    FORMAT_NB_INTEGER+ FIELD_SEPARATOR_TAB +FORMAT_NB_INTEGER+ FIELD_SEPARATOR_TAB + // anciennement '%f'+ FIELD_SEPARATOR_TAB +FORMAT_NB_INTEGER+ FIELD_SEPARATOR_TAB +
                     FORMAT_STRING,
                            [-2,
                             Self.IDExpe,
@@ -2199,11 +2162,11 @@ end;
 
 function TEntrance.toLineXTBSection6(const QIdx: integer): string;
 begin
-  Result := Format(FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB +
-                   FORMAT_STRING + TAB + FORMAT_STRING + TAB +
-                   FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB +
-                   FORMAT_NB_REAL_3_DEC + TAB + FORMAT_NB_REAL_3_DEC + TAB + FORMAT_NB_REAL_3_DEC + TAB +
-                   FORMAT_STRING + TAB + FORMAT_STRING,
+  Result := Format(FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB +
+                   FORMAT_STRING + FIELD_SEPARATOR_TAB + FORMAT_STRING + FIELD_SEPARATOR_TAB +
+                   FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB +
+                   FORMAT_NB_REAL_3_DEC + FIELD_SEPARATOR_TAB + FORMAT_NB_REAL_3_DEC + FIELD_SEPARATOR_TAB + FORMAT_NB_REAL_3_DEC + FIELD_SEPARATOR_TAB +
+                   FORMAT_STRING + FIELD_SEPARATOR_TAB + FORMAT_STRING,
                   [-6, QIdx + 1,//i+1,
                    self.eNomEntree,
                    self.eIDTerrain,
@@ -2217,9 +2180,9 @@ end;
 
 function TEntrance.toLineXTBSection5(const QIdx: integer): string;
 begin
-  Result := Format(FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB +
-                   FORMAT_NB_REAL_3_DEC + TAB + FORMAT_NB_REAL_3_DEC + TAB + FORMAT_NB_REAL_3_DEC + TAB +
-                   FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB + FORMAT_STRING,
+  Result := Format(FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB +
+                   FORMAT_NB_REAL_3_DEC + FIELD_SEPARATOR_TAB + FORMAT_NB_REAL_3_DEC + FIELD_SEPARATOR_TAB + FORMAT_NB_REAL_3_DEC + FIELD_SEPARATOR_TAB +
+                   FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB + FORMAT_STRING,
                           [-5, QIdx + 1, //i+1
                           self.ePosition.X, self.ePosition.Y, self.ePosition.Z,
                           self.eRefSer, self.eRefSt,
@@ -2346,8 +2309,8 @@ end;
 
 function TSecteur.toLineXTB(const QIdx: integer): string;
 begin
-  Result := Format(FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                       FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
+  Result := Format(FORMAT_NB_INTEGER+ FIELD_SEPARATOR_TAB +FORMAT_NB_INTEGER+ FIELD_SEPARATOR_TAB +
+                       FORMAT_NB_INTEGER+ FIELD_SEPARATOR_TAB +FORMAT_NB_INTEGER+ FIELD_SEPARATOR_TAB +FORMAT_NB_INTEGER+ FIELD_SEPARATOR_TAB +
                        FORMAT_STRING,
                        [-10,
                         QIdx, self.CouleurSecteur.Red, self.CouleurSecteur.Green, self.CouleurSecteur.Blue,
@@ -2367,10 +2330,10 @@ end;
 
 function TReseau.toLineXTB(const QIdx: integer): string;
 begin
-  Result := Format(FORMAT_NB_INTEGER +TAB +FORMAT_NB_INTEGER+TAB+
-                   FORMAT_NB_INTEGER +TAB +FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                   FORMAT_NB_INTEGER +TAB +
-                   FORMAT_STRING + TAB + FORMAT_STRING,
+  Result := Format(FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER+ FIELD_SEPARATOR_TAB +
+                   FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER+ FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB+
+                   FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB +
+                   FORMAT_STRING +  FIELD_SEPARATOR_TAB + FORMAT_STRING,
                        [-8,
                         QIdx,
                         self.ColorReseau.Red, self.ColorReseau.Green, self.ColorReseau.Blue, self.TypeReseau,
@@ -2464,14 +2427,15 @@ end;
 function TViseeAntenne.toLineXTB(const QIdx: integer): string;
 begin
   //-9	1	2	1102	10	101	101	GHLMF	12.56	289.00	-14.00	le chat dans la souricière
-  result := Format(FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+
-                              TAB + FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + // série, point
-                              TAB + FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + // code, expé
-                              TAB + FORMAT_STRING +          // ID terrain
-                              TAB + FORMAT_NB_REAL_2_DEC+
-                              TAB + FORMAT_NB_REAL_2_DEC+
-                              TAB + FORMAT_NB_REAL_2_DEC+
-                              TAB + FORMAT_STRING ,
+  result := Format(FORMAT_NB_INTEGER+
+                              FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB+FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+FORMAT_NB_INTEGER+
+                              FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER + // série, point
+                              FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER + // code, expé
+                              FIELD_SEPARATOR_TAB + FORMAT_STRING +          // ID terrain
+                              FIELD_SEPARATOR_TAB + FORMAT_NB_REAL_2_DEC+
+                              FIELD_SEPARATOR_TAB + FORMAT_NB_REAL_2_DEC+
+                              FIELD_SEPARATOR_TAB + FORMAT_NB_REAL_2_DEC+
+                              FIELD_SEPARATOR_TAB + FORMAT_STRING ,
                              [-9,
                              QIdx,
                              self.Reseau, self.Secteur,

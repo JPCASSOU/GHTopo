@@ -1,10 +1,10 @@
 object CdrListeSeries: TCdrListeSeries
   Left = 0
-  Height = 644
+  Height = 594
   Top = 0
   Width = 939
   Align = alClient
-  ClientHeight = 644
+  ClientHeight = 594
   ClientWidth = 939
   Font.CharSet = ANSI_CHARSET
   Font.Height = -13
@@ -14,8 +14,8 @@ object CdrListeSeries: TCdrListeSeries
   Font.Style = [fsBold]
   ParentFont = False
   TabOrder = 0
-  DesignLeft = 418
-  DesignTop = 160
+  DesignLeft = 959
+  DesignTop = 219
   object hcColsTitres: THeaderControl
     Left = 4
     Height = 24
@@ -98,7 +98,7 @@ object CdrListeSeries: TCdrListeSeries
   object lbNbreElements: TLabel
     Left = 4
     Height = 16
-    Top = 625
+    Top = 575
     Width = 100
     Anchors = [akLeft, akBottom]
     Caption = 'lbNbreElements'
@@ -224,7 +224,7 @@ object CdrListeSeries: TCdrListeSeries
   end
   object lsbListe: TCheckListBox
     Left = 4
-    Height = 475
+    Height = 425
     Top = 148
     Width = 932
     Anchors = [akTop, akLeft, akRight, akBottom]

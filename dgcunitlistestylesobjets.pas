@@ -16,32 +16,49 @@ type TDGCListeStylesSheets = class(TDGCListeSimple<TDGCStyleSheet>)
  private
 
  public
-   procedure ClearListe(const DoRegenDefaultStyle: boolean); overload;
+   procedure ClearListeStyles(const DoRegenDefaultStyle: boolean);
    function  FindIdxByName(const N: string): integer;
 end;
+type
 
+{ TDGCListeLayers }
+
+ TDGCListeLayers = class(TDGCListeSimple<TDGCLayer>)
+ private
+
+ public
+   procedure ClearListeLayers(const DoRegenDefaultStyle: boolean);
+
+end;
 implementation
 uses
   DGCDummyUnit; // pour éviter le bug de 'Fin de code source non trouvée
 
+{ TDGCListeLayers }
+
+procedure TDGCListeLayers.ClearListeLayers(const DoRegenDefaultStyle: boolean);
+var
+  L: TDGCLayer;
+begin
+  self.ClearListe();
+  if (DoRegenDefaultStyle) then
+  begin
+    L.setFrom('0', 7);
+    self.AddElement(L);
+  end;
+end;
+
+{ TDGCListeLayers }
+
+
+
 //******************************************************************************
-procedure TDGCListeStylesSheets.ClearListe(const DoRegenDefaultStyle: boolean);
+procedure TDGCListeStylesSheets.ClearListeStyles(const DoRegenDefaultStyle: boolean);
 var
   Nb, i: Integer;
   MyDefaultStyle: TDGCStyleSheet;
 begin
-  Nb := self.Count;
-  if (Nb > 0) then
-  begin
-    for i := 0 to Nb - 1 do
-    begin
-      try
-        Dispose(self.Items[i]);
-      except
-      end;
-    end;
-  end;
-  self.Clear();
+  self.ClearListe();
   if (DoRegenDefaultStyle) then
   begin
     with MyDefaultStyle do

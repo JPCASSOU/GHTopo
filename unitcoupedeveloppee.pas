@@ -793,7 +793,7 @@ begin
           QID := MakeTIDBaseStation(E.Entite_Serie, E.Entite_Station, false);
           // ajouter l'entité
 
-          WrtLn(Format(FMT_BASEPOINTS,
+          WrtLn(Format(GCD_FMT_BASEPOINTS,
                [QID  ,
                 E.IDTerrain,
                 E.Type_Entite,

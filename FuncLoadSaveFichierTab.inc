@@ -110,7 +110,7 @@ var
             AfficherMessage(Format(rsRD_TAB_F_MULTI_OBS,[NoLigneTAB]));
           end
           else begin
-            PrmsLn   := split(LigneTab, SEPARATOR_TAB);
+            PrmsLn   := split(LigneTab, FIELD_SEPARATOR_TAB);
             Prefix1  := StrToIntDef(PrmsLn[0], -110);
           end;
           // routage selon le préfixe
@@ -434,12 +434,9 @@ end;
 //******************************************************************************
 procedure TToporobotStructure2012.SaveToXTB(const FichierTAB: TStringDirectoryFilename; const ModeSaveTAB: TModeSaveTAB; const TextFileFormat: TTextFileFormat);
 const
-
-
-
-  FMT_LINE_NAMESPACE   = FORMAT_NB_INTEGER  + TAB + FORMAT_NB_INTEGER + TAB +
-                         '%d ' + TAB + '%d ' + TAB + '%d ' + TAB + // couleur
-                         FORMAT_STRING  + TAB + FORMAT_STRING;     // noms
+  FMT_LINE_NAMESPACE   = FORMAT_NB_INTEGER  + FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB +
+                         '%d ' + FIELD_SEPARATOR_TAB + '%d ' + FIELD_SEPARATOR_TAB + '%d ' + FIELD_SEPARATOR_TAB + // couleur
+                         FORMAT_STRING  + FIELD_SEPARATOR_TAB + FORMAT_STRING;     // noms
 var
   ENDL     : string;
   Sr, St, i: integer;
@@ -487,9 +484,9 @@ begin
       // Section -20: Date de dernières modifications, version du fichier et du logiciel
       AfficherMessage('--> Horodating saves at #20 section');
 
-      WrtLn(Format(FORMAT_NB_INTEGER + TAB +
-                   FORMAT_STRING + TAB +
-                   FORMAT_STRING + TAB +
+      WrtLn(Format(FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB +
+                   FORMAT_STRING     + FIELD_SEPARATOR_TAB +
+                   FORMAT_STRING     + FIELD_SEPARATOR_TAB +
                    FORMAT_STRING,
                    [-20,
                     DateToStr(Now), TimeToStr(Now),
@@ -511,14 +508,14 @@ begin
 
       // Sections -19 : Libellé et commentaires de l'étude (XTB uniquement)
       AfficherMessage('--> Writing general infos at #-19 to #-18 sections');
-      WrtLn(Format(FORMAT_NB_INTEGER + TAB +
-                    FORMAT_STRING + TAB + FORMAT_STRING,
+      WrtLn(Format(FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB +
+                   FORMAT_STRING     + FIELD_SEPARATOR_TAB + FORMAT_STRING,
                    [-19, self.FNomEtude, self.FCommentaireEtude]));
       // Section -18: Espaces de noms (XTB uniquement);
       AfficherMessage('--> Saving namespace at #-18 section');
       WrtLn('');
       QNbNamespaces := self.GetNbNameSpaces();
-      WrtCommentaire(MakeHeaderRubriquesOfAnRow(TAB, -18, ['IDNamespace', 'CouleurNamespace_R', 'CouleurNamespace_G', 'CouleurNamespace_B', 'Namespace', 'Description']));
+      WrtCommentaire(MakeHeaderRubriquesOfAnRow(FIELD_SEPARATOR_TAB, -18, ['IDNamespace', 'CouleurNamespace_R', 'CouleurNamespace_G', 'CouleurNamespace_B', 'Namespace', 'Description']));
 
       WrtCommentaire(Format('%d namespaces', [QNbNamespaces]));
       WrtLn('');
@@ -539,7 +536,7 @@ begin
       AfficherMessage('--> Saving filters at #-16 section');
       WrtLn('');
       QNbFiltresPerso := GetNbFiltresPersos();
-      WrtCommentaire(MakeHeaderRubriquesOfAnRow(TAB, -16, ['IDFiltre', 'NomFiltre', 'CouleurFiltre_R', 'CouleurFiltre_G', 'CouleurFiltre_B', 'FiltreExpr', 'Description']));
+      WrtCommentaire(MakeHeaderRubriquesOfAnRow(FIELD_SEPARATOR_TAB, -16, ['IDFiltre', 'NomFiltre', 'CouleurFiltre_R', 'CouleurFiltre_G', 'CouleurFiltre_B', 'FiltreExpr', 'Description']));
       WrtCommentaire(Format('%d filtres perso', [QNbFiltresPerso]));
 
       if (QNbFiltresPerso > 0) then
@@ -550,19 +547,19 @@ begin
       // TODO: Désactivé pour l'instant - A réimplémenter
       AfficherMessage('--> Writing coordinates system at #-15 section');
       WrtLn('');
-      WrtCommentaire(MakeHeaderRubriquesOfAnRow(TAB, -15, ['Code EPSG', 'Coordinates system description']));
+      WrtCommentaire(MakeHeaderRubriquesOfAnRow(FIELD_SEPARATOR_TAB, -15, ['Code EPSG', 'Coordinates system description']));
       //WrtCommentaire('#-15'+ TAB + 'Code EPSG' + TAB + 'Coordinates system description');
       // -15	31563	LT3	Lambert 3 France
       WrtLn('');
       EPSG := GetCodeEPSGSystemeCoordonnees;
-      WrtLn(Format(FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER + TAB + FORMAT_STRING,  [-15, EPSG.CodeEPSG, EPSG.NomEPSG]));
+      WrtLn(Format(FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB + FORMAT_STRING,  [-15, EPSG.CodeEPSG, EPSG.NomEPSG]));
       //*************************************
       // Section -10: Secteurs (Format XTB uniquement)
       AfficherMessage('--> Saving #-10 Sectors section');
       WrtLn('');
       WrtCommentaire('Sectors list');
       WrtLn('');
-      WrtCommentaire(MakeHeaderRubriquesOfAnRow(TAB, -10, ['IdxSecteur', 'Color R', 'Color G', 'Color B', 'NomSecteur']));
+      WrtCommentaire(MakeHeaderRubriquesOfAnRow(FIELD_SEPARATOR_TAB, -10, ['IdxSecteur', 'Color R', 'Color G', 'Color B', 'NomSecteur']));
       WrtLn('');
       QNbSecteurs := GetNbSecteurs();
       if (QNbSecteurs > 1) then
@@ -577,7 +574,7 @@ begin
         WrtLn('');
         WrtCommentaire('Antenna-shots list');
         WrtLn('');
-        WrtCommentaire(MakeHeaderRubriquesOfAnRow(TAB, -9, ['ID', 'ID Reseau', 'ID Secteur', 'Serie', 'Point', 'Code (unused)', 'Expe (unused)', 'IDTerrain', 'Longueur', 'Azimut', 'Pente', 'Observ.']));
+        WrtCommentaire(MakeHeaderRubriquesOfAnRow(FIELD_SEPARATOR_TAB, -9, ['ID', 'ID Reseau', 'ID Secteur', 'Serie', 'Point', 'Code (unused)', 'Expe (unused)', 'IDTerrain', 'Longueur', 'Azimut', 'Pente', 'Observ.']));
         WrtLn('');
         for i := 1 to QNbAntennes - 1 do
         begin
@@ -590,7 +587,7 @@ begin
       WrtLn('');
       WrtCommentaire('Networks list');
       WrtLn('');
-      WrtCommentaire(MakeHeaderRubriquesOfAnRow(TAB, -9, ['IdxReseau', 'Color R', 'Color G', 'Color B', 'TypeReseau', 'NomReseau', 'ObsReseau']));
+      WrtCommentaire(MakeHeaderRubriquesOfAnRow(FIELD_SEPARATOR_TAB, -9, ['IdxReseau', 'Color R', 'Color G', 'Color B', 'TypeReseau', 'NomReseau', 'ObsReseau']));
       WrtLn('');
       QNbReseaux := GetNbReseaux();
       if (QNbReseaux > 1) then
@@ -603,12 +600,12 @@ begin
     WrtLn('');
     WrtCommentaire('Entrances list');
     WrtLn('');
-    WrtCommentaire(MakeHeaderRubriquesOfAnRow(TAB, -6, ['ID Entrance', 'NomEntrance', 'Serie', 'Station', 'X Entrance', 'Y Entrance', 'Z Entrance', 'Observ']));
+    WrtCommentaire(MakeHeaderRubriquesOfAnRow(FIELD_SEPARATOR_TAB, -6, ['ID Entrance', 'NomEntrance', 'Serie', 'Station', 'X Entrance', 'Y Entrance', 'Z Entrance', 'Observ']));
     WrtLn('');
     QNbEntrees := GetNbEntrances();
     for i := 0 to QNbEntrees - 1 do WrtLn(GetEntrance(i).toLineXTBSection6(i));
     AfficherMessage('--> Saving #-5 Deprecated Entrances section');
-    WrtCommentaire(MakeHeaderRubriquesOfAnRow(TAB, -5, ['X Entrance', 'Y Entrance', 'Z Entrance', 'Serie', 'Station', 'Observ', '*** Deprecated section. Data moved to #6 section ***']));
+    WrtCommentaire(MakeHeaderRubriquesOfAnRow(FIELD_SEPARATOR_TAB, -5, ['X Entrance', 'Y Entrance', 'Z Entrance', 'Serie', 'Station', 'Observ', '*** Deprecated section. Data moved to #6 section ***']));
     WrtLn('');
     for i := 0 to QNbEntrees - 1 do WrtLn(GetEntrance(i).toLineXTBSection5(i));
 
@@ -616,7 +613,7 @@ begin
     WrtCommentaire('Trips list');
     WrtLn('');
     AfficherMessage('--> Saving Expes');
-    WrtCommentaire(MakeHeaderRubriquesOfAnRow(TAB, -2, ['IDExpe', 'Day', 'Month', 'Year', 'Team', 'Surveyor', 'Modedecl', 'Declination', 'dummy', 'IdxColor', 'Observ.']));
+    WrtCommentaire(MakeHeaderRubriquesOfAnRow(FIELD_SEPARATOR_TAB, -2, ['IDExpe', 'Day', 'Month', 'Year', 'Team', 'Surveyor', 'Modedecl', 'Declination', 'dummy', 'IdxColor', 'Observ.']));
     WrtLn('');
     QNbExpes := GetNbExpes();
     if (QNbExpes > 0) then
@@ -653,13 +650,13 @@ begin
       begin
         case ModeSaveTAB of
           mtabEXTENDEDTAB:
-            WrtLn(Format(FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                                 FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                                 FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                                 FORMAT_NB_INTEGER+TAB+
-                                 FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                                 FORMAT_STRING+TAB+FORMAT_STRING+TAB+
-                                 FORMAT_NB_INTEGER+TAB+FORMAT_NB_REAL_3_DEC+TAB+
+            WrtLn(Format(FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+
+                                 FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+
+                                 FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+
+                                 FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+
+                                 FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+
+                                 FORMAT_STRING+FIELD_SEPARATOR_TAB+FORMAT_STRING+FIELD_SEPARATOR_TAB+
+                                 FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+
                                  FORMAT_NB_INTEGER,
                                  [GetNumeroDeSerie(), -1,
                                   GetNoSerieDep(), GetNoPointDep(),
@@ -673,11 +670,11 @@ begin
                                   GetNumeroEntrance()
                                  ]));
           mtabTOPOROBOT:
-            WrtLn(Format(FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                                 FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                                 FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                                 FORMAT_NB_INTEGER+TAB+
-                                 FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
+            WrtLn(Format(FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+
+                                 FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+
+                                 FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+
+                                 FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+
+                                 FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+
                                  FORMAT_STRING,
                                  [GetNumeroDeSerie(), -1,
                                   GetNoSerieDep, GetNoPointDep,

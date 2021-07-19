@@ -523,20 +523,20 @@ const FMTSTS = 's%d_%d';
 // Régénération d'un stub topo
 function RegenererEbaucheXTB(const NomEbauche: string; const DefaultCodeEPSG: integer): boolean;
 const
-  QFMT_SERIE    = FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB +
-                  FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB +
-                  FORMAT_NB_INTEGER + TAB +
-                  FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB +
-                  FORMAT_STRING + TAB +
-                  FORMAT_STRING + TAB +
-                  FORMAT_NB_INTEGER + TAB + FORMAT_NB_REAL_2_DEC;
-  QLINE_STATION = FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                  FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER+TAB+
-                  FORMAT_NB_REAL_3_DEC + TAB + FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+
-                  FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+FORMAT_NB_REAL_3_DEC+TAB+
-                  FORMAT_STRING + TAB +
-                  FORMAT_STRING + TAB +
-                  FORMAT_NB_INTEGER+TAB+FORMAT_NB_INTEGER;
+  QFMT_SERIE    = FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB +
+                  FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB +
+                  FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB +
+                  FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB +
+                  FORMAT_STRING + FIELD_SEPARATOR_TAB +
+                  FORMAT_STRING + FIELD_SEPARATOR_TAB +
+                  FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB + FORMAT_NB_REAL_2_DEC;
+  QLINE_STATION = FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+
+                  FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+
+                  FORMAT_NB_REAL_3_DEC + FIELD_SEPARATOR_TAB + FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+
+                  FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+
+                  FORMAT_STRING + FIELD_SEPARATOR_TAB +
+                  FORMAT_STRING + FIELD_SEPARATOR_TAB +
+                  FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+FORMAT_NB_INTEGER;
 
 var
   fp: TextFile;
@@ -3028,17 +3028,20 @@ end;
 function TToporobotStructure2012.GetInfosCavite(const LS: TStrings): integer;
 const
   FMTLNENTREE = FORMAT_NB_INTEGER+
-                TAB+FORMAT_NB_REAL_2_DEC+
-                TAB+FORMAT_NB_REAL_2_DEC+
-                TAB+FORMAT_NB_REAL_2_DEC+TAB + FORMAT_STRING;
+                FIELD_SEPARATOR_TAB + FORMAT_NB_REAL_2_DEC+
+                FIELD_SEPARATOR_TAB + FORMAT_NB_REAL_2_DEC+
+                FIELD_SEPARATOR_TAB + FORMAT_NB_REAL_2_DEC+
+                FIELD_SEPARATOR_TAB + FORMAT_STRING;
   FMTLNSER    = FORMAT_NB_INTEGER+
-                TAB+FORMAT_NB_INTEGER+
-                TAB+FORMAT_NB_INTEGER+
-                TAB+FORMAT_NB_INTEGER+
-                TAB+FORMAT_NB_INTEGER+TAB+'%-60s'+
-                TAB+FORMAT_NB_INTEGER+
-                TAB+FORMAT_NB_REAL_2_DEC+
-                TAB+FORMAT_NB_REAL_2_DEC;
+                FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER+
+                FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER+
+                FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER+
+                FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER+
+                FIELD_SEPARATOR_TAB +
+                '%-60s' +
+                FIELD_SEPARATOR_TAB + FORMAT_NB_INTEGER+
+                FIELD_SEPARATOR_TAB + FORMAT_NB_REAL_2_DEC+
+                FIELD_SEPARATOR_TAB + FORMAT_NB_REAL_2_DEC;
 var
   i, n: integer;
   E: TEntrance;
@@ -3068,9 +3071,9 @@ begin
     LS.Add('');
     LS.Add(Format('List of %d series', [GetNbSeries]));
     LS.Add('');
-    LS.Add('No'+TAB+'S.Dep'+TAB+'Pt.Dep'+TAB+'S.Arr'+TAB+'Pt.Arr'+TAB+
-           'Serie name'+TAB+'Nb points'+TAB+'Length'+
-           TAB + 'Estimated volume');
+    LS.Add('No'+FIELD_SEPARATOR_TAB+'S.Dep'+FIELD_SEPARATOR_TAB+'Pt.Dep'+FIELD_SEPARATOR_TAB+'S.Arr'+FIELD_SEPARATOR_TAB+'Pt.Arr'+FIELD_SEPARATOR_TAB+
+           'Serie name'+FIELD_SEPARATOR_TAB+'Nb points'+FIELD_SEPARATOR_TAB+'Length'+
+           FIELD_SEPARATOR_TAB + 'Estimated volume');
     LS.Add('');
     DevTotal:=0.00;
     NbPtsTotal:=0;
@@ -4169,18 +4172,13 @@ var
 begin
   result := false;
   MyPOI := GetPointOfInterest(Idx);
-  AfficherMessageErreur(format('Fuck the Christ: %s.RemovePointOfInterest(%d): ', [ClassName, Idx]));
   if (GetSerieByNumeroSerie(MyPOI.Serie, MySerie, QIdxSerie)) then
   begin
-    //AfficherMessageErreur('--001');
     MyStation := MySerie.GetVisee(MyPOI.Station);
-    //AfficherMessageErreur(format('--002: %f, %f, %f - %s', [MyStation.Longueur, MyStation.Azimut, MyStation.Pente, MyStation.Commentaires]));
     // Basculer le POI à DONE
     MyStation.Commentaires := StringReplace(MyStation.Commentaires, KEYWORD_POI_TODO, KEYWORD_POI_DONE, [rfIgnoreCase]);
-    //AfficherMessageErreur(format('--003: %f, %f, %f - %s', [MyStation.Longueur, MyStation.Azimut, MyStation.Pente, MyStation.Commentaires]));
     MySerie.PutVisee(MyPOI.Station, MyStation);
     // et supprimer le POI de la liste
-    AfficherMessageErreur('Le Christ doit être pendu');
     FTablePointsOfInterest.RemoveElement(Idx);
     result := True;
   end;

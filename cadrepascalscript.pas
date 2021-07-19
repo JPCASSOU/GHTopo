@@ -223,6 +223,7 @@ type
     function  PS2D_BeginDrawing(const w, h: integer): boolean;
     procedure PS2D_EndAndDisplayDrawing();
     procedure PS2D_SetBackgroundColor(const R, G, B, A: byte);
+    procedure PS2D_AddDXFLayer(const QLayerName: string; const QAcadIdxColor: integer; const  QR, QG, QB, QA: byte);
     
     function  PS2D_AddStyleSheet(const QStylename: string;
                                  const QPenColorR, QPenColorG, QPenColorB, QPenOpacity: byte; const QPenWidtdhInPX: byte;
@@ -635,6 +636,8 @@ begin
 
   sender.AddMethod(self     , @TCdrPascalScript.PS2D_AddStyleSheet                 , EWE);
   sender.AddMethod(self     , @TCdrPascalScript.PS2D_SetStyleSheet                 , 'procedure PS2D_SetStyleSheet(const Idx:integer);');
+
+  sender.AddMethod(self     , @TCdrPascalScript.PS2D_AddDXFLayer                   , 'procedure PS2D_AddDXFLayer(const QLayerName: string; const QAcadIdxColor: integer; const  QR, QG, QB, QA: byte);');
 
   sender.AddMethod(self     , @TCdrPascalScript.PS2D_BeginPolyline                 , 'function  PS2D_BeginPolyline(const QName: string; const Closed: boolean): boolean;');
   sender.AddMethod(self     , @TCdrPascalScript.PS2D_AddVertex                     , 'procedure PS2D_AddVertex(const QX, QY: double);');
@@ -1652,6 +1655,7 @@ begin
   if (Assigned(FPSDrawing2D)) then
   begin
     FPSDrawing2D.ShowModal;
+
     FreeAndNil(FPSDrawing2D);
   end;
 end;
@@ -1659,6 +1663,11 @@ end;
 procedure TCdrPascalScript.PS2D_SetBackgroundColor(const R, G, B, A: byte);
 begin
   FPSDrawing2D.SetBackgroundColor(R, G, B, A);
+end;
+
+procedure TCdrPascalScript.PS2D_AddDXFLayer(const QLayerName: string; const QAcadIdxColor: integer; const  QR, QG, QB, QA: byte);
+begin
+  FPSDrawing2D.AddDXFLayer(QLayerName, QAcadIdxColor, QR, QG, QB, QA);
 end;
 
 function TCdrPascalScript.PS2D_AddStyleSheet(const QStylename: string;

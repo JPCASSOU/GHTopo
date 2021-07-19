@@ -48,7 +48,47 @@ type
   procedure Empty();
   function  getNorme(): double;
 end;
-type TDGCArrayPoints2D = array of TDGCPoint2D;
+type TDGCBezierArc = record
+  PT1    : TDGCPoint2D; // extremité courbe 1
+  TangP1 : TDGCPoint2D; // Tangente en P1
+  PT2    : TDGCPoint2D; // extremité courbe 2
+  TangP2 : TDGCPoint2D; // Tangente en P2
+end;
+
+type
+
+{ TDGCArrayPoints2D }
+
+ TDGCArrayPoints2D = record
+  M: array of TDGCPoint2D;
+  procedure Empty();
+  procedure SetCapacity(const N: integer);
+  function  GetNbElements(): integer;
+  function  GetElement(const Idx: integer): TDGCPoint2D;
+  procedure SetElement(const Idx: integer; const P: TDGCPoint2D); overload;
+  procedure SetElement(const Idx: integer; const QX, QY: double); overload;
+
+  procedure AddElement(const P: TDGCPoint2D); overload;
+  procedure AddElement(const QX, QY: double); overload;
+end;
+type
+
+{ TListDGCBezierArcs }
+
+ { TDGCListBezierArcs }
+
+ TDGCListBezierArcs = record
+  M: array of TDGCBezierArc;
+  procedure Empty();
+  procedure SetCapacity(const N: integer);
+  function  GetNbElements(): integer;
+  function  GetElement(const Idx: integer): TDGCBezierArc;
+  procedure SetElement(const Idx: integer; const P: TDGCBezierArc); overload;
+  procedure AddElement(const P: TDGCBezierArc); overload;
+
+end;
+
+
 type
 
 { TDGCPoint2Dh }
@@ -147,6 +187,23 @@ type
   procedure setDefault();
 end;
 
+ type
+
+ { TDGCLayer }
+
+ TDGCLayer = record
+   Name        : string;
+   Color       : TDGCColor;
+
+   AcadColorIdx: integer;
+
+   procedure setFrom(const QName: string; const QAcadIdxColor: integer); overload;
+   procedure setFrom(const QName: string; const QAcadIdxColor: integer; const QR, QG, QB, QA: byte); overload;
+
+
+
+ end;
+
 
 // Types internes
 type TTypeCurve = (tdgcBEZIER_CURVE, tdgcSPLINE_CURVE);
@@ -154,14 +211,7 @@ type TInfiniteLineOrientation = (tdgcVERTICAL_LINE, tdgcHORIZONTAL_LINE);
 // Arc de courbe de Bézier
 // On stocke les tangentes ET les points de contrôle
 
-type TDGCBezierArc = record
-  PT1    : TDGCPoint2D; // extremité courbe 1
-  TangP1 : TDGCPoint2D; // Tangente en P1
-  //PC1    : TDGCPoint2D; // Point de contrôle PC2
-  PT2    : TDGCPoint2D; // extremité courbe 2
-  TangP2 : TDGCPoint2D; // Tangente en P2
-  //PC2    : TDGCPoint2D; // Point de contrôle PC2
-end;
+
 
 
 // pour les pointeurs sur fonctions de conversion
@@ -174,6 +224,112 @@ type TProcTransmitCoords     = procedure(const P: TDGCPoint2D) of object;
 implementation
 uses
   DGCDummyUnit; // pour limiter le bug de 'Fin de code source non trouvée
+
+{ TDGCLayer }
+
+procedure TDGCLayer.setFrom(const QName: string; const QAcadIdxColor: integer);
+begin
+  self.Name         := QName;
+  self.AcadColorIdx := QAcadIdxColor;
+  self.Color.setFrom(255, 0, 0, 255);
+  //...........
+end;
+
+procedure TDGCLayer.setFrom(const QName: string; const QAcadIdxColor: integer; const QR, QG, QB, QA: byte);
+begin
+  self.Name         := QName;
+  self.AcadColorIdx := QAcadIdxColor;
+  self.Color.setFrom(QR, QG, QB, QA);
+end;
+
+{ TDGCListBezierArcs }
+
+procedure TDGCListBezierArcs.Empty();
+begin
+  setLength(self.M, 0);
+end;
+
+procedure TDGCListBezierArcs.SetCapacity(const N: integer);
+begin
+  SetLength(self.M, N);
+end;
+
+function TDGCListBezierArcs.GetNbElements(): integer;
+begin
+  Result := length(self.M);
+end;
+
+function TDGCListBezierArcs.GetElement(const Idx: integer): TDGCBezierArc;
+begin
+  result := self.M[Idx];
+end;
+
+procedure TDGCListBezierArcs.SetElement(const Idx: integer; const P: TDGCBezierArc);
+begin
+  self.M[Idx] := P;
+end;
+
+procedure TDGCListBezierArcs.AddElement(const P: TDGCBezierArc);
+var
+  n: Integer;
+begin
+  n := length(self.M);
+  setlength(self.M, n+1);
+  self.M[n] := P;
+
+end;
+
+//******************************************************************************
+{ TDGCArrayPoints2D }
+procedure TDGCArrayPoints2D.Empty();
+begin
+  setLength(self.M, 0);
+end;
+
+procedure TDGCArrayPoints2D.SetCapacity(const N: integer);
+begin
+  SetLength(self.M, N);
+end;
+
+function TDGCArrayPoints2D.GetNbElements(): integer;
+begin
+  Result := length(self.M);
+end;
+
+function TDGCArrayPoints2D.GetElement(const Idx: integer): TDGCPoint2D;
+begin
+  result := self.M[Idx];
+end;
+
+procedure TDGCArrayPoints2D.SetElement(const Idx: integer; const P: TDGCPoint2D);
+begin
+  self.M[Idx] := P;
+end;
+
+procedure TDGCArrayPoints2D.SetElement(const Idx: integer; const QX, QY: double);
+var
+  P2d: TDGCPoint2D;
+begin
+  P2D.setFrom(QX, QY);
+  self.SetElement(Idx, P2d);
+end;
+
+procedure TDGCArrayPoints2D.AddElement(const P: TDGCPoint2D);
+var
+  n: Integer;
+begin
+  n := length(self.M);
+  setlength(self.M, n+1);
+  self.M[n] := P;
+end;
+
+procedure TDGCArrayPoints2D.AddElement(const QX, QY: double);
+var
+  P2d: TDGCPoint2D;
+begin
+  P2D.setFrom(QX, QY);
+  self.AddElement(P2d);
+end;
 
 { TDGCColor }
 { TGHTopoColor }

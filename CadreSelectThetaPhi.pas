@@ -137,7 +137,6 @@ begin
     if (Result.Y < Y1) then Result.Y := Y1;
     if (Result.X > X2) then Result.X := X2;
     if (Result.Y > Y2) then Result.Y := Y2;
-    AfficherMessage(Format('CalcThetaPhi(%d, %d -> %f, %f)', [QX, QY, Result.X, Result.Y]));
     if (Assigned(FProcRefreshXY)) then FProcRefreshXY;
   except
 

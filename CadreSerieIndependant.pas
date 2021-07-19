@@ -1018,7 +1018,7 @@ begin
      EWE := ClipBoard.AsText;
      // remplacer les virgules par le séparateur décimal
      EWE := StringReplace(EWE, ',', DefaultFormatSettings.DecimalSeparator, [rfReplaceAll, rfIgnoreCase]);
-     ValuesArray := MakeTStringArray2DFromStr(EWE, TAB);
+     ValuesArray := MakeTStringArray2DFromStr(EWE, FIELD_SEPARATOR_TAB);
      // affichage dans le tableau
      for i := 0 to MAX_NB_LIGNES_TSTRINGARRAY2D do
      begin

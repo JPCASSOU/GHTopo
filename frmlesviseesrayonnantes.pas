@@ -60,7 +60,7 @@ begin
   try
     FDocuTopo   := B;
     FBDDEntites := E;
-    CdrAntennes1.Initialise(FDocuTopo);
+    CdrAntennes1.Initialiser(FDocuTopo, FBDDEntites);
     result := true;
   except
     ;

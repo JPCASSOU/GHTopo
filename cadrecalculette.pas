@@ -1661,15 +1661,15 @@ begin
     MyClipBoard.Clear;
     // contenu
     EWE := Format('Layers of "%s" (%d layers)' + #13#10, [editDocumentTitle.Text, NbLayers]);
-    EWE += 'ID'               + TAB +
-           'LayerVarName'     + TAB +
-           'LayerTitle'       + TAB +
-           'SymboleStyle'     + TAB +
-           'SymbolSize'       + TAB +
-           'SymbolColor'      + TAB +
-           'SymbolOpacity'    + TAB +
-           'LayerDescription' + TAB +
-           'LayerAttribution' + TAB +
+    EWE += 'ID'               + FIELD_SEPARATOR_TAB +
+           'LayerVarName'     + FIELD_SEPARATOR_TAB +
+           'LayerTitle'       + FIELD_SEPARATOR_TAB +
+           'SymboleStyle'     + FIELD_SEPARATOR_TAB +
+           'SymbolSize'       + FIELD_SEPARATOR_TAB +
+           'SymbolColor'      + FIELD_SEPARATOR_TAB +
+           'SymbolOpacity'    + FIELD_SEPARATOR_TAB +
+           'LayerDescription' + FIELD_SEPARATOR_TAB +
+           'LayerAttribution' + FIELD_SEPARATOR_TAB +
            #13#10;
     for i := 0 to NbLayers - 1 do
     begin
@@ -1723,7 +1723,7 @@ begin
      // affichage dans le tableau
      for i := 0 to Nb - 1 do
      begin
-       EWE := Split(Trim(ValuesArray[i]), TAB);
+       EWE := Split(Trim(ValuesArray[i]), FIELD_SEPARATOR_TAB);
        // ID	LayerVarName	LayerTitle	SymboleStyle	SymbolSize	SymbolColor	SymbolOpacity	LayerDescription	LayerAttribution
        // 0    1         2          3   4         5          6      7      8
        // 0	Markers0	Couche00	0	10.00	16711680	255
@@ -1775,7 +1775,7 @@ begin
   QFilename := 'Tableau1.csv';
   if (DoDialogSaveFile('Fichier CSV (*.csv)|*.csv', '.csv', QFilename, QFilterIndex)) then
   begin
-    grdDonnees.SaveToCSVFile(QFilename, SEPARATOR_TAB, chkPremLigneIsTitres.Checked);
+    grdDonnees.SaveToCSVFile(QFilename, FIELD_SEPARATOR_TAB, chkPremLigneIsTitres.Checked);
   end;
 end;
 

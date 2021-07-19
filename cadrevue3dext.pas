@@ -593,7 +593,7 @@ begin
       QID := EWE.getGHCaveDrawIDPtCenterline();
       PtOutExtr1 :=  Get2DDepthCoordinatesFromP3D(EWE.PosExtr0);
       PtOutExtr2 :=  Get2DDepthCoordinatesFromP3D(EWE.PosStation);
-      WrtLn(Format(FMT_BASEPOINTS,
+      WrtLn(Format(GCD_FMT_BASEPOINTS,
                   [QID  ,
                    EWE.IDTerrain,
                    EWE.Type_Entite,
@@ -616,7 +616,7 @@ begin
         QID := EWE.getGHCaveDrawIDPtAntenne(i);
         PtOutExtr1 :=  Get2DDepthCoordinatesFromP3D(EWE.PosExtr0);
         PtOutExtr2 :=  Get2DDepthCoordinatesFromP3D(EWE.PosStation);
-        WrtLn(Format(FMT_BASEPOINTS,
+        WrtLn(Format(GCD_FMT_BASEPOINTS,
                     [QID  ,
                      EWE.IDTerrain,
                      EWE.Type_Entite,
@@ -867,9 +867,9 @@ begin
   //AfficherMessage('  --> Entrees');
   QBmp.CanvasBGRA.Pen.Width := 0;
   QBmp.CanvasBGRA.Pen.Color:=clRED;
-  QBmp.CanvasBGRA.Font.Height  := 14;
-  QBmp.CanvasBGRA.Font.Style   := [fsBold];
-  QBmp.CanvasBGRA.Font.Color := clBlue;
+  QBmp.CanvasBGRA.Font.Height   := 14;
+  QBmp.CanvasBGRA.Font.Style    := [fsBold];
+  QBmp.CanvasBGRA.Font.Color    := clBlue;
   QBmp.CanvasBGRA.Brush.Opacity := 255;
   for i := 0 to Nb - 1 do
   begin

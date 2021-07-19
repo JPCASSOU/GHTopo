@@ -80,10 +80,11 @@ var
 
 begin
   PasT := 1/NbSubdivs;
-  SetLength(AP, 1+NbSubdivs);
+  AP.Empty();
+  AP.SetCapacity(1+NbSubdivs);//  SetLength(AP, 1+NbSubdivs);
   t := 0;
   // coefs
-  for i:= 0 to High(AP) do
+  for i:= 0 to AP.GetNbElements() - 1 do //High(AP) do
   begin
     Q1 := 1 - t;
     Q2 := Q1 * Q1;
@@ -94,8 +95,10 @@ begin
     B := 3 * Q2 * t;
     C := 3 * Q1 * T2; //T * T;
     D := T3; //T * T * T;
-    AP[i].setFrom(A * P0.X + B * P1.X + C * P2.X + D * P3.X,
-                  A * P0.Y + B * P1.Y + C * P2.Y + D * P3.Y);
+    AP.SetElement(i, A * P0.X + B * P1.X + C * P2.X + D * P3.X,
+                     A * P0.Y + B * P1.Y + C * P2.Y + D * P3.Y);
+    //AP[i].setFrom(A * P0.X + B * P1.X + C * P2.X + D * P3.X,
+    //              A * P0.Y + B * P1.Y + C * P2.Y + D * P3.Y);
     t += PasT;
   end;
 end;

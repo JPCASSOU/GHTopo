@@ -2,11 +2,10 @@ object CdrDGCDrawingContext: TCdrDGCDrawingContext
   Left = 0
   Height = 578
   Top = 0
-  Width = 771
+  Width = 642
   Align = alClient
   ClientHeight = 578
-  ClientWidth = 771
-  LCLVersion = '2.0.0.4'
+  ClientWidth = 642
   OnResize = FrameResize
   ParentFont = False
   TabOrder = 0
@@ -16,11 +15,11 @@ object CdrDGCDrawingContext: TCdrDGCDrawingContext
     Left = 0
     Height = 542
     Top = 0
-    Width = 740
+    Width = 611
     Anchors = [akTop, akLeft, akRight, akBottom]
     BevelOuter = bvLowered
     ClientHeight = 542
-    ClientWidth = 740
+    ClientWidth = 611
     DoubleBuffered = True
     ParentDoubleBuffered = False
     TabOrder = 0
@@ -28,7 +27,7 @@ object CdrDGCDrawingContext: TCdrDGCDrawingContext
       Left = 1
       Height = 540
       Top = 1
-      Width = 738
+      Width = 609
       Align = alClient
       OnClick = VueClick
       OnMouseDown = VueMouseDown
@@ -41,7 +40,7 @@ object CdrDGCDrawingContext: TCdrDGCDrawingContext
     Left = 4
     Height = 21
     Top = 547
-    Width = 636
+    Width = 507
     Anchors = [akLeft, akRight, akBottom]
     BorderStyle = sbsSunken
     Caption = '--'
@@ -49,7 +48,7 @@ object CdrDGCDrawingContext: TCdrDGCDrawingContext
     TabOrder = 1
   end
   object SpeedButton12: TSpeedButton
-    Left = 739
+    Left = 610
     Height = 30
     Top = 0
     Width = 30
@@ -60,7 +59,7 @@ object CdrDGCDrawingContext: TCdrDGCDrawingContext
     ParentShowHint = False
   end
   object SpeedButton13: TSpeedButton
-    Left = 739
+    Left = 610
     Height = 30
     Top = 29
     Width = 30
@@ -71,7 +70,7 @@ object CdrDGCDrawingContext: TCdrDGCDrawingContext
     ParentShowHint = False
   end
   object SpeedButton14: TSpeedButton
-    Left = 739
+    Left = 610
     Height = 30
     Top = 59
     Width = 30
@@ -82,7 +81,7 @@ object CdrDGCDrawingContext: TCdrDGCDrawingContext
     ParentShowHint = False
   end
   object SpeedButton15: TSpeedButton
-    Left = 739
+    Left = 610
     Height = 30
     Top = 88
     Width = 30
@@ -93,7 +92,7 @@ object CdrDGCDrawingContext: TCdrDGCDrawingContext
     ParentShowHint = False
   end
   object SpeedButton16: TSpeedButton
-    Left = 739
+    Left = 610
     Height = 30
     Top = 118
     Width = 30
@@ -104,7 +103,7 @@ object CdrDGCDrawingContext: TCdrDGCDrawingContext
     ParentShowHint = False
   end
   object SpeedButton17: TSpeedButton
-    Left = 739
+    Left = 610
     Height = 30
     Top = 148
     Width = 30
@@ -115,7 +114,7 @@ object CdrDGCDrawingContext: TCdrDGCDrawingContext
     ParentShowHint = False
   end
   object SpeedButton18: TSpeedButton
-    Left = 739
+    Left = 610
     Height = 30
     Top = 512
     Width = 30
@@ -126,7 +125,7 @@ object CdrDGCDrawingContext: TCdrDGCDrawingContext
     ParentShowHint = False
   end
   object SpeedButton19: TSpeedButton
-    Left = 676
+    Left = 547
     Height = 30
     Top = 546
     Width = 30
@@ -137,7 +136,7 @@ object CdrDGCDrawingContext: TCdrDGCDrawingContext
     ParentShowHint = False
   end
   object SpeedButton20: TSpeedButton
-    Left = 708
+    Left = 579
     Height = 30
     Top = 546
     Width = 30
@@ -148,7 +147,7 @@ object CdrDGCDrawingContext: TCdrDGCDrawingContext
     ParentShowHint = False
   end
   object SpeedButton21: TSpeedButton
-    Left = 739
+    Left = 610
     Height = 30
     Top = 546
     Width = 30
@@ -159,7 +158,7 @@ object CdrDGCDrawingContext: TCdrDGCDrawingContext
     ParentShowHint = False
   end
   object SpeedButton22: TSpeedButton
-    Left = 644
+    Left = 515
     Height = 30
     Top = 546
     Width = 30

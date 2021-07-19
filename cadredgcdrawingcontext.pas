@@ -29,6 +29,7 @@ uses
   DGCUnitListeStylesObjets,
   DGCUnitListeAffichage,
   SVGCanvasUnit,
+  UnitExportDXF2,
   Dialogs,
   Classes, SysUtils, Forms, Controls, ExtCtrls, StdCtrls, Buttons, ActnList;
 
@@ -128,6 +129,9 @@ type
     // Liste des styles
     FListOfStyles  : TDGCListeStylesSheets;
     FCurrentStyleSheet : integer;
+    // Liste des couches
+    FListeOfLayers: TDGCListeLayers;
+    FCurrentIdxLayer: integer;
 
   private
     FProcOnClick    : TProcedureOfObject;
@@ -162,7 +166,7 @@ type
     procedure SetModeTravail(const MT: TDGCModesTravail);
     function  GetModeTravail(): TDGCModesTravail;
     // feuilles de styles
-    function GetNbStyleSheets(): integer;
+    function  GetNbStyleSheets(): integer;
     function  GetStyleSheet(const Idx: integer): TDGCStyleSheet;
     procedure PutStyleSheet(const Idx: integer; const FS: TDGCStyleSheet);
     function MakeTDGCStyleSheet(const QStylename: string;
@@ -185,6 +189,12 @@ type
                             const QFontColor     : TDGCColor; const QFontStyle  : TFontStyles;
                             const QFontName      : string   ;const QFontSizeInPts: integer; const QFontSizeInMM: double;
                             const QDescription   : string = ''); overload;
+
+    // gestion des couches DXF
+    procedure AddLayer(const L: TDGCLayer); overload;
+    procedure AddLayer(const QName: string; const QAcadIdxColor: integer; const  QR, QG, QB, QA: byte); overload;
+    function  GetNbLayers(): integer;
+    function  GetLayer(const Idx: integer): TDGCLayer;
     // définition des styles de crayon et brosses
     // méthode déconseillée - Utiliser les feuilles de style
     procedure SetBackgroundColor(const C: TDGCColor); overload;
@@ -267,6 +277,8 @@ type
 
     // export en SVG
     procedure ExportSVG(const QFilename: RawByteString);
+    // export en DXF
+    procedure ExportToDXF(const QFilename: RawByteString);
   end;
 
 implementation
@@ -301,20 +313,19 @@ begin
   FListOfEntities := TDGCListeAffichage.Create;
 
   FListOfStyles   := TDGCListeStylesSheets.Create;
+  FListeOfLayers  := TDGCListeLayers.Create;
   try
     FListOfEntities.ClearListe();
-    FListOfStyles.ClearListe(True);
+    FListeOfLayers.ClearListeLayers(True);
+    FListOfStyles.ClearListeStyles(True);
     FCurrentStyleSheet := 0;
+    FCurrentIdxLayer   := 0;
     FOriginalCoinBasGauche.setFrom(X1, Y1);
     FOriginalCoinHautDroit.setFrom(X2, Y2);
     self.ResetVue(false);
-    //Label1.Caption:= format('%f, %f -> %f, %f', [FRegionCMini.X, FRegionCMini.Y, FRegionCMaxi.X, FRegionCMaxi.Y]);
     FDessinReady := True;
     result := True;
-
-
     Vue.Invalidate;
-
   except
 
   end;
@@ -322,9 +333,11 @@ end;
 procedure TCdrDGCDrawingContext.Finaliser();
 begin
   try
-    FListOfStyles.ClearListe(false);
+    FListOfStyles.ClearListeStyles(false);
+    FListeOfLayers.ClearListeLayers(false);
     FListOfEntities.ClearListe();
   finally
+    FreeAndNil(FListeOfLayers);
     FreeAndNil(FListOfStyles);
     FreeAndNil(FListOfEntities);
   end;
@@ -347,7 +360,7 @@ end;
 
 procedure TCdrDGCDrawingContext.ClearDrawing();
 begin
-  FListOfStyles.ClearListe(True);
+  FListOfStyles.ClearListeStyles(True);
   FListOfEntities.ClearListe();
   vue.Invalidate;
 end;
@@ -461,12 +474,38 @@ begin
   FListOfStyles.AddElement(MyStyle);
 end;
 
+
+
+
+procedure TCdrDGCDrawingContext.AddLayer(const L: TDGCLayer);
+begin
+  FListeOfLayers.AddElement(L);
+end;
+
+procedure TCdrDGCDrawingContext.AddLayer(const QName: string; const QAcadIdxColor: integer; const  QR, QG, QB, QA: byte);
+var
+  L: TDGCLayer;
+begin
+  L.setFrom(QName, QAcadIdxColor, QR, QG, QB, QA);
+  self.AddLayer(L);
+end;
+
+function TCdrDGCDrawingContext.GetNbLayers(): integer;
+begin
+  result := FListeOfLayers.GetNbElements();
+end;
+
+function TCdrDGCDrawingContext.GetLayer(const Idx: integer): TDGCLayer;
+begin
+  result := FListeOfLayers.GetElement(Idx);
+end;
+
 procedure TCdrDGCDrawingContext.SetBackgroundColor(const C: TDGCColor);
 begin
   self.SetBackgroundColor(C.Red, C.Green, C.Blue, C.Alpha);
 end;
 
-
+//******************************************************************************
 
 
 
@@ -837,7 +876,6 @@ begin
     T1 := Now();
     FTmpBuffer.Draw(vue.Canvas, 0, 0, True);
     DecodeTime(t1-t0, HH, MM, SS, MS);
-    //Label1.Caption:= format('%f, %f -> %f, %f - %d entites - Temps: %.2d:%.2d:%.2d.%.3d', [FRegionCMini.X, FRegionCMini.Y, FRegionCMaxi.X, FRegionCMaxi.Y, Nb, HH, MM, SS, MS]);
   finally
     FreeAndNil(FTmpBuffer);
     FDessinEnCours := False;
@@ -1071,8 +1109,7 @@ begin
   end;
 end;
 
-procedure TCdrDGCDrawingContext.VueMouseUp(Sender: TObject;
-  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+procedure TCdrDGCDrawingContext.VueMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
   nop;
 end;
@@ -1173,10 +1210,7 @@ end;
 
 function TCdrDGCDrawingContext.GetVueBounds(): TDGCBoundingBox;
 begin
-  Result.X1 := FRegionCMini.X;
-  Result.Y1 := FRegionCMini.Y;
-  Result.X2 := FRegionCMaxi.X;
-  Result.Y2 := FRegionCMaxi.Y;
+  Result.setFrom(FRegionCMini.X, FRegionCMini.Y, FRegionCMaxi.X, FRegionCMaxi.Y);
 end;
 
 function TCdrDGCDrawingContext.AddInfiniteLine(const QIdxStyleSheet: integer;
@@ -1273,7 +1307,7 @@ end;
 
 procedure TCdrDGCDrawingContext.BeginDrawing();
 begin
-  FListOfStyles.ClearListe(True);
+  FListOfStyles.ClearListeStyles(True);
   FListOfEntities.ClearListe();
   nop;
 end;
@@ -1642,6 +1676,11 @@ begin
   finally
     FreeAndNil(FSVGCanvas);
   end;
+
+end;
+
+procedure TCdrDGCDrawingContext.ExportToDXF(const QFilename: RawByteString);
+begin
 
 end;
 

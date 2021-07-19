@@ -1,7 +1,7 @@
 object dlgMaintenanceDocTopo: TdlgMaintenanceDocTopo
-  Left = 420
+  Left = 478
   Height = 667
-  Top = 264
+  Top = 379
   Width = 995
   Caption = 'Maintenance du document'
   ClientHeight = 667
@@ -30,9 +30,9 @@ object dlgMaintenanceDocTopo: TdlgMaintenanceDocTopo
     Height = 623
     Top = 4
     Width = 989
-    ActivePage = tabshtSeries
+    ActivePage = tabShtAntennes
     Anchors = [akTop, akLeft, akRight, akBottom]
-    TabIndex = 2
+    TabIndex = 3
     TabOrder = 1
     object tabshtGeneral: TTabSheet
       Caption = 'tabshtGeneral'
@@ -716,10 +716,13 @@ object dlgMaintenanceDocTopo: TdlgMaintenanceDocTopo
             end
           end
           inherited GroupBox1: TGroupBox
-            Height = 265
+            Height = 241
             Width = 964
-            ClientHeight = 244
+            ClientHeight = 220
             ClientWidth = 960
+          end
+          inherited lbStatutExportPLY: TStaticText
+            Width = 680
           end
         end
       end

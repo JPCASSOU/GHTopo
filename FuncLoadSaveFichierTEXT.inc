@@ -137,7 +137,6 @@ var
       //qVA.Commentaires     := '';
       qVA.setLongAzInc(EWE[0], EWE[1], EWE[2]);
       qVA.MarkedForDelete  := false;
-      //AfficherMessage(Format('%f, %f, %f',[qVA.Longueur, qVA.Azimut, qVA.Pente]));
       Result := (qVA.Longueur > 0.00);
     except
     end;

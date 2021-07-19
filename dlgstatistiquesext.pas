@@ -208,27 +208,27 @@ begin
   MyClipboard := TClipboard.Create(ctClipboard);
   try
     MyClipBoard.Clear;
-    WU := lbDevelTopal.Caption       + TAB + FormatterNombreOOo(FR.Fossiles + FR.Ennoyables + FR.Siphons + FR.Vadoses) + #13#10;
-    WU += lbDenivTopal.Caption       + TAB + FormatterNombreOOo(C2.Z - C1.Z) + #13#10;
+    WU := lbDevelTopal.Caption       + FIELD_SEPARATOR_TAB + FormatterNombreOOo(FR.Fossiles + FR.Ennoyables + FR.Siphons + FR.Vadoses) + #13#10;
+    WU += lbDenivTopal.Caption       + FIELD_SEPARATOR_TAB + FormatterNombreOOo(C2.Z - C1.Z) + #13#10;
     WU += #13#10;
-    WU += lbMetrageFossile.Caption   + TAB + FormatterNombreOOo(FR.Fossiles)   + #13#10;
-    WU += lbMetrageVadoses.Caption   + TAB + FormatterNombreOOo(FR.Vadoses)    + #13#10;
-    WU += lbMetrageInondable.Caption + TAB + FormatterNombreOOo(FR.Ennoyables) + #13#10;
-    WU += lbMetrageSiphon.Caption    + TAB + FormatterNombreOOo(FR.Siphons)    + #13#10;
+    WU += lbMetrageFossile.Caption   + FIELD_SEPARATOR_TAB + FormatterNombreOOo(FR.Fossiles)   + #13#10;
+    WU += lbMetrageVadoses.Caption   + FIELD_SEPARATOR_TAB + FormatterNombreOOo(FR.Vadoses)    + #13#10;
+    WU += lbMetrageInondable.Caption + FIELD_SEPARATOR_TAB + FormatterNombreOOo(FR.Ennoyables) + #13#10;
+    WU += lbMetrageSiphon.Caption    + FIELD_SEPARATOR_TAB + FormatterNombreOOo(FR.Siphons)    + #13#10;
     WU += #13#10;
-    WU += lbMetrageSpeciaux.Caption  + TAB + FormatterNombreAvecSepMilliers(FR.Speciaux) + #13#10;
-    WU += lbMetrageTunnels.Caption   + TAB + FormatterNombreAvecSepMilliers(FR.Tunnels)  + #13#10;
-    WU += lbMetrageMines.Caption     + TAB + FormatterNombreAvecSepMilliers(FR.Filons)   + #13#10;
+    WU += lbMetrageSpeciaux.Caption  + FIELD_SEPARATOR_TAB + FormatterNombreAvecSepMilliers(FR.Speciaux) + #13#10;
+    WU += lbMetrageTunnels.Caption   + FIELD_SEPARATOR_TAB + FormatterNombreAvecSepMilliers(FR.Tunnels)  + #13#10;
+    WU += lbMetrageMines.Caption     + FIELD_SEPARATOR_TAB + FormatterNombreAvecSepMilliers(FR.Filons)   + #13#10;
     WU += #13#10;
-    WU += 'X ' + TAB + FormatterNombreOOo(C1.X) + TAB + FBDDEntites.GetIDStationXMini() + TAB +
-                       FormatterNombreOOo(C2.X - C1.X) + TAB +
-                       FormatterNombreOOo(C2.X) + TAB + FBDDEntites.GetIDStationXMaxi() +  #13#10;
-    WU += 'Y ' + TAB + FormatterNombreOOo(C1.Y) + TAB + FBDDEntites.GetIDStationYMini() + TAB +
-                       FormatterNombreOOo(C2.Y - C1.Y) + TAB +
-                       FormatterNombreOOo(C2.Y) + TAB + FBDDEntites.GetIDStationYMaxi() +  #13#10;
-    WU += 'Z ' + TAB + FormatterNombreOOo(C1.Z) + TAB + FBDDEntites.GetIDStationZMini() + TAB +
-                       FormatterNombreOOo(C2.Z - C1.Z) + TAB +
-                       FormatterNombreOOo(C2.Z) + TAB + FBDDEntites.GetIDStationZMaxi() +  #13#10;
+    WU += 'X ' + FIELD_SEPARATOR_TAB + FormatterNombreOOo(C1.X) + FIELD_SEPARATOR_TAB + FBDDEntites.GetIDStationXMini() + FIELD_SEPARATOR_TAB +
+                       FormatterNombreOOo(C2.X - C1.X) + FIELD_SEPARATOR_TAB +
+                       FormatterNombreOOo(C2.X) + FIELD_SEPARATOR_TAB + FBDDEntites.GetIDStationXMaxi() +  #13#10;
+    WU += 'Y ' + FIELD_SEPARATOR_TAB + FormatterNombreOOo(C1.Y) + FIELD_SEPARATOR_TAB + FBDDEntites.GetIDStationYMini() + FIELD_SEPARATOR_TAB +
+                       FormatterNombreOOo(C2.Y - C1.Y) + FIELD_SEPARATOR_TAB +
+                       FormatterNombreOOo(C2.Y) + FIELD_SEPARATOR_TAB + FBDDEntites.GetIDStationYMaxi() +  #13#10;
+    WU += 'Z ' + FIELD_SEPARATOR_TAB + FormatterNombreOOo(C1.Z) + FIELD_SEPARATOR_TAB + FBDDEntites.GetIDStationZMini() + FIELD_SEPARATOR_TAB +
+                       FormatterNombreOOo(C2.Z - C1.Z) + FIELD_SEPARATOR_TAB +
+                       FormatterNombreOOo(C2.Z) + FIELD_SEPARATOR_TAB + FBDDEntites.GetIDStationZMaxi() +  #13#10;
     MyClipboard.AsText := WU;
   finally
     FreeAndNil(MyClipboard);
@@ -351,23 +351,23 @@ begin
     MyClipBoard.Clear;
     Nb := FBDDEntites.GetNbEntitesVisees();
     WU := '';
-    for i := 0 to HeaderControl1.Sections.Count - 1 do WU += HeaderControl1.Sections.Items[i].Text + TAB;
+    for i := 0 to HeaderControl1.Sections.Count - 1 do WU += HeaderControl1.Sections.Items[i].Text + FIELD_SEPARATOR_TAB;
     WU += #13#10;
     for i := 0 to Nb -1 do
     begin
       EWE := FBDDEntites.GetEntiteVisee(i);
-      WU  += EWE.toString() + TAB +
-             EWE.IDTerrain + TAB +
-             GetDescTypeVisee(EWE.Type_Entite) + TAB +
-             FormatterNombreOOo(EWE.oLongueur, 3, False) + TAB +
-             FormatterNombreOOo(EWE.oAzimut, 3, False) + TAB +
-             FormatterNombreOOo(EWE.oPente, 3, False) + TAB +
-             FormatterNombreOOo(EWE.oLG, 3, False) + TAB +
-             FormatterNombreOOo(EWE.oLD, 3, False) + TAB +
-             FormatterNombreOOo(EWE.oHZ, 3, False) + TAB +
-             FormatterNombreOOo(EWE.oHN, 3, False) + TAB +
-             FormatterNombreOOo(EWE.PosStation.X, 3, False) + TAB +
-             FormatterNombreOOo(EWE.PosStation.Y, 3, False) + TAB +
+      WU  += EWE.toString() + FIELD_SEPARATOR_TAB +
+             EWE.IDTerrain + FIELD_SEPARATOR_TAB +
+             GetDescTypeVisee(EWE.Type_Entite) + FIELD_SEPARATOR_TAB +
+             FormatterNombreOOo(EWE.oLongueur, 3, False) + FIELD_SEPARATOR_TAB +
+             FormatterNombreOOo(EWE.oAzimut, 3, False) + FIELD_SEPARATOR_TAB +
+             FormatterNombreOOo(EWE.oPente, 3, False) + FIELD_SEPARATOR_TAB +
+             FormatterNombreOOo(EWE.oLG, 3, False) + FIELD_SEPARATOR_TAB +
+             FormatterNombreOOo(EWE.oLD, 3, False) + FIELD_SEPARATOR_TAB +
+             FormatterNombreOOo(EWE.oHZ, 3, False) + FIELD_SEPARATOR_TAB +
+             FormatterNombreOOo(EWE.oHN, 3, False) + FIELD_SEPARATOR_TAB +
+             FormatterNombreOOo(EWE.PosStation.X, 3, False) + FIELD_SEPARATOR_TAB +
+             FormatterNombreOOo(EWE.PosStation.Y, 3, False) + FIELD_SEPARATOR_TAB +
              FormatterNombreOOo(EWE.PosStation.Z, 3, False) + #13#10;
     end;
     MyClipBoard.AsText := WU;
@@ -389,18 +389,18 @@ begin
     MyClipBoard.Clear;
     Nb := FBDDEntites.GetNbEntrances();
     WU := '';
-    for i := 0 to HeaderControl1.Sections.Count - 1 do WU += HeaderControl1.Sections.Items[i].Text + TAB;
+    for i := 0 to HeaderControl1.Sections.Count - 1 do WU += HeaderControl1.Sections.Items[i].Text + FIELD_SEPARATOR_TAB;
     WU += #13#10;
     for i := 0 to Nb -1 do
     begin
       EWE := FBDDEntites.GetEntrance(i);
-      WU  += format('%d', [i]) + TAB +
-             EWE.eCouleur.toHTMLColor() + TAB +
-             Format(FMTSERST, [EWE.eRefSer, EWE.eRefSt]) + TAB +
-             EWE.eNomEntree + TAB +
-             FormatterNombreOOo(EWE.ePosition.X, 3, False) + TAB +
-             FormatterNombreOOo(EWE.ePosition.Y, 3, False) + TAB +
-             FormatterNombreOOo(EWE.ePosition.Z, 3, False) + TAB +
+      WU  += format('%d', [i]) + FIELD_SEPARATOR_TAB +
+             EWE.eCouleur.toHTMLColor() + FIELD_SEPARATOR_TAB +
+             Format(FMTSERST, [EWE.eRefSer, EWE.eRefSt]) + FIELD_SEPARATOR_TAB +
+             EWE.eNomEntree + FIELD_SEPARATOR_TAB +
+             FormatterNombreOOo(EWE.ePosition.X, 3, False) + FIELD_SEPARATOR_TAB +
+             FormatterNombreOOo(EWE.ePosition.Y, 3, False) + FIELD_SEPARATOR_TAB +
+             FormatterNombreOOo(EWE.ePosition.Z, 3, False) + FIELD_SEPARATOR_TAB +
              EWE.eObserv + #13#10;
     end;
     MyClipBoard.AsText := WU;

@@ -31,14 +31,18 @@ procedure TDGCListeSimple<T>.ClearListe();
 var
   i, n: Integer;
 begin
-  //AfficherMessage(Format('%s.ClearListe()', [classname]));
   n := self.Count;
-  if (n > 0) then
-  for i:=Count-1 downto 0 Do
-  begin
-    if (self.Items[i] <> Nil) then Dispose(self.Items[i]); // Libération
-    self.Delete(i);                                        // Suppression de l'élément
+  try
+    if (n > 0) then
+    for i := self.Count - 1 downto 0 Do
+    begin
+      if (self.Items[i] <> Nil) then Dispose(self.Items[i]); // Libération
+      self.Delete(i);                                        // Suppression de l'élément
+    end;
+  finally
+    self.Clear;
   end;
+
 end;
 
 
