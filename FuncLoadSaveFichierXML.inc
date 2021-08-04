@@ -393,12 +393,7 @@ begin
         try
           WU := ListeDesExpes.Item[i];
           UneExpe.IDExpe        := ExtractIntOfNode(WU, GTX_ATTR_EXPE_NUMERO, 0);
-          {$WARNING: TEXpe.DateExpe à implementer}
-          //UneExpe.DateExpe := ;
-          QMyDate               := DateSQLToDatePascal(ExtractStringOfNode(WU, GTX_ATTR_EXPE_DATE));
-          UneExpe.AnneeExpe     := YearOf(QMyDate);
-          UneExpe.MoisExpe      := MonthOf(QMyDate);
-          UneExpe.JourExpe      := DayOf(QMyDate);
+          UneExpe.DateExpe      := DateSQLToDatePascal(ExtractStringOfNode(WU, GTX_ATTR_EXPE_DATE));
           UneExpe.IdxCouleur    := ExtractIntOfNode(WU, GTX_ATTR_EXPE_IDXCOLOR, 0);
           UneExpe.Operateur     := ExtractStringOfNode(WU, GTX_ATTR_EXPE_SURVEY1);
           UneExpe.ClubSpeleo    := ExtractStringOfNode(WU, GTX_ATTR_EXPE_SURVEY2);
@@ -706,7 +701,7 @@ begin
         EX := GetExpe(i);
         SubSection := MyDocXML.CreateElement(GTX_KEY_EXPE);
           SubSection.SetAttribute(GTX_ATTR_EXPE_NUMERO   , Format(FORMAT_NB_INTEGER   , [EX.IDExpe]));                                             // IDExpe      : integer;
-          SubSection.SetAttribute(GTX_ATTR_EXPE_DATE     , DateYYYYMMDDToDateSQL(EX.AnneeExpe, EX.MoisExpe, EX.JourExpe));    // JourExpe    : integer;MoisExpe    : integer;AnneeExpe   : integer;
+          SubSection.SetAttribute(GTX_ATTR_EXPE_DATE     , DatePascalToDateSQL(EX.DateExpe));    // JourExpe    : integer;MoisExpe    : integer;AnneeExpe   : integer;
           SubSection.SetAttribute(GTX_ATTR_EXPE_IDXCOLOR , Format(FORMAT_NB_INTEGER   , [EX.IdxCouleur]));                                            // //Couleur     : Integer;
           SubSection.SetAttribute(GTX_ATTR_EXPE_DECLINAT , Format(FORMAT_NB_REAL_6_DEC, [EX.DeclinaisonInDegrees]));                                      // Declinaison : double;
           SubSection.SetAttribute(GTX_ATTR_EXPE_MODEDECL , Format(FORMAT_NB_INTEGER   , [Ord(EX.ModeDecl)]));                                           // ModeDecl    : integer; // deprecated;

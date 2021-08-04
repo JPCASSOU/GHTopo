@@ -161,7 +161,7 @@ begin
   lbNomSecteur.Caption     := _AnsiToLCLStr(SC.NomSecteur);
 
   // init du QR
-  FTexteAEncoder := EWE + #13#10 + WU  + #13#10;
+  FTexteAEncoder := EWE + CR_LF + WU  + CR_LF;
   editCaseUnitaire.Value  := 20;
   GenererGrilleQRCode(FTexteAEncoder, editCaseUnitaire.Value);
 end;

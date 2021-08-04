@@ -21,7 +21,6 @@ type
     BitBtn1: TBitBtn;
     CdrAntennes1: TCdrAntennes;
     Panel1: TPanel;
-    procedure acViderListeAntennesExecute(Sender: TObject);
   private
     { private declarations }
     FDocuTopo  : TToporobotStructure2012;
@@ -48,10 +47,6 @@ begin
   ShowMessageFmt('%s.Finaliser()', [classname]);
 end;
 
-procedure TfrmGestionViseesRayonnantes.acViderListeAntennesExecute(Sender: TObject);
-begin
-
-end;
 
 function TfrmGestionViseesRayonnantes.Initialiser(const B: TToporobotStructure2012; const E: TBDDEntites): boolean;
 begin

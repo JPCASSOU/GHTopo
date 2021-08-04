@@ -218,9 +218,7 @@ begin
   if (chkCreateNewCode.Checked) then
   begin
     MyExpe := FDocTopoCourant.GetLastExpe();
-    DecodeDate(editDateExpe.Date, YYYY, MM, DD);
-    {$WARNING: TEXpe.DateExpe à implementer}
-    MyExpe.AnneeExpe := YYYY; MyExpe.MoisExpe := MM; MyExpe.JourExpe := DD;
+    MyExpe.DateExpe := editDateExpe.Date;
     MyExpe.IDExpe  += 1;
     MyExpe.IdxCouleur := (MyExpe.IdxCouleur + 1) MOD 256; // propale: ajouter 1 à l'index couleur de la dernière expé
     FDocTopoCourant.AddExpe(MyExpe);

@@ -11,7 +11,7 @@ uses
   unitUtilsComposants,
   CallDialogsStdVersion,
   CadreGrapheItineraire,
-  Forms, Controls, Graphics, Dialogs, ExtCtrls, Buttons, StdCtrls, ComCtrls, Grids, PairSplitter, curredit, PReport, LCLType, Types;
+  Forms, Controls, Graphics, Dialogs, ExtCtrls, Buttons, StdCtrls, ComCtrls, Grids, PairSplitter, PReport, LCLType, Types;
 type TLigneDistancier = array of TPathBetweenNodes;
 
 type
@@ -48,6 +48,7 @@ type
     PRPage1: TPRPage;
     procedure btnCopierDistancierClick(Sender: TObject);
     procedure btnAddItineraireClick(Sender: TObject);
+
     procedure btnOuvrirItinerairesClick(Sender: TObject);
     procedure btnRemoveArcClick(Sender: TObject);
     procedure btnRemoveNodeClick(Sender: TObject);
@@ -205,6 +206,8 @@ end;
 
 
 
+
+
 procedure TdlgDisplayGraphe.btnOuvrirItinerairesClick(Sender: TObject);
 var
   TD: TOpenDialog;
@@ -307,8 +310,8 @@ begin
     for i := 0 to NbItineraires - 1 do
     begin
       MyGraphe.GetItineraire(i, ITI);
-      LesExtremites.Add(Format('%d', [MakeTIDBaseStation(ITI.SerieDepart, ITI.StationDepart, false)]));
-      LesExtremites.Add(Format('%d', [MakeTIDBaseStation(ITI.SerieArrivee, ITI.StationArrivee, false)]));
+      LesExtremites.Add(Format('%d', [ITI.StationDepartToTIDBaseStation()]));
+      LesExtremites.Add(Format('%d', [ITI.StationArriveeToTIDBaseStation()]));
     end;
     // remplir la grille
     Nb := LesExtremites.Count;

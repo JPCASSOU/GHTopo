@@ -251,9 +251,11 @@ begin
       for i := 0 to Nb - 1 do
       begin
         EWE := FDocTopo.GetEntrance(i);
-        WU := Format('   (%d, %d, %d, %.3f, %.3f, %.3f, "%s", "%s", "%s")', [
+        WU := Format('   (%d, %d, %d, %s, %s, %s, "%s", "%s", "%s")', [
                            EWE.eRefSer, EWE.eRefSt, EWE.eCouleur.toTColor(),
-                           EWE.ePosition.X, EWE.ePosition.Y, EWE.ePosition.Z,
+                           FormatterNombreWithDotDecimal(EWE.ePosition.X, 3),
+                           FormatterNombreWithDotDecimal(EWE.ePosition.Y, 3),
+                           FormatterNombreWithDotDecimal(EWE.ePosition.Z, 3),
                            mysqli_real_escape_string(EWE.eIDTerrain),
                            mysqli_real_escape_string(EWE.eNomEntree),
                            mysqli_real_escape_string(EWE.eObserv)]);
@@ -316,17 +318,27 @@ begin
       for i := 0 to Nb - 1 do
       begin
         EWE := FDocTopo.GetCode(i);
-        WU := Format('   (%d, %.2f, %.2f,'+
-                          '%.4f, %.4f, %.4f,'+
-                          '%.4f, %.3f, %.3f,'+
-                          '%.3f, %.3f, %.3f,'+
-                          '%.3f, %.3f, %.3f,'+
+        WU := Format('   (%d, %s, %s,'+
+                          '%s, %s, %s,'+
+                          '%s, %s, %s,'+
+                          '%s, %s, %s,'+
+                          '%s, %s, %s,'+
                           '"%s")', [
                           EWE.IDCode,
-                          EWE.GradAz, EWE.GradInc, EWE.PsiL, EWE.PsiAz, EWE.PsiP,
-                          EWE.FactLong, EWE.AngLimite, EWE.ErreurTourillon,
-                          EWE.ParamsFuncCorrAz.Co, EWE.ParamsFuncCorrAz.ErreurMax, EWE.ParamsFuncCorrAz.PosErrMax,
-                          EWE.ParamsFuncCorrInc.Co, EWE.ParamsFuncCorrInc.ErreurMax, EWE.ParamsFuncCorrInc.PosErrMax,
+                          FormatterNombreWithDotDecimal(EWE.GradAz           , 2),
+                          FormatterNombreWithDotDecimal(EWE.GradInc          , 2),
+                          FormatterNombreWithDotDecimal(EWE.PsiL             , 4),
+                          FormatterNombreWithDotDecimal(EWE.PsiAz            , 4),
+                          FormatterNombreWithDotDecimal(EWE.PsiP             , 4),
+                          FormatterNombreWithDotDecimal(EWE.FactLong         , 4),
+                          FormatterNombreWithDotDecimal(EWE.AngLimite        , 3),
+                          FormatterNombreWithDotDecimal(EWE.ErreurTourillon  , 3),
+                          FormatterNombreWithDotDecimal(EWE.ParamsFuncCorrAz.Co),
+                          FormatterNombreWithDotDecimal(EWE.ParamsFuncCorrAz.ErreurMax),
+                          FormatterNombreWithDotDecimal(EWE.ParamsFuncCorrAz.PosErrMax),
+                          FormatterNombreWithDotDecimal(EWE.ParamsFuncCorrInc.Co),
+                          FormatterNombreWithDotDecimal(EWE.ParamsFuncCorrInc.ErreurMax),
+                          FormatterNombreWithDotDecimal(EWE.ParamsFuncCorrInc.PosErrMax),
                           mysqli_real_escape_string(EWE.Commentaire)]);
         WU += IIF(i = (Nb - 1), ';', ', ');
         WriteLine(WU);
@@ -374,7 +386,7 @@ begin
                           '%d, %d, %.4f,'+
                           '"%s", "%s", "%s")', [
                           EWE.IDExpe,
-                          DateYYYYMMDDToDateSQL(EWE.AnneeExpe, EWE.MoisExpe, EWE.JourExpe),   {$WARNING: TEXpe.DateExpe à implementer}
+                          DatePascalToDateSQL(EWE.DateExpe),
                           EWE.IdxCouleur, EWE.ModeDecl, EWE.DeclinaisonInDegrees,
                           mysqli_real_escape_string(EWE.Operateur),
                           mysqli_real_escape_string(EWE.ClubSpeleo),

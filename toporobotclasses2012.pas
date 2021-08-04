@@ -406,8 +406,10 @@ type
 
                                                 // coordonnées par défaut
     function  GetDatabaseName: TStringDirectoryFilename;
-    procedure SetDefaultCoords(const X, Y, Z: double); overload;
+    procedure SetDefaultCoords(const QX, QY, QZ: double); overload;
+    procedure SetDefaultCoords(const QX, QY, QZ: string); overload;
     procedure SetDefaultCoords(const P0: TPoint3Df); overload;
+
     function  GetPositionDuPointZero(): TPoint3Df;
     // fonctions de recherche
     function FindPtTopoByCle(const DoMatchExact: boolean; var Cle: string; var Sr: TNumeroSerie; var Pt: integer): boolean;
@@ -823,14 +825,22 @@ function TToporobotStructure2012.GetPositionDuPointZero(): TPoint3Df;
 begin
   Result := FPositionPointZero;
 end;
-procedure TToporobotStructure2012.SetDefaultCoords(const X, Y, Z: double); overload;
+procedure TToporobotStructure2012.SetDefaultCoords(const QX, QY, QZ: double); overload;
 begin
-  FPositionPointZero.setFrom(X, Y, Z);
+  FPositionPointZero.setFrom(QX, QY, QZ);
 end;
 
 procedure TToporobotStructure2012.SetDefaultCoords(const P0: TPoint3Df); overload;
 begin
   FPositionPointZero := P0;
+end;
+
+procedure TToporobotStructure2012.SetDefaultCoords(const QX, QY, QZ: string);
+begin
+  FPositionPointZero.X := ConvertirEnNombreReel(QX, 0.00);
+  FPositionPointZero.Y := ConvertirEnNombreReel(QY, 0.00);
+  FPositionPointZero.Z := ConvertirEnNombreReel(QZ, 0.00);
+
 end;
 
 function TToporobotStructure2012.GetRefSerie(): TNumeroSerie;
@@ -1095,7 +1105,7 @@ begin
                 0.001, 0.00, 0.00,
                 0.00, 0.00, 0.00, 0.00,
                 '', '',
-                MyExpe.getTDateTime(),
+                MyExpe.DateExpe,
                 0.00, 0.00);
     self.AddSerie(NSR);
     result := True;
@@ -1247,7 +1257,6 @@ var
   i, N, P : integer;
   EWE     : TExpe;
   zdar    : String;
-  Q       : String;
 begin
   Result := -1;
   N := GetNbExpes() - 1;
@@ -1255,10 +1264,7 @@ begin
   for i := P to N do
   begin
     EWE := GetExpe(i);
-    // DONE: Recherche sur date, équipe et commentaire à implémenter
-    {$WARNING: TEXpe.DateExpe à implementer}
-    Q := DateToStr(GetSecuredDate(EWE.AnneeExpe, EWE.MoisExpe, EWE.JourExpe));
-    zdar := Format('%s %s  %s  %s', [Q, EWE.Operateur, EWE.ClubSpeleo, EWE.Commentaire]);
+    zdar := Format('%s %s  %s  %s', [DatePascalToDateSQL(EWE.DateExpe), EWE.Operateur, EWE.ClubSpeleo, EWE.Commentaire]);
     if (Pos(LowerCase(S), LowerCase(zdar)) > 0) then
     begin
       FLastFindTextWhat   := S;                                       // mémorise la clé pour recherche de l'occurrence suivante
@@ -1747,24 +1753,15 @@ begin
 end;
 
 function TToporobotStructure2012.MakeExpe0(const N: TNumeroExpe; const C: string): TExpe;
-var
-  YYYY, MM, DD: word;
 begin
-  DecodeDate(Now(), YYYY, MM, DD);
-  {$WARNING: TEXpe.DateExpe à implementer}
-  with Result do
-  begin
-    IDExpe        := N;
-    JourExpe      := DD;
-    MoisExpe      := MM;
-    AnneeExpe     := YYYY;
-    Operateur     := DFT_OPERATEUR;            // spéléomètre
-    ClubSpeleo    := DFT_CLUB_SPELEO;          // spéléographe
-    ModeDecl      := cdmAUTOMATIQUE;           // déclinaison auto ?
-    DeclinaisonInDegrees := 0.00;              // déclinaison
-    IdxCouleur    := 1;                        // couleur
-    Commentaire   := C;                        // commentaire
-  end;
+  Result.IDExpe        := N;
+  Result.DateExpe      := Now();
+  Result.Operateur     := DFT_OPERATEUR;            // spéléomètre
+  Result.ClubSpeleo    := DFT_CLUB_SPELEO;          // spéléographe
+  Result.ModeDecl      := cdmAUTOMATIQUE;           // déclinaison auto ?
+  Result.DeclinaisonInDegrees := 0.00;              // déclinaison
+  Result.IdxCouleur    := 1;                        // couleur
+  Result.Commentaire   := C;                        // commentaire
 end;
 function TToporobotStructure2012.MakeCode0(const N: TNumeroExpe; const C: string): TCode;
 begin
@@ -2246,13 +2243,13 @@ begin
     for i := 0 to Nb -1 do
     begin
       myExpe := GetExpe(i);
-      {$WARNING: TEXpe.DateExpe à implementer}
+
       LS.Add(Format(FORMAT_NB_INTEGER + #9 + FORMAT_NB_INTEGER + #9 +
-                         '%.2d/%.2d/%.4d' + #9 +
+                         '%s' + #9 +
                          '%s, %s' + #9 +
                          FORMAT_STRING,
                          [myExpe.IDExpe, myExpe.IdxCouleur,
-                          myExpe.JourExpe, myExpe.MoisExpe, myExpe.AnneeExpe,   // DatePascalToDateSQL(myExpe.DateExpe),
+                          DatePascalToDateSQL(myExpe.DateExpe),
                           myExpe.Operateur, myExpe.ClubSpeleo,
                           myExpe.Commentaire
                          ]));
@@ -2675,7 +2672,7 @@ var
   MaxAzimutAccepte: double;
   function EWE(const QMsg: string; const QMini, QMaxi: double; const QUnit: string): string;
   begin
-    Result := Format(rsCHECK_VISEE_VALID_INTERVAL + #13#10, [QMsg, QMini, QUnit, QMaxi, QUnit]);
+    Result := Format(rsCHECK_VISEE_VALID_INTERVAL + CR_LF, [QMsg, QMini, QUnit, QMaxi, QUnit]);
   end;
 begin
   MsgErr := '';
@@ -2684,7 +2681,7 @@ begin
   // types de visée
   if (not IsInRange(Ord(V.TypeVisee), 0, Ord(tgVISEE_RADIANTE))) then
   begin
-    MsgErr += Format(rsCHECK_VISEE_VALID_TYPE_VISEE + #13#10, [0, Ord(tgVISEE_RADIANTE)]);
+    MsgErr += Format(rsCHECK_VISEE_VALID_TYPE_VISEE + CR_LF, [0, Ord(tgVISEE_RADIANTE)]);
     Result += [errvTYPEVISEE];
   end;
   //AfficherMessageErreur('--- CheckVisee: 002');
@@ -2832,15 +2829,14 @@ begin
       AfficherMessage('');
       NbE := GetNbExpes();
       AfficherMessage(Format('-- Declinaisons pour les %d expes', [NbE]));
-      {$WARNING: TEXpe.DateExpe à implementer}
       for i := 1 to NbE - 1 do
       begin
         EX   := GetExpe(i);
         EX.ModeDecl    := cdmAUTOMATIQUE;                           // on force en automatique
         // DONE: Vérifier le signe des déclinaisons dans CalculerDeclinaison();
         // Les déclinaisons dont toujours en degrés
-        EX.DeclinaisonInDegrees := CalculateurDeclimag.CalculerDeclinaison(lat, lon, MyCentroide.Z, GetSecuredDate(EX.AnneeExpe, EX.MoisExpe, EX.JourExpe));
-        AfficherMessageErreur(Format('Expe: %d: %.4d-%.2d-%.2d: %.8f', [EX.IDExpe, EX.AnneeExpe, EX.MoisExpe, EX.JourExpe, EX.DeclinaisonInDegrees]));
+        EX.DeclinaisonInDegrees := CalculateurDeclimag.CalculerDeclinaison(lat, lon, MyCentroide.Z, EX.DateExpe);
+        AfficherMessageErreur(Format('Expe: %d: %s: %.8f', [EX.IDExpe, DatePascalToDateSQL(EX.DateExpe), EX.DeclinaisonInDegrees]));
         PutExpe(i, EX);                                // et on met à jour la table
       end;
     end;
@@ -3223,8 +3219,7 @@ var
     Fuck_The_Christ += Format('%s,%s,%s ', [QSensViseeAzimut, QSensViseePente, QSensViseeLRUD]);
     Fuck_The_Christ += Format('%s ', ['Arr']);
     Fuck_The_Christ += Format('%d,%d,%d ', [Red(CC), Green(CC), Blue(CC)]);
-    {$WARNING: TEXpe.DateExpe à implementer}
-    Fuck_The_Christ += Format('%.2d/%.2d/%.4d ', [E.JourExpe, E.MoisExpe, E.AnneeExpe]);
+    Fuck_The_Christ += E.toVisualTopoDateJJMMAAAA();
     Fuck_The_Christ += Format('%s ', ['M']);
     Fuck_The_Christ += Format(';%s', ['']);
     WriteLn(pTRO, Fuck_The_Christ);
@@ -3249,7 +3244,10 @@ begin
     Serie := GetSerie(1);
     EWE := Format(FMTSERST_VTOPO,[Serie.GetNoSerieDep, Serie.GetNoPointDep]);
     // Trou CDS03,0.000,0.000,0,
-    WriteLn(pTRO, Format('Trou %s,%.3f,%.3f,%f,', [Entree.eNomEntree, Entree.ePosition.X / 1000, Entree.ePosition.Y / 1000, Entree.ePosition.Z]));
+    WriteLn(pTRO, Format('Trou %s,%s,%s,%s,', [Entree.eNomEntree,
+                                               FormatterNombreWithDotDecimal(Entree.ePosition.X / 1000),
+                                               FormatterNombreWithDotDecimal(Entree.ePosition.Y / 1000),
+                                               FormatterNombreWithDotDecimal(Entree.ePosition.Z)]));
     WriteLn(pTRO, Format('Entree %s',[Format(FMTSERST_VTOPO, [Entree.eRefSer, Entree.eRefSt])]));
     WriteLn(pTRO, Format('Club %s',[rsGHTOPOEXENAME]));
     DefautCouleur:= clRED;
@@ -3258,9 +3256,15 @@ begin
     // première ligne de données
     WriteLn(pTRO,'Param Deca Degd Clino Deg 0.0000 Dir,Dir,Dir Inc Std --/--/---- M');
     Serie := GetSerie(1);
-    WriteLn(pTRO, Format('%10s %10s %.1f   %.1f %.1f %.1f %.2f %.2f %.2f %s',
+    WriteLn(pTRO, Format('%10s %10s %s   %s %s %s %s %s %s %s',
                                [EWE, EWE,
-                                0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00,
+                                FormatterNombreWithDotDecimal(0.00, 2),
+                                FormatterNombreWithDotDecimal(0.00, 2),
+                                FormatterNombreWithDotDecimal(0.00, 2),
+                                FormatterNombreWithDotDecimal(1.00, 2),
+                                FormatterNombreWithDotDecimal(1.00, 2),
+                                FormatterNombreWithDotDecimal(1.00, 2),
+                                FormatterNombreWithDotDecimal(1.00, 2),
                                 'Entrée ' + EWE]));
     // exportation proprement dite
     for NoSer:=1 to GetNbSeries() - 1 do
@@ -3285,10 +3289,15 @@ begin
         if (Trim(CurrStation.Commentaires)='') and (Trim(CurrStation.IDTerrainStation)='')
         then S777 := ''
         else S777 := ';' + S666 + S777 + ';';
-        WriteLn(pTRO, Format('%10s %10s %.2f   %.2f %.2f %.2f %.2f %.2f %.2f N I * %s',
+        WriteLn(pTRO, Format('%10s %10s %s   %s %s %s %s %s %s N I * %s',
                              [FromStationID,  ToStationID,
-                              CurrStation.Longueur, CurrStation.Azimut, CurrStation.Pente,
-                              CurrStation.LG, CurrStation.LD, CurrStation.HZ, CurrStation.HN,
+                              FormatterNombreWithDotDecimal(CurrStation.Longueur, 2),
+                              FormatterNombreWithDotDecimal(CurrStation.Azimut  , 2),
+                              FormatterNombreWithDotDecimal(CurrStation.Pente   , 2),
+                              FormatterNombreWithDotDecimal(CurrStation.LG      , 2),
+                              FormatterNombreWithDotDecimal(CurrStation.LD      , 2),
+                              FormatterNombreWithDotDecimal(CurrStation.HZ      , 2),
+                              FormatterNombreWithDotDecimal(CurrStation.HN      , 2),
                               S777]));
         PrevStation    := CurrStation;
         FromStationID  := ToStationID;
@@ -3308,9 +3317,12 @@ begin
             begin
               MyAntenne := ArrAntennesFound[j].VA;
               FromStationID := Format(FMTSERST_VTOPO,[MyAntenne.SerieDepart, MyAntenne.PtDepart]);
-              WriteLn(pTRO, Format('%10s %10s %.2f   %.2f %.2f     *      *      *      * N I M %s',
+              WriteLn(pTRO, Format('%10s %10s %s   %s %s     *      *      *      * N I M %s',
                                [FromStationID, '        *',
-                                MyAntenne.Longueur, MyAntenne.Azimut, MyAntenne.Pente,  '']));
+                                FormatterNombreWithDotDecimal(MyAntenne.Longueur , 2),
+                                FormatterNombreWithDotDecimal(MyAntenne.Azimut   , 2),
+                                FormatterNombreWithDotDecimal(MyAntenne.Pente    , 2),
+                                '']));
             end;
           end;
         end; // if (DoExportViseesRadiantes) then
@@ -3353,7 +3365,7 @@ begin
     WriteLn(fp, 'encoding ' + 'utf-8');
     WriteLn(fp, 'source ' + ExtractFileName(QFichierTH));
     WriteLn(fp, 'export model -fmt loch');
-	WriteLn(fp, 'export model -fmt kml');
+    WriteLn(fp, 'export model -fmt kml');
     WriteLn(fp, 'layout xvi-export');
     WriteLn(fp, Format('  scale %d %d', [1, QScale]));
     WriteLn(fp, Format('  grid-size %.0f %.0f %.0f %s', [QGridSize, QGridSize, QGridSize, 'm']));
@@ -3407,7 +3419,6 @@ var
 begin
   Nb := GetNbAntennes();
   AfficherMessage(Format('-- %s.CheckerLesAntennes: %d visees rayonnantes',[ClassName, Nb]));
-
 end;
 procedure TToporobotStructure2012.CheckerLesCodes();
 var
@@ -3458,14 +3469,14 @@ procedure TToporobotStructure2012.ExportVersTherionTH(const FichierTH: TStringDi
 const
   TH_KW_CENTERLINE     = 'centerline';
   TH_KW_ENDCENTERLINE  = 'end' + TH_KW_CENTERLINE;
+  TH_LINE_VISEE        = '       %s %s %s %s %s  %s %s  %s %s  %s';
 var
   THF      : TextFile;
   MySerie  : TObjSerie;
   MyFixPt  : TEntrance;
-  // Station de rattachement courante
-  MaStationDeRattachement: string;
-  i           , Nb: integer;
+  i , Nb   : integer;
   MyGCS: TLabelSystemesCoordsEPSG;
+  MaStationDeRattachement: string;    // Station de rattachement courante
   procedure WrtLn(const Line: string);
   begin
     WriteLn(THF, Line);
@@ -3474,8 +3485,7 @@ var
   procedure DefineExpe(const E: TExpe);
   begin
     WrtLn(Format('       # Expe %d: %s',[E.IDExpe, E.Commentaire]));
-    {$WARNING: TEXpe.DateExpe à implementer}
-    WrtLn(Format('       date %.4d.%.2d.%.2d',[ E.AnneeExpe,  E.MoisExpe,  E.JourExpe]));
+    WrtLn(E.toTherionDateYYYYMMDD());
     WrtLn('       #-------------------');
   end;
   // definition d'un code - Valeur de retour par défaut: -1, sinon, un angle droit
@@ -3598,10 +3608,16 @@ var
 
     OldIDStation := Format(FMTSTS, [S.GetNoSerieDep(), S.GetNoPointDep()]);
     CurIDStation := Format(FMTSTS, [S.GetNumeroDeSerie(), 0]);
-    if (OldIDStation <> CurIDStation) then WrtLn(Format('       %s %s %.2f %.2f %.2f  %.2f %.2f  %.2f %.2f  %s',
+    if (OldIDStation <> CurIDStation) then WrtLn(Format(TH_LINE_VISEE,
                                      [OldIDStation, CurIDStation,
-                                      0.005, MyStation.Azimut, MyStation.Pente,
-                                      0.00, 0.00, 0.00, 0.00, '']));
+                                      FormatterNombreWithDotDecimal(0.005, 2),
+                                      FormatterNombreWithDotDecimal(MyStation.Azimut, 2),
+                                      FormatterNombreWithDotDecimal(MyStation.Pente, 2),
+                                      FormatterNombreWithDotDecimal(0.00, 2),
+                                      FormatterNombreWithDotDecimal(0.00, 2),
+                                      FormatterNombreWithDotDecimal(0.00, 2),
+                                      FormatterNombreWithDotDecimal(0.00, 2),
+                                      '']));
 
 
     for St := 1 to S.GetNbVisees - 1 do
@@ -3641,10 +3657,16 @@ var
       Tag := '';
       if (MyStation.IDTerrainStation <> '') then Tag := Format('# Label: %s ',[MyStation.IDTerrainStation]);
       if (MyStation.Commentaires <> '')     then Tag := Tag + Format('# Observ: %s', [MyStation.Commentaires]);
-      WrtLn(Format('       %s %s %.2f %.2f %.2f  %.2f %.2f  %.2f %.2f  %s',
+
+      WrtLn(Format(TH_LINE_VISEE,             // '       %s %s %s %s %s  %s %s  %s %s  %s'
                    [OldIDStation, CurIDStation,
-                    lulu, MyStation.Azimut, Incl,
-                    MyStation.LG, MyStation.LD, MyStation.HZ, MyStation.HN,
+                     FormatterNombreWithDotDecimal(lulu, 2),
+                     FormatterNombreWithDotDecimal(MyStation.Azimut, 2),
+                     FormatterNombreWithDotDecimal(Incl, 2),
+                     FormatterNombreWithDotDecimal(MyStation.LG, 2),
+                     FormatterNombreWithDotDecimal(MyStation.LD, 2),
+                     FormatterNombreWithDotDecimal(MyStation.HZ, 2),
+                     FormatterNombreWithDotDecimal(MyStation.HN, 2),
                     Tag]));
       //--------------------------------------------------------------
       OldIDStation := CurIDStation;
@@ -3682,15 +3704,18 @@ begin
     WrtLn('  # Coordinates system');
     WrtLn(format('  cs EPSG:%d # %s', [MyGCS.CodeEPSG, MyGCS.NomEPSG]));
     // entrées et points fixes
+
     Nb := GetNbEntrances();
-    for i := 0 to  Nb - 1 do
+    WrtLn(Format('  # Entrances list (%d entrances)', [Nb]));
+
+    for i := 0 to Nb - 1 do
     begin
       MyFixPt := GetEntrance(i);
-      WrtLn(Format('    fix %s %.2f %.2f %.2f # %s',
+      WrtLn(Format('    fix %s %s %s %s # %s',
                    [ Format(FMTSTS, [MyFixPt.eRefSer, MyFixPt.eRefSt]),
-                     MyFixPt.ePosition.X,
-                     MyFixPt.ePosition.Y,
-                     MyFixPt.ePosition.Z,
+                     FormatterNombreWithDotDecimal(MyFixPt.ePosition.X, 2),
+                     FormatterNombreWithDotDecimal(MyFixPt.ePosition.Y, 2),
+                     FormatterNombreWithDotDecimal(MyFixPt.ePosition.Z, 2),
                      MyFixPt.eNomEntree
                    ]));
     end;
@@ -4645,7 +4670,7 @@ end;
 
 //******************************************************************************
 // détection de doublons dans les numéros de série, expés et codes
-// retourne l'index interne de l'objet, ou -1 si aucune erreur
+// retourne l'index interne de l'objet, ou 0 si aucune erreur
 function TToporobotStructure2012.HasDoublonsInNumsSeries(const NS: TNumeroSerie; out QInternalIdx: integer): boolean;
 var
   MySerie: TObjSerie;

@@ -69,7 +69,7 @@ begin
   for i := 0 to GetNbExpes() - 1 do
   begin
     MyExpe := GetExpe(i);
-    AfficherMessageErreur(Format('-- %d: Expe: %d, %.4d-%.2d-%.2d, %s', [i, MyExpe.IDExpe, MyExpe.AnneeExpe, MyExpe.MoisExpe, MyExpe.JourExpe, MyExpe.Commentaire]));
+    AfficherMessageErreur(Format('-- %d: Expe: %d, %s, %s', [i, MyExpe.IDExpe, DatePascalToDateSQL(MyExpe.DateExpe), MyExpe.Commentaire]));
   end;
   MyCode := GetLastCode();
   MyExpe := GetLastExpe();
@@ -249,7 +249,7 @@ begin
     for i := 0 to GetNbExpes() - 1 do
     begin
       MyExpe := GetExpe(i);
-      AfficherMessageErreur(Format('-- %d: Expe: %d, %.4d-%.2d-%.2d, %s', [i, MyExpe.IDExpe, MyExpe.AnneeExpe, MyExpe.MoisExpe, MyExpe.JourExpe, MyExpe.Commentaire]));
+      AfficherMessageErreur(Format('-- %d: Expe: %d, %s, %s', [i, MyExpe.IDExpe, DatePascalToDateSQL(MyExpe.DateExpe), MyExpe.Commentaire]));
     end;
     //**************************
     Preconditionner(FichierTXT);

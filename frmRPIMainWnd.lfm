@@ -29,7 +29,7 @@ object RPIMainWnd: TRPIMainWnd
     Height = 590
     Top = 0
     Width = 1020
-    ActivePage = tabShtDistoX
+    ActivePage = tabShtSeries
     Align = alClient
     Font.CharSet = ANSI_CHARSET
     Font.Color = clBlack
@@ -38,7 +38,7 @@ object RPIMainWnd: TRPIMainWnd
     Font.Pitch = fpVariable
     Font.Quality = fqDraft
     ParentFont = False
-    TabIndex = 2
+    TabIndex = 3
     TabOrder = 0
     OnChange = PageControl1Change
     object tabShtMenu: TTabSheet
@@ -1268,6 +1268,17 @@ object RPIMainWnd: TRPIMainWnd
         inherited PageControlDistoX: TPageControl
           Height = 512
           Width = 1008
+          inherited tabShtListeMesures: TTabSheet
+            ClientHeight = 468
+            ClientWidth = 1000
+            inherited hcColsTitres: THeaderControl
+              Width = 1001
+            end
+            inherited lsbMesures: TListBox
+              Height = 443
+              Width = 1001
+            end
+          end
           inherited tabShtMisc: TTabSheet
             ClientHeight = 468
             ClientWidth = 1000
@@ -1380,8 +1391,6 @@ object RPIMainWnd: TRPIMainWnd
           Width = 1010
           ClientHeight = 526
           ClientWidth = 1010
-          DesignLeft = 422
-          DesignTop = 298
           inherited pnlEnteteSerie: TPanel
             Width = 1008
             ClientWidth = 1008
@@ -1492,9 +1501,6 @@ object RPIMainWnd: TRPIMainWnd
           end
           inherited pnlErreursACorriger: TPanel
             Left = 540
-            inherited lsbErreurs: TListBox
-              ScrollWidth = 449
-            end
           end
         end
       end

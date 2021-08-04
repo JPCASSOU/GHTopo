@@ -37,11 +37,7 @@ type
     function  toGrayScale(): byte;
 end;
 
-type
-
-{ TDGCPoint2D }
-
- TDGCPoint2D = record
+type TDGCPoint2D = record
   X:  double;
   Y:  double;
   procedure setFrom(const QX, QY: double);
@@ -55,11 +51,7 @@ type TDGCBezierArc = record
   TangP2 : TDGCPoint2D; // Tangente en P2
 end;
 
-type
-
-{ TDGCArrayPoints2D }
-
- TDGCArrayPoints2D = record
+type TDGCArrayPoints2D = record
   M: array of TDGCPoint2D;
   procedure Empty();
   procedure SetCapacity(const N: integer);
@@ -67,17 +59,10 @@ type
   function  GetElement(const Idx: integer): TDGCPoint2D;
   procedure SetElement(const Idx: integer; const P: TDGCPoint2D); overload;
   procedure SetElement(const Idx: integer; const QX, QY: double); overload;
-
   procedure AddElement(const P: TDGCPoint2D); overload;
   procedure AddElement(const QX, QY: double); overload;
 end;
-type
-
-{ TListDGCBezierArcs }
-
- { TDGCListBezierArcs }
-
- TDGCListBezierArcs = record
+type TDGCListBezierArcs = record
   M: array of TDGCBezierArc;
   procedure Empty();
   procedure SetCapacity(const N: integer);
@@ -85,7 +70,6 @@ type
   function  GetElement(const Idx: integer): TDGCBezierArc;
   procedure SetElement(const Idx: integer; const P: TDGCBezierArc); overload;
   procedure AddElement(const P: TDGCBezierArc); overload;
-
 end;
 
 
@@ -170,11 +154,9 @@ type
   PenStyle         : TPenStyle;
   PenWidthInPX     : byte;
   PenWidthInMM     : double;
-
   // Brosse
   BrushColor       : TDGCColor;
   BrushStyle       : TBrushStyle;
-
   // Fontes
   FontName         : string;
   FontColor        : TDGCColor; // Utiliser la couleur de Brush
@@ -187,21 +169,12 @@ type
   procedure setDefault();
 end;
 
- type
-
- { TDGCLayer }
-
- TDGCLayer = record
+ type TDGCLayer = record
    Name        : string;
    Color       : TDGCColor;
-
    AcadColorIdx: integer;
-
    procedure setFrom(const QName: string; const QAcadIdxColor: integer); overload;
    procedure setFrom(const QName: string; const QAcadIdxColor: integer; const QR, QG, QB, QA: byte); overload;
-
-
-
  end;
 
 
@@ -209,11 +182,6 @@ end;
 type TTypeCurve = (tdgcBEZIER_CURVE, tdgcSPLINE_CURVE);
 type TInfiniteLineOrientation = (tdgcVERTICAL_LINE, tdgcHORIZONTAL_LINE);
 // Arc de courbe de Bézier
-// On stocke les tangentes ET les points de contrôle
-
-
-
-
 // pour les pointeurs sur fonctions de conversion
 type TFunctionGetCoordsMonde = function(const PP: TPoint): TDGCPoint2D of object;
 type TFunctionGetCoordsPlan  = function(const PM: TDGCPoint2D): TPoint of object;
@@ -395,6 +363,7 @@ function TDGCColor.toGrayScale(): byte; //Convertit une couleur en niveaux de gr
 begin
   Result := round(0.30 * self.Red + 0.59 * self.Green + 0.11 * self.Blue);
 end;
+
 
 function TDGCColor.getFloatRed(): double;
 begin

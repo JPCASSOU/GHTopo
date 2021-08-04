@@ -1002,7 +1002,7 @@ var
     EWE: TToporobotIDStation;
   begin
     EWE.setFrom(S);
-    Result := MakeTIDBaseStation(EWE.aSerie, EWE.aStation, false);
+    Result := EWE.toTIDBaseStation();
   end;
 begin
   E1 := Item1;

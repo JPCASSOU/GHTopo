@@ -247,7 +247,11 @@ begin
 
     WriteLine(Format('%%%% Date    : %s %%%%',[DateToStr(Now)]));
     WriteLine(Format('%%%% Comments: %s %%%%',[QDescro]));
-    WriteLine(Format('%%%% BoundingBox: %.2f %.2f %.2f %.2f', [FXMin, FYMin, FXMax, FYMax]));
+    WriteLine(Format('%%%% BoundingBox: %s %s %s %s',[
+                           FormatterNombreWithDotDecimal(FXMin, 2),
+                           FormatterNombreWithDotDecimal(FYMin, 2),
+                           FormatterNombreWithDotDecimal(FXMax, 2),
+                           FormatterNombreWithDotDecimal(FYMax, 2)]));
 
     WriteLine(Format('%%%%%s%%%%',[StringOfChar('=',80)]));
     // écriture des alias

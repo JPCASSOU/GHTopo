@@ -346,9 +346,9 @@ var
   QIdxFilter: integer;
   MyTextEditor: String;
 begin
-  if (not GHTopoQuestionOuiNon('Fonctionnalité expérimentale' + #13#10 +
-                               'Le fichier XTB généré peut devoir être modifié' + #13#10 +
-                               'Ceci ouvrira le fichier résultant dans un éditeur de texte '  + #13#10 +
+  if (not GHTopoQuestionOuiNon('Fonctionnalité expérimentale' + CR_LF +
+                               'Le fichier XTB généré peut devoir être modifié' + CR_LF +
+                               'Ceci ouvrira le fichier résultant dans un éditeur de texte '  + CR_LF +
                                'Continuer')) then Exit;
   QFileName := GetGHTopoDirectory() + 'Subset_001.xtb';
   if (DoDialogSaveFile('Fichier XTB', '.xtb', QFileName, QIdxFilter)) then

@@ -1,7 +1,7 @@
 object frmVue3DExt: TfrmVue3DExt
-  Left = 54
+  Left = 582
   Height = 750
-  Top = 150
+  Top = 641
   Width = 1079
   Align = alClient
   Caption = 'frmVue3DExt'
@@ -78,18 +78,19 @@ object frmVue3DExt: TfrmVue3DExt
   end
   object Panel3: TPanel
     Left = 906
-    Height = 316
+    Height = 162
     Top = 38
     Width = 167
     Anchors = [akTop, akRight]
+    BevelInner = bvRaised
     BevelOuter = bvLowered
-    ClientHeight = 316
+    ClientHeight = 162
     ClientWidth = 167
     TabOrder = 2
     object SpeedButton21: TSpeedButton
       Left = 4
       Height = 50
-      Top = 112
+      Top = 108
       Width = 50
       Action = acParamVue3D
       ShowCaption = False
@@ -176,142 +177,6 @@ object frmVue3DExt: TfrmVue3DExt
       ShowHint = True
       ParentShowHint = False
     end
-    object Label1: TLabel
-      Left = 4
-      Height = 16
-      Top = 200
-      Width = 71
-      Caption = 'Orientation'
-      ParentColor = False
-    end
-    object Label2: TLabel
-      Left = 4
-      Height = 16
-      Top = 228
-      Width = 59
-      Caption = 'Elévation'
-      ParentColor = False
-    end
-    object Label3: TLabel
-      Left = 4
-      Height = 16
-      Top = 256
-      Width = 35
-      Caption = 'Zoom'
-      ParentColor = False
-    end
-    object Label4: TLabel
-      Left = 4
-      Height = 16
-      Top = 284
-      Width = 50
-      Caption = 'Magn. Z'
-      ParentColor = False
-    end
-    object Button2: TButton
-      Left = 4
-      Height = 32
-      Top = 164
-      Width = 75
-      Caption = 'VRML'
-      Enabled = False
-      TabOrder = 0
-    end
-    object Button3: TButton
-      Left = 87
-      Height = 32
-      Top = 164
-      Width = 75
-      Caption = 'X3D'
-      Enabled = False
-      TabOrder = 1
-    end
-    object editTheta: TCurrencyEdit
-      Left = 80
-      Height = 24
-      Top = 200
-      Width = 53
-      Alignment = taRightJustify
-      DecimalPlaces = 0
-      DisplayFormat = '0'
-      MaxValue = 360
-      MinValue = 0
-      TabOrder = 2
-      Value = 0
-    end
-    object btnSetTheta: TButton
-      Left = 132
-      Height = 25
-      Top = 200
-      Width = 29
-      Caption = '...'
-      OnClick = btnSetThetaClick
-      TabOrder = 3
-    end
-    object editPhi: TCurrencyEdit
-      Left = 80
-      Height = 24
-      Top = 228
-      Width = 53
-      Alignment = taRightJustify
-      DecimalPlaces = 0
-      DisplayFormat = '0'
-      MaxValue = 90
-      MinValue = 0
-      TabOrder = 4
-      Value = 0
-    end
-    object btnSetPhi: TButton
-      Left = 133
-      Height = 25
-      Top = 228
-      Width = 28
-      Caption = '...'
-      OnClick = btnSetPhiClick
-      TabOrder = 5
-    end
-    object editMagnificationZ: TCurrencyEdit
-      Left = 80
-      Height = 24
-      Top = 284
-      Width = 53
-      Alignment = taRightJustify
-      DisplayFormat = '0.00'
-      MaxValue = 20
-      MinValue = 0.25
-      TabOrder = 6
-      Value = 1
-    end
-    object editZoom: TCurrencyEdit
-      Left = 80
-      Height = 24
-      Top = 256
-      Width = 53
-      Alignment = taRightJustify
-      DisplayFormat = '0.00'
-      MaxValue = 20
-      MinValue = 0.25
-      TabOrder = 7
-      Value = 1
-    end
-    object btnSetZoom: TButton
-      Left = 132
-      Height = 25
-      Top = 256
-      Width = 29
-      Caption = '...'
-      OnClick = btnSetZoomClick
-      TabOrder = 8
-    end
-    object btnSetMagnZ: TButton
-      Left = 132
-      Height = 25
-      Top = 284
-      Width = 29
-      Caption = '...'
-      OnClick = btnSetMagnZClick
-      TabOrder = 9
-    end
   end
   object BitBtn1: TBitBtn
     Left = 910
@@ -371,7 +236,7 @@ object frmVue3DExt: TfrmVue3DExt
   object pnlSetValue: TPanel
     Left = 916
     Height = 238
-    Top = 356
+    Top = 332
     Width = 150
     Anchors = [akTop, akRight]
     BevelInner = bvRaised
@@ -470,6 +335,136 @@ object frmVue3DExt: TfrmVue3DExt
       Width = 82
       Caption = 'lbNomValeur'
       ParentColor = False
+    end
+  end
+  object Panel4: TPanel
+    Left = 906
+    Height = 125
+    Top = 204
+    Width = 166
+    Anchors = [akTop, akRight]
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    ClientHeight = 125
+    ClientWidth = 166
+    TabOrder = 7
+    object Label1: TLabel
+      Left = 4
+      Height = 16
+      Top = 5
+      Width = 71
+      Caption = 'Orientation'
+      ParentColor = False
+    end
+    object editTheta: TCurrencyEdit
+      Left = 80
+      Height = 24
+      Top = 5
+      Width = 50
+      Alignment = taRightJustify
+      DecimalPlaces = 0
+      DisplayFormat = '0'
+      MaxValue = 360
+      MinValue = 0
+      TabOrder = 0
+      Value = 0
+    end
+    object btnSetTheta: TButton
+      Left = 132
+      Height = 25
+      Top = 4
+      Width = 29
+      Caption = '...'
+      OnClick = btnSetThetaClick
+      TabOrder = 1
+    end
+    object Label2: TLabel
+      Left = 4
+      Height = 16
+      Top = 33
+      Width = 59
+      Caption = 'Elévation'
+      ParentColor = False
+    end
+    object editPhi: TCurrencyEdit
+      Left = 80
+      Height = 24
+      Top = 33
+      Width = 50
+      Alignment = taRightJustify
+      DecimalPlaces = 0
+      DisplayFormat = '0'
+      MaxValue = 90
+      MinValue = 0
+      TabOrder = 2
+      Value = 0
+    end
+    object btnSetPhi: TButton
+      Left = 133
+      Height = 25
+      Top = 32
+      Width = 28
+      Caption = '...'
+      OnClick = btnSetPhiClick
+      TabOrder = 3
+    end
+    object Label3: TLabel
+      Left = 4
+      Height = 16
+      Top = 60
+      Width = 35
+      Caption = 'Zoom'
+      ParentColor = False
+    end
+    object editZoom: TCurrencyEdit
+      Left = 80
+      Height = 24
+      Top = 61
+      Width = 50
+      Alignment = taRightJustify
+      DisplayFormat = '0.00'
+      MaxValue = 20
+      MinValue = 0.25
+      TabOrder = 4
+      Value = 1
+    end
+    object btnSetZoom: TButton
+      Left = 132
+      Height = 25
+      Top = 60
+      Width = 29
+      Caption = '...'
+      OnClick = btnSetZoomClick
+      TabOrder = 5
+    end
+    object Label4: TLabel
+      Left = 4
+      Height = 16
+      Top = 89
+      Width = 50
+      Caption = 'Magn. Z'
+      ParentColor = False
+    end
+    object editMagnificationZ: TCurrencyEdit
+      Left = 80
+      Height = 24
+      Top = 89
+      Width = 50
+      Alignment = taRightJustify
+      DisplayFormat = '0.00'
+      MaxValue = 20
+      MinValue = 0.25
+      TabOrder = 6
+      Value = 1
+    end
+    object btnSetMagnZ: TButton
+      Left = 132
+      Height = 25
+      Top = 88
+      Width = 29
+      Caption = '...'
+      OnClick = btnSetMagnZClick
+      TabOrder = 7
     end
   end
   object ImageList2: TImageList

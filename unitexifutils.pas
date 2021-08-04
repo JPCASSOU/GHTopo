@@ -97,7 +97,7 @@ const
   COL_Endian       = 8;
   COL_RAW_DATA     = 9;
 var
-  i, row, w: Integer;
+  i, row, w, NbTagsExif: Integer;
   lTag: TTag;
   suffix, QMsg: String;
   QLat, QLon: double;
@@ -128,7 +128,9 @@ begin
     ExifGrid.Cells[COL_RAW_DATA    , 0] := 'Raw data';
 
     ExifGrid.FixedCols := 0;
-    for i := 0 to self.ExifData.TagCount-1 do
+    NbTagsExif := self.ExifData.TagCount;
+    if (0 = NbTagsExif) then exit;
+    for i := 0 to NbTagsExif - 1 do
     begin
       row := i+1;
       lTag := self.ExifData.TagByIndex[i];

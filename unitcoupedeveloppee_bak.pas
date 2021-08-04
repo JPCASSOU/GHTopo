@@ -160,7 +160,7 @@ end;
 implementation
 //uses Forms, Dialogs, frmJournal;
 { TCoupeDeveloppee }
-CONST COEF_MULT_SERIES = 100000;
+
 const IDX_MIN_JONCTION = 0;
 (*
 procedure DlgAlert(const S: string);

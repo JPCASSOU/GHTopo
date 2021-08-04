@@ -1,7 +1,7 @@
 object dlgEditSerie: TdlgEditSerie
-  Left = 461
+  Left = 442
   Height = 614
-  Top = 394
+  Top = 209
   Width = 1027
   Caption = 'dlgEditSerie'
   ClientHeight = 614

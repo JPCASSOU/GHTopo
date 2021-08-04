@@ -850,9 +850,6 @@ begin
   Result.Y := QY;
 end;
 
-{$WARNING: TEXpe.DateExpe à implementer}
-
-
 //******************************************************************************
 // fonctions communes:
 //******************************************************************************
@@ -1374,6 +1371,7 @@ begin
     taCenter        : D := (L div 2) - 1;
   end;
   Result := StringOfChar(#32, G) + EWE + StringOfChar(#32, D);
+  Result := StringReplace(Result, DefaultFormatSettings.DecimalSeparator, '.', [rfReplaceAll]);
 end;
 
 
@@ -1688,7 +1686,11 @@ begin
   G := 100.0 * GetFloatGValue(C);
   B := 100.0 * GetFloatBValue(C);
   //Result:=Format('#%X%X%X',[R,G,B]);
-  Result:=Format(' rgb(%.2f%%, %.2f%%, %.2f%%)', [R,G,B]);
+  Result:=Format(' rgb(%s%%, %s%%, %s%%)', [FormatterNombreWithDotDecimal(R, 2),
+                                            FormatterNombreWithDotDecimal(G, 2),
+                                            FormatterNombreWithDotDecimal(B, 2)]);
+
+
 end;
 
 
@@ -2133,7 +2135,6 @@ var
   Quadrant  : double;
   TermeTrigo: double;
 begin
-  //AfficherMessageErreur(Format('%.3f - %.2f - %.6f, %.6f, %.6f', [AzBrut, UniteBoussole, ParamsFunc.Co, ParamsFunc.ErreurMax, ParamsFunc.PosErrMax]));
   Result     := AzBrut;
   // erreur systématique constante: mauvais positionnement de l'aiguille aimantée
   AzC        := AzBrut + ParamsFunc.Co;

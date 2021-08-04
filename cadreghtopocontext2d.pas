@@ -616,8 +616,8 @@ begin
     SetCurrentNumeroSerieStationPourDistoX(1, -1);
     FStationNearToMouse := FCurrentStation;
   except
-    ShowMessage('Erreur dans la fixation des items courants '      + #13#10 +
-                'Cause probable: Document au format Text'          + #13#10 +
+    ShowMessage('Erreur dans la fixation des items courants '      + CR_LF +
+                'Cause probable: Document au format Text'          + CR_LF +
                 'Solution: Enregistrer en *.xtb puis recharger');
   end;
   FBDDEntites.SetMinMax(false);
@@ -1222,7 +1222,7 @@ begin
   for i := 0 to Nb - 1 do
   begin
     PT := FListeLastPointsClicked.GetElement(i);
-    EWE += FormatterNombreWithDotDecimal(PT.X) + ', ' + FormatterNombreWithDotDecimal(PT.Y) + ', ' + #13#10;
+    EWE += FormatterNombreWithDotDecimal(PT.X) + ', ' + FormatterNombreWithDotDecimal(PT.Y) + ', ' + CR_LF;
   end;
 
   DisplayTextEditor(EWE);
@@ -1667,9 +1667,11 @@ var
   EWE: String;
   CT: TClipboard;
 begin
-  EWE := Format('%d.%d; %.3f; %.3f; %.3f; %s',
+  EWE := Format('%d.%d; %s; %s; %s; %s',
          [FStationNearToMouse.Entite_Serie, FStationNearToMouse.Entite_Station,
-          FStationNearToMouse.PosStation.X, FStationNearToMouse.PosStation.Y, FStationNearToMouse.PosStation.Z,
+          FormatterNombreWithDotDecimal(FStationNearToMouse.PosStation.X),
+          FormatterNombreWithDotDecimal(FStationNearToMouse.PosStation.Y),
+          FormatterNombreWithDotDecimal(FStationNearToMouse.PosStation.Z),
           FStationNearToMouse.IDTerrain
          ]);
   CT := TClipboard.Create(ctClipBoard);
@@ -1807,7 +1809,6 @@ begin
     // infos sur le code
     lbCode.Caption          := CDS.getLibelle();
     // infos sur l'expé
-    {$WARNING: TEXpe.DateExpe à implementer}
     WU                      := EWE.getDateStr();
     lbInfosExpe.Caption     := EWE.getLibelle();
     lbMesures.Caption       := Format(rsVUE2D_FMT_INFOS_MESURES, [L, A, P, G,D,H,B]);
@@ -2047,7 +2048,7 @@ begin
         if (not FCroquisTerrain.IsReady) then exit;
         QQ1 := FBDDEntites.GetStationOrEntranceFromXYZ(FMyPos.X, FMyPos.Y, 0.00, MAX_DISTANCE_CAPTURE, [tpVISEES], false, FCurrentInternalIdxEntite, ST1, QEntrance1, QDistance, QE);
         MyAnnotation.IDStyle := FCroquisTerrain.CurrentIdxStyleAnnotation;
-        MyAnnotation.Position.IDBaseStation := MakeTIDBaseStation(ST1.Entite_Serie, ST1.Entite_Station, false);
+        MyAnnotation.Position.IDBaseStation := ST1.toTIDBaseStation(); //MakeTIDBaseStation(ST1.Entite_Serie, ST1.Entite_Station, false);
         MyAnnotation.Position.Offset.setFrom(FMyPos.X - ST1.PosStation.X, FMyPos.Y - ST1.PosStation.Y, ST1.PosStation.Z);
         MyAnnotation.Texte  := '';
         if (EditerAnnotation(FCroquisTerrain, 0, MyAnnotation)) then
@@ -2962,9 +2963,7 @@ begin
   begin
     QMetaFiltre := Format('%s < %d', [rsMETAFILTRE_EXPE, i]);
     MyExpe    := FBDDEntites.GetExpe(i);
-    {$WARNING: TEXpe.DateExpe à implementer}
-
-    QFilename := QDirectory + DirectorySeparator + Format('Img_Expe_%d_%.4d-%.2d-%.2d.png', [i, MyExpe.AnneeExpe, MyExpe.MoisExpe, MyExpe.JourExpe]);
+    QFilename := QDirectory + DirectorySeparator + Format('Img_Expe_%d_%s.png', [i, DatePascalToDateSQL(MyExpe.DateExpe)]);
     if (not FRedessinInProcess) then
     begin
       CreerImg(QMetaFiltre, QFilename);

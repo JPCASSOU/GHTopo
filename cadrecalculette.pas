@@ -1660,7 +1660,7 @@ begin
   try
     MyClipBoard.Clear;
     // contenu
-    EWE := Format('Layers of "%s" (%d layers)' + #13#10, [editDocumentTitle.Text, NbLayers]);
+    EWE := Format('Layers of "%s" (%d layers)' + CR_LF, [editDocumentTitle.Text, NbLayers]);
     EWE += 'ID'               + FIELD_SEPARATOR_TAB +
            'LayerVarName'     + FIELD_SEPARATOR_TAB +
            'LayerTitle'       + FIELD_SEPARATOR_TAB +
@@ -1670,7 +1670,7 @@ begin
            'SymbolOpacity'    + FIELD_SEPARATOR_TAB +
            'LayerDescription' + FIELD_SEPARATOR_TAB +
            'LayerAttribution' + FIELD_SEPARATOR_TAB +
-           #13#10;
+           CR_LF;
     for i := 0 to NbLayers - 1 do
     begin
       MyLayer := FOSMAdditionalLayers.GetElement(i);
@@ -1683,7 +1683,7 @@ begin
                     '%d' + #9 +         // SymbolOpacity      : byte;
                     '%s' + #9 +         // LayerDescription: string;
                     '%s' + #9 +         // LayerAttribution        : string;
-                    #13#10,
+                    CR_LF,
                     [i,
                      MyLayer.LayerVarName,
                      MyLayer.LayerTitle,
@@ -1779,8 +1779,6 @@ begin
   end;
 end;
 
-
-
 procedure TCdrCalculette.acExportListePointsKMLExecute(Sender: TObject);
 var
   QFilters: String;
@@ -1788,11 +1786,11 @@ var
   QIdxFilter: integer;
   MyCodeEPSG: TLabelSystemesCoordsEPSG;
 begin
-  if (not GHTopoQuestionOuiNon('Utilisation: Sélectionner les colonnes contenant l''étiquette et les coordonnnées' + #13#10 +
-                         Format('Colonne pour X: %s', [cmbColXSource.Text]) + #13#10 +
-                         Format('Colonne pour Y: %s', [cmbColYSource.Text]) + #13#10 +
-                         Format('Colonne pour Z: %s', [cmbColZSource.Text]) + #13#10 +
-                         Format('Colonne pour étiquette: %s', [cmbColEtiquettes.Text]) + #13#10 +
+  if (not GHTopoQuestionOuiNon('Utilisation: Sélectionner les colonnes contenant l''étiquette et les coordonnnées' + CR_LF +
+                         Format('Colonne pour X: %s', [cmbColXSource.Text]) + CR_LF +
+                         Format('Colonne pour Y: %s', [cmbColYSource.Text]) + CR_LF +
+                         Format('Colonne pour Z: %s', [cmbColZSource.Text]) + CR_LF +
+                         Format('Colonne pour étiquette: %s', [cmbColEtiquettes.Text]) + CR_LF +
                          'Continuer')) then Exit;
 
   // Avertissement: Régénération des couches
@@ -1806,8 +1804,6 @@ begin
     0: QFilters := 'Cartes OSM Leaflet (*.htm)|*.htm';
     1: QFilters := 'Fichiers Google Earth (*.kml)|*.kml';
   end;
-
-
   if (DoDialogSaveFile(QFilters, IIF(0 = cmbFormatExport.ItemIndex, '*.htm', '*.kml'), QFileName, QIdxFilter)) then
   begin
     FColonneOSMLayer       := cmbColAdditionalOSMLayers.ItemIndex;
@@ -1818,10 +1814,6 @@ begin
     FColonneZSource        := cmbColZSource.ItemIndex;
     FColonneDescription    := cmbColDescription.ItemIndex;
     FColonneObservations   := cmbColObservations.ItemIndex;
-
-
-
-
 
     MyCodeEPSG:= FConversionUtils.GetCodeEPSGNomSysteme(cmbSystSourceJPC.ItemIndex);
     ExportListePointsVersCarto(TFormatExportGIS(cmbFormatExport.ItemIndex),
@@ -2317,21 +2309,8 @@ begin
 end;
 
 procedure TCdrCalculette.Button3Click(Sender: TObject);
-var
-  EWE: string;
-  WU: TGHStringArray;
-  i: Integer;
 begin
-  //CdrDGCDrawingContext1.SetModeTravail(mtgcsPICK_COORDS);
-  //ShowMessage('666');
-  EWE := '666 toto     "daech must die"     "miaou"';
-  if (InputQuery('Découpage de texte', 'Texte', EWE)) then
-  begin
-    WU := SplitWithQuotedFields(EWE, ' ');
-    AfficherMessageErreur(EWE);
-    for i := 0 to high(EWE) do AfficherMessageErreur(WU[i]);
-  end;
-
+  pass;
 end;
 
 function TCdrCalculette.LoadImage(const QFilename: TStringDirectoryFilename): boolean;
@@ -2339,12 +2318,13 @@ var
   QLat, QLon: double;
 begin
   result:= false;
-  if (QFilename = '') then begin
+  if (QFilename = '') then
+  begin
     ShowMessage('No file selected.');
     exit;
   end;
   if (not FileExists(QFilename)) then begin
-    ShowMessage('File "' + QFilename + '" does not exist.');
+    ShowMessageFmt(rsMSG_FILENOTFOUND, [QFilename]);
     exit;
   end;
   FImgInfo := TImgInfoWithGPS.Create;
@@ -2363,13 +2343,11 @@ var
   QMsg: string;
   QLat, QLon: double;
 begin
-  FImgInfo.DisplayMetadataInGrid(ExifGrid);
-  EWE := FImgInfo.ExtractWGSCoordinates(QLat, QLon, QMsg);
-  QMsg := IIF(EWE, Format('%dx%d - Lat: %.8f, Lon: %.8f', [FImgInfo.ImgWidth, FImgInfo.ImgHeight,QLat, QLon]), QMsg);
-  lbPhotoInfos.Caption := QMsg;
-
   try   // et on libère le FImgInfo
-    ;;
+    FImgInfo.DisplayMetadataInGrid(ExifGrid);
+    EWE := FImgInfo.ExtractWGSCoordinates(QLat, QLon, QMsg);
+    QMsg := IIF(EWE, Format('%dx%d - Lat: %.8f, Lon: %.8f', [FImgInfo.ImgWidth, FImgInfo.ImgHeight,QLat, QLon]), QMsg);
+    lbPhotoInfos.Caption := QMsg;
   finally
     FreeAndNil(FImgInfo);
   end;
@@ -2386,63 +2364,11 @@ begin
     begin
       self.LoadImage(TD.FileName);
       self.DisplayMetadata();
-
     end;
   finally
     FreeAndNil(TD);
   end;
-
-  //Image.Width := FWidth;
-  //Image.Height:= FHeight;
-
-
-  (*
-  Statusbar.Panels[PANEL_ENDIAN].Text := '';
-  Statusbar.Panels[PANEL_OFFSET].Text := '';
-  Statusbar.Panels[PANEL_MSG].Text := '';
-
-
-
-  FFilename := AFilename;
-  FMRUMenuManager.AddToRecent(AFileName);
-  Caption := Format('Exif Spy - "%s"', [FFilename]);
-  AcFileReload.Enabled := true;
-
-  crs := Screen.Cursor;
-  Screen.Cursor := crHourglass;
-  try
-    FBuffer := nil;
-    FHexEditor.LoadFromFile(aFileName);
-    FBuffer := PBytes(TMPHexEditorOpener(FHexEditor).DataStorage.Memory);
-    FBufferSize := FHexEditor.DataSize;
-    FCurrOffset := 0;
-    HexEditorClick(nil);
-
-    if ScanIFDs then
-      UpdateIFDs;
-    UpdateMarkers;
-    ClearAnalysis;
-
-    FreeAndNil(FImgInfo);
-    if FLoadFpExif then begin
-      FImgInfo := TImgInfo.Create;
-      FImgInfo.LoadFromFile(AFileName);
-      Populate_fpExifGrids;
-    end;
-
-    Image.Picture.LoadFromFile(AFileName);
-    Image.Width := FWidth;
-    Image.Height := FHeight;
-    AcImgFitExecute(nil);
-
-  finally
-    Screen.Cursor := crs;
-  end;
-  //*)
 end;
-
-
-
 
 
 procedure TCdrCalculette.cmbColAdditionalOSMLayersChange(Sender: TObject);
@@ -2760,7 +2686,7 @@ begin
   d := editDegradeXFin.Value - editDegradeXDebut.Value;
 
   QPosition := editDegradeXDebut.Value + r * d;
-  lbDegradeXCourant.Caption := Format('%.2f', [QPosition]);
+  lbDegradeXCourant.Caption := FormatterNombreWithDotDecimal(QPosition, 2);
 
   EWE := GetColorDegrade(QPosition, editDegradeXDebut.Value, editDegradeXFin.Value,
                          btnDegradeDebut.ButtonColor, btnDegradeFin.ButtonColor);

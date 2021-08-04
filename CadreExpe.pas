@@ -79,15 +79,13 @@ uses
 // appelée une seule fois dans leurs feuilles respectives
 // --> initialisation du cadre effectuée en même temps
 function TCdrExpe.Initialiser(const D: TToporobotStructure2012; const MyExpe: TExpe): boolean;
-var
-  WU: TDateTime;
 begin
   result := false;
   FMyDocTopo := D;
   InitCaptions();
   editNoExpe.AsInteger    := MyExpe.IDExpe;
-  WU := GetSecuredDate(MyExpe.AnneeExpe, MyExpe.MoisExpe, MyExpe.JourExpe);
-  editDateSeance.Text     := DateToStr(WU, DefaultFormatSettings);
+
+  editDateSeance.Text     := DateToStr(MyExpe.DateExpe, DefaultFormatSettings);
   editSpeleometre.Text    := GetResourceString(MyExpe.Operateur);
   editSpeleographe.Text   := GetResourceString(MyExpe.ClubSpeleo);
   editDeclimag.Value      := MyExpe.DeclinaisonInDegrees;
@@ -201,16 +199,9 @@ begin
   with E do
   begin
     IDExpe      := editNoExpe.AsInteger;
-    WU := StrToDate(Trim(editDateSeance.Text), DefaultFormatSettings);
-    DecodeDate(WU, YYYY, MM, DD);
-    {$WARNING: TEXpe.DateExpe à implementer}
-    JourExpe    := DD;
-    MoisExpe    := MM;
-    AnneeExpe   := YYYY;
+    DateExpe    := editDateSeance.Date;
     Operateur   := _LCLStrToAnsi(editSpeleometre.Text);
     ClubSpeleo  := _LCLStrToAnsi(editSpeleographe.Text);
-    //Inclinaison := editInclinaison.Value;
-
     IdxCouleur  := editCouleur.AsInteger;
     ModeDecl    := TModeCalculDeclimag(cmbModeDecl.ItemIndex);
     DeclinaisonInDegrees := editDeclimag.Value;

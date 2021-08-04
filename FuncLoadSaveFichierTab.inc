@@ -189,9 +189,7 @@ var
                      //nombre d'entrées nul = on définit l'entrée par défaut
                      if (0 = GetNbEntrances()) then
                      begin
-                       SetDefaultCoords(ConvertirEnNombreReel(PrmsLn[2], 0.00),
-                                        ConvertirEnNombreReel(PrmsLn[3], 0.00),
-                                        ConvertirEnNombreReel(PrmsLn[4], 0.00));
+                       SetDefaultCoords(PrmsLn[2], PrmsLn[3], PrmsLn[4]);
                        SetRefSeriePoint(StrToIntDef(PrmsLn[5],1), StrtoIntDef(PrmsLn[6], 0));
                      end;
                      //Commentaires:=PrmsLn[7];
@@ -213,9 +211,7 @@ var
                        UneEntree.eNomEntree := Format(rsRD_TAB_ENTRANCE,[QN]);
                        UneEntree.eCouleur.setFrom(clRed);
                      end;
-                     UneEntree.ePosition.setFrom(ConvertirEnNombreReel(PrmsLn[2], 0.00),
-                                                 ConvertirEnNombreReel(PrmsLn[3], 0.00),
-                                                 ConvertirEnNombreReel(PrmsLn[4], 0.00));
+                     UneEntree.ePosition.setFrom(PrmsLn[2], PrmsLn[3], PrmsLn[4]);
 
 
                      //------------
@@ -238,24 +234,10 @@ var
                         ErrMsg:=rsRD_TAB_BAD_TRIP;
                         raise Exception.Create(ErrMsg);
                      end;
-                     {$WARNING: TEXpe.DateExpe à implementer - }
-                     UneExpe.JourExpe      := StrToIntDef(PrmsLn[2],1);
-                     UneExpe.MoisExpe      := StrToIntDef(PrmsLn[3],1);
-                     UneExpe.AnneeExpe     := StrToIntDef(PrmsLn[4],2000);
-                     //UneExpe.DateExpe      := GetSecuredDate(StrToIntDef(PrmsLn[4],2000),
-                     //                                        StrToIntDef(PrmsLn[3],1),
-                     //                                        StrToIntDef(PrmsLn[2],1));
+                     UneExpe.fromYYYYMMDD(StrToIntDef(PrmsLn[4], 2000),
+                                          StrToIntDef(PrmsLn[3], 1),
+                                          StrToIntDef(PrmsLn[2], 2000));
 
-                     if (UneExpe.JourExpe=0) or (UneExpe.MoisExpe=0) or (UneExpe.AnneeExpe=0) then
-                     begin
-                       WriteWarning(Format(rsRD_TAB_BAD_DATE,
-                                          [NoLigneTAB]));
-                       DecodeDate(Now(), yyy, mmm, ddd);
-                       UneExpe.JourExpe := ddd;
-                       UneExpe.MoisExpe := mmm;
-                       UneExpe.AnneeExpe:= yyy;
-                     end;
-                     {$WARNING: End TEXpe.DateExpe à implementer}
                      UneExpe.Operateur     := PrmsLn[5];             // spéléomètre
                      UneExpe.ClubSpeleo    := PrmsLn[6];             // spéléographe
                      {$WARNING A revoir et vérifier. Si c'est un TAB pur, calcul de la déclimag en automatique}

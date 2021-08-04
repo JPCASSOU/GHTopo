@@ -698,7 +698,7 @@ begin
       MyPoly.BoundingBox.UpdateBoundingBox(BuffVertex);
       if (FBDDEntites.GetStationOrEntranceFromXYZ(BuffVertex.X, BuffVertex.Y, 0.00, MAX_DISTANCE_CAPTURE, [tpVISEES], False, QIdx, QBaseStation, QEntrance, QDistance, QE)) then
       begin
-        MyPoly.Sommets[i].IDBaseStation := MakeTIDBaseStation(QBaseStation.Entite_Serie, QBaseStation.Entite_Station, false);
+        MyPoly.Sommets[i].IDBaseStation := QBaseStation.toTIDBaseStation();
         MyPoly.Sommets[i].Offset.setFrom(BuffVertex.X - QBaseStation.PosStation.X,
                                          BuffVertex.Y - QBaseStation.PosStation.Y,
                                          QBaseStation.PosStation.Z);

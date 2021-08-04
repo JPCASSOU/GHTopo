@@ -4,10 +4,10 @@ unit UnitGraphes1;
 {$DEFINE NEW_VERSION}
 interface
 uses
+  StructuresDonnees,
   Classes, SysUtils, math, Graphics,
   LazFileUtils,
   Common,
-  StructuresDonnees,
   UnitObjetSerie,
   UnitListesSimplesWithGeneriques,
   ToporobotClasses2012,
@@ -17,7 +17,11 @@ uses
   BZArrayClasses
   ;
 
-type TPathBetweenNodes = record
+type
+
+{ TPathBetweenNodes }
+
+ TPathBetweenNodes = record
   NomItineraire : string;
   Color         : TColor;
   SerieDepart   : TNumeroSerie;
@@ -34,6 +38,9 @@ type TPathBetweenNodes = record
   procedure AddNoeud(const N: TNumeroNoeud);
   function  GetNoeud(const Idx: integer): TNumeroNoeud;
   function  GetNbNoeuds(): integer;
+  function  StationDepartToTIDBaseStation(): TIDBaseStation;
+  function  StationArriveeToTIDBaseStation(): TIDBaseStation;
+  function  IsSameStationsDepartArrivee(): boolean;
 end;
 //******************************************************************************
 
@@ -53,7 +60,7 @@ type
     function SetLastError(const QErrCode: integer; const QErrMsg: string): boolean;
   private
     function   Reset(): boolean;
-    function   FindNoeudByIDStation(const IDS: TIDStation; out ST: TBZClassNode; out IndexOf: TNumeroNoeud): boolean;
+    function   FindNoeudByIDStation(const IDS: TIDBaseStation; out ST: TBZClassNode; out IndexOf: TNumeroNoeud): boolean;
     procedure  SetMinMax();                // étendue du réseau
     procedure  PurgerDoublons();           // on jette les doublons
     procedure  PutNoeud(const Idx: integer; const QNoeud: TBZClassNode);
@@ -68,7 +75,7 @@ type
     function  ConstruireGraphe(): boolean;
     // Les utilitaires
     function  GetLastError(): TGrapheLastError;
-    function  FormatterTIDStation(const QId: TIDStation): string;
+    function  FormatterTIDStation(const QId: TIDBaseStation): string;
     procedure ListerLesNoeuds(const Caption: string; const DoDisplayDependances: boolean = false);
     // Les noeuds
     procedure DisplaySommetsGraphe();
@@ -155,6 +162,21 @@ begin
   result := Length(self.ListeNoeuds);
 end;
 
+function TPathBetweenNodes.StationDepartToTIDBaseStation(): TIDBaseStation;
+begin
+  Result := NB_MAXI_SERIES_PAR_CAVITE * Abs(self.SerieDepart) + MULTIPLICATEUR_STATION * Abs(self.StationDepart);
+end;
+
+function TPathBetweenNodes.StationArriveeToTIDBaseStation(): TIDBaseStation;
+begin
+  Result := NB_MAXI_SERIES_PAR_CAVITE * Abs(self.SerieArrivee) + MULTIPLICATEUR_STATION * Abs(self.StationArrivee);
+end;
+
+function TPathBetweenNodes.IsSameStationsDepartArrivee(): boolean;
+begin
+  Result := (self.SerieDepart = self.SerieArrivee) and (self.StationDepart = self.StationArrivee);
+end;
+
 //******************************************************************************
 { TPathFindingGraphe }
 function TPathFindingGraphe.Reset(): boolean;
@@ -186,7 +208,7 @@ function  TPathFindingGraphe.GetLastError(): TGrapheLastError;
 begin
   result := FLastError;
 end;
-function TPathFindingGraphe.FormatterTIDStation(const QId: TIDStation): string;
+function TPathFindingGraphe.FormatterTIDStation(const QId: TIDBaseStation): string;
 var
   Qser, QSt: integer;
 begin
@@ -469,8 +491,8 @@ begin
   else
     SetLastError(ERR_GRAPHE_EMPTY_LIST_NODES, 'La liste des noeuds est vide');
 end;
-function TPathFindingGraphe.FindNoeudByIDStation(const IDS: TIDStation; out ST: TBZClassNode; out IndexOf: TNumeroNoeud): boolean;
-  function FindDepth(const I1, I2: TNumeroNoeud; const QIDX: TIDStation): TNumeroNoeud;
+function TPathFindingGraphe.FindNoeudByIDStation(const IDS: TIDBaseStation; out ST: TBZClassNode; out IndexOf: TNumeroNoeud): boolean;
+  function FindDepth(const I1, I2: TNumeroNoeud; const QIDX: TIDBaseStation): TNumeroNoeud;
   var
     PVT: integer;
     C1: TBZClassNode;
@@ -609,20 +631,15 @@ begin
   try
     FShortestPath.ClearListe();
     // Recherche des noeuds de départ et d'arrivée
-    Q1 := FindNoeudByIDStation(MakeTIDBaseStation(MyPath.SerieDepart, MyPath.StationDepart, false), QNoeudDepart, IdxNoeudDepart);
+    Q1 := FindNoeudByIDStation(MyPath.StationDepartToTIDBaseStation(), QNoeudDepart, IdxNoeudDepart);
     if (Not Q1) then Exit(SetLastError(ERR_GRAPHE_NODE_NOT_FOUND, Format('Noeud "%d.%d" introuvable', [MyPath.SerieDepart, MyPath.StationDepart])));
-    Q1 := FindNoeudByIDStation(MakeTIDBaseStation(MyPath.SerieArrivee, MyPath.StationArrivee, false), QNoeudArrivee, IdxNoeudArrivee);
+    Q1 := FindNoeudByIDStation(MyPath.StationArriveeToTIDBaseStation(), QNoeudArrivee, IdxNoeudArrivee);
     if (Not Q1) then Exit(SetLastError(ERR_GRAPHE_NODE_NOT_FOUND, Format('Noeud "%d.%d" introuvable', [MyPath.SerieArrivee, MyPath.StationArrivee])));
     //AfficherMessage(Format('%s.RechercherPlusCourtChemin(): %d: %d.%d -> %d: %d.%d', [ClassName, IdxNoeudDepart, FSerieDepart, FStationDepart, IdxNoeudArrivee, FSerieArrivee, FStationArrivee]));
     // Stations identiques -->[ ]
-    Q1 := (MyPath.SerieDepart = MyPath.SerieArrivee) and (MyPath.StationDepart = MyPath.StationArrivee);
-    if (Q1) then Exit(SetLastError(ERR_GRAPHE_SAME_START_END, '-- Les stations de départ et arrivée sont identiques'));
-    //AfficherMessage('Début de la recherche du chemin le plus court');
-    //AfficherMessage('==========================================================');
+    if (MyPath.IsSameStationsDepartArrivee()) then Exit(SetLastError(ERR_GRAPHE_SAME_START_END, '-- Les stations de départ et arrivée sont identiques'));
     QDist := self.Dijkstra(IdxNoeudDepart, IdxNoeudArrivee, FShortestPath);
-    //AfficherMessage(Format('Fin la recherche du chemin le plus court: QDist = %.2f', [QDist]));
-    //AfficherMessage('==========================================================');
-    QNbC := FShortestPath.Count;
+    QNbC  := FShortestPath.Count;
     if (QNbC > 2) then
     begin
       MyPath.EmptyListeNoeuds();

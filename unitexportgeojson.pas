@@ -69,7 +69,7 @@ end;
 implementation
 
 // pour se rendre indépendant des unités de GHTopo
-function FormatterNombreReel(const Value: double; const NbDecs: integer = 2): string;
+function QFormatterNombreReel(const Value: double; const NbDecs: integer = 2): string;
 var
   EWE: String;
 begin
@@ -107,7 +107,7 @@ begin
   WriteLine(Format('      "%s": "%s",'  , ['stroke'      , QColorToHTMLColor(FLineColor)]));
   WriteLine(Format('      "%s": "%s",'  , ['fill'        , QColorToHTMLColor(FFillColor)]));
   WriteLine(Format('      "%s": %d,', ['stroke-width', FLineWidth]));
-  WriteLine(Format('      "%s": %.2f', ['opacity', FFillOpacity / 256.0]));
+  WriteLine(Format('      "%s": %s', ['opacity', QFormatterNombreReel(FFillOpacity / 256.0, 2)]));
   WriteLine(       '    },');
   WriteLine(Format('    "%s": {', ['geometry']));
   WriteLine(Format('      "%s": "%s",', ['type', EWE]));
@@ -184,7 +184,7 @@ begin
   WriteLine(Format('    "%s": "%s",'  , ['stroke'      , QColorToHTMLColor(FLineColor)]));
   WriteLine(Format('    "%s": "%s",'  , ['fill'        , QColorToHTMLColor(FFillOpacity)]));
   WriteLine(Format('    "%s": "%.0f",', ['stroke-width', 0.00]));
-  WriteLine(Format('    "%s": "%.2f"' , ['opacity', FFillOpacity / 256.0]));
+  WriteLine(Format('    "%s": "%s"' , ['opacity', QFormatterNombreReel(FFillOpacity / 256.0, 2)]));
   WriteLine(       '  },');
   WriteLine(Format('  "%s":[', ['features']))
 end;
@@ -224,7 +224,7 @@ end;
 
 procedure TGeoJSONExport.AddVertex(const Lat, Lon, Alt: double; const IsLast: boolean);
 begin
-  WriteLine(format('          [%s, %s]%s', [FormatterNombreReel(Lon, 8), FormatterNombreReel(Lat, 8), BoolToStr(IsLast, '',',')]));
+  WriteLine(format('          [%s, %s]%s', [QFormatterNombreReel(Lon, 8), QFormatterNombreReel(Lat, 8), BoolToStr(IsLast, '',',')]));
 end;
 procedure TGeoJSONExport.BeginPolygon(const Name: string; const TagString: string);
 begin

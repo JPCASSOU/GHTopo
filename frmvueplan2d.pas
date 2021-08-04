@@ -10,7 +10,6 @@ interface
 
 uses
   {$INCLUDE SelectionLangues.inc} // insère les unités en fonction de la langue
-
   Classes, SysUtils,
   StructuresDonnees,
   Common,

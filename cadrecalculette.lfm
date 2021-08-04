@@ -22,10 +22,10 @@ object CdrCalculette: TCdrCalculette
     Height = 717
     Top = 0
     Width = 1160
-    ActivePage = tabShtPascalScript
+    ActivePage = tabShtCalculatrice
     Align = alClient
     Anchors = [akLeft, akRight, akBottom]
-    TabIndex = 3
+    TabIndex = 0
     TabOrder = 0
     OnChange = PageControl1Change
     object tabShtCalculatrice: TTabSheet
@@ -2771,23 +2771,23 @@ object CdrCalculette: TCdrCalculette
     end
     object tabShtImage: TTabSheet
       Caption = 'tabShtImage'
-      ClientHeight = 743
-      ClientWidth = 1088
+      ClientHeight = 688
+      ClientWidth = 1152
       object PairSplitter4: TPairSplitter
         Left = 0
-        Height = 743
+        Height = 688
         Top = 0
-        Width = 1088
+        Width = 1152
         Align = alClient
         Position = 492
         object PairSplitterSide7: TPairSplitterSide
           Cursor = crArrow
           Left = 0
-          Height = 743
+          Height = 688
           Top = 0
           Width = 492
           ClientWidth = 492
-          ClientHeight = 743
+          ClientHeight = 688
           object btnOpenImage: TButton
             Left = 0
             Height = 25
@@ -2810,7 +2810,7 @@ object CdrCalculette: TCdrCalculette
           object lbPhotoInfos: TStaticText
             Left = 0
             Height = 21
-            Top = 721
+            Top = 666
             Width = 409
             Anchors = [akLeft, akRight, akBottom]
             BorderStyle = sbsSingle
@@ -2819,7 +2819,7 @@ object CdrCalculette: TCdrCalculette
           object btnAny: TButton
             Left = 412
             Height = 21
-            Top = 721
+            Top = 666
             Width = 75
             Anchors = [akRight, akBottom]
             Caption = 'Copier'
@@ -2828,7 +2828,7 @@ object CdrCalculette: TCdrCalculette
           end
           object ExifGrid: TStringGrid
             Left = 0
-            Height = 685
+            Height = 630
             Top = 32
             Width = 487
             Anchors = [akTop, akLeft, akRight, akBottom]
@@ -2853,16 +2853,16 @@ object CdrCalculette: TCdrCalculette
         object PairSplitterSide8: TPairSplitterSide
           Cursor = crArrow
           Left = 497
-          Height = 743
+          Height = 688
           Top = 0
-          Width = 591
-          ClientWidth = 591
-          ClientHeight = 743
+          Width = 655
+          ClientWidth = 655
+          ClientHeight = 688
           object lbImageFilename: TStaticText
             Left = 4
             Height = 24
             Top = 4
-            Width = 583
+            Width = 647
             Anchors = [akTop, akLeft, akRight]
             BorderStyle = sbsSingle
             Caption = '--'
@@ -2870,19 +2870,19 @@ object CdrCalculette: TCdrCalculette
           end
           object pnlImage: TPanel
             Left = 4
-            Height = 710
+            Height = 655
             Top = 32
-            Width = 583
+            Width = 647
             Anchors = [akTop, akLeft, akRight, akBottom]
             BorderStyle = bsSingle
-            ClientHeight = 706
-            ClientWidth = 579
+            ClientHeight = 651
+            ClientWidth = 643
             TabOrder = 1
             object Image: TImage
               Left = 1
-              Height = 704
+              Height = 649
               Top = 1
-              Width = 577
+              Width = 641
               Align = alClient
               Proportional = True
             end

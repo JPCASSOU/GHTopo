@@ -173,6 +173,7 @@ type
     procedure grdStationsGetCellHint(Sender: TObject; ACol, ARow: Integer; var HintText: String);
     procedure grdStationsHeaderClick(Sender: TObject; IsColumn: Boolean; Index: Integer);
     procedure grdStationsKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+    procedure grdStationsMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure grdStationsSelectCell(Sender: TObject; aCol, aRow: Integer; var CanSelect: Boolean);
 
     procedure lsbErreursClick(Sender: TObject);
@@ -287,8 +288,7 @@ begin
     FRowCourante := grdStations.Row;
     FColCourante := grdStations.Col;
     L := 0.00;
-    // Configuration du pop-up
-    ConfigurerGrdPopUp(grdStations.Col);
+    ConfigurerGrdPopUp(grdStations.Col);  // Configuration du pop-up
     // calcul de la longueur cumulée
     if (grdStations.Row > 0) then
     begin
@@ -299,7 +299,6 @@ begin
       end;
     end;
     lbLongueurCumulee.Caption := Format('L%dC%d: %.2f m', [FRowCourante, FColCourante, L]);
-
   except
   end;
 end;
@@ -469,7 +468,7 @@ begin
     // Sous Delphi, utiliser l'option goAlwaysShowEditor
     Options := [goEditing,
                 //goAlwaysShowEditor,
-                goRangeSelect,
+                //goRangeSelect,
                 goAutoAddRows,
                 goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine,
                 goRowHighlight,
@@ -586,60 +585,10 @@ end;
 
 //******************************************************************************
 procedure TCdrSerieIndependant.grdStationsDblClick(Sender: TObject);
-var
-  P: TPoint;
-  QCol, QRow: integer;
-  Q: integer;
-  S: string;
-  UnCode: TCode;
-  UneExpe: TExpe;
 begin
-
+  pass;
   (*
-  //******************************************************
-  // DONE: Ce code fonctionne mais l'événement OnDblClick est intercepté
-  //       par l'éditeur de texte incorporé
-  // Source: http://www.developpez.net/forums/d299139/ \n
-  //         environnements-developpement/delphi/selection-cellule-tstringgrid-double-click/
 
-  P := Mouse.CursorPos;
-  //GetCursorPos(P) ;
-  P := grdStations.ScreenToClient(P);
-  grdStations.MouseToCell(P.X, P.Y, Qcol, QRow);
-  if grdStations.Row = 0 then Exit;
-  case grdStations.Col of
-    NUM_COL_TYPEGAL: // sélection d'un type de galerie
-    begin
-      q := StrToIntDef(grdStations.Cells[NUM_COL_TYPEGAL, grdStations.Row], 0);
-      q := ChooseTypeVisee(q);
-      grdStations.Cells[NUM_COL_TYPEGAL, grdStations.Row] := Format(FORMAT_NB_INTEGER, [q]);
-    end;
-    NUM_COL_CODE:
-    begin // sélectionner un code
-      q := StrToIntDef(grdStations.Cells[NUM_COL_CODE, grdStations.Row], 1);
-      q := SelectionDansListe(FDocuToporobot, mslCODE, q, False);
-      if (q > 0) then UnCode := FDocuToporobot.GetCodeByIndex(q)
-                 else UnCode := FDocuToporobot.GetCodeByIndex(1);
-      grdStations.Cells[NUM_COL_CODE, grdStations.Row] := Format(FORMAT_NB_INTEGER, [UnCode.IDCode]);
-    end;
-    NUM_COL_EXPE:
-    begin // sélectionner une expé
-      q := StrToIntDef(grdStations.Cells[NUM_COL_EXPE, grdStations.Row], 1);
-      q := SelectionDansListe(FDocuToporobot, mslEXPE, q, False);
-      if (q > 0) then UneExpe := FDocuToporobot.GetExpeByIndex(Q)
-                 else UneExpe := FDocuToporobot.GetExpeByIndex(1);
-      grdStations.Cells[NUM_COL_EXPE, grdStations.Row] := Format(FORMAT_NB_INTEGER, [UneExpe.IDExpe]);
-    end;
-    NUM_COL_OBS:
-    begin // commentaire station
-      s := grdStations.Cells[NUM_COL_OBS, grdStations.Row];
-      if (GHTopoInputQuery(GetResourceString(rsINPUT_COMMENTAIRE_TITRE),
-                           GetResourceString(rsINPUT_COMMENTAIRE_MSG),
-                           s))
-      then grdStations.Cells[NUM_COL_OBS, grdStations.Row] := s;
-    end;
-    else;
-  end;
 
   //*)
 end;
@@ -668,8 +617,7 @@ begin
     NUM_COL_EXPE:
       begin
         EX := FDocuToporobot.GetExpeByNumero(EWE);
-        {$WARNING: TEXpe.DateExpe à implementer}
-        HintText := Format('Expe: %d - %.2d/%.2d/%.4d - %s', [EX.IDExpe, EX.JourExpe, EX.MoisExpe, EX.AnneeExpe, EX.Commentaire]);
+        HintText := Format('Expe: %d - %s - %s', [EX.IDExpe, DateToStr(EX.DateExpe), EX.Commentaire]);
       end;
     NUM_COL_CODE:
       begin
@@ -816,6 +764,73 @@ begin
   end;
 end;
 
+procedure TCdrSerieIndependant.grdStationsMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var
+  P: TPoint;
+  q, QCol, QRow: LongInt;
+  s: String;
+  UnCode: TCode;
+  UneExpe: TExpe;
+begin
+  QCol := 0;
+  QRow := 0;
+  if (ssShift in Shift) then
+  begin
+    grdStations.Options := grdStations.Options + [goRangeSelect];
+  end
+  else
+  begin
+    grdStations.Options := grdStations.Options - [goRangeSelect];
+    //******************************************************
+    // DONE: Ce code fonctionne mais l'événement OnDblClick est intercepté
+    //       par l'éditeur de texte incorporé
+    // Source: http://www.developpez.net/forums/d299139/ \n
+    //         environnements-developpement/delphi/selection-cellule-tstringgrid-double-click/
+    P := grdStations.ScreenToClient(Mouse.CursorPos);
+    grdStations.MouseToCell(P.X, P.Y, Qcol, QRow);
+    if (QRow = 0) then Exit;
+    case QCol of
+      NUM_COL_SECTEUR:
+      begin
+        q := StrToIntDef(grdStations.Cells[NUM_COL_SECTEUR, QRow], 0);
+        SelectionDansListe(FDocuToporobot, mslSECTEURS, True, q);
+        grdStations.Cells[NUM_COL_SECTEUR, QRow] := Format(FORMAT_NB_INTEGER, [q]);
+      end;
+      NUM_COL_TYPEVISEE: // sélection d'un type de galerie
+      begin
+        q := ChooseTypeVisee(StrToIntDef(grdStations.Cells[NUM_COL_TYPEVISEE, QRow], 0));
+        grdStations.Cells[NUM_COL_TYPEVISEE, QRow] := Format(FORMAT_NB_INTEGER, [q]);
+      end;
+      NUM_COL_CODE:
+      begin // sélectionner un code
+        q := StrToIntDef(grdStations.Cells[NUM_COL_CODE, grdStations.Row], 1);
+        SelectionDansListe(FDocuToporobot, mslCODE, False, q);
+        if (q > 0) then UnCode := FDocuToporobot.GetCodeByNumero(q)
+                   else UnCode := FDocuToporobot.GetCodeByNumero(1);
+        grdStations.Cells[NUM_COL_CODE, QRow] := Format(FORMAT_NB_INTEGER, [UnCode.IDCode]);
+      end;
+      NUM_COL_EXPE:
+      begin // sélectionner une expé
+        q := StrToIntDef(grdStations.Cells[NUM_COL_EXPE, QRow], 1);
+        SelectionDansListe(FDocuToporobot, mslEXPE, False, q);
+        if (q > 0) then UneExpe := FDocuToporobot.GetExpeByNumero(Q)
+                   else UneExpe := FDocuToporobot.GetExpeByNumero(1);
+        grdStations.Cells[NUM_COL_EXPE, QRow] := Format(FORMAT_NB_INTEGER, [UneExpe.IDExpe]);
+      end;
+      NUM_COL_OBS:
+      begin // commentaire station
+        s := grdStations.Cells[NUM_COL_OBS, QRow];
+        if (GHTopoInputQuery(GetResourceString(rsINPUT_COMMENTAIRE_TITRE),
+                             GetResourceString(rsINPUT_COMMENTAIRE_MSG),
+                             s))
+        then grdStations.Cells[NUM_COL_OBS, grdStations.Row] := s;
+      end;
+      else
+        pass;
+    end;
+  end;
+end;
+
 procedure TCdrSerieIndependant.grdStationsSelectCell(Sender: TObject; aCol, aRow: Integer; var CanSelect: Boolean);
 var
   R: TRect;
@@ -827,12 +842,12 @@ begin
   if ((aRow > 0) and (aCol = NUM_COL_TYPEVISEE) and (1 = NbCellsSelected)) then
   begin
     R := grdStations.CellRect(aCol, aRow);
-    R.Left   := R.Left + grdStations.Left;
-    R.Right  := R.Right + grdStations.Left;
-    R.Top    := R.Top + grdStations.Top;
+    R.Left   := R.Left   + grdStations.Left;
+    R.Right  := R.Right  + grdStations.Left;
+    R.Top    := R.Top    + grdStations.Top;
     R.Bottom := R.Bottom + grdStations.Top;
-   end;
-   CanSelect := True;
+  end;
+  CanSelect := True;
 end;
 
 
@@ -911,7 +926,6 @@ begin
       Q := Trim(Copy(QFindWhat, 1, S - 1));
       QEditSer.Hint := Q;
       QEditPt.Hint  := Q;
-
     end
     else
       ShowMessage(GetResourceString(rsMATCHNOTFOUND));
@@ -948,25 +962,13 @@ procedure TCdrSerieIndependant.acChooseSecteurExecute(Sender: TObject);
 var
   WU: Integer;
 begin
-   WU := StrToIntDef(grdStations.Cells[NUM_COL_SECTEUR, FRowCourante], 0);
-   if (SelectionDansListe(FDocuToporobot, mslSECTEURS, False, WU)) then grdStations.Cells[NUM_COL_SECTEUR, FRowCourante] := Format(FORMAT_NB_INTEGER, [WU]);
+  WU := StrToIntDef(grdStations.Cells[NUM_COL_SECTEUR, FRowCourante], 0);
+  if (SelectionDansListe(FDocuToporobot, mslSECTEURS, False, WU)) then grdStations.Cells[NUM_COL_SECTEUR, FRowCourante] := Format(FORMAT_NB_INTEGER, [WU]);
 end;
 
 procedure TCdrSerieIndependant.acChooseTypeViseeExecute(Sender: TObject);
-var
-  QQ: Integer;
-  k: Integer;
-  WU: Integer;
 begin
-  (*
-  QQ := grdStations.Left;
-  for k := 0 to NUM_COL_TYPEGAL - 1 do QQ := QQ + grdStations.ColWidths[k];
-  pnlTypesVisees.Top  := 60;
-  pnlTypesVisees.Left := QQ;
-  WU := StrToIntDef(grdStations.Cells[NUM_COL_TYPEGAL, grdStations.Row], 0);
-  pnlTypesVisees.Visible     := true;
-  lsbTypesGaleries.ItemIndex := WU;
-  //*)
+  pass;
 end;
 
 procedure TCdrSerieIndependant.acCopierLeTableauExecute(Sender: TObject);
@@ -1053,12 +1055,11 @@ var
   MyRow, MyIdxSecteur, i: Integer;
   MyIdxCode: TNumeroCode;
   MyIdxExpe: TNumeroExpe;
-
 begin
   {$IFDEF GROS_MINET}
      ShowMessage('Not implemented');
   {$ELSE}
-  if (Not GHTopoQuestionOuiNon('Vous pouvez aussi utiliser l''outil de maintenance du document ' + #13#10 +
+  if (Not GHTopoQuestionOuiNon('Vous pouvez aussi utiliser l''outil de maintenance du document ' + CR_LF +
                                'pour réattribuer les index - Continuer ?')) then Exit;
   MyRow := grdStations.Row;
   MyIdxSecteur := StrToIntDef(grdStations.Cells[NUM_COL_SECTEUR, MyRow], 0);
@@ -1201,8 +1202,8 @@ end;
 
 procedure TCdrSerieIndependant.Button2Click(Sender: TObject);
 begin
-  ShowMessage('Ce coefficient caractérise la déformabilité de la série' + #13#10 +
-              'Mettre une valeur élevée (e.g: 5 à 10): la série est peu déformable' + #13#10 +
+  ShowMessage('Ce coefficient caractérise la déformabilité de la série' + CR_LF +
+              'Mettre une valeur élevée (e.g: 5 à 10): la série est peu déformable' + CR_LF +
               'Mettre une valeur faible (eg: 0.5): la série est très déformable');
 end;
 
@@ -1215,15 +1216,15 @@ end;
 procedure TCdrSerieIndependant.cmbPropalesRaideurChange(Sender: TObject);
 begin
   case cmbPropalesRaideur.ItemIndex of
-    0: pass;                          //  Valeur fournie
+    0: pass;                          // Valeur fournie
     1: editRaideur.Value  :=    1.0;  // par défaut;
-    2: editRaideur.Value  := 1000.0;  //  Enclume;
+    2: editRaideur.Value  := 1000.0;  // Enclume;
     3: editRaideur.Value  :=   10.0;  // Bite de cheval
     4: editRaideur.Value  :=    5.0;  // Bite de nègre
     5: editRaideur.Value  :=    1.0;  // Bite normale
     6: editRaideur.Value  :=    0.5;  // Flaccide
-    7: editRaideur.Value  :=    0.3;  //  Bite de Buldo
-    8: editRaideur.Value  :=    0.1;  // Impuissance quasi totale    //*)
+    7: editRaideur.Value  :=    0.3;  // Bite de Buldo
+    8: editRaideur.Value  :=    0.1;  // Impuissance quasi totale
   end;
 end;
 
@@ -1290,7 +1291,7 @@ end;
 
 procedure TCdrSerieIndependant.DisplayHint(const MyCtrl: TControl; const Msg: string);
 begin
-
+  pass;
 end;
 
 // Sauvegarde modifs formulaire et tableau
@@ -1299,7 +1300,7 @@ var
   i: integer;
   V: TUneVisee;
   NbAffectedViseesAntennes: Integer;
-  SD, EWE: Integer;
+  EWE: Integer;
   qdx, qdy, qdz: double;
   QSerieDoublon: TObjSerie;
   WU: boolean;
@@ -1364,7 +1365,7 @@ var
       if (not IsInRange(AStation.Azimut, AMin, AMax)) then AddMsgErreur(i, NUM_COL_A, Format(rsCDR_SERIES_MSG_ERROR_AZIMUT_OUT_OF_RANGE, [AStation.Azimut, AMin, AMax]));
       // pentes
       case Trunc(CC.GradInc) of
-        360: SetAMinAMax(-QUADRANT_DEGRES, QUADRANT_DEGRES);     // zéro horizontal degrés
+        360: SetAMinAMax(-QUADRANT_DEGRES, QUADRANT_DEGRES);   // zéro horizontal degrés
         400: SetAMinAMax(-QUADRANT_GRADES, QUADRANT_GRADES);   // zéro horizontal grades
         361: SetAMinAMax(0.00, ANGLE_JANE_BRIKIN_DEGRES);      // zéro zénithal degrés
         401: SetAMinAMax(0.00, ANGLE_JANE_BRIKIN_GRADES);      // zéro zénithal grades
@@ -1392,106 +1393,93 @@ var
   end;
 begin
   QNbErreurs := 0;
-  {$DEFINE ACTIVETRY}
-  {$UNDEF ACTIVETRY}
-
   AfficherMessage(Format('%s.ImplementerModifs', [ClassName]));
   Result := False;
   lsbErreurs.Clear;
 
   // calcul éventuel estrémités de série
   if (editPointArrivee.AsInteger = -1) then AttribuerExtremiteLibre();
-  //AttribuerExtremiteLibre(editSerieArrivee.AsInteger, editPointArrivee.AsInteger);
-  {$IFDEF ACTIVETRY}
-  try
-  {$ENDIF}
-    FCurrentSerie.SetNumeroSerie(TNumeroSerie(editNumeroSerie.AsInteger));
-    FCurrentSerie.SetNomSerie(Trim(_LCLStrToAnsi(editNomSerie.Text)));
-    SD := editNumEntreeRattachement.AsInteger;     // entrées
-    FCurrentSerie.SetNumeroEntrance(SD);
-    SD := editNumeroReseau.AsInteger;              // réseaux
-    FCurrentSerie.SetNumeroReseau(SD);
-    WU := FDocuToporobot.HasPtTopoBySerSt(editSerieDepart.AsInteger, editPointDepart.AsInteger) OR
-          FDocuToporobot.HasPtTopoBySerSt(editSerieArrivee.AsInteger, editPointArrivee.AsInteger);
-    if (not WU) then AddMsgErreur(-3, -4, rsCDR_SERIES_MSG_ERROR_ORPHAN_SERIE);
+  FCurrentSerie.SetNumeroSerie(TNumeroSerie(editNumeroSerie.AsInteger));
+  FCurrentSerie.SetNomSerie(Trim(_LCLStrToAnsi(editNomSerie.Text)));
+  FCurrentSerie.SetNumeroEntrance(editNumEntreeRattachement.AsInteger);
+  FCurrentSerie.SetNumeroReseau(editNumeroReseau.AsInteger);
+  WU := FDocuToporobot.HasPtTopoBySerSt(editSerieDepart.AsInteger, editPointDepart.AsInteger) OR
+        FDocuToporobot.HasPtTopoBySerSt(editSerieArrivee.AsInteger, editPointArrivee.AsInteger);
+  if (not WU) then AddMsgErreur(-3, -4, rsCDR_SERIES_MSG_ERROR_ORPHAN_SERIE);
 
-    FCurrentSerie.SetSeriePtExtremites(editSerieDepart.AsInteger, editPointDepart.AsInteger, editSerieArrivee.AsInteger, editPointArrivee.AsInteger);
-    FCurrentSerie.SetChanceObstacle(cmbChance.ItemIndex, cmbObstacle.ItemIndex);
-    FCurrentSerie.SetRaideur(editRaideur.Value);
-    FCurrentSerie.SetObsSerie(Trim(_LCLStrToAnsi(editCommentaire.Text)));
-    // [MODIF_ENTETE_TABLEUR] Attrapper la station 0 de la série
-    V := FCurrentSerie.GetVisee(0);
-    V.setLRUD(editLG0.Value, editLD0.Value, editHZ0.Value, editHN0.Value);
-    FCurrentSerie.ClearStations();      // Purger la liste des points topos
+  FCurrentSerie.SetSeriePtExtremites(editSerieDepart.AsInteger, editPointDepart.AsInteger, editSerieArrivee.AsInteger, editPointArrivee.AsInteger);
+  FCurrentSerie.SetChanceObstacle(cmbChance.ItemIndex, cmbObstacle.ItemIndex);
+  FCurrentSerie.SetRaideur(editRaideur.Value);
+  FCurrentSerie.SetObsSerie(Trim(_LCLStrToAnsi(editCommentaire.Text)));
+  // [MODIF_ENTETE_TABLEUR] Attrapper la station 0 de la série
+  V := FCurrentSerie.GetVisee(0);
+  V.setLRUD(editLG0.Value, editLD0.Value, editHZ0.Value, editHN0.Value);
+  FCurrentSerie.ClearStations();      // Purger la liste des points topos
+  FCurrentSerie.AddVisee(V);
+  // critère de sortie: Colonne 1 à 5 vides ou nulles
+  AfficherMessage(GetResourcestring(rsCDR_SERIES_MSG_ERROR_CHECKING_SERIE));
+  // si les colonnes Long, Az et P sont vides,
+  // la fin de la table des stations est supposée atteinte
+  //[MODIF_ENTETE_TABLEUR]
+  for i := 1 to grdStations.RowCount - 1 do
+  begin
+    if (IsEmptyRow(i)) then Break;
+    V.IDTerrainStation := FormatterIDTerrainStation(grdStations.Cells[NUM_COL_IDTERRAIN, i]);
+    V.IDSecteur        := StrToIntDef(grdStations.Cells[NUM_COL_SECTEUR, i], 0);
+    V.TypeVisee        := GetTypeDeVisee(StrToIntDef(grdStations.Cells[NUM_COL_TYPEVISEE, i], 0));
+    V.Code             := StrToIntDef(grdStations.Cells[NUM_COL_CODE, i], 1);
+    V.Expe             := StrToIntDef(grdStations.Cells[NUM_COL_EXPE, i], 1);
+    V.setLongAzInc(grdStations.Cells[NUM_COL_L, i],
+                   grdStations.Cells[NUM_COL_A, i],
+                   grdStations.Cells[NUM_COL_P, i]);
+    V.setLRUD(grdStations.Cells[NUM_COL_LG, i],
+              grdStations.Cells[NUM_COL_LD, i],
+              grdStations.Cells[NUM_COL_HZ, i],
+              grdStations.Cells[NUM_COL_HN, i]);
+    V.Commentaires     := _LCLStrToAnsi(Trim(grdStations.Cells[NUM_COL_OBS, i]));
+    V.Horodatage       := DateTimeSQLToDateTimePascal(grdStations.Cells[NUM_COL_HORODATE, i]);
+    V.Temperature      := ConvertirEnNombreReel(grdStations.Cells[NUM_COL_TEMPERATURE, i], 0.00);
+    V.Humidity         := ConvertirEnNombreReel(grdStations.Cells[NUM_COL_HUMIDITY   , i], 0.00);
+    CheckAStation(V);
     FCurrentSerie.AddVisee(V);
-    // critère de sortie: Colonne 1 à 5 vides ou nulles
-    AfficherMessage(GetResourcestring(rsCDR_SERIES_MSG_ERROR_CHECKING_SERIE));
-    // si les colonnes Long, Az et P sont vides,
-    // la fin de la table des stations est supposée atteinte
-    //[MODIF_ENTETE_TABLEUR]
-    for i := 1 to grdStations.RowCount - 1 do
-    begin
-      if (IsEmptyRow(i)) then Break;
-      V.IDTerrainStation := FormatterIDTerrainStation(grdStations.Cells[NUM_COL_IDTERRAIN, i]);
-      V.IDSecteur        := StrToIntDef(grdStations.Cells[NUM_COL_SECTEUR, i], 0);
-      V.TypeVisee        := GetTypeDeVisee(StrToIntDef(grdStations.Cells[NUM_COL_TYPEVISEE, i], 0));
-      V.Code             := StrToIntDef(grdStations.Cells[NUM_COL_CODE, i], 1);
-      V.Expe             := StrToIntDef(grdStations.Cells[NUM_COL_EXPE, i], 1);
-      V.setLongAzInc(grdStations.Cells[NUM_COL_L, i],
-                     grdStations.Cells[NUM_COL_A, i],
-                     grdStations.Cells[NUM_COL_P, i]);
-      V.setLRUD(grdStations.Cells[NUM_COL_LG, i],
-                grdStations.Cells[NUM_COL_LD, i],
-                grdStations.Cells[NUM_COL_HZ, i],
-                grdStations.Cells[NUM_COL_HN, i]);
-      V.Commentaires     := _LCLStrToAnsi(Trim(grdStations.Cells[NUM_COL_OBS, i]));
-      V.Horodatage       := DateTimeSQLToDateTimePascal(grdStations.Cells[NUM_COL_HORODATE, i]);
-      V.Temperature      := ConvertirEnNombreReel(grdStations.Cells[NUM_COL_TEMPERATURE, i], 0.00);
-      V.Humidity         := ConvertirEnNombreReel(grdStations.Cells[NUM_COL_HUMIDITY   , i], 0.00);
-      CheckAStation(V);
-      FCurrentSerie.AddVisee(V);
-    end;
-    FCurrentSerie.CalculIncertitude(-1, qdx, qdy, qdz);            // calcul d'incertitude
-
-
-    // rechercher si un doublon existe
-    EWE := 0;
-    if (FDocuToporobot.HasDoublonsInNumsSeries(FCurrentSerie.GetNumeroDeSerie(), EWE)) then
-    begin
-      QSerieDoublon := FDocuToporobot.GetSerie(EWE);
-      fatxe := format('Le numéro de série %d est utilisé par la série %d: %s [%d]', [FCurrentSerie.GetNumeroDeSerie(), QSerieDoublon.GetNumeroDeSerie(), QSerieDoublon.GetNomSerie(), EWE]);
-
-      AddMsgErreur(-3, -4, fatxe);
-      FCurrentSerie.SetNumeroSerie(FOldNumeroserie);
-      FOldNumeroserie := FCurrentSerie.GetNumeroDeSerie();
-      editNumeroSerie.AsInteger := FOldNumeroserie;
-      ShowMessage(fatxe);
-      Exit;
-    end
-    else
-    begin
-      // on renomme les visées en antenne et on réattribue les ID des noeuds des séries dépendantes
-      if (FCurrentSerie.GetNumeroDeSerie() <> FOldNumeroserie) then
-      begin
-        NbAffectedViseesAntennes := FDocuToporobot.UpdateSerPtExtremsSeriesRattachees(FOldNumeroserie, FCurrentSerie.GetNumeroDeSerie());
-        NbAffectedViseesAntennes := FDocuToporobot.ReAttribuerViseesRayonnantesDeUneSerie(FCurrentSerie, FOldNumeroserie);
-        ShowMessage(Format(GetResourceString(rsCDR_SERIE_NB_ANTENNES_MODIFIEES), [NbAffectedViseesAntennes]));
-      end;
-    end;
-    FOldNumeroserie := FCurrentSerie.GetNumeroDeSerie();
-    AfficherMessage(Format('%s.ImplementerModifs OK', [ClassName]));
-    QNbErreurs := lsbErreurs.Count;
-    pnlErreursACorriger.Visible := (QNbErreurs <> 0);        // liste des erreurs affichée s'il y en a
-
-
-    FCondensat := CalcCondensat();                                 // et recalcul du condensat
-    Result := True;                                                // Tout est OK: On met Result à TRUE;
-
-  {$IFDEF ACTIVETRY}
-  except
-    AfficherMessage(Format('%s.ImplementerModifs KO', [ClassName]));
   end;
-  {$ENDIF}
+  FCurrentSerie.CalculIncertitude(-1, qdx, qdy, qdz);            // calcul d'incertitude
+
+
+  // rechercher si un doublon existe
+  EWE := 0;
+  if (FDocuToporobot.HasDoublonsInNumsSeries(FCurrentSerie.GetNumeroDeSerie(), EWE)) then
+  begin
+    QSerieDoublon := FDocuToporobot.GetSerie(EWE);
+    fatxe := format('Le numéro de série %d est utilisé par la série %d: %s [%d]', [FCurrentSerie.GetNumeroDeSerie(), QSerieDoublon.GetNumeroDeSerie(), QSerieDoublon.GetNomSerie(), EWE]);
+
+    AddMsgErreur(-3, -4, fatxe);
+    FCurrentSerie.SetNumeroSerie(FOldNumeroserie);
+    FOldNumeroserie := FCurrentSerie.GetNumeroDeSerie();
+    editNumeroSerie.AsInteger := FOldNumeroserie;
+    ShowMessage(fatxe);
+    Exit;
+  end
+  else
+  begin
+    // on renomme les visées en antenne et on réattribue les ID des noeuds des séries dépendantes
+    if (FCurrentSerie.GetNumeroDeSerie() <> FOldNumeroserie) then
+    begin
+      NbAffectedViseesAntennes := FDocuToporobot.UpdateSerPtExtremsSeriesRattachees(FOldNumeroserie, FCurrentSerie.GetNumeroDeSerie());
+      NbAffectedViseesAntennes := FDocuToporobot.ReAttribuerViseesRayonnantesDeUneSerie(FCurrentSerie, FOldNumeroserie);
+      ShowMessage(Format(GetResourceString(rsCDR_SERIE_NB_ANTENNES_MODIFIEES), [NbAffectedViseesAntennes]));
+    end;
+  end;
+  FOldNumeroserie := FCurrentSerie.GetNumeroDeSerie();
+  AfficherMessage(Format('%s.ImplementerModifs OK', [ClassName]));
+  QNbErreurs := lsbErreurs.Count;
+  pnlErreursACorriger.Visible := (QNbErreurs <> 0);        // liste des erreurs affichée s'il y en a
+
+
+  FCondensat := CalcCondensat();                                 // et recalcul du condensat
+  Result := True;                                                // Tout est OK: On met Result à TRUE;
+
+
 end;
 
 function TCdrSerieIndependant.IsDataModified(): boolean;

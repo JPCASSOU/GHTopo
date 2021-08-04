@@ -335,14 +335,10 @@ begin
     FLongueurDiagonale := Hypot3D(cnMaxi.X-cnMini.X,
                                   cnMaxi.Y-cnMini.Y,
                                   cnMaxi.Z-cnMini.Z);
-    //AfficherMessage(Format('--   Mini: %.2f - %.2f - %.2f', [cnMini.X, cnMini.Y, cnMini.Z]));
-    //AfficherMessage(Format('--   Maxi: %.2f - %.2f - %.2f', [cnMaxi.X, cnMaxi.Y, cnMaxi.Z]));
-
     FOffset.setFrom(-(cnMini.X+ 0.5*(cnMaxi.X - cnMini.X)),
                     -(cnMini.Y+ 0.5*(cnMaxi.Y - cnMini.Y)),
                     -(cnMini.Z+ 0.5*(cnMaxi.Z - cnMini.Z)));
 
-    //AfficherMessage(Format('--   Offset: %.2f - %.2f - %.2f', [FOffset.X, FOffset.Y, FOffset.Z]));
   end;
   //AfficherMessage('--- 0.01');
   //SetParamTransformation(45.00, 32.00, 1.00, 1.00, True, True);
@@ -357,7 +353,6 @@ var
   cnMini, cnMaxi: TPoint3Df;
   MiouTheta, MiouPhi: ValReal;
 begin
-  //AfficherMessage(Format('%s.SetParamTransformation(%.2f, %.2f, %.2f, %.2f)', [ClassName, QTheta, QPhi, QZoom, QMagnification]));
   FVue3DParams.FovOrZoom  := QZoom;
   FVue3DParams.Theta      := QTheta;
   FVue3DParams.Phi        := QPhi;
@@ -365,7 +360,6 @@ begin
   MiouTheta := FVue3DParams.Theta * DEG_TO_RAD;
   MiouPhi   := FVue3DParams.Phi   * DEG_TO_RAD;
 
-  //AfficherMessage(Format('%s.setParamTransformation(Theta = %.0f; Phi = %.0f; Zoom: %.3f; Magn. = %.3f', [ClassName, QTheta, QPhi, QZoom, QMagnification]));
   FMatAux[1] := Sin(MiouTheta);
   FMatAux[2] := Sin(MiouPhi);                     // | -sin(A)           +cos(A)         0           0 | | x |   | X |
   FMatAux[3] := Cos(MiouTheta);                   // |                                                 | |   |   |   |
@@ -579,7 +573,10 @@ begin
     ReWrite(fp);
 
     WrtLn(Format('# Coupe projetee: %s - %s', [QFileName, DateTimeToStr(Now())]));
-    WrtLn(Format('# Theta = %.2f; Phi = %.2f; Magn = %.2f', [FVue3DParams.Theta, FVue3DParams.Phi, FVue3DParams.CoefMagnification]));
+    WrtLn(Format('# Theta = %s; Phi = %s; Magn = %s', [
+                   FormatterNombreWithDotDecimal(FVue3DParams.Theta, 2),
+                   FormatterNombreWithDotDecimal(FVue3DParams.Phi  , 2),
+                   FormatterNombreWithDotDecimal(FVue3DParams.CoefMagnification, 3)]));
 
     WrtLn('# Base points');
     WrtLn('');

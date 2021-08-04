@@ -414,7 +414,7 @@ begin
           MyProximite := GetProximite(n);
           if (FDocumentToporobot.GetSerieByNumeroSerie(MyProximite.BaseStation.aSerie, MySerie, QIdx)) then
           begin
-            QAT := Format('Accrocher l''extrémité de la série %d - "%s"' + #13#10 + 'à la station %d.%d',
+            QAT := Format('Accrocher l''extrémité de la série %d - "%s"' + CR_LF + 'à la station %d.%d',
                           [MySerie.GetNumeroDeSerie(), MySerie.GetNomSerie(),
                            MyProximite.NearestStation.aSerie, MyProximite.NearestStation.aStation]);
             if (GHTopoQuestionOuiNonWithOptionalAction('Mise en place d''un bouclage', QAT, 'Créer une visée de raccordement', QDoAction)) then
@@ -1056,8 +1056,7 @@ var
           MyNamespace := FDocumentToporobot.GetNameSpace(QIdxNamespace);
           ResetColorRow(lsbListe, ARect, bg, tc);
           try
-            {$WARNING: TEXpe.DateExpe à implementer}
-            miou := DateToStr(GetSecuredDate(ss.AnneeExpe,ss.MoisExpe,ss.JourExpe));
+            miou := DateToStr(ss.DateExpe);
           except
             miou := '01/01/2000';
           end;
@@ -1230,7 +1229,6 @@ var
   EWE: TStationProcheOfEndSerie;
   MyLastStationOfSerie: TUneVisee;
 begin
-  //AfficherMessage(Format('%s.RechercherProximites(%.2f)', [Classname, QRayonCapture]));
   NbSeries := FDocumentToporobot.GetNbSeries();
   NbEntitesVisees  := FBDDEntites.GetNbEntitesVisees();
   self.FListeDesProximites.ClearListe();

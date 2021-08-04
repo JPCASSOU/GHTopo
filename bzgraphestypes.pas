@@ -6,20 +6,19 @@ interface
 uses
   Classes, SysUtils, math;
 
-const MULT_SERIES: integer = 1000000;
 
 // messages d'erreur
 const
-  ERR_GRAPHE_NO_ERROR         : integer =  0;
-  ERR_GRAPHE_INITIALISATION   : integer = -1;
+  ERR_GRAPHE_NO_ERROR                   : integer =  0;
+  ERR_GRAPHE_INITIALISATION             : integer = -1;
 
-  ERR_GRAPHE_EMPTY_LIST_NODES : integer = -2;
-  ERR_GRAPHE_EMPTY_LIST_ARCS  : integer = -3;
+  ERR_GRAPHE_EMPTY_LIST_NODES           : integer = -2;
+  ERR_GRAPHE_EMPTY_LIST_ARCS            : integer = -3;
 
-  ERR_GRAPHE_NODE_NOT_FOUND   : integer = -4;
-  ERR_GRAPHE_ARC_NOT_FOUND    : integer = -5;
+  ERR_GRAPHE_NODE_NOT_FOUND             : integer = -4;
+  ERR_GRAPHE_ARC_NOT_FOUND              : integer = -5;
 
-  ERR_GRAPHE_SAME_START_END   : integer = -6;
+  ERR_GRAPHE_SAME_START_END             : integer = -6;
 
   ERR_GRAPHE_ARC_EXTR_DEB_NOT_FOUND     : integer = -7;
   ERR_GRAPHE_ARC_EXTR_FIN_NOT_FOUND     : integer = -8;
@@ -31,7 +30,6 @@ const
 type TProcAfficherMessage = procedure(const Msg: string; const DoClear: boolean = false) of object;
 type TProcOjObject        = procedure of object;
 type TNumeroNoeud = type Integer;
-type TIDStation   = type Int64;
 
 type TGrapheLastError = record
   ErrCode: integer;

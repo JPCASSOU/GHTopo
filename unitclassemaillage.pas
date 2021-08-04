@@ -1914,9 +1914,15 @@ begin
     QSpcX := (FCoordsMaxi.X - FCoordsMini.X) / (FNbVertexX - 1);
     QSpcY := (FCoordsMaxi.Y - FCoordsMini.Y) / (FNbVertexY - 1);
 
-    WriteLine(Format('Surface %.3f %.3f %.3f %d %.3f %.3f %.3f %d',
-                     [FCoordsMini.X / 1000, FCoordsMaxi.X / 1000, QSpcX / 1000, FNbVertexX,
-                      FCoordsMini.Y / 1000, FCoordsMaxi.Y / 1000, QSpcY / 1000, FNbVertexY
+    WriteLine(Format('Surface %s %s %s %d %s %s %s %d',
+                     [FormatterNombreWithDotDecimal(FCoordsMini.X / 1000, 3),
+                      FormatterNombreWithDotDecimal(FCoordsMaxi.X / 1000, 3),
+                      FormatterNombreWithDotDecimal(QSpcX / 1000, 3),
+                      FNbVertexX,
+                      FormatterNombreWithDotDecimal(FCoordsMini.Y / 1000, 3),
+                      FormatterNombreWithDotDecimal(FCoordsMaxi.Y / 1000, 3),
+                      FormatterNombreWithDotDecimal(QSpcY / 1000, 3),
+                      FNbVertexY
                      ]));
     WriteLine('');
     for i := 0 to FNbVertexY - 1 do
@@ -2517,7 +2523,6 @@ begin
     for i := 0 to QNbVertex - 1 do
     begin
       MyVertex := GetVertex(i);
-      //WriteLn(fp, Format('%d %.2f %.2f %.2f %d', [i, MyVertex.Position.X, MyVertex.Position.Y, MyVertex.Position.Z, 1]));
       writeln(fp, MyVertex.MakeLigneForMailleur(i));
     end;
     Result := True;

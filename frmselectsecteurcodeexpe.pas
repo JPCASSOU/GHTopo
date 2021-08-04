@@ -156,8 +156,7 @@ begin
     QIdx := Idx;
   editIdxExpe.AsInteger := QIdx;
   EWE := FMyDocTopo.GetExpeByNumero(QIdx);
-  {$WARNING: TEXpe.DateExpe à implementer}
-  lbDescExpe.Caption := Format('%.2d/%.2d/%.4d - %s', [EWE.JourExpe, EWE.MoisExpe, EWE.AnneeExpe, EWE.Commentaire]);
+  lbDescExpe.Caption := Format('%s - %s', [DateToStr(EWE.DateExpe), EWE.Commentaire]);
 end;
 
 procedure TdlgSelectSecteurCodeExpe.SetInfosSecteur(const Idx: integer);

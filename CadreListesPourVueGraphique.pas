@@ -560,8 +560,7 @@ var
           QDrawColTexte(hcColsTitres.Sections.Items[1], False, Format(FORMAT_NB_INTEGER,[ss.IDExpe]));
           PP := FTableEntites.GetPalette256();
           QDrawColRectColoreWithTexte(hcColsTitres.Sections.Items[2], True, PP.GetColorByIndex(ss.IdxCouleur), Format(FORMAT_NB_INTEGER,[ss.IdxCouleur]));
-          {$WARNING: TEXpe.DateExpe à implementer}
-          QDrawColTexte(hcColsTitres.Sections.Items[3], True , DateToStr(GetSecuredDate(ss.AnneeExpe,ss.MoisExpe,ss.JourExpe)));
+          QDrawColTexte(hcColsTitres.Sections.Items[3], True , DateToStr(ss.DateExpe));
           QDrawColTexte(hcColsTitres.Sections.Items[4], True , ss.Operateur);
           QDrawColTexte(hcColsTitres.Sections.Items[5], True , ss.ClubSpeleo);
           QDrawColTexte(hcColsTitres.Sections.Items[6], True , Format(FORMAT_NB_REAL_3_DEC,[ss.DeclinaisonInDegrees]));
@@ -961,7 +960,7 @@ begin
         if (chkDoHighLightCurrentItem.Checked) then
         begin
           NS := FDocToporobot.GetNameSpace(WU);
-          lsbListeElements.Hint := NS.Nom + #13#10 + NS.Description;
+          lsbListeElements.Hint := NS.Nom + CR_LF + NS.Description;
           FCadreVue2D.SetModeSelectionListe(FModeSelection);
           FCadreVue2D.SetCurrentNumeroNamespace(WU);
         end;

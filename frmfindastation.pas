@@ -61,8 +61,8 @@ begin
     for i := 0 to Nb - 1 do
     begin
       EWE := FDocTopo.GetLabelTerrain(i);
-      WU  := WU + EWE.ToString() + #9 + EWE.aIDTerrain + #9 + #9;
-      if ((i+1) mod NB_COLONNES_PAR_PAGE) = 0 then WU := WU + #13#10;
+      WU  := WU + EWE.ToString() + FIELD_SEPARATOR_TAB + EWE.aIDTerrain + FIELD_SEPARATOR_TAB + FIELD_SEPARATOR_TAB;
+      if ((i+1) mod NB_COLONNES_PAR_PAGE) = 0 then WU := WU + CR_LF;
     end;
     Clipboard.AsText := WU;
   finally

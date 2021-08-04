@@ -6,6 +6,7 @@ object CdrDGCDrawingContext: TCdrDGCDrawingContext
   Align = alClient
   ClientHeight = 578
   ClientWidth = 642
+  LCLVersion = '2.0.0.4'
   OnResize = FrameResize
   ParentFont = False
   TabOrder = 0

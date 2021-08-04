@@ -129,12 +129,8 @@ var
       EWE := Split(myStr, ' ');
       qVA.SerieDepart      := qIdxSerie;
       qVA.PtDepart         := qIdxPoint;
-      //qVA.IDTerrainStation := qMyVisee.IDTerrainStation;
-      //qVA.Code             := qMyVisee.Code;
-      //qVA.Expe             := qMyVisee.Expe;
       qVA.Reseau           := qIdxReseau;
       qVA.Secteur          := qMyVisee.IDSecteur;
-      //qVA.Commentaires     := '';
       qVA.setLongAzInc(EWE[0], EWE[1], EWE[2]);
       qVA.MarkedForDelete  := false;
       Result := (qVA.Longueur > 0.00);
@@ -201,17 +197,12 @@ begin
            Prefix1:=0;
            Inc(NoLigneTEXT);
            ReadLn(pTEXT, LigneTEXT);
-           //AfficherMessage('--> ' + LigneTEXT);
-           //AfficherMessage(Format('Ligne %d - %s', [NoLigneTEXT, LigneTEXT]));
-           //AfficherMessage(LigneTEXT);
-           //ConvertTextMacToPC(LigneTEXT);
-           if Trim(LigneTEXT)=''    then Prefix1:=-100       // lignes vides
-           else if LigneTEXT[1]='#' then Prefix1:=-1000     // commentaires sur une ligne
+           if Trim(LigneTEXT)=''    then Prefix1 := -100       // lignes vides
+           else if LigneTEXT[1]='#' then Prefix1 := -1000     // commentaires sur une ligne
            else
            begin
              // Commentaire = parenthèse de tête présente
              HasParenthesis := (LigneTEXT[1] = '(');
-             //if (HasParenthesis) then Continue;
              // attraper le préfixe de section (en évitant une décomposition)
              str := Trim(Copy(LigneTEXT, 2, 5));
              Prefix1   := StrToIntDef(str, -110);
@@ -231,8 +222,8 @@ begin
 
                        PutEntrance(IdxCourant, UneEntree);
                      end;
-                 -4: ;     // sessions (obsolète)
-                 -3: ;     // section non affectée
+                 -4: pass;     // sessions (obsolète)
+                 -3: pass;     // section non affectée
                  -2: begin // expés
                        IdxCourant := GetNbExpes() - 1;
                        UneExpe    := GetExpe(IdxCourant);
@@ -311,15 +302,8 @@ begin
                          // TODO: Revoir cette zone
                          if (0 = self.GetNbEntrances()) then
                          begin
-                           SetDefaultCoords(ConvertirEnNombreReel(PrmsLn[COL_XENTREE], 0.00),
-                                            ConvertirEnNombreReel(PrmsLn[COL_YENTREE], 0.00),
-                                            ConvertirEnNombreReel(PrmsLn[COL_ZENTREE], 0.00)
-                                           );
-
-                           SetRefSeriePoint(StrToIntDef(PrmsLn[COL_ENT_SER],1),
-                                            StrtoIntDef(PrmsLn[COL_ENT_ST], 0)
-                                           );
-
+                           SetDefaultCoords(PrmsLn[COL_XENTREE], PrmsLn[COL_YENTREE], PrmsLn[COL_ZENTREE]);
+                           SetRefSeriePoint(StrToIntDef(PrmsLn[COL_ENT_SER],1), StrtoIntDef(PrmsLn[COL_ENT_ST], 0));
                          end;
                          // Ajouter les entrées
                          // le nombre d'entrées retenu est celui décompté dans
@@ -366,38 +350,20 @@ begin
                    -2: begin // Expés
                          //Ajoute l'expé dans la liste
                          PrmsLn := SplitFixedColLine(LigneTEXT, [1, 2, 7, 13, 17, 21, 25, 36, 50, 64, 65, 73, 77, 81,100]);
-                         with UneExpe do
+                         UneExpe.IDExpe        := StrToIntDef(PrmsLn[COL_NUM_ITEM], 0);
+                         if (UneExpe.IDExpe <= 0) then
                          begin
-                           IDExpe        := StrToInt(PrmsLn[COL_NUM_ITEM]);
-                           if (IDExpe<=0) then begin
-                              ErrMsg:=rsRD_TAB_BAD_TRIP;
-                              raise Exception.Create(ErrMsg);
-                           end;
-                           // décomposition de la date
-                           {$WARNING: TEXpe.DateExpe à implementer}
-                           str := Trim(PrmsLn[COL_DATE_EXPE]);
-                           JourExpe      := StrToIntDef(Copy(STR, 0, 2), 0);
-                           MoisExpe      := StrToIntDef(Copy(STR, 4, 2), 1);
-                           AnneeExpe     := StrToIntDef(Copy(STR, 7, 2), 1);
-                           if (JourExpe = 0) or (MoisExpe = 0) or (AnneeExpe = 0) then
-                           begin
-                             WriteWarning(Format(rsRD_TAB_BAD_DATE,
-                                                [NoLigneTEXT]));
-                             DecodeDate(Now, yyy, mmm, ddd);
-                             JourExpe := ddd;
-                             MoisExpe := mmm;
-                             AnneeExpe:= yyy;
-                           end;
-                           {$WARNING: End TEXpe.DateExpe à implementer}
-                           Operateur     := PrmsLn[COL_SPELEOMETRE];             // spéléomètre
-                           ClubSpeleo    := PrmsLn[COL_SPELEOGRAPH];             // spéléographe
-                           ModeDecl      := TModeCalculDeclimag(StrToIntDef(PrmsLn[COL_MODEDECL], 1));   // déclinaison auto ?
-                           DeclinaisonInDegrees  := ConvertirEnNombreReel(PrmsLn[COL_DECL_VALUE], 0.00); // déclinaison
-                           //Inclinaison   := ConvertirEnNombreReel(PrmsLn[COL_INCL_VALUE], 0.00); // correction clino x10
-                           IdxCouleur    := StrToIntDef(PrmsLn[COL_COULEUR], 0);  // couleur
-                           Commentaire   := ''; //PrmsLn[11];            // commentaire
-
-                         end;  // with UneExpe
+                            ErrMsg := rsRD_TAB_BAD_TRIP;
+                            raise Exception.Create(ErrMsg);
+                         end;
+                         UneExpe.fromToporobotJJMMAA(PrmsLn[COL_DATE_EXPE]);
+                         UneExpe.Operateur     := PrmsLn[COL_SPELEOMETRE];             // spéléomètre
+                         UneExpe.ClubSpeleo    := PrmsLn[COL_SPELEOGRAPH];             // spéléographe
+                         UneExpe.ModeDecl      := TModeCalculDeclimag(StrToIntDef(PrmsLn[COL_MODEDECL], 1));   // déclinaison auto ?
+                         UneExpe.DeclinaisonInDegrees  := ConvertirEnNombreReel(PrmsLn[COL_DECL_VALUE], 0.00); // déclinaison
+                         //Inclinaison   := ConvertirEnNombreReel(PrmsLn[COL_INCL_VALUE], 0.00); // correction clino x10
+                         UneExpe.IdxCouleur    := StrToIntDef(PrmsLn[COL_COULEUR], 0);  // couleur
+                         UneExpe.Commentaire   := ''; //PrmsLn[11];            // commentaire
                          AfficherMessage(Format('%s: %s', [{$I %FILE%}, {$I %LINE%}]));
                          AddExpe(UneExpe);
                          Continue;
@@ -591,6 +557,7 @@ var
   myAntenne: TViseeAntenne;
   q: Integer;
   zdar: String;
+  QYYYY, QMM, QDD: word;
   function makeColonnesEnTete(const IsCommentaire: boolean;
                               const Section, ID1, ID2, ID3, ID4: integer): string;
   begin
@@ -646,9 +613,12 @@ begin
     for i := 1 to Nb - 1 do
     begin
       myExpe := GetExpe(i);
-      {$WARNING: TEXpe.DateExpe à implementer}
+      DecodeDate(myExpe.DateExpe, QYYYY, QMM, QDD);
+
       EWE := makeColonnesEnTete(false, -2, myExpe.IDExpe, 1, 1, 1) +
-             FormatterFixedColumn(Format('%.2d/%.2d/%.2d', [myExpe.JourExpe, myExpe.MoisExpe, myExpe.AnneeExpe mod 100]), 9, taRightJustify) +
+
+
+             FormatterFixedColumn(Format('%.2d/%.2d/%.2d', [QDD, QMM, (QYYYY mod 100)]), 9, taRightJustify) +
              '  ' +
              FormatterFixedColumn(myExpe.Operateur, 13, taLeftJustify) + ' ' +
              FormatterFixedColumn(myExpe.ClubSpeleo, 13, taLeftJustify) + ' ' +
@@ -740,7 +710,10 @@ begin
               begin
                 // PocketTopo stocke les antennes dans les commentaires du point d'accrochage
                 EWE := makeColonnesEnTete(true, myAntenne.SerieDepart, myAntenne.PtDepart, q, 0, 0) + //myAntenne.Code, myAntenne.Expe) +
-                       Format(' [%.2f %.1f %.1f]', [myAntenne.Longueur, myAntenne.Azimut, myAntenne.Pente]);
+                       Format(' [%s %s %s]', [
+                                 FormatterNombreWithDotDecimal(myAntenne.Longueur, 2),
+                                 FormatterNombreWithDotDecimal(myAntenne.Azimut  , 1),
+                                 FormatterNombreWithDotDecimal(myAntenne.Pente   , 1)]);
                 WriteLn(fp, EWE);
                 q += 1;
               end;

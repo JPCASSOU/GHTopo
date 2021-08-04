@@ -253,7 +253,7 @@ function SaisirIDStation(const Msg: string; var S: string): boolean;
 // Recherche dans la base
 function SearchInGHTopoDatabase(const FD: TToporobotStructure2012; const FE: TBDDEntites; const QFindWhat: string; const QPerformAction: TProcedureOfObject): boolean;
 // tests unitaires pour un TCadreBoussole
-procedure DisplayTestUnitaireTCadreBoussole();
+procedure DisplayTestsUnitaires(const FD: TToporobotStructure2012; const FE: TBDDEntites; const ParamFTP: TFTPParameters);
 
 implementation
 uses
@@ -330,7 +330,7 @@ uses
   , frmEditGISLayer
   , frmRegisterChineseUser
   , frmSearchInDatabase
-  , frmBoussole // tests unitaire pour un cadre Boussole
+  , frmTestsUnitaires // tests unitaire pour un cadre Boussole
   ; // et ce point-virgule est indispensable
 //******************************************************************************
 // mini convertisseur
@@ -940,7 +940,7 @@ begin
   end;
   //*)
   {$ELSE}
-  ShowMessage('Fonctionnalité non disponible dans cette version' + #13#10 +
+  ShowMessage('Fonctionnalité non disponible dans cette version' + CR_LF +
               '(adaptations en cours)');
   {$ENDIF}
 end;
@@ -1725,13 +1725,13 @@ begin
 
 end;
 // tests unitaires pour un TCadreBoussole
-procedure DisplayTestUnitaireTCadreBoussole();
+procedure DisplayTestsUnitaires(const FD: TToporobotStructure2012; const FE: TBDDEntites; const ParamFTP: TFTPParameters);
 var
-  TD: TdlgBoussole;
+  TD: TdlgTestsUnitaires;
 begin
-  TD := TdlgBoussole.Create(Application);
+  TD := TdlgTestsUnitaires.Create(Application);
   try
-    if (TD.Initialiser()) then TD.ShowModal;
+    if (TD.Initialiser(FD, FE, ParamFTP)) then TD.ShowModal;
   finally
     TD.Release;
   end;

@@ -358,9 +358,9 @@ begin
   // attrapper l'ID du noeud le plus proche
   if (FGraphe.FindStationByXY(EWE.X, EWE.Y, FCurrentStation)) then
   begin
-    //ExtractSerStFromTIDStation(QST.IDStation, QSer, QPt);
-    //lbMouseCoords.Caption := Format('%d.%d: %f, %.2f', [QSer, QPt, QST.X, QST.Y]);
-    lbMouseCoords.Caption := Format('%s: %f, %.2f', [FCurrentStation.ToString(), FCurrentStation.Position.X, FCurrentStation.Position.Y]);
+    lbMouseCoords.Caption := Format('%s: %s, %s', [FCurrentStation.ToString(),
+                                                   FormatterNombreWithDotDecimal(FCurrentStation.Position.X),
+                                                   FormatterNombreWithDotDecimal(FCurrentStation.Position.Y)]);
   end;
 end;
 

@@ -1590,23 +1590,6 @@ var
     QNbV := P.GetNbVertex();
     if (0 = QNbV) then exit;
     QStyleSheet := FListOfStyles.GetElement(P.IdxStyleSheet);
-    //FSVGCanvas.BeginListeBezierArcs();
-    (* version autolissée
-    FSVGCanvas.BeginListeVertex();
-      for v := 0 to QNbV - 1 do
-      begin
-        VX := P.GetVertex(v);
-        FSVGCanvas.AddVertex(VX.X, VX.Y);
-        (*QArc := P.GetBezierArc(v);
-        FSVGCanvas.AddBezierArc(QArc.PT1.X, QArc.PT1.Y,
-                                QArc.PT1.X + QArc.TangP1.X, QArc.PT1.Y + QArc.TangP1.Y,
-                                QArc.PT2.X + QArc.TangP2.X, QArc.PT2.Y + QArc.TangP2.Y,
-                                QArc.PT2.X, QArc.PT2.Y);
-
-      end;
-    FSVGCanvas.EndListeVertex();
-    //*)
-    //ShowMessage(inttostr(QNbV));
     if (P.MakeBezierCurve(true)) then
     begin
       FSVGCanvas.BeginListeBezierArcs();

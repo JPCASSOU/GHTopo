@@ -703,7 +703,6 @@ begin
      SetVoyantMode(lbDistoReady           , false);
      // grille de données pour GHTopo
      grdViseesDistoX.RowCount := GHTOPO_GRID_NB_LINES;
-     // EWE := Format('[%s] Mesure %d: (Tir %d): L = %.3f, Az = %.3f, P = %.3f - %s',
      grdViseesDistoX.ColCount := 8;
      grdViseesDistoX.FixedCols:= 0;
      grdViseesDistoX.ColWidths[0] := 60;

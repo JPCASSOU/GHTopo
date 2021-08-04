@@ -193,11 +193,9 @@ begin
 
   FTableListesAffichage := TTableListesAffichage.Create;
 
-
   ClearAllListesAffichage();
 
   FBackground.SetRGBA(clBlue);
-
   // contexte OpenGL
   OGLContext.DepthBits := 4 * DEPTH_COMPOSANTE_PIXEL;
   OGLContext.AlphaBits := DEPTH_COMPOSANTE_PIXEL;

@@ -376,7 +376,7 @@ begin
   CT := TClipboard.Create(ctClipboard);
   try
     CT.Clear;
-    WU := 'Reseau' + #9 + 'Secteur' + #9 + 'Station' + #9 + 'Long.' + #9 + 'Az.' + #9 + 'Inc.' + #13#10;
+    WU := 'Reseau' + #9 + 'Secteur' + #9 + 'Station' + #9 + 'Long.' + #9 + 'Az.' + #9 + 'Inc.' + CR_LF;
     for i := 0 to n - 1 do
     begin
       EWE := FListeIdxAntennesRetenues.GetElement(i);
@@ -386,7 +386,7 @@ begin
              va.toString() + #9 +
              FormatterNombreOOo(VA.Longueur, 3) + #9 +
              FormatterNombreOOo(VA.Azimut  , 3) + #9 +
-             FormatterNombreOOo(VA.Pente   , 3) + #13#10;
+             FormatterNombreOOo(VA.Pente   , 3) + CR_LF;
       CT.AsText := WU;
     end;
   finally

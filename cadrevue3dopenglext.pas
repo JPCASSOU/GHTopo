@@ -726,13 +726,13 @@ var
         case FMyMaillage.GetModeDessinMaillage of
           M3D_MESH:       // transparent
           begin
-             //glDepthMask(GL_FALSE);
-             glEnable(GL_COLOR_MATERIAL);
-             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-             glEnable(GL_BLEND);
-             glCallList(FglListMAILLAGE);
-             glDisable(GL_BLEND);
-             glDisable(GL_COLOR_MATERIAL);
+            //glDepthMask(GL_FALSE);
+            glEnable(GL_COLOR_MATERIAL);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glEnable(GL_BLEND);
+            glCallList(FglListMAILLAGE);
+            glDisable(GL_BLEND);
+            glDisable(GL_COLOR_MATERIAL);
           end;
           M3D_WIRE_FRAME:  // fil de fer
           begin

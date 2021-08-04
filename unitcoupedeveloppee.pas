@@ -790,7 +790,7 @@ begin
                           E.PosStation.Z - myVisee.HN);
 
 
-          QID := MakeTIDBaseStation(E.Entite_Serie, E.Entite_Station, false);
+          QID := E.toTIDBaseStation();
           // ajouter l'entité
 
           WrtLn(Format(GCD_FMT_BASEPOINTS,

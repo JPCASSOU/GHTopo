@@ -1,7 +1,7 @@
 object GHTopoMainMenuBar: TGHTopoMainMenuBar
-  Left = 273
+  Left = 249
   Height = 89
-  Top = 364
+  Top = 137
   Width = 1274
   AllowDropFiles = True
   Caption = 'GHTopoMainMenuBar'
@@ -419,7 +419,6 @@ object GHTopoMainMenuBar: TGHTopoMainMenuBar
     0000
   }
   Menu = MainMenu1
-  OnActivate = FormActivate
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
@@ -1037,15 +1036,11 @@ object GHTopoMainMenuBar: TGHTopoMainMenuBar
     end
     object mnuOutils: TMenuItem
       Caption = 'Outils'
+      object MenuItem64: TMenuItem
+        Action = acAnalyseGrapheReseau
+      end
       object MenuItem47: TMenuItem
         Action = acToolCalculette
-      end
-      object MenuItem56: TMenuItem
-        Caption = 'Exporter maillage en X3D'
-      end
-      object mnuExportTopoEnX3D: TMenuItem
-        Caption = 'Exporter en X3D'
-        OnClick = mnuExportTopoEnX3DClick
       end
     end
     object mnuHelp: TMenuItem
@@ -1053,18 +1048,11 @@ object GHTopoMainMenuBar: TGHTopoMainMenuBar
       object MenuItem25: TMenuItem
         Action = acHelpSystem
       end
-      object MenuItem27: TMenuItem
-        Caption = '-'
-      end
     end
     object mnuSandbox: TMenuItem
       Caption = 'Sandbox'
       object MenuItem50: TMenuItem
-        Action = acAnalyseGrapheReseau
-      end
-      object MenuItem45: TMenuItem
-        Caption = 'Recherche dans la base'
-        OnClick = MenuItem45Click
+        Action = acTestsUnitaires
       end
       object MenuItem40: TMenuItem
         Caption = '-'
@@ -1078,23 +1066,8 @@ object GHTopoMainMenuBar: TGHTopoMainMenuBar
       object MenuItem28: TMenuItem
         Action = acSimplifyAntennesOfAll
       end
-      object MenuItem59: TMenuItem
-        Caption = '-'
-      end
-      object MenuItem60: TMenuItem
-        Caption = 'Test de FTP'
-        OnClick = MenuItem60Click
-      end
-      object mnuMultiThreading: TMenuItem
-        Caption = 'Test de multithreading'
-        OnClick = mnuMultiThreadingClick
-      end
       object MenuItem61: TMenuItem
         Caption = '-'
-      end
-      object mnuTUBoussole: TMenuItem
-        Caption = 'Test de TCadreBoussole'
-        OnClick = mnuTUBoussoleClick
       end
       object mnuTUOpenGL3: TMenuItem
         Caption = 'Nouveau viewer OpenGL'
@@ -1102,10 +1075,6 @@ object GHTopoMainMenuBar: TGHTopoMainMenuBar
       end
       object MenuItem63: TMenuItem
         Caption = '-'
-      end
-      object MenuItem62: TMenuItem
-        Caption = 'Parcours d''un dossier'
-        OnClick = MenuItem62Click
       end
     end
   end
@@ -1246,6 +1215,7 @@ object GHTopoMainMenuBar: TGHTopoMainMenuBar
     object acAnalyseGrapheReseau: TAction
       Category = 'Outils'
       Caption = 'Etablir le graphe du réseau'
+      ImageIndex = 51
       OnExecute = acAnalyseGrapheReseauExecute
     end
     object acFenetreListesSimples: TAction
@@ -1375,12 +1345,18 @@ object GHTopoMainMenuBar: TGHTopoMainMenuBar
       ImageIndex = 45
       OnExecute = acExportPlanSVGExecute
     end
+    object acTestsUnitaires: TAction
+      Category = 'Outils'
+      Caption = 'acTestsUnitaires'
+      ImageIndex = 7
+      OnExecute = acTestsUnitairesExecute
+    end
   end
   object ImageList1: TImageList
     left = 896
     top = 24
     Bitmap = {
-      4C69330000001000000010000000C0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
+      4C69340000001000000010000000C0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
       C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
       C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000
       00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
@@ -3012,7 +2988,39 @@ object GHTopoMainMenuBar: TGHTopoMainMenuBar
       FFFFC0C0C0FF008080FFC0C0C0FFC0C0C0FF0000FFFF0000FFFFC0C0C0FFC0C0
       C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
       C0FF0000FFFF0000FFFF0000FFFF0000FFFFC0C0C0FFC0C0C0FFC0C0C0FFC0C0
-      C0FFC0C0C0FFC0C0C0FFC0C0C0FF
+      C0FFC0C0C0FFC0C0C0FFC0C0C0FF000000FF0000FFFF00000000000000000000
+      00000000000000FFFFFF0000000000FFFFFF0000000000FFFFFF000000000000
+      00000000000000000000000000000000FFFF0000FFFF0000FFFF000000FF0000
+      0000000000000000000000FFFFFF00FFFFFF00FFFFFF00000000000000000000
+      000000000000000000000000FFFF000000000000FFFF00000000000000000000
+      00FF0000000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF000000000000
+      000000000000000000000000FFFF000000000000000000000000000000000000
+      00FF000000000000000000FFFFFF00FFFFFF00FFFFFF00000000000000000000
+      00000000FFFF0000FFFF00000000000000000000000000000000000000FF0000
+      00000000000000FFFFFF0000000000FFFFFF0000000000FFFFFF0000FFFF0000
+      FFFF000000000000000000000000000000000000000000000000000000FF0000
+      000000000000000000000000000000000000000000000000FFFF000000000000
+      00000000000000000000000000000000000000000000000000FF000000000000
+      00000000000000000000FF0000FF000000000000FFFF00000000000000000000
+      00000000000000000000000000000000000000000000000000FF000000000000
+      0000000000000000FFFF0000FFFF0000FFFF0000FFFF00000000000000000000
+      0000000000000000000000000000000000000000000000000000000000FF0000
+      0000FF0000FF0000FFFFFF0000FF0000FFFFFF0000FF00000000000000000000
+      0000000000000000000000000000000000000000000000000000000000FF0000
+      00FF000000000000FFFF0000FFFF0000FFFF000000FF000000FF000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000FF0000FF000000000000000000000000000000FF0000
+      00FF000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00FF000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000FF0000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000FF0000FFFF00000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000FFFF0000FFFF0000FFFF000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000FFFF000000FF
     }
   end
 end

@@ -313,8 +313,7 @@ var
         begin
           ResetColorRow(lsbListeElements, ARect, bg, tc);
           try
-            {$WARNING: TEXpe.DateExpe à implementer}
-            EWE := DateToStr(GetSecuredDate(ss.AnneeExpe,ss.MoisExpe,ss.JourExpe));
+            EWE := DateToStr(ss.DateExpe); // DateToStr est localisé selon la date
           except
             EWE := '01/01/2000';
           end;

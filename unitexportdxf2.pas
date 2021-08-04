@@ -130,9 +130,6 @@ begin
   end;
 end;
 
-
-
-
 procedure TDXFExport2.AddLayer(const QLayerName: string; const QAcadColorIndex: integer; const QLineType: string = ACAD_LINESTYLE_CONTINUOUS);
 var
   L: TDxfLayer;

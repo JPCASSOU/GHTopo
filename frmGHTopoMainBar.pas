@@ -18,7 +18,6 @@ uses
   UnitGraphes1,
   CodeCalculTopo,
   ConvertisseurJPC,
-  //UnitFichesTopo,
   CallDialogsStdVersion,
   unitUtilsComposants, UnitObjetSerie,
   IniFiles,
@@ -48,6 +47,7 @@ type
     acRecalcDeclimagsOfExpes: TAction;
     acLoadMNT: TAction;
     acExportPlanSVG: TAction;
+    acTestsUnitaires: TAction;
     acUtilFusionTopos: TAction;
     acCheckBase: TAction;
     acCompileExt: TAction;
@@ -95,19 +95,14 @@ type
     MenuItem48: TMenuItem;
     MenuItem49: TMenuItem;
     MenuItem5: TMenuItem;
+    MenuItem50: TMenuItem;
     MenuItem51: TMenuItem;
-    MenuItem56: TMenuItem;
     MenuItem57: TMenuItem;
     MenuItem58: TMenuItem;
-    MenuItem59: TMenuItem;
-    MenuItem60: TMenuItem;
     MenuItem61: TMenuItem;
-    MenuItem62: TMenuItem;
     MenuItem63: TMenuItem;
+    MenuItem64: TMenuItem;
     mnuTUOpenGL3: TMenuItem;
-    mnuTUBoussole: TMenuItem;
-    mnuMultiThreading: TMenuItem;
-    mnuExportTopoEnX3D: TMenuItem;
     mnuOutils: TMenuItem;
     MenuItem47: TMenuItem;
     MenuItem17: TMenuItem;
@@ -126,7 +121,6 @@ type
     MenuItem24: TMenuItem;
     MenuItem25: TMenuItem;
     MenuItem26: TMenuItem;
-    MenuItem27: TMenuItem;
     MenuItem3: TMenuItem;
     mnuSandbox: TMenuItem;
     MenuItem31: TMenuItem;
@@ -140,9 +134,7 @@ type
     MenuItem4: TMenuItem;
     MenuItem41: TMenuItem;
     MenuItem42: TMenuItem;
-    MenuItem45: TMenuItem;
     mnuSeparateurFusionTopos: TMenuItem;
-    MenuItem50: TMenuItem;
     MenuItem52: TMenuItem;
     MenuItem53: TMenuItem;
     MenuItem54: TMenuItem;
@@ -217,6 +209,7 @@ type
     procedure acSimplifyAntennesOfAllExecute(Sender: TObject);
     procedure acSimplifyAntennesOfSerieExecute(Sender: TObject);
     procedure acSnapShotExecute(Sender: TObject);
+    procedure acTestsUnitairesExecute(Sender: TObject);
     procedure acUtilFusionToposExecute(Sender: TObject);
     procedure acCheckBaseExecute(Sender: TObject);
     procedure acCompileExtExecute(Sender: TObject);
@@ -241,7 +234,7 @@ type
     procedure acStatsExecute(Sender: TObject);
     procedure acToolCalculetteExecute(Sender: TObject);
     procedure acVue3DFiltreeExecute(Sender: TObject);
-    procedure FormActivate(Sender: TObject);
+
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
 
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -251,13 +244,6 @@ type
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure lbCurrentCodeEPSGClick(Sender: TObject);
-    procedure MenuItem45Click(Sender: TObject);
-    procedure MenuItem60Click(Sender: TObject);
-    procedure MenuItem62Click(Sender: TObject);
-    procedure mnuTUBoussoleClick(Sender: TObject);
-    procedure mnuMultiThreadingClick(Sender: TObject);
-
-    procedure mnuExportTopoEnX3DClick(Sender: TObject);
     procedure mnuTUOpenGL3Click(Sender: TObject);
     procedure RecalculerEtActualiser(const P: boolean);
   private
@@ -300,7 +286,6 @@ type
 
     procedure SetCurrentEPSGByCode(const C: integer);
     procedure SetCurrentEPSG(const C: TLabelSystemesCoordsEPSG);
-    procedure ExporterCaviteMaillage(const QBDD: TBDDEntites; const QMaillage: TMaillage; const OutputFilename: TStringDirectoryFilename);
     procedure TransmitGotoError(const Ser: TNumeroSerie; const St: TNumeroStation);
     procedure CentrerBasepointSurPlan(const BP: TToporobotIDStation);
     procedure CentrerXYSurPlan(const QX, QY: double; const TagString: string);
@@ -323,7 +308,6 @@ uses
   , frmLesListesSimples    // gestion des listes simples
   , frmFrontalSeries       // frontal liste des séries
   , frmVuePlan2D           // vue en plan
-  //, frmTestMultithreading      // test de multithreading
   ;
 
 const
@@ -375,10 +359,7 @@ begin
   FLastFichierTopoOpened := '';
   FCurrentStation.setFrom(0, 1, 0, '');
 
-  // paramètres FTP
-  FFTPParameters.HostName    := '';
-  FFTPParameters.Port        := '';
-  FFTPParameters.User        := '';
+
 
 
   // prêt à dessiner le plan
@@ -487,15 +468,14 @@ begin
         {$ENDIF}
      {$ENDIF}
   {$ENDIF}
-  (*
-  ShowMessage('L''utilisation de GHTopo est interdite aux chrétiens' + #13#10 +
-              'Rapprochez-vous des forces de police ou du Bureau 610' + #13#10 +
-              'Les frais s''élèvent à 65.536 RMB sauf si apostasie');
-      Application.Terminate;
-  //*)
+
+  FFTPParameters.HostName    := '';
+  FFTPParameters.Port        := '';
+  FFTPParameters.User        := '';
+
   SetCurrentStation(1,0);
-  self.Top     :=0;
-  self.left    :=0;
+  self.Top     := 0;
+  self.left    := 0;
   self.Width   := Screen.Width - 8;
   self.ClientHeight  := pnlToolBar.Height + 2 + pnlProgression.Height + 2;
   self.Caption := MakeTitleMainWindowGHTopo('Untitled');
@@ -537,133 +517,11 @@ begin
   acRedefineGCSExecute(self);
 end;
 
-procedure TGHTopoMainMenuBar.MenuItem45Click(Sender: TObject);
-begin
-  // Recherche dans la base
-  SearchInGHTopoDatabase(FDocumentToporobot, FBDDEntites, 'toto', nil);
 
-  if (GHTopoQuestionOuiNon('Quitter IMMEDIATEMENT GHTopo')) then Application.Terminate;
-end;
 
-procedure TGHTopoMainMenuBar.MenuItem60Click(Sender: TObject);
-const
-  FTP_PASSWORD        = 'G40+g41-f84';
-  FTP_ROOT_DIRECTORY  = '/www/0000_TotoDummy';
 
-var
-  QValues: array of string;
-  QFileNameSRC, QDirectoryTGT, QDirectorySRC, QDS: TStringDirectoryFilename;
-  QDirectoryACreer    :TStringDirectoryFilename;
-  QErrCode: integer;
-  QErrMsg: string;
-begin
-  QDirectoryACreer    := '00000_AAA'; // Type
-  ClearConsoleErreur();
-  // Test de la connexion
-  while (not FTP_TestConnexion(FFTPParameters, FTP_PASSWORD, QErrCode, QErrMsg)) do
-  begin
-    if (not GHTopoQuestionOuiNon(Format('Echec de connexion: [%d - %s] - Réessayer', [QErrCode, QErrMsg]))) then Exit;
-  end;
-  QDirectorySRC := GetGHTopoDirectory() + QDirectoryACreer;
-  if (not DirectoryExists(QDirectorySRC)) then ShowMessage(QDirectorySRC);
 
-  QDirectoryTGT := FTP_ROOT_DIRECTORY;
 
-  FTP_CreateFolder(FFTPParameters, FTP_PASSWORD, QDirectoryTGT, QDirectoryACreer);
-  FTP_CreateFolder(FFTPParameters, FTP_PASSWORD, QDirectoryTGT, '0000001');
-  FTP_CreateFolder(FFTPParameters, FTP_PASSWORD, QDirectoryTGT, '0000001' + '/' + '01');
-  FTP_CreateFolder(FFTPParameters, FTP_PASSWORD, QDirectoryTGT, '0000001' + '/' + '011');
-  FTP_CreateFolder(FFTPParameters, FTP_PASSWORD, QDirectoryTGT, '0000004');
-  ShowMessage('Après création des dossiers' + QDirectoryTGT);
-
-  QDirectoryTGT  := FTP_ROOT_DIRECTORY + '/' + QDirectoryACreer;
-  ShowMessage(' 001:' + QDirectoryTGT);
-  QDS := QDirectorySRC + PathDelim;
-  ShowMessage(' 002:' + QDirectoryTGT);
-
-  SetLength(QValues, 4);
-  ShowMessage(' 003:' + QDirectoryTGT);
-
-  QValues[0] := QDS + 'Latresne_1-1_1-51.pdf';
-  QValues[1] := QDS + 'MNTCoume1.mai';
-  QValues[2] := QDS + 'FichesStations_001.pdf';
-  QValues[3] := QDS + 'GrapheJS_Bidon.htm';
-  ShowMessage(' 004:' + QDirectoryTGT);
-
-  ShowMessage('Avant FTP_UploadMultiplesFiles(): ' + QDirectoryTGT);
-
-  FTP_UploadMultiplesFiles(FFTPParameters, FTP_PASSWORD, QValues, QDirectoryTGT);
-  ShowMessage('Après FTP_UploadMultiplesFiles(): ' + QDirectoryTGT);
-  //*)
-  (*
-  SetLength(QValues, 3);
-  QValues[0] := FFTPParameters.HostName;
-  QValues[1] := FFTPParameters.Port;
-  QValues[2] := FFTPParameters.User;
-
-  if (InputQuery('Paramètres serveur FTP',
-                 ['Host', 'Port', 'User'],
-                 QValues)) then
-  begin
-    FFTPParameters.HostName := QValues[0];
-    FFTPParameters.Port     := QValues[1];
-    FFTPParameters.User     := QValues[2];
-  end;
-  //*)
-
-end;
-
-procedure TGHTopoMainMenuBar.MenuItem62Click(Sender: TObject);
-const
-  QNOM_DOSSIER_TEST = '000000_DossierTestFonctionsDossier';
-var
-  MonDossierSRC, MonDossierDEST: TStringDirectoryFilename;
-begin
-  MonDossierSRC  := GetGHTopoDirectory() + QNOM_DOSSIER_TEST + PathDelim + '00000_SRC' + PathDelim;
-  MonDossierDEST := GetGHTopoDirectory() + QNOM_DOSSIER_TEST + PathDelim + '00000_TGT' + PathDelim;
-
-  ClearConsoleErreur();
-  TraiterContenuDeDossier(MonDossierSRC, MonDossierDEST);
-
-end;
-
-procedure TGHTopoMainMenuBar.mnuTUBoussoleClick(Sender: TObject);
-begin
-  DisplayTestUnitaireTCadreBoussole();
-end;
-
-procedure TGHTopoMainMenuBar.mnuMultiThreadingClick(Sender: TObject);
-begin
-  pass;
-end;
-(*
-var
-  TD: TdlgMultiThreading;
-begin
-  TD := TdlgMultiThreading.Create(Application);
-  try
-    if (TD.Initialiser(FDocumentToporobot)) then
-    begin
-      TD.ShowModal;
-      TD.Finaliser();
-    end;
-  finally
-    TD.Release;
-  end;
-end;
-//*)
-//----------------------------------------------------------------------------*)
-procedure TGHTopoMainMenuBar.mnuExportTopoEnX3DClick(Sender: TObject);
-var
-  QIdx: integer;
-  QFileName: TStringDirectoryFilename;
-begin
-  QFileName := 'Cavite001' + EXT_X3D;
-  if (DoDialogSaveFile('Volumes X3D (format XML)|*' + EXT_X3D, EXT_X3D, QFileName, QIdx)) then
-  begin
-    ExporterCaviteMaillage(FBDDEntites, FMonMaillage, QFileName);
-  end;
-end;
 
 procedure TGHTopoMainMenuBar.mnuTUOpenGL3Click(Sender: TObject);
 begin
@@ -1011,7 +869,7 @@ begin
       DisplayTextEditor(WU, False);
     end;
   finally
-    FreeAndNil(LS);//LS.Free;
+    FreeAndNil(LS);
   end;
 end;
 
@@ -1280,11 +1138,16 @@ begin
 
 end;
 
+procedure TGHTopoMainMenuBar.acTestsUnitairesExecute(Sender: TObject);
+begin
+  DisplayTestsUnitaires(FDocumentToporobot, FBDDEntites, FFTPParameters);
+end;
+
 procedure TGHTopoMainMenuBar.acUtilFusionToposExecute(Sender: TObject);
 begin
   (*
-  ShowMessage('Implanter boutons Up/Down pour la liste des docs fusionnés' + #13#10 +
-              'Voir avec la méthodo d''espaces de noms où une cavité est de la forme' + #13#10 +
+  ShowMessage('Implanter boutons Up/Down pour la liste des docs fusionnés' + CR_LF +
+              'Voir avec la méthodo d''espaces de noms où une cavité est de la forme' + CR_LF +
               '123.45@Reseau_Trombe ou 12.56@"Puits de la Râpe"');
   //*)
   DispFusionTopographies(FDocumentToporobot, FConvertisseurCoordonnees);
@@ -1381,10 +1244,6 @@ begin
 //    SetAcHint(acHelpNews         ,rsHLPNEWS));
 end;
 
-procedure TGHTopoMainMenuBar.FormActivate(Sender: TObject);
-begin
-  //self.WindowState := ws;
-end;
 
 
 // activer/désactiver options de menus
@@ -1447,9 +1306,6 @@ begin
   CodeCalcul := TCodeDeCalcul.Create;
   T0 := Now();
   try
-    AfficherMessageErreur('-- Calcul non parallélisé');
-    AfficherMessageErreur('');
-
     CodeCalcul.Initialiser(FDocumentToporobot, FBDDEntites, self.AfficherProgression);
     Result    := CodeCalcul.CalculComplet(False);
     AfficherMessageErreur(Format('%s.CalculerLeReseauExt: %s', [Classname, IIF(Result, 'OK', 'KO')]));
@@ -1466,8 +1322,6 @@ begin
   AfficherMessage('Calcul lancé à ' + DateTimePascalToDateTimeSQL(T0, True));
   AfficherMessage('Calcul terminé à ' + DateTimePascalToDateTimeSQL(T1, True));
   AfficherMessage('Temps de calcul: ' + DatePascalToDateSQL(T1 - T0));
-    // calculer les dégradés
-  ///ShowMessage('888');
   FBDDEntites.CalcCouleursByDepth(FBDDEntites.GetColorZMini(), FBDDEntites.GetColorZMaxi());
 end;
 // fermer tous les documents
@@ -1481,7 +1335,6 @@ begin
   FDocumentToporobot.ClearListeSeries();          // vidage des séries
   FDocumentToporobot.ViderTablesSimples;        // vidage autres tables
   FCroquisTerrain.ViderLesListesObjets();
-  //CloseVues;
   ActiverMenus(False);
   self.Caption := MakeTitleMainWindowGHTopo('Untitled');
 end;
@@ -1522,7 +1375,6 @@ begin
   begin
     if (FDocumentToporobot.LoadFichierText(FC) < 0) then
     begin
-      //showmessage('gmj');
       AfficherMessageErreur('Le fichier comporte des erreurs - Voir les consoles');
       FDocumentToporobot.Finaliser;   // Echec = on détruit l'objet
       Exit;
@@ -1558,10 +1410,8 @@ begin
       Exit;
     end;
   end;
-  //ShowMessageFmt('%d series', [FDocumentToporobot.GetNbSeries()]);
   self.Caption := MakeTitleMainWindowGHTopo(ExtractFileName(FC));
   RecalculerEtActualiser(true);
-
   self.Top  := 0;
   self.Left := 0;
   {$IFDEF MSWINDOWS}
@@ -1578,14 +1428,12 @@ end;
 // callback appelé par la liste des erreurs de check
 procedure TGHTopoMainMenuBar.TransmitGotoError(const Ser: TNumeroSerie; const St: TNumeroStation);
 begin
-
+  pass;
 end;
 
 procedure TGHTopoMainMenuBar.CentrerBasepointSurPlan(const BP: TToporobotIDStation);
 begin
-
   frmVueEnPlan.CentrerBasePointSurPlan(BP);
-
 end;
 
 procedure TGHTopoMainMenuBar.CentrerXYSurPlan(const QX, QY: double; const TagString: string);
@@ -1663,7 +1511,6 @@ begin
   acLastFile1.Visible := false;
   // Create the object, specifying the the ini file that contains the settings
   INI := TINIFile.Create(GetGHTopoDirectory() + GHTOPO_STD_INI_FILENAME);
-
   // Put reading the INI file inside a try/finally block to prevent memory leaks
   try
     S := Trim(INI.ReadString(INI_SECTION_LAST_FILE_OPENED, INI_KEY_LAST_FILE_OPENED, ''));
@@ -1716,7 +1563,6 @@ begin
     QSaveWindowPosSize(frmVueEnPlan);
     {$IFDEF MSWINDOWS} QSaveWindowPosSize(dlgProcessing); {$ENDIF}
     QSaveWindowPosSize(frmListesSimples);
-
     // CodeEPSG
     INI.WriteInteger(INI_CURRENT_GCS, INI_CODE_EPSG, FCurrentSystemeEPSG.CodeEPSG);
     INI.WriteString(INI_CURRENT_GCS, INI_NOM_EPSG, FCurrentSystemeEPSG.NomEPSG);
@@ -1741,10 +1587,6 @@ begin
   lbCurrentCodeEPSG.Hint := FCurrentSystemeEPSG.NomEPSG;
 end;
 
-//******************************************************************************
-procedure TGHTopoMainMenuBar.ExporterCaviteMaillage(const QBDD: TBDDEntites; const QMaillage: TMaillage; const OutputFilename: TStringDirectoryFilename);
-begin
-  pass;
-end;
+
 
 end.

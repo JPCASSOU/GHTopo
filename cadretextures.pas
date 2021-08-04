@@ -552,14 +552,14 @@ begin
     case (cmbPerlinFunc.ItemIndex) of
       0, 1:
       begin
-        MiouMiou(Format('  result := %s(%d, %d, %d, %.2f, %.2f, %.5f, %s);',
+        MiouMiou(Format('  result := %s(%d, %d, %d, %s, %s, %s, %s);',
                     [EWE,
                      editSizeTextureX.AsInteger,
                      editSizeTextureX.AsInteger,
                      editTileOverlap.AsInteger,
-                     sclHorizontalPeriod.Position / 100.0,
-                     sclVerticalPeriod.Position / 100.0,
-                     sclExponent.Position / 100.0,
+                     FormatterNombreWithDotDecimal(sclHorizontalPeriod.Position / 100.0, 2),
+                     FormatterNombreWithDotDecimal(sclVerticalPeriod.Position / 100.0, 2),
+                     FormatterNombreWithDotDecimal(sclExponent.Position / 100.0, 5),
                      cmbResampleFilter.Items[cmbResampleFilter.ItemIndex]
                      ]));
         MiouMiou('  // Bumped procedural texture');
@@ -576,9 +576,9 @@ begin
         MiouMiou(Format('    phong.LightPositionZ            := %d;', [80]));
         MiouMiou(Format('    phong.LightColor := BGRA(%d, %d, %d, %d);', [sclLightColorB.Position, sclLightColorG.Position, sclLightColorR.Position, sclLightColorA.Position]));
         MiouMiou('');
-        MiouMiou(Format('    phong.NegativeDiffusionFactor   := %.2f; ', [0.3]));
-        MiouMiou(Format('    phong.SpecularIndex             := %d;'  , [20]));
-        MiouMiou(Format('    phong.AmbientFactor            := %.3f;', [0.4]));
+        MiouMiou(Format('    phong.NegativeDiffusionFactor   := %s;', [FormatterNombreWithDotDecimal(0.3, 2)]));
+        MiouMiou(Format('    phong.SpecularIndex             := %d;', [20]));
+        MiouMiou(Format('    phong.AmbientFactor             := %s;', [FormatterNombreWithDotDecimal(0.4, 2)]));
         MiouMiou(Format('    phong.Draw(Result, Temp, %d, -blurSize,-blurSize, BGRA(%d, %d, %d, %d));', [20, sclColorB.Position, sclColorG.Position, sclColorR.Position,  sclColorA.Position]));
         MiouMiou('  finally');
         MiouMiou('    FreeAndNil(phong);');
@@ -590,14 +590,14 @@ begin
       begin
         MiouMiou('  // Marble or wooden like texture');
 
-        MiouMiou(Format('  result := %s(%d, %d, %d, %.2f, %.2f, %.5f, %s);',
+        MiouMiou(Format('  result := %s(%d, %d, %d, %s, %s, %s, %s);',
                     [EWE,
                      editSizeTextureX.AsInteger,
                      editSizeTextureX.AsInteger,
                      editTileOverlap.AsInteger,
-                     sclHorizontalPeriod.Position / 100.0,
-                     sclVerticalPeriod.Position / 100.0,
-                     sclExponent.Position / 100.0,
+                     FormatterNombreWithDotDecimal(sclHorizontalPeriod.Position / 100.0, 2),
+                     FormatterNombreWithDotDecimal(sclVerticalPeriod.Position / 100.0, 2),
+                     FormatterNombreWithDotDecimal(sclExponent.Position / 100.0, 5),
                      cmbResampleFilter.Items[cmbResampleFilter.ItemIndex]
                      ]));
                      //*)

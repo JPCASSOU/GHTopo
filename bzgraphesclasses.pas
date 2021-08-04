@@ -30,7 +30,7 @@ type
     FNodeLinkList : TBZNodeLinkList;
     FNodeIndex    : Integer;
     // data
-    FIDStation    : TIDStation;
+    FIDStation    : TIDBaseStation;
     FPosition     : TPoint3Df;
     // metadata
     FMetaData     : string;
@@ -40,20 +40,21 @@ type
 
     procedure SetNodeLink(Index : Integer; const AValue: TBZNodeLink);
   public
-    constructor Create(AOwner : TBZGraphNode; const QIDStation: TIDStation; const QPosition: TPoint3Df; const QMetaData: string);
+    constructor Create(AOwner : TBZGraphNode; const QIDStation: TIDBaseStation; const QPosition: TPoint3Df; const QMetaData: string);
     destructor  Destroy; override;
 
     function AddNodeLink(anIndex : Integer; const Weight: double) : TBZNodeLink; overload;
 
     property Owner : TBZGraphNode read FOwner write SetOwner;
 
-    property IDStation     : TIDStation read FIDStation write FIDStation;
+    property IDStation     : TIDBaseStation read FIDStation write FIDStation;
     property Position: TPoint3Df read FPosition write FPosition;
     property NodeIndex : Integer read FNodeIndex write FNodeIndex;
     property LinkNode[Index : Integer] : TBZNodeLink read GetNodeLink write SetNodeLink;
     property NodeLinkList : TBZNodeLinkList read FNodeLinkList;
     property MetaData: string read FMetaData write FMetaData;
     function ToString(): string;
+    procedure setFromSerSt(const S: TNumeroSerie; const P: TNumeroStation);
   end;
 // arc
   TBZNodeLink = class
@@ -107,7 +108,7 @@ type
     constructor Create;
     destructor Destroy; override;
     function AddNode(ANode : TBZClassNode) : Integer; overload;
-    function AddNode(const QIDStation: TIDStation; const QPosition: TPoint3Df; const QMetaData: string) : TBZClassNode; overload;
+    function AddNode(const QIDStation: TIDBaseStation; const QPosition: TPoint3Df; const QMetaData: string) : TBZClassNode; overload;
 
     function Dijkstra(FromIndex, ToIndex : Integer; out ShortestPath : TListOfIntegers) : double;
 
@@ -327,7 +328,7 @@ end;
 
 {%region=====[ TNode ]==========================================================}
 
-constructor TBZClassNode.Create(AOwner: TBZGraphNode; const QIDStation: TIDStation; const QPosition: TPoint3Df; const QMetaData: string);
+constructor TBZClassNode.Create(AOwner: TBZGraphNode; const QIDStation: TIDBaseStation; const QPosition: TPoint3Df; const QMetaData: string);
 begin
   FOwner := AOwner;
   FIDStation   := QIDStation;
@@ -383,6 +384,11 @@ var
 begin
   ExtractSerStFromTIDStation(self.IDStation, QSR, QSt);
   Result := Format(FMTSERST, [QSR, QST]);
+end;
+
+procedure TBZClassNode.setFromSerSt(const S: TNumeroSerie; const P: TNumeroStation);
+begin
+  self.FIDStation := NB_MAXI_SERIES_PAR_CAVITE * Abs(S) + MULTIPLICATEUR_STATION * Abs(P);
 end;
 
 
@@ -522,7 +528,7 @@ begin
   if Assigned(FOnGraphNodeVerboseCall) then FOnGraphNodeVerboseCall(Self, s);
 end;
 
-function TBZGraphNode.AddNode(const QIDStation: TIDStation; const QPosition: TPoint3Df; const QMetaData: string): TBZClassNode;
+function TBZGraphNode.AddNode(const QIDStation: TIDBaseStation; const QPosition: TPoint3Df; const QMetaData: string): TBZClassNode;
 Var
   aNode : TBZClassNode;
   Idx : Integer;

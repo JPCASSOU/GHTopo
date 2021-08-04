@@ -1,68 +1,92 @@
-unit frmBoussole;
+unit frmTestsUnitaires;
 
 {$mode delphi}
 
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, Buttons, StdCtrls, CadreBoussole;
+  StructuresDonnees, Common,
+  CallDialogsStdVersion,
+  ToporobotClasses2012,
+  UnitEntitesExtended,
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, Buttons, StdCtrls, ComCtrls, CadreBoussole;
 
 type
 
-  { TdlgBoussole }
+  { TdlgTestsUnitaires }
 
-  TdlgBoussole = class(TForm)
+  TdlgTestsUnitaires = class(TForm)
     BitBtn1: TBitBtn;
     btnBackColor: TColorButton;
     btnReticuleColor: TColorButton;
     btnRoseColor: TColorButton;
+    btnTraiterDossier: TButton;
+    btnTestFTP: TButton;
+    btnRechercheDansBase: TButton;
+    Button1: TButton;
     CdrBoussole1: TCdrBoussole;
+    lbPhidgets: TPanel;
+    lbPhidgetsStatus: TStaticText;
     lbUniteAzimut: TLabel;
+    PageControl1: TPageControl;
     Panel1: TPanel;
     Panel2: TPanel;
-    lbPhidgets: TPanel;
     RadioGroup1: TRadioGroup;
     sclAzimut: TScrollBar;
     sclInclinX: TScrollBar;
     sclInclinY: TScrollBar;
-    StaticText1: TStaticText;
-    lbPhidgetsStatus: TStaticText;
+    tabhstPhidgets: TTabSheet;
+    tabShtSpecial: TTabSheet;
+    tabshtFonctionsFTP: TTabSheet;
+    tabshtCadreBoussole: TTabSheet;
     procedure btnBackColorColorChanged(Sender: TObject);
+    procedure btnRechercheDansBaseClick(Sender: TObject);
     procedure btnReticuleColorColorChanged(Sender: TObject);
     procedure btnRoseColorColorChanged(Sender: TObject);
+    procedure btnTestFTPClick(Sender: TObject);
+    procedure btnTraiterDossierClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
     procedure sclInclinXChange(Sender: TObject);
     procedure sclInclinYChange(Sender: TObject);
     procedure SetUniteBoussoleClino(const UB, UC: double);
     procedure RadioGroup1Click(Sender: TObject);
     procedure sclAzimutChange(Sender: TObject);
   private
-
-
+    // paramètres FTP
+    FFTPParameters            : TFTPParameters;
+    FDocuTopo  : TToporobotStructure2012;
+    FBDDEntites: TBDDEntites;
   public
-    function Initialiser(): boolean;
+    function Initialiser(const FD: TToporobotStructure2012; const FE: TBDDEntites; const ParamFTP: TFTPParameters): boolean;
   end;
 
 var
-  dlgBoussole: TdlgBoussole;
+  dlgTestsUnitaires: TdlgTestsUnitaires;
 
 implementation
 uses DGCDummyUnit;
 
 {$R *.lfm}
 
-{ TdlgBoussole }
-function TdlgBoussole.Initialiser(): boolean;
+{ TdlgTestsUnitaires }
+function TdlgTestsUnitaires.Initialiser(const FD: TToporobotStructure2012; const FE: TBDDEntites; const ParamFTP: TFTPParameters): boolean;
 begin
+  FDocuTopo   := FD;
+  FBDDEntites := FE;
+  // Onglet FTP
+  FFTPParameters := ParamFTP;
+
+  // Onglet Boussole
   SetUniteBoussoleClino(360.00, 360);
   result := true;
 end;
 
-procedure TdlgBoussole.sclAzimutChange(Sender: TObject);
+procedure TdlgTestsUnitaires.sclAzimutChange(Sender: TObject);
 begin
   CdrBoussole1.SetAzimut(1.00 * sclAzimut.Position);
 end;
 
-procedure TdlgBoussole.SetUniteBoussoleClino(const UB, UC: double);
+procedure TdlgTestsUnitaires.SetUniteBoussoleClino(const UB, UC: double);
 var
   EWE: Int64;
 begin
@@ -81,30 +105,125 @@ begin
 end;
 
 
-procedure TdlgBoussole.btnBackColorColorChanged(Sender: TObject);
+procedure TdlgTestsUnitaires.btnBackColorColorChanged(Sender: TObject);
 begin
   CdrBoussole1.SetBackColor(btnBackColor.ButtonColor);
 end;
-procedure TdlgBoussole.btnReticuleColorColorChanged(Sender: TObject);
+
+procedure TdlgTestsUnitaires.btnRechercheDansBaseClick(Sender: TObject);
+begin
+  // Recherche dans la base
+  SearchInGHTopoDatabase(FDocuTopo, FBDDEntites, 'toto', nil);
+
+  if (GHTopoQuestionOuiNon('Quitter IMMEDIATEMENT GHTopo')) then Application.Terminate;
+end;
+
+procedure TdlgTestsUnitaires.btnReticuleColorColorChanged(Sender: TObject);
 begin
    CdrBoussole1.SetReticuleColor(btnReticuleColor.ButtonColor);
 end;
-procedure TdlgBoussole.btnRoseColorColorChanged(Sender: TObject);
+procedure TdlgTestsUnitaires.btnRoseColorColorChanged(Sender: TObject);
 begin
     CdrBoussole1.SetRoseColor(btnRoseColor.ButtonColor);
 end;
 
-procedure TdlgBoussole.sclInclinXChange(Sender: TObject);
+procedure TdlgTestsUnitaires.btnTestFTPClick(Sender: TObject);
+const
+  FTP_PASSWORD        = 'G40+g41-f84';
+  FTP_ROOT_DIRECTORY  = '/www/0000_TotoDummy';
+
+var
+  QValues: array of string;
+  QFileNameSRC, QDirectoryTGT, QDirectorySRC, QDS: TStringDirectoryFilename;
+  QDirectoryACreer    :TStringDirectoryFilename;
+  QErrCode: integer;
+  QErrMsg: string;
+begin
+  QDirectoryACreer    := '00000_AAA'; // Type
+  ClearConsoleErreur();
+  // Test de la connexion
+  while (not FTP_TestConnexion(FFTPParameters, FTP_PASSWORD, QErrCode, QErrMsg)) do
+  begin
+    if (not GHTopoQuestionOuiNon(Format('Echec de connexion: [%d - %s] - Réessayer', [QErrCode, QErrMsg]))) then Exit;
+  end;
+  QDirectorySRC := GetGHTopoDirectory() + QDirectoryACreer;
+  if (not DirectoryExists(QDirectorySRC)) then ShowMessage(QDirectorySRC);
+
+  QDirectoryTGT := FTP_ROOT_DIRECTORY;
+
+  FTP_CreateFolder(FFTPParameters, FTP_PASSWORD, QDirectoryTGT, QDirectoryACreer);
+  FTP_CreateFolder(FFTPParameters, FTP_PASSWORD, QDirectoryTGT, '0000001');
+  FTP_CreateFolder(FFTPParameters, FTP_PASSWORD, QDirectoryTGT, '0000001' + '/' + '01');
+  FTP_CreateFolder(FFTPParameters, FTP_PASSWORD, QDirectoryTGT, '0000001' + '/' + '011');
+  FTP_CreateFolder(FFTPParameters, FTP_PASSWORD, QDirectoryTGT, '0000004');
+  ShowMessage('Après création des dossiers' + QDirectoryTGT);
+
+  QDirectoryTGT  := FTP_ROOT_DIRECTORY + '/' + QDirectoryACreer;
+  ShowMessage(' 001:' + QDirectoryTGT);
+  QDS := QDirectorySRC + PathDelim;
+  ShowMessage(' 002:' + QDirectoryTGT);
+
+  SetLength(QValues, 4);
+  ShowMessage(' 003:' + QDirectoryTGT);
+
+  QValues[0] := QDS + 'Latresne_1-1_1-51.pdf';
+  QValues[1] := QDS + 'MNTCoume1.mai';
+  QValues[2] := QDS + 'FichesStations_001.pdf';
+  QValues[3] := QDS + 'GrapheJS_Bidon.htm';
+  ShowMessage(' 004:' + QDirectoryTGT);
+
+  ShowMessage('Avant FTP_UploadMultiplesFiles(): ' + QDirectoryTGT);
+
+  FTP_UploadMultiplesFiles(FFTPParameters, FTP_PASSWORD, QValues, QDirectoryTGT);
+  ShowMessage('Après FTP_UploadMultiplesFiles(): ' + QDirectoryTGT);
+  //*)
+  (*
+  SetLength(QValues, 3);
+  QValues[0] := FFTPParameters.HostName;
+  QValues[1] := FFTPParameters.Port;
+  QValues[2] := FFTPParameters.User;
+
+  if (InputQuery('Paramètres serveur FTP',
+                 ['Host', 'Port', 'User'],
+                 QValues)) then
+  begin
+    FFTPParameters.HostName := QValues[0];
+    FFTPParameters.Port     := QValues[1];
+    FFTPParameters.User     := QValues[2];
+  end;
+  //*)
+
+end;
+
+procedure TdlgTestsUnitaires.btnTraiterDossierClick(Sender: TObject);
+const
+  QNOM_DOSSIER_TEST = '000000_DossierTestFonctionsDossier';
+var
+  MonDossierSRC, MonDossierDEST: TStringDirectoryFilename;
+begin
+  MonDossierSRC  := GetGHTopoDirectory() + QNOM_DOSSIER_TEST + PathDelim + '00000_SRC' + PathDelim;
+  MonDossierDEST := GetGHTopoDirectory() + QNOM_DOSSIER_TEST + PathDelim + '00000_TGT' + PathDelim;
+
+  ClearConsoleErreur();
+  TraiterContenuDeDossier(MonDossierSRC, MonDossierDEST);
+end;
+
+procedure TdlgTestsUnitaires.Button1Click(Sender: TObject);
+begin
+
+end;
+
+procedure TdlgTestsUnitaires.sclInclinXChange(Sender: TObject);
 begin
   CdrBoussole1.SetInclinaisonX(1.00 * sclInclinX.Position);
 end;
 
-procedure TdlgBoussole.sclInclinYChange(Sender: TObject);
+procedure TdlgTestsUnitaires.sclInclinYChange(Sender: TObject);
 begin
   CdrBoussole1.SetInclinaisonY(1.00 * sclInclinY.Position);
 end;
 
-procedure TdlgBoussole.RadioGroup1Click(Sender: TObject);
+procedure TdlgTestsUnitaires.RadioGroup1Click(Sender: TObject);
 begin
   case RadioGroup1.ItemIndex of
     0: SetUniteBoussoleClino(360, 360);
@@ -142,7 +261,7 @@ type
   TForm1 = class(TForm)
     btnConnecter: TButton;
     btnDeconnecter: TButton;
-    Button1: TButton;
+    btnTraiterDossier: TButton;
     CdrBoussole1: TCdrBoussole;
     CdrClino1: TCdrClino;
     Memo1: TMemo;

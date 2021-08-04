@@ -932,8 +932,7 @@ var
             QEntite.Type_Entite := TabVisee[St].TypeVisee;
 
             MyExpe                  := FDocTopo.GetExpeByNumero(TabVisee[St].Expe);
-            {$WARNING: TEXpe.DateExpe à implementer}
-            QEntite.DateLeve        := GetSecuredDate(MyExpe.AnneeExpe, MyExpe.MoisExpe, MyExpe.JourExpe);
+            QEntite.DateLeve        := MyExpe.DateExpe;
             QEntite.eEntrance       := QBranche.NoEntranceRatt;
             QEntite.Entite_Serie    := QBranche.NoSerie;
             QEntite.Entite_Station  := TabVisee[St].NoVisee;

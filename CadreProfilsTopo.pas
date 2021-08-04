@@ -233,7 +233,7 @@ begin
     // contenu
     EWE := '';
     for i := 0 to HeaderControl1.Sections.Count - 1 do EWE += HeaderControl1.Sections.Items[i].Text + #9;
-    EWE += #13#10;
+    EWE += CR_LF;
     for i := 0 to Nb - 1 do
     begin
       MyConduit := FProfilTopo.GetConduitRecoupe(i);
@@ -241,12 +241,12 @@ begin
       DeltaZ    := QAltTN - MyConduit.PosStation.Z;
       DecomposeNumeroSerie(MyConduit.Entite_Serie, QIdxNamespace, QNoSerie);
       MyNamespace := FDocTopo.GetNameSpace(QIdxNamespace);
-      EWE += Format(FORMAT_NB_INTEGER + #9 +
-                    FORMAT_STRING + #9 +
-                    FMTSERST +#9 +
-                    FORMAT_STRING + #9 +
-                    FORMAT_STRING + #9 +
-                    FORMAT_STRING + #13#10,
+      EWE += Format(FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB +
+                    FORMAT_STRING + FIELD_SEPARATOR_TAB +
+                    FMTSERST +FIELD_SEPARATOR_TAB +
+                    FORMAT_STRING + FIELD_SEPARATOR_TAB +
+                    FORMAT_STRING + FIELD_SEPARATOR_TAB +
+                    FORMAT_STRING + CR_LF,
                       [i, MyNamespace.Nom,
                       QNoSerie, MyConduit.Entite_Station,
                       FormatterNombreOOo(MyConduit.TagDouble, 3, false),

@@ -475,6 +475,7 @@ object CdrSerieIndependant: TCdrSerieIndependant
       OnGetCellHint = grdStationsGetCellHint
       OnHeaderClick = grdStationsHeaderClick
       OnKeyDown = grdStationsKeyDown
+      OnMouseDown = grdStationsMouseDown
       OnSelectCell = grdStationsSelectCell
     end
     object lbNbStations: TLabel

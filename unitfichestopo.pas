@@ -44,26 +44,6 @@ uses
 
 const ONE_INCH_IN_MM: double = 25.40;
 const QECHELLE_PAR_DEFAULT   = 1000;
-// fonctions locales hors objet
-  (*
-function Millimetres2PixelsXf(const Millims: double): integer;
-begin
-  Result:=trunc(100 * Printer.XDPI * Millims / ONE_INCH_IN_MM) div 100;
-end;
-function Millimetres2PixelsYf(const Millims: double): integer;
-begin
-  Result:=trunc(100 * Printer.YDPI * Millims / ONE_INCH_IN_MM) div 100;
-end;
-function Pixels2MillimetresX(const Pixls: integer): Double;
-begin
-  Result := ONE_INCH_IN_MM * Pixls / Printer.XDPI;
-end;
-function Pixels2MillimetresY(const Pixls: integer): Double;
-begin
-  Result := ONE_INCH_IN_MM * Pixls / Printer.YDPI;
-end;
-//*)
-{ TFichesTopo }
 
 function TFichesTopo.Initialiser(const pBDD: TBDDEntites; const QProcProgression: TProcDisplayProgression): boolean;
 var
@@ -172,7 +152,7 @@ var
     FPDFDoc.Canvas.SetFont('Arial', HAUTEUR_TEXTE_ID_NEXT_STATION);
     SS := Format(FMT_NEAR_ST, [IIF(AsNext, 'Next', 'Prev'), QST.Entite_Serie, QST.Entite_Station, QLong, QAzimut, QPente]);
     QDrawTexte(QX0 + QMargeX, QHT, SS);
-    EWE += SS + #13#10;
+    EWE += SS + CR_LF;
   end;
 
 begin
@@ -183,7 +163,6 @@ begin
 
   QMargeX       := FPDFDoc.Canvas.PageWidth  div MG;
   QMargeY       := FPDFDoc.Canvas.PageHeight div MG;
-
 
   QLargeurFiche := (FPDFDoc.Canvas.PageWidth  - round(K * QMargeX)) div 2;
   QHauteurFiche := (FPDFDoc.Canvas.PageHeight - round(K * QMargeY)) div 2;
@@ -239,9 +218,9 @@ begin
                     ]));
 
   // imprimer la station suivante et son cap
-  EWE := EWE + #13#10 +
+  EWE := EWE + CR_LF +
              '================' +
-             #13#10;
+             CR_LF;
   IdxNext := IdxCurr + 1;
   if (IdxNext < Nb) then
   begin

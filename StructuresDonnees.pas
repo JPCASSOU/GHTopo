@@ -40,6 +40,7 @@ const MAX_LINES_LOG              = 1000; // nb max de lignes de l'historique des
 const MAX_LINES_ERRORS_LOG       = 2000; // nb max de lignes de l'historique des opérations
 // séparateurs de champs
 const FIELD_SEPARATOR_TAB        = #9;
+const CR_LF                      = #13#10;
 
 // dossiers de service
 const MON_DOSSIER_CHIFFRES_TOPO  = '0_Mes_Donnees_Topo';
@@ -107,7 +108,7 @@ const CODE_EPSG_LAMBERT_II                 = 27572;
 const CODE_EPSG_LAMBERT_III                = 27573;
 const CODE_EPSG_LAMBERT_IV                 = 27574;
 // lambert 9 zones
-const CODE_EPSG_CC_ZONE_0                  = 3940;
+const CODE_EPSG_CC_ZONE_0                  =  3940;
 // codes UTM
 const CODE_EPSG_UTM_ZONE_0_NORTH           = 32600;
 const CODE_EPSG_UTM_ZONE_0_SOUTH           = 32700;
@@ -117,8 +118,8 @@ const DEFAULT_SYSTEME_COORDONNEES_NOM       = 'Lambert III'; // évolutif en LT9
 const DEFAULT_SYSTEME_COORDONNEES_CODE_EPSG = CODE_EPSG_LAMBERT_III; // évolutif en LT93 (2154)
 {$ELSE}
 {$WARNING: Repasser en LT93 par défaut à la prochaine LTS}
-const DEFAULT_SYSTEME_COORDONNEES_NOM       = 'Lambert III'; //'Lambert 93'; // évolutif en LT93
-const DEFAULT_SYSTEME_COORDONNEES_CODE_EPSG = CODE_EPSG_LAMBERT_III; // CODE_EPSG_LAMBERT_93
+const DEFAULT_SYSTEME_COORDONNEES_NOM       = 'Lambert 93'; //'Lambert 93'; // évolutif en LT93
+const DEFAULT_SYSTEME_COORDONNEES_CODE_EPSG = CODE_EPSG_LAMBERT_93; // CODE_EPSG_LAMBERT_93
 {$ENDIF GROS_MINET}
 
 
@@ -163,9 +164,9 @@ const SATANGRADES_PAR_TOUR     = 666.00; // lol
 const DEG_TO_RAD               = PI / 180;
 const GON_TO_RAD               = PI / 200;
 const QUADRANT_DEGRES = DEGRES_PAR_TOUR / 4.0;
-const QUADRANT_GRADES = GRADES_PAR_TOUR / 4;
-const ANGLE_JANE_BRIKIN_DEGRES = DEGRES_PAR_TOUR / 2;
-const ANGLE_JANE_BRIKIN_GRADES = GRADES_PAR_TOUR / 2;
+const QUADRANT_GRADES = GRADES_PAR_TOUR / 4.0;
+const ANGLE_JANE_BRIKIN_DEGRES = DEGRES_PAR_TOUR / 2.0;
+const ANGLE_JANE_BRIKIN_GRADES = GRADES_PAR_TOUR / 2.0;
 
 // constantes instrumentales
 // 01/10/2013: Nouveaux instruments
@@ -204,10 +205,10 @@ const COULEUR_VISEE_ANTENNE        = clGray;      // couleur des visées en ante
 // export GHCaveDraw
 const GCD_FMT_BASEPOINTS = '    %d'+FIELD_SEPARATOR_TAB + FORMAT_STRING + // ID de la visée
         FIELD_SEPARATOR_TAB+FORMAT_NB_INTEGER+FIELD_SEPARATOR_TAB+FORMAT_NB_INTEGER + // attributs
-        FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC +  // point de départ
-        FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC +  // point d'arrivée
-        FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC +  // point droit  (avec Z du sol)
-        FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC+FIELD_SEPARATOR_TAB+FORMAT_NB_REAL_3_DEC;   // point gauche (avec Z du plafond)
+        FIELD_SEPARATOR_TAB+'%s'+FIELD_SEPARATOR_TAB+'%s'+FIELD_SEPARATOR_TAB+'%s' +  // point de départ
+        FIELD_SEPARATOR_TAB+'%s'+FIELD_SEPARATOR_TAB+'%s'+FIELD_SEPARATOR_TAB+'%s' +  // point d'arrivée
+        FIELD_SEPARATOR_TAB+'%s'+FIELD_SEPARATOR_TAB+'%s'+FIELD_SEPARATOR_TAB+'%s' +  // point droit  (avec Z du sol)
+        FIELD_SEPARATOR_TAB+'%s'+FIELD_SEPARATOR_TAB+'%s'+FIELD_SEPARATOR_TAB+'%s';   // point gauche (avec Z du plafond)
 
 // constantes à utiliser comme des énumérations
 const // Ne pas définir de type énuméré afin d'éviter une dépendance avec GHTopo
@@ -219,27 +220,27 @@ const // Ne pas définir de type énuméré afin d'éviter une dépendance avec 
   OSM_MARKER_STYLE_LOSANGE = 5;
 // constantes des filtres   Pas de type énuméré
 const
-    kFLT_NIL         = 0;      //  NIL               NIL
-    kFLT_ALL         = 1;      //  ALL               ALL
-    kFLT_ID          = 2;      //  ID                ID
-    kFLT_LONGUEUR    = 3;      //  LONGUEUR          LONGUEUR
-    kFLT_AZIMUT      = 4;      //  AZIMUT            AZIMUT
-    kFLT_PENTE       = 5;      //  PENTE             PENTE
-    kFLT_DATE        = 6;      //  DATE              DATE
-    kFLT_COULEUR     = 7;      //  COULEUR           COULEUR
-    kFLT_X           = 8;      //  X                 X
-    kFLT_Y           = 9;      //  Y                 Y
-    kFLT_Z           = 10;     //  Z                 Z
-    kFLT_LARGEUR     = 11;     //  LARGEUR           LARGEUR
-    kFLT_HAUTEUR     = 12;     //  HAUTEUR           HAUTEUR
-    kFLT_DATES       = 13;     //  DATES             DATES
-    kFLT_COULEURS    = 14;     //  COULEURS          COULEURS
-    kFLT_SERIE       = 15;     //  SERIE;
-    kFLT_RESEAU      = 16;     //  Réseau
-    kFLT_CODE        = 17;     //  code
-    kFLT_EXPE        = 18;     //  Séance (expé)
-    kFLT_TYPEVISEE   = 19;     //  type de visée
-    kFLT_SECTEUR     = 20;     // secteur
+    kFLT_NIL           = 0;      //  NIL               NIL
+    kFLT_ALL           = 1;      //  ALL               ALL
+    kFLT_ID            = 2;      //  ID                ID
+    kFLT_LONGUEUR      = 3;      //  LONGUEUR          LONGUEUR
+    kFLT_AZIMUT        = 4;      //  AZIMUT            AZIMUT
+    kFLT_PENTE         = 5;      //  PENTE             PENTE
+    kFLT_DATE          = 6;      //  DATE              DATE
+    kFLT_COULEUR       = 7;      //  COULEUR           COULEUR
+    kFLT_X             = 8;      //  X                 X
+    kFLT_Y             = 9;      //  Y                 Y
+    kFLT_Z             = 10;     //  Z                 Z
+    kFLT_LARGEUR       = 11;     //  LARGEUR           LARGEUR
+    kFLT_HAUTEUR       = 12;     //  HAUTEUR           HAUTEUR
+    kFLT_DATES         = 13;     //  DATES             DATES
+    kFLT_COULEURS      = 14;     //  COULEURS          COULEURS
+    kFLT_SERIE         = 15;     //  SERIE;
+    kFLT_RESEAU        = 16;     //  Réseau
+    kFLT_CODE          = 17;     //  code
+    kFLT_EXPE          = 18;     //  Séance (expé)
+    kFLT_TYPEVISEE     = 19;     //  type de visée
+    kFLT_SECTEUR       = 20;     // secteur
     kFLT_ENTRANCE_RATT = 21;   // entrée de rattachement
     kFLT_NAMESPACE     = 22;   // espace de noms
 
@@ -447,16 +448,21 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Quasi-classes
-type TPoint3Df = record
+type
+
+{ TPoint3Df }
+
+ TPoint3Df = record
   X:  double;
   Y:  double;
   Z:  double;
-  procedure setFrom(const QX, QY, QZ: double);
+  procedure setFrom(const QX, QY, QZ: double); overload;
+  procedure setFrom(const QX, QY, QZ: string); overload;
   procedure Empty();
   function  getNorme(): double;
   function  getProjHZ(): double;
-  function getAzimut(const Unite: double): double;
-  function getInclinaison(const Unite: double): double;
+  function  getAzimut(const Unite: double): double;
+  function  getInclinaison(const Unite: double): double;
 end;
 type TPoint2Df = record
   X:  double;
@@ -522,8 +528,6 @@ type TGHTopoColor = record   // TGHTopoColor: Unifie tous les types de couleur e
   function  toKMLColor(): string;
   function  toSVGColor(): string;
   function  toGrayScale(): byte;
-  function  toAcadColorIdx(): integer;
-  procedure fromAcadColorIdx(const Idx: integer); // conversion depuis un index couleur AutoCAD
 end;
 
 // quads pour vue 3D
@@ -550,7 +554,7 @@ type TPortionTubeVisee = record
    IdxReseau         : integer;
    IdxSecteur        : integer;
    IdxExpe           : integer;
-   Facettes: array[1 .. NBFACESBYVISEE] of TQuad;
+   Facettes          : array[1 .. NBFACESBYVISEE] of TQuad;
    DepthField        : double;
    Highlighted       : boolean;
 end;
@@ -565,8 +569,8 @@ end;
 
 // Labels EPSG
 type  TLabelSystemesCoordsEPSG = record
-  CodeEPSG: TCodeEPSG;
-  NomEPSG : string;
+  CodeEPSG    : TCodeEPSG;
+  NomEPSG     : string;
   procedure setFrom(const QCode: TCodeEPSG; const QNom: string);
 end;
 
@@ -586,8 +590,6 @@ type TArrayOfTProjUV = record
   procedure SetElement(const Idx: integer; const P: TProjUV); overload;
   function  GetElement(const Idx: integer): TProjUV;
   function  GetNbElements(): integer;
-  //  function  fromString(const S: string): boolean;
-  //  function  toString(): string;
 end;
 type TProjXY = TProjUV;
 
@@ -595,7 +597,11 @@ type TProjXY = TProjUV;
 // Types de données TOPOROBOT
 //****************************
 // couple série station au format TOPOROBOT + ID de terrain
-type TToporobotIDStation = record
+type
+
+{ TToporobotIDStation }
+
+ TToporobotIDStation = record
   eIdxNameSpace: integer;
   aSerie: TNumeroSerie;
   aStation: integer;
@@ -603,6 +609,7 @@ type TToporobotIDStation = record
   procedure setFrom(const QNameSpace: Integer; const QSerie: TNumeroSerie; const QStation: integer; const QIDTerrain: string = ''); overload;
   procedure setFrom(const S: string); overload;
   function  ToString(): string;
+  function  toTIDBaseStation(): TIDBaseStation;
 end;
 
 // fonctions trigonométriques de correction angulaire
@@ -649,13 +656,13 @@ type TSecteur = record
 end;
 
 // expés
-type TExpe = record
+type
+
+{ TExpe }
+
+ TExpe = record
   IDExpe      : TNumeroExpe;
-  {$WARNING: TEXpe.DateExpe à implementer}
-  JourExpe    : word; {$WARNING: Remplacer ces trois champs par un TDateTime}
-  MoisExpe    : word;
-  AnneeExpe   : word;
-  //DateExpe    : TDateTime;
+  DateExpe    : TDateTime;
   Operateur   : String;
   ClubSpeleo  : string;
   ModeDecl    : TModeCalculDeclimag;
@@ -671,8 +678,11 @@ type TExpe = record
                     const QCommentaires: string);
   function getLibelle(): string;
   function getDateStr(): string;
-  function getTDateTime(): TDateTime;
   function toLineXTB(): string;
+  procedure fromYYYYMMDD(const YYYY, MM, DD: word);
+  procedure fromToporobotJJMMAA(const S: string);
+  function  toVisualTopoDateJJMMAAAA(): string;
+  function  toTherionDateYYYYMMDD(): string;
 end;
 
 // codes
@@ -884,7 +894,11 @@ type TSerieEncadree = record
 end;
 
 // structure pour croquis et export GHCavedraw
-type  TBaseStation = record
+type
+
+{ TBaseStation }
+
+  TBaseStation = record
    // serie et point
    IDTerrain         : string;
    Entite_Serie      : TNumeroSerie;            // Série
@@ -938,6 +952,7 @@ type  TBaseStation = record
    function toTextForQRCode(): string;
    procedure setLongAzInc(const L, A, P: double); overload;
    procedure setLRUD(const L, R, U, D: double);
+   function toTIDBaseStation(): TIDBaseStation;
 end;
 
 // marqueurs sur la carte
@@ -1609,15 +1624,7 @@ begin
   Result := round(0.30 * self.Red + 0.59 * self.Green + 0.11 * self.Blue);
 end;
 
-function TGHTopoColor.toAcadColorIdx(): integer;
-begin
-  result := 0;
-end;
 
-procedure TGHTopoColor.fromAcadColorIdx(const Idx: integer);
-begin
-  self.setFrom(clRED, 255);
-end;
 
 function TGHTopoColor.getFloatRed(): double;
 begin
@@ -2096,9 +2103,7 @@ procedure TExpe.setFrom(const QNumeroExpe: TNumeroExpe;
                         const QCommentaires: string);
 begin
   self.IDExpe     := QNumeroExpe;
-  self.AnneeExpe  := YYYY;
-  self.MoisExpe   := MM;
-  self.JourExpe   := DD;
+  self.DateExpe   := EncodeDate(YYYY, MM, DD);
   self.IdxCouleur := QIdxCouleur;
   self.ModeDecl   := QModeDecl;
   self.DeclinaisonInDegrees:= QDeclinaisonInDegrees;
@@ -2119,16 +2124,16 @@ end;
 
 function TExpe.getDateStr(): string;
 begin
-  result := DateToStr(GetSecuredDate(self.AnneeExpe, self.MoisExpe, self.JourExpe));
+  result := DateToStr(self.DateExpe);
 end;
 
-function TExpe.getTDateTime(): TDateTime;
-begin
-  result := GetSecuredDate(self.AnneeExpe, self.MoisExpe, self.JourExpe);
-end;
+
 
 function TExpe.toLineXTB(): string;
+var
+  YYYY, MM, DD: word;
 begin
+  DecodeDate(self.DateExpe, YYYY, MM, DD);
   Result := Format(FORMAT_NB_INTEGER+ FIELD_SEPARATOR_TAB +FORMAT_NB_INTEGER+ FIELD_SEPARATOR_TAB +
                     FORMAT_NB_INTEGER+ FIELD_SEPARATOR_TAB +FORMAT_NB_INTEGER+ FIELD_SEPARATOR_TAB +FORMAT_NB_INTEGER+ FIELD_SEPARATOR_TAB +
                     FORMAT_STRING+ FIELD_SEPARATOR_TAB +FORMAT_STRING+ FIELD_SEPARATOR_TAB +
@@ -2137,7 +2142,7 @@ begin
                     FORMAT_STRING,
                            [-2,
                             Self.IDExpe,
-                            Self.JourExpe, Self.MoisExpe, Self.AnneeExpe, {$WARNING: TEXpe.DateExpe à implementer}
+                            DD, MM, YYYY,
                             Self.Operateur, Self.ClubSpeleo,
                             Ord(Self.ModeDecl),
                             Self.DeclinaisonInDegrees,
@@ -2145,6 +2150,40 @@ begin
                             Self.Commentaire
                            ]);
 end;
+
+procedure TExpe.fromYYYYMMDD(const YYYY, MM, DD: word);
+begin
+
+  self.DateExpe := GetSecuredDate(YYYY, MM, DD);
+  AfficherMessageErreur(Format('fromYYYYMMDD: %d, %d, %d -> %s', [YYYY, MM, DD, DateToStr(self.DateExpe)]));
+end;
+
+procedure TExpe.fromToporobotJJMMAA(const S: string);
+var
+  JourExpe, MoisExpe, AnneeExpe: word;
+begin
+   JourExpe      := StrToIntDef(Copy(S, 0, 2), 0);
+   MoisExpe      := StrToIntDef(Copy(S, 4, 2), 1);
+   AnneeExpe     := StrToIntDef(Copy(S, 7, 2), 1);
+end;
+
+function TExpe.toVisualTopoDateJJMMAAAA(): string;
+var
+  YYYY, MM, DD: word;
+begin
+  DecodeDate(self.DateExpe, YYYY, MM, DD);
+  Result := Format('%.2d/%.2d/%.4d ', [YYYY, MM, DD]);
+end;
+
+function TExpe.toTherionDateYYYYMMDD(): string;
+var
+  YYYY, MM, DD: word;
+begin
+  DecodeDate(self.DateExpe, YYYY, MM, DD);
+  Result := Format('       date %.4d.%.2d.%.2d',[YYYY, MM, DD]);
+end;
+
+
 
 
 { TEntrance }
@@ -2216,6 +2255,13 @@ begin
   self.X := QX;
   self.Y := QY;
   self.Z := QZ;
+end;
+
+procedure TPoint3Df.setFrom(const QX, QY, QZ: string);
+begin
+  self.X := ConvertirEnNombreReel(QX, 0.00);
+  self.Y := ConvertirEnNombreReel(QY, 0.00);
+  self.Z := ConvertirEnNombreReel(QZ, 0.00);
 end;
 
 procedure TPoint3Df.Empty();
@@ -2293,7 +2339,11 @@ end;
 
 function TMNTVertex.MakeLigneForMailleur(const Idx: integer): string;
 begin
-  Result := Format('%d %.2f %.2f %.2f %d', [Idx, self.Position.X, self.Position.Y, self.Position.Z, 1]);
+  Result := Format('%d %s %s %s %d', [Idx,
+                    FormatterNombreWithDotDecimal(self.Position.X, 2),
+                    FormatterNombreWithDotDecimal(self.Position.Y, 2),
+                    FormatterNombreWithDotDecimal(self.Position.Z, 2),
+                    1]);
 end;
 
 { TColorRGBA }
@@ -2474,20 +2524,11 @@ begin
     DateLeve    := Now();
     Entite_Serie    := 0;
     Entite_Station  := 0;
-    // drapeau
     Enabled         := false;
-    // données originales
-    oLongueur       := 0.00;
-    oAzimut         := 0.00;
-    oPente          := 0.00;
-    oLG             := 0.00;
-    oLD             := 0.00;
-    oHZ             := 0.00;
-    oHN             := 0.00;
-    // centerline
+    self.setLongAzInc(0, 0, 0);
+    self.setLRUD(0, 0, 0, 0);
     PosExtr0.Empty();
     PosStation.Empty();
-    // habillage
     PosOPD.Empty();
     PosOPG.Empty();
     PosPD.Empty();
@@ -2495,7 +2536,6 @@ begin
     CouleurStd      := clBlue;
     CouleurDegrade  := clWhite;
     IsPOI           := false;
-    // commentaires
     IDTerrain       := '';
     oCommentaires   := '';
   end;
@@ -2549,7 +2589,6 @@ begin
   result := '';
   if (self.Type_Entite = tgVISEE_RADIANTE) then Exit;
   DecomposeNumeroSerie(self.Entite_Serie, QIdxNameSpace, QNoSerie);
-
   WU := IIF(QIdxNameSpace = 0, '', Format('@%d', [QIdxNameSpace]));
   EWE := IIF(self.IDTerrain ='', '', ' - ' + self.IDTerrain);
   Result := Format('%d.%d%s%s', [QNoSerie, self.Entite_Station, WU, EWE]);
@@ -2587,6 +2626,11 @@ begin
   self.oHN := D;
 end;
 
+function TBaseStation.toTIDBaseStation(): TIDBaseStation;
+begin
+  Result := NB_MAXI_SERIES_PAR_CAVITE * Abs(self.Entite_Serie) + MULTIPLICATEUR_STATION * Abs(self.Entite_Station);
+end;
+
 
 { TJonctionXYZ }
 
@@ -2620,7 +2664,7 @@ begin
   if (Pos('.', S) = 0) then Exit;
   EWE := Split(S, '.');
   try
-    self.aSerie := StrToIntDef(EWE[0], -1);
+    self.aSerie   := StrToIntDef(EWE[0], -1);
     self.aStation := StrToIntDef(EWE[1], -1);
   except
   end;
@@ -2632,6 +2676,9 @@ begin
   Result := Format(FMTSERST, [self.aSerie, self.aStation]);
 end;
 
-//*****************
+function TToporobotIDStation.toTIDBaseStation(): TIDBaseStation;
+begin
+  Result := NB_MAXI_SERIES_PAR_CAVITE * Abs(self.aSerie) + MULTIPLICATEUR_STATION * Abs(self.aStation);
+end;
 end.
 

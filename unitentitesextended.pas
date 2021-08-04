@@ -28,7 +28,6 @@ interface
 
 uses
   {$INCLUDE SelectionLangues.inc} // insère les unités en fonction de la langue
-  //GHCD_Types,
   StructuresDonnees,
   UnitStructuresMetaFiltre,
   Common,
@@ -37,7 +36,6 @@ uses
   Classes, SysUtils, Graphics, math,
   Clipbrd, LCLType,
   ConvertisseurJPC,
-  //UnitDXFDrawing,
   SVGCanvasUnit,
   PostScriptCanvasUnit;
 type
@@ -150,7 +148,6 @@ type
     procedure SetColorZMiniZMaxi(const ColorZMini, ColorZMaxi: TColor);
     function  GetColorZMaxi(): TColor;
     function  GetColorZMini(): TColor;
-
     // Accès aux antennes
     procedure AddEntiteAntenne(const E: TBaseStation);
     function  GetEntiteAntenne(const Idx: integer): TBaseStation;
@@ -366,8 +363,8 @@ var
 begin
   E1:=Item1;
   E2:=Item2;
-  P1 := QMakeTIDStation( E1.NoSer, E1.NoSt); //NB_MAXI_SERIES_PAR_CAVITE * E1.NoSer + E1.NoSt;
-  P2 := QMakeTIDStation( E2.NoSer, E2.NoSt); //NB_MAXI_SERIES_PAR_CAVITE * E1.NoSer + E1.NoSt;
+  P1 := QMakeTIDStation( E1.NoSer, E1.NoSt);
+  P2 := QMakeTIDStation( E2.NoSer, E2.NoSt);
   if      (P1 < P2) then Result := -1
   else if (P1 = P2) then Result :=  0
   else                   Result :=  1;
@@ -553,7 +550,6 @@ begin
 end;
 
 // ajout, modif, suppression, lecture d'éléments
-// les visées
 procedure TBDDEntites.AddEntiteVisee(const E: TBaseStation);
 begin
   FTableDesVisees.AddElement(E);
@@ -601,7 +597,6 @@ end;
 
 procedure TBDDEntites.PutEntiteAntenne(const Idx: integer; const E: TBaseStation);
 begin
-  // fonctionnement erratique (ne fonctionne pas en multithread)
   FTableDesAntennes.PutElement(Idx, E);
 end;
 
@@ -779,18 +774,6 @@ begin
     QJonction     := GetJonction(i);
     exit(True);
   end;
-  //*)
-
-  (* version naïve par scan
-  result := false;
-  Nb := GetNbJonctions();
-  for i := 0 to Nb -1 do
-  begin
-    QJonction := GetJonction(i);
-    if ((Ser = QJonction.NoSer) and (St = QJonction.NoSt)) then exit(True);
-  end;
-  //*)
-
 end;
 
 procedure TBDDEntites.SortJonctions();
@@ -1655,13 +1638,11 @@ function TBDDEntites.GetSpeleometrieParSecteurByIdx(const Idx: integer): TVentil
 begin
   Result := FSpeleometrieParSecteurs[Idx];
 end;
-// semble OK. A valider
-// SetMinMax inutile
+
 procedure TBDDEntites.ExportForGHCaveDraw(const MyFile: TStringDirectoryFilename; const QMyFiltre: string);
 var
   F: TextFile;
   i: integer;
-  QID: Int64;
   OldFilter: string;
   E: TBaseStation;
   NbVisees   : Integer;
@@ -1670,6 +1651,27 @@ var
   procedure WrtLn(const S: string);
   begin
     WriteLn(F, S);
+  end;
+  procedure WrtBP(const QIDX: Int64; const EE: TBaseStation); // valable pour basepoints et antennes
+  begin
+    WrtLn(Format(GCD_FMT_BASEPOINTS, [
+                 QIDX,
+                 EE.IDTerrain,
+                 EE.Type_Entite,
+                 GetCouleurEntiteByExpe(EE).toTColor(), //EE.ColorEntite,
+                 FormatterNombreWithDotDecimal(EE.PosExtr0.X),
+                 FormatterNombreWithDotDecimal(EE.PosExtr0.Y),
+                 FormatterNombreWithDotDecimal(EE.PosExtr0.Z),
+                 FormatterNombreWithDotDecimal(EE.PosStation.X),
+                 FormatterNombreWithDotDecimal(EE.PosStation.Y),
+                 FormatterNombreWithDotDecimal(EE.PosStation.Z),
+                 FormatterNombreWithDotDecimal(EE.PosPG.X),
+                 FormatterNombreWithDotDecimal(EE.PosPG.Y),
+                 FormatterNombreWithDotDecimal(EE.PosOPG.Z),
+                 FormatterNombreWithDotDecimal(EE.PosPD.X),
+                 FormatterNombreWithDotDecimal(EE.PosPD.Y),
+                 FormatterNombreWithDotDecimal(EE.PosOPD.Z)
+                 ]));
   end;
 begin
   NbVisees        := self.GetNbEntitesVisees();
@@ -1693,17 +1695,8 @@ begin
     for i := LOW_INDEX to NbVisees - 1 do
     begin
       E  := GetEntiteVisee(i);
-      QID := E.getGHCaveDrawIDPtCenterline();
-      WrtLn(Format(GCD_FMT_BASEPOINTS,
-                  [QID  ,
-                   E.IDTerrain,
-                   E.Type_Entite,
-                   GetCouleurEntiteByExpe(E).toTColor(), //E.ColorEntite,
-                   E.PosExtr0.X, E.PosExtr0.Y, E.PosExtr0.Z,
-                   E.PosStation.X, E.PosStation.Y, E.PosStation.Z,
-                   E.PosPG.X, E.PosPG.Y,  E.PosOPG.Z, // Z1PB,
-                   E.PosPD.X, E.PosPD.Y,  E.PosOPD.Z//E.X2PD, E.Y2PD,  E.Z1PH
-                   ]));
+      //QID := E.getGHCaveDrawIDPtCenterline();
+      WrtBP( E.getGHCaveDrawIDPtCenterline(), E);
     end;
     // les antennes
     WrtLn(Format('# %d radiant shots', [NbAntennes]));
@@ -1711,20 +1704,10 @@ begin
     begin
       for i := 0 to NbAntennes - 1 do
       begin
-        E  := GetEntiteAntenne(i);
         // NOTA: Les visées en antennes ne sont pas prises en compte par
         //       les fonctions de recherche et d'indexation de GHCaveDraw
-        QID := E.getGHCaveDrawIDPtAntenne(i);
-        WrtLn(Format(GCD_FMT_BASEPOINTS,
-                    [QID  ,
-                     E.IDTerrain,
-                     E.Type_Entite,
-                     GetCouleurEntiteByExpe(E).toTColor(),
-                     E.PosExtr0.X, E.PosExtr0.Y, E.PosExtr0.Z,
-                     E.PosStation.X, E.PosStation.Y, E.PosStation.Z,
-                     E.PosPG.X, E.PosPG.Y,  E.PosOPG.Z, // Z1PB,
-                     E.PosPD.X, E.PosPD.Y,  E.PosOPD.Z//E.X2PD, E.Y2PD,  E.Z1PH
-                     ]));
+        E  := GetEntiteAntenne(i);
+        WrtBP(E.getGHCaveDrawIDPtAntenne(i), E);          //QID := E.getGHCaveDrawIDPtAntenne(i);
       end;
     end;
     WrtLn('endbasepoints');
@@ -2508,8 +2491,7 @@ begin
             for QIdx := 0 to QNb - 1 do
             begin
               MyExpe   := GetExpe(QIdx);
-              {$WARNING: TEXpe.DateExpe à implementer}
-              if (Assigned(LocalProcProgression)) then LocalProcProgression(format('Séance %d: %d du %s', [QIdx, MyExpe.IDExpe, DateYYYYMMDDToDateSQL(MyExpe.AnneeExpe, MyExpe.MoisExpe, MyExpe.JourExpe)]), QIdx, 0, QNb, 10);
+              if (Assigned(LocalProcProgression)) then LocalProcProgression(format('Séance %d: %d du %s', [QIdx, MyExpe.IDExpe, DatePascalToDateSQL(MyExpe.DateExpe)]), QIdx, 0, QNb, 10);
               QQQQ     := Format('Expe%d', [MyExpe.IDExpe]);
               FSVGCanvas.BeginGroupe(QQQQ, MyExpe.Commentaire, 0.0, 0.0);
                 if (edFillGalerie    in Param2D.ongElementsDrawn) then DessinerSilhouette(False, -1, -1, -1, MyExpe.IDExpe);
@@ -2994,7 +2976,6 @@ begin
     end;
     PutEntiteVisee(i, BS);
   end;
-
 end;
 
 procedure TBDDEntites.HighlightReseaux(const QArrReseauxHighlighted: array of TNumeroReseau);
@@ -3044,9 +3025,6 @@ begin
   end;
 end;
 
-
-
-
 // exporter les antennes comme nuages de points
 procedure TBDDEntites.ExporterAntennesNuagePoints(const FichierPLY: TStringDirectoryFilename);
 const PROPERTY_FLOAT = 'property float %s';
@@ -3063,7 +3041,7 @@ begin
     ReWrite(fp);
     writeln(fp, 'ply');
     writeln(fp, Format('format %s', ['ascii 1.0']));
-    writeln(fp, Format('comment %s - %s', [rsGHTOPOEXENAME, DateTimeToStr(Now())]));          // comment created by safir
+    writeln(fp, Format('comment %s - %s', [rsGHTOPOEXENAME, DateTimePascalToDateTimeSQL(Now())]));          // comment created by safir
     writeln(fp, Format('element %s %d', ['vertex', Nb]));                                     // element vertex 3337
     writeln(fp, Format(PROPERTY_FLOAT, ['x']));                                               // property float x
     writeln(fp, Format(PROPERTY_FLOAT, ['y']));                                               // property float y

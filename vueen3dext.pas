@@ -39,22 +39,20 @@ type
     BitBtn1: TBitBtn;
     btnDetourerMNT: TButton;
     btnExportGCP: TButton;
-    Button2: TButton;
-    Button3: TButton;
-    btnSetTheta: TButton;
-    btnSetPhi: TButton;
-    btnSetZoom: TButton;
     btnSetMagnZ: TButton;
+    btnSetPhi: TButton;
+    btnSetTheta: TButton;
+    btnSetZoom: TButton;
     Button4: TButton;
     Button5: TButton;
     CdrVue3DExt1: TCdrVue3DExt;
     chkFiltrer: TCheckBox;
-    editValue: TCurrencyEdit;
-    editZoom: TCurrencyEdit;
-    editTheta: TCurrencyEdit;
-    editFiltres3D: TEdit;
-    editPhi: TCurrencyEdit;
     editMagnificationZ: TCurrencyEdit;
+    editPhi: TCurrencyEdit;
+    editTheta: TCurrencyEdit;
+    editValue: TCurrencyEdit;
+    editFiltres3D: TEdit;
+    editZoom: TCurrencyEdit;
     grbxParamsMaillage: TGroupBox;
     ImageList2: TImageList;
     Label1: TLabel;
@@ -67,6 +65,7 @@ type
     Panel1: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
+    Panel4: TPanel;
     pnlSetValue: TPanel;
     sclValeur: TScrollBar;
     SpeedButton1: TSpeedButton;
@@ -94,6 +93,7 @@ type
     procedure btnSetPhiClick(Sender: TObject);
     procedure btnSetMagnZClick(Sender: TObject);
     procedure btnSetZoomClick(Sender: TObject);
+
     procedure Button4Click(Sender: TObject);
     procedure Button5Click(Sender: TObject);
     procedure Button6Click(Sender: TObject);
@@ -381,7 +381,7 @@ var
   QFilterIndex: integer;
 begin
   QFileName := 'NuagePoints001.csv';
-  if (DoDialogSaveFile('Fichiers CSV (*.csv)|*.csv|Tous|*.*', '.csv', QFileName, QFilterIndex)) then
+  if (DoDialogSaveFile('Fichiers PLY (*.ply)|*.ply|Tous|*.*', '.ply', QFileName, QFilterIndex)) then
   begin
     FBDDEntites.ExporterAntennesNuagePoints(QFileName);
   end;
@@ -453,7 +453,7 @@ begin
     medORIENTATION  : MiouMiou(0.00, 360.00, 'Orientation'   , editTheta.Top           + FATXE);
     medELEVATION    : MiouMiou(0.00,  90.00, 'Elevation'     , editPhi.Top             + FATXE);
     medZOOM         : MiouMiou(0.10,  10.00, 'Zoom'          , editZoom.Top            + FATXE);
-    medMAGNIFICATION: MiouMiou(0.50,  10.00, 'Magnification' , editMagnificationZ.Top  + FATXE);
+    medMAGNIFICATION: MiouMiou(0.50,  16.00, 'Magnification' , editMagnificationZ.Top  + FATXE);
   end;
 end;
 

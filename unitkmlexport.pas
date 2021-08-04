@@ -324,7 +324,7 @@ begin
   EWE := Format('%.2X%.2X%.2X%.2X', [Opacity, Blue(LColor), Green(LColor), Red(LColor)]);
   BaliseOuvrante(Indent, KML_KEYWORD_LineStyle);
     SetAttribut(Indent + 2, 'color', EWE);
-    SetAttribut(Indent + 2, 'width', Format('%.2f', [LWidth]));
+    SetAttribut(Indent + 2, 'width', QFormatterNombreReel(LWidth, 2));
   BaliseFermante(Indent, KML_KEYWORD_LineStyle);
 end;
 procedure TKMLExport.DefineFillStyle(const Indent: integer; const LColor: TColor; const Opacity: byte = 255);

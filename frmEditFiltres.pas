@@ -96,11 +96,12 @@ uses
 
 {$R *.lfm}
 const
-  TAB = #9;
-  QFMT = FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB + FORMAT_NB_INTEGER + TAB +
-         FORMAT_STRING + TAB +
-         FORMAT_STRING + TAB +
-         FORMAT_STRING + #13#10;
+  QFMT = FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB +
+         FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB +
+         FORMAT_NB_INTEGER + FIELD_SEPARATOR_TAB +
+         FORMAT_STRING + FIELD_SEPARATOR_TAB +
+         FORMAT_STRING + FIELD_SEPARATOR_TAB +
+         FORMAT_STRING + CR_LF;
 
 procedure TdlgEditFiltres.btnAddFiltreClick(Sender: TObject);
 var
@@ -137,7 +138,7 @@ begin
   try
     MyClipBoard.Clear;
     // contenu
-    EWE := 'R' + TAB + 'G' + TAB + 'B' + TAB + 'Nom du filtre' + TAB + 'Description' + TAB + 'Expression' + #13#10;
+    EWE := 'R' + FIELD_SEPARATOR_TAB + 'G' + FIELD_SEPARATOR_TAB + 'B' + FIELD_SEPARATOR_TAB + 'Nom du filtre' + FIELD_SEPARATOR_TAB + 'Description' + FIELD_SEPARATOR_TAB + 'Expression' + CR_LF;
     for i := 0 to Nb - 1 do
     begin
       FF := FDocTopo.GetFiltrePerso(i);
