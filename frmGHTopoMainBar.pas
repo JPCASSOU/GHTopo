@@ -300,9 +300,10 @@ implementation
 {$R *.lfm}
 uses
   //unitAnalyseReseau2
+  DGCDummyUnit
   {$IFDEF MSWINDOWS}
     {$IFDEF DISP_FRM_JOURNAL}
-    frmJournal
+    ,frmJournal
     {$ENDIF}
   {$ENDIF}         // console de suivi
   , frmLesListesSimples    // gestion des listes simples

@@ -45,8 +45,6 @@ type
     FMaillage  : TMaillage;
     FFiltres   : string;
     procedure DispDebugMsg(const Msg: string);
-
-
   public
     function Initialiser(const QBDDEntites: TBDDEntites;
                          const QMaillage: TMaillage;

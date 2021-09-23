@@ -109,7 +109,8 @@ type
                                          const FileNameJS: RawByteString;
                                          const QIDStationDepart, QIDStationArrivee: string;
                                          const BackgroundColorCarte, CouleurCenterlines: TColor;
-                                         const CanvasWidthInPixels, CanvasHeightInPixels, WidthMenuLateralInPixels: integer);
+                                         const CanvasWidthInPixels, CanvasHeightInPixels, WidthMenuLateralInPixels: integer;
+                                         const AllowIDStationsAsText: boolean = false);
     function getBoundinxBox(): TRect2Df;
 end;
 
@@ -840,7 +841,8 @@ procedure TPathFindingGraphe.ExporterGrapheEnJavascript(const DocTitle: string;
                                                         const FileNameJS: RawByteString;
                                                         const QIDStationDepart, QIDStationArrivee: string;
                                                         const BackgroundColorCarte, CouleurCenterlines: TColor;
-                                                        const CanvasWidthInPixels, CanvasHeightInPixels, WidthMenuLateralInPixels: integer);
+                                                        const CanvasWidthInPixels, CanvasHeightInPixels, WidthMenuLateralInPixels: integer;
+                                                        const AllowIDStationsAsText: boolean = false);
 const
   MIME_TEXT_JAVASCRIPT       = 'text/javascript';
 
@@ -999,6 +1001,17 @@ const
   JS_TACTILE_EVENT_pointerdown_handler   = 'tactile_pointerdown_handler';
   JS_TACTILE_EVENT_pointermove_handler   = 'tactile_pointermove_handler';
   JS_TACTILE_EVENT_pointerup_handler     = 'tactile_pointerup_handler';
+
+  JS_NAME_lbFindWhat                     = 'lbStationDepart';
+  JS_NAME_lbStationDepart                = 'lbStationDepart';
+  JS_NAME_lbStationArrivee               = 'lbStationArrivee';
+
+  JS_CAPTION_LocatePoint                 = 'Localiser un point';
+
+  JS_CAPTION_Depart                      = 'Départ';
+  JS_CAPTION_Arrivee                     = 'Arrivée';
+
+
 var
   fp   : TextFile;
   i, Nb, j: integer;
@@ -1173,7 +1186,8 @@ begin
         EndDiv();
         BeginDiv(NAMEREF_FORM_SEARCH);
           BeginForm(JS_DOCUMENT_FORM_NAME_SEARCH);
-            JSMakeLabelledEdit(JS_DOCUMENT_FORM_editFindWhat, 'Localiser un point', JS_DOCUMENT_FORM_editFindWhat, QIDStationDepart);
+            if (AllowIDStationsAsText) then JSMakeLabelledEditText(JS_DOCUMENT_FORM_editFindWhat, JS_CAPTION_LocatePoint, JS_DOCUMENT_FORM_editFindWhat, QIDStationDepart)
+                                       else JSMakeLabelledEditToporobotStation(JS_DOCUMENT_FORM_editFindWhat, JS_CAPTION_LocatePoint, JS_DOCUMENT_FORM_editFindWhat, QIDStationDepart);
             WrtLinFmt('      ' + HTML_BUTTON_FORMAT, [JS_DOCUMENT_FORM_btnSearch, 95, 32, 'Rechercher', JS_DOCUMENT_FORM_btnSearch_ProcOnSubmit]);
           EndForm();
         EndDiv();
@@ -1201,13 +1215,15 @@ begin
             BeginTable(100, 100);
               BeginRow();
                 WriteLine('<TD>');
-                  JSMakeLabelledEdit('lbStationDepart' , 'Départ'  , JS_DOCUMENT_FORM_editStationDepart  , QIDStationDepart);
+                if (AllowIDStationsAsText) then JSMakeLabelledEditText(JS_NAME_lbStationDepart, JS_CAPTION_Depart  , JS_DOCUMENT_FORM_editStationDepart  , QIDStationDepart)
+                                           else JSMakeLabelledEditToporobotStation(JS_NAME_lbStationDepart , JS_CAPTION_Depart  , JS_DOCUMENT_FORM_editStationDepart  , QIDStationDepart);
                 WriteLine('</TD>');
                   JSMakeButtonInTable('btnPickStationDepart', '...', JS_VUE_PickStationDep);
               EndRow();
               BeginRow();
                 WriteLine('<TD>');
-                  JSMakeLabelledEdit('lbStationArrivee', 'Arrivée' , JS_DOCUMENT_FORM_editStationArrivee , QIDStationArrivee);
+                  if (AllowIDStationsAsText) then JSMakeLabelledEditText(JS_NAME_lbStationArrivee, JS_CAPTION_Arrivee , JS_DOCUMENT_FORM_editStationArrivee , QIDStationArrivee)
+                                             else JSMakeLabelledEditToporobotStation(JS_NAME_lbStationArrivee, JS_CAPTION_Arrivee , JS_DOCUMENT_FORM_editStationArrivee , QIDStationArrivee);
                 WriteLine('</TD>');
                 JSMakeButtonInTable('btnPickStationArrivee', '...' , JS_VUE_PickStationArr);
               EndRow();

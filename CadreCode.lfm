@@ -285,8 +285,8 @@ object CdrCode: TCdrCode
       Left = 5
       Height = 15
       Top = 60
-      Width = 124
-      Caption = 'Azimuts: Inc Corrigée ='
+      Width = 116
+      Caption = 'Pentes: Inc Corrigée ='
       ParentColor = False
     end
     object Label2: TLabel

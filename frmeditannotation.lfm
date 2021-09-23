@@ -1,11 +1,11 @@
 object dlgEditAnnotation: TdlgEditAnnotation
-  Left = 985
-  Height = 177
-  Top = 172
-  Width = 436
+  Left = 631
+  Height = 179
+  Top = 213
+  Width = 439
   Caption = 'dlgEditAnnotation'
-  ClientHeight = 177
-  ClientWidth = 436
+  ClientHeight = 179
+  ClientWidth = 439
   Font.CharSet = ANSI_CHARSET
   Font.Height = -13
   Font.Name = 'Arial'
@@ -16,9 +16,9 @@ object dlgEditAnnotation: TdlgEditAnnotation
   Position = poScreenCenter
   LCLVersion = '2.0.0.4'
   object BitBtn1: TBitBtn
-    Left = 213
+    Left = 216
     Height = 30
-    Top = 145
+    Top = 147
     Width = 108
     Anchors = [akRight, akBottom]
     Default = True
@@ -28,9 +28,9 @@ object dlgEditAnnotation: TdlgEditAnnotation
     TabOrder = 0
   end
   object BitBtn2: TBitBtn
-    Left = 326
+    Left = 329
     Height = 30
-    Top = 145
+    Top = 147
     Width = 108
     Anchors = [akRight, akBottom]
     Cancel = True
@@ -41,13 +41,13 @@ object dlgEditAnnotation: TdlgEditAnnotation
   end
   object Panel1: TPanel
     Left = 2
-    Height = 140
+    Height = 142
     Top = 0
-    Width = 432
+    Width = 435
     Anchors = [akTop, akLeft, akRight, akBottom]
     BevelOuter = bvLowered
-    ClientHeight = 140
-    ClientWidth = 432
+    ClientHeight = 142
+    ClientWidth = 435
     TabOrder = 2
     object editSer: TCurrencyEdit
       Left = 60
@@ -237,7 +237,7 @@ object dlgEditAnnotation: TdlgEditAnnotation
       end
     end
     object cmbAnnotationStyle: TComboBox
-      Left = 255
+      Left = 258
       Height = 24
       Top = 4
       Width = 173
@@ -249,15 +249,15 @@ object dlgEditAnnotation: TdlgEditAnnotation
     object editTexte: TEdit
       Left = 4
       Height = 24
-      Top = 112
-      Width = 358
+      Top = 114
+      Width = 361
       Anchors = [akLeft, akRight, akBottom]
       TabOrder = 8
     end
     object btnInsertAltitude: TButton
-      Left = 397
+      Left = 400
       Height = 25
-      Top = 112
+      Top = 114
       Width = 30
       Anchors = [akRight, akBottom]
       Caption = '%z'
@@ -265,9 +265,9 @@ object dlgEditAnnotation: TdlgEditAnnotation
       TabOrder = 9
     end
     object btnInsertIDStation: TButton
-      Left = 365
+      Left = 368
       Height = 25
-      Top = 112
+      Top = 114
       Width = 30
       Anchors = [akRight, akBottom]
       Caption = '%s'

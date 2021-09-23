@@ -118,7 +118,6 @@ begin
   Result.Position.Offset.Z    := editOffsetZ.Value;
   Result.Alignment   := GetAnnAlignmentFromForm();
   Result.IDStyle     := cmbAnnotationStyle.ItemIndex;
-
   Result.Texte       := Trim(editTexte.Text);
 end;
 

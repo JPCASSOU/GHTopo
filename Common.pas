@@ -295,6 +295,7 @@ function  MakeHeaderRubriquesOfAnRow(const Separateur: char; const Section: inte
 function  CalcSHA1(const S: string): string;
 // échappement des guillemets et autres. Même nom que la fonction php.
 function  mysqli_real_escape_string(const S: string): string;
+function  XML_real_escape_string(const S: string): string;
 //******************************************************************************
 // calcul d'un azimut moyen
 function  CalcAzimutMoyen(const GradAz: double; const ArrAzimuts: array of double): double;
@@ -2529,6 +2530,19 @@ end;
 function mysqli_real_escape_string(const S: string): string;
 begin
   Result := StringReplace(S, '"', '\"', [rfReplaceAll]);
+  // TODO: à compléter
+end;
+function XML_real_escape_string(const S: string): string;
+  function toto(const OldPattern, NewPattern: string): string;
+  begin
+    Result := StringReplace(S, OldPattern, NewPattern, [rfReplaceAll]);
+  end;
+begin
+  result := toto('"', '&quot;');
+  result := toto('&', '&amp;');
+  result := toto('<', '&lt;');
+  result := toto('>', '&gt;');
+  // TODO: à compléter
 end;
 // calcul de l'azimut moyen par la méthode du pseudo-cheminement
 function CalcAzimutMoyen(const GradAz: double; const ArrAzimuts: array of double): double;

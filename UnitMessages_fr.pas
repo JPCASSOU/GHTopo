@@ -97,17 +97,17 @@ resourcestring
 
   // Filtres de fichiers
   //rsFILEFILTER_ALL = 'Tous (*.*)|*.*';     =
-  rsGHTOPO_FILE_FILTER_WO_TEXT               = 'Fichiers GHTopo (*.xtb)|*.xtb|' +
-                                               'Fichiers GHTopo XML (*.gtx)|*.gtx|' +
-                                               'Fichiers Toporobot Tab [deprecated] (*.Tab)|*.Tab|' +
+  rsGHTOPO_FILE_FILTER_WO_TEXT               = 'Fichiers GHTopo (*.xtb)|*.xtb'                         + '|' +
+                                               'Fichiers GHTopo XML (*.gtx)|*.gtx'                     + '|' +
+                                               'Fichiers Toporobot Tab [deprecated] (*.Tab)|*.Tab'     + '|' +
                          //'Fichiers JSON (*.json)|*.json|' +
                                                'Tous (*.*)|*.*';
-  rsGHTOPO_FILE_FILTER_W_TEXT                = 'Fichiers GHTopo (*.xtb)|*.xtb|' +
-                                               'Fichiers GHTopo XML (*.gtx)|*.gtx|' +
-                                               'Fichiers Toporobot Tab [deprecated] (*.Tab)|*.Tab|' +
-                                               'Fichiers Toporobot Text [deprecated] (*.Text)|*.Text|' +
-                                               'Fichiers PocketTopo TXT|*.txt' +
-                                               'Fichiers JSON (*.json)|*.json|' +
+  rsGHTOPO_FILE_FILTER_W_TEXT                = 'Fichiers GHTopo (*.xtb)|*.xtb'                         + '|' +
+                                               'Fichiers GHTopo XML (*.gtx)|*.gtx'                     + '|' +
+                                               'Fichiers Toporobot Tab [deprecated] (*.Tab)|*.Tab'     + '|' +
+                                               'Fichiers Toporobot Text [deprecated] (*.Text)|*.Text'  + '|' +
+                                               'Fichiers PocketTopo TXT [deprecated] (*.txt)|*.txt'    + '|' +
+                                               'Fichiers JSON (*.json)|*.json'                         + '|' +
                                                'Tous (*.*)|*.*';
   rsKML_FILE_FILTER                          = 'Fichier Google Earth (*.kml)|*.kml|Tous (*.*)|*.*';
   rsGCD_FILE_FILTER                          = 'Polygonale GHCaveDraw (*.gcd)|*.gcd|Tous (*.*)|*.*';

@@ -1,6 +1,7 @@
 //FuncImportPocketTopoTxt.inc
 // charger un fichier PocketTopo TXT
-function TToporobotStructure2012.LoadFromPocketTopoTXT(const FichierTXT: TStringDirectoryFilename): integer;  deprecated;
+// Cette fonction est un utilitaire de secours destiné à récupérer les data PocketTopo, qui n'est plus maintenu.
+function TToporobotStructure2012.LoadFromPocketTopoTXT(const FichierTXT: TStringDirectoryFilename): integer;
 var
   EPSGDefault       : TLabelSystemesCoordsEPSG;
   EWE               : TGHStringArray;
@@ -21,19 +22,10 @@ var
   MySerie: TObjSerie;
   MyVisee: TUneVisee;
 
-
   QStationDepart, QStationArrivee, QLaStationCourante: TToporobotIDStation;
   EWE0, EWE1: TGHStringArray;
   QNumeroDeSerieCourant : TNumeroSerie;
   MyEntrance: TEntrance;
-
-  procedure ReadAndDispLigneLue(out MyLine: string);
-  begin
-    ReadLn(pTXT, MyLine);
-    MyLine += ' '; // espace de sécurité en queue
-    Inc(NbLignesLues);
-    //AfficherMessageErreur(Format('%d: %s', [NbLignesLues, MyLine]));
-  end;
 begin
   Result := -1;
   QDateSeanceTopo := Now();
@@ -42,6 +34,14 @@ begin
   EPSGDefault.NomEPSG  := DEFAULT_SYSTEME_COORDONNEES_NOM;
 
   AfficherMessageErreur(Format('%s.LoadFromPocketTopoTXT: %s', [ClassName, FichierTXT]));
+  AfficherMessageErreur('====================');
+  AfficherMessageErreur('Limitations connues:');
+  AfficherMessageErreur('- Les boucles ne sont pas fermées, par choix technique');
+  AfficherMessageErreur('- Les LRUD data doivent être reconstruites');
+  AfficherMessageErreur('- Toutes les séries doivent DEBUTER par un point connu.');
+  AfficherMessageErreur('  Si une série dont le début est en nn.0 arrive sur une série connue, son début sera en 1.0');
+  AfficherMessageErreur('');
+
   // Fichier introuvable ? OK, On sort
   if (not FileExistsUTF8(FichierTXT)) then  Exit(-32);
   // nom étude par défaut = nom du fichier
@@ -61,6 +61,7 @@ begin
   MyExpe.setFrom(1, YearOf(QDateSeanceTopo), MonthOf(QDateSeanceTopo), DayOf(QDateSeanceTopo), 6, cdmAUTOMATIQUE, 0.00, 'Speleometre', 'Speleographe', 'Expe01');
   self.AddExpe(MyExpe);
   AfficherMessageErreur(Format('*** %d entrances, %d reseaux, %d secteurs, %d codes, %d seances', [GetNbEntrances(), GetNbReseaux(), GetNbSecteurs(), GetNbCodes(), GetNbExpes()]));
+  // contrôles codes et expés
   for i := 0 to GetNbCodes() - 1 do
   begin
     MyCode := GetCode(i);
@@ -71,43 +72,23 @@ begin
     MyExpe := GetExpe(i);
     AfficherMessageErreur(Format('-- %d: Expe: %d, %s, %s', [i, MyExpe.IDExpe, DatePascalToDateSQL(MyExpe.DateExpe), MyExpe.Commentaire]));
   end;
+  //*************************
   MyCode := GetLastCode();
   MyExpe := GetLastExpe();
   try
     ListeOfTGHStringArray := TListeOfTGHStringArray.Create;
     ListeOfTGHStringArray.ClearListe();
-    AssignFile(pTXT, FichierTXT);
-    NbLignesLues := 0;
-    try
-      ReSet(pTXT);
-      // La première ligne contient le nom de l'étude
-      //Tabanac_20210321   (m, 360)
-      ReadAndDispLigneLue(LigneTXT);
-      p := Pos(' ', LigneTXT);
-      QNomEtude := Copy(LigneTXT, 1, p);
-      SetNomEtude(QNomEtude);
-      AfficherMessageErreur(GetNomEtude());
-      //
-      // on lit les autres lignes
-      while(not eof(pTXT)) do
-      begin
-        ReadAndDispLigneLue(LigneTXT);
-        if (''  = Trim(LigneTXT)) then Continue; // ligne vide = on continue
-        if ('#' = LigneTXT[1])    then Continue; // dièse en tête           = commentaire
-        if ('[' = LigneTXT[1])    then Continue; // crochet ouvrant en tête = ligne ignorée
-        if (1 = pos('stop', LowerCase(LigneTXT))) then Break;  // signal d'arrêt du traitement à inclure dans le fichier
-        //0        1         2         3         4         5         6         7         8         9         0
-        //1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
-        //     1.0              0,00          0,00      0,00
-        EWE := SplitFixedColLine(LigneTXT, [1, 11, 23, 33, 41, 50, 58, 100]);
-        ListeOfTGHStringArray.AddElement(EWE);
-      end;
-    finally
-      CloseFile(pTXT);
-    end;
+    ListeOfTGHStringArray.LoadFromFile(FichierTXT, QNomEtude);
+    self.SetNomEtude(QNomEtude);
+    AfficherMessageErreur(self.GetNomEtude());
+
+
+
     // contrôle et traitements
     Nb := ListeOfTGHStringArray.GetNbElements();
     AfficherMessageErreur(Format('==== %d', [Nb]));
+    if (0 = Nb) then exit;
+
     // On trie la liste en fonction de la première colonne (regroupement des séries)
     ListeOfTGHStringArray.SortByFirstColumn();
     // on extrait les antennes (lignes dont le champ 1 est vide)
@@ -155,9 +136,10 @@ begin
         ListeOfTGHStringArray.RemoveElement(i);
       end;
     end;
-    nbSeries := GetNbSeries();
+    nbSeries := self.GetNbSeries();
     AfficherMessageErreur(Format('%d séries', [nbSeries]));
-    SortSeries();
+    if (0 = nbSeries) then exit;
+    self.SortSeries();
     (*
     for i := 0 to nbSeries -1 do
     begin
@@ -195,7 +177,7 @@ begin
     Nb := ListeOfTGHStringArray.GetNbElements();
     AfficherMessageErreur(Format('= Séries === %d', [Nb]));
     QNumeroDeSerieCourant := 0;
-
+    // On fait ici le choix de ne pas fermer les boucles
     for i := 0 to Nb - 1 do
     begin
       EWE := ListeOfTGHStringArray.GetElement(i);
@@ -215,7 +197,7 @@ begin
                       0.0, 0.0, 0.0, 0.0,
                       Now(),
                       '', StringReplace(Trim(EWE[6]), '"', '', [rfReplaceAll]));
-      MySerie.AddVisee(MyVisee);
+      if (MyVisee.Longueur > 0.001) then MySerie.AddVisee(MyVisee);
     end;
     // et affichage de contrôle
     nbSeries := GetNbSeries();
@@ -231,6 +213,7 @@ begin
       MySerie.SetNumeroReseau(0);
       MySerie.SetNomObsSerie('', '');
       AfficherMessageErreur(Format('%d: %d (%d pts): %d.%d -> %d.%d: %s', [i, MySerie.GetNumeroDeSerie(), MySerie.GetNbVisees(),MySerie.GetNoSerieDep(), MySerie.GetNoPointDep(), MySerie.GetNoSerieArr(), MySerie.GetNoPointArr(), MySerie.GetNomSerie()]));
+      (*
       for j := 0 to MySerie.GetNbVisees() - 1 do
       begin
         MyVisee := MySerie.GetVisee(j);
@@ -239,8 +222,10 @@ begin
                                      MyVisee.Longueur, MyVisee.Azimut, MyVisee.Pente
                                      ]));
       end;
+      //*)
     end;
     ListeOfTGHStringArray.ClearListe();
+    (* // contrôles (facultatif)
     for i := 0 to GetNbCodes() - 1 do
     begin
       MyCode := GetCode(i);
@@ -251,8 +236,12 @@ begin
       MyExpe := GetExpe(i);
       AfficherMessageErreur(Format('-- %d: Expe: %d, %s, %s', [i, MyExpe.IDExpe, DatePascalToDateSQL(MyExpe.DateExpe), MyExpe.Commentaire]));
     end;
+    //*)
     //**************************
-    Preconditionner(FichierTXT);
+    Preconditionner(FichierTXT); // contrôles, tris et définition des références
+    // Recalculer les LRUD
+    for i := 1 to nbSeries - 1 do CalcLRUD_AllStationsOfTheSerie(GetSerie(i));
+
     //**************************
     Result := GetNbSeries();
   finally

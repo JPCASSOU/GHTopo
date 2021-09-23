@@ -219,7 +219,7 @@ var
     begin
       MySerie := FDocTopo.GetSerie(i);
       //AfficherMessage(Format('Serie: %d - %s', [MySerie.GetNumeroDeSerie(), MySerie.GetNomSerie()]));
-      EWE := Format('Serie: %d - %s', [MySerie.GetNumeroDeSerie(), MySerie.GetNomSerie()]);
+      EWE := Format('Serie: %d - %s', [MySerie.GetNumeroDeSerie(), XML_real_escape_string(MySerie.GetNomSerie())]);
       DC.WriteCommentaire(EWE);
       DC.BeginPolyline(Format('Serie%d', [MySerie.GetNumeroDeSerie()]), KML_STYLE_CENTERLINE_BY_DEFAULT);
       if (ExtractAndConvertBasePointBySerSt(MySerie.GetNoSerieDep(),
@@ -251,7 +251,7 @@ var
     for i := 1 to Nb - 1 do
     begin
       MySerie := FDocTopo.GetSerie(i);
-      EWE := Format('Silhouettes: Serie: %d - %s', [MySerie.GetNumeroDeSerie(), MySerie.GetNomSerie()]);
+      EWE := Format('Silhouettes: Serie: %d - %s', [MySerie.GetNumeroDeSerie(), XML_real_escape_string(MySerie.GetNomSerie())]);
       if (MakeSilhouetteOfSerie(MySerie, QPolygoneSilhouette)) then
       begin
 
@@ -392,7 +392,7 @@ var
       MySerie := FDocTopo.GetSerie(i);
       NbSts := MySerie.GetNbVisees();
       if (Nb < 2) then Continue;
-      EWE := Format('Centerlines: Serie: %d - %s', [MySerie.GetNumeroDeSerie(), MySerie.GetNomSerie()]);
+      EWE := Format('Centerlines: Serie: %d - %s', [MySerie.GetNumeroDeSerie(), XML_real_escape_string(MySerie.GetNomSerie())]);
       DC.BeginPolyline(QLayer.LayerVarName, Format('Serie%d', [MySerie.GetNumeroDeSerie()]), OSM_STYLE_CENTERLINE_BY_DEFAULT);
         if (ExtractAndConvertBasePointBySerSt(MySerie.GetNoSerieDep(), MySerie.GetNoPointDep(), QLat, QLon, QAlt))
         then DC.AddVertex(QLat, QLon, QAlt, False);
@@ -426,10 +426,10 @@ var
     for i := 1 to Nb - 1 do
     begin
       MySerie := FDocTopo.GetSerie(i);
-      EWE := Format('Silhouettes: Serie: %d - %s', [MySerie.GetNumeroDeSerie(), MySerie.GetNomSerie()]);
+      EWE := Format('Silhouettes: Serie: %d - %s', [MySerie.GetNumeroDeSerie(), XML_real_escape_string(MySerie.GetNomSerie())]);
       if (MakeSilhouetteOfSerie(MySerie, QPolygoneSilhouette)) then
       begin
-        DC.BeginPolygon(QLayer.LayerVarName, Format('Serie: %d: %s', [MySerie.GetNumeroDeSerie(), MySerie.GetNomSerie()]), '');
+        DC.BeginPolygon(QLayer.LayerVarName, Format('Serie: %d: %s', [MySerie.GetNumeroDeSerie(), XML_real_escape_string(MySerie.GetNomSerie())]), '');
           for v := 0 to QPolygoneSilhouette.GetNbElements() - 1 do
           begin
             PV := QPolygoneSilhouette.GetElement(v);
@@ -586,7 +586,7 @@ var
       MySerie := FDocTopo.GetSerie(i);
       NbSts := MySerie.GetNbVisees();
       if (Nb < 2) then Continue;
-      EWE := Format('Centerlines: Serie: %d - %s', [MySerie.GetNumeroDeSerie(), MySerie.GetNomSerie()]);
+      EWE := Format('Centerlines: Serie: %d - %s', [MySerie.GetNumeroDeSerie(), XML_real_escape_string(MySerie.GetNomSerie())]);
       DC.BeginPolyline(Format('Serie%d', [MySerie.GetNumeroDeSerie()]), '');
         if (ExtractAndConvertBasePointBySerSt(MySerie.GetNoSerieDep(), MySerie.GetNoPointDep(), QLat, QLon, QAlt))
         then DC.AddVertex(QLat, QLon, QAlt, False);
@@ -617,10 +617,10 @@ var
     for i := 1 to Nb - 1 do
     begin
       MySerie := FDocTopo.GetSerie(i);
-      EWE := Format('Silhouettes: Serie: %d - %s', [MySerie.GetNumeroDeSerie(), MySerie.GetNomSerie()]);
+      EWE := Format('Silhouettes: Serie: %d - %s', [MySerie.GetNumeroDeSerie(), XML_real_escape_string(MySerie.GetNomSerie())]);
       if (MakeSilhouetteOfSerie(MySerie, QPolygoneSilhouette)) then
       begin
-        DC.BeginPolygon(Format('Serie: %d: %s', [MySerie.GetNumeroDeSerie(), MySerie.GetNomSerie()]), '');
+        DC.BeginPolygon(Format('Serie: %d: %s', [MySerie.GetNumeroDeSerie(), XML_real_escape_string(MySerie.GetNomSerie())]), '');
           for v := 0 to QPolygoneSilhouette.GetNbElements() - 1 do
           begin
             PV := QPolygoneSilhouette.GetElement(v);

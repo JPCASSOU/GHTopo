@@ -4553,7 +4553,6 @@ var
   MyCode           : TCode;
   MyAntenne        : TViseeAntenneFound;
   QArrAntennesFound: TArrayOfTViseeAntenne;
-
   i, n             : Integer;
   Quadrant         : double;
   AzimutMoyen, AzimutDirecteurGauche, AzimutDirecteurDroit: Double;
@@ -4561,10 +4560,21 @@ var
   TwoPIsurGradInclin, QInclin: double;
   dp, dz: ValReal;
   b1, b2, b3, b4: Boolean;
-
+  procedure _NearToAz(const AD: double);
+  begin
+    if (IsNearToAzimut(MyCode.GradAz, MyAntenne.VA.Azimut, AD, DEMI_ECART_MAXIMAL_AZIMUT_DIRECTEUR)) then
+    begin
+      QInclin := MyAntenne.VA.Pente  * TwoPIsurGradInclin;
+      dp := MyAntenne.VA.Longueur * cos(QInclin);
+      LGMoyen := Max(LGMoyen, dp);
+      dz := abs(MyAntenne.VA.Longueur * sin(QInclin));
+      HZMoyen := Max(HZMoyen, dz);
+      HNMoyen := Min(HNMoyen, dz);
+    end;
+  end;
 begin
   Result := false;
-  AfficherMessage(Format('%s.CalcLRUD_OfStationOfAnSerie: Serie %d', [ClassName, MySerie.GetNumeroDeSerie()]));
+  //AfficherMessage(Format('%s.CalcLRUD_OfStationOfAnSerie: Serie %d', [ClassName, MySerie.GetNumeroDeSerie()]));
   MyCurrentVisee     := MySerie.GetVisee(QNumeroStation);
   MyCode             := GetCodeByNumero(MyCurrentVisee.Code);
   // extraction des visées radiantes
@@ -4582,12 +4592,12 @@ begin
   if ((QNumeroStation = 1) OR (QNumeroStation = (MySerie.GetNbVisees() - 1))) then
   begin
     AzimutMoyen := MyCurrentVisee.Azimut;
-    AfficherMessage(Format('Station d''extrémité - Az0 = %.3f', [MyCurrentVisee.Azimut]));
+    //AfficherMessage(Format('Station d''extrémité - Az0 = %.3f', [MyCurrentVisee.Azimut]));
   end
   else
   begin
     MyNearVisee  := MySerie.GetVisee(QNumeroStation + 1);
-    AfficherMessage(Format('Station Intermédiaire - Az0 = %.3f, Az1 = %.3f', [MyCurrentVisee.Azimut, MyNearVisee.Azimut]));
+    //AfficherMessage(Format('Station Intermédiaire - Az0 = %.3f, Az1 = %.3f', [MyCurrentVisee.Azimut, MyNearVisee.Azimut]));
     AzimutMoyen    := CalcAzimutMoyen(MyCode.GradAz, [MyCurrentVisee.Azimut, MyNearVisee.Azimut]);
   end;
   AzimutDirecteurGauche := AzimutMoyen - Quadrant;
@@ -4606,27 +4616,12 @@ begin
   else
     TwoPIsurGradInclin := 2 * PI / 360.00;
   end;
+
   for i := 0 to n - 1 do
   begin
     MyAntenne := QArrAntennesFound[i];
-    if (IsNearToAzimut(MyCode.GradAz, MyAntenne.VA.Azimut, AzimutDirecteurGauche, DEMI_ECART_MAXIMAL_AZIMUT_DIRECTEUR)) then
-    begin
-      QInclin := MyAntenne.VA.Pente  * TwoPIsurGradInclin;
-      dp := MyAntenne.VA.Longueur * cos(QInclin);
-      dz := MyAntenne.VA.Longueur * sin(QInclin);
-      LGMoyen := Max(LGMoyen, dp);
-      HZMoyen := Max(HZMoyen, dz);
-      HNMoyen := Min(HNMoyen, dz);
-    end;
-    if (IsNearToAzimut(MyCode.GradAz, MyAntenne.VA.Azimut, AzimutDirecteurDroit, DEMI_ECART_MAXIMAL_AZIMUT_DIRECTEUR)) then
-    begin
-      QInclin := MyAntenne.VA.Pente  * TwoPIsurGradInclin;
-      dp := MyAntenne.VA.Longueur * cos(QInclin);
-      dz := MyAntenne.VA.Longueur * sin(QInclin);
-      LDMoyen := Max(LGMoyen, dp);
-      HZMoyen := Max(HZMoyen, dz);
-      HNMoyen := Min(HNMoyen, dz);
-    end;
+    _NearToAz(AzimutDirecteurGauche);
+    _NearToAz(AzimutDirecteurDroit);
   end;
   // on ne met à jour que si les calculs sont OK
   b1 := InRange(LGMoyen, 0, SEUIL_LONGUEUR_MAXI_TOPOROBOT);
@@ -4637,7 +4632,7 @@ begin
   if (b2) then MyCurrentVisee.LD := LDMoyen;
   if (b3) then MyCurrentVisee.HZ := HZMoyen;
   if (b4) then MyCurrentVisee.HN := HNMoyen;
-  if (b1 and b2 and b3 and b4) then MyCurrentVisee.Commentaires += ' * LRUD recalculées';
+  //if (b1 and b2 and b3 and b4) then MyCurrentVisee.Commentaires += ' * LRUD recalculées';
   MySerie.PutVisee(QNumeroStation, MyCurrentVisee);
 end;
 
@@ -4663,7 +4658,7 @@ var
   QIdxSerie: integer;
 begin
   Result := false;
-  AfficherMessage(Format('%s.CalcLRUDOfStationFromRadiantShots: Serie %d, Station: %d', [ClassName, QNumeroSerie, QNumeroStation]));
+  //AfficherMessage(Format('%s.CalcLRUDOfStationFromRadiantShots: Serie %d, Station: %d', [ClassName, QNumeroSerie, QNumeroStation]));
   if (not GetSerieByNumeroSerie(QNumeroSerie, MySerie, QIdxSerie)) then Exit(false);
   Result := CalcLRUD_AStationOfTheSerie(MySerie, QNumeroStation);
 end;

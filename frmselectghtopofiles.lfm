@@ -168,8 +168,8 @@ object dlgSelectGHTopoFiles: TdlgSelectGHTopoFiles
                 Left = 4
                 Height = 20
                 Top = 100
-                Width = 124
-                Caption = 'PocketTopo TXT'
+                Width = 279
+                Caption = 'PocketTopo TXT (for rescue - En secours)'
                 OnChange = rbxPocketTopoTXTChange
                 TabOrder = 4
               end
@@ -278,6 +278,7 @@ object dlgSelectGHTopoFiles: TdlgSelectGHTopoFiles
           Anchors = [akTop, akLeft, akRight]
           MaxLength = 0
           TabOrder = 0
+          OnChange = editFileNameChange
         end
         object chkAddFolderOfhisAtUserList: TCheckBox
           Left = 12

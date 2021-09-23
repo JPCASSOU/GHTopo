@@ -24,9 +24,9 @@ object dlgTestsUnitaires: TdlgTestsUnitaires
     Height = 636
     Top = 4
     Width = 819
-    ActivePage = tabShtSpecial
+    ActivePage = tabshtFonctionsFTP
     Anchors = [akTop, akLeft, akRight, akBottom]
-    TabIndex = 3
+    TabIndex = 2
     TabOrder = 1
     object tabshtCadreBoussole: TTabSheet
       Caption = 'Cadre boussole'

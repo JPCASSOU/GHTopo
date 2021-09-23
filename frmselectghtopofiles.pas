@@ -59,6 +59,7 @@ type
 
     procedure btnRemoveDocumentClick(Sender: TObject);
     procedure cmbMyDataFolderChange(Sender: TObject);
+    procedure editFileNameChange(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure lsbMyDataFolderClick(Sender: TObject);
     procedure lsbMyDataFolderSelectionChange(Sender: TObject; User: boolean);
@@ -261,6 +262,11 @@ end;
 procedure TdlgSelectGHTopoFiles.cmbMyDataFolderChange(Sender: TObject);
 begin
   ListerFichiers(lsbMyDataFolder.ItemIndex);
+end;
+
+procedure TdlgSelectGHTopoFiles.editFileNameChange(Sender: TObject);
+begin
+
 end;
 
 procedure TdlgSelectGHTopoFiles.FormShow(Sender: TObject);

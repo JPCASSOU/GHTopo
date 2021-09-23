@@ -180,6 +180,7 @@ type
  TListeOfTGHStringArray = class(TListeSimple<TGHStringArray>)
   private
   public
+    function  LoadFromFile(const QFilename: TStringDirectoryFilename; out QCaption: string): boolean;
     procedure SortByFirstColumn();
 end;
 
@@ -1014,6 +1015,50 @@ begin
   else                           Result :=  1;
 end;
 
+function TListeOfTGHStringArray.LoadFromFile(const QFilename: TStringDirectoryFilename; out QCaption: string): boolean;
+var
+  pTXT: TextFile;
+  NbLignesLues: Integer;
+  LigneTXT: string;
+  p: SizeInt;
+  EWE: TGHStringArray;
+  procedure ReadAndDispLigneLue(out MyLine: string);
+  begin
+    ReadLn(pTXT, MyLine);
+    MyLine += ' '; // espace de sécurité en queue
+    Inc(NbLignesLues);
+    //AfficherMessageErreur(Format('%d: %s', [NbLignesLues, MyLine]));
+  end;
+begin
+  result := false;
+  AssignFile(pTXT, QFilename);
+  NbLignesLues := 0;
+  try
+    ReSet(pTXT);
+    // La première ligne contient le nom de l'étude
+    //Tabanac_20210321   (m, 360)
+    ReadAndDispLigneLue(LigneTXT);
+    p := Pos(' ', LigneTXT);
+    QCaption := Copy(LigneTXT, 1, p);
+    // on lit les autres lignes
+    while(not eof(pTXT)) do
+    begin
+      ReadAndDispLigneLue(LigneTXT);
+      if (''  = Trim(LigneTXT)) then Continue; // ligne vide = on continue
+      if ('#' = LigneTXT[1])    then Continue; // dièse en tête           = commentaire
+      if ('[' = LigneTXT[1])    then Continue; // crochet ouvrant en tête = ligne ignorée
+      if (1 = pos('stop', LowerCase(LigneTXT))) then Break;  // signal d'arrêt du traitement à inclure dans le fichier
+      //0        1         2         3         4         5         6         7         8         9         0
+      //1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
+      //     1.0              0,00          0,00      0,00
+      EWE := SplitFixedColLine(LigneTXT, [1, 11, 23, 33, 41, 50, 58, 100]);
+      self.AddElement(EWE);
+    end;
+    result := true;
+  finally
+    CloseFile(pTXT);
+  end;
+end;
 
 procedure TListeOfTGHStringArray.SortByFirstColumn();
 begin

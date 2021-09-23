@@ -41,7 +41,7 @@ end;
 
 procedure JSVerbatim(const L: string);
 begin
-  WriteLine(L);
+  WriteLine('// **** ' + L);
 end;
 
 procedure EndJSVerbatim();
@@ -280,10 +280,16 @@ begin
   WrtLinFmt('    <TD width="%d%%" height="%d%%"><INPUT type="button" name="%s" value="%s" style="%s" onclick="%s()"> </TD>',
              [33, 33, btnName, btnCaption, MyStyleButton, btnOnClick]);
 end;
-procedure JSMakeLabelledEdit(const LbName, LbCaption: string; const EditName, EditText: string);
+procedure JSMakeLabelledEditText(const LbName, LbCaption: string; const EditName, EditText: string);
 begin
-  WrtLinFmt('    <LABEL for="%s">%s</LABEL><BR>'    , [LbName, LbCaption]);
+  WrtLinFmt('    <LABEL for="%s">%s</LABEL><BR>'    , [LbName, GetResourceString(LbCaption)]);
   WrtLinFmt('    <INPUT type="text" id="%s" style="width:%d%%" name="%s" value="%s"><BR>', [EditName, 95, EditName, EditText]);
+end;
+procedure JSMakeLabelledEditToporobotStation(const LbName, LbCaption: string; const EditName, EditText: string);
+begin
+  WrtLinFmt('    <LABEL for="%s">%s</LABEL><BR>'    , [LbName, GetResourceString(LbCaption)]);
+  WrtLinFmt('    <INPUT type="text" id="%s" style="width:%d%%" name="%s" value="%s"><BR>', [EditName, 95, EditName, EditText]);
+  //WrtLinFmt('    <INPUT type="text" id="%s" style="width:%d%%" name="%s" value="%s"> required pattern="%s"<BR>', [EditName, 95, EditName, EditText, '[0-9]');
 end;
 // définitions de variables globales
 procedure QRedigeDeclGlobalVars();
@@ -414,7 +420,7 @@ begin
     jsSetLocalVar(VARNAME_qInc   , format('%s.atan2(%s, %s) * 0.5 * %s / %s.PI', [JS_MATH_LIBRARY, VARNAME_dz, VARNAME_qdp, VARNAME_fUC, JS_MATH_LIBRARY]), '');
     jsSetLocalVar(VARNAME_qAz    , format('%s(%s, %s, %s)', [JS_UTILITY_FUNC_GetAzimut, VARNAME_dx, VARNAME_dy, VARNAME_fUB]), '');
     WriteLine('  return {');
-    WrtLinFmt('    %s: %s / 10.0,', [JS_VARNAME_OUT_Dist, VARNAME_qdist]);
+    WrtLinFmt('    %s: %s / %.2f,', [JS_VARNAME_OUT_Dist, VARNAME_qdist, 10.0]);
     WrtLinFmt('    %s: %s,', [JS_VARNAME_OUT_Az  , VARNAME_qAz]);
     WrtLinFmt('    %s: %s', [JS_VARNAME_OUT_Inc , VARNAME_qInc]);
     WriteLine('  }; // return tuple');
@@ -471,7 +477,7 @@ begin
   WrtLinFmt('// La classe T%s', [JS_GRAPHE_CLASS_VAR_NAME]);
   WrtLinFmt('function T%s() {', [JS_GRAPHE_CLASS_VAR_NAME]);
   WrtLinFmt('  %s.%s  = new Array();', [JS_THIS, JS_GRAPH_LISTE_NOEUDS]);
-  WrtLinFmt('  %s.%s    = new Array();', [JS_THIS, JS_GRAPH_SHORTEST_PATH]);
+  WrtLinFmt('  %s.%s  = new Array();', [JS_THIS, JS_GRAPH_SHORTEST_PATH]);
 
   WrtLinFmt('  %s.FXMini       = %d;', [JS_THIS, ToJSCoord(self.FEtendue.X1)]);
   WrtLinFmt('  %s.FYMini       = %d;', [JS_THIS, ToJSCoord(self.FEtendue.Y1)]);
@@ -527,8 +533,8 @@ begin
     WriteLine('    if (0 == Nb) return -1;');
     jsSetLocalVar('QDistance', JS_CONST_INFINITY, 'Infinité');//      WrtLinFmt('    var %s = %s;', ['QDistance', JS_CONST_INFINITY]);
     jsFOR('i', 'Nb', 0, '', 4);
-      jsSetLocalVar('qdx', Format(FMT_QDXY, ['QX', JS_THIS, JS_GRAPH_LISTE_NOEUDS, 'X']), 'Qdx'); // WrtLinFmt('       var %s = (QX - %s.%s[i].%s);', ['qdx', JS_THIS, JS_GRAPH_LISTE_NOEUDS, 'X']);
-      jsSetLocalVar('qdy', Format(FMT_QDXY, ['QY', JS_THIS, JS_GRAPH_LISTE_NOEUDS, 'Y']), 'Qdy'); // WrtLinFmt('       var %s = (QY - %s.%s[i].%s);', ['qdy', JS_THIS, JS_GRAPH_LISTE_NOEUDS, 'Y']);
+      jsSetLocalVar('qdx'  , Format(FMT_QDXY, ['QX', JS_THIS, JS_GRAPH_LISTE_NOEUDS, 'X']), 'Qdx'); // WrtLinFmt('       var %s = (QX - %s.%s[i].%s);', ['qdx', JS_THIS, JS_GRAPH_LISTE_NOEUDS, 'X']);
+      jsSetLocalVar('qdy'  , Format(FMT_QDXY, ['QY', JS_THIS, JS_GRAPH_LISTE_NOEUDS, 'Y']), 'Qdy'); // WrtLinFmt('       var %s = (QY - %s.%s[i].%s);', ['qdy', JS_THIS, JS_GRAPH_LISTE_NOEUDS, 'Y']);
       jsSetLocalVar('qdist', format('%s * %s  + %s * %s', ['qdx', 'qdx', 'qdy', 'qdy']), 'distance en plan');  //        WrtLinFmt('       var %s = %s * %s  + %s * %s;', ['qdist', 'qdx', 'qdx', 'qdy', 'qdy']);
       jsIF(format('%s < %s', ['qdist', 'QDistance']), '', 8);
         WrtLinFmt('          %s = %s;', ['QDistance', 'qdist']);
@@ -545,9 +551,9 @@ begin
   BeginClassJSFunction(JS_THIS, 'Dijkstra', 'StationDepart, StationArrivee');
     jsSetLocalVar(JS_VAR_IDX_ND_DEPART , Format(FMT_FIND_IDX_NOEUD, [JS_THIS, 'StationDepart']) , 'Recherche départ');
     jsSetLocalVar(JS_VAR_IDX_ND_ARRIVEE, Format(FMT_FIND_IDX_NOEUD, [JS_THIS, 'StationArrivee']), 'Recherche arrivée');
-    WrtLinFmt('    if (%s == -1) return -1;', [JS_VAR_IDX_ND_DEPART]);
-    WrtLinFmt('    if (%s == -1) return -2;', [JS_VAR_IDX_ND_ARRIVEE]);
-    WrtLinFmt('    if (%s == %s) return -3;', [JS_VAR_IDX_ND_DEPART, JS_VAR_IDX_ND_ARRIVEE]);
+    WrtLinFmt('    if (%s === -1) return -1;', [JS_VAR_IDX_ND_DEPART]);
+    WrtLinFmt('    if (%s === -1) return -2;', [JS_VAR_IDX_ND_ARRIVEE]);
+    WrtLinFmt('    if (%s === %s) return -3;', [JS_VAR_IDX_ND_DEPART, JS_VAR_IDX_ND_ARRIVEE]);
     WrtLinFmt('    %s.%s  = []; // vider le chemin le plus court', [JS_THIS, JS_GRAPH_SHORTEST_PATH]);
     WriteLine('    // Variables locales');
     jsSetLocalVar(JS_VARNAME_CURRENT_NODE, 'null');

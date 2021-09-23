@@ -531,9 +531,7 @@ begin
   if ((FSpatialReady) and (not FSpatialReading)) then
   begin
     MoyennerLesMesures();
-
     IntegrerSurPeriode();
-
     // et on vide la liste pour une autre mesure
     FListeMesuresAIntegrer.ClearListe();
 
